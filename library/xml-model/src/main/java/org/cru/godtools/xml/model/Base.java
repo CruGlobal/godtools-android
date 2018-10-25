@@ -1,17 +1,17 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
-import android.support.v4.view.ViewCompat;
-
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.xml.model.Text.Align;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.Set;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.text.TextUtilsCompat;
+import androidx.core.view.ViewCompat;
 
 public abstract class Base {
     static final String XML_PRIMARY_COLOR = "primary-color";

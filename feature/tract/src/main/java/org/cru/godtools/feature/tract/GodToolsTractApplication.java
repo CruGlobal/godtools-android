@@ -1,7 +1,6 @@
 package org.cru.godtools.feature.tract;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
@@ -9,6 +8,8 @@ import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBusBuilder;
+
+import androidx.annotation.NonNull;
 
 import static org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API;
 

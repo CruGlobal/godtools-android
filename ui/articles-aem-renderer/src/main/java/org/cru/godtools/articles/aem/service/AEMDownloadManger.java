@@ -2,13 +2,12 @@ package org.cru.godtools.articles.aem.service;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.AnyThread;
-import android.support.annotation.GuardedBy;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.annotation.WorkerThread;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
@@ -56,11 +55,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.GuardedBy;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+import androidx.room.InvalidationTracker;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -68,6 +79,7 @@ import timber.log.Timber;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
+import static org.cru.godtools.articles.aem.model.Constants.TABLE_NAME_RESOURCE;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.:wq
@@ -75,24 +87,32 @@ import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 public class AEMDownloadManger {
     private static final String TAG = "AEMDownloadManager";
 
+    private static final int MSG_CLEAN = 1;
+
     private static final int TASK_CONCURRENCY = 4;
     private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
+    private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private final ArticleRoomDatabase mAemDb;
     private final AemApi mApi;
     private final Context mContext;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
+    private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
+    final Object mCleanOrphanedFilesLock = new Object();
 
     // Task de-dup related objects
+    @Nullable
+    private CleanOrphanedFilesTask mCleanOrphanedFilesTask;
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
@@ -101,6 +121,7 @@ public class AEMDownloadManger {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
+        mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
@@ -110,7 +131,12 @@ public class AEMDownloadManger {
         EventBus.getDefault().register(this);
 
         // trigger some base sync tasks
+        // TODO: maybe these sync tasks should be triggered elsewhere?
         enqueueExtractAemImportsFromManifests();
+        enqueueSyncStaleAemImports();
+
+        // perform an initial clean of any orphaned files
+        enqueueCleanOrphanedFiles();
     }
 
     @Nullable
@@ -140,10 +166,7 @@ public class AEMDownloadManger {
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mExtractAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(() -> {
-                extractAemImportsFromManifestsTask();
-                enqueueSyncStaleAemImports();
-            });
+            mExecutor.execute(this::extractAemImportsFromManifestsTask);
         }
     }
 
@@ -210,6 +233,29 @@ public class AEMDownloadManger {
         return task.mResult;
     }
 
+    @AnyThread
+    void scheduleCleanOrphanedFiles() {
+        // remove any pending executions
+        mHandler.removeMessages(MSG_CLEAN);
+
+        // schedule another execution
+        final Message m = Message.obtain(mHandler, this::enqueueCleanOrphanedFiles);
+        m.what = MSG_CLEAN;
+        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
+    }
+
+    @AnyThread
+    void enqueueCleanOrphanedFiles() {
+        // try updating a task that is currently enqueued
+        if (mCleanOrphanedFilesTask != null && !mCleanOrphanedFilesTask.mStarted) {
+            return;
+        }
+
+        // otherwise create a new task
+        mCleanOrphanedFilesTask = new CleanOrphanedFilesTask();
+        mExecutor.execute(mCleanOrphanedFilesTask);
+    }
+
     // endregion Task Scheduling Methods
 
     // region Tasks
@@ -237,8 +283,18 @@ public class AEMDownloadManger {
                 }
 
                 // add AEM imports extracted from the manifest to the AEM article cache
-                final Manifest manifest = Futures.getUnchecked(mManifestManager.getManifest(translation));
-                repository.addAemImports(translation, manifest.getAemImports());
+                try {
+                    final Manifest manifest = mManifestManager.getManifest(translation).get();
+                    repository.addAemImports(translation, manifest.getAemImports());
+                    enqueueSyncManifestAemImports(manifest, false);
+                } catch (final InterruptedException e) {
+                    // set interrupted and return immediately
+                    Thread.currentThread().interrupt();
+                    return;
+                } catch (final ExecutionException e) {
+                    Timber.tag(TAG)
+                            .d(e.getCause(), "Unable to add aem imports from manifest");
+                }
             }
 
             // prune any translations that we no longer have downloaded.
@@ -380,6 +436,29 @@ public class AEMDownloadManger {
         }
     }
 
+    @WorkerThread
+    void cleanOrphanedFiles() {
+        // lock the filesystem before removing any orphaned files
+        final Lock lock = LOCK_FILESYSTEM.writeLock();
+        try {
+            lock.lock();
+
+            // determine which files are still being referenced
+            final Set<File> valid = Stream.of(mAemDb.resourceDao().getAll())
+                    .map(r -> r.getLocalFile(mContext))
+                    .collect(Collectors.toSet());
+
+            // delete any files not referenced
+            //noinspection ResultOfMethodCallIgnored
+            Optional.ofNullable(ResourceUtilsKt.getResourcesDir(mContext).listFiles())
+                    .map(Stream::of).stream().flatMap(s -> s)
+                    .filterNot(valid::contains)
+                    .forEach(File::delete);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /**
      * This task will remove any attachments no longer in use.
      */
@@ -420,60 +499,79 @@ public class AEMDownloadManger {
                     .d(e, "Unable to create MessageDigest to dedup AEM resources");
         }
 
-        // stream resource to temporary file
-        final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
-        final Closer closer = Closer.create();
+        // lock the file system for writing this resource
+        final Lock lock = LOCK_FILESYSTEM.readLock();
         try {
-            OutputStream out = closer.register(new FileOutputStream(tmpFile));
+            lock.lock();
+
+            // stream resource to temporary file
+            final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
+            final Closer closer = Closer.create();
+            try {
+                OutputStream out = closer.register(new FileOutputStream(tmpFile));
+                if (digest != null) {
+                    out = closer.register(new DigestOutputStream(out, digest));
+                }
+                IOUtils.copy(in, out);
+                out.flush();
+                out.close();
+            } catch (final Throwable t) {
+                throw closer.rethrow(t);
+            } finally {
+                closer.close();
+            }
+
+            // rename temporary file to name based on digest
             if (digest != null) {
-                out = closer.register(new DigestOutputStream(out, digest));
+                final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
+                final File file = ResourceUtilsKt.getFile(mContext, hash);
+                if (file.exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    tmpFile.delete();
+                    return file;
+                } else if (tmpFile.renameTo(file)) {
+                    return file;
+                } else {
+                    Timber.tag(TAG)
+                            .d("cannot rename tmp file %s to %s", tmpFile, file);
+                }
             }
-            IOUtils.copy(in, out);
-            out.flush();
-            out.close();
-        } catch (final Throwable t) {
-            throw closer.rethrow(t);
+
+            // default to returning the temporary file
+            return tmpFile;
         } finally {
-            closer.close();
+            lock.unlock();
+        }
+    }
+
+    private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
+        RoomDatabaseChangeTracker(@NonNull final String firstTable, final String... rest) {
+            super(firstTable, rest);
         }
 
-        // rename temporary file to name based on digest
-        if (digest != null) {
-            final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
-            final File file = ResourceUtilsKt.getFile(mContext, hash);
-            if (file.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                tmpFile.delete();
-                return file;
-            } else if (tmpFile.renameTo(file)) {
-                return file;
-            } else {
-                Timber.tag(TAG)
-                        .d("cannot rename tmp file %s to %s", tmpFile, file);
+        @Override
+        public void onInvalidated(@NonNull final Set<String> tables) {
+            for (final String table : tables) {
+                switch (table) {
+                    case TABLE_NAME_RESOURCE:
+                        enqueueCleanOrphanedFiles();
+                        break;
+                }
             }
         }
-
-        // default to returning the temporary file
-        return tmpFile;
     }
 
     // region PriorityRunnable Tasks
 
+    private static final int PRIORITY_CLEANER = Integer.MIN_VALUE;
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
-    abstract class UniqueUriBasedTask implements PriorityRunnable {
-        @NonNull
-        final Uri mUri;
-        volatile boolean mStarted = false;
+    abstract class UniqueTask implements PriorityRunnable {
         volatile boolean mForce = false;
-
+        volatile boolean mStarted = false;
         final SettableFuture<Boolean> mResult = SettableFuture.create();
-
-        UniqueUriBasedTask(@NonNull final Uri uri) {
-            mUri = uri;
-        }
 
         /**
          * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
@@ -504,6 +602,15 @@ public class AEMDownloadManger {
         abstract Object getLock();
 
         abstract boolean runTask();
+    }
+
+    abstract class UniqueUriBasedTask extends UniqueTask {
+        @NonNull
+        final Uri mUri;
+
+        UniqueUriBasedTask(@NonNull final Uri uri) {
+            mUri = uri;
+        }
     }
 
     class SyncAemImportTask extends UniqueUriBasedTask {
@@ -571,6 +678,26 @@ public class AEMDownloadManger {
         @Override
         boolean runTask() {
             downloadResourceTask(mUri, mForce);
+            return true;
+        }
+    }
+
+    class CleanOrphanedFilesTask extends UniqueTask {
+        @Override
+        public int getPriority() {
+            return PRIORITY_CLEANER;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return mCleanOrphanedFilesLock;
+        }
+
+        @Override
+        boolean runTask() {
+            cleanOrphanedFiles();
+            scheduleCleanOrphanedFiles();
             return true;
         }
     }

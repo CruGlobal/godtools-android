@@ -3,9 +3,6 @@ package org.keynote.godtools.android.db;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 import android.util.Pair;
 
 import com.annimon.stream.LongStream;
@@ -34,6 +31,10 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {

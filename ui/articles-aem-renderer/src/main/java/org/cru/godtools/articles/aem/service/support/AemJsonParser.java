@@ -1,7 +1,6 @@
 package org.cru.godtools.articles.aem.service.support;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
@@ -18,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
 
 /**
  * This class handles parsing any AEM json calls into DOA objects.

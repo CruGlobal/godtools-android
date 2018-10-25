@@ -2,12 +2,6 @@ package org.cru.godtools.adapter;
 
 import android.database.Cursor;
 import android.graphics.Typeface;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +28,12 @@ import org.keynote.godtools.android.util.ViewUtils;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.text.TextUtilsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -379,7 +379,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
                     mCallbacks.onToolSelect(mCode, mType, mParallelLanguage);
                 } else if (mType == Tool.Type.ARTICLE && CODE_EVERYSTUDENT.equals(mCode)) {
                     // everystudent content for now
-                    mCallbacks.onToolSelect(mCode, mType);
+                    // TODO: this can probably be removed once we release AEM Articles support
+                    mCallbacks.onToolSelect(mCode, mType, Locale.ENGLISH);
                 } else {
                     // do nothing
                 }

@@ -4,9 +4,9 @@ dependencies {
     api project(':library:analytics')
     implementation project(':library:model')
 
-    api "com.android.support:appcompat-v7:${deps.androidSupport}"
-    implementation "com.android.support:customtabs:${deps.androidSupport}"
-    implementation "com.android.support:design:${deps.androidSupport}"
+    api "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
+    implementation "androidx.browser:browser:${deps.androidX.browser}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 

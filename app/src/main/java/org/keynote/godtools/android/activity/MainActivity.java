@@ -5,19 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.material.tabs.TabLayout;
 
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
@@ -26,17 +20,23 @@ import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.util.BuildTypeUtils;
 import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
-import static android.arch.lifecycle.Lifecycle.State.RESUMED;
-import static android.arch.lifecycle.Lifecycle.State.STARTED;
+import static androidx.lifecycle.Lifecycle.State.RESUMED;
+import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
@@ -279,8 +279,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     private void syncData() {
-        GodToolsSyncService.syncFollowups(this).sync();
-        GodToolsSyncService.syncToolShares(this).sync();
+        GodToolsSyncServiceKt.syncFollowups(this).sync();
+        GodToolsSyncServiceKt.syncToolShares(this).sync();
     }
 
     @Override
@@ -315,7 +315,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return mToolbar != null && (mDrawerLayout == null || !mDrawerLayout.isDrawerOpen(Gravity.START));
+                return mToolbar != null && (mDrawerLayout == null || !mDrawerLayout.isDrawerOpen(GravityCompat.START));
         }
 
         // assume we can show it if we don't have any specific rules about it

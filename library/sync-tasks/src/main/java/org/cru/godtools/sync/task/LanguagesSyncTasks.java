@@ -2,8 +2,6 @@ package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Collectors;
 
@@ -19,6 +17,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.collection.SimpleArrayMap;
 import retrofit2.Response;
 import timber.log.Timber;
 

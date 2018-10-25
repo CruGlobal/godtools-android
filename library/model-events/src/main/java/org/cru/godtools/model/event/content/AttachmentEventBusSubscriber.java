@@ -1,13 +1,13 @@
 package org.cru.godtools.model.event.content;
 
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.v4.content.Loader;
-
 import org.ccci.gto.android.common.eventbus.content.EventBusSubscriber;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.loader.content.Loader;
 
 public final class AttachmentEventBusSubscriber extends EventBusSubscriber {
     public AttachmentEventBusSubscriber(@NonNull final Loader loader) {

@@ -1,7 +1,6 @@
 package org.cru.godtools;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
 import com.evernote.android.job.JobManager;
 
@@ -20,6 +19,7 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBusBuilder;
 
+import androidx.annotation.NonNull;
 import me.thekey.android.core.TheKeyImpl;
 import me.thekey.android.eventbus.EventBusEventsManager;
 

@@ -1,11 +1,6 @@
 package org.cru.godtools.sync.task;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
@@ -27,10 +22,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
+
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
-    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID};
+    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID, LanguageTable.COLUMN_NAME};
     private static final String[] API_FIELDS_TOOL =
             {ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
                     ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER, ToolTable.COLUMN_DETAILS_BANNER,

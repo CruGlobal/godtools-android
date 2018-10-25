@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.util;
 
-import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
@@ -8,6 +7,8 @@ import org.cru.godtools.R;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
+
+import androidx.annotation.Nullable;
 
 public final class ViewUtils {
     public static void bindShares(@Nullable final TextView view, @Nullable final Tool tool) {

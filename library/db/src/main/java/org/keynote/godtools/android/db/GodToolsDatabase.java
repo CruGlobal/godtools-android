@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
@@ -19,11 +18,12 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 38;
+    private static final int DATABASE_VERSION = 39;
 
     /*
      * Version history
@@ -72,6 +72,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 37: 2018-04-23
      * v5.0.11 - v5.0.12
      * 38: 2018-06-15
+     * 39: 2018-10-24
      */
 
     @NonNull
@@ -213,6 +214,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 38:
                         db.execSQL(ToolTable.SQL_V38_ALTER_ORDER);
                         db.execSQL(ToolTable.SQL_V38_POPULATE_ORDER);
+                        break;
+                    case 39:
+                        db.execSQL(LanguageTable.SQL_V39_ALTER_NAME);
                         break;
                     default:
                         // unrecognized version

@@ -18,7 +18,7 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -131,10 +131,7 @@ dependencies {
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
 
-    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
-    implementation "com.android.support:cardview-v7:${deps.androidSupport}"
-    implementation "com.android.support:design:${deps.androidSupport}"
-    implementation "com.android.support:percent:${deps.androidSupport}"
+    implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
@@ -161,7 +158,7 @@ dependencies {
     debugImplementation project(':ui:article-renderer')
     debugImplementation project(':ui:articles-aem-renderer')
 
-    debugImplementation "com.android.support:multidex:${deps.multidex}"
+    debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"

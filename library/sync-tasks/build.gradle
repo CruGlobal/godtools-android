@@ -20,7 +20,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

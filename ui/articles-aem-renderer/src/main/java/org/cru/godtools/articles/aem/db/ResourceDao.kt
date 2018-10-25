@@ -1,11 +1,11 @@
 package org.cru.godtools.articles.aem.db
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
 import android.net.Uri
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import okhttp3.MediaType
 import org.cru.godtools.articles.aem.model.Resource
 import java.util.Date
@@ -24,12 +24,20 @@ interface ResourceDao {
     fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
 
     @WorkerThread
+    @Query("""
+        DELETE FROM resources
+        WHERE uri NOT IN (SELECT uri FROM articleResources)""")
+    fun removeOrphanedResources()
+
+    @WorkerThread
     @Query("SELECT * FROM resources WHERE uri = :uri")
     fun find(uri: Uri): Resource?
 
+    @WorkerThread
     @Query("SELECT * FROM resources")
     fun getAll(): List<Resource>
 
+    @WorkerThread
     @Query("""
         SELECT r.*
         FROM resources AS r JOIN articleResources AS a ON a.resourceUri = r.uri

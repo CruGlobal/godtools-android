@@ -4,8 +4,6 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
@@ -26,9 +24,9 @@ dependencies {
 
     api project(':ui:base-tool')
 
-    implementation "com.android.support:cardview-v7:${deps.androidSupport}"
-    implementation "com.android.support:design:${deps.androidSupport}"
+    implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
@@ -53,7 +51,7 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4-rule:${deps.powermock}"
     testImplementation "org.ccci.gto.android:gto-support-testing:${deps.gtoSupport}"
 
-    annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

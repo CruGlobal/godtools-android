@@ -1,6 +1,5 @@
 package org.cru.godtools.model;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
@@ -9,6 +8,8 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.model.Followup.JSON_API_TYPE;
 

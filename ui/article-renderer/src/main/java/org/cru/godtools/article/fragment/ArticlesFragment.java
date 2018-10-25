@@ -1,15 +1,7 @@
 package org.cru.godtools.article.fragment;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +10,10 @@ import com.annimon.stream.Optional;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.util.MainThreadExecutor;
-import org.ccci.gto.android.common.util.WeakTask;
+import org.ccci.gto.android.common.util.WeakRunnable;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
@@ -37,14 +28,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks,
         SwipeRefreshLayout.OnRefreshListener {
-    private static final WeakTask.Task<SwipeRefreshLayout> CLEAR_REFRESHING_TASK = v -> v.setRefreshing(false);
-
     public interface Callbacks {
         void onArticleSelected(@Nullable Article article);
     }
@@ -181,11 +178,13 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     // endregion ViewModel methods
 
     private void syncData(final boolean force) {
-        final ListenableFuture<?> sync = AEMDownloadManger.getInstance(requireContext())
-                .enqueueSyncManifestAemImports(mManifest, force);
-        if (mSwipeRefreshLayout != null) {
-            sync.addListener(new WeakTask<>(mSwipeRefreshLayout, CLEAR_REFRESHING_TASK), new MainThreadExecutor());
-        }
+        AEMDownloadManger.getInstance(requireContext())
+                .enqueueSyncManifestAemImports(mManifest, force)
+                .addListener(new WeakRunnable(() -> {
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }), new MainThreadExecutor());
     }
 
     // region View Logic

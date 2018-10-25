@@ -1,6 +1,5 @@
 dependencies {
-    implementation "com.android.support:support-annotations:${deps.androidSupport}"
-    implementation "com.android.support:support-compat:${deps.androidSupport}"
+    implementation "androidx.core:core:${deps.androidX.core}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 

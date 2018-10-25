@@ -1,3 +1,5 @@
+apply plugin: 'kotlin-android'
+
 android {
     defaultConfig {
         javaCompileOptions {
@@ -19,11 +21,13 @@ dependencies {
     implementation project(':ui:everystudent')
     implementation project(':ui:tract-renderer')
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     // transitive dependencies for ui:tract-renderer, needed to build this module
     implementation project(':library:download-manager')
-    implementation "com.android.support:design:${deps.androidSupport}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

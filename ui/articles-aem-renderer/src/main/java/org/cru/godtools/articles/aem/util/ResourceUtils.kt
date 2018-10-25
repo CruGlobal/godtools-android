@@ -1,7 +1,7 @@
 package org.cru.godtools.articles.aem.util
 
 import android.content.Context
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 import org.jetbrains.annotations.Contract
 import java.io.File
 

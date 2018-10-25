@@ -1,7 +1,6 @@
 package org.cru.godtools.articles.aem.api;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
 import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
@@ -13,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import androidx.annotation.NonNull;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.TlsVersion;

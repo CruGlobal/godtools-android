@@ -1,8 +1,8 @@
 package org.cru.godtools.articles.aem.db
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Transaction
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
+import androidx.room.Dao
+import androidx.room.Transaction
 import org.cru.godtools.articles.aem.model.AemImport
 import org.cru.godtools.articles.aem.model.Article
 import java.util.Date
@@ -32,5 +32,15 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
             // update the last processed time
             updateLastProcessed(aemImport.uri, Date())
         }
+
+        // remove any orphaned articles
+        db.articleRepository().removeOrphanedArticles()
+    }
+
+    @Transaction
+    @WorkerThread
+    open fun removeOrphanedAemImports() {
+        db.aemImportDao().removeOrphanedAemImports()
+        db.articleRepository().removeOrphanedArticles()
     }
 }

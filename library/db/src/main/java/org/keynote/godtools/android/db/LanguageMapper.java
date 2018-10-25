@@ -2,12 +2,14 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Language;
 
+import androidx.annotation.NonNull;
+
 import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_CODE;
+import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_NAME;
 
 final class LanguageMapper extends BaseMapper<Language> {
     @Override
@@ -19,6 +21,9 @@ final class LanguageMapper extends BaseMapper<Language> {
                 break;
             case COLUMN_ADDED:
                 values.put(field, language.isAdded());
+                break;
+            case COLUMN_NAME:
+                values.put(field, language.getLanguageName());
                 break;
             default:
                 super.mapField(values, field, language);
@@ -39,6 +44,7 @@ final class LanguageMapper extends BaseMapper<Language> {
 
         language.setCode(getLocale(c, COLUMN_CODE, Language.INVALID_CODE));
         language.setAdded(getBool(c, COLUMN_ADDED, false));
+        language.setLanguageName(getString(c, COLUMN_NAME, null));
 
         return language;
     }

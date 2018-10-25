@@ -1,9 +1,9 @@
 package org.cru.godtools.articles.aem.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import okhttp3.MediaType
 import org.cru.godtools.articles.aem.util.getFile
 import java.io.File
@@ -12,7 +12,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Date
 
-@Entity(tableName = "resources")
+@Entity(tableName = TABLE_NAME_RESOURCE)
 class Resource(@field:PrimaryKey val uri: Uri) {
     var contentType: MediaType? = null
     var localFileName: String? = null
@@ -34,12 +34,6 @@ class Resource(@field:PrimaryKey val uri: Uri) {
 
     @Throws(IOException::class)
     fun getInputStream(context: Context): InputStream? {
-        return getLocalFile(context)?.run {
-            if (isFile) {
-                FileInputStream(this)
-            } else {
-                null
-            }
-        }
+        return getLocalFile(context)?.let { FileInputStream(it) }
     }
 }

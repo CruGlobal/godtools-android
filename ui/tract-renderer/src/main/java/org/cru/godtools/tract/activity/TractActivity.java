@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity;
 
-import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,18 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.UiThread;
-import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TabLayoutUtils;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -30,6 +17,8 @@ import android.widget.ProgressBar;
 import com.annimon.stream.IntPair;
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutUtils;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -72,6 +61,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.UiThread;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.Lifecycle;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;

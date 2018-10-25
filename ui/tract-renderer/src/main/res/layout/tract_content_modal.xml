@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/horiz_margin_modal"
     android:paddingRight="@dimen/horiz_margin_modal">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

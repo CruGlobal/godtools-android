@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/initial_page_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,7 +60,7 @@
                         android:saveEnabled="false" />
                 </RelativeLayout>
             </RelativeLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <include layout="@layout/tract_call_to_action" />
     </org.cru.godtools.tract.widget.PageContentLayout>

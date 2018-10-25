@@ -1,6 +1,6 @@
 package org.cru.godtools.adapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class EmptyListHeaderFooterAdapter extends BaseHeaderFooterAdapter {
     public static class Builder extends BaseHeaderFooterAdapter.Builder<Builder> {

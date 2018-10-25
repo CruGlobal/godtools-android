@@ -1,8 +1,6 @@
 package org.cru.godtools.articles.aem.service.support;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
@@ -13,7 +11,10 @@ import org.junit.runner.RunWith;
 import java.io.InputStream;
 import java.util.List;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import androidx.annotation.NonNull;
+import androidx.test.runner.AndroidJUnit4;
+
+import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

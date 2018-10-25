@@ -1,7 +1,7 @@
 package org.cru.godtools.articles.aem.db
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Transaction
+import androidx.room.Dao
+import androidx.room.Transaction
 import org.cru.godtools.articles.aem.model.Article
 import org.cru.godtools.articles.aem.model.Resource
 

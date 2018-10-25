@@ -1,12 +1,12 @@
 package org.cru.godtools.analytics;
 
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 public class EventBusAnalyticsHelper {
     @NonNull

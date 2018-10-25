@@ -1,8 +1,5 @@
 package org.cru.godtools.base.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -13,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.concurrent.Immutable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

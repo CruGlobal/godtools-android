@@ -3,9 +3,6 @@ package org.cru.godtools.article.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 
 import com.annimon.stream.Optional;
 
@@ -19,6 +16,10 @@ import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Text;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;

@@ -1,17 +1,14 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.res.ColorStateList;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.design.widget.TextInputLayout;
-import android.support.design.widget.TextInputLayoutUtils;
-import android.support.v4.view.ViewCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayoutUtils;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
@@ -21,6 +18,10 @@ import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
@@ -106,7 +107,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     private void bindLabel() {
         final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
         if (mInputLayout != null) {
-            TextInputLayoutUtils.setCollapsedTextColor(mInputLayout, Text.getTextColor(labelStyles));
+            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, Text.getTextColor(labelStyles));
         }
     }
 

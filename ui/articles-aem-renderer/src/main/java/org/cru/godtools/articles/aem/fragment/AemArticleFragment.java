@@ -1,15 +1,9 @@
 package org.cru.godtools.articles.aem.fragment;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +21,7 @@ import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -34,6 +29,12 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import okhttp3.MediaType;
 import timber.log.Timber;
@@ -41,6 +42,8 @@ import timber.log.Timber;
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AemArticleFragment extends BaseToolFragment {
+    private static final String TAG = "AemArticleFragment";
+
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
     private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
@@ -214,8 +217,14 @@ public class AemArticleFragment extends BaseToolFragment {
             InputStream data = null;
             try {
                 data = resource.getInputStream(requireContext());
+            } catch (final FileNotFoundException e) {
+                // the file wasn't found in the local cache directory. log the error and clear the local file state so
+                // it is downloaded again.
+                Timber.tag(TAG)
+                        .e(e, "Missing cached version of: %s", resource.getUri());
+                resourceDao.updateLocalFile(resource.getUri(), null, null, null);
             } catch (final IOException e) {
-                Timber.tag("AEMArticleFragment")
+                Timber.tag(TAG)
                         .d(e, "Error opening local file");
             }
             if (data == null) {

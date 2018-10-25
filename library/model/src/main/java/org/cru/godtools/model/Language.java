@@ -1,13 +1,13 @@
 package org.cru.godtools.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.model.Language.JSON_API_TYPE;
 
@@ -15,12 +15,17 @@ import static org.cru.godtools.model.Language.JSON_API_TYPE;
 public class Language extends Base {
     static final String JSON_API_TYPE = "language";
     private static final String JSON_CODE = "code";
+    private static final String JSON_NAME = "name";
 
     public static final Locale INVALID_CODE = new Locale("x", "inv");
 
     @Nullable
     @JsonApiAttribute(name = JSON_CODE)
     private Locale mCode;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_NAME)
+    private String mLanguageName;
 
     @JsonApiIgnore
     private boolean mAdded = false;
@@ -32,6 +37,15 @@ public class Language extends Base {
 
     public void setCode(@Nullable final Locale code) {
         mCode = code;
+    }
+
+    @Nullable
+    public String getLanguageName() {
+        return mLanguageName;
+    }
+
+    public void setLanguageName(@Nullable String name) {
+        mLanguageName = name;
     }
 
     public boolean isAdded() {

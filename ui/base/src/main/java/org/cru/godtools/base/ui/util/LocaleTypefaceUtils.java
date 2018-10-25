@@ -3,13 +3,13 @@ package org.cru.godtools.base.ui.util;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 

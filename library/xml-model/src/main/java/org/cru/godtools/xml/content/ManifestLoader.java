@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.content;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
 import org.cru.godtools.model.loader.TranslationEventBusSubscriber;
@@ -10,6 +9,7 @@ import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {

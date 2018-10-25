@@ -1,7 +1,5 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.Nullable;
-
 import com.annimon.stream.Stream;
 import com.google.common.collect.Sets;
 
@@ -9,6 +7,8 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.EnumSet;
 import java.util.Set;
+
+import androidx.annotation.Nullable;
 
 enum DeviceType {
     MOBILE, UNKNOWN;

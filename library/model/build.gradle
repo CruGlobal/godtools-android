@@ -1,7 +1,5 @@
 dependencies {
     implementation project(':library:base')
 
-    implementation "com.android.support:support-annotations:${deps.androidSupport}"
-
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
 }

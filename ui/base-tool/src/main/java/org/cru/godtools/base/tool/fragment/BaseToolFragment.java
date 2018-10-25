@@ -1,10 +1,6 @@
 package org.cru.godtools.base.tool.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.Loader;
 
 import com.google.common.base.Objects;
 
@@ -17,6 +13,11 @@ import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.Locale;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.content.Loader;
 
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;

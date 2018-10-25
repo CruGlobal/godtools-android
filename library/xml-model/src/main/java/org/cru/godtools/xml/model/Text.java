@@ -1,10 +1,5 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 import android.view.Gravity;
 
 import org.ccci.gto.android.common.util.NumberUtils;
@@ -14,6 +9,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.xml.model.Utils.parseColor;

@@ -2,8 +2,6 @@ package org.cru.godtools.base.tool.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -16,6 +14,8 @@ import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.picasso.transformation.ScaledCropTransformation;
 import org.cru.godtools.xml.model.ImageScaleType;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 

@@ -5,14 +5,6 @@ import android.database.Cursor;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,17 +30,24 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.fragment.BasePlatformFragment;
 
 import java.util.Locale;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 public class ToolsFragment extends BasePlatformFragment
@@ -214,7 +213,7 @@ public class ToolsFragment extends BasePlatformFragment
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        mSyncHelper.sync(GodToolsSyncService.syncTools(getContext(), force));
+        mSyncHelper.sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
     }
 
     private void startLoaders() {

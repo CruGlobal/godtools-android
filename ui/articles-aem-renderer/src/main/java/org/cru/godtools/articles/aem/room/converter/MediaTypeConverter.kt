@@ -1,7 +1,7 @@
 @file:JvmName("MediaTypeConverter")
 package org.cru.godtools.articles.aem.room.converter
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import okhttp3.MediaType
 
 @TypeConverter

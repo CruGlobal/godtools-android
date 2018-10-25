@@ -2,14 +2,6 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.VisibleForTesting;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
@@ -28,6 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+import androidx.collection.SimpleArrayMap;
+
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.xml.model.Utils.parseColor;
@@ -42,6 +43,7 @@ public final class Manifest extends Base implements Styles {
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
     private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
+    private static final String XML_CATEGORY_LABEL_COLOR = "category-label-color";
     private static final String XML_CATEGORIES = "categories";
     private static final String XML_PAGES = "pages";
     private static final String XML_PAGES_AEM_IMPORT = "aem-import";
@@ -112,6 +114,10 @@ public final class Manifest extends Base implements Styles {
     @Nullable
     @ColorInt
     private Integer mNavBarControlColor;
+
+    @Nullable
+    @ColorInt
+    private Integer mCategoryLabelColor;
 
     @Nullable
     private Text mTitle;
@@ -287,6 +293,12 @@ public final class Manifest extends Base implements Styles {
                 Styles.getPrimaryTextColor(manifest);
     }
 
+    @ColorInt
+    public static int getCategoryLabelColor(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mCategoryLabelColor != null ? manifest.mCategoryLabelColor :
+                Styles.getTextColor(manifest);
+    }
+
     @NonNull
     @WorkerThread
     public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
@@ -312,6 +324,7 @@ public final class Manifest extends Base implements Styles {
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
+        mCategoryLabelColor = parseColor(parser, XML_CATEGORY_LABEL_COLOR, mCategoryLabelColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {

@@ -2,10 +2,6 @@ package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.SimpleArrayMap;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.model.Base;
@@ -13,6 +9,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Collection;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
 
 import static android.content.ContentResolver.SYNC_EXTRAS_MANUAL;
 

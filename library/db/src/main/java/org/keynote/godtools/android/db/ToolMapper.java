@@ -2,11 +2,12 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Tool.Type;
+
+import androidx.annotation.NonNull;
 
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER;

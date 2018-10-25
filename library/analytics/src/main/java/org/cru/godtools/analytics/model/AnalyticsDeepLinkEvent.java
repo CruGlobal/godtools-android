@@ -1,7 +1,8 @@
 package org.cru.godtools.analytics.model;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 public class AnalyticsDeepLinkEvent extends AnalyticsBaseEvent {
     @NonNull

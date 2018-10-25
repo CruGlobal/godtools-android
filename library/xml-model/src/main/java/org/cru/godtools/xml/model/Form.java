@@ -1,7 +1,5 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.NonNull;
-
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -10,6 +8,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 

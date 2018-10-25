@@ -9,8 +9,6 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${deps.androidSupport}"
-
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     api "org.greenrobot:eventbus:${deps.eventbus}"

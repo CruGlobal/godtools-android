@@ -1,8 +1,5 @@
 package org.cru.godtools.tract.viewmodel;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 
 import org.cru.godtools.base.model.Event;
@@ -10,6 +7,10 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.xml.model.Form;
 
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 @UiThread
 public final class FormViewHolder extends ParentViewHolder<Form> {
