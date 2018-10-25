@@ -35,7 +35,6 @@ import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.articles.aem.util.ResourceUtilsKt;
-import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -450,7 +449,7 @@ public class AEMDownloadManger {
 
             // delete any files not referenced
             //noinspection ResultOfMethodCallIgnored
-            Stream.of(FileUtils.getResourcesDir(mContext).listFiles())
+            Stream.of(ResourceUtilsKt.getResourcesDir(mContext).listFiles())
                     .filterNot(valid::contains)
                     .forEach(File::delete);
         } finally {
