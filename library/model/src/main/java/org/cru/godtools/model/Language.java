@@ -65,7 +65,7 @@ public class Language extends Base {
             return "";
         }
 
-        return LocaleUtils.getDisplayName(mCode, context, null, null);
+        return LocaleUtils.getDisplayName(mCode, context, mName, null);
     }
 
     @Override
