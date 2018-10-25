@@ -2,10 +2,6 @@ package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
@@ -19,6 +15,10 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
 import retrofit2.Response;
 
 import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;

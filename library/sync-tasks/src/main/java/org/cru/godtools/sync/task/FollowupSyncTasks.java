@@ -1,8 +1,6 @@
 package org.cru.godtools.sync.task;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
@@ -12,6 +10,8 @@ import org.cru.godtools.model.Language;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import retrofit2.Response;
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)

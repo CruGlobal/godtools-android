@@ -1,8 +1,6 @@
 package org.cru.godtools.sync.task;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.api.GodToolsApi;
@@ -12,6 +10,9 @@ import org.junit.Test;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Locale;
+
+import androidx.collection.SimpleArrayMap;
+import androidx.test.InstrumentationRegistry;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
