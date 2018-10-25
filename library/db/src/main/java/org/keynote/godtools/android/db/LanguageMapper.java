@@ -23,7 +23,7 @@ final class LanguageMapper extends BaseMapper<Language> {
                 values.put(field, language.isAdded());
                 break;
             case COLUMN_NAME:
-                values.put(field, language.getLanguageName());
+                values.put(field, language.getName());
                 break;
             default:
                 super.mapField(values, field, language);
@@ -44,7 +44,7 @@ final class LanguageMapper extends BaseMapper<Language> {
 
         language.setCode(getLocale(c, COLUMN_CODE, Language.INVALID_CODE));
         language.setAdded(getBool(c, COLUMN_ADDED, false));
-        language.setLanguageName(getString(c, COLUMN_NAME, null));
+        language.setName(getString(c, COLUMN_NAME, null));
 
         return language;
     }

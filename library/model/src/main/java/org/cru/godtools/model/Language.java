@@ -28,7 +28,7 @@ public class Language extends Base {
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
-    private String mLanguageName;
+    private String mName;
 
     @JsonApiIgnore
     private boolean mAdded = false;
@@ -43,12 +43,12 @@ public class Language extends Base {
     }
 
     @Nullable
-    public String getLanguageName() {
-        return mLanguageName;
+    public String getName() {
+        return mName;
     }
 
-    public void setLanguageName(@Nullable String name) {
-        mLanguageName = name;
+    public void setName(@Nullable String name) {
+        mName = name;
     }
 
     public boolean isAdded() {
