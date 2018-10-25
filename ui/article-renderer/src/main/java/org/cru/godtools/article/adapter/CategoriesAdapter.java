@@ -1,7 +1,5 @@
 package org.cru.godtools.article.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,6 +8,9 @@ import org.cru.godtools.article.databinding.ListItemCategoryBinding;
 import org.cru.godtools.xml.model.Category;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class CategoriesAdapter extends SimpleDataBindingAdapter<ListItemCategoryBinding> {
     public interface Callbacks {

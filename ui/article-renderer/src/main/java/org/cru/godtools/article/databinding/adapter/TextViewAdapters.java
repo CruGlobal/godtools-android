@@ -1,14 +1,15 @@
 package org.cru.godtools.article.databinding.adapter;
 
-import android.databinding.BindingAdapter;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.xml.model.Text;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 
 public final class TextViewAdapters {
     @BindingAdapter(value = {"textNode", "android:textSize"})

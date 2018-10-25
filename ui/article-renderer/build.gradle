@@ -15,9 +15,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
-    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"
-    implementation "com.android.support:recyclerview-v7:${deps.androidSupport}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
+    implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
 
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"

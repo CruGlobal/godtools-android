@@ -1,8 +1,5 @@
 package org.cru.godtools.article.adapter;
 
-import android.arch.lifecycle.Observer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,6 +9,10 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 
 public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding>
         implements Observer<List<Article>> {
