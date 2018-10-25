@@ -1,6 +1,6 @@
 package org.cru.godtools.model.event;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * This event is fired when a tool is actually opened.
