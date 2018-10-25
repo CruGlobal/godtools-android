@@ -6,15 +6,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AnyThread;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.ArrayMap;
-import android.support.v4.util.ArraySet;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
@@ -79,6 +70,15 @@ import java.util.zip.ZipInputStream;
 
 import javax.annotation.concurrent.GuardedBy;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.collection.ArrayMap;
+import androidx.collection.ArraySet;
+import androidx.collection.LongSparseArray;
+import androidx.collection.SimpleArrayMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 

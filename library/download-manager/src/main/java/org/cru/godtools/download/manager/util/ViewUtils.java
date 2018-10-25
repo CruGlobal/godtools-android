@@ -1,11 +1,12 @@
 package org.cru.godtools.download.manager.util;
 
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import org.cru.godtools.download.manager.DownloadProgress;
+
+import androidx.annotation.Nullable;
 
 public final class ViewUtils {
     public static void bindDownloadProgress(@Nullable final ProgressBar progressBar,
