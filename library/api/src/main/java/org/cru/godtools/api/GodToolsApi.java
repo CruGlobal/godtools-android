@@ -2,8 +2,6 @@ package org.cru.godtools.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
@@ -21,6 +19,8 @@ import org.cru.godtools.model.jsonapi.ToolTypeConverter;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
