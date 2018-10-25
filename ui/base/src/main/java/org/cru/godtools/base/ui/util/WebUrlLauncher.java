@@ -3,13 +3,13 @@ package org.cru.godtools.base.ui.util;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import org.cru.godtools.base.ui.R;
 
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 import timber.log.Timber;
 
 public class WebUrlLauncher {

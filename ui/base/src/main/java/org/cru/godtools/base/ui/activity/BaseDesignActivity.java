@@ -1,14 +1,15 @@
 package org.cru.godtools.base.ui.activity;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.base.ui.R2;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 public abstract class BaseDesignActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {

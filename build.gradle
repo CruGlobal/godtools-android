@@ -9,6 +9,8 @@ buildscript {
                 ],
                 androidX             : [
                         annotation: '1.0.0',
+                        appCompat : '1.0.0',
+                        browser   : '1.0.0',
                         core      : '1.0.0',
                 ],
                 androidInstantApps   : '1.1.0',
@@ -31,6 +33,7 @@ buildscript {
                 ktlint               : '0.29.0',
                 leakcanary           : '1.6.2',
                 lightweightStream    : '1.2.1',
+                materialDesign       : '1.0.0',
                 mockito              : '2.17.0',
                 mockitoKotlin        : '2.0.0-RC3',
                 multidex             : '1.0.3',
