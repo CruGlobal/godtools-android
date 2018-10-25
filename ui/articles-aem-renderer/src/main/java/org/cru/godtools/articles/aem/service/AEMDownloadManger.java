@@ -14,6 +14,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Collectors;
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
@@ -449,7 +450,8 @@ public class AEMDownloadManger {
 
             // delete any files not referenced
             //noinspection ResultOfMethodCallIgnored
-            Stream.of(ResourceUtilsKt.getResourcesDir(mContext).listFiles())
+            Optional.ofNullable(ResourceUtilsKt.getResourcesDir(mContext).listFiles())
+                    .map(Stream::of).stream().flatMap(s -> s)
                     .filterNot(valid::contains)
                     .forEach(File::delete);
         } finally {
