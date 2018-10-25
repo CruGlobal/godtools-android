@@ -9,7 +9,7 @@ buildscript {
                 ],
                 androidInstantApps   : '1.1.0',
                 androidLifecycle     : '1.1.1',
-                androidSupport       : '27.1.1',
+                androidSupport       : '28.0.0',
                 androidTestingSupport: '1.0.2',
                 butterknife          : '9.0.0-rc1',
                 calligraphy          : '2.3.0',
@@ -76,10 +76,10 @@ ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4026000
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 27
+    compileSdk    = 28
     minSdk        = 15
     minSdkFeature = 21
-    targetSdk     = 27
+    targetSdk     = 28
 }
 
 subprojects {
