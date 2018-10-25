@@ -1,10 +1,10 @@
 package org.cru.godtools.base.util;
 
-import android.support.annotation.NonNull;
-
 import com.google.common.primitives.Ints;
 
 import java.util.Comparator;
+
+import androidx.annotation.NonNull;
 
 public interface PriorityRunnable extends Comparable<PriorityRunnable>, Runnable {
     int PRIORITY_DEFAULT = 0;

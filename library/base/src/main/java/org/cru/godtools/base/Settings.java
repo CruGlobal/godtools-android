@@ -3,8 +3,6 @@ package org.cru.godtools.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -13,6 +11,8 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import java.util.Locale;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.thekey.android.TheKey;
 
 public final class Settings {
