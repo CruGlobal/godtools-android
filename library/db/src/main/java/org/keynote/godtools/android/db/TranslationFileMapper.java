@@ -2,12 +2,13 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractMapper;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
+
+import androidx.annotation.NonNull;
 
 import static org.keynote.godtools.android.db.Contract.TranslationFileTable.COLUMN_FILE;
 import static org.keynote.godtools.android.db.Contract.TranslationFileTable.COLUMN_TRANSLATION;

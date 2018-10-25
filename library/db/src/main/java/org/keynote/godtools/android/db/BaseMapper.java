@@ -2,10 +2,11 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractMapper;
 import org.cru.godtools.model.Base;
+
+import androidx.annotation.NonNull;
 
 import static org.keynote.godtools.android.db.Contract.BaseTable.COLUMN_ID;
 
