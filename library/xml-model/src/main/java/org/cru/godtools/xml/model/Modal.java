@@ -1,9 +1,6 @@
 package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -18,6 +15,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 

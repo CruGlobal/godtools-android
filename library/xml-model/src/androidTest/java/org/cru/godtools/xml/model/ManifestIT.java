@@ -1,12 +1,12 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.NonNull;
-import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.test.runner.AndroidJUnit4;
 
 import static org.cru.godtools.xml.util.TestParserUtils.getParserForTestAsset;
 import static org.hamcrest.CoreMatchers.is;

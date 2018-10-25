@@ -3,11 +3,6 @@ package org.cru.godtools.xml.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.AnyThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.LruCache;
 import android.util.Xml;
 
 import com.annimon.stream.Stream;
@@ -41,6 +36,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.collection.LruCache;
 import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;

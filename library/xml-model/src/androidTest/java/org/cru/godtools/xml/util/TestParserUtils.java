@@ -2,11 +2,12 @@ package org.cru.godtools.xml.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.support.annotation.NonNull;
-import android.support.test.InstrumentationRegistry;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import androidx.annotation.NonNull;
+import androidx.test.InstrumentationRegistry;
 
 public final class TestParserUtils {
     public static XmlPullParser getParserForTestAsset(@NonNull final String name) throws Exception {
