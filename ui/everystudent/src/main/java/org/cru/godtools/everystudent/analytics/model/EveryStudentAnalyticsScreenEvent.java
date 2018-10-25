@@ -1,11 +1,11 @@
 package org.cru.godtools.everystudent.analytics.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class EveryStudentAnalyticsScreenEvent extends AnalyticsScreenEvent {
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
