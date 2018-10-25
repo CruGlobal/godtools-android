@@ -1,10 +1,5 @@
 package org.cru.godtools.tract.viewmodel;
 
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,6 +17,11 @@ import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;

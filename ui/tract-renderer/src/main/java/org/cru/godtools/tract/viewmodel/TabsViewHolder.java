@@ -1,17 +1,12 @@
 package org.cru.godtools.tract.viewmodel;
 
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TabLayoutUtils;
-import android.support.v4.util.Pools;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.base.model.Event;
@@ -24,6 +19,11 @@ import org.cru.godtools.xml.model.Tab;
 import org.cru.godtools.xml.model.Tabs;
 import org.cru.godtools.xml.model.Text;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.util.Pools;
 import butterknife.BindView;
 
 @UiThread

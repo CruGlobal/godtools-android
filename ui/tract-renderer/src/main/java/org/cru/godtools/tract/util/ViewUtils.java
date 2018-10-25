@@ -4,14 +4,15 @@ import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.TintableBackgroundView;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.TintableBackgroundView;
+import androidx.core.view.ViewCompat;
 
 public class ViewUtils {
     public static int getTopOffset(@NonNull final ViewGroup root, @IdRes final int id) {
