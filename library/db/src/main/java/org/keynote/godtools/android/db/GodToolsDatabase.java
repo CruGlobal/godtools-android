@@ -72,7 +72,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 37: 2018-04-23
      * v5.0.11 - v5.0.12
      * 38: 2018-06-15
-     * 39: 2018-09-24
+     * 39: 2018-10-24
      */
 
     @NonNull

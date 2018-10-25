@@ -78,7 +78,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
             final TranslationFile file = (TranslationFile) obj;
             return getPrimaryKeyWhere(TranslationFile.class, file.getTranslationId(), file.getFileName());
         } else if (obj instanceof Language) {
-            return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode(), ((Language) obj).getLanguageName());
+            return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
         } else if (obj instanceof Tool) {
             return getPrimaryKeyWhere(Tool.class, ((Tool) obj).getCode());
         } else if (obj instanceof Base) {

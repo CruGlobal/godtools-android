@@ -184,7 +184,6 @@ public final class GodToolsDownloadManager {
             final Language language = new Language();
             language.setCode(locale);
             language.setAdded(true);
-            language.setLanguageName(locale.getDisplayName());
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
@@ -203,7 +202,6 @@ public final class GodToolsDownloadManager {
             final Language language = new Language();
             language.setCode(locale);
             language.setAdded(false);
-            language.setLanguageName(locale.getDisplayName());
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(this::pruneStaleTranslations, directExecutor());
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),

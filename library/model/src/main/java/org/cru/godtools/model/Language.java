@@ -39,12 +39,12 @@ public class Language extends Base {
         mCode = code;
     }
 
-    @NonNull
+    @Nullable
     public String getLanguageName() {
         return mLanguageName;
     }
 
-    public void setLanguageName(String name) {
+    public void setLanguageName(@Nullable String name) {
         mLanguageName = name;
     }
 

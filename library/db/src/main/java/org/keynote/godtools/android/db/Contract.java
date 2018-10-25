@@ -61,11 +61,11 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
-        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind()).and(FIELD_NAME.eq(bind()));
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, COLUMN_NAME, SQL_PRIMARY_KEY);
+                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         static final String SQL_V39_ALTER_NAME = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_NAME;

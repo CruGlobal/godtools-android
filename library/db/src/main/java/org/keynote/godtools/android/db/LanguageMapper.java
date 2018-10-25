@@ -43,7 +43,7 @@ final class LanguageMapper extends BaseMapper<Language> {
 
         language.setCode(getLocale(c, COLUMN_CODE, Language.INVALID_CODE));
         language.setAdded(getBool(c, COLUMN_ADDED, false));
-        language.setLanguageName(getString(c, COLUMN_NAME, ""));
+        language.setLanguageName(getString(c, COLUMN_NAME, null));
 
         return language;
     }
