@@ -30,7 +30,7 @@ import java.util.Map;
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
-    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID};
+    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID, LanguageTable.COLUMN_NAME};
     private static final String[] API_FIELDS_TOOL =
             {ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
                     ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER, ToolTable.COLUMN_DETAILS_BANNER,
