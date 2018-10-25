@@ -6,7 +6,7 @@
 
     <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"
             style="@style/Widget.GodTools.Static.Icon.Large"
             tools:src="@drawable/ic_find_tools" />

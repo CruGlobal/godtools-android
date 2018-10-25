@@ -2,8 +2,6 @@ package org.cru.godtools.service;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.Settings;
@@ -14,6 +12,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 import me.thekey.android.Attributes;
 import me.thekey.android.TheKey;
 import me.thekey.android.eventbus.event.LoginEvent;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- HACK: API-17 doesn't correctly handle having both start/end and left/right layout rules defined.
      HACK: So the API-17+ version will only define start/end -->
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -41,7 +41,7 @@
             android:layout_below="@id/banner"
             android:layout_margin="4dp">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/action_add"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -59,7 +59,7 @@
                 android:layout_toEndOf="@id/action_add"
                 android:background="@color/gray_E6" />
 
-            <android.support.v7.widget.AppCompatTextViewImpl
+            <androidx.appcompat.widget.AppCompatTextViewImpl
                 android:id="@+id/language_parallel"
                 style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
                 android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                 android:maxWidth="72dp"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
-            <android.support.v7.widget.AppCompatTextViewImpl
+            <androidx.appcompat.widget.AppCompatTextViewImpl
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 tools:text="Knowing God Personally (Extra Long Title)" />
 
-            <android.support.v7.widget.AppCompatTextViewImpl
+            <androidx.appcompat.widget.AppCompatTextViewImpl
                 android:id="@+id/tagline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/action_info"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -111,4 +111,4 @@
                 app:srcCompat="@drawable/ic_info" />
         </RelativeLayout>
     </RelativeLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

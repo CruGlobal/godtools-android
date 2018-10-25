@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -31,9 +31,9 @@
                 android:layout_alignBottom="@id/banner"
                 android:visibility="gone"
                 tools:visibility="visible" />
-        </android.support.percent.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             style="@style/Widget.GodTools.Tools.Details.Title"
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_marginTop="40dp"
             tools:text="Knowing God Personally" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/shares"
             style="@style/Widget.GodTools.Tools.Details.Shares"
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             android:layout_marginTop="10dp"
             tools:text="45,876 Views" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_add"
             style="@style/Widget.GodTools.Button.Colored.Green"
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/action_tools_download" />
 
-        <android.support.v7.widget.AppCompatButtonImpl
+        <androidx.appcompat.widget.AppCompatButtonImpl
             android:id="@+id/action_remove"
             style="@style/Widget.GodTools.Button.Colored.Red"
             android:layout_width="match_parent"
@@ -79,7 +79,7 @@
             android:text="@string/action_tools_remove"
             tools:visibility="gone" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/Widget.GodTools.Tools.Details.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:text="@string/label_tools_about" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/description"
             style="@style/Widget.GodTools.Tools.Details.Content"
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:layout_marginTop="8dp"
             tools:text="Chili can be enameled with bitter sausages, also try soaking the sauce with ice water.  To the diced avocado add ground beef, strudel, ricotta and tender chocolate.  Try toasting cucumber ricotta tossed with rice vinegar." />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/languages_header"
             style="@style/Widget.GodTools.Tools.Details.Subhead"
             android:layout_width="match_parent"
@@ -107,7 +107,7 @@
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             tools:text="40 Languages" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/languages"
             style="@style/Widget.GodTools.Tools.Details.Content"
             android:layout_width="match_parent"
@@ -118,4 +118,4 @@
             android:layout_marginTop="8dp"
             tools:text="English, French, Spanish" />
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

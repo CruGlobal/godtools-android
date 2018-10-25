@@ -1,23 +1,14 @@
 package org.cru.godtools.activity;
 
-import android.arch.lifecycle.Lifecycle;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
@@ -36,6 +27,15 @@ import org.keynote.godtools.android.activity.MainActivity;
 
 import java.util.Locale;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import butterknife.BindBool;
 import butterknife.BindView;
 import me.thekey.android.TheKey;

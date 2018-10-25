@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.content;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
@@ -10,6 +9,8 @@ import org.cru.godtools.model.event.content.LanguageEventBusSubscriber;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public final class LanguagesLoader extends CachingAsyncTaskEventBusLoader<List<Language>> {
     private static final Query<Language> QUERY_LANGUAGES = Query.select(Language.class);
