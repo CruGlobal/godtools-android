@@ -26,7 +26,7 @@ import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.util.BuildTypeUtils;
 import org.cru.godtools.xml.service.ManifestManager;
@@ -279,8 +279,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     private void syncData() {
-        GodToolsSyncService.syncFollowups(this).sync();
-        GodToolsSyncService.syncToolShares(this).sync();
+        GodToolsSyncServiceKt.syncFollowups(this).sync();
+        GodToolsSyncServiceKt.syncToolShares(this).sync();
     }
 
     @Override

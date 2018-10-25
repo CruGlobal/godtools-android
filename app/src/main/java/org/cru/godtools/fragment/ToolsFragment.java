@@ -38,7 +38,7 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
@@ -213,7 +213,7 @@ public class ToolsFragment extends BasePlatformFragment
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        mSyncHelper.sync(GodToolsSyncService.syncTools(getContext(), force));
+        mSyncHelper.sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
     }
 
     private void startLoaders() {
