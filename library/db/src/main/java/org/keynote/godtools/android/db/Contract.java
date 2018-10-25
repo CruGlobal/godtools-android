@@ -65,7 +65,8 @@ public final class Contract extends BaseContract {
         public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
+                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED,
+                        SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         static final String SQL_V39_ALTER_NAME = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_NAME;
