@@ -1,12 +1,6 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.room.converter.DateConverter;
 import org.ccci.gto.android.common.room.converter.LocaleConverter;
@@ -16,6 +10,13 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.model.TranslationRef;
 import org.cru.godtools.articles.aem.room.converter.MediaTypeConverter;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 /**
  * This class is used to create the database table.

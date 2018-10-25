@@ -1,17 +1,10 @@
 package org.cru.godtools.articles.aem.service;
 
-import android.arch.persistence.room.InvalidationTracker;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AnyThread;
-import android.support.annotation.GuardedBy;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
@@ -72,6 +65,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.GuardedBy;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+import androidx.room.InvalidationTracker;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;

@@ -1,10 +1,10 @@
 package org.cru.godtools.articles.aem.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 import java.util.Date
 
