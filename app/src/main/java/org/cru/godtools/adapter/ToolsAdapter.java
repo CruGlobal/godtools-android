@@ -379,7 +379,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
                     mCallbacks.onToolSelect(mCode, mType, mParallelLanguage);
                 } else if (mType == Tool.Type.ARTICLE && CODE_EVERYSTUDENT.equals(mCode)) {
                     // everystudent content for now
-                    mCallbacks.onToolSelect(mCode, mType);
+                    // TODO: this can probably be removed once we release AEM Articles support
+                    mCallbacks.onToolSelect(mCode, mType, Locale.ENGLISH);
                 } else {
                     // do nothing
                 }
