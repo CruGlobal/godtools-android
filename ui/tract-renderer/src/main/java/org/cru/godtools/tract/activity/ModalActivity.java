@@ -1,6 +1,6 @@
 package org.cru.godtools.tract.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -66,7 +66,7 @@ public class ModalActivity extends ImmersiveActivity {
     @Nullable
     private ModalViewHolder mModalViewHolder;
 
-    public static void start(@NonNull final Context context, @NonNull final String manifestFileName,
+    public static void start(@NonNull final Activity activity, @NonNull final String manifestFileName,
                              @NonNull final String toolCode, @NonNull final Locale locale, @NonNull final String page,
                              @NonNull final String modal) {
         final Bundle extras = new Bundle(4);
@@ -76,8 +76,8 @@ public class ModalActivity extends ImmersiveActivity {
         extras.putString(EXTRA_PAGE, page);
         extras.putString(EXTRA_MODAL, modal);
 
-        ContextCompat.startActivity(context, new Intent(context, ModalActivity.class).putExtras(extras),
-                                    makeCustomAnimation(context, R.anim.activity_fade_in, R.anim.activity_fade_out)
+        ContextCompat.startActivity(activity, new Intent(activity, ModalActivity.class).putExtras(extras),
+                                    makeCustomAnimation(activity, R.anim.activity_fade_in, R.anim.activity_fade_out)
                                             .toBundle());
     }
 
