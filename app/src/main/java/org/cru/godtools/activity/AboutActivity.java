@@ -20,8 +20,8 @@ import static org.cru.godtools.base.util.LocaleUtils.getDeviceLocale;
 public final class AboutActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    public static void start(@NonNull final Activity context) {
-        context.startActivity(new Intent(context, AboutActivity.class));
+    public static void start(@NonNull final Activity activity) {
+        activity.startActivity(new Intent(activity, AboutActivity.class));
     }
 
     /* BEGIN lifecycle */
