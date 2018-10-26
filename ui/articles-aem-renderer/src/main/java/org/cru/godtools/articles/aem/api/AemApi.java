@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
 import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
-import org.cru.godtools.articles.aem.service.DynamicSSLSocketFactory;
+import org.ccci.gto.android.common.util.DynamicSSLSocketFactory;
 import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
@@ -48,7 +48,7 @@ public interface AemApi {
                     .addEnabledProtocols(TlsVersion.TLS_1_1.javaName(), TlsVersion.TLS_1_2.javaName())
                     .build();
             builder.sslSocketFactory(factory);
-        } catch (final NoSuchAlgorithmException e) {
+        } catch ( IllegalStateException | NoSuchAlgorithmException e) {
             Timber.tag("AemApi")
                     .d(e, "Error creating the DynamicSSLSocketFactory");
         }
