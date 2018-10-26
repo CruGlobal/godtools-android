@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,6 +114,7 @@ public class ModalActivity extends ImmersiveActivity {
     }
 
     @Override
+    @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
         setupModalViewHolder();

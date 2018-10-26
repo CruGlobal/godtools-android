@@ -23,12 +23,13 @@ public abstract class BaseDesignActivity extends BaseActivity implements TabLayo
     // region Lifecycle Events
 
     @Override
+    @CallSuper
     public void onContentChanged() {
-        super.onContentChanged();
-
         // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
         // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
         new BaseDesignActivity_ViewBinding(this);
+
+        super.onContentChanged();
 
         setupNavigationTabs();
     }

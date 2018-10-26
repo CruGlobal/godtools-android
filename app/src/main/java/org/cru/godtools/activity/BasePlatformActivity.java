@@ -105,6 +105,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     @Override
+    @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
         setupNavigationDrawer();

@@ -231,6 +231,7 @@ public class TractActivity extends BaseToolActivity
     }
 
     @Override
+    @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
         setupPager();

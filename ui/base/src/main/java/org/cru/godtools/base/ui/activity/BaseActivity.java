@@ -40,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
 
