@@ -5,7 +5,6 @@
         <activity
             android:name="org.cru.godtools.articles.aem.activity.AemArticleActivity"
             android:parentActivityName="org.cru.godtools.article.activity.ArticlesActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

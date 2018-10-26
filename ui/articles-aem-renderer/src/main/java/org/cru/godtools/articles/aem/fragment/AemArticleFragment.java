@@ -83,6 +83,8 @@ public class AemArticleFragment extends BaseToolFragment {
         validateStartState();
 
         setupViewModel();
+
+        this.setRetainInstance(true);
     }
 
     @Nullable
@@ -95,7 +97,9 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupWebView();
+        if (savedInstanceState == null) {
+            setupWebView();
+        }
     }
 
     void onUpdateArticle(@Nullable final Article article) {
@@ -105,6 +109,21 @@ public class AemArticleFragment extends BaseToolFragment {
     }
 
     // endregion Lifecycle Events
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mWebView.saveState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mWebView.restoreState(savedInstanceState);
+        }
+    }
 
     private void validateStartState() {
         if (mArticleUri == null) {
