@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import org.cru.godtools.R;
 import org.cru.godtools.activity.LanguageSelectionActivity;
-import org.keynote.godtools.android.utils.WordUtils;
+import org.cru.godtools.base.util.LocaleUtils;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -57,11 +57,13 @@ public class LanguageSettingsFragment extends BasePlatformFragment {
 
     private void updateLanguages() {
         if (mPrimaryLanguageView != null) {
-            mPrimaryLanguageView.setText(WordUtils.capitalize(mPrimaryLanguage.getDisplayName()));
+            mPrimaryLanguageView.setText(
+                    LocaleUtils.getDisplayName(mPrimaryLanguage, mPrimaryLanguageView.getContext(), null, null));
         }
         if (mParallelLanguageView != null) {
             if (mParallelLanguage != null) {
-                mParallelLanguageView.setText(WordUtils.capitalize(mParallelLanguage.getDisplayName()));
+                mParallelLanguageView.setText(
+                        LocaleUtils.getDisplayName(mParallelLanguage, mParallelLanguageView.getContext(), null, null));
             } else {
                 mParallelLanguageView.setText(R.string.action_language_parallel_select);
             }

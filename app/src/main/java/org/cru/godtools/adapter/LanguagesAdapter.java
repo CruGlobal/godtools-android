@@ -144,6 +144,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         ImageView mActionRemove;
 
         @Nullable
+        Language mLanguage = null;
+        @Nullable
         Locale mLocale = null;
         boolean mAdded = false;
 
@@ -156,17 +158,16 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
         @Override
         void bind(final int position) {
-            final Language language = mShowNone && position == 0 ? null :
-                    mLanguages.get(position - (mShowNone ? 1 : 0));
-            mLocale = language != null ? language.getCode() : null;
-            mAdded = language != null && language.isAdded();
+            mLanguage = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
+            mLocale = mLanguage != null ? mLanguage.getCode() : null;
+            mAdded = mLanguage != null && mLanguage.isAdded();
 
             if (mRoot != null) {
                 mRoot.setSelected(Objects.equal(mSelected, mLocale));
             }
             if (mTitle != null) {
-                if (mLocale != null) {
-                    mTitle.setText(mLocale.getDisplayName());
+                if (mLanguage != null) {
+                    mTitle.setText(mLanguage.getDisplayName(mTitle.getContext()));
                 } else {
                     mTitle.setText(R.string.label_language_none);
                 }

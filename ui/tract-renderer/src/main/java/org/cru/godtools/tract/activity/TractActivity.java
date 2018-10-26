@@ -24,7 +24,6 @@ import com.google.common.util.concurrent.SettableFuture;
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
-import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
@@ -32,6 +31,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -74,6 +74,7 @@ import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
+import static org.ccci.gto.android.common.util.LocaleUtils.getFallbacks;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
@@ -402,13 +403,13 @@ public class TractActivity extends BaseToolActivity
         }
         streamLanguageParamater(data, PARAM_PRIMARY_LANGUAGE).forEach(rawPrimaryLanguages::add);
         rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
-        final Locale[] primaryLanguages = LocaleUtils.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+        final Locale[] primaryLanguages = getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
         Collections.addAll(locales, primaryLanguages);
         mPrimaryLanguages = primaryLanguages.length;
 
         // process parallel languages specified in the uri
-        final Locale[] parallelLanguages = LocaleUtils.getFallbacks(
-                streamLanguageParamater(data, PARAM_PARALLEL_LANGUAGE).toArray(Locale[]::new));
+        final Locale[] parallelLanguages =
+                getFallbacks(streamLanguageParamater(data, PARAM_PARALLEL_LANGUAGE).toArray(Locale[]::new));
         Collections.addAll(locales, parallelLanguages);
         mParallelLanguages = parallelLanguages.length;
 
@@ -530,8 +531,9 @@ public class TractActivity extends BaseToolActivity
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
-                        .setText(locale.getDisplayName(locale))
-                        .setTag(locale));
+                                             .setText(LocaleUtils.getDisplayName(locale, mLanguageTabs.getContext(),
+                                                                                 null, locale))
+                                             .setTag(locale));
             }
 
             mLanguageTabs.addOnTabSelectedListener(this);

@@ -1,8 +1,11 @@
 package org.cru.godtools.model;
 
+import android.content.Context;
+
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
+import org.cru.godtools.base.util.LocaleUtils;
 
 import java.util.Locale;
 
@@ -25,7 +28,7 @@ public class Language extends Base {
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
-    private String mLanguageName;
+    private String mName;
 
     @JsonApiIgnore
     private boolean mAdded = false;
@@ -40,12 +43,12 @@ public class Language extends Base {
     }
 
     @Nullable
-    public String getLanguageName() {
-        return mLanguageName;
+    public String getName() {
+        return mName;
     }
 
-    public void setLanguageName(@Nullable String name) {
-        mLanguageName = name;
+    public void setName(@Nullable String name) {
+        mName = name;
     }
 
     public boolean isAdded() {
@@ -57,8 +60,12 @@ public class Language extends Base {
     }
 
     @NonNull
-    public String getDisplayName() {
-        return mCode != null ? mCode.getDisplayName() : "";
+    public String getDisplayName(@Nullable final Context context) {
+        if (mCode == null) {
+            return "";
+        }
+
+        return LocaleUtils.getDisplayName(mCode, context, mName, null);
     }
 
     @Override
