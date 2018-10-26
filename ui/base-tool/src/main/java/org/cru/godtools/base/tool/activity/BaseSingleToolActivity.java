@@ -80,6 +80,16 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     // endregion Lifecycle Events
 
+    @Override
+    protected int determineActiveToolState() {
+        // TODO: handle STATE_NOT_FOUND
+        if (mManifest != null) {
+            return STATE_LOADED;
+        } else {
+            return STATE_LOADING;
+        }
+    }
+
     private boolean validStartState() {
         return !Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale);
     }

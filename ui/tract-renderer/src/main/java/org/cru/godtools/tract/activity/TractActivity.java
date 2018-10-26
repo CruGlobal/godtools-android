@@ -92,24 +92,9 @@ public class TractActivity extends BaseToolActivity
     private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
     private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
-    private static final int STATE_LOADING = 0;
-    private static final int STATE_LOADED = 1;
-    private static final int STATE_NOT_FOUND = 2;
-
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
-
-    // Visibility sections
-    @Nullable
-    @BindView(R2.id.contentLoading)
-    View mLoadingContent;
-    @Nullable
-    @BindView(R2.id.noContent)
-    View mMissingContent;
-    @Nullable
-    @BindView(R2.id.mainContent)
-    View mMainContent;
 
     // Manifest page pager
     @BindView(R2.id.background_image)
@@ -213,9 +198,8 @@ public class TractActivity extends BaseToolActivity
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
         }
 
-        setContentView(R.layout.activity_tract);
         startLoaders();
-        updateVisibilityState();
+        setContentView(R.layout.activity_tract);
     }
 
     @Override
@@ -440,6 +424,11 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
+    @Override
+    protected int determineActiveToolState() {
+        return determineLanguageState(mActiveLanguage);
+    }
+
     private int determineLanguageState(final int languageIndex) {
         if (mManifests.get(languageIndex) != null) {
             return STATE_LOADED;
@@ -493,19 +482,11 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
-    private void updateVisibilityState() {
+    @Override
+    @CallSuper
+    protected void updateVisibilityState() {
         updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary();
-        final int state = determineLanguageState(mActiveLanguage);
-
-        if (mLoadingContent != null) {
-            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
-        }
-        if (mMainContent != null) {
-            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
-        }
-        if (mMissingContent != null) {
-            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
-        }
+        super.updateVisibilityState();
     }
 
     private void setupLanguageToggle() {
@@ -547,7 +528,6 @@ public class TractActivity extends BaseToolActivity
 
                 if (i == mActiveLanguage) {
                     onUpdateActiveManifest();
-                    updateVisibilityState();
                 }
                 updateLanguageToggle();
                 break;

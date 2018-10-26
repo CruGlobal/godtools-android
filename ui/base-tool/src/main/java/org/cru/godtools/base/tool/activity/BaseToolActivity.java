@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import org.cru.godtools.base.tool.R2;
@@ -24,12 +25,27 @@ import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgr
 
 public abstract class BaseToolActivity extends ImmersiveActivity
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
+    protected static final int STATE_LOADING = 0;
+    protected static final int STATE_LOADED = 1;
+    protected static final int STATE_NOT_FOUND = 2;
+
     @Nullable
     protected GodToolsDownloadManager mDownloadManager;
 
     // App/Action Bar
     @Nullable
     private Menu mToolbarMenu;
+
+    // Visibility sections
+    @Nullable
+    @BindView(R2.id.contentLoading)
+    View mLoadingContent;
+    @Nullable
+    @BindView(R2.id.noContent)
+    View mMissingContent;
+    @Nullable
+    @BindView(R2.id.mainContent)
+    View mMainContent;
 
     // download progress
     @Nullable
@@ -59,6 +75,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         new BaseToolActivity_ViewBinding(this);
 
         super.onContentChanged();
+        updateVisibilityState();
     }
 
     @Override
@@ -91,6 +108,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     @CallSuper
     protected void onUpdateActiveManifest() {
         updateToolbar();
+        updateVisibilityState();
     }
 
     // endregion Lifecycle Events
@@ -138,6 +156,27 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     }
 
     // endregion Toolbar update logic
+
+    // region Tool state
+
+    @CallSuper
+    protected void updateVisibilityState() {
+        final int state = determineActiveToolState();
+
+        if (mLoadingContent != null) {
+            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
+        }
+        if (mMainContent != null) {
+            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
+        }
+        if (mMissingContent != null) {
+            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    protected abstract int determineActiveToolState();
+
+    // endregion Tool state
 
     // region DownloadProgress logic
 
