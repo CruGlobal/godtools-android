@@ -164,14 +164,12 @@ public class TractActivity extends BaseToolActivity
                                       @NonNull final Locale... languages) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
-        return new Intent(context, TractActivity.class).putExtras(extras); //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return new Intent(context, TractActivity.class).putExtras(extras);
     }
 
     public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale... languages) {
-        final Bundle extras = new Bundle();
-        populateExtras(extras, toolCode, languages);
-        activity.startActivity(new Intent(activity, TractActivity.class).putExtras(extras));
+        activity.startActivity(createIntent(activity, toolCode, languages));
     }
 
     public TractActivity() {
