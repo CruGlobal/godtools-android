@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -69,16 +70,31 @@ public class ModalActivity extends ImmersiveActivity {
     public static void start(@NonNull final Activity activity, @NonNull final String manifestFileName,
                              @NonNull final String toolCode, @NonNull final Locale locale, @NonNull final String page,
                              @NonNull final String modal) {
+        final Bundle extras = getBundle(manifestFileName, toolCode, locale, page, modal);
+
+        ContextCompat.startActivity(activity, new Intent(activity, ModalActivity.class).putExtras(extras),
+                                    makeCustomAnimation(activity, R.anim.activity_fade_in, R.anim.activity_fade_out)
+                                            .toBundle());
+    }
+
+    private static Bundle getBundle(@NonNull String manifestFileName, @NonNull String toolCode, @NonNull Locale locale, @NonNull String page, @NonNull String modal) {
         final Bundle extras = new Bundle(4);
         extras.putString(EXTRA_MANIFEST_FILE_NAME, manifestFileName);
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, locale);
         extras.putString(EXTRA_PAGE, page);
         extras.putString(EXTRA_MODAL, modal);
+        return extras;
+    }
 
-        ContextCompat.startActivity(activity, new Intent(activity, ModalActivity.class).putExtras(extras),
-                                    makeCustomAnimation(activity, R.anim.activity_fade_in, R.anim.activity_fade_out)
-                                            .toBundle());
+    public static void startWithFlag(@NonNull final Context context, @NonNull final String manifestFileName,
+                                     @NonNull final String toolCode, @NonNull final Locale locale, @NonNull final String page,
+                                     @NonNull final String modal) {
+        final Bundle extras = getBundle(manifestFileName, toolCode, locale, page, modal);
+        ContextCompat.startActivity(context, new Intent(context, ModalActivity.class).putExtras(extras)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                makeCustomAnimation(context, R.anim.activity_fade_in, R.anim.activity_fade_out)
+                        .toBundle());
     }
 
     public ModalActivity() {
