@@ -66,6 +66,18 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         startLoaders();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startDownloadProgressListener(mTool, mLocale);
+    }
+
+    @Override
+    protected void onStop() {
+        stopDownloadProgressListener();
+        super.onStop();
+    }
+
     // endregion Lifecycle Events
 
     private boolean validStartState() {
