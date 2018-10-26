@@ -13,7 +13,6 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
@@ -32,7 +31,6 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -77,7 +75,6 @@ import butterknife.BindView;
 import static org.ccci.gto.android.common.util.LocaleUtils.getFallbacks;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
-import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
@@ -114,10 +111,6 @@ public class TractActivity extends BaseToolActivity
     @BindView(R2.id.mainContent)
     View mMainContent;
 
-    @Nullable
-    @BindView(R2.id.loading_progress)
-    ProgressBar mLoadingProgress;
-
     // Manifest page pager
     @BindView(R2.id.background_image)
     ScaledPicassoImageView mBackgroundImage;
@@ -134,13 +127,9 @@ public class TractActivity extends BaseToolActivity
     /*final*/ int mPrimaryLanguages = 1;
     /*final*/ int mParallelLanguages = 0;
 
-    @Nullable
-    private GodToolsDownloadManager mDownloadManager;
     @NonNull
     @VisibleForTesting
     SettableFuture[] mDownloadTasks = new SettableFuture[0];
-    @NonNull
-    private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
     private final SparseArray<Translation> mTranslations;
     private final SparseArray<Manifest> mManifests;
@@ -190,7 +179,6 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDownloadManager = GodToolsDownloadManager.getInstance(this);
 
         // read requested tract from the provided intent
         processIntent(getIntent(), savedInstanceState);
@@ -299,12 +287,6 @@ public class TractActivity extends BaseToolActivity
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
-        mDownloadProgress = progress != null ? progress : DownloadProgress.INDETERMINATE;
-        bindDownloadProgress(mLoadingProgress, mDownloadProgress);
     }
 
     @Override
@@ -742,22 +724,13 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void startDownloadProgressListener() {
-        if (mDownloadManager != null && mTool != null) {
-            mDownloadManager.addOnDownloadProgressUpdateListener(mTool, mLanguages[mActiveLanguage], this);
-            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mTool, mLanguages[mActiveLanguage]));
-        }
+        startDownloadProgressListener(mTool, mLanguages[mActiveLanguage]);
     }
 
     private void restartDownloadProgressListener() {
         stopDownloadProgressListener();
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
             startDownloadProgressListener();
-        }
-    }
-
-    private void stopDownloadProgressListener() {
-        if (mDownloadManager != null) {
-            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
         }
     }
 

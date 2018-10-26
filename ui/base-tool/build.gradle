@@ -1,3 +1,5 @@
+apply plugin: 'com.jakewharton.butterknife'
+
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -6,6 +8,7 @@ android {
 
 dependencies {
     implementation project(':library:base')
+    api project(':library:download-manager')
     implementation project(':library:model')
     api project(':library:xml-model')
 
@@ -18,5 +21,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+
+    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
