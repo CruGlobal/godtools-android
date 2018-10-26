@@ -1,3 +1,9 @@
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+}
+
 dependencies {
     implementation project(':library:base')
     implementation project(':library:model')
