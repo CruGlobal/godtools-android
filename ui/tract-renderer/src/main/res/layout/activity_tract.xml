@@ -9,7 +9,7 @@
 
     <include layout="@layout/activity_tool_missing" />
 
-    <include layout="@layout/activity_tract_loading" />
+    <include layout="@layout/activity_tool_loading" />
 
     <include layout="@layout/activity_tract_content" />
 
