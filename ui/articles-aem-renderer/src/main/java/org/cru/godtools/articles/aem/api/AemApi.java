@@ -48,7 +48,7 @@ public interface AemApi {
                     .addEnabledProtocols(TlsVersion.TLS_1_1.javaName(), TlsVersion.TLS_1_2.javaName())
                     .build();
             builder.sslSocketFactory(factory);
-        } catch ( IllegalStateException | NoSuchAlgorithmException e) {
+        } catch (final IllegalStateException | NoSuchAlgorithmException e) {
             Timber.tag("AemApi")
                     .d(e, "Error creating the DynamicSSLSocketFactory");
         }
