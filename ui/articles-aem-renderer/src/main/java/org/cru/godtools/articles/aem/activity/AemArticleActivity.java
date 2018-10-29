@@ -87,6 +87,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
     void onUpdateArticle(@Nullable final Article article) {
         mArticle = article;
         updateToolbarTitle();
+        updateVisibilityState();
     }
 
     // endregion Lifecycle Events
@@ -113,6 +114,15 @@ public class AemArticleActivity extends BaseSingleToolActivity {
         } else {
             super.updateToolbarTitle();
         }
+    }
+
+    @Override
+    protected int determineActiveToolState() {
+        final int state = super.determineActiveToolState();
+        if (state != STATE_LOADED) {
+            return state;
+        }
+        return mArticle != null && mArticle.content != null ? STATE_LOADED : STATE_LOADING;
     }
 
     @MainThread
