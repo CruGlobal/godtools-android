@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.annimon.stream.IntPair;
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
 import com.google.android.material.tabs.TabLayout;
@@ -590,9 +589,8 @@ public class TractActivity extends BaseToolActivity
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
         // only process if the active language is not found
         if (determineLanguageState(mActiveLanguage) == STATE_NOT_FOUND) {
-            Stream.of(mLanguages).indexed()
-                    .filter(l -> determineLanguageState(l.getFirst()) != STATE_NOT_FOUND)
-                    .map(IntPair::getSecond)
+            Stream.of(mLanguages)
+                    .filterIndexed((i, l) -> determineLanguageState(i) != STATE_NOT_FOUND)
                     .findFirst()
                     .ifPresent(this::updateActiveLanguage);
         }
