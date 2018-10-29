@@ -9,6 +9,8 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 
@@ -16,13 +18,15 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public abstract class BaseSingleToolActivity extends BaseToolActivity {
-    private static final int LOADER_MANIFEST = 101;
+    private static final int LOADER_TRANSLATION = 101;
+    private static final int LOADER_MANIFEST = 102;
 
     @NonNull
     @SuppressWarnings("ConstantConditions")
@@ -30,6 +34,9 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     @NonNull
     protected /*final*/ Locale mLocale = Language.INVALID_CODE;
 
+    private boolean mTranslationLoaded = false;
+    @Nullable
+    private Translation mTranslation;
     @Nullable
     protected Manifest mManifest;
 
@@ -72,6 +79,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         startDownloadProgressListener(mTool, mLocale);
     }
 
+    protected void onUpdateTranslation() {
+        updateVisibilityState();
+    }
+
     @Override
     protected void onStop() {
         stopDownloadProgressListener();
@@ -82,9 +93,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     @Override
     protected int determineActiveToolState() {
-        // TODO: handle STATE_NOT_FOUND
         if (mManifest != null) {
             return STATE_LOADED;
+        } else if (mTranslationLoaded && mTranslation == null) {
+            return STATE_NOT_FOUND;
         } else {
             return STATE_LOADING;
         }
@@ -95,7 +107,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     private void startLoaders() {
-        getSupportLoaderManager().initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+        final LoaderManager manager = LoaderManager.getInstance(this);
+
+        manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
+        manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
     }
 
     void setManifest(@Nullable final Manifest manifest) {
@@ -103,10 +118,43 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         onUpdateActiveManifest();
     }
 
+    void setTranslation(@Nullable final Translation translation) {
+        mTranslationLoaded = true;
+        mTranslation = translation;
+        onUpdateTranslation();
+    }
+
     @Nullable
     @Override
     protected Manifest getActiveManifest() {
         return mManifest;
+    }
+
+    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
+        @Nullable
+        @Override
+        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
+            switch (id) {
+                case LOADER_TRANSLATION:
+                    return new LatestTranslationLoader(BaseSingleToolActivity.this, mTool, mLocale);
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
+            switch (loader.getId()) {
+                case LOADER_TRANSLATION:
+                    setTranslation(translation);
+                    break;
+            }
+        }
+
+        @Override
+        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
+            // noop
+        }
     }
 
     class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {

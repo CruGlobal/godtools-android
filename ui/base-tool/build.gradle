@@ -10,6 +10,7 @@ dependencies {
     implementation project(':library:base')
     api project(':library:download-manager')
     implementation project(':library:model')
+    implementation project(':library:model-loader')
     api project(':library:xml-model')
 
     api project(':ui:base')
