@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -166,9 +167,9 @@ public class TractActivity extends BaseToolActivity
         return new Intent(context, TractActivity.class).putExtras(extras);
     }
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale... languages) {
-        context.startActivity(createIntent(context, toolCode, languages));
+        activity.startActivity(createIntent(activity, toolCode, languages));
     }
 
     public TractActivity() {

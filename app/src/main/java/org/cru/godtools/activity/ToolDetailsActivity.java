@@ -1,6 +1,6 @@
 package org.cru.godtools.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -24,10 +24,10 @@ public class ToolDetailsActivity extends BasePlatformActivity implements ToolDet
     @Nullable
     private /*final*/ String mTool = Tool.INVALID_CODE;
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode) {
-        final Intent intent = new Intent(context, ToolDetailsActivity.class);
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode) {
+        final Intent intent = new Intent(activity, ToolDetailsActivity.class);
         intent.putExtra(EXTRA_TOOL, toolCode);
-        context.startActivity(intent);
+        activity.startActivity(intent);
     }
 
     /* BEGIN lifecycle */

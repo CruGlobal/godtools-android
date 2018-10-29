@@ -1,6 +1,6 @@
 package org.cru.godtools.articles.aem.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,13 +27,13 @@ public class AemArticleActivity extends BaseSingleToolActivity {
 
     // region Constructors and Initializers
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language, @NonNull final Uri articleUri) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, language);
         extras.putParcelable(EXTRA_ARTICLE, articleUri);
-        final Intent intent = new Intent(context, AemArticleActivity.class).putExtras(extras);
-        context.startActivity(intent);
+        final Intent intent = new Intent(activity, AemArticleActivity.class).putExtras(extras);
+        activity.startActivity(intent);
     }
 
     public AemArticleActivity() {
