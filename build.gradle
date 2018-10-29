@@ -29,6 +29,9 @@ buildscript {
                 eventbus           : '3.1.1',
                 evernoteAndroidJob : '1.2.5',
                 facebookStetho     : '1.5.0',
+                firebase           : [
+                        core: '16.0.4',
+                ],
                 gtoSupport         : '2.0.0-SNAPSHOT',
                 guava              : '26.0-android',
                 hamcrest           : '1.3',
