@@ -1,7 +1,5 @@
 package org.cru.godtools.analytics;
 
-import android.app.Activity;
-
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.model.Event;
@@ -32,18 +30,6 @@ public class TimberAnalyticsService implements AnalyticsService {
     }
 
     /* BEGIN lifecycle */
-
-    @Override
-    public void onActivityResume(@NonNull final Activity activity) {
-        Timber.tag("AnalyticsService")
-                .d("onActivityResume(%s)", activity.getClass());
-    }
-
-    @Override
-    public void onActivityPause(@NonNull final Activity activity) {
-        Timber.tag("AnalyticsService")
-                .d("onActivityPause(%s)", activity.getClass());
-    }
 
     @Override
     public void onTrackContentEvent(@NonNull final Event event) {
