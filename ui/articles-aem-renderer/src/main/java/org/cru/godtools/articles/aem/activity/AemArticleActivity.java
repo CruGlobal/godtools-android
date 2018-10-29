@@ -62,7 +62,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
             return;
         }
 
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_generic_tool_fragment);
     }
 
     @Override
