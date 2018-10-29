@@ -48,6 +48,7 @@ import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -776,6 +777,14 @@ public class TractActivity extends BaseToolActivity
             intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest, mPager != null ? mPager.getCurrentItem() : 0));
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
+    }
+
+    @Override
+    public void showModal(@NonNull final Modal modal) {
+        final Manifest manifest = modal.getManifest();
+        final Page page = modal.getPage();
+        ModalActivity.start(this, manifest.getManifestName(), manifest.getCode(),
+                            manifest.getLocale(), page.getId(), modal.getId());
     }
 
     /**
