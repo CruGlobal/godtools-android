@@ -100,8 +100,8 @@ public class AemJsonParser {
         // Create Article
         final Article article = new Article(url);
         if (content != null) {
-            article.uuid = content.optString(TAG_UUID, article.uuid);
-            article.title = content.optString(TAG_TITLE, article.title);
+            article.setUuid(content.optString(TAG_UUID, article.getUuid()));
+            article.setTitle(content.optString(TAG_TITLE, article.getTitle()));
 
             // store any tags
             final JSONArray tagsJson = content.optJSONArray(TAG_TAGS);

@@ -133,9 +133,9 @@ public class AemArticleFragment extends BaseToolFragment {
 
     private void updateWebView() {
         if (mWebView != null) {
-            if (mArticle != null && mArticle.content != null) {
+            if (mArticle != null && mArticle.getContent() != null) {
                 assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-                final String content = injectCss(mArticle.content);
+                final String content = injectCss(mArticle.getContent());
                 mWebView.loadDataWithBaseURL(mArticleUri.toString() + ".html", content, null, null, null);
             }
         }

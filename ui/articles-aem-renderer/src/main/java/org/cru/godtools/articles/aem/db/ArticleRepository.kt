@@ -10,7 +10,7 @@ abstract class ArticleRepository internal constructor(private val db: ArticleRoo
     @Transaction
     open fun updateContent(article: Article) {
         db.articleDao().updateContent(article.uri, article.contentUuid, article.content)
-        db.resourceRepository().storeResources(article, article.mResources)
+        db.resourceRepository().storeResources(article, article.resources)
     }
 
     @Transaction

@@ -110,7 +110,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
     @Override
     protected void updateToolbarTitle() {
         if (mArticle != null) {
-            setTitle(mArticle.title);
+            setTitle(mArticle.getTitle());
         } else {
             super.updateToolbarTitle();
         }
@@ -122,7 +122,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
         if (state != STATE_LOADED) {
             return state;
         }
-        return mArticle != null && mArticle.content != null ? STATE_LOADED : STATE_LOADING;
+        return mArticle != null && mArticle.getContent() != null ? STATE_LOADED : STATE_LOADING;
     }
 
     @MainThread
