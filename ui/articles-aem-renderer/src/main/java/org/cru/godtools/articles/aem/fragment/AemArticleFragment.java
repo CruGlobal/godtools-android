@@ -10,9 +10,14 @@ import android.view.ViewGroup;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import org.cru.godtools.article.aem.R;
-import org.cru.godtools.article.aem.R2;
+import android.widget.LinearLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
+import okhttp3.MediaType;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.ResourceDao;
 import org.cru.godtools.articles.aem.model.Article;
@@ -20,6 +25,7 @@ import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
+import timber.log.Timber;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,24 +35,15 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
-import okhttp3.MediaType;
-import timber.log.Timber;
-
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AemArticleFragment extends BaseToolFragment {
     private static final String TAG = "AemArticleFragment";
 
-    @BindView(R2.id.aem_article_web_view)
-    WebView mWebView;
+//    @BindView(R2.id.aem_article_web_view)
+//    WebView mWebView;
     private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
+    private AemArticleViewModel mViewModel;
 
     // these properties should be treated as final and only set/modified in onCreate()
     @NonNull
@@ -91,7 +88,9 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+
+        mViewModel.setAemWebView(getContext(), mWebViewClient);
+        return mViewModel.aemWebView;
     }
 
     @Override
@@ -114,14 +113,14 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        mWebView.saveState(outState);
+        mViewModel.aemWebView.saveState(outState);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            mWebView.restoreState(savedInstanceState);
+            mViewModel.aemWebView.restoreState(savedInstanceState);
         }
     }
 
@@ -132,14 +131,14 @@ public class AemArticleFragment extends BaseToolFragment {
     }
 
     private void setupViewModel() {
-        final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
-        if (viewModel.article == null) {
+        if (mViewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            viewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
+            mViewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
         }
 
-        viewModel.article.observe(this, this::onUpdateArticle);
+        mViewModel.article.observe(this, this::onUpdateArticle);
     }
 
     private void setActivityTitle() {
@@ -151,18 +150,18 @@ public class AemArticleFragment extends BaseToolFragment {
     // region WebView content
 
     private void setupWebView() {
-        if (mWebView != null) {
-            mWebView.setWebViewClient(mWebViewClient);
+        if (mViewModel.aemWebView != null) {
+            mViewModel.aemWebView.setWebViewClient(mWebViewClient);
             updateWebView();
         }
     }
 
     private void updateWebView() {
-        if (mWebView != null) {
+        if (mViewModel.aemWebView != null) {
             if (mArticle != null && mArticle.content != null) {
                 assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
                 final String content = injectCss(mArticle.content);
-                mWebView.loadDataWithBaseURL(mArticleUri.toString() + ".html", content, null, null, null);
+                mViewModel.aemWebView.loadDataWithBaseURL(mArticleUri.toString() + ".html", content, null, null, null);
             }
         }
     }
@@ -260,5 +259,18 @@ public class AemArticleFragment extends BaseToolFragment {
 
     public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
+        WebView aemWebView;
+
+        public void setAemWebView(Context context, WebViewClient client) {
+            if (aemWebView != null) {
+                aemWebView.removeAllViews();
+                return;
+            }
+
+            aemWebView = new WebView(context);
+            aemWebView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            aemWebView.setWebViewClient(client);
+        }
     }
 }
