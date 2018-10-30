@@ -69,6 +69,7 @@ script:
 #  --no-daemon     : disable the background gradle build daemon
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 jobs:
+  fast_finish: true
   include:
   - name: "Build Debug"
     stage: compile
