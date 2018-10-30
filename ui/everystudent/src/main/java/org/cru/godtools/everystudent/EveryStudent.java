@@ -130,18 +130,6 @@ public class EveryStudent extends ExpandableListActivity {
         return false;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.onActivityResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mTracker.onActivityPause(this);
-    }
-
     @SuppressLint("HandlerLeak")
     private class ParserHandler extends Handler {
         @Override

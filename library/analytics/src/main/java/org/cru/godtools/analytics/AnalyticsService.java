@@ -1,6 +1,5 @@
 package org.cru.godtools.analytics;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 
@@ -8,7 +7,6 @@ import org.cru.godtools.base.model.Event;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
 
 public interface AnalyticsService {
     /* Action event names */
@@ -22,12 +20,6 @@ public interface AnalyticsService {
     static AnalyticsService getInstance(@NonNull final Context context) {
         return AnalyticsDispatcher.getAnalyticsService(context.getApplicationContext());
     }
-
-    @UiThread
-    default void onActivityResume(@NonNull Activity activity) {}
-
-    @UiThread
-    default void onActivityPause(@NonNull Activity activity) {}
 
     @AnyThread
     default void onTrackShareAction() {}
