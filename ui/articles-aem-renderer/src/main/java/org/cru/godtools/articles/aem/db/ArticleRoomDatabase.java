@@ -17,6 +17,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 /**
  * This class is used to create the database table.
@@ -28,10 +30,17 @@ import androidx.room.TypeConverters;
         AemImport.class, AemImport.AemImportArticle.class,
         Article.class, Article.Tag.class,
         Article.ArticleResource.class, Resource.class
-}, version = 8)
+}, version = 9)
 @TypeConverters({DateConverter.class, LocaleConverter.class, MediaTypeConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "aem_article_cache.db";
+
+    /*
+     * Version history
+     *
+     * v5.0.18
+     * 9: 2018-10-30
+     */
 
     ArticleRoomDatabase() {}
 
@@ -47,6 +56,7 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     public static synchronized ArticleRoomDatabase getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(), ArticleRoomDatabase.class, DATABASE_NAME)
+                    .addMigrations(MIGRATION_8_9)
                     .fallbackToDestructiveMigration()
                     .build();
         }
@@ -85,4 +95,16 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     public abstract ResourceRepository resourceRepository();
 
     // endregion Repositories
+
+    // region Migrations
+
+    private static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull final SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE articles ADD COLUMN `shareLink` TEXT");
+            database.execSQL("ALTER TABLE articles ADD COLUMN `shortShareLink` TEXT");
+        }
+    };
+
+    // endregion Migrations
 }
