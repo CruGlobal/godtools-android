@@ -17,6 +17,9 @@ class Article(@field:PrimaryKey val uri: Uri) {
     var contentUuid: String? = null
     var content: String? = null
 
+    var shareLink: Uri? = null
+    var shortShareLink: Uri? = null
+
     @Ignore
     var tags: List<String> = ImmutableList.of()
         set(it) {
