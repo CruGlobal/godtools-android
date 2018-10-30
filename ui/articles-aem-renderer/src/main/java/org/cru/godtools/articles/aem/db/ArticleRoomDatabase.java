@@ -13,6 +13,7 @@ import org.cru.godtools.articles.aem.room.converter.MediaTypeConverter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -33,7 +34,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 }, version = 9)
 @TypeConverters({DateConverter.class, LocaleConverter.class, MediaTypeConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
-    private static final String DATABASE_NAME = "aem_article_cache.db";
+    @VisibleForTesting
+    static final String DATABASE_NAME = "aem_article_cache.db";
 
     /*
      * Version history
@@ -98,7 +100,8 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     // region Migrations
 
-    private static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+    @VisibleForTesting
+    static final Migration MIGRATION_8_9 = new Migration(8, 9) {
         @Override
         public void migrate(@NonNull final SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE articles ADD COLUMN `shareLink` TEXT");
