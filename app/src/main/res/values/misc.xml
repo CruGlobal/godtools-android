@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-        user: 2
-        userPortrait: 12
-    -->
-    <integer name="default_screen_orientation">12</integer>
-
     <bool name="show_login_menu_items">false</bool>
 </resources>
