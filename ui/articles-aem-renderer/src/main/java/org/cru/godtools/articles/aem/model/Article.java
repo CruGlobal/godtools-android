@@ -5,17 +5,13 @@ import android.net.Uri;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.concurrent.Immutable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -57,20 +53,6 @@ public class Article {
     @Nullable
     public String content;
 
-    /**
-     * The date the article was created
-     */
-    @NonNull
-    @ColumnInfo(name = "date_created")
-    public long mDateCreated;
-
-    /**
-     * The date the article was last updated. If no
-     * data exist should be set to date created.
-     */
-    @ColumnInfo(name = "date_updated")
-    public long mDateUpdated;
-
     @Ignore
     @NonNull
     private List<String> mTags = ImmutableList.of();
@@ -93,13 +75,6 @@ public class Article {
         return Stream.of(mTags)
                 .map(tag -> new Tag(this, tag))
                 .toList();
-    }
-
-    public String getLastUpdatedFormattedString() {
-        String date = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                .format(new Date(mDateUpdated));
-
-        return String.format("Updated: %s", date);
     }
 
     @Immutable

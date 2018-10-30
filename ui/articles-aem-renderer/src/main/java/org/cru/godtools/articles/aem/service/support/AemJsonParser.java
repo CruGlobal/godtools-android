@@ -99,7 +99,6 @@ public class AemJsonParser {
 
         // Create Article
         final Article article = new Article(url);
-        article.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
         if (content != null) {
             article.uuid = content.optString(TAG_UUID, article.uuid);
             article.title = content.optString(TAG_TITLE, article.title);
@@ -115,10 +114,6 @@ public class AemJsonParser {
                 tags.add(tag);
             }
             article.setTags(tags);
-
-            if (content.has(LAST_MODIFIED_TAG)) {
-                article.mDateUpdated = getDateLongFromJsonString(content.optString(LAST_MODIFIED_TAG));
-            }
         }
 
         return article;
