@@ -96,6 +96,7 @@
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="8dp"
+            android:autoLink="web|email"
             tools:text="Chili can be enameled with bitter sausages, also try soaking the sauce with ice water.  To the diced avocado add ground beef, strudel, ricotta and tender chocolate.  Try toasting cucumber ricotta tossed with rice vinegar." />
 
         <androidx.appcompat.widget.AppCompatTextView
