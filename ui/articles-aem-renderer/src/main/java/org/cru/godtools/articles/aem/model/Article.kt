@@ -18,8 +18,8 @@ class Article(@field:PrimaryKey val uri: Uri) {
     var contentUuid: String? = null
     var content: String? = null
 
-    var shareLink: Uri? = null
-    var shortShareLink: Uri? = null
+    var canonicalUri: Uri? = null
+    var shareUri: Uri? = null
 
     @Ignore
     var tags: List<String> = ImmutableList.of()

@@ -104,8 +104,8 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     static final Migration MIGRATION_8_9 = new Migration(8, 9) {
         @Override
         public void migrate(@NonNull final SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE articles ADD COLUMN `shareLink` TEXT");
-            database.execSQL("ALTER TABLE articles ADD COLUMN `shortShareLink` TEXT");
+            database.execSQL("ALTER TABLE articles ADD COLUMN `canonicalUri` TEXT");
+            database.execSQL("ALTER TABLE articles ADD COLUMN `shareUri` TEXT");
         }
     };
 
