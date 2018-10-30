@@ -59,9 +59,6 @@ public class AemArticleFragment extends BaseToolFragment {
     private AemArticleViewModel mViewModel;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    @NonNull
-    @SuppressWarnings("NullableProblems")
-    /*final*/ ArticleRoomDatabase mAemDb;
     @Nullable
     private /*final*/ Uri mArticleUri;
 
@@ -83,7 +80,6 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAemDb = ArticleRoomDatabase.getInstance(requireContext());
 
         final Bundle args = getArguments();
         if (args != null) {
@@ -133,7 +129,8 @@ public class AemArticleFragment extends BaseToolFragment {
 
         if (mViewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            mViewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
+            mViewModel.article =
+                    ArticleRoomDatabase.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
         }
 
         mViewModel.article.observe(this, this::onUpdateArticle);
