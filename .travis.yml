@@ -83,7 +83,7 @@ jobs:
     script: ./gradlew clean assembleRelease --continue --stacktrace --parallel
 
   - name: "Static Analysis"
-    stage: test
+    stage: compile
 
     install: skip
     script: ./gradlew check --continue --stacktrace --parallel
