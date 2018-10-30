@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "71275134527",
+    "firebase_url": "https://godtools-b2f82.firebaseio.com",
+    "project_id": "godtools-b2f82",
+    "storage_bucket": "godtools-b2f82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71275134527:android:db9ebd1fd7bcde2c",
+        "android_client_info": {
+          "package_name": "org.keynote.godtools.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyAuld0dB3rSs1AJ4lqqb688Y05z4RgEMyQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71275134527:android:3f5f59861a4a0730",
+        "android_client_info": {
+          "package_name": "org.keynote.godtools.android.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyAuld0dB3rSs1AJ4lqqb688Y05z4RgEMyQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
