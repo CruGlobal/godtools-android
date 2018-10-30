@@ -40,8 +40,15 @@ interface ArticleDao {
     fun insertOrIgnore(articleResource: Article.ArticleResource)
 
     @WorkerThread
-    @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
-    fun update(uri: Uri, uuid: String, title: String)
+    @Query("""
+        UPDATE articles
+        SET
+            uuid = :uuid,
+            title = :title,
+            canonicalUri = :canonicalUri,
+            shareUri = CASE WHEN canonicalUri = :canonicalUri THEN shareUri ELSE NULL END
+        WHERE uri = :uri""")
+    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
 
     @WorkerThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")

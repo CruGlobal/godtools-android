@@ -95,6 +95,7 @@ public class AemJsonParser {
 
         // Create Article
         final Article article = new Article(url);
+        article.setCanonicalUri(Uri.parse(url.toString() + ".html"));
         if (content != null) {
             article.setUuid(content.optString(TAG_UUID, article.getUuid()));
             article.setTitle(content.optString(TAG_TITLE, article.getTitle()));
