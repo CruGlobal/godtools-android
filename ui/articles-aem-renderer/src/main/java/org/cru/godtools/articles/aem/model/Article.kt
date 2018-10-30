@@ -2,6 +2,7 @@ package org.cru.godtools.articles.aem.model
 
 import android.net.Uri
 import androidx.annotation.RestrictTo
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
@@ -59,4 +60,12 @@ class Article(@field:PrimaryKey val uri: Uri) {
     data class ArticleResource(val articleUri: Uri, val resourceUri: Uri) {
         constructor(article: Article, resource: Resource) : this(article.uri, resource.uri)
     }
+
+    // HACK: old database columns kept to simplify migrations
+    @ColumnInfo(name = "date_created")
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    var deleteMe1: Int = 0
+    @ColumnInfo(name = "date_updated")
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    var deleteMe2: Int = 0
 }

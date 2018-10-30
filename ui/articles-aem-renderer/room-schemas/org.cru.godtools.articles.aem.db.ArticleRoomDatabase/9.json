@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "259e73a8ce7758ba116d59358dcd9b47",
+    "identityHash": "a4223c6497ea76727227762467490586",
     "entities": [
       {
         "tableName": "translations",
@@ -208,7 +208,7 @@
       },
       {
         "tableName": "articles",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `title` TEXT NOT NULL, `contentUuid` TEXT, `content` TEXT, `shareLink` TEXT, `shortShareLink` TEXT, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `title` TEXT NOT NULL, `contentUuid` TEXT, `content` TEXT, `shareLink` TEXT, `shortShareLink` TEXT, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -245,6 +245,18 @@
             "columnName": "shortShareLink",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "deleteMe1",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleteMe2",
+            "columnName": "date_updated",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "uri",
@@ -401,7 +413,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"259e73a8ce7758ba116d59358dcd9b47\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a4223c6497ea76727227762467490586\")"
     ]
   }
 }
