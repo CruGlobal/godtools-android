@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,7 +282,15 @@ public class AemArticleFragment extends BaseToolFragment {
         @NonNull
         WebView getWebView(@NonNull final Activity activity) {
             if (mWebView == null) {
-                mWebView = new WebView(activity);
+                final Context context;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    context = new ContextThemeWrapper(activity.getApplicationContext(),
+                                                      R.style.Theme_GodTools_Tool_AppBar);
+                } else {
+                    context = new ContextThemeWrapper(activity.getApplicationContext(), activity.getTheme());
+                }
+
+                mWebView = new WebView(context);
                 mWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                                                     ViewGroup.LayoutParams.MATCH_PARENT));
                 mWebView.setWebViewClient(mWebViewClient);
