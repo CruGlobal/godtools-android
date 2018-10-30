@@ -13,7 +13,6 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
@@ -32,7 +31,6 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -78,7 +76,6 @@ import butterknife.BindView;
 import static org.ccci.gto.android.common.util.LocaleUtils.getFallbacks;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
-import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
@@ -96,28 +93,9 @@ public class TractActivity extends BaseToolActivity
     private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
     private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
-    private static final int STATE_LOADING = 0;
-    private static final int STATE_LOADED = 1;
-    private static final int STATE_NOT_FOUND = 2;
-
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
-
-    // Visibility sections
-    @Nullable
-    @BindView(R2.id.contentLoading)
-    View mLoadingContent;
-    @Nullable
-    @BindView(R2.id.noContent)
-    View mMissingContent;
-    @Nullable
-    @BindView(R2.id.mainContent)
-    View mMainContent;
-
-    @Nullable
-    @BindView(R2.id.loading_progress)
-    ProgressBar mLoadingProgress;
 
     // Manifest page pager
     @BindView(R2.id.background_image)
@@ -135,13 +113,9 @@ public class TractActivity extends BaseToolActivity
     /*final*/ int mPrimaryLanguages = 1;
     /*final*/ int mParallelLanguages = 0;
 
-    @Nullable
-    private GodToolsDownloadManager mDownloadManager;
     @NonNull
     @VisibleForTesting
     SettableFuture[] mDownloadTasks = new SettableFuture[0];
-    @NonNull
-    private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
     private final SparseArray<Translation> mTranslations;
     private final SparseArray<Manifest> mManifests;
@@ -191,7 +165,6 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDownloadManager = GodToolsDownloadManager.getInstance(this);
 
         // read requested tract from the provided intent
         processIntent(getIntent(), savedInstanceState);
@@ -226,9 +199,8 @@ public class TractActivity extends BaseToolActivity
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
         }
 
-        setContentView(R.layout.activity_tract);
         startLoaders();
-        updateVisibilityState();
+        setContentView(R.layout.activity_tract);
     }
 
     @Override
@@ -300,12 +272,6 @@ public class TractActivity extends BaseToolActivity
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
-        mDownloadProgress = progress != null ? progress : DownloadProgress.INDETERMINATE;
-        bindDownloadProgress(mLoadingProgress, mDownloadProgress);
     }
 
     @Override
@@ -459,6 +425,11 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
+    @Override
+    protected int determineActiveToolState() {
+        return determineLanguageState(mActiveLanguage);
+    }
+
     private int determineLanguageState(final int languageIndex) {
         if (mManifests.get(languageIndex) != null) {
             return STATE_LOADED;
@@ -512,19 +483,11 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
-    private void updateVisibilityState() {
+    @Override
+    @CallSuper
+    protected void updateVisibilityState() {
         updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary();
-        final int state = determineLanguageState(mActiveLanguage);
-
-        if (mLoadingContent != null) {
-            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
-        }
-        if (mMainContent != null) {
-            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
-        }
-        if (mMissingContent != null) {
-            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
-        }
+        super.updateVisibilityState();
     }
 
     private void setupLanguageToggle() {
@@ -566,7 +529,6 @@ public class TractActivity extends BaseToolActivity
 
                 if (i == mActiveLanguage) {
                     onUpdateActiveManifest();
-                    updateVisibilityState();
                 }
                 updateLanguageToggle();
                 break;
@@ -743,22 +705,13 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void startDownloadProgressListener() {
-        if (mDownloadManager != null && mTool != null) {
-            mDownloadManager.addOnDownloadProgressUpdateListener(mTool, mLanguages[mActiveLanguage], this);
-            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mTool, mLanguages[mActiveLanguage]));
-        }
+        startDownloadProgressListener(mTool, mLanguages[mActiveLanguage]);
     }
 
     private void restartDownloadProgressListener() {
         stopDownloadProgressListener();
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
             startDownloadProgressListener();
-        }
-    }
-
-    private void stopDownloadProgressListener() {
-        if (mDownloadManager != null) {
-            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
         }
     }
 

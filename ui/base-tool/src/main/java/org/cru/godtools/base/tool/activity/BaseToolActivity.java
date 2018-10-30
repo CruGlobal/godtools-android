@@ -1,28 +1,82 @@
 package org.cru.godtools.base.tool.activity;
 
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import org.cru.godtools.base.tool.R2;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
+import org.cru.godtools.download.manager.DownloadProgress;
+import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.xml.model.Manifest;
+
+import java.util.Locale;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import butterknife.BindView;
 
 import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
+import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 
-public abstract class BaseToolActivity extends ImmersiveActivity {
+public abstract class BaseToolActivity extends ImmersiveActivity
+        implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
+    protected static final int STATE_LOADING = 0;
+    protected static final int STATE_LOADED = 1;
+    protected static final int STATE_NOT_FOUND = 2;
+
+    @Nullable
+    protected GodToolsDownloadManager mDownloadManager;
+
     // App/Action Bar
     @Nullable
     private Menu mToolbarMenu;
+
+    // Visibility sections
+    @Nullable
+    @BindView(R2.id.contentLoading)
+    View mLoadingContent;
+    @Nullable
+    @BindView(R2.id.noContent)
+    View mMissingContent;
+    @Nullable
+    @BindView(R2.id.mainContent)
+    View mMainContent;
+
+    // download progress
+    @Nullable
+    @BindView(R2.id.loading_progress)
+    ProgressBar mLoadingProgress;
+
+    @NonNull
+    private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
     public BaseToolActivity(final boolean immersive) {
         super(immersive);
     }
 
     // region Lifecycle Events
+
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDownloadManager = GodToolsDownloadManager.getInstance(this);
+    }
+
+    @Override
+    @CallSuper
+    public void onContentChanged() {
+        // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
+        // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
+        new BaseToolActivity_ViewBinding(this);
+
+        super.onContentChanged();
+        updateVisibilityState();
+    }
 
     @Override
     protected void onSetupActionBar() {
@@ -45,9 +99,16 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     @CallSuper
     protected void onUpdateToolbar() {}
 
+    @Override
+    public final void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
+        mDownloadProgress = progress != null ? progress : DownloadProgress.INDETERMINATE;
+        bindDownloadProgress(mLoadingProgress, mDownloadProgress);
+    }
+
     @CallSuper
     protected void onUpdateActiveManifest() {
         updateToolbar();
+        updateVisibilityState();
     }
 
     // endregion Lifecycle Events
@@ -95,6 +156,44 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     }
 
     // endregion Toolbar update logic
+
+    // region Tool state
+
+    @CallSuper
+    protected void updateVisibilityState() {
+        final int state = determineActiveToolState();
+
+        if (mLoadingContent != null) {
+            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
+        }
+        if (mMainContent != null) {
+            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
+        }
+        if (mMissingContent != null) {
+            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    protected abstract int determineActiveToolState();
+
+    // endregion Tool state
+
+    // region DownloadProgress logic
+
+    protected final void startDownloadProgressListener(@Nullable final String tool, @Nullable final Locale language) {
+        if (mDownloadManager != null && tool != null && language != null) {
+            mDownloadManager.addOnDownloadProgressUpdateListener(tool, language, this);
+            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(tool, language));
+        }
+    }
+
+    protected final void stopDownloadProgressListener() {
+        if (mDownloadManager != null) {
+            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
+        }
+    }
+
+    // endregion DownloadProgress logic
 
     @Override
     public void setTitle(final CharSequence title) {

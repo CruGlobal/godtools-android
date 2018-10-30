@@ -100,7 +100,6 @@ public class AemArticleFragment extends BaseToolFragment {
 
     void onUpdateArticle(@Nullable final Article article) {
         mArticle = article;
-        setActivityTitle();
         updateWebView();
     }
 
@@ -121,12 +120,6 @@ public class AemArticleFragment extends BaseToolFragment {
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
-    }
-
-    private void setActivityTitle() {
-        if (mArticle != null) {
-            requireActivity().setTitle(mArticle.title);
-        }
     }
 
     // region WebView content

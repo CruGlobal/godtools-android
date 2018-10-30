@@ -62,7 +62,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
             mCategory = extras.getString(EXTRA_CATEGORY, mCategory);
         }
 
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_generic_tool_fragment);
     }
 
     @Override
