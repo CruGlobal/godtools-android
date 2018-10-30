@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 env:
   global:
-    - GRADLE_OPTS="-Xmx2048m"
+    - GRADLE_OPTS="-Xmx3072m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
     # FABRIC_BUILD_SECRET={Build Secret}
