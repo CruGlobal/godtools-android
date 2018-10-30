@@ -105,6 +105,8 @@ subprojects {
     }
 }
 
+def checkTasks = ['checkProductionRelease', 'checkProductionDebug', 'checkStageDebug', 'checkRelease', 'checkDebug', 'check']
+
 // configure checkstyle
 subprojects {
     apply plugin: 'checkstyle'
@@ -121,8 +123,8 @@ subprojects {
         classpath = files()
     }
     afterEvaluate {
-        if (project.tasks.findByName('check')) {
-            check.dependsOn('checkstyle')
+        checkTasks.each {
+            project.tasks.findByName(it)?.dependsOn('checkstyle')
         }
     }
 }
@@ -145,8 +147,8 @@ subprojects {
         args "--reporter=checkstyle,output=${buildDir}/reports/ktlint/ktlint.xml"
     }
     afterEvaluate {
-        if (project.tasks.findByName('check')) {
-            check.dependsOn ktlint
+        checkTasks.each {
+            project.tasks.findByName(it)?.dependsOn('ktlint')
         }
     }
 }
