@@ -294,15 +294,16 @@ public class AemArticleFragment extends BaseToolFragment {
             if (mWebView == null) {
                 return;
             }
-            if (article == null || article.content == null) {
+            if (article == null || article.getContent() == null) {
                 return;
             }
-            if (Objects.equal(article.contentUuid, mContentUuid)) {
+            if (Objects.equal(article.getContentUuid(), mContentUuid)) {
                 return;
             }
 
-            mWebView.loadDataWithBaseURL(article.uri.toString() + ".html", article.content, "text/html", null, null);
-            mContentUuid = article.contentUuid;
+            mWebView.loadDataWithBaseURL(article.getUri().toString() + ".html", article.getContent(),
+                    "text/html", null, null);
+            mContentUuid = article.getContentUuid();
         }
     }
 }
