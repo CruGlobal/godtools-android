@@ -1,15 +1,21 @@
 package org.cru.godtools.articles.aem.fragment;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+
+import com.google.common.base.Objects;
 
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
@@ -24,6 +30,8 @@ import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -32,8 +40,8 @@ import java.util.concurrent.ExecutionException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -44,14 +52,13 @@ import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 public class AemArticleFragment extends BaseToolFragment {
     private static final String TAG = "AemArticleFragment";
 
-    @BindView(R2.id.aem_article_web_view)
-    WebView mWebView;
-    private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
+    @Nullable
+    @BindView(R2.id.frame)
+    FrameLayout mWebViewContainer;
+
+    private AemArticleViewModel mViewModel;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    @NonNull
-    @SuppressWarnings("NullableProblems")
-    /*final*/ ArticleRoomDatabase mAemDb;
     @Nullable
     private /*final*/ Uri mArticleUri;
 
@@ -73,7 +80,6 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAemDb = ArticleRoomDatabase.getInstance(requireContext());
 
         final Bundle args = getArguments();
         if (args != null) {
@@ -103,6 +109,12 @@ public class AemArticleFragment extends BaseToolFragment {
         updateWebView();
     }
 
+    @Override
+    public void onDestroyView() {
+        cleanupWebView();
+        super.onDestroyView();
+    }
+
     // endregion Lifecycle Events
 
     private void validateStartState() {
@@ -112,49 +124,60 @@ public class AemArticleFragment extends BaseToolFragment {
     }
 
     private void setupViewModel() {
-        final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
-        if (viewModel.article == null) {
+        if (mViewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            viewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
+            mViewModel.article =
+                    ArticleRoomDatabase.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
         }
 
-        viewModel.article.observe(this, this::onUpdateArticle);
+        mViewModel.article.observe(this, this::onUpdateArticle);
     }
 
     // region WebView content
 
     private void setupWebView() {
-        if (mWebView != null) {
-            mWebView.setWebViewClient(mWebViewClient);
-            updateWebView();
+        if (mWebViewContainer != null) {
+            mWebViewContainer.addView(mViewModel.getWebView(requireActivity()));
         }
+        updateWebView();
     }
 
     private void updateWebView() {
-        if (mWebView != null) {
-            if (mArticle != null && mArticle.getContent() != null) {
-                assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-                final String content = injectCss(mArticle.getContent());
-                mWebView.loadDataWithBaseURL(mArticleUri.toString() + ".html", content, null, null, null);
-            }
-        }
+        mViewModel.updateWebViewArticle(mArticle);
     }
 
-    @NonNull
-    private String injectCss(@NonNull final String content) {
-        final StringBuilder builder = new StringBuilder(content);
-        builder.insert(content.indexOf("<head>") + 7,
-                "<style> img { max-width: 100%; } </style>");
-        return builder.toString();
+    private void cleanupWebView() {
+        if (mWebViewContainer != null) {
+            mWebViewContainer.removeView(mViewModel.getWebView(requireActivity()));
+        }
     }
 
     // endregion WebView content
 
-    private class ArticleWebViewClient extends WebViewClient {
+    private static class ArticleWebViewClient extends WebViewClient {
+        private final Context mContext;
+        @NonNull
+        private final ArticleRoomDatabase mAemDb;
+        @NonNull
+        private Reference<Activity> mActivity = new WeakReference<>(null);
+
+        ArticleWebViewClient(@NonNull final Context context) {
+            mContext = context.getApplicationContext();
+            mAemDb = ArticleRoomDatabase.getInstance(context);
+        }
+
+        void updateActivity(@Nullable final Activity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-            WebUrlLauncher.openUrl(requireActivity(), Uri.parse(url));
+            final Activity activity = mActivity.get();
+            if (activity != null) {
+                WebUrlLauncher.openUrl(activity, Uri.parse(url));
+            }
             return true;
         }
 
@@ -209,7 +232,7 @@ public class AemArticleFragment extends BaseToolFragment {
             // get the data input stream
             InputStream data = null;
             try {
-                data = resource.getInputStream(requireContext());
+                data = resource.getInputStream(mContext);
             } catch (final FileNotFoundException e) {
                 // the file wasn't found in the local cache directory. log the error and clear the local file state so
                 // it is downloaded again.
@@ -232,7 +255,55 @@ public class AemArticleFragment extends BaseToolFragment {
         }
     }
 
-    public static class AemArticleViewModel extends ViewModel {
+    public static class AemArticleViewModel extends AndroidViewModel {
         LiveData<Article> article;
+        @Nullable
+        private WebView mWebView;
+        @NonNull
+        private final ArticleWebViewClient mWebViewClient;
+        @Nullable
+        private String mContentUuid;
+
+        public AemArticleViewModel(@NonNull final Application application) {
+            super(application);
+            mWebViewClient = new ArticleWebViewClient(application);
+        }
+
+        @NonNull
+        WebView getWebView(@NonNull final Activity activity) {
+            if (mWebView == null) {
+                final Context context;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    context = new ContextThemeWrapper(activity.getApplicationContext(),
+                                                      R.style.Theme_GodTools_Tool_AppBar);
+                } else {
+                    context = new ContextThemeWrapper(activity.getApplicationContext(), activity.getTheme());
+                }
+
+                mWebView = new WebView(context);
+                mWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                                    ViewGroup.LayoutParams.MATCH_PARENT));
+                mWebView.setWebViewClient(mWebViewClient);
+            }
+            mWebViewClient.updateActivity(activity);
+
+            return mWebView;
+        }
+
+        void updateWebViewArticle(@Nullable final Article article) {
+            if (mWebView == null) {
+                return;
+            }
+            if (article == null || article.getContent() == null) {
+                return;
+            }
+            if (Objects.equal(article.getContentUuid(), mContentUuid)) {
+                return;
+            }
+
+            mWebView.loadDataWithBaseURL(article.getUri().toString() + ".html", article.getContent(),
+                    "text/html", null, null);
+            mContentUuid = article.getContentUuid();
+        }
     }
 }
