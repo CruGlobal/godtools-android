@@ -38,8 +38,8 @@ import me.thekey.android.TheKey;
 
 import static com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity.HTTPS;
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
-import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_APP_ID;
+import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
 public class SnowplowAnalyticsService {
     /* SnowPlow value constants */
