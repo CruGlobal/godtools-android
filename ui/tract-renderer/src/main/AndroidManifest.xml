@@ -5,7 +5,7 @@
     <application>
         <activity
             android:name=".activity.TractActivity"
-            android:screenOrientation="userPortrait"
+            android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tract.Activity.Tract">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -32,7 +32,7 @@
 
         <activity
             android:name=".activity.ModalActivity"
-            android:screenOrientation="user"
+            android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>
 </manifest>

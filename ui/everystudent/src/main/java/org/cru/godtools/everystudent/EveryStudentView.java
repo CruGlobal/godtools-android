@@ -127,7 +127,6 @@ public class EveryStudentView extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        mAnalytics.onActivityPause(this);
         if (wl != null) {
             wl.release();
         }
@@ -139,7 +138,6 @@ public class EveryStudentView extends Activity {
         if (wl != null) {
             wl.acquire();
         }
-        mAnalytics.onActivityResume(this);
     }
 
     @Override

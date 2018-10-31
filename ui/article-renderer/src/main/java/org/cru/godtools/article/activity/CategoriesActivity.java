@@ -1,6 +1,6 @@
 package org.cru.godtools.article.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,12 +19,12 @@ import androidx.fragment.app.FragmentManager;
 public class CategoriesActivity extends BaseSingleToolActivity implements CategoriesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language) {
         final Bundle extras = new Bundle(2);
         populateExtras(extras, toolCode, language);
-        final Intent intent = new Intent(context, CategoriesActivity.class).putExtras(extras);
-        context.startActivity(intent);
+        final Intent intent = new Intent(activity, CategoriesActivity.class).putExtras(extras);
+        activity.startActivity(intent);
     }
 
     public CategoriesActivity() {
@@ -40,7 +40,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
             return;
         }
 
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_generic_tool_fragment);
     }
 
     @Override

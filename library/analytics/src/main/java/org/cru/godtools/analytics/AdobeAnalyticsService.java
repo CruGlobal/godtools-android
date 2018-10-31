@@ -2,9 +2,11 @@ package org.cru.godtools.analytics;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.adobe.mobile.Analytics;
 import com.adobe.mobile.Config;
@@ -27,16 +29,16 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.AnyThread;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import me.thekey.android.TheKey;
 
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 
-public final class AdobeAnalyticsService implements AnalyticsService {
+public final class AdobeAnalyticsService implements AnalyticsService, Application.ActivityLifecycleCallbacks {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
@@ -72,7 +74,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         mContext = context;
         mTheKey = TheKey.getInstance(mContext);
         Config.setContext(context);
+
         EventBus.getDefault().register(this);
+        ((Application) mContext.getApplicationContext()).registerActivityLifecycleCallbacks(this);
     }
 
     @Nullable
@@ -88,24 +92,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    // region Tracking Methods
-
-    @UiThread
-    @Override
-    public void onActivityResume(@NonNull final Activity activity) {
-        final String guid = mTheKey.getDefaultSessionGuid();
-        mActiveActivity = new WeakReference<>(activity);
-        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid, null)));
-    }
-
-    @UiThread
-    @Override
-    public void onActivityPause(@NonNull final Activity activity) {
-        if (mActiveActivity.get() == activity) {
-            mActiveActivity = new WeakReference<>(null);
-            mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
-        }
-    }
+    // region Tracking Events
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
@@ -137,7 +124,42 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
-    // endregion Tracking Methods
+    // region ActivityLifecycleCallbacks
+
+    @Override
+    public void onActivityCreated(final Activity activity, final Bundle savedInstanceState) {}
+
+    @Override
+    public void onActivityStarted(final Activity activity) {}
+
+    @Override
+    @MainThread
+    public void onActivityResumed(final Activity activity) {
+        final String guid = mTheKey.getDefaultSessionGuid();
+        mActiveActivity = new WeakReference<>(activity);
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid, null)));
+    }
+
+    @Override
+    public void onActivityPaused(final Activity activity) {
+        if (mActiveActivity.get() == activity) {
+            mActiveActivity = new WeakReference<>(null);
+            mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        }
+    }
+
+    @Override
+    public void onActivityStopped(final Activity activity) {}
+
+    @Override
+    public void onActivitySaveInstanceState(final Activity activity, final Bundle outState) {}
+
+    @Override
+    public void onActivityDestroyed(final Activity activity) {}
+
+    // endregion ActivityLifecycleCallbacks
+
+    // endregion Tracking Events
 
     @AnyThread
     private void trackAction(@NonNull final String action, @Nullable final AnalyticsActionEvent event,

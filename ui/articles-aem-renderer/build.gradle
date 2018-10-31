@@ -9,6 +9,10 @@ android {
             }
         }
     }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/room-schemas")
+    }
 }
 
 dependencies {

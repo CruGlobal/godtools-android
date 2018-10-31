@@ -1,6 +1,6 @@
 package org.cru.godtools.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,8 +19,8 @@ import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 public class LanguageSettingsActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, LanguageSettingsActivity.class));
+    public static void start(@NonNull final Activity activity) {
+        activity.startActivity(new Intent(activity, LanguageSettingsActivity.class));
     }
 
     // region Lifecycle Events

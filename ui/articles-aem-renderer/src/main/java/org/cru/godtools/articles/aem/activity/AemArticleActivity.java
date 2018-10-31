@@ -1,12 +1,14 @@
 package org.cru.godtools.articles.aem.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import org.cru.godtools.article.aem.R;
+import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.fragment.AemArticleFragment;
+import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
@@ -15,6 +17,9 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
@@ -22,18 +27,24 @@ public class AemArticleActivity extends BaseSingleToolActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     // these properties should be treated as final and only set/modified in onCreate()
+    @NonNull
+    @SuppressWarnings("NullableProblems")
+    /*final*/ ArticleRoomDatabase mAemDb;
     @Nullable
     private /*final*/ Uri mArticleUri;
 
+    @Nullable
+    private Article mArticle;
+
     // region Constructors and Initializers
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language, @NonNull final Uri articleUri) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, language);
         extras.putParcelable(EXTRA_ARTICLE, articleUri);
-        final Intent intent = new Intent(context, AemArticleActivity.class).putExtras(extras);
-        context.startActivity(intent);
+        final Intent intent = new Intent(activity, AemArticleActivity.class).putExtras(extras);
+        activity.startActivity(intent);
     }
 
     public AemArticleActivity() {
@@ -62,7 +73,9 @@ public class AemArticleActivity extends BaseSingleToolActivity {
             return;
         }
 
-        setContentView(R.layout.activity_generic_fragment);
+        mAemDb = ArticleRoomDatabase.getInstance(this);
+        setContentView(R.layout.activity_generic_tool_fragment);
+        setupViewModel();
     }
 
     @Override
@@ -71,10 +84,45 @@ public class AemArticleActivity extends BaseSingleToolActivity {
         loadFragmentIfNeeded();
     }
 
+    void onUpdateArticle(@Nullable final Article article) {
+        mArticle = article;
+        updateToolbarTitle();
+        updateVisibilityState();
+    }
+
     // endregion Lifecycle Events
 
     private boolean validStartState() {
         return mArticleUri != null;
+    }
+
+    private void setupViewModel() {
+        final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
+
+        if (viewModel.article == null) {
+            assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
+            viewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
+        }
+
+        viewModel.article.observe(this, this::onUpdateArticle);
+    }
+
+    @Override
+    protected void updateToolbarTitle() {
+        if (mArticle != null) {
+            setTitle(mArticle.getTitle());
+        } else {
+            super.updateToolbarTitle();
+        }
+    }
+
+    @Override
+    protected int determineActiveToolState() {
+        final int state = super.determineActiveToolState();
+        if (state != STATE_LOADED) {
+            return state;
+        }
+        return mArticle != null && mArticle.getContent() != null ? STATE_LOADED : STATE_LOADING;
     }
 
     @MainThread
@@ -89,5 +137,9 @@ public class AemArticleActivity extends BaseSingleToolActivity {
         fm.beginTransaction()
                 .replace(R.id.frame, AemArticleFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
                 .commit();
+    }
+
+    public static class AemArticleViewModel extends ViewModel {
+        LiveData<Article> article;
     }
 }

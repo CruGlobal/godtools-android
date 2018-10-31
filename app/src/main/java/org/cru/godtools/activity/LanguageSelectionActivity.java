@@ -1,6 +1,6 @@
 package org.cru.godtools.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -26,10 +26,10 @@ public class LanguageSelectionActivity extends BasePlatformActivity implements L
     // these properties should be treated as final and only set/modified in onCreate()
     private /*final*/ boolean mPrimary = true;
 
-    public static void start(@NonNull final Context context, final boolean primary) {
-        final Intent intent = new Intent(context, LanguageSelectionActivity.class);
+    public static void start(@NonNull final Activity activity, final boolean primary) {
+        final Intent intent = new Intent(activity, LanguageSelectionActivity.class);
         intent.putExtra(EXTRA_PRIMARY, primary);
-        context.startActivity(intent);
+        activity.startActivity(intent);
     }
 
     // region Lifecycle Events

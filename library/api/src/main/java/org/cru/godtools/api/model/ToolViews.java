@@ -1,12 +1,12 @@
 package org.cru.godtools.api.model;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 import org.cru.godtools.model.Tool;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.api.model.ToolViews.JSON_API_TYPE;
 

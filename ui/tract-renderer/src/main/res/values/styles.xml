@@ -17,12 +17,4 @@
 
         <item name="buttonStyle">@style/Widget.GodTools.Button.Outline</item>
     </style>
-
-    <style name="Widget.GodTools.Tract.Static.ProgressBar" parent="Widget.GodTools.ProgressBar">
-        <item name="android:progressDrawable">@drawable/progress_loading</item>
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">10dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
-    </style>
 </resources>

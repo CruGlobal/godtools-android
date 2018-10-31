@@ -1,6 +1,6 @@
 package org.cru.godtools.article.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -33,13 +33,13 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
     // region Initialization
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language, @Nullable final String category) {
         final Bundle args = new Bundle();
         populateExtras(args, toolCode, language);
         args.putString(EXTRA_CATEGORY, category);
-        final Intent intent = new Intent(context, ArticlesActivity.class).putExtras(args);
-        context.startActivity(intent);
+        final Intent intent = new Intent(activity, ArticlesActivity.class).putExtras(args);
+        activity.startActivity(intent);
     }
 
     public ArticlesActivity() {
@@ -62,7 +62,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
             mCategory = extras.getString(EXTRA_CATEGORY, mCategory);
         }
 
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_generic_tool_fragment);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         if (article != null) {
-            AemArticleActivity.start(this, mTool, mLocale, article.uri);
+            AemArticleActivity.start(this, mTool, mLocale, article.getUri());
         }
     }
 

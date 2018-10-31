@@ -17,7 +17,6 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.annimon.stream.function.Predicate;
 import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
@@ -331,7 +330,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
                         .orderBy(ToolTable.COLUMN_ORDER))
                 .map(GodToolsShortcutManager::toolShortcutId)
                 .map(shortcuts::get)
-                .filter(Predicate.Util.notNull())
+                .withoutNulls()
                 .limit(manager.getMaxShortcutCountPerActivity())
                 .toList();
         manager.setDynamicShortcuts(dynamic);

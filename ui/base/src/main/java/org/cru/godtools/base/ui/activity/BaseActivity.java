@@ -55,18 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @CallSuper
     protected void onSetupActionBar() {}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mAnalytics.onActivityResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mAnalytics.onActivityPause(this);
-    }
-
     // endregion Lifecycle Events
 
     private void setupActionBar() {

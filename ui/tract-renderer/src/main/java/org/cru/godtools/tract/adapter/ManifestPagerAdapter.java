@@ -12,7 +12,6 @@ import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
 import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
@@ -37,6 +36,8 @@ import butterknife.ButterKnife;
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements LifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
+
+        void showModal(@NonNull Modal modal);
 
         void onUpdateActiveCard(@NonNull Page page, @Nullable Card card);
     }
@@ -203,11 +204,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
         private void checkForModalEvent(@NonNull final Event event) {
             assert mPage != null;
-            final Manifest manifest = mPage.getManifest();
             for (final Modal modal : mPage.getModals()) {
                 if (modal.getListeners().contains(event.id)) {
-                    ModalActivity.start(mPageView.getContext(), manifest.getManifestName(), manifest.getCode(),
-                                        manifest.getLocale(), mPage.getId(), modal.getId());
+                    if (mCallbacks != null) {
+                        mCallbacks.showModal(modal);
+                    }
                 }
             }
         }

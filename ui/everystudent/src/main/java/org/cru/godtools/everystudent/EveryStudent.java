@@ -1,10 +1,10 @@
 package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -51,8 +51,8 @@ public class EveryStudent extends ExpandableListActivity {
     private List<List<Map<String, String>>> mTopics;
     private List<Map<String, String>> mCategories;
 
-    public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, EveryStudent.class));
+    public static void start(@NonNull final Activity activity) {
+        activity.startActivity(new Intent(activity, EveryStudent.class));
     }
 
     @Override
@@ -128,18 +128,6 @@ public class EveryStudent extends ExpandableListActivity {
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.onActivityResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mTracker.onActivityPause(this);
     }
 
     @SuppressLint("HandlerLeak")
