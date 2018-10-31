@@ -1,6 +1,7 @@
 package org.cru.godtools.base.tool.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.util.WeakRunnable;
+import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
@@ -44,6 +46,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     // App/Action Bar
     @Nullable
     private Menu mToolbarMenu;
+    @Nullable
+    private MenuItem mShareMenuItem;
 
     // Visibility sections
     @Nullable
@@ -97,7 +101,10 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_tool, menu);
         mToolbarMenu = menu;
+        mShareMenuItem = menu.findItem(R.id.action_share);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -111,6 +118,16 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     protected void onStart() {
         super.onStart();
         syncTools();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareCurrentTool();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @CallSuper
@@ -170,9 +187,54 @@ public abstract class BaseToolActivity extends ImmersiveActivity
                 mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
             }
         }
+        updateShareMenuItem();
     }
 
     // endregion Toolbar update logic
+
+    // region Share tool logic
+
+    private void updateShareMenuItem() {
+        if (mShareMenuItem != null) {
+            mShareMenuItem.setVisible(hasShareLinkUri());
+        }
+    }
+
+    private void shareCurrentTool() {
+        // short-circuit if we don't have a share tool url
+        final String shareUrl = getShareLinkUri();
+        if (shareUrl == null) {
+            return;
+        }
+
+        // track the share action
+        mAnalytics.onTrackShareAction();
+
+        // start the share activity chooser with our share link
+        final String title = getShareLinkTitle();
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, title));
+        intent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, title)));
+    }
+
+    protected boolean hasShareLinkUri() {
+        return getShareLinkUri() != null;
+    }
+
+    @Nullable
+    protected String getShareLinkTitle() {
+        final Manifest manifest = getActiveManifest();
+        return manifest != null ? manifest.getTitle() : null;
+    }
+
+    @Nullable
+    protected String getShareLinkUri() {
+        return null;
+    }
+
+    // endregion Share tool logic
 
     // region Tool state
 
