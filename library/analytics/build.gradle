@@ -11,6 +11,15 @@ android {
         consumerProguardFiles 'proguard-rules-adobe.pro'
         consumerProguardFiles 'proguard-rules-snowplow.pro'
     }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools-dev\""
+        }
+        release {
+            buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools\""
+        }
+    }
 }
 
 dependencies {
