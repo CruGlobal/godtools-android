@@ -1,6 +1,7 @@
 package org.cru.godtools.article.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -24,10 +25,10 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
         activity.startActivity(createIntent(activity, toolCode, language));
     }
 
-    public static Intent createIntent(@NonNull final Activity activity, @NonNull final String toolCode,
+    public static Intent createIntent(@NonNull final Context context, @NonNull final String toolCode,
                                       @NonNull final Locale language) {
-        return new Intent(activity, CategoriesActivity.class)
-                .putExtras(buildExtras(activity, toolCode, language));
+        return new Intent(context, CategoriesActivity.class)
+                .putExtras(buildExtras(context, toolCode, language));
     }
 
     public CategoriesActivity() {
