@@ -359,7 +359,7 @@ public class AEMDownloadManger {
 
         // enqueue downloads for all articles
         for (final Article article : articles) {
-            enqueueDownloadArticle(article.uri, false);
+            enqueueDownloadArticle(article.getUri(), false);
         }
     }
 
@@ -376,20 +376,20 @@ public class AEMDownloadManger {
         }
 
         // short-circuit if the Article isn't stale and we aren't forcing a download
-        if (article.uuid.equals(article.contentUuid) && !force) {
+        if (article.getUuid().equals(article.getContentUuid()) && !force) {
             return;
         }
 
         // download the article html
         try {
-            final Response<String> response = mApi.downloadArticle(article.uri + ".html").execute();
+            final Response<String> response = mApi.downloadArticle(article.getUri() + ".html").execute();
             if (response.code() == HTTP_OK) {
-                article.contentUuid = article.uuid;
-                article.content = response.body();
-                article.mResources = HtmlParserKt.extractResources(article);
+                article.setContentUuid(article.getUuid());
+                article.setContent(response.body());
+                article.setResources(HtmlParserKt.extractResources(article));
                 mAemDb.articleRepository().updateContent(article);
 
-                downloadResourcesNeedingUpdate(mAemDb.resourceDao().getAllForArticle(article.uri));
+                downloadResourcesNeedingUpdate(mAemDb.resourceDao().getAllForArticle(article.getUri()));
             }
         } catch (final IOException e) {
             Timber.tag(TAG)
