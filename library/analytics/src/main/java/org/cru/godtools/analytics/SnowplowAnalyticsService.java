@@ -38,12 +38,12 @@ import me.thekey.android.TheKey;
 
 import static com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity.HTTPS;
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
+import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_APP_ID;
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
 public class SnowplowAnalyticsService {
     /* SnowPlow value constants */
-    private static final String SNOWPLOW_APP_ID = "GodTools";
-    private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
+    private static final String SNOWPLOW_NAMESPACE = "godtools-android";
 
     private static final String CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3";
     private static final String CONTEXT_SCHEMA_SCORING = "iglu:org.cru/content-scoring/jsonschema/1-0-0";
