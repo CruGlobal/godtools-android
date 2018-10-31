@@ -16,6 +16,7 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:model-events')
 
+    implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
