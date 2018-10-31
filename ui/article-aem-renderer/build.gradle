@@ -30,6 +30,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
 
+    implementation "com.google.firebase:firebase-dynamic-links:${deps.firebase.dynamicLinks}"
+
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

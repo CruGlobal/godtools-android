@@ -194,7 +194,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // region Share tool logic
 
-    private void updateShareMenuItem() {
+    protected void updateShareMenuItem() {
         if (mShareMenuItem != null) {
             mShareMenuItem.setVisible(hasShareLinkUri());
         }

@@ -33,7 +33,8 @@ buildscript {
                 evernoteAndroidJob : '1.2.5',
                 facebookStetho     : '1.5.0',
                 firebase           : [
-                        core: '16.0.4',
+                        core        : '16.0.4',
+                        dynamicLinks: '16.1.2',
                 ],
                 gtoSupport         : '2.0.0-SNAPSHOT',
                 guava              : '26.0-android',

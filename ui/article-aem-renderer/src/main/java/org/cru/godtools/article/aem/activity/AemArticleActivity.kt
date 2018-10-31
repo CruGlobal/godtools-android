@@ -20,6 +20,7 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
+import org.cru.godtools.article.aem.util.ShareLinkUtils
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
@@ -65,6 +66,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
+        updateShareMenuItem()
         updateVisibilityState()
     }
 
@@ -122,6 +124,23 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
             return
         }
     }
+
+    // region Share Link logic
+
+    override fun hasShareLinkUri(): Boolean {
+        return article?.canonicalUri != null
+    }
+
+    override fun getShareLinkTitle(): String? {
+        return article?.title ?: super.getShareLinkTitle()
+    }
+
+    override fun getShareLinkUri(): String? {
+        return article?.shareUri?.toString()
+            ?: ShareLinkUtils.articleShareLinkBuilder(article)?.buildDynamicLink()?.uri?.toString()
+    }
+
+    // endregion Share Link logic
 
     override fun determineActiveToolState(): Int {
         return when {
