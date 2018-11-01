@@ -27,8 +27,9 @@ public class LanguageSelectionActivity extends BasePlatformActivity implements L
     private /*final*/ boolean mPrimary = true;
 
     public static void start(@NonNull final Activity activity, final boolean primary) {
-        final Intent intent = new Intent(activity, LanguageSelectionActivity.class);
-        intent.putExtra(EXTRA_PRIMARY, primary);
+        final Intent intent = new Intent(activity, LanguageSelectionActivity.class)
+                .putExtras(buildExtras(activity))
+                .putExtra(EXTRA_PRIMARY, primary);
         activity.startActivity(intent);
     }
 
@@ -43,7 +44,7 @@ public class LanguageSelectionActivity extends BasePlatformActivity implements L
             mPrimary = intent.getBooleanExtra(EXTRA_PRIMARY, mPrimary);
         }
 
-        setContentView(R.layout.activity_generic_fragment_with_nav_drawer);
+        setContentView(R.layout.activity_generic_fragment);
     }
 
     @Override
