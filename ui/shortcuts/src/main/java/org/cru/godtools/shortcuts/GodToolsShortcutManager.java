@@ -61,7 +61,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
-import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 
 public final class GodToolsShortcutManager implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
@@ -193,11 +192,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         }
         switch (tool.getType()) {
             case TRACT:
-                break;
             case ARTICLE:
-                if (CODE_EVERYSTUDENT.equals(tool.getCode())) {
-                    break;
-                }
+                break;
             default:
                 return false;
         }
