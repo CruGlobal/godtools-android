@@ -15,5 +15,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
+    implementation "com.appsee:appsee-android:+"
+
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

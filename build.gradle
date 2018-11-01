@@ -78,6 +78,7 @@ buildscript {
         classpath "com.newrelic.agent.android:agent-gradle-plugin:${deps.newrelic}"
         classpath 'io.fabric.tools:gradle:1.25.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
+        classpath "com.appsee:appsee-plugin:+"
     }
 }
 

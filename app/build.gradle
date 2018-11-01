@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
+apply plugin: 'com.appsee.appsee-plugin'
 
 android {
     compileSdkVersion compileSdk
