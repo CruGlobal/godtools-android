@@ -82,7 +82,7 @@ import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 import static org.cru.godtools.articles.aem.model.Constants.TABLE_NAME_RESOURCE;
 
 /**
- * This class hold all the logic for maintaining a local cache of AEM Articles.:wq
+ * This class hold all the logic for maintaining a local cache of AEM Articles.
  */
 public class AEMDownloadManger {
     private static final String TAG = "AEMDownloadManager";
@@ -457,14 +457,6 @@ public class AEMDownloadManger {
         } finally {
             lock.unlock();
         }
-    }
-
-    /**
-     * This task will remove any attachments no longer in use.
-     */
-    @WorkerThread
-    void pruneOldAttachmentsTask() {
-        // TODO
     }
 
     // endregion Tasks
