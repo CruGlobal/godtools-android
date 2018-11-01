@@ -55,6 +55,10 @@ interface ArticleDao {
     fun updateContent(uri: Uri, uuid: String?, content: String?)
 
     @WorkerThread
+    @Query("UPDATE articles SET shareUri = :shareUri WHERE uri = :uri")
+    fun updateShareUrl(uri: Uri, shareUri: Uri?)
+
+    @WorkerThread
     @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
     fun removeAllTags(articleUri: Uri)
 
