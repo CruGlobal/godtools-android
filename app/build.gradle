@@ -92,6 +92,8 @@ android {
             if (project.hasProperty('crashlyticsBetaBuild')) {
                 signingConfig signingConfigs.crashlyticsBeta
             }
+            //AppSee key
+            manifestPlaceholders = [appSeekey:"f05dbdbcd6524a7089bdcfbac5c9be11"]
         }
         release {
             minifyEnabled true
@@ -99,6 +101,9 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
+
+            //AppSee key
+            manifestPlaceholders = [appSeekey:"873e1bffe3444d649f8e9b84ae364a42"]
         }
     }
 
