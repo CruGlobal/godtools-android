@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
-import com.appsee.Appsee;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.tabs.TabLayout;
@@ -76,9 +75,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         super.onCreate(savedInstanceState);
         mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
-
-        // Initialize AppSee
-        Appsee.start();
 
         processIntent(getIntent());
 
