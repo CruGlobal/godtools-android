@@ -3,5 +3,14 @@
 
     <application
         android:name="org.cru.godtools.DebugGodToolsApplication"
-        tools:replace="name" />
+        tools:replace="name" >
+        <meta-data android:name="com.appsee.ApiKey" android:value="f05dbdbcd6524a7089bdcfbac5c9be11" />
+        <!--
+        TODO: move this key to a gradle resource and change it based on the build type
+
+        Production Key = 873e1bffe3444d649f8e9b84ae364a42
+
+        Testing Key = f05dbdbcd6524a7089bdcfbac5c9be11
+        -->
+    </application>
 </manifest>
