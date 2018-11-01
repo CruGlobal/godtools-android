@@ -21,8 +21,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
     public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language) {
-        final Bundle extras = new Bundle(2);
-        populateExtras(extras, toolCode, language);
+        final Bundle extras = buildExtras(activity, toolCode, language);
         final Intent intent = new Intent(activity, CategoriesActivity.class).putExtras(extras);
         activity.startActivity(intent);
     }

@@ -35,8 +35,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
     public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language, @Nullable final String category) {
-        final Bundle args = new Bundle();
-        populateExtras(args, toolCode, language);
+        final Bundle args = buildExtras(activity, toolCode, language);
         args.putString(EXTRA_CATEGORY, category);
         final Intent intent = new Intent(activity, ArticlesActivity.class).putExtras(args);
         activity.startActivity(intent);

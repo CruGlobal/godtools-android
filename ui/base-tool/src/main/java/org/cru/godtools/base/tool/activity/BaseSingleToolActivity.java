@@ -1,5 +1,6 @@
 package org.cru.godtools.base.tool.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -40,8 +41,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     @Nullable
     protected Manifest mManifest;
 
-    protected static Bundle populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
-                                           @NonNull final Locale language) {
+    @NonNull
+    protected static Bundle buildExtras(@NonNull final Activity activity, @NonNull final String toolCode,
+                                        @NonNull final Locale language) {
+        final Bundle extras = buildExtras(activity);
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, language);
         return extras;
