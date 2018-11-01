@@ -133,6 +133,19 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         return mManifest;
     }
 
+    // region Up Navigation
+
+    @NonNull
+    @Override
+    protected Bundle buildParentIntentExtras() {
+        final Bundle extras = super.buildParentIntentExtras();
+        extras.putString(EXTRA_TOOL, mTool);
+        BundleUtils.putLocale(extras, EXTRA_LANGUAGE, mLocale);
+        return extras;
+    }
+
+    // endregion Up Navigation
+
     class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
         @Nullable
         @Override

@@ -22,6 +22,9 @@ import androidx.lifecycle.Lifecycle;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent";
 
@@ -105,6 +108,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // otherwise defer to default navigate behavior
         super.supportNavigateUpTo(upIntent);
+    }
+
+    @Nullable
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        final Intent intent = super.getSupportParentActivityIntent();
+
+        if (intent != null) {
+            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtras(buildParentIntentExtras());
+        }
+
+        return intent;
+    }
+
+    @NonNull
+    @CallSuper
+    protected Bundle buildParentIntentExtras() {
+        return new Bundle();
     }
 
     // endregion Up Navigation
