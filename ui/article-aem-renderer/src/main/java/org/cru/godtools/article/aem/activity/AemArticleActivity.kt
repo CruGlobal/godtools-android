@@ -52,6 +52,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         syncArticle()
         setContentView(R.layout.activity_generic_tool_fragment)
         setupViewModel()
+        syncData()
     }
 
     override fun onStart() {
@@ -122,6 +123,13 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         title = article?.title ?: run {
             super.updateToolbarTitle()
             return
+        }
+    }
+
+    private fun syncData() {
+        with(AemArticleManger.getInstance(this)) {
+            enqueueDownloadArticle(articleUri, false)
+            enqueueGenerateShareUri(articleUri)
         }
     }
 
