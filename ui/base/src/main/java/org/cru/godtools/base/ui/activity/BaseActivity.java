@@ -3,11 +3,11 @@ package org.cru.godtools.base.ui.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import com.appsee.Appsee;
+
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.R2;
 import org.greenrobot.eventbus.EventBus;
-
-import com.appsee.Appsee;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAnalytics = AnalyticsService.getInstance(this);
         mEventBus = EventBus.getDefault();
-        Appsee.start()
+        Appsee.start();
     }
 
     @Override
