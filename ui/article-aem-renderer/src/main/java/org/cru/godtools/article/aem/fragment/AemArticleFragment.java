@@ -95,7 +95,7 @@ public class AemArticleFragment extends BaseToolFragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+        return inflater.inflate(R.layout.fragment_aem_article, container, false);
     }
 
     @Override
