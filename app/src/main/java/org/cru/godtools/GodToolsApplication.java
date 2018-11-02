@@ -2,6 +2,14 @@ package org.cru.godtools;
 
 import android.os.AsyncTask;
 
+import com.appsee.Appsee;
+import com.appsee.AppseeListener;
+import com.appsee.AppseeScreenDetectedInfo;
+import com.appsee.AppseeSessionEndedInfo;
+import com.appsee.AppseeSessionEndingInfo;
+import com.appsee.AppseeSessionStartedInfo;
+import com.appsee.AppseeSessionStartingInfo;
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 
 import org.cru.godtools.api.GodToolsApi;
@@ -37,6 +45,8 @@ public class GodToolsApplication extends BaseGodToolsApplication {
 
         // install any missing initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
+
+        addAppSeeListener();
     }
 
     @Override
@@ -74,5 +84,37 @@ public class GodToolsApplication extends BaseGodToolsApplication {
                 .accountType(ACCOUNT_TYPE)
                 .clientId(THEKEY_CLIENTID)
                 .eventsManager(new EventBusEventsManager());
+    }
+
+    private void addAppSeeListener() {
+        Appsee.addAppseeListener(new AppseeListener() {
+            @Override
+            public void onAppseeSessionStarting(AppseeSessionStartingInfo appseeSessionStartingInfo) {
+
+            }
+
+            @Override
+            public void onAppseeSessionStarted(AppseeSessionStartedInfo appseeSessionStartedInfo) {
+                String crashlyticsAppSeeId = Appsee.generate3rdPartyId("Crashlytics",
+                        false);
+                Crashlytics.getInstance().core.setString("AppseeSessionUrl",
+                        String.format("https://dashboard.appsee.com/3rdparty/crashlytics/%s", crashlyticsAppSeeId));
+            }
+
+            @Override
+            public void onAppseeSessionEnding(AppseeSessionEndingInfo appseeSessionEndingInfo) {
+
+            }
+
+            @Override
+            public void onAppseeSessionEnded(AppseeSessionEndedInfo appseeSessionEndedInfo) {
+
+            }
+
+            @Override
+            public void onAppseeScreenDetected(AppseeScreenDetectedInfo appseeScreenDetectedInfo) {
+
+            }
+        });
     }
 }
