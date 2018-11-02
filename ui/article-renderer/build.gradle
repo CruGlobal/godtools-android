@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation project(':library:base')
 
-    implementation project(':ui:articles-aem-renderer')
+    implementation project(':ui:article-aem-renderer')
     implementation project(':ui:base-tool')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
