@@ -115,8 +115,7 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
     companion object {
         @JvmStatic
         fun start(activity: Activity, toolCode: String, language: Locale, articleUri: Uri) {
-            val extras = Bundle().apply {
-                BaseSingleToolActivity.populateExtras(this, toolCode, language)
+            val extras = buildExtras(activity, toolCode, language).apply {
                 putParcelable(EXTRA_ARTICLE, articleUri)
             }
             val intent = Intent(activity, AemArticleActivity::class.java).putExtras(extras)

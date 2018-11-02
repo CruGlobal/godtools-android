@@ -21,7 +21,10 @@ public final class AboutActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Activity activity) {
-        activity.startActivity(new Intent(activity, AboutActivity.class));
+        final Intent intent = new Intent(activity, AboutActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                .putExtras(buildExtras(activity));
+        activity.startActivity(intent);
     }
 
     /* BEGIN lifecycle */

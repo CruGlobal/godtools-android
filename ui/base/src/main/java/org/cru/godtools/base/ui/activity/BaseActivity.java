@@ -1,7 +1,12 @@
 package org.cru.godtools.base.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+
+import com.google.common.base.Objects;
 
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.R2;
@@ -17,7 +22,12 @@ import androidx.lifecycle.Lifecycle;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
 public abstract class BaseActivity extends AppCompatActivity {
+    private static final String EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent";
+
     // App/Action Bar
     @Nullable
     @BindView(R2.id.appbar)
@@ -29,6 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected /*final*/ AnalyticsService mAnalytics;
     @NonNull
     protected /*final*/ EventBus mEventBus;
+
+    @NonNull
+    protected static Bundle buildExtras(@NonNull final Activity activity) {
+        final Bundle extras = new Bundle();
+        extras.putParcelable(EXTRA_LAUNCHING_COMPONENT, activity.getComponentName());
+        return extras;
+    }
 
     // region Lifecycle Events
 
@@ -52,6 +69,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         setupActionBar();
     }
 
+    @Override
+    protected void onNewIntent(final Intent intent) {
+        super.onNewIntent(intent);
+
+        // update the Launching Component extra
+        getIntent()
+                .putExtra(EXTRA_LAUNCHING_COMPONENT, (Parcelable) intent.getParcelableExtra(EXTRA_LAUNCHING_COMPONENT));
+    }
+
     @CallSuper
     protected void onSetupActionBar() {}
 
@@ -69,6 +95,41 @@ public abstract class BaseActivity extends AppCompatActivity {
         // trigger lifecycle event for subclasses
         onSetupActionBar();
     }
+
+    // region Up Navigation
+
+    @Override
+    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
+        // if the upIntent already points to the original launching activity, just finish this activity
+        if (Objects.equal(getIntent().getParcelableExtra(EXTRA_LAUNCHING_COMPONENT), upIntent.getComponent())) {
+            finish();
+            return;
+        }
+
+        // otherwise defer to default navigate behavior
+        super.supportNavigateUpTo(upIntent);
+    }
+
+    @Nullable
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        final Intent intent = super.getSupportParentActivityIntent();
+
+        if (intent != null) {
+            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtras(buildParentIntentExtras());
+        }
+
+        return intent;
+    }
+
+    @NonNull
+    @CallSuper
+    protected Bundle buildParentIntentExtras() {
+        return new Bundle();
+    }
+
+    // endregion Up Navigation
 
     // HACK: workaround this bug: https://issuetracker.google.com/issues/64039135
     @Override

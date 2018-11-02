@@ -20,7 +20,10 @@ public class LanguageSettingsActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Activity activity) {
-        activity.startActivity(new Intent(activity, LanguageSettingsActivity.class));
+        final Intent intent = new Intent(activity, LanguageSettingsActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                .putExtras(buildExtras(activity));
+        activity.startActivity(intent);
     }
 
     // region Lifecycle Events
@@ -58,10 +61,5 @@ public class LanguageSettingsActivity extends BasePlatformActivity {
         fm.beginTransaction()
                 .replace(R.id.frame, LanguageSettingsFragment.newInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
-    }
-
-    @Override
-    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
-        finish();
     }
 }

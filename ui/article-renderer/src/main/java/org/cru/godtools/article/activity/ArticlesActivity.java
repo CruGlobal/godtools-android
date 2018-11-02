@@ -21,8 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
@@ -35,8 +33,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
     public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
                              @NonNull final Locale language, @Nullable final String category) {
-        final Bundle args = new Bundle();
-        populateExtras(args, toolCode, language);
+        final Bundle args = buildExtras(activity, toolCode, language);
         args.putString(EXTRA_CATEGORY, category);
         final Intent intent = new Intent(activity, ArticlesActivity.class).putExtras(args);
         activity.startActivity(intent);
@@ -108,22 +105,4 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         // otherwise default to the default toolbar title
         super.updateToolbarTitle();
     }
-
-    // region Up Navigation
-
-    @Nullable
-    @Override
-    public Intent getSupportParentActivityIntent() {
-        final Intent intent = super.getSupportParentActivityIntent();
-
-        // populate the CategoriesActivity intent
-        if (intent != null) {
-            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtras(CategoriesActivity.populateExtras(new Bundle(), mTool, mLocale));
-        }
-
-        return intent;
-    }
-
-    // endregion Up Navigation
 }
