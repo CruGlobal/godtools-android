@@ -3,12 +3,12 @@ package org.cru.godtools.api;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.api.model.ToolViews;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
