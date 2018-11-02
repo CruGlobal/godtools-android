@@ -25,6 +25,8 @@ android {
 dependencies {
     implementation project(':library:base')
 
+    implementation "com.appsee:appsee-android:${deps.appSee.android}"
+
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices.analytics}"
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 

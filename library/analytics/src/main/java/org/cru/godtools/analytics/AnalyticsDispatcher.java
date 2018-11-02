@@ -24,6 +24,7 @@ public final class AnalyticsDispatcher implements InvocationHandler {
 
         addAnalyticsService(GoogleAnalyticsService.getInstance(context));
         addAnalyticsService(AdobeAnalyticsService.getInstance(context));
+        addAnalyticsService(AppSeeAnalyticSevice.getInstance());
     }
 
     @Nullable
