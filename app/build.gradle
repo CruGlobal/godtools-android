@@ -16,6 +16,7 @@ android {
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-searchview.pro'
+        consumerProguardFiles 'proguard-appsee.pro'
 
         vectorDrawables.useSupportLibrary = true
 
@@ -92,6 +93,8 @@ android {
             if (project.hasProperty('crashlyticsBetaBuild')) {
                 signingConfig signingConfigs.crashlyticsBeta
             }
+            //AppSee key
+            manifestPlaceholders = [appSeekey:"f05dbdbcd6524a7089bdcfbac5c9be11"]
         }
         release {
             minifyEnabled true
@@ -99,6 +102,9 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
+
+            //AppSee key
+            manifestPlaceholders = [appSeekey:"873e1bffe3444d649f8e9b84ae364a42"]
         }
     }
 
@@ -143,6 +149,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.appsee:appsee-android:${deps.appSee.android}"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
