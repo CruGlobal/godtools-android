@@ -11,18 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
-public class AppSeeAnalyticSevice implements AnalyticsService {
-    private AppSeeAnalyticSevice() {
+public class AppSeeAnalyticService implements AnalyticsService {
+    private AppSeeAnalyticService() {
         EventBus.getDefault().register(this);
     }
 
     @Nullable
-    private static AppSeeAnalyticSevice sInstance;
+    private static AppSeeAnalyticService sInstance;
 
     @NonNull
-    public static synchronized AppSeeAnalyticSevice getInstance() {
+    public static synchronized AppSeeAnalyticService getInstance() {
         if (sInstance == null) {
-            sInstance = new AppSeeAnalyticSevice();
+            sInstance = new AppSeeAnalyticService();
         }
 
         return sInstance;
