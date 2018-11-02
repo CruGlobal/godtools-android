@@ -20,7 +20,6 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
-import org.cru.godtools.article.aem.util.ShareLinkUtils
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
@@ -144,8 +143,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     }
 
     override fun getShareLinkUri(): String? {
-        return article?.shareUri?.toString()
-            ?: ShareLinkUtils.articleShareLinkBuilder(article)?.buildDynamicLink()?.uri?.toString()
+        return article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
     }
 
     // endregion Share Link logic
