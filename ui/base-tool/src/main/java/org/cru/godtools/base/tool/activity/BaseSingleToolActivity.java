@@ -31,9 +31,9 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     @NonNull
     @SuppressWarnings("ConstantConditions")
-    protected /*final*/ String mTool = Tool.INVALID_CODE;
+    private /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
-    protected /*final*/ Locale mLocale = Language.INVALID_CODE;
+    private /*final*/ Locale mLocale = Language.INVALID_CODE;
 
     private boolean mTranslationLoaded = false;
     @Nullable
@@ -93,6 +93,16 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     // endregion Lifecycle Events
+
+    @NonNull
+    protected final String getTool() {
+        return mTool;
+    }
+
+    @NonNull
+    protected final Locale getLocale() {
+        return mLocale;
+    }
 
     @Override
     protected void cacheTools() {
@@ -159,7 +169,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TRANSLATION:
-                    return new LatestTranslationLoader(BaseSingleToolActivity.this, mTool, mLocale);
+                    return new LatestTranslationLoader(BaseSingleToolActivity.this, getTool(), getLocale());
             }
 
             return null;
@@ -186,7 +196,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
+                    return new ManifestLoader(BaseSingleToolActivity.this, getTool(), getLocale());
             }
 
             return null;

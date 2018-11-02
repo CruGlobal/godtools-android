@@ -50,7 +50,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
     @Override
     public void onCategorySelected(@Nullable final Category category) {
-        ArticlesActivity.start(this, mTool, mLocale, category != null ? category.getId() : null);
+        ArticlesActivity.start(this, getTool(), getLocale(), category != null ? category.getId() : null);
     }
 
     // endregion Lifecycle Events
@@ -66,7 +66,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, CategoriesFragment.newInstance(mTool, mLocale), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, CategoriesFragment.newInstance(getTool(), getLocale()), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

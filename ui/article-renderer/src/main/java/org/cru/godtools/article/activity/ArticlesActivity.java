@@ -71,7 +71,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         if (article != null) {
-            AemArticleActivity.start(this, mTool, mLocale, article.getUri());
+            AemArticleActivity.start(this, getTool(), getLocale(), article.getUri());
         }
     }
 
@@ -84,7 +84,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         }
 
         fm.beginTransaction()
-                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategory), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ArticlesFragment.newInstance(getTool(), getLocale(), mCategory), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 
