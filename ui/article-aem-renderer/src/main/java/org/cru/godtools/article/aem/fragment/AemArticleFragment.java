@@ -24,7 +24,7 @@ import org.cru.godtools.article.aem.db.ResourceDao;
 import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.AemArticleManger;
-import org.cru.godtools.base.tool.fragment.BaseToolFragment;
+import org.cru.godtools.base.ui.fragment.BaseFragment;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
 import java.io.FileNotFoundException;
@@ -34,7 +34,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
@@ -49,7 +48,7 @@ import timber.log.Timber;
 
 import static org.cru.godtools.article.aem.Constants.EXTRA_ARTICLE;
 
-public class AemArticleFragment extends BaseToolFragment {
+public class AemArticleFragment extends BaseFragment {
     private static final String TAG = "AemArticleFragment";
 
     @Nullable
@@ -65,11 +64,9 @@ public class AemArticleFragment extends BaseToolFragment {
     @Nullable
     private Article mArticle;
 
-    public static AemArticleFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
-                                                 @NonNull final Uri articleUri) {
-        AemArticleFragment fragment = new AemArticleFragment();
+    public static AemArticleFragment newInstance(@NonNull final Uri articleUri) {
+        final AemArticleFragment fragment = new AemArticleFragment();
         final Bundle args = new Bundle(3);
-        populateArgs(args, tool, locale);
         args.putParcelable(EXTRA_ARTICLE, articleUri);
         fragment.setArguments(args);
         return fragment;
