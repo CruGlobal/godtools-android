@@ -20,7 +20,6 @@ branches:
   only:
     - develop
     - master
-    - GT-539-AppSee
 
 stages:
 - compile
