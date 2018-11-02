@@ -148,7 +148,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.appsee:appsee-android:+"
+    implementation "com.appsee:appsee-android:${deps.appSee.android}"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
