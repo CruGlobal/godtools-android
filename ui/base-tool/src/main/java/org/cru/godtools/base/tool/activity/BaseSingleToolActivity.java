@@ -29,6 +29,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private static final int LOADER_TRANSLATION = 101;
     private static final int LOADER_MANIFEST = 102;
 
+    private final boolean mRequireTool;
+
     @NonNull
     @SuppressWarnings("ConstantConditions")
     private /*final*/ String mTool = Tool.INVALID_CODE;
@@ -51,7 +53,12 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     public BaseSingleToolActivity(final boolean immersive) {
+        this(immersive, true);
+    }
+
+    public BaseSingleToolActivity(final boolean immersive, final boolean requireTool) {
         super(immersive);
+        mRequireTool = requireTool;
     }
 
     // region Lifecycle Events
@@ -96,11 +103,19 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     @NonNull
     protected final String getTool() {
+        if (!mRequireTool) {
+            throw new UnsupportedOperationException(
+                    "You cannot call getTool() on a fragment that doesn't require a tool");
+        }
         return mTool;
     }
 
     @NonNull
     protected final Locale getLocale() {
+        if (!mRequireTool) {
+            throw new UnsupportedOperationException(
+                    "You cannot call getLocale() on a fragment that doesn't require a tool");
+        }
         return mLocale;
     }
 
