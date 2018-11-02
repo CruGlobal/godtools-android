@@ -23,7 +23,7 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.article.aem.db.ResourceDao;
 import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.aem.model.Resource;
-import org.cru.godtools.article.aem.service.AEMDownloadManger;
+import org.cru.godtools.article.aem.service.AemArticleManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
@@ -212,7 +212,7 @@ public class AemArticleFragment extends BaseToolFragment {
             if (!resource.isDownloaded()) {
                 try {
                     // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-                    AEMDownloadManger.getInstance(context).enqueueDownloadResource(resource.getUri(), false).get();
+                    AemArticleManger.getInstance(context).enqueueDownloadResource(resource.getUri(), false).get();
                 } catch (InterruptedException e) {
                     // propagate thread interruption
                     Thread.currentThread().interrupt();

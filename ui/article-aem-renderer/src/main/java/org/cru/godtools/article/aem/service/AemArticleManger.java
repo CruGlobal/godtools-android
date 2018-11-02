@@ -84,7 +84,7 @@ import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
  */
-public class AEMDownloadManger {
+public class AemArticleManger {
     private static final String TAG = "AEMDownloadManager";
 
     private static final int MSG_CLEAN = 1;
@@ -117,7 +117,7 @@ public class AEMDownloadManger {
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
-    private AEMDownloadManger(@NonNull final Context context) {
+    private AemArticleManger(@NonNull final Context context) {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
@@ -125,7 +125,7 @@ public class AEMDownloadManger {
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
-                                           new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+                                           new NamedThreadFactory(AemArticleManger.class.getSimpleName()));
         mManifestManager = ManifestManager.getInstance(mContext);
 
         EventBus.getDefault().register(this);
@@ -140,12 +140,12 @@ public class AEMDownloadManger {
     }
 
     @Nullable
-    private static AEMDownloadManger sInstance;
+    private static AemArticleManger sInstance;
 
     @NonNull
-    public static synchronized AEMDownloadManger getInstance(@NonNull final Context context) {
+    public static synchronized AemArticleManger getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new AEMDownloadManger(context);
+            sInstance = new AemArticleManger(context);
         }
         return sInstance;
     }
