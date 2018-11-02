@@ -17,10 +17,10 @@ import org.ccci.gto.android.common.util.WeakRunnable;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
+import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
+import org.cru.godtools.article.aem.model.Article;
+import org.cru.godtools.article.aem.service.AEMDownloadManger;
 import org.cru.godtools.article.databinding.FragmentArticlesBinding;
-import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.xml.model.Category;
 

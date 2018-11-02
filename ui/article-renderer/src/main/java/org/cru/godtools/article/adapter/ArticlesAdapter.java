@@ -4,8 +4,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter;
+import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.databinding.ListItemArticleBinding;
-import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.List;

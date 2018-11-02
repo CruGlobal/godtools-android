@@ -7,9 +7,9 @@ import android.os.Bundle;
 import com.annimon.stream.Optional;
 
 import org.cru.godtools.article.R;
+import org.cru.godtools.article.aem.activity.AemArticleActivity;
+import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.fragment.ArticlesFragment;
-import org.cru.godtools.articles.aem.activity.AemArticleActivity;
-import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 import org.cru.godtools.xml.model.Category;
 import org.cru.godtools.xml.model.Manifest;
