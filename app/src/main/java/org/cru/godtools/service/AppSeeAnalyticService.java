@@ -1,4 +1,4 @@
-package org.cru.godtools.analytics;
+package org.cru.godtools.service;
 
 import android.app.Activity;
 import android.app.Application;
@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
-public class AppSeeAnalyticService implements AnalyticsService, Application.ActivityLifecycleCallbacks, AppseeListener {
+public class AppSeeAnalyticService implements Application.ActivityLifecycleCallbacks, AppseeListener {
 
     @Nullable
     private static AppSeeAnalyticService sInstance;

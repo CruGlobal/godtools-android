@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.evernote.android.job.JobManager;
 
-import org.cru.godtools.analytics.AppSeeAnalyticService;
+import org.cru.godtools.service.AppSeeAnalyticService;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
