@@ -3,8 +3,6 @@ package org.cru.godtools.tract.activity;
 import android.graphics.Color;
 import android.util.SparseArray;
 
-import com.google.common.util.concurrent.SettableFuture;
-
 import org.ccci.gto.android.common.testing.CommonMocks;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.xml.model.Manifest;
@@ -46,7 +44,6 @@ public class TractActivityUpdateHiddenLanguagesTest {
 
     private void setLanguages(final Locale... locales) {
         mActivity.mLanguages = locales;
-        mActivity.mDownloadTasks = new SettableFuture[mActivity.mLanguages.length];
         mActivity.mHiddenLanguages = new boolean[mActivity.mLanguages.length];
     }
 
