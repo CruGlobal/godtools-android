@@ -10,10 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
+import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.aem.util.removeExtension
+import org.cru.godtools.article.aem.util.toUri
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
@@ -61,12 +64,21 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        intent?.extras?.apply {
-            articleUri = getParcelable(EXTRA_ARTICLE) ?: return false
-            return true
-        }
+        articleUri = processDeepLink() ?:
+                intent?.extras?.run { getParcelable<Uri>(EXTRA_ARTICLE) } ?:
+                return false
 
-        return false
+        return true
+    }
+
+    private fun processDeepLink(): Uri? {
+        return intent
+            ?.takeIf { it.action == Intent.ACTION_VIEW }
+            ?.data
+            ?.takeIf { it.scheme == "http" || it.scheme == "https" }
+            ?.takeIf { it.host == "godtoolsapp.com" }
+            ?.takeIf { it.path == "/aemArticle" }
+            ?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
     }
 
     private fun setupViewModel() {

@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.common.base.Objects;
-
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.model.Language;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.xml.content.ManifestLoader;
@@ -100,6 +97,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     // endregion Lifecycle Events
 
+    private boolean hasTool() {
+        return mTool != null && !Language.INVALID_CODE.equals(mLocale);
+    }
+
     @NonNull
     protected final String getTool() {
         if (!mRequireTool) {
@@ -135,6 +136,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     protected int determineActiveToolState() {
         if (mManifest != null) {
             return STATE_LOADED;
+        } else if (!hasTool()) {
+            return STATE_LOADED;
         } else if (mTranslationLoaded && mTranslation == null) {
             return STATE_NOT_FOUND;
         } else {
@@ -143,12 +146,12 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     private boolean validStartState() {
-        return !mRequireTool || (!Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale));
+        return !mRequireTool || hasTool();
     }
 
     private void startLoaders() {
         // only start loaders if we have a tool
-        if (mTool != null && !mLocale.equals(Language.INVALID_CODE)) {
+        if (hasTool()) {
             final LoaderManager manager = LoaderManager.getInstance(this);
 
             manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
