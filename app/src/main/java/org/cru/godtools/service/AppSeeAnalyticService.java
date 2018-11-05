@@ -15,6 +15,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -47,11 +48,17 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
     @UiThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAnalyticScreenEvent(@NonNull final AnalyticsScreenEvent event) {
-        Appsee.startScreen(event.getScreen());
+        if (event.isForSystem(AnalyticsSystem.APPSEE)) {
+            Appsee.startScreen(event.getScreen());
+        }
     }
 
     @Subscribe
     public void onAnalyticActionEvent(@NonNull final AnalyticsActionEvent event) {
+        if (!event.isForSystem(AnalyticsSystem.APPSEE)) {
+            return;
+        }
+
         Map<String, Object> data = (Map<String, Object>) event.getAttributes();
         if (data != null) {
             Appsee.addEvent(event.getAction(), data);
