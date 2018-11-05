@@ -25,8 +25,9 @@ public class ToolDetailsActivity extends BasePlatformActivity implements ToolDet
     private /*final*/ String mTool = Tool.INVALID_CODE;
 
     public static void start(@NonNull final Activity activity, @NonNull final String toolCode) {
-        final Intent intent = new Intent(activity, ToolDetailsActivity.class);
-        intent.putExtra(EXTRA_TOOL, toolCode);
+        final Intent intent = new Intent(activity, ToolDetailsActivity.class)
+                .putExtras(buildExtras(activity))
+                .putExtra(EXTRA_TOOL, toolCode);
         activity.startActivity(intent);
     }
 
@@ -99,10 +100,5 @@ public class ToolDetailsActivity extends BasePlatformActivity implements ToolDet
         fm.beginTransaction()
                 .replace(R.id.frame, ToolDetailsFragment.newInstance(mTool), TAG_MAIN_FRAGMENT)
                 .commit();
-    }
-
-    @Override
-    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
-        finish();
     }
 }

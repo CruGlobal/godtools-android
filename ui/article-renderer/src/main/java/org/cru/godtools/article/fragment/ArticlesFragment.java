@@ -17,10 +17,10 @@ import org.ccci.gto.android.common.util.WeakRunnable;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
+import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
+import org.cru.godtools.article.aem.model.Article;
+import org.cru.godtools.article.aem.service.AemArticleManger;
 import org.cru.godtools.article.databinding.FragmentArticlesBinding;
-import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.xml.model.Category;
 
@@ -178,7 +178,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     // endregion ViewModel methods
 
     private void syncData(final boolean force) {
-        AEMDownloadManger.getInstance(requireContext())
+        AemArticleManger.getInstance(requireContext())
                 .enqueueSyncManifestAemImports(mManifest, force)
                 .addListener(new WeakRunnable(() -> {
                     if (mSwipeRefreshLayout != null) {

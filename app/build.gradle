@@ -164,7 +164,7 @@ dependencies {
     releaseImplementation project(':ui:everystudent')
 
     debugImplementation project(':ui:article-renderer')
-    debugImplementation project(':ui:articles-aem-renderer')
+    debugImplementation project(':ui:article-aem-renderer')
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"

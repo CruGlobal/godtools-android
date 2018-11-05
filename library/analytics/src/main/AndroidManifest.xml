@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools.analytics">
     <!-- Permissions required for Google Analytics -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -6,6 +7,14 @@
 
     <!-- Permissions required for Firebase Analytics -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Only request this permission on versions of android with runtime permissions.
+         This isn't critical app functionality and we don't want to force users to have to accept the update.
+         The permission originally comes from the firebase-analytics dependency. -->
+    <uses-permission
+        android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+        tools:node="remove" />
+    <uses-permission-sdk-23 android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
 
     <application>
         <activity
