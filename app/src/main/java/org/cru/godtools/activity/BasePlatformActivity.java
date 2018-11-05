@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.appsee.Appsee;
 import com.google.android.material.navigation.NavigationView;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -103,7 +102,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         super.onCreate(savedInstanceState);
         mTheKey = TheKey.getInstance(this);
         loadLanguages(true);
-        Appsee.start();
     }
 
     @Override

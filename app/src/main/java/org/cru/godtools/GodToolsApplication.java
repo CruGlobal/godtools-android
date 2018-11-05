@@ -2,16 +2,9 @@ package org.cru.godtools;
 
 import android.os.AsyncTask;
 
-import com.appsee.Appsee;
-import com.appsee.AppseeListener;
-import com.appsee.AppseeScreenDetectedInfo;
-import com.appsee.AppseeSessionEndedInfo;
-import com.appsee.AppseeSessionEndingInfo;
-import com.appsee.AppseeSessionStartedInfo;
-import com.appsee.AppseeSessionStartingInfo;
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 
+import org.cru.godtools.analytics.AppSeeAnalyticService;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
@@ -45,8 +38,6 @@ public class GodToolsApplication extends BaseGodToolsApplication {
 
         // install any missing initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
-
-        addAppSeeListener();
     }
 
     @Override
@@ -86,35 +77,11 @@ public class GodToolsApplication extends BaseGodToolsApplication {
                 .eventsManager(new EventBusEventsManager());
     }
 
-    private void addAppSeeListener() {
-        Appsee.addAppseeListener(new AppseeListener() {
-            @Override
-            public void onAppseeSessionStarting(AppseeSessionStartingInfo appseeSessionStartingInfo) {
+    @Override
+    protected void configureAnalyticsServices() {
+        super.configureAnalyticsServices();
 
-            }
-
-            @Override
-            public void onAppseeSessionStarted(AppseeSessionStartedInfo appseeSessionStartedInfo) {
-                String crashlyticsAppSeeId = Appsee.generate3rdPartyId("Crashlytics",
-                        false);
-                Crashlytics.getInstance().core.setString("AppseeSessionUrl",
-                        String.format("https://dashboard.appsee.com/3rdparty/crashlytics/%s", crashlyticsAppSeeId));
-            }
-
-            @Override
-            public void onAppseeSessionEnding(AppseeSessionEndingInfo appseeSessionEndingInfo) {
-
-            }
-
-            @Override
-            public void onAppseeSessionEnded(AppseeSessionEndedInfo appseeSessionEndedInfo) {
-
-            }
-
-            @Override
-            public void onAppseeScreenDetected(AppseeScreenDetectedInfo appseeScreenDetectedInfo) {
-
-            }
-        });
+        // Need to keep AppSee in Gradle file in order to work
+        AppSeeAnalyticService.getInstance(getApplicationContext());
     }
 }
