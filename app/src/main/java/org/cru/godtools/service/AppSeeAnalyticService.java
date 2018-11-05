@@ -2,7 +2,6 @@ package org.cru.godtools.service;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.os.Bundle;
 
 import com.appsee.Appsee;
@@ -31,16 +30,16 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
     @Nullable
     private static AppSeeAnalyticService sInstance;
 
-    private AppSeeAnalyticService(Context context) {
+    private AppSeeAnalyticService(Application application) {
         EventBus.getDefault().register(this);
-        ((Application) context.getApplicationContext()).registerActivityLifecycleCallbacks(this);
+        application.registerActivityLifecycleCallbacks(this);
         Appsee.addAppseeListener(this);
     }
 
     @NonNull
-    public static synchronized AppSeeAnalyticService getInstance(Context context) {
+    public static synchronized AppSeeAnalyticService start(Application application) {
         if (sInstance == null) {
-            sInstance = new AppSeeAnalyticService(context);
+            sInstance = new AppSeeAnalyticService(application);
         }
         return sInstance;
     }
