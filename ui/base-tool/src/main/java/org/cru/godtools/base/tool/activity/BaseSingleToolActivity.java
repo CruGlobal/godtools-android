@@ -95,6 +95,13 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     // endregion Lifecycle Events
 
     @Override
+    protected void cacheTools() {
+        if (mDownloadManager != null) {
+            mDownloadManager.cacheTranslation(mTool, mLocale);
+        }
+    }
+
+    @Override
     protected int determineActiveToolState() {
         if (mManifest != null) {
             return STATE_LOADED;
