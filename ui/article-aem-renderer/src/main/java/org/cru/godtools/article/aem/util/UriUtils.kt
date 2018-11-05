@@ -1,3 +1,4 @@
+@file:JvmName("UriUtils")
 package org.cru.godtools.article.aem.util
 
 import android.net.Uri
