@@ -90,7 +90,7 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
     public void onAppseeSessionStarting(final AppseeSessionStartingInfo appseeSessionStartingInfo) {
         String crashlyticsAppSeeId = Appsee.generate3rdPartyId("Crashlytics",
                                                                false);
-        Crashlytics.getInstance().core.setString(
+        Crashlytics.setString(
                 "AppseeSessionUrl",
                 String.format("https://dashboard.appsee.com/3rdparty/crashlytics/%s", crashlyticsAppSeeId));
     }
