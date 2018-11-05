@@ -9,8 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
+import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
@@ -20,7 +20,7 @@ import java.util.Locale
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
-class AemArticleActivity : BaseSingleToolActivity(false) {
+class AemArticleActivity : BaseSingleToolActivity(false, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
@@ -114,12 +114,13 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
 
     companion object {
         @JvmStatic
-        fun start(activity: Activity, toolCode: String, language: Locale, articleUri: Uri) {
+        fun start(activity: Activity, toolCode: String?, language: Locale, articleUri: Uri) {
             val extras = buildExtras(activity, toolCode, language).apply {
                 putParcelable(EXTRA_ARTICLE, articleUri)
             }
-            val intent = Intent(activity, AemArticleActivity::class.java).putExtras(extras)
-            activity.startActivity(intent)
+            Intent(activity, AemArticleActivity::class.java)
+                .putExtras(extras)
+                .also { activity.startActivity(it) }
         }
     }
 }

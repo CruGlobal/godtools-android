@@ -31,11 +31,10 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     private final boolean mRequireTool;
 
+    @Nullable
+    /*final*/ String mTool = null;
     @NonNull
-    @SuppressWarnings("ConstantConditions")
-    private /*final*/ String mTool = Tool.INVALID_CODE;
-    @NonNull
-    private /*final*/ Locale mLocale = Language.INVALID_CODE;
+    /*final*/ Locale mLocale = Language.INVALID_CODE;
 
     private boolean mTranslationLoaded = false;
     @Nullable
@@ -44,8 +43,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     protected Manifest mManifest;
 
     @NonNull
-    protected static Bundle buildExtras(@NonNull final Activity activity, @NonNull final String toolCode,
-                                        @NonNull final Locale language) {
+    protected static Bundle buildExtras(@NonNull final Activity activity, @Nullable final String toolCode,
+                                        @Nullable final Locale language) {
         final Bundle extras = buildExtras(activity);
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, language);
@@ -107,6 +106,9 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
             throw new UnsupportedOperationException(
                     "You cannot call getTool() on a fragment that doesn't require a tool");
         }
+        if (mTool == null) {
+            throw new IllegalStateException("mRequireTool is true, but a tool wasn't specified");
+        }
         return mTool;
     }
 
@@ -116,12 +118,15 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
             throw new UnsupportedOperationException(
                     "You cannot call getLocale() on a fragment that doesn't require a tool");
         }
+        if (mLocale.equals(Language.INVALID_CODE)) {
+            throw new IllegalStateException("mRequireTool is true, but a valid locale wasn't specified");
+        }
         return mLocale;
     }
 
     @Override
     protected void cacheTools() {
-        if (mDownloadManager != null) {
+        if (mDownloadManager != null && mTool != null) {
             mDownloadManager.cacheTranslation(mTool, mLocale);
         }
     }
@@ -138,14 +143,20 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     private boolean validStartState() {
-        return !Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale);
+        return !mRequireTool || (!Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale));
     }
 
     private void startLoaders() {
-        final LoaderManager manager = LoaderManager.getInstance(this);
+        // only start loaders if we have a tool
+        if (mTool != null && !mLocale.equals(Language.INVALID_CODE)) {
+            final LoaderManager manager = LoaderManager.getInstance(this);
 
-        manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
-        manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+            manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
+            manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+        } else {
+            setTranslation(null);
+            setManifest(null);
+        }
     }
 
     void setManifest(@Nullable final Manifest manifest) {
@@ -184,7 +195,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TRANSLATION:
-                    return new LatestTranslationLoader(BaseSingleToolActivity.this, getTool(), getLocale());
+                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
+                    return new LatestTranslationLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 
             return null;
@@ -211,7 +223,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    return new ManifestLoader(BaseSingleToolActivity.this, getTool(), getLocale());
+                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
+                    return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 
             return null;
