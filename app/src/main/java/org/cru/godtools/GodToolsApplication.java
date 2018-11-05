@@ -82,6 +82,6 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         super.configureAnalyticsServices();
 
         // Need to keep AppSee in Gradle file in order to work
-        AppSeeAnalyticService.getInstance(getApplicationContext());
+        AppSeeAnalyticService.getInstance(this);
     }
 }
