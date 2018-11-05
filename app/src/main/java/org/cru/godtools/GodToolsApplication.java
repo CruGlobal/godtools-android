@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import com.evernote.android.job.JobManager;
 
-import org.cru.godtools.service.AppSeeAnalyticService;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
@@ -13,6 +12,7 @@ import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.model.event.ModelEventEventBusIndex;
 import org.cru.godtools.model.loader.ModelLoaderEventBusIndex;
 import org.cru.godtools.service.AccountListRegistrationService;
+import org.cru.godtools.service.AppSeeAnalyticService;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.ShortcutsEventBusIndex;
 import org.cru.godtools.sync.job.SyncJobCreator;
