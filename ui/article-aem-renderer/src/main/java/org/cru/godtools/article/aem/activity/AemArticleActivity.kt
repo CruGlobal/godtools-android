@@ -87,9 +87,9 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
     }
 
     override fun determineActiveToolState(): Int {
-        val state = super.determineActiveToolState()
+        val toolState = super.determineActiveToolState()
         return when {
-            state != BaseToolActivity.STATE_LOADED -> state
+            toolState != BaseToolActivity.STATE_LOADED -> toolState
             article?.content == null -> BaseToolActivity.STATE_LOADING
             else -> BaseToolActivity.STATE_LOADED
         }
