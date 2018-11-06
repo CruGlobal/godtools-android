@@ -25,7 +25,7 @@ buildscript {
                 androidInstantApps : '1.1.0',
                 butterknife        : '9.0.0-rc1',
                 calligraphy        : '2.3.0',
-                crashlytics        : '2.9.5',
+                crashlytics        : '2.9.6',
                 eventbus           : '3.1.1',
                 evernoteAndroidJob : '1.2.5',
                 facebookStetho     : '1.5.0',
