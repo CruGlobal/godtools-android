@@ -29,6 +29,7 @@ import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParser;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
+import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -321,8 +322,8 @@ public class AemArticleManger {
     @WorkerThread
     @GuardedBy("mSyncAemImportLocks")
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
-        // short-circuit if this isn't an absolute URL
-        if (!baseUri.isAbsolute()) {
+        // short-circuit if this isn't an hierarchical absolute URL
+        if (!(baseUri.isHierarchical() && baseUri.isAbsolute())) {
             return;
         }
 
@@ -342,7 +343,7 @@ public class AemArticleManger {
         try {
             final long timestamp = force ? System.currentTimeMillis() :
                     roundTimestamp(System.currentTimeMillis(), CACHE_BUSTING_INTERVAL_JSON);
-            json = mApi.getJson(baseUri.toString() + ".9999.json", timestamp)
+            json = mApi.getJson(UriUtils.addExtension(baseUri, "9999.json"), timestamp)
                     .execute()
                     .body();
         } catch (final IOException e) {
@@ -382,7 +383,8 @@ public class AemArticleManger {
 
         // download the article html
         try {
-            final Response<String> response = mApi.downloadArticle(article.getUri() + ".html").execute();
+            final Response<String> response =
+                    mApi.downloadArticle(UriUtils.addExtension(article.getUri(), "html")).execute();
             if (response.code() == HTTP_OK) {
                 article.setContentUuid(article.getUuid());
                 article.setContent(response.body());

@@ -27,10 +27,10 @@ import timber.log.Timber;
 
 public interface AemApi {
     @GET
-    Call<JSONObject> getJson(@Url String uri, @Query("_") long timestamp);
+    Call<JSONObject> getJson(@Url Uri uri, @Query("_") long timestamp);
 
     @GET
-    Call<String> downloadArticle(@Url String uri);
+    Call<String> downloadArticle(@Url Uri uri);
 
     @GET
     @Streaming
