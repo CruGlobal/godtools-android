@@ -20,6 +20,7 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBusBuilder;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import me.thekey.android.core.TheKeyImpl;
 import me.thekey.android.eventbus.EventBusEventsManager;
@@ -78,10 +79,9 @@ public class GodToolsApplication extends BaseGodToolsApplication {
     }
 
     @Override
+    @CallSuper
     protected void configureAnalyticsServices() {
         super.configureAnalyticsServices();
-
-        // Need to keep AppSee in Gradle file in order to work
         AppSeeAnalyticService.start(this);
     }
 }

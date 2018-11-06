@@ -102,7 +102,6 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.appsee.ApiKey"
-            android:value="${appSeekey}" />
-       
+            android:value="${appseeKey}" />
     </application>
 </manifest>

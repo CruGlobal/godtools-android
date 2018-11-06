@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
 public class AppSeeAnalyticService implements Application.ActivityLifecycleCallbacks, AppseeListener {
-
     @Nullable
     private static AppSeeAnalyticService sInstance;
 
@@ -106,8 +105,7 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
     //region AppSee LifeCycle Callbacks
     @Override
     public void onAppseeSessionStarting(final AppseeSessionStartingInfo appseeSessionStartingInfo) {
-        String crashlyticsAppSeeId = Appsee.generate3rdPartyId("Crashlytics",
-                                                               false);
+        String crashlyticsAppSeeId = Appsee.generate3rdPartyId("Crashlytics", false);
         Crashlytics.setString(
                 "AppseeSessionUrl",
                 String.format("https://dashboard.appsee.com/3rdparty/crashlytics/%s", crashlyticsAppSeeId));
