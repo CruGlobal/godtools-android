@@ -44,7 +44,7 @@ buildscript {
                 materialDesign     : '1.0.0',
                 mockito            : '2.17.0',
                 mockitoKotlin      : '2.0.0-RC3',
-                newrelic           : '5.19.0',
+                newrelic           : '5.21.0',
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 playServices       : [
