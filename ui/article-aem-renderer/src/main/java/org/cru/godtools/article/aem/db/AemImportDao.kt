@@ -37,8 +37,10 @@ interface AemImportDao {
     @WorkerThread
     @Query("""
         DELETE FROM aemImports
-        WHERE uri NOT IN (SELECT aemImportUri FROM translationAemImports)""")
-    fun removeOrphanedAemImports()
+        WHERE
+            uri NOT IN (SELECT aemImportUri FROM translationAemImports) AND
+            lastAccessed < :lastAccessedBefore""")
+    fun removeOrphanedAemImports(lastAccessedBefore: Date)
 
     @WorkerThread
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
