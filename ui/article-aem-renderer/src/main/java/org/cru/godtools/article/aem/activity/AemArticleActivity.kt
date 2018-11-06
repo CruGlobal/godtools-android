@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakRunnable
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
@@ -24,6 +25,7 @@ import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import java.util.Locale
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
@@ -72,11 +74,16 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         updateVisibilityState()
     }
 
+    private fun postAnalyticScreen(title: String) {
+        mEventBus.post(AnalyticsScreenEvent(title, getDeviceLocale(this)))
+    }
+
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
         updateShareMenuItem()
         updateVisibilityState()
+        postAnalyticScreen(this.article!!.title)
     }
 
     // endregion Lifecycle Events
