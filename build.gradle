@@ -9,7 +9,7 @@ buildscript {
                 ],
                 androidX           : [
                         annotation      : '1.0.0',
-                        appCompat       : '1.0.0',
+                        appCompat       : '1.0.1',
                         archCore        : '2.0.0',
                         browser         : '1.0.0',
                         cardView        : '1.0.0',
