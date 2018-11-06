@@ -5,8 +5,6 @@ import android.net.Uri
 
 private val REGEX_REMOVE_EXTENSION = "\\.[^/]*$".toRegex()
 
-fun String.toUri(): Uri = Uri.parse(this)
-
 fun Uri.addExtension(extension: String): Uri {
     return buildUpon().encodedPath((encodedPath ?: "") + ".$extension").build()
 }

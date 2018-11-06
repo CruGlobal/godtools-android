@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.MainThread
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,6 @@ import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.aem.util.removeExtension
-import org.cru.godtools.article.aem.util.toUri
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
