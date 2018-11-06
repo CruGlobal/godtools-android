@@ -13,6 +13,7 @@ private const val STALE_AGE = DAY_IN_MS
 @Entity(tableName = "aemImports")
 class AemImport(@field:PrimaryKey val uri: Uri) {
     var lastProcessed = Date(0)
+    var lastAccessed = Date(0)
 
     fun isStale(): Boolean {
         return lastProcessed.before(Date(System.currentTimeMillis() - STALE_AGE))
