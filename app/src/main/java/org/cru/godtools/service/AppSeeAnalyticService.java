@@ -48,9 +48,20 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
     @UiThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAnalyticScreenEvent(@NonNull final AnalyticsScreenEvent event) {
-        if (event.isForSystem(AnalyticsSystem.APPSEE)) {
-            Appsee.startScreen(event.getScreen());
+        if (!event.isForSystem(AnalyticsSystem.APPSEE)) {
+            return;
         }
+        // AppSee should match Adobe for integration
+        String screen;
+        String siteSection = event.getAdobeSiteSection();
+        String siteSubSection = event.getAdobeSiteSubSection();
+        if (siteSection != null) {
+            screen = siteSubSection != null ? String.format("%s-%s", siteSection, siteSubSection) :
+                    ("tools".equals(siteSection) || "menu".equals(siteSection)) ? siteSection : event.getScreen();
+        } else {
+            screen = event.getScreen();
+        }
+        Appsee.startScreen(screen);
     }
 
     @Subscribe
