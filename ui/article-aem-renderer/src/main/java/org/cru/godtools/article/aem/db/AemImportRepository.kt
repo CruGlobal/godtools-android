@@ -40,6 +40,15 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
 
     @Transaction
     @WorkerThread
+    open fun accessAemImport(import: AemImport) {
+        with(db.aemImportDao()) {
+            insertOrIgnore(import)
+            updateLastAccessed(import.uri, import.lastAccessed)
+        }
+    }
+
+    @Transaction
+    @WorkerThread
     open fun removeOrphanedAemImports() {
         db.aemImportDao().removeOrphanedAemImports(Date(System.currentTimeMillis() - WEEK_IN_MS))
         db.articleRepository().removeOrphanedArticles()

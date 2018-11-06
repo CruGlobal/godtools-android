@@ -18,11 +18,19 @@ interface AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnore(import: AemImport)
+
+    @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(imports: List<AemImport>)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreArticles(aemImportArticle: List<AemImportArticle>)
+
+    @WorkerThread
+    @Query("UPDATE aemImports SET lastAccessed = :date WHERE uri = :aemImportUri")
+    fun updateLastAccessed(aemImportUri: Uri, date: Date)
 
     @WorkerThread
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
