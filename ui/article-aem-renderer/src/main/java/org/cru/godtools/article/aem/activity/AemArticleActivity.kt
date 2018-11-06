@@ -9,12 +9,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.google.common.util.concurrent.ListenableFuture
+import org.ccci.gto.android.common.util.MainThreadExecutor
+import org.ccci.gto.android.common.util.WeakRunnable
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.article.aem.util.toUri
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
@@ -27,6 +31,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
+    private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
     // region Lifecycle Events
@@ -43,6 +48,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
             return
         }
 
+        syncArticle()
         setContentView(R.layout.activity_generic_tool_fragment)
         setupViewModel()
     }
@@ -50,6 +56,10 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     override fun onStart() {
         super.onStart()
         loadFragmentIfNeeded()
+    }
+
+    internal fun onSyncTaskFinished() {
+        updateVisibilityState()
     }
 
     private fun onUpdateArticle(article: Article?) {
@@ -72,13 +82,19 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     }
 
     private fun processDeepLink(): Uri? {
-        return intent
-            ?.takeIf { it.action == Intent.ACTION_VIEW }
-            ?.data
-            ?.takeIf { it.scheme == "http" || it.scheme == "https" }
-            ?.takeIf { it.host == "godtoolsapp.com" }
-            ?.takeIf { it.path == "/aemArticle" }
-            ?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+        return when {
+            isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+            else -> null
+        }
+    }
+
+    private fun isValidDeepLink(): Boolean {
+        return intent?.action == Intent.ACTION_VIEW &&
+                intent.data?.run {
+                    (scheme == "http" || scheme == "https") &&
+                            host == "godtoolsapp.com" &&
+                            path == "/aemArticle"
+                } == true
     }
 
     private fun setupViewModel() {
@@ -91,6 +107,15 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
     }
 
+    private fun syncArticle() {
+        val manager = AemArticleManger.getInstance(this)
+        syncTask = when {
+            isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
+            else -> manager.downloadArticle(articleUri, false)
+        }
+        syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
+    }
+
     override fun updateToolbarTitle() {
         title = article?.title ?: run {
             super.updateToolbarTitle()
@@ -99,11 +124,11 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     }
 
     override fun determineActiveToolState(): Int {
-        val toolState = super.determineActiveToolState()
         return when {
-            toolState != BaseToolActivity.STATE_LOADED -> toolState
-            article?.content == null -> BaseToolActivity.STATE_LOADING
-            else -> BaseToolActivity.STATE_LOADED
+            article?.content != null -> BaseToolActivity.STATE_LOADED
+            !this::syncTask.isInitialized -> BaseToolActivity.STATE_LOADING
+            !syncTask.isDone -> BaseToolActivity.STATE_LOADING
+            else -> BaseToolActivity.STATE_NOT_FOUND
         }
     }
 
