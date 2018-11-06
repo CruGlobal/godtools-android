@@ -74,9 +74,9 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        articleUri = processDeepLink() ?:
-                intent?.extras?.run { getParcelable<Uri>(EXTRA_ARTICLE) } ?:
-                return false
+        articleUri = processDeepLink()
+                ?: intent?.extras?.run { getParcelable<Uri>(EXTRA_ARTICLE) }
+                ?: return false
 
         return true
     }
