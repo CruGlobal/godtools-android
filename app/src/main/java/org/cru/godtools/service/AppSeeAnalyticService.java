@@ -26,6 +26,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SITE_SECTION_MENU;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SITE_SECTION_TOOLS;
+
 public class AppSeeAnalyticService implements Application.ActivityLifecycleCallbacks, AppseeListener {
     @Nullable
     private static AppSeeAnalyticService sInstance;
@@ -51,15 +54,14 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
             return;
         }
         // AppSee should match Adobe for integration
-        String screen;
-        String siteSection = event.getAdobeSiteSection();
+        String siteSection = (SITE_SECTION_TOOLS.equals(event.getAdobeSiteSection()) ||
+                SITE_SECTION_MENU.equals(event.getAdobeSiteSection())) ? event.getAdobeSiteSection() :
+                event.getScreen();
+
         String siteSubSection = event.getAdobeSiteSubSection();
-        if (siteSection != null) {
-            screen = siteSubSection != null ? String.format("%s-%s", siteSection, siteSubSection) :
-                    ("tools".equals(siteSection) || "menu".equals(siteSection)) ? siteSection : event.getScreen();
-        } else {
-            screen = event.getScreen();
-        }
+
+        String screen = siteSubSection != null ? String.format("%s - %s", siteSection, siteSubSection) : siteSection;
+
         Appsee.startScreen(screen);
     }
 

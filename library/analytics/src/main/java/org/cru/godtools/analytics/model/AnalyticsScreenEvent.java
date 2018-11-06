@@ -30,8 +30,8 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     public static final String SCREEN_COPYRIGHT = "Copyright Info";
 
     /* Adobe Site Sections */
-    private static final String SITE_SECTION_TOOLS = "tools";
-    private static final String SITE_SECTION_MENU = "menu";
+    public static final String SITE_SECTION_TOOLS = "tools";
+    public static final String SITE_SECTION_MENU = "menu";
     private static final String SITE_SUB_SECTION_ADD_TOOLS = "add tools";
     private static final String SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings";
 
