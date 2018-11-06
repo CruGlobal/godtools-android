@@ -41,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected /*final*/ EventBus mEventBus;
 
     @NonNull
-    protected static Bundle buildExtras(@NonNull final Activity activity) {
+    public static Bundle buildExtras(@NonNull final Activity activity) {
         final Bundle extras = new Bundle();
         extras.putParcelable(EXTRA_LAUNCHING_COMPONENT, activity.getComponentName());
         return extras;

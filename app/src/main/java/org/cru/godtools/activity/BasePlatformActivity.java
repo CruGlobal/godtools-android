@@ -177,7 +177,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                AboutActivity.start(this);
+                AboutActivityKt.startAboutActivity(this);
                 return true;
             case R.id.action_login:
                 launchLogin(false);
