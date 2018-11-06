@@ -93,7 +93,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
                 intent.data?.run {
                     (scheme == "http" || scheme == "https") &&
                             host == "godtoolsapp.com" &&
-                            path == "/aemArticle"
+                            path == "/article/aem"
                 } == true
     }
 
