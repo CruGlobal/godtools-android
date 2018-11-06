@@ -77,6 +77,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
@@ -203,12 +204,28 @@ public class AemArticleManger {
         return task.mResult;
     }
 
+    @NonNull
     @AnyThread
-    private void enqueueDownloadArticle(@NonNull final Uri uri, final boolean force) {
+    public ListenableFuture<Boolean> downloadDeeplinkedArticle(@NonNull final Uri uri) {
+        // create an AemImport for the deeplinked article
+        final SettableFuture<Boolean> deeplinkTask = SettableFuture.create();
+        mExecutor.execute(() -> {
+            createAemImportForDeeplinkedArticleTask(uri);
+            deeplinkTask.set(true);
+        });
+
+        final ListenableFuture<?> syncAemImportTask =
+                Futures.transformAsync(deeplinkTask, t -> enqueueSyncAemImport(uri, false), directExecutor());
+        return Futures.transformAsync(syncAemImportTask, t -> downloadArticle(uri, false), directExecutor());
+    }
+
+    @NonNull
+    @AnyThread
+    public ListenableFuture<Boolean> downloadArticle(@NonNull final Uri uri, final boolean force) {
         // try updating a task that is currently enqueued
         final DownloadArticleTask existing = mDownloadArticleTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {
-            return;
+            return existing.mResult;
         }
 
         // create a new sync task
@@ -216,6 +233,7 @@ public class AemArticleManger {
         task.updateTask(force);
         mDownloadArticleTasks.put(uri, task);
         mExecutor.execute(task);
+        return task.mResult;
     }
 
     @AnyThread
@@ -360,8 +378,19 @@ public class AemArticleManger {
 
         // enqueue downloads for all articles
         for (final Article article : articles) {
-            enqueueDownloadArticle(article.getUri(), false);
+            downloadArticle(article.getUri(), false);
         }
+    }
+
+    @WorkerThread
+    void createAemImportForDeeplinkedArticleTask(@NonNull final Uri uri) {
+        // create & access an AemImport to trigger the download pipeline
+        final AemImport aemImport = new AemImport(uri);
+        aemImport.setLastAccessed(new Date());
+        mAemDb.aemImportRepository().accessAemImport(aemImport);
+
+        // enqueue a sync of the AemImport
+        enqueueSyncAemImport(uri, false);
     }
 
     /**
