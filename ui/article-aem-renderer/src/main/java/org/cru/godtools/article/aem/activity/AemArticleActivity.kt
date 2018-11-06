@@ -46,6 +46,8 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
+    private var hasScreenEventTriggered: Boolean = false
+
     // region Lifecycle Events
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +77,7 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     }
 
     private fun postAnalyticScreen(title: String) {
+        this.hasScreenEventTriggered = true
         mEventBus.post(AnalyticsScreenEvent(title, getDeviceLocale(this)))
     }
 
@@ -83,7 +86,9 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         updateToolbarTitle()
         updateShareMenuItem()
         updateVisibilityState()
-        postAnalyticScreen(this.article!!.title)
+        if (!hasScreenEventTriggered) {
+            article?.title?.let { postAnalyticScreen(it) }
+        }
     }
 
     // endregion Lifecycle Events
