@@ -226,7 +226,7 @@ public class AemArticleManger {
     }
 
     @AnyThread
-    public ListenableFuture<Boolean> enqueueGenerateShareUri(@NonNull final Uri articleUri) {
+    public ListenableFuture<Boolean> generateShareUri(@NonNull final Uri articleUri) {
         // try updating a task that is currently enqueued
         final GenerateShareUriTask existing = mGenerateShareUriTasks.get(articleUri);
         if (existing != null && existing.updateTask(false)) {
@@ -400,7 +400,7 @@ public class AemArticleManger {
         // enqueue a couple article specific tasks
         for (final Article article : articles) {
             downloadArticle(article.getUri(), false);
-            enqueueGenerateShareUri(article.getUri());
+            generateShareUri(article.getUri());
         }
     }
 

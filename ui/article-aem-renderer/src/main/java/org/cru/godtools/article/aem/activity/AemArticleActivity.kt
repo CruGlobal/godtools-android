@@ -48,10 +48,9 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
             return
         }
 
-        syncArticle()
+        syncData()
         setContentView(R.layout.activity_generic_tool_fragment)
         setupViewModel()
-        syncData()
     }
 
     override fun onStart() {
@@ -109,15 +108,6 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
     }
 
-    private fun syncArticle() {
-        val manager = AemArticleManger.getInstance(this)
-        syncTask = when {
-            isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
-            else -> manager.downloadArticle(articleUri, false)
-        }
-        syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
-    }
-
     override fun updateToolbarTitle() {
         title = article?.title ?: run {
             super.updateToolbarTitle()
@@ -127,8 +117,12 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
 
     private fun syncData() {
         with(AemArticleManger.getInstance(this)) {
-            enqueueDownloadArticle(articleUri, false)
-            enqueueGenerateShareUri(articleUri)
+            syncTask = when {
+                isValidDeepLink() -> downloadDeeplinkedArticle(articleUri)
+                else -> downloadArticle(articleUri, false)
+            }
+            syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
+            generateShareUri(articleUri)
         }
     }
 
