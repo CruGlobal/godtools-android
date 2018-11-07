@@ -20,6 +20,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.AttachmentLoader;
+import org.cru.godtools.content.AvailableLanguagesLoader;
 import org.cru.godtools.content.ToolLoader;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -29,7 +30,6 @@ import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
-import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.Collections;
