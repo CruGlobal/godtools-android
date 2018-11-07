@@ -40,8 +40,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     protected Manifest mManifest;
 
     @NonNull
-    protected static Bundle buildExtras(@NonNull final Activity activity, @Nullable final String toolCode,
-                                        @Nullable final Locale language) {
+    public static Bundle buildExtras(@NonNull final Activity activity, @Nullable final String toolCode,
+                                     @Nullable final Locale language) {
         final Bundle extras = buildExtras(activity);
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, language);

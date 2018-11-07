@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.annimon.stream.Optional;
 
 import org.cru.godtools.article.R;
-import org.cru.godtools.article.aem.activity.AemArticleActivity;
+import org.cru.godtools.article.aem.activity.AemArticleActivityKt;
 import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.fragment.ArticlesFragment;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
@@ -71,7 +71,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         if (article != null) {
-            AemArticleActivity.start(this, getTool(), getLocale(), article.getUri());
+            AemArticleActivityKt.startAemArticleActivity(this, getTool(), getLocale(), article.getUri());
         }
     }
 
