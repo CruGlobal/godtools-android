@@ -410,6 +410,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     protected void showLanguageSettings() {
-        LanguageSettingsActivity.start(this);
+        LanguageSettingsActivityKt.startLanguageSettingsActivity(this);
     }
 }
