@@ -129,7 +129,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     // region Share Link logic
 
     override fun hasShareLinkUri(): Boolean {
-        return article?.canonicalUri != null
+        return false
     }
 
     override fun getShareLinkTitle(): String? {
