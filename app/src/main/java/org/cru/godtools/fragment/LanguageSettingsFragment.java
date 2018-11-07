@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.cru.godtools.R;
-import org.cru.godtools.activity.LanguageSelectionActivity;
+import org.cru.godtools.activity.LanguageSelectionActivityKt;
 import org.cru.godtools.base.util.LocaleUtils;
 
 import androidx.annotation.Nullable;
@@ -73,12 +73,12 @@ public class LanguageSettingsFragment extends BasePlatformFragment {
     @Optional
     @OnClick(R.id.primary_language)
     void editPrimaryLanguage() {
-        LanguageSelectionActivity.start(requireActivity(), true);
+        LanguageSelectionActivityKt.startLanguageSelectionActivity(requireActivity(), true);
     }
 
     @Optional
     @OnClick(R.id.parallel_language)
     void editParallelLanguage() {
-        LanguageSelectionActivity.start(requireActivity(), false);
+        LanguageSelectionActivityKt.startLanguageSelectionActivity(requireActivity(), false);
     }
 }
