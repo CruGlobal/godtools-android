@@ -48,7 +48,6 @@ interface ArticleDao {
             canonicalUri = :canonicalUri,
             shareUri = CASE
                 WHEN canonicalUri != :canonicalUri THEN NULL
-                WHEN title != :title THEN NULL
                 ELSE shareUri END
         WHERE uri = :uri""")
     fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
