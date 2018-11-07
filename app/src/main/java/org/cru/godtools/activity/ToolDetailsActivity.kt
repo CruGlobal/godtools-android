@@ -68,7 +68,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        tool =  intent?.extras?.getString(EXTRA_TOOL) ?: return false
+        tool = intent?.extras?.getString(EXTRA_TOOL) ?: return false
         return true
     }
 
