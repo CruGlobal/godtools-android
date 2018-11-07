@@ -27,6 +27,15 @@ import java.util.Locale
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
+fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
+    val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
+        putParcelable(EXTRA_ARTICLE, articleUri)
+    }
+    Intent(this, AemArticleActivity::class.java)
+        .putExtras(extras)
+        .also { startActivity(it) }
+}
+
 class AemArticleActivity : BaseSingleToolActivity(false, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
@@ -147,17 +156,5 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         internal lateinit var article: LiveData<Article>
 
         internal fun isArticleInitialized() = ::article.isInitialized
-    }
-
-    companion object {
-        @JvmStatic
-        fun start(activity: Activity, toolCode: String?, language: Locale, articleUri: Uri) {
-            val extras = buildExtras(activity, toolCode, language).apply {
-                putParcelable(EXTRA_ARTICLE, articleUri)
-            }
-            Intent(activity, AemArticleActivity::class.java)
-                .putExtras(extras)
-                .also { activity.startActivity(it) }
-        }
     }
 }
