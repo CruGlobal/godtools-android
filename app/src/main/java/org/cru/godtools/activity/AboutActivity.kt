@@ -10,7 +10,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
-import org.cru.godtools.fragment.AboutFragment
+import org.cru.godtools.fragment.createAboutFragment
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -46,7 +46,7 @@ class AboutActivity : BasePlatformActivity() {
         supportFragmentManager?.apply {
             if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
                 transaction {
-                    replace(R.id.frame, AboutFragment.newInstance(), TAG_MAIN_FRAGMENT)
+                    replace(R.id.frame, createAboutFragment(), TAG_MAIN_FRAGMENT)
                 }
             }
         }
