@@ -14,15 +14,6 @@ object ShareLinkUtils {
                 FirebaseDynamicLinks.getInstance().createDynamicLink()
                     .setDomainUriPrefix("https://godtools.page.link")
                     .setLink(it)
-                    .setSocialMetaTagParameters(
-                        DynamicLink.SocialMetaTagParameters.Builder()
-                            .setTitle(article.title)
-                            .build()
-                    )
-//                    // Open links with this app on Android
-//                    .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-//                    // Open links with com.example.ios on iOS
-//                    .setIosParameters(DynamicLink.IosParameters.Builder("com.example.ios").build())
             }
     }
 }
