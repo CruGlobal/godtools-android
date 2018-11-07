@@ -414,8 +414,9 @@ public class TractActivity extends BaseToolActivity
     }
 
     private int determineLanguageState(final int languageIndex) {
-        if (mManifests.get(languageIndex) != null) {
-            return STATE_LOADED;
+        Manifest manifest = mManifests.get(languageIndex);
+        if (manifest != null) {
+            return manifest.getPages().size() > 0 ? STATE_LOADED : STATE_NOT_FOUND;
         } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
                 mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
