@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.common.base.Objects;
-
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.model.Language;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.xml.content.ManifestLoader;
@@ -29,11 +26,12 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private static final int LOADER_TRANSLATION = 101;
     private static final int LOADER_MANIFEST = 102;
 
+    private final boolean mRequireTool;
+
+    @Nullable
+    /*final*/ String mTool = null;
     @NonNull
-    @SuppressWarnings("ConstantConditions")
-    protected /*final*/ String mTool = Tool.INVALID_CODE;
-    @NonNull
-    protected /*final*/ Locale mLocale = Language.INVALID_CODE;
+    /*final*/ Locale mLocale = Language.INVALID_CODE;
 
     private boolean mTranslationLoaded = false;
     @Nullable
@@ -42,8 +40,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     protected Manifest mManifest;
 
     @NonNull
-    protected static Bundle buildExtras(@NonNull final Activity activity, @NonNull final String toolCode,
-                                        @NonNull final Locale language) {
+    protected static Bundle buildExtras(@NonNull final Activity activity, @Nullable final String toolCode,
+                                        @Nullable final Locale language) {
         final Bundle extras = buildExtras(activity);
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, language);
@@ -51,7 +49,12 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     public BaseSingleToolActivity(final boolean immersive) {
+        this(immersive, true);
+    }
+
+    public BaseSingleToolActivity(final boolean immersive, final boolean requireTool) {
         super(immersive);
+        mRequireTool = requireTool;
     }
 
     // region Lifecycle Events
@@ -94,9 +97,37 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     // endregion Lifecycle Events
 
+    private boolean hasTool() {
+        return mTool != null && !Language.INVALID_CODE.equals(mLocale);
+    }
+
+    @NonNull
+    protected final String getTool() {
+        if (!mRequireTool) {
+            throw new UnsupportedOperationException(
+                    "You cannot call getTool() on a fragment that doesn't require a tool");
+        }
+        if (mTool == null) {
+            throw new IllegalStateException("mRequireTool is true, but a tool wasn't specified");
+        }
+        return mTool;
+    }
+
+    @NonNull
+    protected final Locale getLocale() {
+        if (!mRequireTool) {
+            throw new UnsupportedOperationException(
+                    "You cannot call getLocale() on a fragment that doesn't require a tool");
+        }
+        if (mLocale.equals(Language.INVALID_CODE)) {
+            throw new IllegalStateException("mRequireTool is true, but a valid locale wasn't specified");
+        }
+        return mLocale;
+    }
+
     @Override
     protected void cacheTools() {
-        if (mDownloadManager != null) {
+        if (mDownloadManager != null && mTool != null) {
             mDownloadManager.cacheTranslation(mTool, mLocale);
         }
     }
@@ -104,6 +135,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     @Override
     protected int determineActiveToolState() {
         if (mManifest != null) {
+            return STATE_LOADED;
+        } else if (!hasTool()) {
             return STATE_LOADED;
         } else if (mTranslationLoaded && mTranslation == null) {
             return STATE_NOT_FOUND;
@@ -113,14 +146,20 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     private boolean validStartState() {
-        return !Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale);
+        return !mRequireTool || hasTool();
     }
 
     private void startLoaders() {
-        final LoaderManager manager = LoaderManager.getInstance(this);
+        // only start loaders if we have a tool
+        if (hasTool()) {
+            final LoaderManager manager = LoaderManager.getInstance(this);
 
-        manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
-        manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+            manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
+            manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+        } else {
+            setTranslation(null);
+            setManifest(null);
+        }
     }
 
     void setManifest(@Nullable final Manifest manifest) {
@@ -159,6 +198,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TRANSLATION:
+                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
                     return new LatestTranslationLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 
@@ -186,6 +226,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
+                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
                     return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 

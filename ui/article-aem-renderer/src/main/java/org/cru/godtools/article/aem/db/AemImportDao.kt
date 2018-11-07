@@ -18,11 +18,19 @@ interface AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnore(import: AemImport)
+
+    @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(imports: List<AemImport>)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreArticles(aemImportArticle: List<AemImportArticle>)
+
+    @WorkerThread
+    @Query("UPDATE aemImports SET lastAccessed = :date WHERE uri = :aemImportUri")
+    fun updateLastAccessed(aemImportUri: Uri, date: Date)
 
     @WorkerThread
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
@@ -37,8 +45,10 @@ interface AemImportDao {
     @WorkerThread
     @Query("""
         DELETE FROM aemImports
-        WHERE uri NOT IN (SELECT aemImportUri FROM translationAemImports)""")
-    fun removeOrphanedAemImports()
+        WHERE
+            uri NOT IN (SELECT aemImportUri FROM translationAemImports) AND
+            lastAccessed < :lastAccessedBefore""")
+    fun removeOrphanedAemImports(lastAccessedBefore: Date)
 
     @WorkerThread
     @Query("SELECT * FROM aemImports WHERE uri = :uri")

@@ -19,4 +19,14 @@ class ArticleRoomDatabaseMigrationIT {
         // run migration
         helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 9, true, ArticleRoomDatabase.MIGRATION_8_9)
     }
+
+    @Test
+    fun migrate9To10() {
+        // create v9 database
+        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 9)
+            .close()
+
+        // run migration
+        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 10, true, ArticleRoomDatabase.MIGRATION_9_10)
+    }
 }
