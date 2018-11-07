@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
-import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
@@ -162,7 +162,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         // trigger tool details if we are in the find tools UI
         if (mActiveState == STATE_FIND_TOOLS) {
-            ToolDetailsActivity.start(this, code);
+            ToolDetailsActivityKt.startToolDetailsActivity(this, code);
             return;
         }
 
@@ -191,7 +191,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     public void onToolInfo(@Nullable final String code) {
         if (code != null) {
-            ToolDetailsActivity.start(this, code);
+            ToolDetailsActivityKt.startToolDetailsActivity(this, code);
         }
     }
 
