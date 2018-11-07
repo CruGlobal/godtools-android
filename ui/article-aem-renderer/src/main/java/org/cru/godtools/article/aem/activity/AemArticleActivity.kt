@@ -46,7 +46,7 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
-    private var hasScreenEventTriggered: Boolean = false
+    private var pendingAnalyticsEvent = false
 
     // region Lifecycle Events
 
@@ -72,13 +72,14 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         loadFragmentIfNeeded()
     }
 
-    internal fun onSyncTaskFinished() {
-        updateVisibilityState()
+    override fun onResume() {
+        super.onResume()
+        pendingAnalyticsEvent = true
+        sendAnalyticsEventIfNeededAndPossible()
     }
 
-    private fun postAnalyticScreen(title: String) {
-        this.hasScreenEventTriggered = true
-        mEventBus.post(AnalyticsScreenEvent(title, getDeviceLocale(this)))
+    internal fun onSyncTaskFinished() {
+        updateVisibilityState()
     }
 
     private fun onUpdateArticle(article: Article?) {
@@ -86,9 +87,12 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         updateToolbarTitle()
         updateShareMenuItem()
         updateVisibilityState()
-        if (!hasScreenEventTriggered) {
-            article?.title?.let { postAnalyticScreen(it) }
-        }
+        sendAnalyticsEventIfNeededAndPossible()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pendingAnalyticsEvent = false
     }
 
     // endregion Lifecycle Events
@@ -128,6 +132,15 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         }
 
         viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
+    }
+
+    private fun sendAnalyticsEventIfNeededAndPossible() {
+        if (!pendingAnalyticsEvent) return
+
+        article?.title?.let {
+            mEventBus.post(AnalyticsScreenEvent(it, getDeviceLocale(this)))
+            pendingAnalyticsEvent = false
+        }
     }
 
     override fun updateToolbarTitle() {
