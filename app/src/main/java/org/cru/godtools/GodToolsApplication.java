@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.evernote.android.job.JobManager;
 
 import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.article.aem.service.AemArticleManger;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -66,6 +67,7 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         GodToolsDownloadManager.getInstance(this);
         GodToolsShortcutManager.getInstance(this);
         AccountListRegistrationService.start(this);
+        AemArticleManger.getInstance(this);
         FollowupService.start(this);
     }
 

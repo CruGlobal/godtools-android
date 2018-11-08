@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.leakcanary.CrashlyticsLeakService;
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider;
 import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.TimberAnalyticsService;
-import org.cru.godtools.article.aem.service.AemArticleManger;
 import org.keynote.godtools.android.db.GodToolsDatabase;
 
 import java.io.File;
@@ -91,12 +90,6 @@ public class DebugGodToolsApplication extends GodToolsApplication {
 
         // add TimberAnalyticsService
         AnalyticsDispatcher.getInstance(this).addAnalyticsService(TimberAnalyticsService.getInstance());
-    }
-
-    @Override
-    protected void startServices() {
-        super.startServices();
-        AemArticleManger.getInstance(this);
     }
 
     class GtDatabaseFilesProvider implements DatabaseFilesProvider {
