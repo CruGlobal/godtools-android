@@ -23,10 +23,10 @@ import com.squareup.picasso.Picasso;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
+import org.cru.godtools.article.activity.CategoriesActivity;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.FileUtils;
-import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -61,7 +61,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
-import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 
 public final class GodToolsShortcutManager implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
@@ -193,11 +192,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         }
         switch (tool.getType()) {
             case TRACT:
-                break;
             case ARTICLE:
-                if (CODE_EVERYSTUDENT.equals(tool.getCode())) {
-                    break;
-                }
+                break;
             default:
                 return false;
         }
@@ -369,32 +365,29 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             return Optional.empty();
         }
 
+        // short-circuit if we don't have a primary translation
+        final Translation translation = mDao.getLatestTranslation(code, mSettings.getPrimaryLanguage())
+                .or(() -> mDao.getLatestTranslation(code, Locale.ENGLISH))
+                .orElse(null);
+        if (translation == null) {
+            return Optional.empty();
+        }
+        // generate the list of locales to use for this tool
+        final List<Locale> locales = new ArrayList<>();
+        locales.add(translation.getLanguageCode());
+        if (mSettings.getParallelLanguage() != null) {
+            locales.add(mSettings.getParallelLanguage());
+        }
+
         // generate the target intent for this shortcut
         final Intent intent;
         switch (tool.getType()) {
             case TRACT:
-                // short-circuit if we don't have a primary translation
-                final Translation translation = mDao.getLatestTranslation(code, mSettings.getPrimaryLanguage())
-                        .or(() -> mDao.getLatestTranslation(code, Locale.ENGLISH))
-                        .orElse(null);
-                if (translation == null) {
-                    return Optional.empty();
-                }
-
-                // generate the list of locales to use for this tool
-                final List<Locale> locales = new ArrayList<>();
-                locales.add(translation.getLanguageCode());
-                if (mSettings.getParallelLanguage() != null) {
-                    locales.add(mSettings.getParallelLanguage());
-                }
-
                 intent = TractActivity.createIntent(mContext, code, locales.toArray(new Locale[0]));
                 break;
             case ARTICLE:
-                if (CODE_EVERYSTUDENT.equals(tool.getCode())) {
-                    intent = new Intent(mContext, EveryStudent.class);
-                    break;
-                }
+                intent = CategoriesActivity.createIntent(mContext, code, locales.get(0));
+                break;
             default:
                 // XXX: we don't support shortcuts for this tool type
                 return Optional.empty();

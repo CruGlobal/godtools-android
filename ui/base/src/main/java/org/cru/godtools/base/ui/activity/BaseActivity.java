@@ -2,6 +2,7 @@ package org.cru.godtools.base.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -41,9 +42,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected /*final*/ EventBus mEventBus;
 
     @NonNull
-    public static Bundle buildExtras(@NonNull final Activity activity) {
+    public static Bundle buildExtras(@NonNull final Context context) {
         final Bundle extras = new Bundle();
-        extras.putParcelable(EXTRA_LAUNCHING_COMPONENT, activity.getComponentName());
+        if (context instanceof Activity) {
+            extras.putParcelable(EXTRA_LAUNCHING_COMPONENT, ((Activity) context).getComponentName());
+        }
         return extras;
     }
 
