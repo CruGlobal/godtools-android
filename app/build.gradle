@@ -128,6 +128,8 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:account')
+    implementation project(':ui:article-aem-renderer')
+    implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:shortcuts')
@@ -157,11 +159,6 @@ dependencies {
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
-
-    releaseImplementation project(':ui:everystudent')
-
-    debugImplementation project(':ui:article-renderer')
-    debugImplementation project(':ui:article-aem-renderer')
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
