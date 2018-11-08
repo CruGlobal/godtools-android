@@ -15,14 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "71275134527-bnnfudq34jrhqfjnnmok2qmbho1uq2vc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.keynote.godtools.android",
+            "certificate_hash": "ee40b2e6569e1e242f69bf9dd839f6fb135337d8"
+          }
+        },
+        {
           "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
-        {
-          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
-        },
         {
           "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
         },
@@ -35,8 +40,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -57,9 +67,6 @@
         }
       ],
       "api_key": [
-        {
-          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
-        },
         {
           "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
         },

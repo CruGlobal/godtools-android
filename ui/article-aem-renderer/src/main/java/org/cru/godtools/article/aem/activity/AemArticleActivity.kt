@@ -57,7 +57,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
             return
         }
 
-        syncArticle()
+        syncData()
         setContentView(R.layout.activity_generic_tool_fragment)
         setupViewModel()
     }
@@ -74,6 +74,7 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
+        updateShareMenuItem()
         updateVisibilityState()
     }
 
@@ -116,21 +117,39 @@ class AemArticleActivity : BaseSingleToolActivity(false, false) {
         viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
     }
 
-    private fun syncArticle() {
-        val manager = AemArticleManger.getInstance(this)
-        syncTask = when {
-            isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
-            else -> manager.downloadArticle(articleUri, false)
-        }
-        syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
-    }
-
     override fun updateToolbarTitle() {
         title = article?.title ?: run {
             super.updateToolbarTitle()
             return
         }
     }
+
+    private fun syncData() {
+        with(AemArticleManger.getInstance(this)) {
+            syncTask = when {
+                isValidDeepLink() -> downloadDeeplinkedArticle(articleUri)
+                else -> downloadArticle(articleUri, false)
+            }
+            syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
+            generateShareUri(articleUri)
+        }
+    }
+
+    // region Share Link logic
+
+    override fun hasShareLinkUri(): Boolean {
+        return false
+    }
+
+    override fun getShareLinkTitle(): String? {
+        return article?.title ?: super.getShareLinkTitle()
+    }
+
+    override fun getShareLinkUri(): String? {
+        return article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
+    }
+
+    // endregion Share Link logic
 
     override fun determineActiveToolState(): Int {
         return when {

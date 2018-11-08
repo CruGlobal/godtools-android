@@ -248,10 +248,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
-        if (id == R.id.action_share) {
-            shareCurrentTract();
-            return true;
-        } else if (id == R.id.action_install) {
+        if (id == R.id.action_install) {
             installFullAppFromInstantApp();
             return true;
         } else if (id == android.R.id.home) {
@@ -705,39 +702,26 @@ public class TractActivity extends BaseToolActivity
         InstantApps.showInstallPrompt(this, null, -1, "instantapp");
     }
 
-    private void shareCurrentTract() {
-        final Manifest manifest = getActiveManifest();
-        if (manifest != null) {
-            mAnalytics.onTrackShareAction();
-
-            final Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
-            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest, mPager != null ? mPager.getCurrentItem() : 0));
-            startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
-        }
-    }
+    // region Share Link logic
 
     @Override
-    public void showModal(@NonNull final Modal modal) {
-        final Manifest manifest = modal.getManifest();
-        final Page page = modal.getPage();
-        ModalActivity.start(this, manifest.getManifestName(), manifest.getCode(),
-                            manifest.getLocale(), page.getId(), modal.getId());
+    protected boolean hasShareLinkUri() {
+        return getActiveManifest() != null;
     }
 
-    /**
-     * This method takes in a Manifest and page and returns a shareable link for the corresponding tool.
-     *
-     * @param manifest The Manifest Object to be used.
-     * @param page     The page being shared
-     * @return Url string of the shareable link.
-     */
-    @NonNull
-    private String buildSharingURL(@NonNull final Manifest manifest, final int page) {
+    @Nullable
+    @Override
+    protected String getShareLinkUri() {
+        final Manifest manifest = getActiveManifest();
+        if (manifest == null) {
+            return null;
+        }
+
+        // build share link
         final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
                 .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
                 .appendPath(manifest.getCode());
+        final int page = mPager != null ? mPager.getCurrentItem() : 0;
         if (page > 0) {
             uri.appendPath(String.valueOf(page));
         }
@@ -745,6 +729,16 @@ public class TractActivity extends BaseToolActivity
         return uri
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
+    }
+
+    // endregion Share Link logic
+
+    @Override
+    public void showModal(@NonNull final Modal modal) {
+        final Manifest manifest = modal.getManifest();
+        final Page page = modal.getPage();
+        ModalActivity.start(this, manifest.getManifestName(), manifest.getCode(),
+                            manifest.getLocale(), page.getId(), modal.getId());
     }
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {

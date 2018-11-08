@@ -34,7 +34,8 @@ buildscript {
                 evernoteAndroidJob : '1.2.5',
                 facebookStetho     : '1.5.0',
                 firebase           : [
-                        core: '16.0.4',
+                        core        : '16.0.5',
+                        dynamicLinks: '16.1.3',
                 ],
                 gtoSupport         : '2.0.0-SNAPSHOT',
                 guava              : '26.0-android',
@@ -52,7 +53,7 @@ buildscript {
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 playServices       : [
-                        analytics: '16.0.4',
+                        analytics: '16.0.5',
                 ],
                 powermock          : '2.0.0-beta.9',
                 retrofit2          : '2.4.0',
