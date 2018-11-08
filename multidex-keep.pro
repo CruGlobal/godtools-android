@@ -3,3 +3,6 @@
 -keepclasseswithmembers class * {
     @org.junit.* *;
 }
+
+# Keep Firebase dependencies in the main dex file
+-keep class com.google.firebase.**
