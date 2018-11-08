@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import static org.cru.godtools.article.activity.ArticlesActivityKt.startArticlesActivity;
+
 public class CategoriesActivity extends BaseSingleToolActivity implements CategoriesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
@@ -55,7 +57,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
     @Override
     public void onCategorySelected(@Nullable final Category category) {
-        ArticlesActivity.start(this, getTool(), getLocale(), category != null ? category.getId() : null);
+        startArticlesActivity(this, getTool(), getLocale(), category != null ? category.getId() : null);
     }
 
     // endregion Lifecycle Events

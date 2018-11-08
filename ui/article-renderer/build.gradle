@@ -15,6 +15,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
