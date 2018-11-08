@@ -416,7 +416,7 @@ public class TractActivity extends BaseToolActivity
     private int determineLanguageState(final int languageIndex) {
         Manifest manifest = mManifests.get(languageIndex);
         if (manifest != null) {
-            return Tool.Type.TRACT.equals(manifest.getType()) ? STATE_LOADED : STATE_NOT_FOUND;
+            return Manifest.Type.TRACT == manifest.getType() ? STATE_LOADED : STATE_NOT_FOUND;
         } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
                 mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
@@ -567,7 +567,7 @@ public class TractActivity extends BaseToolActivity
     @Nullable
     protected Manifest getActiveManifest() {
         Manifest manifest = mManifests.get(mActiveLanguage);
-        return manifest == null || Tool.Type.TRACT.equals(manifest.getType()) ? manifest : null;
+        return manifest == null || Manifest.Type.TRACT == manifest.getType() ? manifest : null;
     }
 
     private void updateLanguageToggle() {
