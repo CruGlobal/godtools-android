@@ -148,9 +148,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         }
     }
 
-    protected boolean isSupportedType(@NonNull final Manifest.Type type) {
-        return true;
-    }
+    protected abstract boolean isSupportedType(@NonNull Manifest.Type type);
 
     private boolean validStartState() {
         return !mRequireTool || hasTool();
