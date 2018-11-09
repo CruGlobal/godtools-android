@@ -416,7 +416,10 @@ public class TractActivity extends BaseToolActivity
     private int determineLanguageState(final int languageIndex) {
         final Manifest manifest = mManifests.get(languageIndex);
         if (manifest != null) {
-            return Manifest.Type.TRACT == manifest.getType() ? STATE_LOADED : STATE_NOT_FOUND;
+            if (manifest.getType() != Manifest.Type.TRACT) {
+                return STATE_INVALID_TYPE;
+            }
+            return STATE_LOADED;
         } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
                 mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
@@ -441,10 +444,10 @@ public class TractActivity extends BaseToolActivity
         for (int i = start; i < mLanguages.length && i < end; i++) {
             // default hidden state to whether the language exists or not
             final int state = determineLanguageState(i);
-            mHiddenLanguages[i] = state == STATE_NOT_FOUND;
+            mHiddenLanguages[i] = state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE;
 
             // short-circuit loop if this language was not found
-            if (state == STATE_NOT_FOUND) {
+            if (mHiddenLanguages[i]) {
                 continue;
             }
 
@@ -534,10 +537,14 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
-        // only process if the active language is not found
-        if (determineLanguageState(mActiveLanguage) == STATE_NOT_FOUND) {
+        // only process if the active language is not found or invalid
+        final int activeLanguageState = determineLanguageState(mActiveLanguage);
+        if (activeLanguageState == STATE_NOT_FOUND || activeLanguageState == STATE_INVALID_TYPE) {
             Stream.of(mLanguages)
-                    .filterIndexed((i, l) -> determineLanguageState(i) != STATE_NOT_FOUND)
+                    .filterIndexed((i, l) -> {
+                        final int state = determineLanguageState(i);
+                        return state != STATE_NOT_FOUND && state != STATE_INVALID_TYPE;
+                    })
                     .findFirst()
                     .ifPresent(this::updateActiveLanguage);
         }
