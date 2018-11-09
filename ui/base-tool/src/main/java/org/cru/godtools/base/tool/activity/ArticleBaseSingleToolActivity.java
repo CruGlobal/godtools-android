@@ -8,6 +8,10 @@ public class ArticleBaseSingleToolActivity extends BaseSingleToolActivity {
         super(immersive);
     }
 
+    public ArticleBaseSingleToolActivity(final boolean immersive, final boolean requiretool) {
+        super(immersive, requiretool);
+    }
+
     @Override
     protected int determineActiveToolState() {
         int state = super.determineActiveToolState();
