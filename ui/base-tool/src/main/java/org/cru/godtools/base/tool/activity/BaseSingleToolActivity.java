@@ -37,7 +37,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     @Nullable
     private Translation mTranslation;
     @Nullable
-    protected Manifest mManifest;
+    private Manifest mManifest;
 
     @NonNull
     public static Bundle buildExtras(@NonNull final Context context, @Nullable final String toolCode,
@@ -134,15 +134,22 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     @Override
     protected int determineActiveToolState() {
-        if (mManifest != null) {
+        if (!hasTool()) {
             return STATE_LOADED;
-        } else if (!hasTool()) {
+        } else if (mManifest != null) {
+            if (!isSupportedType(mManifest.getType())) {
+                return STATE_INVALID_TYPE;
+            }
             return STATE_LOADED;
         } else if (mTranslationLoaded && mTranslation == null) {
             return STATE_NOT_FOUND;
         } else {
             return STATE_LOADING;
         }
+    }
+
+    protected boolean isSupportedType(@NonNull final Manifest.Type type) {
+        return true;
     }
 
     private boolean validStartState() {

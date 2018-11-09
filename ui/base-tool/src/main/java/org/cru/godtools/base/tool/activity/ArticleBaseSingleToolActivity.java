@@ -2,6 +2,8 @@ package org.cru.godtools.base.tool.activity;
 
 import org.cru.godtools.xml.model.Manifest;
 
+import androidx.annotation.NonNull;
+
 public class ArticleBaseSingleToolActivity extends BaseSingleToolActivity {
 
     public ArticleBaseSingleToolActivity(final boolean immersive) {
@@ -13,14 +15,7 @@ public class ArticleBaseSingleToolActivity extends BaseSingleToolActivity {
     }
 
     @Override
-    protected int determineActiveToolState() {
-        int state = super.determineActiveToolState();
-        if (state == STATE_LOADED) {
-            if (mManifest == null) {
-                return STATE_NOT_FOUND;
-            }
-            return Manifest.Type.ARTICLE == mManifest.getType() ? state : STATE_NOT_FOUND;
-        }
-        return state;
+    protected boolean isSupportedType(@NonNull final Manifest.Type type) {
+        return type == Manifest.Type.ARTICLE;
     }
 }
