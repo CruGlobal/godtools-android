@@ -1,12 +1,8 @@
 buildscript {
     ext {
         deps = [
-                adobeMobileServices: '4.16.0',
+                adobeMobileServices: '4.17.0',
                 advrecyclerview    : '0.11.0',
-                androidArch        : [
-                        core: '1.1.1',
-                        room: '1.1.1'
-                ],
                 androidX           : [
                         annotation      : '1.0.0',
                         appCompat       : '1.0.1',
@@ -58,6 +54,7 @@ buildscript {
                 powermock          : '2.0.0-beta.9',
                 retrofit2          : '2.4.0',
                 snowplow           : '0.8.0',
+                taptargetview      : '1.12.0',
                 thekey             : '3.0.0-SNAPSHOT',
                 timber             : '4.7.1'
         ]
