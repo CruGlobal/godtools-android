@@ -3,10 +3,6 @@ buildscript {
         deps = [
                 adobeMobileServices: '4.17.0',
                 advrecyclerview    : '0.11.0',
-                androidArch        : [
-                        core: '1.1.1',
-                        room: '1.1.1'
-                ],
                 androidX           : [
                         annotation      : '1.0.0',
                         appCompat       : '1.0.1',
