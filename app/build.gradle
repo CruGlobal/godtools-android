@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
@@ -21,12 +22,6 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
-            }
-        }
 
         // Crashlytics config
         ext {
@@ -113,6 +108,11 @@ android {
         }
     }
 }
+kapt {
+    arguments {
+        arg('eventBusIndex', 'org.cru.godtools.AppEventBusIndex')
+    }
+}
 
 dependencies {
     implementation project(':library:api')
@@ -172,8 +172,8 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants
