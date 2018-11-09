@@ -12,7 +12,7 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
         }
 
         synchronized(this) {
-            return  instance ?: creator!!(arg)
+            return instance ?: creator!!(arg)
                 .also {
                     instance = it
                     creator = null
