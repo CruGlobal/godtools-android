@@ -148,6 +148,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // endregion Lifecycle Events
 
+    /**
+     * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
+     */
     @Nullable
     protected abstract Manifest getActiveManifest();
 

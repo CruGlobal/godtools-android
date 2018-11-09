@@ -573,8 +573,8 @@ public class TractActivity extends BaseToolActivity
 
     @Nullable
     protected Manifest getActiveManifest() {
-        Manifest manifest = mManifests.get(mActiveLanguage);
-        return manifest == null || Manifest.Type.TRACT == manifest.getType() ? manifest : null;
+        final Manifest manifest = mManifests.get(mActiveLanguage);
+        return manifest != null && manifest.getType() == Manifest.Type.TRACT ? manifest : null;
     }
 
     private void updateLanguageToggle() {
