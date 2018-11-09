@@ -92,14 +92,14 @@ plugins {
 }
 
 group 'org.cru.android'
-version '5.0.20-SNAPSHOT'
+version '5.1.0-SNAPSHOT'
 ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4025200
 
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
     compileSdk    = 28
-    minSdk        = 15
+    minSdk        = 16
     minSdkFeature = 21
     targetSdk     = 28
 }
