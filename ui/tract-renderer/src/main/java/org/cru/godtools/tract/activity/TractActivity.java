@@ -415,10 +415,9 @@ public class TractActivity extends BaseToolActivity
 
     private int determineLanguageState(final int languageIndex) {
         final Manifest manifest = mManifests.get(languageIndex);
-        final boolean syncDone = isSyncToolsDone();
-        if (manifest != null && syncDone) {
+        if (manifest != null) {
             return Manifest.Type.TRACT == manifest.getType() ? STATE_LOADED : STATE_NOT_FOUND;
-        } else if (syncDone && mTranslations.indexOfKey(languageIndex) >= 0 &&
+        } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
                 mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
         } else {
