@@ -558,8 +558,8 @@ public class TractActivity extends BaseToolActivity
                 continue;
             }
 
-            // skip any language that we don't have a manifest for
-            if (mManifests.get(i) == null) {
+            // skip any language that isn't loaded
+            if (determineLanguageState(i) != STATE_LOADED) {
                 continue;
             }
 
@@ -603,7 +603,7 @@ public class TractActivity extends BaseToolActivity
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
                 if (tab != null) {
                     // update tab visibility
-                    final boolean visible = mManifests.get(i) != null && !mHiddenLanguages[i];
+                    final boolean visible = !mHiddenLanguages[i] && determineLanguageState(i) == STATE_LOADED;
                     TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
                     if (visible) {
                         visibleTabs++;
