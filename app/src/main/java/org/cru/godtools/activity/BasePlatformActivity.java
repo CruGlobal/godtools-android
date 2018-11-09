@@ -222,6 +222,13 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if (!closeNavigationDrawer()) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         mEventBus.unregister(this);
@@ -290,14 +297,23 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
     }
 
-    protected final void closeNavigationDrawer() {
-        closeNavigationDrawer(getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED));
+    /**
+     * @return true if the navigation drawer was closed, false otherwise
+     */
+    protected final boolean closeNavigationDrawer() {
+        return closeNavigationDrawer(getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED));
     }
 
-    protected final void closeNavigationDrawer(final boolean animate) {
-        if (mDrawerLayout != null) {
+    /**
+     * @return true if the navigation drawer was closed, false otherwise
+     */
+    protected final boolean closeNavigationDrawer(final boolean animate) {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START, animate);
+            return true;
         }
+
+        return false;
     }
 
     protected boolean showNavigationDrawerIndicator() {
