@@ -66,7 +66,7 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         super.startServices();
         GodToolsDownloadManager.getInstance(this);
         GodToolsShortcutManager.getInstance(this);
-        AccountListRegistrationService.start(this);
+        AccountListRegistrationService.Companion.getInstance(this);
         AemArticleManger.getInstance(this);
         FollowupService.start(this);
     }
