@@ -10,7 +10,7 @@ import org.cru.godtools.article.aem.activity.startAemArticleActivity
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.article.fragment.newArticlesFragment
-import org.cru.godtools.base.tool.activity.ArticleBaseSingleToolActivity
+import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.xml.model.Text
 import java.util.Locale
@@ -26,7 +26,7 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
         .also { this.startActivity(it) }
 }
 
-class ArticlesActivity : ArticleBaseSingleToolActivity(false), ArticlesFragment.Callbacks {
+class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
     // region Lifecycle Events

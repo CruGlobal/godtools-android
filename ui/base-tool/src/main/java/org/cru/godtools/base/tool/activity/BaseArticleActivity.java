@@ -4,14 +4,13 @@ import org.cru.godtools.xml.model.Manifest;
 
 import androidx.annotation.NonNull;
 
-public class ArticleBaseSingleToolActivity extends BaseSingleToolActivity {
-
-    public ArticleBaseSingleToolActivity(final boolean immersive) {
+public abstract class BaseArticleActivity extends BaseSingleToolActivity {
+    public BaseArticleActivity(final boolean immersive) {
         super(immersive);
     }
 
-    public ArticleBaseSingleToolActivity(final boolean immersive, final boolean requiretool) {
-        super(immersive, requiretool);
+    public BaseArticleActivity(final boolean immersive, final boolean requireTool) {
+        super(immersive, requireTool);
     }
 
     @Override
