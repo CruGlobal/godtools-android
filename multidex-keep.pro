@@ -4,5 +4,6 @@
     @org.junit.* *;
 }
 
-# Keep Firebase dependencies in the main dex file
+# Keep direct dependencies in the main dex file
+-keep class androidx.**
 -keep class com.google.firebase.**
