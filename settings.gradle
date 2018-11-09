@@ -20,7 +20,6 @@ include 'ui:article-renderer'
 include 'ui:base'
 include 'ui:base-app'
 include 'ui:base-tool'
-include 'ui:everystudent'
 include 'ui:shortcuts'
 include 'ui:tract-renderer'
 
