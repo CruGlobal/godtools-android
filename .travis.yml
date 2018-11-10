@@ -20,6 +20,7 @@ branches:
   only:
     - develop
     - master
+    - v5.0.x
 
 stages:
 - compile
