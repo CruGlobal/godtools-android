@@ -1,9 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.cru.godtools.sync">
 
-    <!-- Support persisting jobs through reboot -->
-    <uses-permission-sdk-23 android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application>
         <service
             android:name=".GodToolsSyncService"
