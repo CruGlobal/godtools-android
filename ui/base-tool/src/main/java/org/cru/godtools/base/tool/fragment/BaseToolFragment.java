@@ -34,8 +34,8 @@ public abstract class BaseToolFragment extends BaseFragment {
     @Nullable
     protected Manifest mManifest;
 
-    protected static void populateArgs(@NonNull final Bundle args, @NonNull final String toolCode,
-                                       @NonNull final Locale language) {
+    public static void populateArgs(@NonNull final Bundle args, @NonNull final String toolCode,
+                                    @NonNull final Locale language) {
         args.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(args, EXTRA_LANGUAGE, language);
     }

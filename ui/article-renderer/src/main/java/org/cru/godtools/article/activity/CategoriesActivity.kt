@@ -8,6 +8,7 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.transaction
 import org.cru.godtools.article.R
 import org.cru.godtools.article.fragment.CategoriesFragment
+import org.cru.godtools.article.fragment.newCategoriesFragment
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
@@ -46,7 +47,7 @@ class CategoriesActivity : BaseSingleToolActivity(false), CategoriesFragment.Cal
         supportFragmentManager?.apply {
             if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
                 transaction {
-                    replace(R.id.frame, CategoriesFragment.newInstance(tool, locale), TAG_MAIN_FRAGMENT)
+                    replace(R.id.frame, newCategoriesFragment(tool, locale), TAG_MAIN_FRAGMENT)
                 }
             }
         }
