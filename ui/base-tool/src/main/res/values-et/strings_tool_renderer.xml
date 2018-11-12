@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Jagamine</string>
+    <string name="menu_share_tool">Jagamine</string>
     <string name="share_tract_title">Jaga “%1$s” jagamist</string>
     <string name="tract_not_found">Soovitud tööriista ei leitud</string>
     <string name="tract_loading">Soovitud tööriista laadimine ...</string>

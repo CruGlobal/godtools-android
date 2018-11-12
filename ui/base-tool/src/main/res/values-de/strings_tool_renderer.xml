@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Installieren</string>
-    <string name="menu_share_tract">Teilen</string>
+    <string name="menu_share_tool">Teilen</string>
     <string name="share_tract_title">Teilen Sie „%1$s“ mit</string>
     <string name="tract_not_found">Das von Ihnen angeforderte Tool konnte nicht gefunden werden.</string>
     <string name="tract_loading">Das von Ihnen angeforderte Tool wird geladen ...</string>

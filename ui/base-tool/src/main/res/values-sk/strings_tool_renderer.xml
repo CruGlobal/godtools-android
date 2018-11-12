@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Zdieľanie</string>
+    <string name="menu_share_tool">Zdieľanie</string>
     <string name="share_tract_title">Zdieľať „%1$s“ pomocou</string>
     <string name="tract_not_found">Nástroj, o ktorý ste požiadali, sa nepodarilo nájsť</string>
     <string name="tract_loading">Nástroj, o ktorý ste požiadali, sa načítava…</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">התקן</string>
-    <string name="menu_share_tract">שתף</string>
+    <string name="menu_share_tool">שתף</string>
     <string name="share_tract_title">שתפו את \"%1$s\" בעזרת</string>
     <string name="tract_not_found">לא ניתן למצוא את הכלי שביקשת</string>
     <string name="tract_loading">הכלי שביקשת נטען...</string>

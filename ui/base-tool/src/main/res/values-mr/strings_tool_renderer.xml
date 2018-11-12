@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">इन्स्टाॅल करा.</string>
-    <string name="menu_share_tract">"सांगा
+    <string name="menu_share_tool">"सांगा
        "</string>
     <string name="share_tract_title">सांगा “%1$s” उपयोग करून</string>
     <string name="tract_not_found">आपण विनंती केलेले साधन आढळले नाही</string>

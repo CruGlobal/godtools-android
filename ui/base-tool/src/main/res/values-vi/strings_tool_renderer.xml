@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Chia sẻ</string>
+    <string name="menu_share_tool">Chia sẻ</string>
     <string name="share_tract_title">Chia sẻ “%1$s” sử dụng</string>
     <string name="tract_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
     <string name="tract_loading">Công cụ bạn yêu cầu đang tải...</string>
