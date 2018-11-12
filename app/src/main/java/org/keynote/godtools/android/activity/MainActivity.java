@@ -256,28 +256,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
-    private void showAddTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(mFindToolsTab);
-        mActiveState = STATE_FIND_TOOLS;
-        trackInAnalytics();
-    }
-
-    private void showMyTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(mMyToolsTab);
-        mActiveState = STATE_MY_TOOLS;
-        trackInAnalytics();
-    }
-
     private void syncData() {
         GodToolsSyncServiceKt.syncFollowups(this).sync();
         GodToolsSyncServiceKt.syncToolShares(this).sync();
@@ -301,6 +279,30 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         // default to My Tools
         showMyTools();
     }
+
+    private void showAddTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mFindToolsTab);
+        mActiveState = STATE_FIND_TOOLS;
+        trackInAnalytics();
+    }
+
+    private void showMyTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mMyToolsTab);
+        mActiveState = STATE_MY_TOOLS;
+        trackInAnalytics();
+    }
+
+    // region Feature Discovery logic
 
     void showNextFeatureDiscovery() {
         if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
@@ -393,6 +395,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
         mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
+
+    // endregion Feature Discovery logic
 
     private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
         @Override
