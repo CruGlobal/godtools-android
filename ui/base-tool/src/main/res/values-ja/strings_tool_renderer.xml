@@ -2,6 +2,6 @@
 <resources>
     <string name="menu_share_tool">シェア</string>
     <string name="share_tool_title">次を使って “%1$s” をシェア</string>
-    <string name="tract_not_found">リクエストしたツールが見つかりません</string>
+    <string name="tool_not_found">リクエストしたツールが見つかりません</string>
     <string name="tract_loading">リクエストしたツールを読み込み中…</string>
 </resources>

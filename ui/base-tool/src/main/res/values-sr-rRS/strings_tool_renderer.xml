@@ -2,6 +2,6 @@
 <resources>
     <string name="menu_share_tool">Подели</string>
     <string name="share_tool_title">Подели “%1$s” користећи</string>
-    <string name="tract_not_found">Алатка коју сте тражили није могуће пронаћи</string>
+    <string name="tool_not_found">Алатка коју сте тражили није могуће пронаћи</string>
     <string name="tract_loading">Алатка коју сте тражили се учитава…</string>
 </resources>

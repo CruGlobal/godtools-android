@@ -2,6 +2,6 @@
 <resources>
     <string name="menu_share_tool">Partilhar</string>
     <string name="share_tool_title">Partilhar \"%1$s\" com</string>
-    <string name="tract_not_found">Não é possível encontrar a ferramenta que solicitaste</string>
+    <string name="tool_not_found">Não é possível encontrar a ferramenta que solicitaste</string>
     <string name="tract_loading">A ferramenta que solicitaste está a carregar...</string>
 </resources>

@@ -19,6 +19,6 @@
             style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/missing_icon"
             android:layout_marginBottom="0dp"
-            android:text="@string/tract_not_found" />
+            android:text="@string/tool_not_found" />
     </RelativeLayout>
 </RelativeLayout>

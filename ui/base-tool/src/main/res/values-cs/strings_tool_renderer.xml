@@ -2,6 +2,6 @@
 <resources>
     <string name="menu_share_tool">Sdílet</string>
     <string name="share_tool_title">Sdílet “%1$s” přes</string>
-    <string name="tract_not_found">Požadovaný nástroj nebyl nalezen</string>
+    <string name="tool_not_found">Požadovaný nástroj nebyl nalezen</string>
     <string name="tract_loading">Požadovaný nástroj se načítá...</string>
 </resources>

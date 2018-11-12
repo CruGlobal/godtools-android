@@ -2,6 +2,6 @@
 <resources>
     <string name="menu_share_tool">Del</string>
     <string name="share_tool_title">Del «%1$s» med</string>
-    <string name="tract_not_found">Vi kunne ikke finne det forespurte verktøyet</string>
+    <string name="tool_not_found">Vi kunne ikke finne det forespurte verktøyet</string>
     <string name="tract_loading">Verktøyet du forespurte lastes inn …</string>
 </resources>
