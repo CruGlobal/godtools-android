@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Berbagi</string>
     <string name="share_tool_title">Berbagi \"%1$s\" menggunakan</string>
     <string name="tool_not_found">Alat yang Anda minta tidak tersedia</string>
-    <string name="tract_loading">Alat yang Anda minta sedang dimuat....</string>
+    <string name="tool_loading">Alat yang Anda minta sedang dimuat....</string>
 </resources>

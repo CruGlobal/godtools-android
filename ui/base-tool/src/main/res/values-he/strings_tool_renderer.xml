@@ -4,5 +4,5 @@
     <string name="menu_share_tool">שתף</string>
     <string name="share_tool_title">שתפו את \"%1$s\" בעזרת</string>
     <string name="tool_not_found">לא ניתן למצוא את הכלי שביקשת</string>
-    <string name="tract_loading">הכלי שביקשת נטען...</string>
+    <string name="tool_loading">הכלי שביקשת נטען...</string>
 </resources>

@@ -5,5 +5,5 @@
        "</string>
     <string name="share_tool_title">सांगा “%1$s” उपयोग करून</string>
     <string name="tool_not_found">आपण विनंती केलेले साधन आढळले नाही</string>
-    <string name="tract_loading">आपण विनंती केलेले साधन लोड होत आहे</string>
+    <string name="tool_loading">आपण विनंती केलेले साधन लोड होत आहे</string>
 </resources>

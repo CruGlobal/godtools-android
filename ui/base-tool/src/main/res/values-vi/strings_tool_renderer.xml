@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Chia sẻ</string>
     <string name="share_tool_title">Chia sẻ “%1$s” sử dụng</string>
     <string name="tool_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
-    <string name="tract_loading">Công cụ bạn yêu cầu đang tải...</string>
+    <string name="tool_loading">Công cụ bạn yêu cầu đang tải...</string>
 </resources>

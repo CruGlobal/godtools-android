@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Podijeli</string>
     <string name="share_tool_title">Podijeli “%1$s” uporabom</string>
     <string name="tool_not_found">Alat koji ste tražili nije moguće pronaći</string>
-    <string name="tract_loading">Alat koji ste tražili se učitava...</string>
+    <string name="tool_loading">Alat koji ste tražili se učitava...</string>
 </resources>

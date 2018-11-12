@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Kongsi</string>
     <string name="share_tool_title">Kongsikan “%1$s” menggunakan</string>
     <string name="tool_not_found">Alat yang anda minta tidak ditemui</string>
-    <string name="tract_loading">Alat yang anda minta sedang dimuatkan...</string>
+    <string name="tool_loading">Alat yang anda minta sedang dimuatkan...</string>
 </resources>

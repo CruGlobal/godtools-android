@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Ndaj</string>
     <string name="share_tool_title">Ndaj \"%1$s duke përdorur</string>
     <string name="tool_not_found">Mjeti që po kërkoni nuk gjendet</string>
-    <string name="tract_loading">Mjeti që po kërkoni është  duke u ngarkuar</string>
+    <string name="tool_loading">Mjeti që po kërkoni është  duke u ngarkuar</string>
 </resources>

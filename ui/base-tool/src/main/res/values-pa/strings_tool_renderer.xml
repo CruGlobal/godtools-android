@@ -4,5 +4,5 @@
     <string name="menu_share_tool">ਸਾਂਝਿਆ ਕਰੋ</string>
     <string name="share_tool_title">“%1$s” ਦਾ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਸਾਂਝਿਆ ਕਰੋ</string>
     <string name="tool_not_found">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਨਹੀਂ ਮਿਲ ਰਿਹਾ ਹੈ</string>
-    <string name="tract_loading">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਲੋ਼ਡ ਹੋ ਰਿਹਾ ਹੈ</string>
+    <string name="tool_loading">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਲੋ਼ਡ ਹੋ ਰਿਹਾ ਹੈ</string>
 </resources>

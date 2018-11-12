@@ -24,6 +24,6 @@
             style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/loading_progress"
             android:layout_marginBottom="0dp"
-            android:text="@string/tract_loading" />
+            android:text="@string/tool_loading" />
     </RelativeLayout>
 </RelativeLayout>

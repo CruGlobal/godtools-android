@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Переслати</string>
     <string name="share_tool_title">Перешліть “%1$s” з допомогою</string>
     <string name="tool_not_found">Інструмент не знайдено</string>
-    <string name="tract_loading">Ваш інструмент завантажується...</string>
+    <string name="tool_loading">Ваш інструмент завантажується...</string>
 </resources>

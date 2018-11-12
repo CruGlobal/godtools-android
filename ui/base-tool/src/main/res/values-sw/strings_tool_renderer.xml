@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Shikisha</string>
     <string name="share_tool_title">Shiriki “%1$s” kutumia</string>
     <string name="tool_not_found">Kifaa ulichoagiza hakipatikani</string>
-    <string name="tract_loading">Kifaa ulichoagiza kinapakia</string>
+    <string name="tool_loading">Kifaa ulichoagiza kinapakia</string>
 </resources>

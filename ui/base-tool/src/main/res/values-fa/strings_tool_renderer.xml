@@ -3,5 +3,5 @@
     <string name="menu_share_tool">اشتراک‌گذاری</string>
     <string name="share_tool_title">اشتراک‌گذاری «%1$s» با استفاده</string>
     <string name="tool_not_found">ابزاری را که درخواست کردید نتوانستیم پیدا کنیم</string>
-    <string name="tract_loading">ابزاری که درخواست کردید در حال بارگیری است...</string>
+    <string name="tool_loading">ابزاری که درخواست کردید در حال بارگیری است...</string>
 </resources>
