@@ -3,7 +3,7 @@
     <string name="menu_install">इन्स्टाॅल करा.</string>
     <string name="menu_share_tool">"सांगा
        "</string>
-    <string name="share_tract_title">सांगा “%1$s” उपयोग करून</string>
+    <string name="share_tool_title">सांगा “%1$s” उपयोग करून</string>
     <string name="tract_not_found">आपण विनंती केलेले साधन आढळले नाही</string>
     <string name="tract_loading">आपण विनंती केलेले साधन लोड होत आहे</string>
 </resources>

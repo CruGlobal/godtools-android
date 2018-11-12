@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Переслати</string>
-    <string name="share_tract_title">Перешліть “%1$s” з допомогою</string>
+    <string name="share_tool_title">Перешліть “%1$s” з допомогою</string>
     <string name="tract_not_found">Інструмент не знайдено</string>
     <string name="tract_loading">Ваш інструмент завантажується...</string>
 </resources>

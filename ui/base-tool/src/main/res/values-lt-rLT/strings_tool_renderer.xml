@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Dalytis</string>
-    <string name="share_tract_title">Dalytis „%1$s“ naudojant</string>
+    <string name="share_tool_title">Dalytis „%1$s“ naudojant</string>
     <string name="tract_not_found">Jūsų prašomas įrankis nerastas</string>
     <string name="tract_loading">Jūsų prašomas įrankis įkeliamas...</string>
 </resources>

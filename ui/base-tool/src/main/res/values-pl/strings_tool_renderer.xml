@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Podziel się</string>
-    <string name="share_tract_title">Podziel się “%1$s” przy pomocy</string>
+    <string name="share_tool_title">Podziel się “%1$s” przy pomocy</string>
     <string name="tract_not_found">Nie można znaleźć żądanego narzędzia</string>
     <string name="tract_loading">Trwa wczytywanie żądanego narzędzia...</string>
 </resources>

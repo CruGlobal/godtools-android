@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Ndaj</string>
-    <string name="share_tract_title">Ndaj \"%1$s duke përdorur</string>
+    <string name="share_tool_title">Ndaj \"%1$s duke përdorur</string>
     <string name="tract_not_found">Mjeti që po kërkoni nuk gjendet</string>
     <string name="tract_loading">Mjeti që po kërkoni është  duke u ngarkuar</string>
 </resources>

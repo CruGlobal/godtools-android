@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Paylaş</string>
-    <string name="share_tract_title">Şunu kullanarak \"%1$s\" paylaşın:</string>
+    <string name="share_tool_title">Şunu kullanarak \"%1$s\" paylaşın:</string>
     <string name="tract_not_found">Talep ettiğiniz araç bulunamıyor</string>
     <string name="tract_loading">Talep ettiğiniz araç yükleniyor...</string>
 </resources>

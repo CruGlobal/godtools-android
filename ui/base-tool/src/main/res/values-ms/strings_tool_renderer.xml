@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Kongsi</string>
-    <string name="share_tract_title">Kongsikan “%1$s” menggunakan</string>
+    <string name="share_tool_title">Kongsikan “%1$s” menggunakan</string>
     <string name="tract_not_found">Alat yang anda minta tidak ditemui</string>
     <string name="tract_loading">Alat yang anda minta sedang dimuatkan...</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Delen</string>
-    <string name="share_tract_title">Deel “%1$s” via</string>
+    <string name="share_tool_title">Deel “%1$s” via</string>
     <string name="tract_not_found">Het gewenste hulpmiddel kan niet gevonden worden</string>
     <string name="tract_loading">Het hulpmiddel dat je hebt opgevraagd wordt geladen...</string>
 </resources>
