@@ -229,7 +229,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     private void updateArticlesViewManifest() {
         if (mArticlesAdapter != null) {
-            mArticlesAdapter.setToolManifest(mManifest);
+            mArticlesAdapter.setManifest(mManifest);
         }
     }
 
