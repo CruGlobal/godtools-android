@@ -10,7 +10,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.fragment.LanguageSettingsFragment
+import org.cru.godtools.fragment.newLanguageSettingsFragment
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
@@ -47,7 +47,7 @@ class LanguageSettingsActivity : BasePlatformActivity() {
         supportFragmentManager?.apply {
             if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
                 transaction {
-                    replace(R.id.frame, LanguageSettingsFragment.newInstance(), TAG_MAIN_FRAGMENT)
+                    replace(R.id.frame, newLanguageSettingsFragment(), TAG_MAIN_FRAGMENT)
                 }
             }
         }
