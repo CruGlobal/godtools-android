@@ -2,7 +2,7 @@
 <resources>
     <string name="menu_install">Install</string>
     <string name="menu_share_tool">Share</string>
-    <string name="share_tract_subject" translatable="false">%1$s</string>
+    <string name="share_tool_subject" translatable="false">%1$s</string>
     <string name="share_tract_title">Share “%1$s” using</string>
 
     <string name="tract_not_found">The tool you requested cannot be found</string>
