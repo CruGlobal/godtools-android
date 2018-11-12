@@ -72,9 +72,8 @@ class CategoriesFragment : BaseToolFragment(), CategoriesAdapter.Callbacks {
             setHasFixedSize(true)
             addItemDecoration(VerticalSpaceItemDecoration(R.dimen.categories_list_gap))
 
-            categoriesAdapter = CategoriesAdapter().apply {
-                callbacks = this@CategoriesFragment
-            }
+            categoriesAdapter = CategoriesAdapter()
+                .apply { setCallbacks(this@CategoriesFragment) }
             adapter = categoriesAdapter
             updateCategoriesView()
         }
@@ -85,7 +84,7 @@ class CategoriesFragment : BaseToolFragment(), CategoriesAdapter.Callbacks {
     }
 
     private fun cleanupCategoriesView() {
-        categoriesAdapter?.callbacks = null
+        categoriesAdapter?.setCallbacks(null)
         categoriesAdapter = null
     }
 
