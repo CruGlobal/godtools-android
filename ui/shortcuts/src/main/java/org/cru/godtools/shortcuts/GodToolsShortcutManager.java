@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
-import org.cru.godtools.article.activity.CategoriesActivity;
+import org.cru.godtools.article.activity.CategoriesActivityKt;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.FileUtils;
@@ -386,7 +386,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
                 intent = TractActivity.createIntent(mContext, code, locales.toArray(new Locale[0]));
                 break;
             case ARTICLE:
-                intent = CategoriesActivity.createIntent(mContext, code, locales.get(0));
+                intent = CategoriesActivityKt.createCategoriesIntent(mContext, code, locales.get(0));
                 break;
             default:
                 // XXX: we don't support shortcuts for this tool type
