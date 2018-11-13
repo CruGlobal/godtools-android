@@ -33,7 +33,7 @@ buildscript {
                         core        : '16.0.5',
                         dynamicLinks: '16.1.3',
                 ],
-                gtoSupport         : '2.0.0-SNAPSHOT',
+                gtoSupport         : '2.0.0',
                 guava              : '26.0-android',
                 hamcrest           : '1.3',
                 jsoup              : '1.11.3',
