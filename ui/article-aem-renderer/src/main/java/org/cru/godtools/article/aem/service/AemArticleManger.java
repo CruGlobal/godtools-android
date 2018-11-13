@@ -128,7 +128,7 @@ public class AemArticleManger {
     private AemArticleManger(@NonNull final Context context) {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
-        mAemDb = ArticleRoomDatabase.getInstance(mContext);
+        mAemDb = ArticleRoomDatabase.Companion.getInstance(mContext);
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,

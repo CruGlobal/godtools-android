@@ -14,7 +14,7 @@ private const val TRANSLATION_KEY = "tool = :tool AND language = :language AND v
 
 @Dao
 @WorkerThread
-internal interface TranslationDao {
+interface TranslationDao {
     @get:Query("SELECT * FROM translations")
     val all: List<TranslationRef>
 
