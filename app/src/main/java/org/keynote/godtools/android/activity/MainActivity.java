@@ -18,7 +18,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.cru.godtools.article.activity.CategoriesActivity;
+import org.cru.godtools.article.activity.CategoriesActivityKt;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
@@ -183,7 +183,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 TractActivity.start(this, code, languages);
                 break;
             case ARTICLE:
-                CategoriesActivity.start(this, code, languages[0]);
+                CategoriesActivityKt.startCategoriesActivity(this, code, languages[0]);
                 break;
         }
     }

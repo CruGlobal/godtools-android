@@ -179,7 +179,7 @@ public abstract class BaseHeaderFooterAdapter
         }
 
         @Override
-        void bind(final int position) {
+        protected void bind(final int position) {
             if (mIcon != null) {
                 if (mEmptyIcon != INVALID_DRAWABLE_RES) {
                     mIcon.setVisibility(View.VISIBLE);
