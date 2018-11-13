@@ -213,7 +213,7 @@ public class ToolsFragment extends BasePlatformFragment
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        mSyncHelper.sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
+        getSyncHelper().sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
     }
 
     private void startLoaders() {
@@ -319,8 +319,8 @@ public class ToolsFragment extends BasePlatformFragment
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOLS:
-                    return new LocalToolsCursorLoader(requireContext(), args, mMode, mPrimaryLanguage,
-                                                      mParallelLanguage);
+                    return new LocalToolsCursorLoader(requireContext(), args, mMode, getPrimaryLanguage(),
+                                                      getParallelLanguage());
                 default:
                     return null;
             }

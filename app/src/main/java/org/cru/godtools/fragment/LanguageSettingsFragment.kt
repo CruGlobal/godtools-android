@@ -47,10 +47,10 @@ class LanguageSettingsFragment : BasePlatformFragment() {
 
     private fun updateLanguages() {
         primaryLanguageView?.apply {
-            text = LocaleUtils.getDisplayName(mPrimaryLanguage, context, null, null)
+            text = LocaleUtils.getDisplayName(primaryLanguage, context, null, null)
         }
         parallelLanguageView?.apply {
-            mParallelLanguage?.also { text = LocaleUtils.getDisplayName(it, context, null, null) }
+            parallelLanguage?.also { text = LocaleUtils.getDisplayName(it, context, null, null) }
                 ?: setText(R.string.action_language_parallel_select)
         }
     }
