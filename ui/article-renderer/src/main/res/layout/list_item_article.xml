@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="androidx.databinding.ObservableField" />
+        <import type="org.cru.godtools.article.adapter.ArticlesAdapter.Callbacks" />
         <import type="org.cru.godtools.xml.model.Manifest" />
 
+        <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
+        <variable name="manifest" type="ObservableField&lt;Manifest&gt;" />
         <variable name="article" type="org.cru.godtools.article.aem.model.Article" />
-        <variable name="callbacks" type="org.cru.godtools.article.adapter.ArticlesAdapter.Callbacks" />
-        <variable name="manifest" type="org.cru.godtools.xml.model.Manifest" />
     </data>
 
     <RelativeLayout

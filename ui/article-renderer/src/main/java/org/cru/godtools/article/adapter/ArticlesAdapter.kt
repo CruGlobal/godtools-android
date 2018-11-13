@@ -2,6 +2,7 @@ package org.cru.godtools.article.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ObservableField
 import androidx.lifecycle.Observer
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.article.aem.model.Article
@@ -13,21 +14,17 @@ class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Obse
         fun onArticleSelected(article: Article?)
     }
 
-    var callbacks: Callbacks? = null
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
-    var manifest: Manifest? = null
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
+    private val callbacks = ObservableField<Callbacks>()
+    private val manifest = ObservableField<Manifest>()
     var articles: List<Article>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    fun setCallbacks(callbacks: Callbacks?) = this.callbacks.set(callbacks)
+
+    fun setManifest(manifest: Manifest?) = this.manifest.set(manifest)
 
     override fun getItemCount(): Int {
         return articles?.size ?: 0
@@ -41,18 +38,16 @@ class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Obse
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ListItemArticleBinding {
         return ListItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            .also { it.callbacks = callbacks }
+            .also { it.manifest = manifest }
     }
 
     override fun onBindViewDataBinding(binding: ListItemArticleBinding, position: Int) {
-        binding.callbacks = callbacks
         binding.article = articles?.get(position)
-        binding.manifest = manifest
     }
 
     override fun onViewDataBindingRecycled(binding: ListItemArticleBinding) {
         binding.article = null
-        binding.callbacks = null
-        binding.manifest = null
     }
 
     // endregion LifeCycle Events
