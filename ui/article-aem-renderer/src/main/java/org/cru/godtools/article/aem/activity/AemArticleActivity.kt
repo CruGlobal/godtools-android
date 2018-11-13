@@ -5,25 +5,42 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.MainThread
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import org.cru.godtools.article.aem.R
+import com.google.common.util.concurrent.ListenableFuture
+import org.ccci.gto.android.common.util.MainThreadExecutor
+import org.ccci.gto.android.common.util.WeakRunnable
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
+import org.cru.godtools.article.aem.PARAM_URI
+import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.aem.service.AemArticleManger
+import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
-class AemArticleActivity : BaseSingleToolActivity(false) {
+fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
+    val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
+        putParcelable(EXTRA_ARTICLE, articleUri)
+    }
+    Intent(this, AemArticleActivity::class.java)
+        .putExtras(extras)
+        .also { startActivity(it) }
+}
+
+class AemArticleActivity : BaseSingleToolActivity(false, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
+    private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
     // region Lifecycle Events
@@ -40,6 +57,7 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
             return
         }
 
+        syncData()
         setContentView(R.layout.activity_generic_tool_fragment)
         setupViewModel()
     }
@@ -49,9 +67,14 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
         loadFragmentIfNeeded()
     }
 
+    internal fun onSyncTaskFinished() {
+        updateVisibilityState()
+    }
+
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
+        updateShareMenuItem()
         updateVisibilityState()
     }
 
@@ -61,12 +84,27 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        intent?.extras?.apply {
-            articleUri = getParcelable(EXTRA_ARTICLE) ?: return false
-            return true
-        }
+        articleUri = processDeepLink()
+                ?: intent?.extras?.getParcelable(EXTRA_ARTICLE)
+                ?: return false
 
-        return false
+        return true
+    }
+
+    private fun processDeepLink(): Uri? {
+        return when {
+            isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+            else -> null
+        }
+    }
+
+    private fun isValidDeepLink(): Boolean {
+        return intent?.action == Intent.ACTION_VIEW &&
+                intent.data?.run {
+                    (scheme == "http" || scheme == "https") &&
+                            host == "godtoolsapp.com" &&
+                            path == "/article/aem"
+                } == true
     }
 
     private fun setupViewModel() {
@@ -86,12 +124,39 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
         }
     }
 
+    private fun syncData() {
+        with(AemArticleManger.getInstance(this)) {
+            syncTask = when {
+                isValidDeepLink() -> downloadDeeplinkedArticle(articleUri)
+                else -> downloadArticle(articleUri, false)
+            }
+            syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
+            generateShareUri(articleUri)
+        }
+    }
+
+    // region Share Link logic
+
+    override fun hasShareLinkUri(): Boolean {
+        return false
+    }
+
+    override fun getShareLinkTitle(): String? {
+        return article?.title ?: super.getShareLinkTitle()
+    }
+
+    override fun getShareLinkUri(): String? {
+        return article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
+    }
+
+    // endregion Share Link logic
+
     override fun determineActiveToolState(): Int {
-        val state = super.determineActiveToolState()
         return when {
-            state != BaseToolActivity.STATE_LOADED -> state
-            article?.content == null -> BaseToolActivity.STATE_LOADING
-            else -> BaseToolActivity.STATE_LOADED
+            article?.content != null -> BaseToolActivity.STATE_LOADED
+            !this::syncTask.isInitialized -> BaseToolActivity.STATE_LOADING
+            !syncTask.isDone -> BaseToolActivity.STATE_LOADING
+            else -> BaseToolActivity.STATE_NOT_FOUND
         }
     }
 
@@ -102,7 +167,7 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
 
         // load the fragment
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, AemArticleFragment.newInstance(mTool, mLocale, articleUri), TAG_MAIN_FRAGMENT)
+            .replace(R.id.frame, AemArticleFragment.newInstance(articleUri), TAG_MAIN_FRAGMENT)
             .commit()
     }
 
@@ -110,16 +175,5 @@ class AemArticleActivity : BaseSingleToolActivity(false) {
         internal lateinit var article: LiveData<Article>
 
         internal fun isArticleInitialized() = ::article.isInitialized
-    }
-
-    companion object {
-        @JvmStatic
-        fun start(activity: Activity, toolCode: String, language: Locale, articleUri: Uri) {
-            val extras = buildExtras(activity, toolCode, language).apply {
-                putParcelable(EXTRA_ARTICLE, articleUri)
-            }
-            val intent = Intent(activity, AemArticleActivity::class.java).putExtras(extras)
-            activity.startActivity(intent)
-        }
     }
 }

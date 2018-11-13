@@ -13,7 +13,7 @@ env:
     - secure: jBb7ri2he+o7e17rtiNt6tnPb5gKpjP6Wuh5wTHi6ftdAC5cAGKPqSTGuCnyK/bSZqLdKDoLzgjXEwxY3L4qetrILcAJZKQWY4sb+OVk51/FY8VQx32LpwGtxtZn7XGdHNxTYxGFsDc/BW+Eo7vdRbvUBh2nCJisVYCWSlHdVB4=
   matrix:
     - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
 branches:

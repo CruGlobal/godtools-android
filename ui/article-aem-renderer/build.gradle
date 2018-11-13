@@ -26,8 +26,11 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "androidx.core:core-ktx:${deps.androidX.ktx.core}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
+
+    implementation "com.google.firebase:firebase-dynamic-links:${deps.firebase.dynamicLinks}"
 
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
@@ -47,8 +50,6 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
-    androidTestImplementation "com.google.guava:guava:${deps.guava}"
-    androidTestImplementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
 
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"

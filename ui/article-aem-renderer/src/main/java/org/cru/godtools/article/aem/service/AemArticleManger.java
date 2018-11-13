@@ -9,11 +9,14 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
+import com.google.android.gms.tasks.Tasks;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
@@ -29,6 +32,8 @@ import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParser;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
+import org.cru.godtools.article.aem.util.ShareLinkUtils;
+import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -76,6 +81,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
@@ -106,6 +112,7 @@ public class AemArticleManger {
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
+    final Map<Uri, Object> mGenerateShareUriLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
     final Object mCleanOrphanedFilesLock = new Object();
@@ -114,6 +121,7 @@ public class AemArticleManger {
     @Nullable
     private CleanOrphanedFilesTask mCleanOrphanedFilesTask;
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
+    private final Map<Uri, GenerateShareUriTask> mGenerateShareUriTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
@@ -202,12 +210,43 @@ public class AemArticleManger {
         return task.mResult;
     }
 
+    @NonNull
     @AnyThread
-    private void enqueueDownloadArticle(@NonNull final Uri uri, final boolean force) {
+    public ListenableFuture<Boolean> downloadDeeplinkedArticle(@NonNull final Uri uri) {
+        // create an AemImport for the deeplinked article
+        final SettableFuture<Boolean> deeplinkTask = SettableFuture.create();
+        mExecutor.execute(() -> {
+            createAemImportForDeeplinkedArticleTask(uri);
+            deeplinkTask.set(true);
+        });
+
+        final ListenableFuture<?> syncAemImportTask =
+                Futures.transformAsync(deeplinkTask, t -> enqueueSyncAemImport(uri, false), directExecutor());
+        return Futures.transformAsync(syncAemImportTask, t -> downloadArticle(uri, false), directExecutor());
+    }
+
+    @AnyThread
+    public ListenableFuture<Boolean> generateShareUri(@NonNull final Uri articleUri) {
+        // try updating a task that is currently enqueued
+        final GenerateShareUriTask existing = mGenerateShareUriTasks.get(articleUri);
+        if (existing != null && existing.updateTask(false)) {
+            return existing.mResult;
+        }
+
+        // create a new sync task
+        final GenerateShareUriTask task = new GenerateShareUriTask(articleUri);
+        mGenerateShareUriTasks.put(articleUri, task);
+        mExecutor.execute(task);
+        return task.mResult;
+    }
+
+    @NonNull
+    @AnyThread
+    public ListenableFuture<Boolean> downloadArticle(@NonNull final Uri uri, final boolean force) {
         // try updating a task that is currently enqueued
         final DownloadArticleTask existing = mDownloadArticleTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {
-            return;
+            return existing.mResult;
         }
 
         // create a new sync task
@@ -215,6 +254,7 @@ public class AemArticleManger {
         task.updateTask(force);
         mDownloadArticleTasks.put(uri, task);
         mExecutor.execute(task);
+        return task.mResult;
     }
 
     @AnyThread
@@ -321,8 +361,8 @@ public class AemArticleManger {
     @WorkerThread
     @GuardedBy("mSyncAemImportLocks")
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
-        // short-circuit if this isn't an absolute URL
-        if (!baseUri.isAbsolute()) {
+        // short-circuit if this isn't an hierarchical absolute URL
+        if (!(baseUri.isHierarchical() && baseUri.isAbsolute())) {
             return;
         }
 
@@ -342,7 +382,7 @@ public class AemArticleManger {
         try {
             final long timestamp = force ? System.currentTimeMillis() :
                     roundTimestamp(System.currentTimeMillis(), CACHE_BUSTING_INTERVAL_JSON);
-            json = mApi.getJson(baseUri.toString() + ".9999.json", timestamp)
+            json = mApi.getJson(UriUtils.addExtension(baseUri, "9999.json"), timestamp)
                     .execute()
                     .body();
         } catch (final IOException e) {
@@ -357,10 +397,46 @@ public class AemArticleManger {
         final List<Article> articles = AemJsonParser.findArticles(baseUri, json).toList();
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
 
-        // enqueue downloads for all articles
+        // enqueue a couple article specific tasks
         for (final Article article : articles) {
-            enqueueDownloadArticle(article.getUri(), false);
+            downloadArticle(article.getUri(), false);
+            generateShareUri(article.getUri());
         }
+    }
+
+    @WorkerThread
+    @GuardedBy("mGenerateShareUriLocks")
+    boolean generateShareUriTask(@NonNull final Uri uri) {
+        // short-circuit if there isn't an Article for the specified Uri
+        final Article article = mAemDb.articleDao().find(uri);
+        if (article == null) {
+            return false;
+        }
+
+        // short-circuit if we already have a share uri for this article
+        if (article.getShareUri() != null) {
+            return false;
+        }
+
+        // generate the link
+        final ShortDynamicLink link = buildShortArticleShareLink(article);
+        if (link != null) {
+            article.setShareUri(link.getShortLink());
+            mAemDb.articleDao().updateShareUrl(article.getUri(), article.getShareUri());
+        }
+
+        return true;
+    }
+
+    @WorkerThread
+    void createAemImportForDeeplinkedArticleTask(@NonNull final Uri uri) {
+        // create & access an AemImport to trigger the download pipeline
+        final AemImport aemImport = new AemImport(uri);
+        aemImport.setLastAccessed(new Date());
+        mAemDb.aemImportRepository().accessAemImport(aemImport);
+
+        // enqueue a sync of the AemImport
+        enqueueSyncAemImport(uri, false);
     }
 
     /**
@@ -382,7 +458,8 @@ public class AemArticleManger {
 
         // download the article html
         try {
-            final Response<String> response = mApi.downloadArticle(article.getUri() + ".html").execute();
+            final Response<String> response =
+                    mApi.downloadArticle(UriUtils.addExtension(article.getUri(), "html")).execute();
             if (response.code() == HTTP_OK) {
                 article.setContentUuid(article.getUuid());
                 article.setContent(response.body());
@@ -536,6 +613,25 @@ public class AemArticleManger {
         }
     }
 
+    @Nullable
+    @WorkerThread
+    private ShortDynamicLink buildShortArticleShareLink(@NonNull final Article article) {
+        // build the link
+        final DynamicLink.Builder link = ShareLinkUtils.INSTANCE.articleShareLinkBuilder(article);
+        try {
+            if (link != null) {
+                return Tasks.await(link.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT));
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            Timber.tag(TAG)
+                    .d(e.getCause(), "Error building share link");
+        }
+
+        return null;
+    }
+
     private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
         RoomDatabaseChangeTracker(@NonNull final String firstTable, final String... rest) {
             super(firstTable, rest);
@@ -556,8 +652,9 @@ public class AemArticleManger {
     // region PriorityRunnable Tasks
 
     private static final int PRIORITY_CLEANER = Integer.MIN_VALUE;
-    private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
-    private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
+    private static final int PRIORITY_GENERATE_SHARE_LINK = -50;
+    private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
+    private static final int PRIORITY_DOWNLOAD_RESOURCE = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
     abstract class UniqueTask implements PriorityRunnable {
@@ -625,6 +722,28 @@ public class AemArticleManger {
         boolean runTask() {
             syncAemImportTask(mUri, mForce);
             return true;
+        }
+    }
+
+    class GenerateShareUriTask extends UniqueUriBasedTask {
+        GenerateShareUriTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        public int getPriority() {
+            return PRIORITY_GENERATE_SHARE_LINK;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mDownloadResourceLocks, mUri);
+        }
+
+        @Override
+        boolean runTask() {
+            return generateShareUriTask(mUri);
         }
     }
 

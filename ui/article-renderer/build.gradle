@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -15,6 +16,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
@@ -26,5 +28,5 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

@@ -3,6 +3,7 @@ package org.cru.godtools.article.aem.db
 import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Transaction
+import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
 import java.util.Date
@@ -16,7 +17,7 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
         with(db.articleDao()) {
             articles.forEach {
                 insertOrIgnore(it)
-                update(it.uri, it.uuid, it.title)
+                update(it.uri, it.uuid, it.title, it.canonicalUri)
 
                 // replace all tags
                 removeAllTags(it.uri)
@@ -39,8 +40,17 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
 
     @Transaction
     @WorkerThread
+    open fun accessAemImport(import: AemImport) {
+        with(db.aemImportDao()) {
+            insertOrIgnore(import)
+            updateLastAccessed(import.uri, import.lastAccessed)
+        }
+    }
+
+    @Transaction
+    @WorkerThread
     open fun removeOrphanedAemImports() {
-        db.aemImportDao().removeOrphanedAemImports()
+        db.aemImportDao().removeOrphanedAemImports(Date(System.currentTimeMillis() - WEEK_IN_MS))
         db.articleRepository().removeOrphanedArticles()
     }
 }

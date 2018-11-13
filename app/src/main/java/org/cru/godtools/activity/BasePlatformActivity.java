@@ -177,7 +177,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                AboutActivity.start(this);
+                AboutActivityKt.startAboutActivity(this);
                 return true;
             case R.id.action_login:
                 launchLogin(false);
@@ -219,6 +219,13 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
 
         return onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!closeNavigationDrawer()) {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -290,14 +297,23 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
     }
 
-    protected final void closeNavigationDrawer() {
-        closeNavigationDrawer(getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED));
+    /**
+     * @return true if the navigation drawer was closed, false otherwise
+     */
+    protected final boolean closeNavigationDrawer() {
+        return closeNavigationDrawer(getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED));
     }
 
-    protected final void closeNavigationDrawer(final boolean animate) {
-        if (mDrawerLayout != null) {
+    /**
+     * @return true if the navigation drawer was closed, false otherwise
+     */
+    protected final boolean closeNavigationDrawer(final boolean animate) {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START, animate);
+            return true;
         }
+
+        return false;
     }
 
     protected boolean showNavigationDrawerIndicator() {
@@ -410,6 +426,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     protected void showLanguageSettings() {
-        LanguageSettingsActivity.start(this);
+        LanguageSettingsActivityKt.startLanguageSettingsActivity(this);
     }
 }

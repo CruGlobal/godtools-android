@@ -26,7 +26,7 @@ interface ResourceDao {
     @WorkerThread
     @Query("""
         DELETE FROM resources
-        WHERE uri NOT IN (SELECT uri FROM articleResources)""")
+        WHERE uri NOT IN (SELECT resourceUri FROM articleResources)""")
     fun removeOrphanedResources()
 
     @WorkerThread

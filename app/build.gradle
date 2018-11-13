@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
 apply plugin: 'com.appsee.appsee-plugin'
@@ -22,12 +25,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
-            }
-        }
-
         // Crashlytics config
         ext {
             betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
@@ -39,6 +36,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
@@ -121,6 +121,11 @@ android {
         }
     }
 }
+kapt {
+    arguments {
+        arg('eventBusIndex', 'org.cru.godtools.AppEventBusIndex')
+    }
+}
 
 dependencies {
     implementation project(':library:api')
@@ -136,11 +141,16 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:account')
+    implementation project(':ui:article-aem-renderer')
+    implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
@@ -156,18 +166,13 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
-    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
+    implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
-
-    releaseImplementation project(':ui:everystudent')
-
-    debugImplementation project(':ui:article-renderer')
-    debugImplementation project(':ui:article-aem-renderer')
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
@@ -181,8 +186,8 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants

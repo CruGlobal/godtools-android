@@ -25,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             app:elevation="0dp">
 
-            <com.google.android.material.tabs.TabLayout
+            <androidx.appcompat.widget.AppCompatTabLayout
                 android:id="@+id/language_toggle"
                 style="@style/Widget.GodTools.TabLayout.AppBar"
                 android:layout_width="wrap_content"

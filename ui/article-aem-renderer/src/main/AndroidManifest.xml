@@ -7,6 +7,17 @@
             android:parentActivityName="org.cru.godtools.article.activity.ArticlesActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="godtoolsapp.com" />
+                <data android:path="/article/aem" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.cru.godtools.article.activity.ArticlesActivity" />

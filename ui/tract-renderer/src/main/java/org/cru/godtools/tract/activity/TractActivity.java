@@ -18,7 +18,6 @@ import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutUtils;
-import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
@@ -36,7 +35,6 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
-import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -54,7 +52,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -112,10 +109,6 @@ public class TractActivity extends BaseToolActivity
     /*final*/ Locale[] mLanguages = new Locale[0];
     /*final*/ int mPrimaryLanguages = 1;
     /*final*/ int mParallelLanguages = 0;
-
-    @NonNull
-    @VisibleForTesting
-    SettableFuture[] mDownloadTasks = new SettableFuture[0];
 
     private final SparseArray<Translation> mTranslations;
     private final SparseArray<Manifest> mManifests;
@@ -188,9 +181,6 @@ public class TractActivity extends BaseToolActivity
         }
         assert mTool != null : "If mTool was null, validStartState() would have failed";
 
-        // download the translations for the requested languages of this tool
-        downloadTranslations();
-
         // track this view
         if (savedInstanceState == null) {
             EventBus.getDefault().post(new ToolUsedEvent(mTool));
@@ -258,10 +248,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
-        if (id == R.id.action_share) {
-            shareCurrentTract();
-            return true;
-        } else if (id == R.id.action_install) {
+        if (id == R.id.action_install) {
             installFullAppFromInstantApp();
             return true;
         } else if (id == android.R.id.home) {
@@ -342,8 +329,6 @@ public class TractActivity extends BaseToolActivity
             mLanguages = languages != null ? languages : mLanguages;
         }
         mHiddenLanguages = new boolean[mLanguages.length];
-
-        mDownloadTasks = new SettableFuture[mLanguages.length];
     }
 
     @Contract("null -> false")
@@ -414,13 +399,11 @@ public class TractActivity extends BaseToolActivity
 
     // endregion Creation Methods
 
-    private void downloadTranslations() {
+    @Override
+    protected void cacheTools() {
         if (mDownloadManager != null && mTool != null) {
-            for (int language = 0; language < mLanguages.length; language++) {
-                mDownloadManager.cacheTranslation(mTool, mLanguages[language]);
-                mDownloadTasks[language] = SettableFuture.create();
-                AsyncTask.THREAD_POOL_EXECUTOR.execute(
-                        new DownloadTranslationRunnable(this, mTool, mLanguages[language], mDownloadTasks[language]));
+            for (final Locale language : mLanguages) {
+                mDownloadManager.cacheTranslation(mTool, language);
             }
         }
     }
@@ -433,8 +416,8 @@ public class TractActivity extends BaseToolActivity
     private int determineLanguageState(final int languageIndex) {
         if (mManifests.get(languageIndex) != null) {
             return STATE_LOADED;
-        } else if (mDownloadTasks[languageIndex] != null && mDownloadTasks[languageIndex].isDone() &&
-                mTranslations.indexOfKey(languageIndex) >= 0 && mTranslations.get(languageIndex) == null) {
+        } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
+                mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
         } else {
             return STATE_LOADING;
@@ -719,39 +702,26 @@ public class TractActivity extends BaseToolActivity
         InstantApps.showInstallPrompt(this, null, -1, "instantapp");
     }
 
-    private void shareCurrentTract() {
-        final Manifest manifest = getActiveManifest();
-        if (manifest != null) {
-            mAnalytics.onTrackShareAction();
-
-            final Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
-            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest, mPager != null ? mPager.getCurrentItem() : 0));
-            startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
-        }
-    }
+    // region Share Link logic
 
     @Override
-    public void showModal(@NonNull final Modal modal) {
-        final Manifest manifest = modal.getManifest();
-        final Page page = modal.getPage();
-        ModalActivity.start(this, manifest.getManifestName(), manifest.getCode(),
-                            manifest.getLocale(), page.getId(), modal.getId());
+    protected boolean hasShareLinkUri() {
+        return getActiveManifest() != null;
     }
 
-    /**
-     * This method takes in a Manifest and page and returns a shareable link for the corresponding tool.
-     *
-     * @param manifest The Manifest Object to be used.
-     * @param page     The page being shared
-     * @return Url string of the shareable link.
-     */
-    @NonNull
-    private String buildSharingURL(@NonNull final Manifest manifest, final int page) {
+    @Nullable
+    @Override
+    protected String getShareLinkUri() {
+        final Manifest manifest = getActiveManifest();
+        if (manifest == null) {
+            return null;
+        }
+
+        // build share link
         final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
                 .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
                 .appendPath(manifest.getCode());
+        final int page = mPager != null ? mPager.getCurrentItem() : 0;
         if (page > 0) {
             uri.appendPath(String.valueOf(page));
         }
@@ -759,6 +729,16 @@ public class TractActivity extends BaseToolActivity
         return uri
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
+    }
+
+    // endregion Share Link logic
+
+    @Override
+    public void showModal(@NonNull final Modal modal) {
+        final Manifest manifest = modal.getManifest();
+        final Page page = modal.getPage();
+        ModalActivity.start(this, manifest.getManifestName(), manifest.getCode(),
+                            manifest.getLocale(), page.getId(), modal.getId());
     }
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
@@ -825,31 +805,6 @@ public class TractActivity extends BaseToolActivity
                     }
                     break;
             }
-        }
-    }
-
-    static class DownloadTranslationRunnable implements Runnable {
-        private final Context mContext;
-        private final String mTool;
-        private final Locale mLocale;
-        private final SettableFuture<?> mFuture;
-
-        DownloadTranslationRunnable(@NonNull final Context context, @NonNull final String tool,
-                                    @NonNull final Locale locale, @NonNull final SettableFuture<?> future) {
-            mContext = context.getApplicationContext();
-            mTool = tool;
-            mLocale = locale;
-            mFuture = future;
-        }
-
-        @Override
-        public void run() {
-            try {
-                new ToolSyncTasks(mContext).syncTools(Bundle.EMPTY);
-            } catch (final IOException ignored) {
-            }
-            GodToolsDownloadManager.getInstance(mContext).cacheTranslation(mTool, mLocale);
-            mFuture.set(null);
         }
     }
 }

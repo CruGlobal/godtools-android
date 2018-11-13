@@ -1,18 +1,29 @@
 package org.cru.godtools.base.tool.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
+
+import org.ccci.gto.android.common.util.WeakRunnable;
+import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.xml.model.Manifest;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import androidx.annotation.CallSuper;
@@ -35,6 +46,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     // App/Action Bar
     @Nullable
     private Menu mToolbarMenu;
+    @Nullable
+    private MenuItem mShareMenuItem;
 
     // Visibility sections
     @Nullable
@@ -52,6 +65,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     @BindView(R2.id.loading_progress)
     ProgressBar mLoadingProgress;
 
+    @Nullable
+    private ListenableFuture<?> mSyncToolsState = null;
     @NonNull
     private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
@@ -86,7 +101,10 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_tool, menu);
         mToolbarMenu = menu;
+        mShareMenuItem = menu.findItem(R.id.action_share);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -94,6 +112,22 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     public boolean onPrepareOptionsMenu(final Menu menu) {
         updateToolbarMenu();
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        syncTools();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.action_share) {
+            shareCurrentTool();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @CallSuper
@@ -153,9 +187,54 @@ public abstract class BaseToolActivity extends ImmersiveActivity
                 mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
             }
         }
+        updateShareMenuItem();
     }
 
     // endregion Toolbar update logic
+
+    // region Share tool logic
+
+    protected void updateShareMenuItem() {
+        if (mShareMenuItem != null) {
+            mShareMenuItem.setVisible(hasShareLinkUri());
+        }
+    }
+
+    private void shareCurrentTool() {
+        // short-circuit if we don't have a share tool url
+        final String shareUrl = getShareLinkUri();
+        if (shareUrl == null) {
+            return;
+        }
+
+        // track the share action
+        mAnalytics.onTrackShareAction();
+
+        // start the share activity chooser with our share link
+        final String title = getShareLinkTitle();
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, title));
+        intent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, title)));
+    }
+
+    protected boolean hasShareLinkUri() {
+        return getShareLinkUri() != null;
+    }
+
+    @Nullable
+    protected String getShareLinkTitle() {
+        final Manifest manifest = getActiveManifest();
+        return manifest != null ? manifest.getTitle() : null;
+    }
+
+    @Nullable
+    protected String getShareLinkUri() {
+        return null;
+    }
+
+    // endregion Share tool logic
 
     // region Tool state
 
@@ -178,6 +257,29 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // endregion Tool state
 
+    // region Tool sync/download logic
+
+    protected boolean isSyncToolsDone() {
+        return mSyncToolsState != null && mSyncToolsState.isDone();
+    }
+
+    private void syncTools() {
+        cacheTools();
+        final SyncToolsRunnable task = new SyncToolsRunnable(this, this::cacheTools);
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(task);
+
+        // track sync tools state, combining previous state with current state
+        if (mSyncToolsState == null || mSyncToolsState.isDone()) {
+            mSyncToolsState = task.mFuture;
+        } else {
+            mSyncToolsState = Futures.successfulAsList(mSyncToolsState, task.mFuture);
+        }
+    }
+
+    protected abstract void cacheTools();
+
+    // endregion Tool sync/download logic
+
     // region DownloadProgress logic
 
     protected final void startDownloadProgressListener(@Nullable final String tool, @Nullable final Locale language) {
@@ -198,5 +300,26 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     @Override
     public void setTitle(final CharSequence title) {
         super.setTitle(safeApplyTypefaceSpan(title, ManifestViewUtils.getTypeface(getActiveManifest(), this)));
+    }
+
+    static class SyncToolsRunnable implements Runnable {
+        private final Context mContext;
+        private final WeakRunnable mPostSyncTask;
+        final SettableFuture<?> mFuture = SettableFuture.create();
+
+        SyncToolsRunnable(@NonNull final Context context, @NonNull final Runnable postSyncTask) {
+            mContext = context.getApplicationContext();
+            mPostSyncTask = new WeakRunnable(postSyncTask);
+        }
+
+        @Override
+        public void run() {
+            try {
+                new ToolSyncTasks(mContext).syncTools(Bundle.EMPTY);
+            } catch (final IOException ignored) {
+            }
+            mPostSyncTask.run();
+            mFuture.set(null);
+        }
     }
 }

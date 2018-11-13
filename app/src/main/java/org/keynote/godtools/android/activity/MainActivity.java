@@ -16,13 +16,13 @@ import com.google.android.material.tabs.TabLayout;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
-import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.article.activity.CategoriesActivityKt;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tract.activity.TractActivity;
-import org.cru.godtools.util.BuildTypeUtils;
 import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
@@ -162,7 +162,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         // trigger tool details if we are in the find tools UI
         if (mActiveState == STATE_FIND_TOOLS) {
-            ToolDetailsActivity.start(this, code);
+            ToolDetailsActivityKt.startToolDetailsActivity(this, code);
             return;
         }
 
@@ -183,7 +183,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 TractActivity.start(this, code, languages);
                 break;
             case ARTICLE:
-                BuildTypeUtils.startArticleToolActivity(this, code, type, languages);
+                CategoriesActivityKt.startCategoriesActivity(this, code, languages[0]);
                 break;
         }
     }
@@ -191,7 +191,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     public void onToolInfo(@Nullable final String code) {
         if (code != null) {
-            ToolDetailsActivity.start(this, code);
+            ToolDetailsActivityKt.startToolDetailsActivity(this, code);
         }
     }
 
@@ -256,28 +256,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
-    private void showAddTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(mFindToolsTab);
-        mActiveState = STATE_FIND_TOOLS;
-        trackInAnalytics();
-    }
-
-    private void showMyTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(mMyToolsTab);
-        mActiveState = STATE_MY_TOOLS;
-        trackInAnalytics();
-    }
-
     private void syncData() {
         GodToolsSyncServiceKt.syncFollowups(this).sync();
         GodToolsSyncServiceKt.syncToolShares(this).sync();
@@ -301,6 +279,30 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         // default to My Tools
         showMyTools();
     }
+
+    private void showAddTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mFindToolsTab);
+        mActiveState = STATE_FIND_TOOLS;
+        trackInAnalytics();
+    }
+
+    private void showMyTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mMyToolsTab);
+        mActiveState = STATE_MY_TOOLS;
+        trackInAnalytics();
+    }
+
+    // region Feature Discovery logic
 
     void showNextFeatureDiscovery() {
         if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
@@ -393,6 +395,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
         mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
+
+    // endregion Feature Discovery logic
 
     private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
         @Override

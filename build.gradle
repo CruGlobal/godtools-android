@@ -1,20 +1,20 @@
 buildscript {
     ext {
         deps = [
-                adobeMobileServices: '4.16.0',
+                adobeMobileServices: '4.17.0',
                 advrecyclerview    : '0.11.0',
-                androidArch        : [
-                        core: '1.1.1',
-                        room: '1.1.1'
-                ],
                 androidX           : [
                         annotation      : '1.0.0',
-                        appCompat       : '1.0.0',
+                        appCompat       : '1.0.1',
                         archCore        : '2.0.0',
                         browser         : '1.0.0',
                         cardView        : '1.0.0',
                         constraintLayout: '1.1.3',
                         core            : '1.0.0',
+                        ktx             : [
+                                core    : '1.0.1',
+                                fragment: '1.0.0',
+                        ],
                         lifecycle       : '2.0.0',
                         multidex        : '2.0.0',
                         percentLayout   : '1.0.0',
@@ -29,14 +29,15 @@ buildscript {
                 ],
                 butterknife        : '9.0.0-rc1',
                 calligraphy        : '2.3.0',
-                crashlytics        : '2.9.5',
+                crashlytics        : '2.9.6',
                 eventbus           : '3.1.1',
                 evernoteAndroidJob : '1.2.5',
                 facebookStetho     : '1.5.0',
                 firebase           : [
-                        core: '16.0.4',
+                        core        : '16.0.5',
+                        dynamicLinks: '16.1.3',
                 ],
-                gtoSupport         : '2.0.0-SNAPSHOT',
+                gtoSupport         : '2.0.0',
                 guava              : '26.0-android',
                 hamcrest           : '1.3',
                 jsoup              : '1.11.3',
@@ -48,15 +49,16 @@ buildscript {
                 materialDesign     : '1.0.0',
                 mockito            : '2.17.0',
                 mockitoKotlin      : '2.0.0-RC3',
-                newrelic           : '5.19.0',
+                newrelic           : '5.21.0',
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 playServices       : [
-                        analytics: '16.0.4',
+                        analytics: '16.0.5',
                 ],
                 powermock          : '2.0.0-beta.9',
                 retrofit2          : '2.4.0',
                 snowplow           : '0.8.0',
+                taptargetview      : '1.12.0',
                 thekey             : '3.0.0-SNAPSHOT',
                 timber             : '4.7.1'
         ]
@@ -86,19 +88,20 @@ buildscript {
 }
 
 plugins {
+    id "com.getkeepsafe.dexcount" version "0.8.4" apply false
     id "de.undercouch.download" version "3.4.3" apply false
     id "org.ajoberstar.grgit" version "2.3.0"
 }
 
 group 'org.cru.android'
-version '5.0.19-SNAPSHOT'
+version '5.1.0-SNAPSHOT'
 ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4025200
 
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
     compileSdk    = 28
-    minSdk        = 15
+    minSdk        = 16
     minSdkFeature = 21
     targetSdk     = 28
 }

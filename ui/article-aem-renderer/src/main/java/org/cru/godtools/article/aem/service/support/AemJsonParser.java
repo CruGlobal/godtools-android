@@ -10,12 +10,8 @@ import org.cru.godtools.article.aem.model.Article;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
@@ -99,6 +95,7 @@ public class AemJsonParser {
 
         // Create Article
         final Article article = new Article(url);
+        article.setCanonicalUri(Uri.parse(url.toString() + ".html"));
         if (content != null) {
             article.setUuid(content.optString(TAG_UUID, article.getUuid()));
             article.setTitle(content.optString(TAG_TITLE, article.getTitle()));
@@ -117,21 +114,6 @@ public class AemJsonParser {
         }
 
         return article;
-    }
-
-    /**
-     * This method is used to convert a json Date string to long.
-     *
-     * @param dateString the string representation of Date
-     * @return Date as a long
-     */
-    private static long getDateLongFromJsonString(String dateString) {
-        try {
-            return new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz",
-                    Locale.getDefault()).parse(dateString).getTime();
-        } catch (ParseException e) {
-            return new Date().getTime();
-        }
     }
 
     // endregion Article Parsing

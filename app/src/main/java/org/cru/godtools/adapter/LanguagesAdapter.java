@@ -157,7 +157,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         }
 
         @Override
-        void bind(final int position) {
+        protected void bind(final int position) {
             mLanguage = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
             mLocale = mLanguage != null ? mLanguage.getCode() : null;
             mAdded = mLanguage != null && mLanguage.isAdded();
