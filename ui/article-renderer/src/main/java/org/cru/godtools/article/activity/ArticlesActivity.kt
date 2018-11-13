@@ -9,6 +9,7 @@ import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.activity.startAemArticleActivity
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.fragment.ArticlesFragment
+import org.cru.godtools.article.fragment.newArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.xml.model.Text
 import java.util.Locale
@@ -51,7 +52,7 @@ class ArticlesActivity : BaseSingleToolActivity(false), ArticlesFragment.Callbac
         supportFragmentManager?.apply {
             if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
                 transaction {
-                    replace(R.id.frame, ArticlesFragment.newInstance(tool, locale, category), TAG_MAIN_FRAGMENT)
+                    replace(R.id.frame, newArticlesFragment(tool, locale, category), TAG_MAIN_FRAGMENT)
                 }
             }
         }

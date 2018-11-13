@@ -225,7 +225,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        mSyncHelper.sync(GodToolsSyncServiceKt.syncLanguages(requireContext(), force));
+        getSyncHelper().sync(GodToolsSyncServiceKt.syncLanguages(requireContext(), force));
     }
 
     // region Languages List
@@ -246,10 +246,10 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
 
     void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
-            mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
+            mLanguagesAdapter.setSelected(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
             mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
-            mLanguagesAdapter.setDisabled(mPrimary ? null : mPrimaryLanguage);
-            mLanguagesAdapter.setProtected(mSettings != null ? mSettings.getProtectedLanguages() : null);
+            mLanguagesAdapter.setDisabled(mPrimary ? null : getPrimaryLanguage());
+            mLanguagesAdapter.setProtected(getSettings() != null ? getSettings().getProtectedLanguages() : null);
         }
     }
 
