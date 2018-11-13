@@ -1,5 +1,6 @@
-apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     defaultConfig {
@@ -54,7 +55,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
-    annotationProcessor "androidx.room:room-compiler:${deps.androidX.room}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
+    kapt "androidx.room:room-compiler:${deps.androidX.room}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
