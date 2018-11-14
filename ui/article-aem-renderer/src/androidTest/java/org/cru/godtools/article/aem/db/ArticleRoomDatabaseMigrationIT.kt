@@ -13,20 +13,20 @@ class ArticleRoomDatabaseMigrationIT {
     @Test
     fun migrate8To9() {
         // create v8 database
-        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 8)
+        helper.createDatabase(DATABASE_NAME, 8)
                 .close()
 
         // run migration
-        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 9, true, ArticleRoomDatabase.MIGRATION_8_9)
+        helper.runMigrationsAndValidate(DATABASE_NAME, 9, true, MIGRATION_8_9)
     }
 
     @Test
     fun migrate9To10() {
         // create v9 database
-        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 9)
+        helper.createDatabase(DATABASE_NAME, 9)
             .close()
 
         // run migration
-        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 10, true, ArticleRoomDatabase.MIGRATION_9_10)
+        helper.runMigrationsAndValidate(DATABASE_NAME, 10, true, MIGRATION_9_10)
     }
 }
