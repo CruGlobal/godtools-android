@@ -9,6 +9,7 @@ import androidx.fragment.app.transaction
 import org.cru.godtools.article.R
 import org.cru.godtools.article.fragment.CategoriesFragment
 import org.cru.godtools.article.fragment.newCategoriesFragment
+import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
@@ -24,7 +25,7 @@ fun Activity.startCategoriesActivity(toolCode: String, language: Locale) {
     startActivity(createCategoriesIntent(toolCode, language))
 }
 
-class CategoriesActivity : BaseSingleToolActivity(false), CategoriesFragment.Callbacks {
+class CategoriesActivity : BaseArticleActivity(false), CategoriesFragment.Callbacks {
     // region Lifecycle Events
 
     override fun onCreate(savedInstanceState: Bundle?) {

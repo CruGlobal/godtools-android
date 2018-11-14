@@ -21,6 +21,7 @@ import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.aem.util.removeExtension
+import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
@@ -36,7 +37,7 @@ fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articl
         .also { startActivity(it) }
 }
 
-class AemArticleActivity : BaseSingleToolActivity(false, false) {
+class AemArticleActivity : BaseArticleActivity(false, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
