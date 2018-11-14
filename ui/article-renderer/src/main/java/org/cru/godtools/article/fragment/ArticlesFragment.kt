@@ -36,7 +36,7 @@ fun newArticlesFragment(code: String, locale: Locale, category: String? = null):
     }
 }
 
-private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
+internal val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
 class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
     interface Callbacks {

@@ -19,7 +19,7 @@ import timber.log.Timber
 import java.io.File
 
 class DebugGodToolsApplication : GodToolsApplication() {
-    private val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
+    internal val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
 
     override fun onCreate() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
