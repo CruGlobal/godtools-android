@@ -24,7 +24,6 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 
 public class AppSeeAnalyticService implements Application.ActivityLifecycleCallbacks, AppseeListener {
     @Nullable
@@ -44,8 +43,7 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
         return sInstance;
     }
 
-    @UiThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onAnalyticScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         if (!event.isForSystem(AnalyticsSystem.APPSEE)) {
             return;
@@ -54,7 +52,7 @@ public class AppSeeAnalyticService implements Application.ActivityLifecycleCallb
         Appsee.startScreen(event.getScreen());
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onAnalyticActionEvent(@NonNull final AnalyticsActionEvent event) {
         if (!event.isForSystem(AnalyticsSystem.APPSEE)) {
             return;
