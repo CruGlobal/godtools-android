@@ -8,6 +8,7 @@ import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.TranslationRef.Key
 import org.cru.godtools.article.aem.model.TranslationRef.TranslationAemImport
+import org.cru.godtools.article.aem.model.toTranslationRefKey
 import org.cru.godtools.model.Translation
 
 @Dao
@@ -19,7 +20,7 @@ abstract class TranslationRepository internal constructor(private val db: Articl
 
     @WorkerThread
     fun isProcessed(translation: Translation): Boolean {
-        return find(Key.from(translation))?.processed ?: false
+        return find(translation.toTranslationRefKey())?.processed ?: false
     }
 
     @WorkerThread
@@ -30,7 +31,7 @@ abstract class TranslationRepository internal constructor(private val db: Articl
     @Transaction
     @WorkerThread
     open fun addAemImports(translation: Translation, uris: List<Uri>): Boolean {
-        val translationKey = Key.from(translation) ?: return false
+        val translationKey = translation.toTranslationRefKey() ?: return false
 
         // create translation ref if it doesn't exist already
         db.translationDao().insertOrIgnore(TranslationRef(translationKey))
@@ -50,7 +51,7 @@ abstract class TranslationRepository internal constructor(private val db: Articl
     @Transaction
     @WorkerThread
     open fun removeMissingTranslations(translationsToKeep: List<Translation>) {
-        val valid = translationsToKeep.map { Key.from(it) }
+        val valid = translationsToKeep.map { it.toTranslationRefKey() }.toSet()
         db.translationDao().all
                 .filterNot { valid.contains(it.key) }
                 .apply { db.translationDao().remove(this) }

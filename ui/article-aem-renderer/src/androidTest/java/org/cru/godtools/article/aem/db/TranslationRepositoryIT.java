@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.TranslationRef;
+import org.cru.godtools.article.aem.model.TranslationRefKt;
 import org.cru.godtools.model.Translation;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,14 +36,14 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
         mTranslation.setToolCode(TOOL);
         mTranslation.setLanguageCode(LANG);
         mTranslation.setVersion(1);
-        mTranslationKey = TranslationRef.Key.from(mTranslation);
+        mTranslationKey = TranslationRefKt.toTranslationRefKey(mTranslation);
     }
 
     @Test
     public void verifyIsProcessedTrue() {
         // setup test
         final TranslationRef translation = new TranslationRef(mTranslationKey);
-        translation.processed = true;
+        translation.setProcessed(true);
         mDb.translationDao().insertOrIgnore(translation);
 
         // perform test
