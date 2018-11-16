@@ -50,7 +50,6 @@ buildscript {
                 materialDesign     : '1.0.0',
                 mockito            : '2.17.0',
                 mockitoKotlin      : '2.0.0-RC3',
-                newrelic           : '5.21.0',
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 playServices       : [
@@ -82,7 +81,6 @@ buildscript {
         classpath 'com.google.firebase:firebase-plugins:1.1.5'
         classpath 'com.google.gms:google-services:4.1.0'
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
-        classpath "com.newrelic.agent.android:agent-gradle-plugin:${deps.newrelic}"
         classpath 'io.fabric.tools:gradle:1.25.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
     }

@@ -1,4 +1,3 @@
-apply plugin: 'newrelic'
 apply plugin: 'io.fabric'
 
 android {
