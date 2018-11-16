@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.instantapps.InstantApps;
-import com.newrelic.agent.android.NewRelic;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
@@ -25,8 +24,6 @@ import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.SilentLogger;
 import timber.log.Timber;
 
-import static org.cru.godtools.base.app.BuildConfig.NEW_RELIC_API_KEY;
-
 public class BaseGodToolsApplication extends Application {
     @Override
     public void onCreate() {
@@ -34,7 +31,6 @@ public class BaseGodToolsApplication extends Application {
 
         // Enable application monitoring
         initializeCrashlytics();
-        initializeNewRelic();
 
         // configure components
         configureLanguageFallacks();
@@ -57,12 +53,6 @@ public class BaseGodToolsApplication extends Application {
         Crashlytics.setString("SystemLanguage", LocaleCompat.toLanguageTag(Locale.getDefault()));
 
         Timber.plant(new CrashlyticsTree());
-    }
-
-    private void initializeNewRelic() {
-        NewRelic.withApplicationToken(NEW_RELIC_API_KEY)
-                .withCrashReportingEnabled(false)
-                .start(this);
     }
 
     @CallSuper

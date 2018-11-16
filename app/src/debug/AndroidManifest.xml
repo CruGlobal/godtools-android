@@ -3,5 +3,9 @@
 
     <application
         android:name="org.cru.godtools.DebugGodToolsApplication"
-        tools:replace="name" />
+        tools:replace="name">
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+    </application>
 </manifest>

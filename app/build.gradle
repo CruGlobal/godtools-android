@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
-apply plugin: 'newrelic'
 
 android {
     compileSdkVersion compileSdk
@@ -143,6 +143,8 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
+
+    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
