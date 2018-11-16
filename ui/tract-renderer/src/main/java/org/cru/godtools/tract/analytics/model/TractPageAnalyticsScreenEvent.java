@@ -1,6 +1,6 @@
 package org.cru.godtools.tract.analytics.model;
 
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent;
 
 import java.util.Locale;
 
@@ -10,20 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 @Immutable
-public class TractPageAnalyticsScreenEvent extends AnalyticsScreenEvent {
-    @NonNull
-    private final String mTract;
-
+public class TractPageAnalyticsScreenEvent extends ToolAnalyticsScreenEvent {
     public TractPageAnalyticsScreenEvent(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                          @Nullable final Integer card) {
-        super(tractPageToScreenName(tract, page, card), locale);
-        mTract = tract;
-    }
-
-    @Nullable
-    @Override
-    public String getAdobeSiteSection() {
-        return mTract;
+        super(tractPageToScreenName(tract, page, card), tract, locale);
     }
 
     @NonNull
