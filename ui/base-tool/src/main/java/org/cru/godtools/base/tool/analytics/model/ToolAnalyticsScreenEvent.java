@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class ToolAnalyticsScreenEvent extends AnalyticsScreenEvent {
+    public static final String SCREEN_CATEGORIES = "Categories";
+
     @Nullable
     private final String mTool;
 
