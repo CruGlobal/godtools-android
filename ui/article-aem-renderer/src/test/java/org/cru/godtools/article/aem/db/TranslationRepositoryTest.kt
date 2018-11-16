@@ -3,7 +3,7 @@ package org.cru.godtools.article.aem.db
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.article.aem.model.TranslationRef
-import org.cru.godtools.article.aem.model.TranslationRef.Key
+import org.cru.godtools.article.aem.model.toTranslationRefKey
 import org.cru.godtools.model.Translation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -18,7 +18,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         setLanguageCode(Locale.ENGLISH)
         version = 1
     }
-    private val key = Key.from(translation)!!
+    private val key = translation.toTranslationRefKey()!!
     private val translationRef = TranslationRef(key)
 
     @Test
