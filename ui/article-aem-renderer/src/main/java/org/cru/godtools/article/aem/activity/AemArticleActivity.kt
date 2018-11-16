@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakRunnable
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
+import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
@@ -25,7 +25,6 @@ import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
-import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import java.util.Locale
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
@@ -137,8 +136,8 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     private fun sendAnalyticsEventIfNeededAndPossible() {
         if (!pendingAnalyticsEvent) return
 
-        article?.title?.let {
-            mEventBus.post(AnalyticsScreenEvent(it, getDeviceLocale(this)))
+        article?.let {
+            mEventBus.post(ArticleAnalyticsScreenEvent(it, mTool, mLocale))
             pendingAnalyticsEvent = false
         }
     }
