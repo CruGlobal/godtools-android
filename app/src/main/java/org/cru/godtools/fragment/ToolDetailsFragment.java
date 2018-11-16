@@ -242,10 +242,10 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     private void startProgressListener() {
         if (mDownloadManager != null && mToolCode != null) {
-            mDownloadManager.addOnDownloadProgressUpdateListener(mToolCode, mPrimaryLanguage, this);
+            mDownloadManager.addOnDownloadProgressUpdateListener(mToolCode, getPrimaryLanguage(), this);
 
             // get the initial progress
-            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mToolCode, mPrimaryLanguage));
+            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mToolCode, getPrimaryLanguage()));
         }
     }
 
@@ -352,7 +352,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     private void updateLatestTranslationLoader() {
         final Loader<Translation> loader = getLoaderManager().getLoader(LOADER_LATEST_TRANSLATION);
         if (loader instanceof LatestTranslationLoader) {
-            ((LatestTranslationLoader) loader).setLocale(mPrimaryLanguage);
+            ((LatestTranslationLoader) loader).setLocale(getPrimaryLanguage());
         }
     }
 
@@ -410,7 +410,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
                     if (mToolCode != null) {
-                        return new LatestTranslationLoader(requireContext(), mToolCode, mPrimaryLanguage);
+                        return new LatestTranslationLoader(requireContext(), mToolCode, getPrimaryLanguage());
                     }
                     break;
             }

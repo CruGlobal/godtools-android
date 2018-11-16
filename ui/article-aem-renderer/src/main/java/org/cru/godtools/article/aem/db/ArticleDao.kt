@@ -87,7 +87,8 @@ interface ArticleDao {
     @Query("""
         SELECT DISTINCT a.*
         FROM $GET_ARTICLES_FROM
-        WHERE $GET_ARTICLES_WHERE""")
+        WHERE $GET_ARTICLES_WHERE
+        ORDER BY a.title""")
     fun getArticles(tool: String, locale: Locale): LiveData<List<Article>>
 
     @AnyThread
@@ -96,6 +97,7 @@ interface ArticleDao {
         FROM $GET_ARTICLES_FROM
              JOIN articleTags AS tag ON tag.articleUri = a.uri
         WHERE $GET_ARTICLES_WHERE AND
-            tag.tag IN (:tags)""")
+            tag.tag IN (:tags)
+        ORDER BY a.title""")
     fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
 }

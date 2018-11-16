@@ -414,7 +414,11 @@ public class TractActivity extends BaseToolActivity
     }
 
     private int determineLanguageState(final int languageIndex) {
-        if (mManifests.get(languageIndex) != null) {
+        final Manifest manifest = mManifests.get(languageIndex);
+        if (manifest != null) {
+            if (manifest.getType() != Manifest.Type.TRACT) {
+                return STATE_INVALID_TYPE;
+            }
             return STATE_LOADED;
         } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
                 mTranslations.get(languageIndex) == null) {
@@ -440,10 +444,10 @@ public class TractActivity extends BaseToolActivity
         for (int i = start; i < mLanguages.length && i < end; i++) {
             // default hidden state to whether the language exists or not
             final int state = determineLanguageState(i);
-            mHiddenLanguages[i] = state == STATE_NOT_FOUND;
+            mHiddenLanguages[i] = state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE;
 
             // short-circuit loop if this language was not found
-            if (state == STATE_NOT_FOUND) {
+            if (mHiddenLanguages[i]) {
                 continue;
             }
 
@@ -533,10 +537,14 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
-        // only process if the active language is not found
-        if (determineLanguageState(mActiveLanguage) == STATE_NOT_FOUND) {
+        // only process if the active language is not found or invalid
+        final int activeLanguageState = determineLanguageState(mActiveLanguage);
+        if (activeLanguageState == STATE_NOT_FOUND || activeLanguageState == STATE_INVALID_TYPE) {
             Stream.of(mLanguages)
-                    .filterIndexed((i, l) -> determineLanguageState(i) != STATE_NOT_FOUND)
+                    .filterIndexed((i, l) -> {
+                        final int state = determineLanguageState(i);
+                        return state != STATE_NOT_FOUND && state != STATE_INVALID_TYPE;
+                    })
                     .findFirst()
                     .ifPresent(this::updateActiveLanguage);
         }
@@ -550,8 +558,8 @@ public class TractActivity extends BaseToolActivity
                 continue;
             }
 
-            // skip any language that we don't have a manifest for
-            if (mManifests.get(i) == null) {
+            // skip any language that isn't loaded
+            if (determineLanguageState(i) != STATE_LOADED) {
                 continue;
             }
 
@@ -565,7 +573,8 @@ public class TractActivity extends BaseToolActivity
 
     @Nullable
     protected Manifest getActiveManifest() {
-        return mManifests.get(mActiveLanguage);
+        final Manifest manifest = mManifests.get(mActiveLanguage);
+        return manifest != null && manifest.getType() == Manifest.Type.TRACT ? manifest : null;
     }
 
     private void updateLanguageToggle() {
@@ -594,7 +603,7 @@ public class TractActivity extends BaseToolActivity
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
                 if (tab != null) {
                     // update tab visibility
-                    final boolean visible = mManifests.get(i) != null && !mHiddenLanguages[i];
+                    final boolean visible = !mHiddenLanguages[i] && determineLanguageState(i) == STATE_LOADED;
                     TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
                     if (visible) {
                         visibleTabs++;

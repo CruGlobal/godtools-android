@@ -398,7 +398,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     // endregion Feature Discovery logic
 
-    private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
+    class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
         @Override
         public void onTargetClick(final TapTargetView view) {
             super.onTargetClick(view);

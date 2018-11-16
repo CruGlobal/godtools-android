@@ -126,7 +126,7 @@ public class AemArticleFragment extends BaseFragment {
         if (mViewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
             mViewModel.article =
-                    ArticleRoomDatabase.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
+                    ArticleRoomDatabase.Companion.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
         }
 
         mViewModel.article.observe(this, this::onUpdateArticle);
@@ -162,7 +162,7 @@ public class AemArticleFragment extends BaseFragment {
 
         ArticleWebViewClient(@NonNull final Context context) {
             mContext = context.getApplicationContext();
-            mAemDb = ArticleRoomDatabase.getInstance(context);
+            mAemDb = ArticleRoomDatabase.Companion.getInstance(context);
         }
 
         void updateActivity(@Nullable final Activity activity) {

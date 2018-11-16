@@ -36,9 +36,6 @@ public class AemJsonParser {
             "/conf/cru/settings/wcm/templates/experience-fragment-cru-web-variation"
     );
 
-    private static final String CREATED_TAG = "jcr:created";
-    private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-
     // region Article Parsing
 
     /**

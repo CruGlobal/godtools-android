@@ -8,7 +8,7 @@ import me.thekey.android.eventbus.event.LoginEvent
 import org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_ID
 import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.base.Settings
-import org.cru.godtools.util.SingletonHolder
+import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

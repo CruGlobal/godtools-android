@@ -39,6 +39,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     protected static final int STATE_LOADING = 0;
     protected static final int STATE_LOADED = 1;
     protected static final int STATE_NOT_FOUND = 2;
+    protected static final int STATE_INVALID_TYPE = 3;
 
     @Nullable
     protected GodToolsDownloadManager mDownloadManager;
@@ -147,6 +148,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // endregion Lifecycle Events
 
+    /**
+     * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
+     */
     @Nullable
     protected abstract Manifest getActiveManifest();
 
@@ -249,7 +253,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
             mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
         }
         if (mMissingContent != null) {
-            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+            mMissingContent
+                    .setVisibility(state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE ? View.VISIBLE : View.GONE);
         }
     }
 

@@ -61,7 +61,7 @@ public final class Manifest extends Base implements Styles {
     private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
-    private enum Type {
+    public enum Type {
         TRACT, ARTICLE, UNKNOWN;
 
         public static final Type DEFAULT = TRACT;
@@ -169,6 +169,11 @@ public final class Manifest extends Base implements Styles {
     @Nullable
     public String getTitle() {
         return Text.getText(mTitle);
+    }
+
+    @NonNull
+    public Type getType() {
+        return mType;
     }
 
     @Nullable

@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.databinding.ListItemArticleBinding
 import org.cru.godtools.xml.model.Manifest
@@ -12,6 +14,10 @@ import org.cru.godtools.xml.model.Manifest
 class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Observer<List<Article>> {
     interface Callbacks {
         fun onArticleSelected(article: Article?)
+    }
+
+    init {
+        setHasStableIds(true)
     }
 
     private val callbacks = ObservableField<Callbacks>()
@@ -28,6 +34,10 @@ class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Obse
 
     override fun getItemCount(): Int {
         return articles?.size ?: 0
+    }
+
+    override fun getItemId(position: Int): Long {
+        return articles?.get(position)?.uri?.let { IdUtils.convertId(it) } ?: NO_ID
     }
 
     // region LifeCycle Events
