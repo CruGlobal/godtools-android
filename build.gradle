@@ -5,7 +5,7 @@ buildscript {
                 advrecyclerview    : '0.11.0',
                 androidX           : [
                         annotation      : '1.0.0',
-                        appCompat       : '1.0.1',
+                        appCompat       : '1.0.2',
                         archCore        : '2.0.0',
                         browser         : '1.0.0',
                         cardView        : '1.0.0',
