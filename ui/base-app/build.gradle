@@ -1,10 +1,11 @@
 android {
     defaultConfig {
-        consumerProguardFiles 'proguard-rules.pro'
-        consumerProguardFiles 'proguard-rules-crashlytics.pro'
-        consumerProguardFiles 'proguard-rules-eventbus.pro'
-        consumerProguardFiles 'proguard-rules-guava.pro'
-        consumerProguardFiles 'proguard-rules-picasso.pro'
+        consumerProguardFile 'proguard-rules.pro'
+        consumerProguardFile 'proguard-rules-crashlytics.pro'
+        consumerProguardFile 'proguard-rules-eventbus.pro'
+        consumerProguardFile 'proguard-rules-guava.pro'
+        consumerProguardFile 'proguard-rules-okhttp3.pro'
+        consumerProguardFile 'proguard-rules-picasso.pro'
     }
 }
 
