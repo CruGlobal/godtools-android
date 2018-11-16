@@ -4,16 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.transaction
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.activity.startAemArticleActivity
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
+import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.article.fragment.newArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
-import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import org.cru.godtools.xml.model.Text
 import java.util.Locale
 
@@ -47,7 +47,7 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
 
     override fun onResume() {
         super.onResume()
-        category?.let { mEventBus.post(AnalyticsScreenEvent(it, getDeviceLocale(this))) }
+        sendAnalyticsEvent()
     }
 
     override fun onArticleSelected(article: Article?) {
@@ -78,5 +78,12 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
 
         // otherwise default to the default toolbar title
         super.updateToolbarTitle()
+    }
+
+    private fun sendAnalyticsEvent() {
+        when {
+            category != null -> category?.let { ArticlesCategoryAnalyticsScreenEvent(tool, locale, it) }
+            else -> ArticlesAnalyticsScreenEvent(tool, locale)
+        }?.let { mEventBus.post(it) }
     }
 }
