@@ -1,6 +1,7 @@
 package org.cru.godtools
 
 import android.os.AsyncTask
+import androidx.annotation.CallSuper
 import com.evernote.android.job.JobManager
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
@@ -16,6 +17,7 @@ import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.model.event.ModelEventEventBusIndex
 import org.cru.godtools.model.loader.ModelLoaderEventBusIndex
 import org.cru.godtools.service.AccountListRegistrationService
+import org.cru.godtools.service.AppSeeAnalyticService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.ShortcutsEventBusIndex
 import org.cru.godtools.sync.job.SyncJobCreator
@@ -60,5 +62,11 @@ open class GodToolsApplication : BaseGodToolsApplication() {
             .accountType(ACCOUNT_TYPE)
             .clientId(THEKEY_CLIENTID)
             .eventsManager(EventBusEventsManager())
+    }
+
+    @CallSuper
+    override fun configureAnalyticsServices() {
+        super.configureAnalyticsServices()
+        AppSeeAnalyticService.start(this)
     }
 }
