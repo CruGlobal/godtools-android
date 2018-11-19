@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.util.WeakRunnable
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
+import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
@@ -44,6 +45,8 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
+    private var pendingAnalyticsEvent = false
+
     // region Lifecycle Events
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +71,12 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         loadFragmentIfNeeded()
     }
 
+    override fun onResume() {
+        super.onResume()
+        pendingAnalyticsEvent = true
+        sendAnalyticsEventIfNeededAndPossible()
+    }
+
     internal fun onSyncTaskFinished() {
         updateVisibilityState()
     }
@@ -77,6 +86,12 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         updateToolbarTitle()
         updateShareMenuItem()
         updateVisibilityState()
+        sendAnalyticsEventIfNeededAndPossible()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pendingAnalyticsEvent = false
     }
 
     // endregion Lifecycle Events
@@ -116,6 +131,15 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
         }
 
         viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
+    }
+
+    private fun sendAnalyticsEventIfNeededAndPossible() {
+        if (!pendingAnalyticsEvent) return
+
+        article?.let {
+            mEventBus.post(ArticleAnalyticsScreenEvent(it, mTool, mLocale))
+            pendingAnalyticsEvent = false
+        }
     }
 
     override fun updateToolbarTitle() {

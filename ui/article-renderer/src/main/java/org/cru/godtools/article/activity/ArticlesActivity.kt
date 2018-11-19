@@ -8,6 +8,8 @@ import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.activity.startAemArticleActivity
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
+import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.article.fragment.newArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
@@ -43,6 +45,11 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
         loadInitialFragmentIfNeeded()
     }
 
+    override fun onResume() {
+        super.onResume()
+        sendAnalyticsEvent()
+    }
+
     override fun onArticleSelected(article: Article?) {
         article?.let { startAemArticleActivity(tool, locale, it.uri) }
     }
@@ -71,5 +78,12 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
 
         // otherwise default to the default toolbar title
         super.updateToolbarTitle()
+    }
+
+    private fun sendAnalyticsEvent() {
+        when {
+            category != null -> category?.let { ArticlesCategoryAnalyticsScreenEvent(tool, locale, it) }
+            else -> ArticlesAnalyticsScreenEvent(tool, locale)
+        }?.let { mEventBus.post(it) }
     }
 }

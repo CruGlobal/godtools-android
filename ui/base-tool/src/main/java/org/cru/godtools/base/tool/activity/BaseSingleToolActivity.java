@@ -29,9 +29,9 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private final boolean mRequireTool;
 
     @Nullable
-    /*final*/ String mTool = null;
+    protected /*final*/ String mTool = null;
     @NonNull
-    /*final*/ Locale mLocale = Language.INVALID_CODE;
+    protected /*final*/ Locale mLocale = Language.INVALID_CODE;
 
     private boolean mTranslationLoaded = false;
     @Nullable

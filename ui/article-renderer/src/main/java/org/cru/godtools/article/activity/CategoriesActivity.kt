@@ -11,6 +11,8 @@ import org.cru.godtools.article.fragment.CategoriesFragment
 import org.cru.godtools.article.fragment.newCategoriesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent.SCREEN_CATEGORIES
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
@@ -37,6 +39,11 @@ class CategoriesActivity : BaseArticleActivity(false), CategoriesFragment.Callba
     override fun onStart() {
         super.onStart()
         loadInitialFragmentIfNeeded()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mEventBus.post(ToolAnalyticsScreenEvent(SCREEN_CATEGORIES, tool, locale))
     }
 
     override fun onCategorySelected(category: Category?) = startArticlesActivity(tool, locale, category?.id)
