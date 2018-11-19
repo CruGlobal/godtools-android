@@ -9,6 +9,5 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
-    implementation "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }

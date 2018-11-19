@@ -153,13 +153,11 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
@@ -170,22 +168,20 @@ dependencies {
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
-    implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
-    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
-    debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
+    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugImplementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-timber:${deps.facebookStetho}"
-    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
+    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 
