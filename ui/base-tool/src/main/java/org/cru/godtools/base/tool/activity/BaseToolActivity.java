@@ -13,7 +13,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
-import org.ccci.gto.android.common.util.WeakRunnable;
+import org.ccci.gto.android.common.util.WeakTask;
 import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
@@ -40,6 +40,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     protected static final int STATE_LOADED = 1;
     protected static final int STATE_NOT_FOUND = 2;
     protected static final int STATE_INVALID_TYPE = 3;
+
+    private static final WeakTask.Task<BaseToolActivity> TASK_CACHE_TOOLS = BaseToolActivity::cacheTools;
 
     @Nullable
     protected GodToolsDownloadManager mDownloadManager;
@@ -270,7 +272,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     private void syncTools() {
         cacheTools();
-        final SyncToolsRunnable task = new SyncToolsRunnable(this, this::cacheTools);
+        final SyncToolsRunnable task = new SyncToolsRunnable(this, new WeakTask<>(this, TASK_CACHE_TOOLS));
         AsyncTask.THREAD_POOL_EXECUTOR.execute(task);
 
         // track sync tools state, combining previous state with current state
@@ -309,12 +311,12 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     static class SyncToolsRunnable implements Runnable {
         private final Context mContext;
-        private final WeakRunnable mPostSyncTask;
+        private final Runnable mPostSyncTask;
         final SettableFuture<?> mFuture = SettableFuture.create();
 
         SyncToolsRunnable(@NonNull final Context context, @NonNull final Runnable postSyncTask) {
             mContext = context.getApplicationContext();
-            mPostSyncTask = new WeakRunnable(postSyncTask);
+            mPostSyncTask = postSyncTask;
         }
 
         @Override
