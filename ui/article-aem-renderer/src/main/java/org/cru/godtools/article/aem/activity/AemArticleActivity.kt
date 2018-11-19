@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
-import org.ccci.gto.android.common.util.WeakRunnable
+import org.ccci.gto.android.common.util.WeakTask
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
@@ -126,13 +126,13 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     }
 
     private fun syncData() {
-        with(AemArticleManger.getInstance(this)) {
+        AemArticleManger.getInstance(this).let { manager ->
             syncTask = when {
-                isValidDeepLink() -> downloadDeeplinkedArticle(articleUri)
-                else -> downloadArticle(articleUri, false)
+                isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
+                else -> manager.downloadArticle(articleUri, false)
             }
-            syncTask.addListener(WeakRunnable(Runnable { onSyncTaskFinished() }), MainThreadExecutor())
-            generateShareUri(articleUri)
+            syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
+            manager.generateShareUri(articleUri)
         }
     }
 
