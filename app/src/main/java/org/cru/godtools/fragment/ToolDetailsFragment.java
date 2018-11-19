@@ -30,7 +30,6 @@ import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
-import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +46,8 @@ import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
-import static org.keynote.godtools.android.util.ViewUtils.bindShares;
+import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
+import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolDetailsFragment extends BasePlatformFragment
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
@@ -275,7 +275,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateViews() {
-        ViewUtils.bindLocalImage(mBanner, mBannerAttachment);
+        bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
