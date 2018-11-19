@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.util.MainThreadExecutor
+import org.ccci.gto.android.common.util.WeakTask
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.R2
@@ -23,7 +24,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
-import org.cru.godtools.base.util.WeakTask
 import java.util.Locale
 
 fun newArticlesFragment(code: String, locale: Locale, category: String? = null): ArticlesFragment {
