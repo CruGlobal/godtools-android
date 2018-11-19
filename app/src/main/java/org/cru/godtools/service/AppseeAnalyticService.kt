@@ -43,7 +43,7 @@ class AppseeAnalyticService private constructor(application: Application) :
 
     // region Activity Lifecycle Callbacks
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) = Appsee.start()
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Appsee.start()
 
     override fun onActivityStarted(activity: Activity) {}
 
