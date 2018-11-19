@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
+import org.cru.godtools.activity.LanguageSettingsActivityKt;
 import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.article.activity.CategoriesActivityKt;
@@ -221,7 +222,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
             if (getString(R.string.account_deeplink_host).equalsIgnoreCase(data.getHost())) {
                 if (getString(R.string.account_deeplink_path).equalsIgnoreCase(data.getPath())) {
-                    new CodeGrantAsyncTask(mTheKey, data).execute();
+                    new CodeGrantAsyncTask(getTheKey(), data).execute();
                     intent.setData(null);
                 }
             }
@@ -317,7 +318,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return mToolbar != null && (mDrawerLayout == null || !mDrawerLayout.isDrawerOpen(GravityCompat.START));
+                return mToolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
         }
 
         // assume we can show it if we don't have any specific rules about it
@@ -402,7 +403,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         @Override
         public void onTargetClick(final TapTargetView view) {
             super.onTargetClick(view);
-            showLanguageSettings();
+            LanguageSettingsActivityKt.startLanguageSettingsActivity(MainActivity.this);
         }
 
         @Override
