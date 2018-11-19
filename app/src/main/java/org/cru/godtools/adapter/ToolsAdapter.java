@@ -24,7 +24,6 @@ import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +43,8 @@ import butterknife.Optional;
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
-import static org.keynote.godtools.android.util.ViewUtils.bindShares;
+import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
+import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
@@ -308,7 +308,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
 
             // update any bound views
             ViewCompat.setLayoutDirection(itemView, TextUtilsCompat.getLayoutDirectionFromLocale(mPrimaryLanguage));
-            ViewUtils.bindLocalImage(mBanner, mBannerFile);
+            bindLocalImage(mBanner, mBannerFile);
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
                 mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage),
