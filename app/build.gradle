@@ -174,14 +174,14 @@ dependencies {
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
-    debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
+    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugImplementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-timber:${deps.facebookStetho}"
-    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
+    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 
