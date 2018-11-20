@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Deli</string>
-    <string name="share_tract_title">Deli \"%1$s\" na</string>
-    <string name="tract_not_found">Zahtevanega orodja ni bilo mogoče najti</string>
-    <string name="tract_loading">Zahtevano orodje se nalaga...</string>
+    <string name="menu_share_tool">Deli</string>
+    <string name="share_tool_title">Deli \"%1$s\" na</string>
+    <string name="tool_not_found">Zahtevanega orodja ni bilo mogoče najti</string>
+    <string name="tool_loading">Zahtevano orodje se nalaga...</string>
 </resources>

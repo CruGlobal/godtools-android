@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Dalīties</string>
-    <string name="share_tract_title">Koplietot “%1$s” izmantošanu</string>
-    <string name="tract_not_found">Pieprasīto rīku neizdevās atrast</string>
-    <string name="tract_loading">Jūsu pieprasītais rīks tiek ielādēts...</string>
+    <string name="menu_share_tool">Dalīties</string>
+    <string name="share_tool_title">Koplietot “%1$s” izmantošanu</string>
+    <string name="tool_not_found">Pieprasīto rīku neizdevās atrast</string>
+    <string name="tool_loading">Jūsu pieprasītais rīks tiek ielādēts...</string>
 </resources>

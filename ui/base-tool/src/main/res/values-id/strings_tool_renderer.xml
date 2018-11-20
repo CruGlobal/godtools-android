@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tract">Berbagi</string>
-    <string name="share_tract_title">Berbagi \"%1$s\" menggunakan</string>
-    <string name="tract_not_found">Alat yang Anda minta tidak tersedia</string>
-    <string name="tract_loading">Alat yang Anda minta sedang dimuat....</string>
+    <string name="menu_share_tool">Berbagi</string>
+    <string name="share_tool_title">Berbagi \"%1$s\" menggunakan</string>
+    <string name="tool_not_found">Alat yang Anda minta tidak tersedia</string>
+    <string name="tool_loading">Alat yang Anda minta sedang dimuat....</string>
 </resources>

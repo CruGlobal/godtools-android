@@ -220,9 +220,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         final String title = getShareLinkTitle();
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, title));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tool_subject, title));
         intent.putExtra(Intent.EXTRA_TEXT, shareUrl);
-        startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, title)));
+        startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)));
     }
 
     protected boolean hasShareLinkUri() {

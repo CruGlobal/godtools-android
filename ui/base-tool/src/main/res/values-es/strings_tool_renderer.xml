@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Instalar</string>
-    <string name="menu_share_tract">Compartir</string>
-    <string name="share_tract_title">Comparte “%1$s” mediante</string>
-    <string name="tract_not_found">No se puede encontrar la herramienta que has solicitado</string>
-    <string name="tract_loading">Se está cargando la herramienta que has solicitado...</string>
+    <string name="menu_share_tool">Compartir</string>
+    <string name="share_tool_title">Comparte “%1$s” mediante</string>
+    <string name="tool_not_found">No se puede encontrar la herramienta que has solicitado</string>
+    <string name="tool_loading">Se está cargando la herramienta que has solicitado...</string>
 </resources>
