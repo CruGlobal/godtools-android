@@ -84,6 +84,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // endregion Lifecycle Events
 
+    public boolean enableAppsee() {
+        return true;
+    }
+
     private void setupActionBar() {
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);

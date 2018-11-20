@@ -3,6 +3,9 @@ package org.cru.godtools.service
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.appsee.Appsee
 import com.appsee.AppseeListener
 import com.appsee.AppseeScreenDetectedInfo
@@ -11,16 +14,23 @@ import com.appsee.AppseeSessionEndingInfo
 import com.appsee.AppseeSessionStartedInfo
 import com.appsee.AppseeSessionStartingInfo
 import com.crashlytics.android.Crashlytics
+import me.thekey.android.view.dialog.LoginDialogFragment
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 
 class AppseeAnalyticService private constructor(application: Application) :
     Application.ActivityLifecycleCallbacks, AppseeListener {
+    private val fragmentLifecycleCallbacks = AppseeFragmentLifecycleCallbacks()
+    private val suppressedAppseeComponents = mutableSetOf<Reference<Any?>>()
+
     init {
         Appsee.addAppseeListener(this)
         EventBus.getDefault().register(this)
@@ -43,13 +53,20 @@ class AppseeAnalyticService private constructor(application: Application) :
 
     // region Activity Lifecycle Callbacks
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Appsee.start()
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        if (activity is FragmentActivity)
+            activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, true)
+
+        if (activity !is BaseActivity || activity.enableAppsee()) Appsee.start()
+    }
 
     override fun onActivityStarted(activity: Activity) {}
 
-    override fun onActivityResumed(activity: Activity) {}
+    override fun onActivityResumed(activity: Activity) {
+        if (activity is BaseActivity && !activity.enableAppsee()) suppressComponent(activity)
+    }
 
-    override fun onActivityPaused(activity: Activity) {}
+    override fun onActivityPaused(activity: Activity) = removeSuppressedComponent(activity)
 
     override fun onActivityStopped(activity: Activity) {}
 
@@ -76,5 +93,49 @@ class AppseeAnalyticService private constructor(application: Application) :
 
     // endregion AppSee LifeCycle Callbacks
 
+    // region Suppressed Components Tracking
+
+    internal fun suppressComponent(obj: Any) {
+        suppressedAppseeComponents.add(WeakReference(obj))
+        updateAppseeRecordingState()
+    }
+
+    internal fun removeSuppressedComponent(obj: Any) {
+        suppressedAppseeComponents.iterator().run {
+            while (hasNext()) {
+                when (next().get()) {
+                    null, obj -> remove()
+                }
+            }
+        }
+        updateAppseeRecordingState()
+    }
+
+    private fun updateAppseeRecordingState() {
+        suppressedAppseeComponents.iterator().run {
+            while (hasNext()) {
+                when (next().get()) {
+                    null -> remove()
+                    else -> {
+                        Appsee.pause()
+                        return
+                    }
+                }
+            }
+        }
+
+        Appsee.resume()
+    }
+
+    // endregion Suppressed Components Tracking
+
     companion object : SingletonHolder<AppseeAnalyticService, Application>(::AppseeAnalyticService)
+
+    internal inner class AppseeFragmentLifecycleCallbacks : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is LoginDialogFragment) suppressComponent(f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) = removeSuppressedComponent(f)
+    }
 }
