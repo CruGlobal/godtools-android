@@ -302,7 +302,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private fun stopSettingsChangeListener() =
         prefs().unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
 
-    /* Navigation Menu actions */
+    // region Navigation Menu actions
 
     private fun openPlayStore() {
         try {
@@ -382,4 +382,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             WebUrlLauncher.openUrl(this, URI_SUPPORT)
         }
     }
+
+    // endregion Navigation Menu actions
 }
