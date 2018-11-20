@@ -1,6 +1,5 @@
 package org.cru.godtools.base.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Lifecycle;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -133,11 +131,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     // endregion Up Navigation
-
-    // HACK: workaround this bug: https://issuetracker.google.com/issues/64039135
-    @Override
-    @SuppressLint("RestrictedApi")
-    public Lifecycle getLifecycle() {
-        return super.getLifecycle();
-    }
 }
