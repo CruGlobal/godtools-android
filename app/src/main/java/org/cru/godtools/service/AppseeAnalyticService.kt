@@ -14,6 +14,7 @@ import com.crashlytics.android.Crashlytics
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -43,13 +44,17 @@ class AppseeAnalyticService private constructor(application: Application) :
 
     // region Activity Lifecycle Callbacks
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Appsee.start()
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        if (activity !is BaseActivity || activity.enableAppsee()) Appsee.start()
+    }
 
     override fun onActivityStarted(activity: Activity) {}
 
-    override fun onActivityResumed(activity: Activity) {}
+    override fun onActivityResumed(activity: Activity) {
+        if (activity is BaseActivity && !activity.enableAppsee()) Appsee.pause()
+    }
 
-    override fun onActivityPaused(activity: Activity) {}
+    override fun onActivityPaused(activity: Activity) = Appsee.resume()
 
     override fun onActivityStopped(activity: Activity) {}
 
