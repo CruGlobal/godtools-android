@@ -203,11 +203,9 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         return onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        when {
-            closeNavigationDrawer() -> Unit
-            else -> super.onBackPressed()
-        }
+    override fun onBackPressed() = when {
+        closeNavigationDrawer() -> Unit
+        else -> super.onBackPressed()
     }
 
     override fun onStop() {
@@ -222,9 +220,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun theKeyEvent(event: TheKeyEvent) = onTheKeyEvent(event)
 
-    protected fun prefs(): Settings {
-        return Settings.getInstance(this)
-    }
+    protected fun prefs(): Settings = Settings.getInstance(this)
 
     private fun setupNavigationDrawer() {
         drawerLayout?.let {
@@ -278,9 +274,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         return false
     }
 
-    protected open fun showNavigationDrawerIndicator(): Boolean {
-        return false
-    }
+    protected open fun showNavigationDrawerIndicator(): Boolean = false
 
     private fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
