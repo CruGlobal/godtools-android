@@ -42,15 +42,17 @@ import org.cru.godtools.base.ui.util.WebUrlLauncher
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.keynote.godtools.android.Constants.MAILTO_SUPPORT
-import org.keynote.godtools.android.Constants.URI_COPYRIGHT
-import org.keynote.godtools.android.Constants.URI_HELP
-import org.keynote.godtools.android.Constants.URI_PRIVACY
-import org.keynote.godtools.android.Constants.URI_SUPPORT
-import org.keynote.godtools.android.Constants.URI_TERMS_OF_USE
 import org.keynote.godtools.android.activity.MainActivity
-import org.keynote.godtools.android.utils.Constants.SHARE_LINK
 import java.util.Locale
+
+internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
+internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
+internal val URI_HELP = Uri.parse("https://godtoolsapp.com/faq/")
+internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
+internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
+internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
+
+private const val SHARE_LINK = "{{share_link}}"
 
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
@@ -203,11 +205,9 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         return onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        when {
-            closeNavigationDrawer() -> Unit
-            else -> super.onBackPressed()
-        }
+    override fun onBackPressed() = when {
+        closeNavigationDrawer() -> Unit
+        else -> super.onBackPressed()
     }
 
     override fun onStop() {
@@ -222,9 +222,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun theKeyEvent(event: TheKeyEvent) = onTheKeyEvent(event)
 
-    protected fun prefs(): Settings {
-        return Settings.getInstance(this)
-    }
+    protected fun prefs(): Settings = Settings.getInstance(this)
 
     private fun setupNavigationDrawer() {
         drawerLayout?.let {
@@ -278,9 +276,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         return false
     }
 
-    protected open fun showNavigationDrawerIndicator(): Boolean {
-        return false
-    }
+    protected open fun showNavigationDrawerIndicator(): Boolean = false
 
     private fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
