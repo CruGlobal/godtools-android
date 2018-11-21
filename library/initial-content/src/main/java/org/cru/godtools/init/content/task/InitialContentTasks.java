@@ -245,10 +245,10 @@ public class InitialContentTasks implements Runnable {
             return;
         }
 
-        // add the default tools
-        mDownloadManager.addTool("kgp");
-        mDownloadManager.addTool("fourlaws");
-        mDownloadManager.addTool("satisfied");
+        // add any bundled tools as the default tools
+        for (final String code : BuildConfig.BUNDLED_TOOLS) {
+            mDownloadManager.addTool(code);
+        }
 
         // update the last sync time
         mDao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS);

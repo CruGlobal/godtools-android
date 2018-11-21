@@ -11,7 +11,9 @@ apply plugin: 'de.undercouch.download'
 android.libraryVariants.all { variant ->
     def mobileContentApi = variant.flavorName.contains("stage") ? uris.mobileContentApi.stage : uris.mobileContentApi.production
 
-    // include the list of downloaded languages as a BuildConfig constant
+    // include the list of downloaded tools and languages as a BuildConfig constant
+    variant.buildConfigField('java.util.Set<String>', 'BUNDLED_TOOLS', 'com.google.common.collect.ImmutableSet.of('
+            + toolsToDownload.collect{ "\"$it\"" }.join(',') + ')')
     variant.buildConfigField('java.util.Set<String>', 'BUNDLED_LANGUAGES', 'com.google.common.collect.ImmutableSet.of('
             + languagesToDownload.collect{ "\"$it\"" }.join(',') + ')')
 
