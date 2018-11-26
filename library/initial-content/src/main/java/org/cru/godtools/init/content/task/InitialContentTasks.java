@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
+import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.db.Query;
@@ -239,16 +240,17 @@ public class InitialContentTasks implements Runnable {
         }
     }
 
+    @WorkerThread
     private void initDefaultTools() {
         // check to see if we have initialized the default tools before
         if (mDao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) {
             return;
         }
 
-        // add the default tools
-        mDownloadManager.addTool("kgp");
-        mDownloadManager.addTool("fourlaws");
-        mDownloadManager.addTool("satisfied");
+        // add any bundled tools as the default tools
+        for (final String code : BuildConfig.BUNDLED_TOOLS) {
+            Futures.getUnchecked(mDownloadManager.addTool(code));
+        }
 
         // update the last sync time
         mDao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS);

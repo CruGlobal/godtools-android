@@ -209,13 +209,15 @@ public final class GodToolsDownloadManager {
         }
     }
 
+    @NonNull
     @AnyThread
-    public void addTool(@NonNull final String code) {
+    public ListenableFuture<Integer> addTool(@NonNull final String code) {
         final Tool tool = new Tool();
         tool.setCode(code);
         tool.setAdded(true);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+        return update;
     }
 
     @AnyThread
