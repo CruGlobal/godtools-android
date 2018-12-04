@@ -133,7 +133,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguages = null;
         } else {
             mLanguages = Stream.of(languages)
-                    .collect(Collectors.toMap(l -> l.getDisplayName(getContext()), l -> l,
+                    .collect(Collectors.toMap(l -> l.getDisplayName(getContext()), l -> l, (l1, l2) -> l1,
                                               () -> new TreeMap<>(String::compareToIgnoreCase)));
         }
         updateLanguagesList();
