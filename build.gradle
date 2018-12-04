@@ -39,7 +39,7 @@ buildscript {
                         dynamicLinks: '16.1.3',
                         perf        : '16.2.0',
                 ],
-                gtoSupport         : '2.0.0',
+                gtoSupport         : '2.0.1-SNAPSHOT',
                 guava              : '26.0-android',
                 hamcrest           : '1.3',
                 jsoup              : '1.11.3',

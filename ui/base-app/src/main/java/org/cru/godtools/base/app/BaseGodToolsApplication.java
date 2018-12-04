@@ -7,6 +7,7 @@ import com.google.android.instantapps.InstantApps;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
+import org.ccci.gto.android.common.eventbus.TimberLogger;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsDispatcher;
@@ -69,6 +70,7 @@ public class BaseGodToolsApplication extends Application {
     @CallSuper
     protected EventBusBuilder configureEventBus(@NonNull final EventBusBuilder builder) {
         return builder
+                .logger(new TimberLogger())
                 .addIndex(new AnalyticsEventBusIndex());
     }
 
