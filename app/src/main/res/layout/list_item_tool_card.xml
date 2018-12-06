@@ -75,7 +75,7 @@
                 android:maxWidth="72dp"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
-            <androidx.appcompat.widget.AppCompatTextViewImpl
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 tools:text="Knowing God Personally (Extra Long Title)" />
 
-            <androidx.appcompat.widget.AppCompatTextViewImpl
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tagline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
