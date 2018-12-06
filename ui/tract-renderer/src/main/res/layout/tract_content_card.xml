@@ -61,7 +61,7 @@
                 android:adjustViewBounds="true"
                 android:cropToPadding="false" />
 
-            <androidx.core.widget.NestedScrollView
+            <org.ccci.gto.android.common.widget.HackyNestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/label_divider"
@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
-            </androidx.core.widget.NestedScrollView>
+            </org.ccci.gto.android.common.widget.HackyNestedScrollView>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
