@@ -32,8 +32,8 @@ public class AemJsonParser {
     private static final String TYPE_PAGE = "cq:Page";
 
     private static final Set<String> SUPPORTED_TEMPLATES = ImmutableSet.of(
-            // Cru Web template, we will use this until we create our own GodTools template
-            "/conf/cru/settings/wcm/templates/experience-fragment-cru-web-variation"
+            // GodTools template
+            "/conf/cru/settings/wcm/templates/experience-fragment-cru-godtools-variation"
     );
 
     // region Article Parsing
