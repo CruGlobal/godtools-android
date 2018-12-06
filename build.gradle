@@ -27,19 +27,18 @@ buildscript {
                         android         : '2.4.5',
                         plugin          : '1.0.3'
                 ],
-                butterknife        : '9.0.0-rc1',
+                butterknife        : '9.0.0-rc2',
                 calligraphy        : '2.3.0',
-                crashlytics        : '2.9.6',
+                crashlytics        : '2.9.7',
                 eventbus           : '3.1.1',
-                evernoteAndroidJob : '1.2.5',
+                evernoteAndroidJob : '1.2.6',
                 facebookStetho     : '1.5.0',
                 firebase           : [
-                        analytics   : '16.0.5',
-                        core        : '16.0.5',
-                        dynamicLinks: '16.1.3',
-                        perf        : '16.2.0',
+                        core        : '16.0.6',
+                        dynamicLinks: '16.1.5',
+                        perf        : '16.2.2',
                 ],
-                gtoSupport         : '2.0.1-SNAPSHOT',
+                gtoSupport         : '2.0.1',
                 guava              : '26.0-android',
                 hamcrest           : '1.3',
                 jsoup              : '1.11.3',
@@ -57,13 +56,13 @@ buildscript {
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 playServices       : [
-                        analytics: '16.0.5',
+                        analytics: '16.0.6',
                 ],
                 powermock          : '2.0.0-beta.9',
                 retrofit2          : '2.4.0',
                 snowplow           : '0.8.0',
                 taptargetview      : '1.12.0',
-                thekey             : '3.0.0-SNAPSHOT',
+                thekey             : '3.0.0',
                 timber             : '4.7.1'
         ]
         uris = [
@@ -119,13 +118,6 @@ subprojects {
         maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         mavenLocal()
-    }
-
-    configurations.all {
-        // force versions when there are conflicts
-        resolutionStrategy.force(
-                "com.google.firebase:firebase-analytics:${deps.firebase.analytics}",
-        )
     }
 }
 
