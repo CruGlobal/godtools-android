@@ -29,7 +29,7 @@ import org.cru.godtools.article.aem.db.TranslationRepository;
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.aem.model.Resource;
-import org.cru.godtools.article.aem.service.support.AemJsonParser;
+import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
 import org.cru.godtools.article.aem.util.ShareLinkUtils;
@@ -77,6 +77,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import androidx.room.InvalidationTracker;
+import kotlin.sequences.SequencesKt;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -394,7 +395,7 @@ public class AemArticleManger {
         }
 
         // parse & store articles
-        final List<Article> articles = AemJsonParser.findArticles(baseUri, json).toList();
+        final List<Article> articles = SequencesKt.toList(AemJsonParserKt.findAemArticles(json, baseUri));
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
 
         // enqueue a couple article specific tasks
