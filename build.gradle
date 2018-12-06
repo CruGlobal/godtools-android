@@ -31,7 +31,7 @@ buildscript {
                 calligraphy        : '2.3.0',
                 crashlytics        : '2.9.7',
                 eventbus           : '3.1.1',
-                evernoteAndroidJob : '1.2.5',
+                evernoteAndroidJob : '1.2.6',
                 facebookStetho     : '1.5.0',
                 firebase           : [
                         analytics   : '16.0.5',
