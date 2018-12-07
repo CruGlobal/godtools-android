@@ -13,6 +13,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.test.runner.AndroidJUnit4;
+import kotlin.sequences.SequencesKt;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,8 +25,9 @@ public class AemJsonParserTest {
     public void verifyArticleParseLogic() throws Exception {
         final JSONObject jsonObject = loadJson("tests/article-test.json");
 
-        final List<Article> articles = AemJsonParser.findArticles(Uri.parse(
-                "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject).toList();
+        final List<Article> articles = SequencesKt.toList(AemJsonParserKt.findAemArticles(jsonObject, Uri.parse(
+                "https://stage.cru.org/content/experience-fragments/questions_about_god/english"))
+        );
         assertThat(articles.size(), is(2));
     }
 
