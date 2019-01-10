@@ -47,6 +47,7 @@ interface ArticleDao {
             title = :title,
             canonicalUri = :canonicalUri,
             shareUri = CASE
+                WHEN :canonicalUri IS NULL THEN NULL
                 WHEN canonicalUri != :canonicalUri THEN NULL
                 ELSE shareUri END
         WHERE uri = :uri""")

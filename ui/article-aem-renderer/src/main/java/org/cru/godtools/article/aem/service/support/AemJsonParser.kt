@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.service.support
 
 import android.net.Uri
 import org.cru.godtools.article.aem.model.Article
-import org.cru.godtools.article.aem.util.addExtension
 import org.json.JSONObject
 
 private const val TAG_TYPE = "jcr:primaryType"
@@ -11,6 +10,7 @@ private const val TAG_UUID = "jcr:uuid"
 private const val TAG_TITLE = "jcr:title"
 private const val TAG_CONTENT = "jcr:content"
 private const val TAG_TAGS = "cq:tags"
+private const val TAG_CANONICAL_URL = "xfCanonical"
 
 private const val TYPE_FOLDER = "sling:Folder"
 private const val TYPE_ORDERED_FOLDER = "sling:OrderedFolder"
@@ -53,10 +53,9 @@ private fun JSONObject.parseNestedAemObject(url: Uri): Sequence<Article> {
  */
 private fun JSONObject.parseAemArticle(url: Uri): Article {
     return Article(url).also { article ->
-        article.canonicalUri = url.addExtension("html")
-
         optJSONObject(TAG_CONTENT)?.apply {
             article.uuid = optString(TAG_UUID, article.uuid)
+            article.canonicalUri = optString(TAG_CANONICAL_URL, null)?.let { Uri.parse(it) }
             article.title = optString(TAG_TITLE, article.title)
             article.tags = optJSONArray(TAG_TAGS)?.run {
                 IntRange(0, length() - 1).asSequence()
