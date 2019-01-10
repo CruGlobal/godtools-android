@@ -27,7 +27,7 @@ internal const val DATABASE_NAME = "aem_article_cache.db"
         AemImport.AemImportArticle::class, Article::class, Article.Tag::class, Article.ArticleResource::class,
         Resource::class
     ],
-    version = 10
+    version = 11
 )
 @TypeConverters(DateConverter::class, LocaleConverter::class, MediaTypeConverter::class, UriConverter::class)
 abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
@@ -59,6 +59,7 @@ abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
         Room.databaseBuilder(it.applicationContext, ArticleRoomDatabase::class.java, DATABASE_NAME)
             .addMigrations(MIGRATION_8_9)
             .addMigrations(MIGRATION_9_10)
+            .addMigrations(MIGRATION_10_11)
             .fallbackToDestructiveMigration()
             .build()
     })
@@ -85,6 +86,12 @@ internal val MIGRATION_8_9: Migration = object : Migration(8, 9) {
 internal val MIGRATION_9_10: Migration = object : Migration(9, 10) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE aemImports ADD COLUMN `lastAccessed` INTEGER NOT NULL DEFAULT 0")
+    }
+}
+@VisibleForTesting
+internal val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("UPDATE articles SET canonicalUri = null, shareUri = null")
     }
 }
 
