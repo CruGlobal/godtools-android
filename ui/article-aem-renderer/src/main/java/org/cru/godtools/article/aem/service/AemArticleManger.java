@@ -96,7 +96,7 @@ public class AemArticleManger {
 
     private static final int MSG_CLEAN = 1;
 
-    private static final int TASK_CONCURRENCY = 4;
+    private static final int TASK_CONCURRENCY = 10;
     private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
