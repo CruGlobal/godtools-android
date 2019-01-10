@@ -25,7 +25,7 @@ public final class ToggleLanguageAnalyticsActionEvent extends AnalyticsActionEve
         super(null, ACTION_TOGGLE_LANGUAGE);
         mTract = tract;
         final HashMap<String, Object> attrs = new HashMap<>();
-        attrs.put(KEY_ADOBE_TOGGLE_LANGUAGE, null);
+        attrs.put(KEY_ADOBE_TOGGLE_LANGUAGE, 1);
         attrs.put(KEY_CONTENT_LANGUAGE_SECONDARY, LocaleCompat.toLanguageTag(locale));
         mAttrs = Collections.unmodifiableMap(attrs);
     }

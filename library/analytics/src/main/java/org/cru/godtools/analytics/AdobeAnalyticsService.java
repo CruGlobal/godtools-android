@@ -116,7 +116,7 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
 
     @Override
     public void onTrackShareAction() {
-        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, null));
+        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, 1));
     }
 
     @Override
