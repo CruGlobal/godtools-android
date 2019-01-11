@@ -61,6 +61,9 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
+        public static final Join<Language, Translation> SQL_JOIN_TRANSLATION =
+                Join.create(TABLE, TranslationTable.TABLE).on(FIELD_CODE.eq(TranslationTable.FIELD_LANGUAGE));
+
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
 
