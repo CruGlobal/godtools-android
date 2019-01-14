@@ -20,7 +20,5 @@ class LanguagesLoader(context: Context) : CachingAsyncTaskEventBusLoader<List<@J
         addEventBusSubscriber(LanguageEventBusSubscriber(this))
     }
 
-    override fun loadInBackground(): List<Language> {
-        return dao.get(QUERY_LANGUAGES)
-    }
+    override fun loadInBackground(): List<Language> = dao.get(QUERY_LANGUAGES)
 }
