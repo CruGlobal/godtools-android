@@ -17,7 +17,7 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
         with(db.articleDao()) {
             articles.forEach {
                 insertOrIgnore(it)
-                update(it.uri, it.uuid, it.title, it.canonicalUri, it.shareUri)
+                update(it.uri, it.uuid, it.title, it.canonicalUri)
 
                 // replace all tags
                 removeAllTags(it.uri)

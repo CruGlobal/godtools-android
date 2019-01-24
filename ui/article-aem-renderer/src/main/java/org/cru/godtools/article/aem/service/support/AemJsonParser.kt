@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.service.support
 
 import android.net.Uri
 import org.cru.godtools.article.aem.model.Article
-import org.cru.godtools.article.aem.util.buildShareLink
 import org.json.JSONObject
 
 private const val TAG_TYPE = "jcr:primaryType"
@@ -57,7 +56,6 @@ private fun JSONObject.parseAemArticle(url: Uri): Article {
         optJSONObject(TAG_CONTENT)?.apply {
             article.uuid = optString(TAG_UUID, article.uuid)
             article.canonicalUri = optString(TAG_CANONICAL_URL, null)?.let { Uri.parse(it) }
-            article.shareUri = article.buildShareLink()
             article.title = optString(TAG_TITLE, article.title)
             article.tags = optJSONArray(TAG_TAGS)?.run {
                 IntRange(0, length() - 1).asSequence()

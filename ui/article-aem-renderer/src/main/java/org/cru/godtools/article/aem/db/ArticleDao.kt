@@ -45,10 +45,9 @@ interface ArticleDao {
         SET
             uuid = :uuid,
             title = :title,
-            canonicalUri = :canonicalUri,
-            shareUri = :shareUri
+            canonicalUri = :canonicalUri
         WHERE uri = :uri""")
-    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?, shareUri: Uri?)
+    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
 
     @WorkerThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
