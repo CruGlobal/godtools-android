@@ -46,20 +46,13 @@ interface ArticleDao {
             uuid = :uuid,
             title = :title,
             canonicalUri = :canonicalUri,
-            shareUri = CASE
-                WHEN :canonicalUri IS NULL THEN NULL
-                WHEN canonicalUri != :canonicalUri THEN NULL
-                ELSE shareUri END
+            shareUri = :shareUri
         WHERE uri = :uri""")
-    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
+    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?, shareUri: Uri?)
 
     @WorkerThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
     fun updateContent(uri: Uri, uuid: String?, content: String?)
-
-    @WorkerThread
-    @Query("UPDATE articles SET shareUri = :shareUri WHERE uri = :uri")
-    fun updateShareUrl(uri: Uri, shareUri: Uri?)
 
     @WorkerThread
     @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
