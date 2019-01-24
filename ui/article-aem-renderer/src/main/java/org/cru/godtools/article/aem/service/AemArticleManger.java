@@ -9,14 +9,11 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.android.gms.tasks.Tasks;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.firebase.dynamiclinks.DynamicLink;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
@@ -32,7 +29,7 @@ import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
-import org.cru.godtools.article.aem.util.ShareLinkUtils;
+import org.cru.godtools.article.aem.util.ShareLinkUtilsKt;
 import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
@@ -420,9 +417,9 @@ public class AemArticleManger {
         }
 
         // generate the link
-        final ShortDynamicLink link = buildShortArticleShareLink(article);
-        if (link != null) {
-            article.setShareUri(link.getShortLink());
+        final Uri shareUri = ShareLinkUtilsKt.buildShareLink(article);
+        if (shareUri != null) {
+            article.setShareUri(shareUri);
             mAemDb.articleDao().updateShareUrl(article.getUri(), article.getShareUri());
         }
 
@@ -612,25 +609,6 @@ public class AemArticleManger {
         } finally {
             lock.unlock();
         }
-    }
-
-    @Nullable
-    @WorkerThread
-    private ShortDynamicLink buildShortArticleShareLink(@NonNull final Article article) {
-        // build the link
-        final DynamicLink.Builder link = ShareLinkUtils.INSTANCE.articleShareLinkBuilder(article);
-        try {
-            if (link != null) {
-                return Tasks.await(link.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT));
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            Timber.tag(TAG)
-                    .d(e.getCause(), "Error building share link");
-        }
-
-        return null;
     }
 
     private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
