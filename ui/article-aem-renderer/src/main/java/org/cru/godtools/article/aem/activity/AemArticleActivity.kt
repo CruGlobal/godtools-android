@@ -158,7 +158,6 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
                 else -> manager.downloadArticle(articleUri, false)
             }
             syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
-            manager.generateShareUri(articleUri)
         }
     }
 

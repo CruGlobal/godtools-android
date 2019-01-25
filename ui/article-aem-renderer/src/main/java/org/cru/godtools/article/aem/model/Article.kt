@@ -19,7 +19,10 @@ class Article(@field:PrimaryKey val uri: Uri) {
     var content: String? = null
 
     var canonicalUri: Uri? = null
-    var shareUri: Uri? = null
+    val shareUri
+        get() = canonicalUri?.buildUpon()
+            ?.appendQueryParameter("icid", "gtshare")
+            ?.build()
 
     @Ignore
     var tags: List<String> = ImmutableList.of()
@@ -68,4 +71,7 @@ class Article(@field:PrimaryKey val uri: Uri) {
     @ColumnInfo(name = "date_updated")
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     var deleteMe2: Int = 0
+    @ColumnInfo(name = "shareUri")
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    var deleteMe3: String? = null
 }

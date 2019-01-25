@@ -9,14 +9,11 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.android.gms.tasks.Tasks;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.firebase.dynamiclinks.DynamicLink;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
@@ -32,7 +29,6 @@ import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
-import org.cru.godtools.article.aem.util.ShareLinkUtils;
 import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
@@ -122,7 +118,6 @@ public class AemArticleManger {
     @Nullable
     private CleanOrphanedFilesTask mCleanOrphanedFilesTask;
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
-    private final Map<Uri, GenerateShareUriTask> mGenerateShareUriTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
@@ -224,21 +219,6 @@ public class AemArticleManger {
         final ListenableFuture<?> syncAemImportTask =
                 Futures.transformAsync(deeplinkTask, t -> enqueueSyncAemImport(uri, false), directExecutor());
         return Futures.transformAsync(syncAemImportTask, t -> downloadArticle(uri, false), directExecutor());
-    }
-
-    @AnyThread
-    public ListenableFuture<Boolean> generateShareUri(@NonNull final Uri articleUri) {
-        // try updating a task that is currently enqueued
-        final GenerateShareUriTask existing = mGenerateShareUriTasks.get(articleUri);
-        if (existing != null && existing.updateTask(false)) {
-            return existing.mResult;
-        }
-
-        // create a new sync task
-        final GenerateShareUriTask task = new GenerateShareUriTask(articleUri);
-        mGenerateShareUriTasks.put(articleUri, task);
-        mExecutor.execute(task);
-        return task.mResult;
     }
 
     @NonNull
@@ -401,32 +381,7 @@ public class AemArticleManger {
         // enqueue a couple article specific tasks
         for (final Article article : articles) {
             downloadArticle(article.getUri(), false);
-            generateShareUri(article.getUri());
         }
-    }
-
-    @WorkerThread
-    @GuardedBy("mGenerateShareUriLocks")
-    boolean generateShareUriTask(@NonNull final Uri uri) {
-        // short-circuit if there isn't an Article for the specified Uri
-        final Article article = mAemDb.articleDao().find(uri);
-        if (article == null) {
-            return false;
-        }
-
-        // short-circuit if we already have a share uri for this article
-        if (article.getShareUri() != null) {
-            return false;
-        }
-
-        // generate the link
-        final ShortDynamicLink link = buildShortArticleShareLink(article);
-        if (link != null) {
-            article.setShareUri(link.getShortLink());
-            mAemDb.articleDao().updateShareUrl(article.getUri(), article.getShareUri());
-        }
-
-        return true;
     }
 
     @WorkerThread
@@ -614,25 +569,6 @@ public class AemArticleManger {
         }
     }
 
-    @Nullable
-    @WorkerThread
-    private ShortDynamicLink buildShortArticleShareLink(@NonNull final Article article) {
-        // build the link
-        final DynamicLink.Builder link = ShareLinkUtils.INSTANCE.articleShareLinkBuilder(article);
-        try {
-            if (link != null) {
-                return Tasks.await(link.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT));
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
-            Timber.tag(TAG)
-                    .d(e.getCause(), "Error building share link");
-        }
-
-        return null;
-    }
-
     private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
         RoomDatabaseChangeTracker(@NonNull final String firstTable, final String... rest) {
             super(firstTable, rest);
@@ -723,28 +659,6 @@ public class AemArticleManger {
         boolean runTask() {
             syncAemImportTask(mUri, mForce);
             return true;
-        }
-    }
-
-    class GenerateShareUriTask extends UniqueUriBasedTask {
-        GenerateShareUriTask(@NonNull final Uri uri) {
-            super(uri);
-        }
-
-        @Override
-        public int getPriority() {
-            return PRIORITY_GENERATE_SHARE_LINK;
-        }
-
-        @NonNull
-        @Override
-        Object getLock() {
-            return ThreadUtils.getLock(mDownloadResourceLocks, mUri);
-        }
-
-        @Override
-        boolean runTask() {
-            return generateShareUriTask(mUri);
         }
     }
 
