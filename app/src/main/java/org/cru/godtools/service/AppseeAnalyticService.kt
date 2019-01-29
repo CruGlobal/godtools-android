@@ -89,7 +89,10 @@ class AppseeAnalyticService private constructor(application: Application) :
 
     override fun onAppseeSessionEnded(appseeSessionEndedInfo: AppseeSessionEndedInfo) {}
 
-    override fun onAppseeScreenDetected(appseeScreenDetectedInfo: AppseeScreenDetectedInfo) {}
+    override fun onAppseeScreenDetected(appseeScreenDetectedInfo: AppseeScreenDetectedInfo) {
+        // we don't want to use automatic screen detection, we will manually track screen names using analytics events
+        appseeScreenDetectedInfo.screenName = null
+    }
 
     // endregion AppSee LifeCycle Callbacks
 
