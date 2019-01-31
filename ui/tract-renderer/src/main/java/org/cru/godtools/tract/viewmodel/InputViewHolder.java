@@ -129,7 +129,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
         final int hintColor = Text.getTextColor(hintStyles);
         if (mInputLayout != null) {
-            TextInputLayoutUtils.setExpandedTextColor(mInputLayout, hintColor);
+            mInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(hintColor));
         } else if (mInputView != null) {
             mInputView.setHintTextColor(hintColor);
         }
