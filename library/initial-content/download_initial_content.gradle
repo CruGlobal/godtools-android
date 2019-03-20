@@ -2,7 +2,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 // the tools, languages, and attachments to bundle with app
-def toolsToDownload = ['kgp', 'fourlaws', 'satisfied']
+def toolsToDownload = ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare']
 def languagesToDownload = ['en']
 def attachmentsToDownload = ['attr-banner', 'attr-banner-about']
 
