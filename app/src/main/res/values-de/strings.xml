@@ -9,6 +9,9 @@
     <string name="menu_about">Über</string>
     <string name="menu_help">Hilfe</string>
     <string name="menu_contact_us">Kontaktiere uns</string>
+    <string name="menu_login">Anmelden</string>
+    <string name="menu_signup">Account erstellen</string>
+    <string name="menu_logout">Abmelden</string>
     <string name="menu_share_godtools">GodTools-App teilen</string>
     <string name="menu_share_story">Teilen Sie eine Geschichte mit uns</string>
     <string name="menu_rate">GodTools bewerten</string>
@@ -34,6 +37,7 @@
         <item quantity="other">%1$,d Sprachen</item>
     </plurals>
     <string name="text_tools_all_installed">Es wurden bereits alle verfügbaren Tools heruntergeladen.</string>
+    <string name="menu_add_to_home">Zum Homescreen hinzufügen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Über 60 Sprachen</string>
     <string name="menu_language_settings">Spracheinstellungen</string>
