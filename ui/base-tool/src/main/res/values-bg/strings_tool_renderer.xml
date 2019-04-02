@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Споделете</string>
+    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Споделете “%1$s” чрез</string>
     <string name="tool_not_found">Изискваният от Вас инструмент не е намерен</string>
     <string name="tool_loading">Изискваният от Вас инструмент се зарежда</string>

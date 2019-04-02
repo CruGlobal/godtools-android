@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">ይጫኑ</string>
+    <string name="menu_share_tool">ያጋሩ</string>
+    <string name="share_tool_title">"በዚህ መንገድ \"%1$s\" ያጋሩት
+
+"</string>
+    <string name="tool_not_found">የፈለጉት መተግበርያ አልተገኘም</string>
+    <string name="tool_loading">የጠየቁት መተግበርያ በሂደት ላይ ነዉ...</string>
+</resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Shikisha</string>
+    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Shiriki “%1$s” kutumia</string>
     <string name="tool_not_found">Kifaa ulichoagiza hakipatikani</string>
     <string name="tool_loading">Kifaa ulichoagiza kinapakia</string>
