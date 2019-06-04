@@ -204,7 +204,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
         dependencies {
             compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
-            compileOnly 'org.jetbrains:annotations:16.0.1'
+            compileOnly 'org.jetbrains:annotations:17.0.0'
 
             testImplementation "junit:junit:${deps.junit}"
         }
