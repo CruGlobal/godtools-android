@@ -24,7 +24,7 @@ include 'ui:base-tool'
 include 'ui:shortcuts'
 include 'ui:tract-renderer'
 
-include 'feature:tract'
+//include 'feature:tract'
 
 include 'app'
-include 'instantapp'
+//include 'instantapp'
