@@ -42,10 +42,7 @@ buildscript {
                 cardView        : '1.0.0',
                 constraintLayout: '1.1.3',
                 core            : '1.0.1',
-                ktx             : [
-                        core    : '1.0.1',
-                        fragment: '1.0.0',
-                ],
+                fragment        : '1.0.0',
                 lifecycle       : '2.0.0',
                 multidex        : '2.0.0',
                 percentLayout   : '1.0.0',
