@@ -3,7 +3,6 @@ package org.cru.godtools
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.adobe.mobile.Config
-import com.appsee.Appsee
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.inspector.database.DatabaseFilesProvider
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver
@@ -44,7 +43,6 @@ class DebugGodToolsApplication : GodToolsApplication() {
         super.configureAnalyticsServices()
 
         // enable debug logging for various Analytics Services
-        Appsee.setDebugToLogcat(true)
         Config.setDebugLogging(true)
     }
 

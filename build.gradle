@@ -50,10 +50,6 @@ buildscript {
                 room            : '2.1.0',
                 test            : '1.2.0',
         ]
-        deps.appSee = [
-                android: '2.6.0',
-                plugin : '1.0.4'
-        ]
         deps.firebase = [
                 core        : '16.0.6',
                 dynamicLinks: '16.1.5',
@@ -79,7 +75,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.google.firebase:perf-plugin:1.2.1'
         classpath 'com.google.gms:google-services:4.3.0'
-        classpath "com.appsee:appsee-plugin:${deps.appSee.plugin}"
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath 'io.fabric.tools:gradle:1.29.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
