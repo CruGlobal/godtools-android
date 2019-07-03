@@ -106,6 +106,7 @@ ext {
     targetSdk     = 28
 }
 
+// configure dependency resolution
 subprojects {
     repositories {
         google()
@@ -115,6 +116,12 @@ subprojects {
         maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         mavenLocal()
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force "androidx.core:core:${deps.androidX.core}"
+        }
     }
 }
 
