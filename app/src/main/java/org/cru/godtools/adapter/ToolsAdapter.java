@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
@@ -80,8 +81,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         mCallbacks = callbacks;
     }
 
-    /* BEGIN lifecycle */
-
+    // region Lifecycle
     @Override
     public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -154,8 +154,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
             mRecyclerView = null;
         }
     }
-
-    /* END lifecycle */
+    // endregion Lifecycle
 
     @Nullable
     @Override
@@ -263,8 +262,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         @Nullable
         private DownloadProgress mDownloadProgress;
 
-        @DraggableItemStateFlags
-        private int mDragStateFlags;
+        private final DraggableItemState mDragState = new DraggableItemState();
 
         ToolViewHolder(@NonNull final View view) {
             super(view);
@@ -338,15 +336,21 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
             }
         }
 
+        @NonNull
+        @Override
+        public DraggableItemState getDragState() {
+            return mDragState;
+        }
+
         @Override
         public void setDragStateFlags(@DraggableItemStateFlags final int flags) {
-            mDragStateFlags = flags;
+            mDragState.setFlags(flags);
         }
 
         @Override
         @DraggableItemStateFlags
         public int getDragStateFlags() {
-            return mDragStateFlags;
+            return mDragState.getFlags();
         }
 
         void startDownloadProgressListener() {
