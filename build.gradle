@@ -47,7 +47,7 @@ buildscript {
                 multidex        : '2.0.0',
                 percentLayout   : '1.0.0',
                 recyclerView    : '1.0.0',
-                room            : '2.0.0',
+                room            : '2.1.0',
                 test            : '1.1.0',
         ]
         deps.appSee = [
