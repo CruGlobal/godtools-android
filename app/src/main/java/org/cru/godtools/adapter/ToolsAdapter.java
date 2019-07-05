@@ -37,9 +37,9 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.BindViews;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import butterknife.ViewCollections;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
@@ -332,7 +332,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
                 mActionAdd.setEnabled(!mAdded);
             }
             if (mAddViews != null) {
-                ButterKnife.apply(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
+                ViewCollections.run(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
             }
         }
 
