@@ -35,7 +35,7 @@ buildscript {
                 timber             : '4.7.1'
         ]
         deps.androidX = [
-                annotation      : '1.0.0',
+                annotation      : '1.1.0',
                 appCompat       : '1.0.2',
                 archCore        : '2.0.1',
                 browser         : '1.0.0',
