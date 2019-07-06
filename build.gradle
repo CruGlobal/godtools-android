@@ -52,7 +52,7 @@ buildscript {
         ]
         deps.appSee = [
                 android: '2.6.0',
-                plugin : '1.0.3'
+                plugin : '1.0.4'
         ]
         deps.firebase = [
                 core        : '16.0.6',
