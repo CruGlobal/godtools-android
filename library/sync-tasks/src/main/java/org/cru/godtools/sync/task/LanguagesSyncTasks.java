@@ -22,7 +22,7 @@ import androidx.collection.SimpleArrayMap;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static org.ccci.gto.android.common.TimeConstants.WEEK_IN_MS;
+import static org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS;
 
 public final class LanguagesSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_LANGUAGES = new Object();

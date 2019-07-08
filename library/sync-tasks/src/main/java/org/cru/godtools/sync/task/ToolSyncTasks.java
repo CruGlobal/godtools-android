@@ -21,7 +21,7 @@ import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 import retrofit2.Response;
 
-import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;
+import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class ToolSyncTasks extends BaseDataSyncTasks {

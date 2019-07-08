@@ -13,6 +13,9 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:model-events')
 
+    implementation "androidx.loader:loader:${deps.androidX.loader}"
+
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     api "org.greenrobot:eventbus:${deps.eventbus}"
