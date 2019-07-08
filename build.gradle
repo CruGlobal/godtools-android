@@ -55,7 +55,7 @@ buildscript {
                 plugin : '1.0.4'
         ]
         deps.firebase = [
-                core        : '16.0.6',
+                core        : '17.0.0',
                 dynamicLinks: '16.1.5',
                 perf        : '18.0.1',
         ]
