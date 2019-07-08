@@ -27,7 +27,10 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:model-events')
 
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 }
 
 apply from: 'download_initial_content.gradle'

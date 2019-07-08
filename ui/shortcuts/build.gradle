@@ -23,6 +23,10 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     // transitive dependencies for ui:tract-renderer, needed to build this module
