@@ -60,7 +60,7 @@ buildscript {
                 perf        : '18.0.1',
         ]
         deps.playServices = [
-                analytics: '16.0.6',
+                analytics: '17.0.0',
         ]
         uris = [
                 mobileContentApi: [
