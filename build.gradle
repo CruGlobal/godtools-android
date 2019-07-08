@@ -24,7 +24,7 @@ buildscript {
                 lightweightStream  : '1.2.1',
                 materialDesign     : '1.0.0',
                 mockito            : '3.0.0',
-                mockitoKotlin      : '2.0.0-RC3',
+                mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.11.0',
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.2',
