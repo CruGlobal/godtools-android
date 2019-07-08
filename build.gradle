@@ -119,7 +119,9 @@ subprojects {
 
     configurations.all {
         resolutionStrategy {
+            force "androidx.annotation:annotation:${deps.androidX.annotation}"
             force "androidx.core:core:${deps.androidX.core}"
+            force 'org.jetbrains:annotations:17.0.0'
         }
     }
 }
