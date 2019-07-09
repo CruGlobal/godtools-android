@@ -120,6 +120,10 @@ subprojects {
     configurations.all {
         resolutionStrategy {
             force "androidx.core:core:${deps.androidX.core}"
+
+            dependencySubstitution {
+                substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
+            }
         }
     }
 }
