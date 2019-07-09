@@ -76,7 +76,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath 'com.google.firebase:perf-plugin:1.2.1'
         classpath 'com.google.gms:google-services:4.3.0'
         classpath "com.appsee:appsee-plugin:${deps.appSee.plugin}"
