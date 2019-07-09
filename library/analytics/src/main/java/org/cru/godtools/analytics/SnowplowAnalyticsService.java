@@ -16,7 +16,7 @@ import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson;
 
-import org.ccci.gto.android.common.snowplow.util.EmitterUtils;
+import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
@@ -62,11 +62,11 @@ public class SnowplowAnalyticsService {
         mSnowPlowTracker = new FutureTask<>(() -> {
             Tracker.close();
             // XXX: creating an Emitter will initialize the event store database on whichever thread the emitter is
-            // XXX: created on. Because of this we initialize Snowplow in a background task
+            //      created on. Because of this we initialize Snowplow in a background task
             final Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context)
                     .security(HTTPS)
+                    .client(OkHttpClientUtil.attachGlobalInterceptors(new okhttp3.OkHttpClient.Builder()).build())
                     .build();
-            EmitterUtils.attachOkHttp3GlobalInterceptors(emitter);
             return new Tracker.TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
                     .base64(false)
                     .mobileContext(true)
