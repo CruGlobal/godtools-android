@@ -17,7 +17,6 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
