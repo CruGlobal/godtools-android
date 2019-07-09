@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import retrofit2.Response;
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class FollowupSyncTasks extends BaseSyncTasks {
     private static final Object LOCK_FOLLOWUPS = new Object();
 

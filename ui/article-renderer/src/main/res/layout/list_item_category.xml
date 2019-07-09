@@ -23,7 +23,9 @@
             android:layout_height="0dp"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="15:8"
+            app:layout_constraintTop_toTopOf="parent"
             app:picassoFile="@{category.banner}"
             tools:background="@android:color/darker_gray" />
 
