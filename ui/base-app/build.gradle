@@ -20,6 +20,5 @@ dependencies {
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 }

@@ -28,8 +28,6 @@ dependencies {
     implementation project(':library:model-events')
 
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
-
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
 }
 
 apply from: 'download_initial_content.gradle'
