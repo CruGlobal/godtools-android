@@ -29,7 +29,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-snowplow:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     implementation "com.google.guava:guava:${deps.guava}"
