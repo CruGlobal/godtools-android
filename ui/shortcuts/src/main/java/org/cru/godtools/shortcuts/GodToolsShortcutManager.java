@@ -407,7 +407,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         if (banner != null) {
             try {
                 icon = IconCompat.createWithBitmap(
-                        Picasso.with(mContext)
+                        Picasso.get()
                                 .load(FileUtils.getFile(mContext, banner.getLocalFileName()))
                                 .centerCrop()
                                 .resizeDimen(android.R.dimen.app_icon_size, android.R.dimen.app_icon_size)
