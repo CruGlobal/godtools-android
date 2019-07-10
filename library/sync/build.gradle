@@ -6,6 +6,10 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    // HACK: temporarily include the core dependency because sync doesn't correctly set the dependency as an api
+    //       transitive dependency
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"

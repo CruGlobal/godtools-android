@@ -26,13 +26,14 @@ buildscript {
                 mockito            : '3.0.0',
                 mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.12.3',
+                picasso            : '2.5.2',
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.2',
                 retrofit2          : '2.4.0',
                 snowplow           : '1.2.0',
                 taptargetview      : '1.12.0',
                 thekey             : '3.0.0',
-                timber             : '4.7.1'
+                timber             : '4.7.1',
         ]
         deps.androidX = [
                 annotation      : '1.1.0',
@@ -40,10 +41,12 @@ buildscript {
                 archCore        : '2.0.1',
                 browser         : '1.0.0',
                 cardView        : '1.0.0',
+                collection      : '1.1.0',
                 constraintLayout: '1.1.3',
                 core            : '1.0.2',
                 fragment        : '1.0.0',
                 lifecycle       : '2.0.0',
+                loader          : '1.0.0',
                 multidex        : '2.0.1',
                 percentLayout   : '1.0.0',
                 recyclerView    : '1.0.0',
@@ -76,7 +79,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath 'com.google.firebase:perf-plugin:1.2.1'
         classpath 'com.google.gms:google-services:4.3.0'
         classpath "com.appsee:appsee-plugin:${deps.appSee.plugin}"
@@ -119,7 +122,9 @@ subprojects {
 
     configurations.all {
         resolutionStrategy {
+            force "androidx.annotation:annotation:${deps.androidX.annotation}"
             force "androidx.core:core:${deps.androidX.core}"
+            force 'org.jetbrains:annotations:17.0.0'
 
             dependencySubstitution {
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
@@ -212,6 +217,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
         dependencies {
             compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
             compileOnly 'org.jetbrains:annotations:17.0.0'
+
+            implementation "com.jakewharton.timber:timber:${deps.timber}"
 
             testImplementation "junit:junit:${deps.junit}"
         }

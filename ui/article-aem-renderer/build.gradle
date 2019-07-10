@@ -32,15 +32,16 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
 
-    implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
     implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
