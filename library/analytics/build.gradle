@@ -17,9 +17,13 @@ android {
 
     buildTypes {
         debug {
+            resValue "string", "facebook_app_id", "448969905944197"
+
             buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools-dev\""
         }
         release {
+            resValue "string", "facebook_app_id", "2236701616451487"
+
             buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools\""
         }
     }
@@ -37,6 +41,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
+    implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
