@@ -1,3 +1,6 @@
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
 android {
     defaultConfig {
         javaCompileOptions {
@@ -25,6 +28,8 @@ android {
 dependencies {
     implementation project(':library:base')
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices.analytics}"
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 
@@ -41,5 +46,5 @@ dependencies {
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
