@@ -26,7 +26,7 @@ buildscript {
                 mockito            : '3.0.0',
                 mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.12.3',
-                picasso            : '2.5.2',
+                picasso            : '2.71828',
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.2',
                 retrofit2          : '2.6.0',
