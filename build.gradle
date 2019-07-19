@@ -1,7 +1,7 @@
 buildscript {
     ext {
         deps = [
-                adobeMobileServices: '4.17.7',
+                adobeMobileServices: '4.17.8',
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
                 butterknife        : '10.1.0',
