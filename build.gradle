@@ -16,9 +16,6 @@ buildscript {
                 hamcrest           : '2.1',
                 jsoup              : '1.12.1',
                 junit              : '4.12',
-                // XXX: Kotlin 1.3.10 introduces a ButterKnife ViewBinding generation bug with how the R2 resources are
-                // XXX: processed. Right now the workaround is to utilize Kotlin 1.2.x
-                // XXX: see: https://github.com/JakeWharton/butterknife/issues/974
                 kotlin             : '1.3.41',
                 ktlint             : '0.31.0',
                 leakcanary         : '1.6.3',
