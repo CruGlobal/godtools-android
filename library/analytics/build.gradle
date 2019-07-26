@@ -1,3 +1,6 @@
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
 android {
     defaultConfig {
         javaCompileOptions {
@@ -14,9 +17,13 @@ android {
 
     buildTypes {
         debug {
+            resValue "string", "facebook_app_id", "448969905944197"
+
             buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools-dev\""
         }
         release {
+            resValue "string", "facebook_app_id", "2236701616451487"
+
             buildConfigField "String", "SNOWPLOW_APP_ID", "\"godtools\""
         }
     }
@@ -24,6 +31,9 @@ android {
 
 dependencies {
     implementation project(':library:base')
+    api project(':library:base-kt')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices.analytics}"
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
@@ -32,6 +42,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
+    implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
@@ -41,5 +52,5 @@ dependencies {
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

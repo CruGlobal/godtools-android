@@ -14,6 +14,7 @@ import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.cru.godtools.analytics.FirebaseAnalyticsService;
 import org.cru.godtools.analytics.SnowplowAnalyticsService;
+import org.cru.godtools.analytics.facebook.FacebookAnalyticsService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusBuilder;
 
@@ -59,6 +60,7 @@ public class BaseGodToolsApplication extends Application {
     @CallSuper
     protected void configureAnalyticsServices() {
         AdobeAnalyticsService.getInstance(this);
+        FacebookAnalyticsService.Companion.getInstance(null);
         FirebaseAnalyticsService.getInstance(this);
         SnowplowAnalyticsService.getInstance(this);
         AnalyticsDispatcher.getInstance(this);
