@@ -10,7 +10,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.facebook.stetho.timber.StethoTree
 import com.squareup.leakcanary.LeakCanary
 import org.ccci.gto.android.common.leakcanary.CrashlyticsLeakService
-import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil
+import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider
 import org.cru.godtools.analytics.AnalyticsDispatcher
 import org.cru.godtools.analytics.TimberAnalyticsService
@@ -63,7 +63,7 @@ class DebugGodToolsApplication : GodToolsApplication() {
             }.run { Stetho.initialize(build()) }
 
         Timber.plant(StethoTree())
-        OkHttpClientUtil.addGlobalNetworkInterceptor(StethoInterceptor())
+        addGlobalNetworkInterceptor(StethoInterceptor())
     }
 
     private fun initTimber() {
