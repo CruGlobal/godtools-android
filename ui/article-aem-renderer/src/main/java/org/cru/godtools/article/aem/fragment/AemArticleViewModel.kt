@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.fragment
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
@@ -14,47 +13,37 @@ import org.cru.godtools.article.aem.model.Article
 
 class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
     var article: LiveData<Article>? = null
-    private var mWebView: WebView? = null
-    private val mWebViewClient: ArticleWebViewClient = ArticleWebViewClient(application)
-    private var mContentUuid: String? = null
+
+    private var webView: WebView? = null
+    private val webViewClient: ArticleWebViewClient = ArticleWebViewClient(application)
+    private var contentUuid: String? = null
 
     fun getWebView(activity: Activity): WebView {
-        if (mWebView == null) {
-            val context: Context
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                context = ContextThemeWrapper(
-                    activity.applicationContext,
-                    R.style.Theme_GodTools_Tool_AppBar
-                )
-            } else {
-                context = ContextThemeWrapper(activity.applicationContext, activity.theme)
-            }
+        webViewClient.updateActivity(activity)
+        return webView ?: buildWebView(activity).also { webView = it }
+    }
 
-            mWebView = WebView(context)
-            mWebView!!.layoutParams = ViewGroup.LayoutParams(
+    private fun buildWebView(activity: Activity): WebView {
+        val context = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
+                ContextThemeWrapper(activity.applicationContext, activity.theme)
+            else -> ContextThemeWrapper(activity.applicationContext, R.style.Theme_GodTools_Tool_AppBar)
+        }
+        return WebView(context).also {
+            it.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            mWebView!!.webViewClient = mWebViewClient
+            it.webViewClient = webViewClient
         }
-        mWebViewClient.updateActivity(activity)
-
-        return mWebView!!
     }
 
     fun updateWebViewArticle(article: Article?) {
-        if (mWebView == null) {
-            return
-        }
-        if (article?.content == null) {
-            return
-        }
-        if (article.contentUuid == mContentUuid) return
+        if (article?.content == null) return
+        if (article.contentUuid == contentUuid) return
+        if (webView == null) return
 
-        mWebView!!.loadDataWithBaseURL(
-            article.uri.toString() + ".html", article.content,
-            "text/html", null, null
-        )
-        mContentUuid = article.contentUuid
+        webView?.loadDataWithBaseURL("${article.uri}.html", article.content, "text/html", null, null)
+        contentUuid = article.contentUuid
     }
 }
