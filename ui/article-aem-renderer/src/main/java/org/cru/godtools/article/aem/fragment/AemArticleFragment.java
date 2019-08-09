@@ -181,7 +181,12 @@ public class AemArticleFragment extends BaseFragment {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
-            final WebResourceResponse response = getResponseFromFile(view.getContext(), Uri.parse(url));
+            final Uri uri = Uri.parse(url);
+            if ("data".equals(uri.getScheme())) {
+                return null;
+            }
+
+            final WebResourceResponse response = getResponseFromFile(view.getContext(), uri);
             if (response != null) {
                 return response;
             }
