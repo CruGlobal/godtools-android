@@ -6,11 +6,10 @@ import org.cru.godtools.article.aem.model.Article;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
-
     ArticleDao mArticleDao;
 
     @Before
