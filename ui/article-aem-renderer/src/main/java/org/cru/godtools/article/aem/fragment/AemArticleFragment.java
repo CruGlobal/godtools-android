@@ -95,13 +95,13 @@ public class AemArticleFragment extends BaseFragment {
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
-        if (mViewModel.article == null) {
+        if (mViewModel.getArticle() == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            mViewModel.article =
-                    ArticleRoomDatabase.Companion.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
+            mViewModel.setArticle(
+                    ArticleRoomDatabase.Companion.getInstance(requireContext()).articleDao().findLiveData(mArticleUri));
         }
 
-        mViewModel.article.observe(this, this::onUpdateArticle);
+        mViewModel.getArticle().observe(this, this::onUpdateArticle);
     }
 
     // region WebView content
