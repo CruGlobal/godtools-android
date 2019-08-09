@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">ေ၀ဌလုိ ေသာအရာကုိ ေရးြခ်ယ္ပါ</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">အ ေထ ြ ေထ ြ</string>
+    <string name="menu_heading_share">ေ၀ဌပါ</string>
+    <string name="menu_heading_legal">တရား၀င္</string>
+    <string name="menu_about">အ ေၾကာင္း</string>
+    <string name="menu_help">ကူညီရန္</string>
+    <string name="menu_contact_us">ဆက္သယြ္ရန္</string>
+    <string name="menu_login">"  အ ေကာင့္ ၀င္သည္"</string>
+    <string name="menu_signup">အ ေကာင့္အသစ္ဖငြ့္ပါ</string>
+    <string name="menu_logout">" အ ေကာင့္မွထကြ္သည္"</string>
+    <string name="menu_share_godtools">GodTools App ကုိ ေ၀ဌပါ</string>
+    <string name="menu_share_story">အျဖစ္အပ်က္ကုိ ေ၀ဌ ေပးပါ</string>
+    <string name="menu_terms_of_use">Terms of Use</string>
+    <string name="menu_privacy_policy">ကုိယ္ေရးကုိယ္တာ မူ၀ါဒ</string>
+    <string name="menu_copyright">မူပုိင္ခငြ့္</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">"ဘုရားမည္သုိ႕လုပ္ေဆာင္ေနျခင္းကုိ ၾကားခ်င္ပါသည္ "</string>
+    <!-- Tools UI -->
+    <string name="nav_find_tools">Tools ကုိရွာေဖရြန္</string>
+    <string name="nav_my_tools">က် ြႏု္ပ္၏ Tools မ်ား</string>
+    <string name="menu_switch_language">ဘာသာ စကားကုိ ေျပာင္းရန္</string>
+    <string name="title_add_new_tools">Tools သစ္ ကုိ ထပ္ထည္႔ရန္</string>
+    <string name="action_tools_download">ေဒါင္းလုပ္ ဆဲြရန္</string>
+    <string name="action_tools_remove">ပယ္ဖ်က္ရန္</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">": %1$,d toolကုိၾကည့္ရႈသူမ်ား
+"</item>
+    </plurals>
+    <string name="label_tools_about">အ ေၾကာင္း</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">" %1$,d ဘာသာစကားမ်ား"</item>
+    </plurals>
+    <string name="text_tools_all_installed">အသုံးျပဳနုိင္ ေသာ tools ကုိ ေဒါင္းလုတ္ဆဲြၿပီးပါၿပီ</string>
+    <string name="menu_add_to_home">Home screen တငြ္ထည္႔ပါ</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">ဘာသာစကားေပါင္း ၈၀  ေက်ာ္</string>
+    <string name="menu_language_settings">ဘာသာစကားကုိ ဆက္တင္ ခ်ပါ</string>
+    <string name="title_language_settings">ဘာသာစကားမ်ား၏ ဆက္တင္အ ေျခအ ေန</string>
+    <string name="title_language_primary">အဓိကအသုံးျပဳ ေသာဘာသာစကား</string>
+    <string name="title_language_parallel">ယွဥ္တဲြ အသုံးျ႔ပဳနုိင္ ေသာဘာသာစကား</string>
+    <string name="action_language_parallel_select">ယွဥ္တဲြ အသုံးျပဳနုိင္ ေသာဘာသာစကား ကုိ ေရးြခ်ယ္ပါ</string>
+    <string name="text_language_parallel_description">ဘာသာစကားတူေသာ သူတ ေယာက္ကုိ GodToolsကုိ ေ၀ဌ ပါ</string>
+    <string name="text_language_warning">အခ်ိဳ႕ဘာသာစကားအတကြ္ အသုံးမျပဳနုိင္ ေသးပါ</string>
+    <string name="label_language_none">မရွိပါ</string>
+    <string name="label_language_search">ဘာသာစကား မ်ားကိုစစ္ထုတ္ျခင္း</string>
+    <!-- Sharing -->
+    <string name="share_general_message">"  app ကုိ ေဒါင္းလုတ္ဆဲြရန္ လင့္ခ္မွာ http;//godtoolsapp.com\n\n ျဖစ္သည္
+
+app၏ wed version ၏ လင့္ခ္({{share_link}} ျဖစ္ပါသည္
+
+ဆက္ေဆးြ ေႏြးၾကပါစုိ႔ !
+
+"</string>
+</resources>
