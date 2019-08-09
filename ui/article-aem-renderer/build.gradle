@@ -51,6 +51,7 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
+    androidTestImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
 
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
