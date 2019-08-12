@@ -2,25 +2,37 @@ package org.cru.godtools.article.aem.fragment
 
 import android.app.Activity
 import android.app.Application
+import android.net.Uri
 import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.switchMap
 import org.cru.godtools.article.aem.R
+import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Article
 
 class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
-    var article: LiveData<Article>? = null
+    private val db = ArticleRoomDatabase.getInstance(application)
 
+    val articleUri = MutableLiveData<Uri?>()
+    private val article: LiveData<Article?> =
+        articleUri.distinctUntilChanged().switchMap { db.articleDao().findLiveData(it) }
+
+    // region WebView
     private var webView: WebView? = null
     private val webViewClient: ArticleWebViewClient = ArticleWebViewClient(application)
-    private var contentUuid: String? = null
 
     fun getWebView(activity: Activity): WebView {
         webViewClient.updateActivity(activity)
-        return webView ?: buildWebView(activity).also { webView = it }
+        return webView ?: buildWebView(activity).also {
+            webView = it
+            updateWebViewArticle(article.value)
+        }
     }
 
     private fun buildWebView(activity: Activity): WebView {
@@ -37,8 +49,12 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
             it.webViewClient = webViewClient
         }
     }
+    // endregion WebView
 
-    fun updateWebViewArticle(article: Article?) {
+    // region WebView Content
+    private var contentUuid: String? = null
+
+    private fun updateWebViewArticle(article: Article?) {
         if (article?.content == null) return
         if (article.contentUuid == contentUuid) return
         if (webView == null) return
@@ -46,4 +62,9 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
         webView?.loadDataWithBaseURL("${article.uri}.html", article.content, "text/html", null, null)
         contentUuid = article.contentUuid
     }
+
+    init {
+        article.observeForever { updateWebViewArticle(it) }
+    }
+    // endregion WebView Content
 }

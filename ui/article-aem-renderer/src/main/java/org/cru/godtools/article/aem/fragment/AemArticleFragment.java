@@ -9,8 +9,6 @@ import android.widget.FrameLayout;
 
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
-import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.base.ui.fragment.BaseFragment;
 
 import androidx.annotation.NonNull;
@@ -32,9 +30,6 @@ public class AemArticleFragment extends BaseFragment {
     // these properties should be treated as final and only set/modified in onCreate()
     @Nullable
     private /*final*/ Uri mArticleUri;
-
-    @Nullable
-    private Article mArticle;
 
     public static AemArticleFragment newInstance(@NonNull final Uri articleUri) {
         final AemArticleFragment fragment = new AemArticleFragment();
@@ -73,11 +68,6 @@ public class AemArticleFragment extends BaseFragment {
         setupWebView();
     }
 
-    void onUpdateArticle(@Nullable final Article article) {
-        mArticle = article;
-        updateWebView();
-    }
-
     @Override
     public void onDestroyView() {
         cleanupWebView();
@@ -94,27 +84,14 @@ public class AemArticleFragment extends BaseFragment {
 
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
-
-        if (mViewModel.getArticle() == null) {
-            assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            mViewModel.setArticle(
-                    ArticleRoomDatabase.Companion.getInstance(requireContext()).articleDao().findLiveData(mArticleUri));
-        }
-
-        mViewModel.getArticle().observe(this, this::onUpdateArticle);
+        mViewModel.getArticleUri().setValue(mArticleUri);
     }
 
     // region WebView content
-
     private void setupWebView() {
         if (mWebViewContainer != null) {
             mWebViewContainer.addView(mViewModel.getWebView(requireActivity()));
         }
-        updateWebView();
-    }
-
-    private void updateWebView() {
-        mViewModel.updateWebViewArticle(mArticle);
     }
 
     private void cleanupWebView() {
@@ -122,6 +99,5 @@ public class AemArticleFragment extends BaseFragment {
             mWebViewContainer.removeView(mViewModel.getWebView(requireActivity()));
         }
     }
-
     // endregion WebView content
 }
