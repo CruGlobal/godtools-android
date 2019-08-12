@@ -49,11 +49,6 @@ class AemArticleFragment() : BaseFragment() {
     private var articleUri: Uri by arg()
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupViewModel()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         inflater.inflate(R.layout.fragment_aem_article, container, false)
 
@@ -69,10 +64,9 @@ class AemArticleFragment() : BaseFragment() {
     // endregion Lifecycle
 
     // region ViewModel
-    private val viewModel by lazy { ViewModelProviders.of(this).get(AemArticleViewModel::class.java) }
-
-    private fun setupViewModel() {
-        viewModel.articleUri.value = articleUri
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(AemArticleViewModel::class.java)
+            .also { it.articleUri.value = articleUri }
     }
     // endregion ViewModel
 
