@@ -18,12 +18,14 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
 
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"

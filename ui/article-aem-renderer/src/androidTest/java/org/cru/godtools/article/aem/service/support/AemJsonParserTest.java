@@ -12,10 +12,10 @@ import java.io.InputStream;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import kotlin.sequences.SequencesKt;
 
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

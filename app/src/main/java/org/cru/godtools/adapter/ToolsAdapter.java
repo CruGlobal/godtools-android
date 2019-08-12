@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
@@ -36,9 +37,9 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.BindViews;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import butterknife.ViewCollections;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
@@ -80,8 +81,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         mCallbacks = callbacks;
     }
 
-    /* BEGIN lifecycle */
-
+    // region Lifecycle
     @Override
     public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -154,8 +154,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
             mRecyclerView = null;
         }
     }
-
-    /* END lifecycle */
+    // endregion Lifecycle
 
     @Nullable
     @Override
@@ -263,8 +262,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         @Nullable
         private DownloadProgress mDownloadProgress;
 
-        @DraggableItemStateFlags
-        private int mDragStateFlags;
+        private final DraggableItemState mDragState = new DraggableItemState();
 
         ToolViewHolder(@NonNull final View view) {
             super(view);
@@ -334,19 +332,25 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
                 mActionAdd.setEnabled(!mAdded);
             }
             if (mAddViews != null) {
-                ButterKnife.apply(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
+                ViewCollections.run(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
             }
+        }
+
+        @NonNull
+        @Override
+        public DraggableItemState getDragState() {
+            return mDragState;
         }
 
         @Override
         public void setDragStateFlags(@DraggableItemStateFlags final int flags) {
-            mDragStateFlags = flags;
+            mDragState.setFlags(flags);
         }
 
         @Override
         @DraggableItemStateFlags
         public int getDragStateFlags() {
-            return mDragStateFlags;
+            return mDragState.getFlags();
         }
 
         void startDownloadProgressListener() {

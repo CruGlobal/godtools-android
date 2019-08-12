@@ -57,7 +57,6 @@ import androidx.annotation.WorkerThread;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
@@ -406,12 +405,11 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         IconCompat icon = null;
         if (banner != null) {
             try {
-                icon = IconCompat.createWithBitmap(
-                        Picasso.with(mContext)
+                icon = IconCompat.createWithAdaptiveBitmap(
+                        Picasso.get()
                                 .load(FileUtils.getFile(mContext, banner.getLocalFileName()))
+                                .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                                 .centerCrop()
-                                .resizeDimen(android.R.dimen.app_icon_size, android.R.dimen.app_icon_size)
-                                .transform(new CropCircleTransformation())
                                 .get());
             } catch (final IOException ignored) {
             }

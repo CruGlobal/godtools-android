@@ -15,12 +15,15 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:model-events')
 
+    implementation "androidx.collection:collection:${deps.androidX.collection}"
+
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
+    androidTestImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

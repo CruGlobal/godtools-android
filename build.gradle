@@ -1,69 +1,64 @@
 buildscript {
     ext {
         deps = [
-                adobeMobileServices: '4.17.0',
-                advrecyclerview    : '0.11.0',
-                androidX           : [
-                        annotation      : '1.0.0',
-                        appCompat       : '1.0.2',
-                        archCore        : '2.0.0',
-                        browser         : '1.0.0',
-                        cardView        : '1.0.0',
-                        constraintLayout: '1.1.3',
-                        core            : '1.0.1',
-                        ktx             : [
-                                core    : '1.0.1',
-                                fragment: '1.0.0',
-                        ],
-                        lifecycle       : '2.0.0',
-                        multidex        : '2.0.0',
-                        percentLayout   : '1.0.0',
-                        recyclerView    : '1.0.0',
-                        room            : '2.0.0',
-                        test            : '1.1.0',
-                ],
+                adobeMobileServices: '4.17.9',
+                advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
-                appSee             : [
-                        android         : '2.4.5',
-                        plugin          : '1.0.3'
-                ],
-                butterknife        : '9.0.0-rc2',
+                butterknife        : '10.1.0',
                 calligraphy        : '2.3.0',
-                crashlytics        : '2.9.7',
+                crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
                 evernoteAndroidJob : '1.2.6',
-                facebookStetho     : '1.5.0',
-                firebase           : [
-                        core        : '16.0.6',
-                        dynamicLinks: '16.1.5',
-                        perf        : '16.2.2',
-                ],
-                gtoSupport         : '2.0.1',
-                guava              : '26.0-android',
-                hamcrest           : '1.3',
-                jsoup              : '1.11.3',
+                facebook           : '5.2.0',
+                facebookStetho     : '1.5.1',
+                gtoSupport         : '3.0.1',
+                guava              : '28.0-android',
+                hamcrest           : '2.1',
+                jsoup              : '1.12.1',
                 junit              : '4.12',
-                // XXX: Kotlin 1.3.10 introduces a ButterKnife ViewBinding generation bug with how the R2 resources are
-                // XXX: processed. Right now the workaround is to utilize Kotlin 1.2.x
-                // XXX: see: https://github.com/JakeWharton/butterknife/issues/974
-                kotlin             : '1.2.71',
-                ktlint             : '0.29.0',
-                leakcanary         : '1.6.2',
+                kotlin             : '1.3.41',
+                ktlint             : '0.31.0',
+                leakcanary         : '1.6.3',
                 lightweightStream  : '1.2.1',
                 materialDesign     : '1.0.0',
-                mockito            : '2.17.0',
-                mockitoKotlin      : '2.0.0-RC3',
-                okhttp3            : '3.11.0',
+                mockito            : '3.0.0',
+                mockitoKotlin      : '2.1.0',
+                okhttp3            : '3.12.3',
+                picasso            : '2.71828',
                 picassoTransforms  : '2.2.1',
-                playServices       : [
-                        analytics: '16.0.6',
-                ],
-                powermock          : '2.0.0-beta.9',
-                retrofit2          : '2.4.0',
-                snowplow           : '0.8.0',
+                powermock          : '2.0.2',
+                retrofit2          : '2.6.1',
+                snowplow           : '1.2.1',
                 taptargetview      : '1.12.0',
                 thekey             : '3.0.0',
-                timber             : '4.7.1'
+                timber             : '4.7.1',
+        ]
+        deps.androidX = [
+                annotation      : '1.1.0',
+                appCompat       : '1.0.2',
+                archCore        : '2.0.1',
+                browser         : '1.0.0',
+                cardView        : '1.0.0',
+                collection      : '1.1.0',
+                constraintLayout: '1.1.3',
+                core            : '1.0.2',
+                fragment        : '1.0.0',
+                lifecycle       : '2.0.0',
+                loader          : '1.0.0',
+                multidex        : '2.0.1',
+                percentLayout   : '1.0.0',
+                recyclerView    : '1.0.0',
+                room            : '2.1.0',
+                test            : '1.2.0',
+                testJUnit       : '1.1.1',
+        ]
+        deps.firebase = [
+                core        : '17.0.1',
+                dynamicLinks: '16.1.5',
+                perf        : '18.0.1',
+        ]
+        deps.playServices = [
+                analytics: '17.0.0',
         ]
         uris = [
                 mobileContentApi: [
@@ -75,25 +70,23 @@ buildscript {
 
     repositories {
         google()
-        maven { url 'https://maven.fabric.io/public' }
         jcenter()
-        mavenLocal()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-        classpath 'com.google.firebase:firebase-plugins:1.2.0'
-        classpath 'com.google.gms:google-services:4.2.0'
-        classpath "com.appsee:appsee-plugin:${deps.appSee.plugin}"
+        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.google.firebase:perf-plugin:1.3.1'
+        classpath 'com.google.gms:google-services:4.3.0'
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
-        classpath 'io.fabric.tools:gradle:1.27.0'
+        classpath 'io.fabric.tools:gradle:1.31.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
     }
 }
 
 plugins {
-    id "com.getkeepsafe.dexcount" version "0.8.4" apply false
-    id "de.undercouch.download" version "3.4.3" apply false
-    id "org.ajoberstar.grgit" version "2.3.0"
+    id "com.getkeepsafe.dexcount" version "0.8.6" apply false
+    id "de.undercouch.download" version "4.0.0" apply false
+    id "org.ajoberstar.grgit" version "3.1.1"
 }
 
 group 'org.cru.android'
@@ -109,15 +102,28 @@ ext {
     targetSdk     = 28
 }
 
+// configure dependency resolution
 subprojects {
     repositories {
         google()
-        maven { url 'https://maven.fabric.io/public' }
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://jitpack.io" }
         // XXX: temporary to use beta version of powermock
         maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
-        mavenLocal()
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force "androidx.annotation:annotation:${deps.androidX.annotation}"
+            force "androidx.core:core:${deps.androidX.core}"
+            force 'org.jetbrains:annotations:17.0.0'
+
+            dependencySubstitution {
+                substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
+            }
+        }
     }
 }
 
@@ -204,7 +210,9 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
         dependencies {
             compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
-            compileOnly 'org.jetbrains:annotations:16.0.1'
+            compileOnly 'org.jetbrains:annotations:17.0.0'
+
+            implementation "com.jakewharton.timber:timber:${deps.timber}"
 
             testImplementation "junit:junit:${deps.junit}"
         }

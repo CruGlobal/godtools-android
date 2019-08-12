@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
-apply plugin: 'com.appsee.appsee-plugin'
 
 android {
     compileSdkVersion compileSdk
@@ -19,7 +18,6 @@ android {
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-searchview.pro'
-        proguardFile 'proguard-appsee.pro'
 
         vectorDrawables.useSupportLibrary = true
 
@@ -93,10 +91,6 @@ android {
             if (project.hasProperty('crashlyticsBetaBuild')) {
                 signingConfig signingConfigs.crashlyticsBeta
             }
-
-            manifestPlaceholders = [
-                    appseeKey: "f05dbdbcd6524a7089bdcfbac5c9be11"
-            ]
         }
         release {
             minifyEnabled true
@@ -104,10 +98,6 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
-
-            manifestPlaceholders = [
-                    appseeKey: "873e1bffe3444d649f8e9b84ae364a42"
-            ]
         }
     }
 
@@ -151,25 +141,30 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.ktx.fragment}"
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
-    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
-
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.appsee:appsee-android:${deps.appSee.android}"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.jakewharton.timber:timber:${deps.timber}"
+    implementation "me.thekey.android:thekey-core:${deps.thekey}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
 
@@ -181,7 +176,6 @@ dependencies {
     debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-timber:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
-    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 

@@ -2,8 +2,6 @@ package org.cru.godtools.article.aem.db;
 
 import android.net.Uri;
 
-import com.google.common.collect.ImmutableList;
-
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.TranslationRef;
 import org.cru.godtools.article.aem.model.TranslationRefKt;
@@ -11,6 +9,7 @@ import org.cru.godtools.model.Translation;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -72,7 +71,7 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
 
         // perform test
         assertFalse(mRepository.isProcessed(mTranslation));
-        mRepository.addAemImports(mTranslation, ImmutableList.of(URI1, URI2));
+        mRepository.addAemImports(mTranslation, Arrays.asList(URI1, URI2));
         assertTrue(mRepository.isProcessed(mTranslation));
 
         // TODO: test AemImports once we define dao methods for reading AemImports

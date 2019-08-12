@@ -6,6 +6,8 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
 
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
@@ -14,5 +16,5 @@ dependencies {
 
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
     androidTestImplementation "androidx.test:rules:${deps.androidX.test}"
-    androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+    androidTestImplementation "org.hamcrest:hamcrest:${deps.hamcrest}"
 }

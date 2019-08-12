@@ -30,7 +30,7 @@ import androidx.core.util.Pools;
 import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.BindViews;
-import butterknife.ButterKnife;
+import butterknife.ViewCollections;
 
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
@@ -217,7 +217,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
         // force the layout direction for any other views that do care
         final int dir = Page.getLayoutDirection(mModel);
-        ButterKnife.apply(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
+        ViewCollections.run(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
     }
 
     private void updateDisplayedCards() {
