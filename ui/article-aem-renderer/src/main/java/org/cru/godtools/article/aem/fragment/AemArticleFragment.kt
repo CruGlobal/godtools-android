@@ -86,7 +86,7 @@ class AemArticleFragment() : BaseFragment() {
     // endregion WebView content
 }
 
-internal class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
+private class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
     private val db = ArticleRoomDatabase.getInstance(application)
 
     val articleUri = MutableLiveData<Uri?>()
@@ -139,7 +139,7 @@ internal class AemArticleViewModel(application: Application) : AndroidViewModel(
     // endregion WebView Content
 }
 
-internal class ArticleWebViewClient(context: Context) : WebViewClient() {
+private class ArticleWebViewClient(context: Context) : WebViewClient() {
     var activity: Activity? by weakVar()
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
