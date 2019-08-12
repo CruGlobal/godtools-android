@@ -21,9 +21,8 @@ import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 
 internal class ArticleWebViewClient(context: Context) : WebViewClient() {
-    private val mContext: Context = context.applicationContext
-    private val mAemDb: ArticleRoomDatabase = ArticleRoomDatabase.getInstance(context)
     var activity: Activity? by weakVar()
+    private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         activity?.let { WebUrlLauncher.openUrl(it, Uri.parse(url)) }
@@ -51,13 +50,9 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
 
     @WorkerThread
     private fun getResponseFromFile(context: Context, uri: Uri): WebResourceResponse? {
-        val resourceDao = mAemDb.resourceDao()
-
-        // find the referenced resource
-        var resource: Resource? = resourceDao.find(uri) ?: return null
-
         // attempt to download the file if we haven't downloaded it already
-        if (!resource!!.isDownloaded) {
+        var resource: Resource = resourceDao.find(uri) ?: return null
+        if (!resource.isDownloaded) {
             try {
                 // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
                 AemArticleManger.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
@@ -66,21 +61,18 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
                 Thread.currentThread().interrupt()
                 return null
             } catch (e: ExecutionException) {
-                Timber.tag("AEMArticleFragment")
+                Timber.tag(AemArticleFragment.TAG)
                     .d(e.cause, "Error downloading resource when trying to render an article")
             }
 
             // refresh resource since we may have just downloaded it
-            resource = resourceDao.find(uri)
-            if (resource == null) {
-                return null
-            }
+            resource = resourceDao.find(uri) ?: return null
         }
 
         // get the data input stream
         var data: InputStream? = null
         try {
-            data = resource.getInputStream(mContext)
+            data = resource.getInputStream(context)
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.
@@ -98,8 +90,7 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
 
         // return the response object
         val type = resource.contentType
-        val mimeType = if (type != null) type.type() + "/" + type.subtype() else "application/octet-stream"
-        val encoding = type?.charset()
-        return WebResourceResponse(mimeType, encoding?.name(), data)
+        val mimeType = type?.let { "${type.type()}/${type.subtype()}" } ?: "application/octet-stream"
+        return WebResourceResponse(mimeType, type?.charset()?.name(), data)
     }
 }
