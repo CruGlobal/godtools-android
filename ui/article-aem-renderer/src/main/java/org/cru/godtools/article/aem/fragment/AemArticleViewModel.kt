@@ -28,7 +28,7 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
     private val webViewClient: ArticleWebViewClient = ArticleWebViewClient(application)
 
     fun getWebView(activity: Activity): WebView {
-        webViewClient.updateActivity(activity)
+        webViewClient.activity = activity
         return webView ?: buildWebView(activity).also {
             webView = it
             updateWebViewArticle(article.value)

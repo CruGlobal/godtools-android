@@ -41,6 +41,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation 'com.github.Karumi:WeakDelegate:1.0.0'
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"

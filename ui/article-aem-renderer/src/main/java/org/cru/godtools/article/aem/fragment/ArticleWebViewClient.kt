@@ -8,6 +8,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.WorkerThread
+import com.karumi.weak.weakVar
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManger
@@ -16,25 +17,16 @@ import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
-import java.lang.ref.Reference
-import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 
 internal class ArticleWebViewClient(context: Context) : WebViewClient() {
     private val mContext: Context = context.applicationContext
     private val mAemDb: ArticleRoomDatabase = ArticleRoomDatabase.getInstance(context)
-    private var mActivity: Reference<Activity> = WeakReference(null)
-
-    fun updateActivity(activity: Activity?) {
-        mActivity = WeakReference(activity)
-    }
+    var activity: Activity? by weakVar()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        val activity = mActivity.get()
-        if (activity != null) {
-            WebUrlLauncher.openUrl(activity, Uri.parse(url))
-        }
+        activity?.let { WebUrlLauncher.openUrl(it, Uri.parse(url)) }
         return true
     }
 
