@@ -20,6 +20,12 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 
+private val notFoundResponse
+    get() = WebResourceResponse(null, null, null).apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available")
+    }
+
 internal class ArticleWebViewClient(context: Context) : WebViewClient() {
     var activity: Activity? by weakVar()
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
@@ -31,21 +37,8 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
 
     override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
         val uri = Uri.parse(url)
-        if ("data" == uri.scheme) {
-            return null
-        }
-
-        val response = getResponseFromFile(view.context, uri)
-        if (response != null) {
-            return response
-        }
-
-        // we didn't have a response, return not found
-        val notFound = WebResourceResponse(null, null, null)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notFound.setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available")
-        }
-        return notFound
+        if (uri.scheme == "data") return null
+        return getResponseFromFile(view.context, uri) ?: notFoundResponse
     }
 
     @WorkerThread
