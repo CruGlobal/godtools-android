@@ -74,7 +74,7 @@ interface ArticleDao {
 
     @AnyThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
-    fun findLiveData(uri: Uri): LiveData<Article>
+    fun findLiveData(uri: Uri?): LiveData<Article?>
 
     @AnyThread
     @Query("""

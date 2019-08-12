@@ -132,7 +132,7 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
             viewModel.article = ArticleRoomDatabase.getInstance(this).articleDao().findLiveData(articleUri)
         }
 
-        viewModel.article.observe(this, Observer<Article> { onUpdateArticle(it) })
+        viewModel.article.observe(this, Observer { onUpdateArticle(it) })
     }
 
     private fun sendAnalyticsEventIfNeededAndPossible() {
@@ -187,12 +187,12 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
 
         // load the fragment
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, AemArticleFragment.newInstance(articleUri), TAG_MAIN_FRAGMENT)
+            .replace(R.id.frame, AemArticleFragment(articleUri), TAG_MAIN_FRAGMENT)
             .commit()
     }
 
     class AemArticleViewModel : ViewModel() {
-        internal lateinit var article: LiveData<Article>
+        internal lateinit var article: LiveData<Article?>
 
         internal fun isArticleInitialized() = ::article.isInitialized
     }

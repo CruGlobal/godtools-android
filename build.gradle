@@ -29,6 +29,7 @@ buildscript {
                 powermock          : '2.0.2',
                 retrofit2          : '2.6.1',
                 snowplow           : '1.2.1',
+                splitties          : '3.0.0-alpha06',
                 taptargetview      : '1.12.0',
                 thekey             : '3.0.0',
                 timber             : '4.7.1',
@@ -43,7 +44,7 @@ buildscript {
                 constraintLayout: '1.1.3',
                 core            : '1.0.2',
                 fragment        : '1.0.0',
-                lifecycle       : '2.0.0',
+                lifecycle       : '2.1.0-rc01',
                 loader          : '1.0.0',
                 multidex        : '2.0.1',
                 percentLayout   : '1.0.0',
@@ -122,6 +123,7 @@ subprojects {
 
             dependencySubstitution {
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
             }
         }
     }
