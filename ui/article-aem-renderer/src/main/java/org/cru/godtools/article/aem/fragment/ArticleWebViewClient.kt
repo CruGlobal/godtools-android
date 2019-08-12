@@ -38,52 +38,51 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
     override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
         val uri = Uri.parse(url)
         if (uri.scheme == "data") return null
-        return getResponseFromFile(view.context, uri) ?: notFoundResponse
+        return uri.getResponseFromFile(view.context) ?: notFoundResponse
     }
 
     @WorkerThread
-    private fun getResponseFromFile(context: Context, uri: Uri): WebResourceResponse? {
-        // attempt to download the file if we haven't downloaded it already
-        var resource: Resource = resourceDao.find(uri) ?: return null
-        if (!resource.isDownloaded) {
-            try {
-                // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-                AemArticleManger.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
-            } catch (e: InterruptedException) {
-                // propagate thread interruption
-                Thread.currentThread().interrupt()
-                return null
-            } catch (e: ExecutionException) {
-                Timber.tag(AemArticleFragment.TAG)
-                    .d(e.cause, "Error downloading resource when trying to render an article")
-            }
+    private fun Uri.getResponseFromFile(context: Context): WebResourceResponse? {
+        val resource = getResource(context) ?: return null
+        val type = resource.contentType
+        val data = resource.getData(context) ?: return null
+        return WebResourceResponse(
+            type?.let { "${type.type()}/${type.subtype()}" } ?: "application/octet-stream",
+            type?.charset()?.name(), data
+        )
+    }
 
-            // refresh resource since we may have just downloaded it
-            resource = resourceDao.find(uri) ?: return null
+    private fun Uri.getResource(context: Context): Resource? {
+        val resource = resourceDao.find(this) ?: return null
+        if (resource.isDownloaded) return resource
+
+        // attempt to download the file if we haven't downloaded it already
+        try {
+            // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
+            AemArticleManger.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
+        } catch (e: InterruptedException) {
+            // propagate thread interruption
+            Thread.currentThread().interrupt()
+            return null
+        } catch (e: ExecutionException) {
+            Timber.tag(AemArticleFragment.TAG).d(e.cause, "Error downloading resource when trying to render an article")
         }
 
-        // get the data input stream
-        var data: InputStream? = null
+        // refresh resource since we may have just downloaded it
+        return resourceDao.find(this)
+    }
+
+    private fun Resource.getData(context: Context): InputStream? {
         try {
-            data = resource.getInputStream(context)
+            return getInputStream(context)
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.
-            Timber.tag(AemArticleFragment.TAG)
-                .e(e, "Missing cached version of: %s", resource.uri)
-            resourceDao.updateLocalFile(resource.uri, null, null, null)
+            Timber.tag(AemArticleFragment.TAG).e(e, "Missing cached version of: %s", uri)
+            resourceDao.updateLocalFile(uri, null, null, null)
         } catch (e: IOException) {
-            Timber.tag(AemArticleFragment.TAG)
-                .d(e, "Error opening local file")
+            Timber.tag(AemArticleFragment.TAG).d(e, "Error opening local file")
         }
-
-        if (data == null) {
-            return null
-        }
-
-        // return the response object
-        val type = resource.contentType
-        val mimeType = type?.let { "${type.type()}/${type.subtype()}" } ?: "application/octet-stream"
-        return WebResourceResponse(mimeType, type?.charset()?.name(), data)
+        return null
     }
 }
