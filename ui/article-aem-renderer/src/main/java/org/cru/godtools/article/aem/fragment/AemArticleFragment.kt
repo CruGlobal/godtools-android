@@ -71,6 +71,7 @@ class AemArticleFragment() : BaseFragment() {
     // endregion ViewModel
 
     // region WebView content
+    @JvmField
     @BindView(R2.id.frame)
     internal var webViewContainer: FrameLayout? = null
 
