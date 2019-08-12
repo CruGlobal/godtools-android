@@ -20,6 +20,8 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 
+private const val TAG = "ArticleWebViewClient"
+
 private val notFoundResponse
     get() = WebResourceResponse(null, null, null).apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -65,7 +67,7 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
             Thread.currentThread().interrupt()
             return null
         } catch (e: ExecutionException) {
-            Timber.tag(AemArticleFragment.TAG).d(e.cause, "Error downloading resource when trying to render an article")
+            Timber.tag(TAG).d(e.cause, "Error downloading resource when trying to render an article")
         }
 
         // refresh resource since we may have just downloaded it
@@ -78,10 +80,10 @@ internal class ArticleWebViewClient(context: Context) : WebViewClient() {
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.
-            Timber.tag(AemArticleFragment.TAG).e(e, "Missing cached version of: %s", uri)
+            Timber.tag(TAG).e(e, "Missing cached version of: %s", uri)
             resourceDao.updateLocalFile(uri, null, null, null)
         } catch (e: IOException) {
-            Timber.tag(AemArticleFragment.TAG).d(e, "Error opening local file")
+            Timber.tag(TAG).d(e, "Error opening local file")
         }
         return null
     }

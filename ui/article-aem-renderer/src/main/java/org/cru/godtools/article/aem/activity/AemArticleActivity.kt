@@ -187,7 +187,7 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
 
         // load the fragment
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, AemArticleFragment.newInstance(articleUri), TAG_MAIN_FRAGMENT)
+            .replace(R.id.frame, AemArticleFragment(articleUri), TAG_MAIN_FRAGMENT)
             .commit()
     }
 
