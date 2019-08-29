@@ -12,7 +12,7 @@ buildscript {
                 facebook           : '5.4.0',
                 facebookStetho     : '1.5.1',
                 gtoSupport         : '3.0.1',
-                guava              : '28.0-android',
+                guava              : '28.1-android',
                 hamcrest           : '2.1',
                 jsoup              : '1.12.1',
                 junit              : '4.12',
