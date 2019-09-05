@@ -30,7 +30,7 @@ buildscript {
                 retrofit2          : '2.6.1',
                 snowplow           : '1.2.1',
                 splitties          : '3.0.0-alpha06',
-                taptargetview      : '1.12.0',
+                taptargetview      : '1.13.0',
                 thekey             : '3.0.0',
                 timber             : '4.7.1',
         ]
