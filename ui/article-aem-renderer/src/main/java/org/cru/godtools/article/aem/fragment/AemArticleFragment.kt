@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import butterknife.BindView
-import com.karumi.weak.weakVar
+import com.karumi.weak.weak
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.R2
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -135,7 +135,7 @@ private class AemArticleViewModel(application: Application) : AndroidViewModel(a
 }
 
 private class ArticleWebViewClient(context: Context) : WebViewClient() {
-    var activity: Activity? by weakVar()
+    var activity: Activity? by weak()
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
