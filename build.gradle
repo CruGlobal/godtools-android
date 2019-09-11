@@ -23,7 +23,7 @@ buildscript {
                 materialDesign     : '1.0.0',
                 mockito            : '3.0.0',
                 mockitoKotlin      : '2.1.0',
-                okhttp3            : '3.12.4',
+                okhttp3            : '3.12.5',
                 picasso            : '2.71828',
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.2',
