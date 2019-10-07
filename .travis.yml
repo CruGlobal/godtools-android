@@ -30,7 +30,7 @@ stages:
 - compile
 - test
 - name: deploy
-  if: branch = develop AND type = push
+  if: type = push AND branch = develop OR branch = firebaseAppDistribution
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -113,13 +113,23 @@ jobs:
     script:
     - ./gradlew clean :app:assembleProductionDebug -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
 
+    before_deploy:
+    # Configure Firebase App Distribution
+    - openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
     deploy:
-      provider: script
+    - provider: script
       skip_cleanup: true
       script: ./gradlew crashlyticsUploadDistributionProductionDebug -PfirebaseAppDistributionBuild --parallel
       on:
         repo: CruGlobal/godtools-android
         branch: develop
+        jdk: oraclejdk8
+    - provider: script
+      skip_cleanup: true
+      script: ./gradlew appDistributionUploadProductionDebug -PfirebaseAppDistributionBuild --parallel
+      on:
+        repo: CruGlobal/godtools-android
+        branch: firebaseAppDistribution
         jdk: oraclejdk8
 
 notifications:
