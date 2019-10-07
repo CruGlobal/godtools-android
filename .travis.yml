@@ -25,6 +25,7 @@ branches:
   only:
     - develop
     - master
+    - firebaseAppDistribution
 
 stages:
 - compile
