@@ -109,8 +109,6 @@ jobs:
     # configure the keystore
     - echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     - echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
-    # Configure Firebase App Distribution
-    - openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
     script:
     - ./gradlew clean :app:assembleProductionDebug -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
 
