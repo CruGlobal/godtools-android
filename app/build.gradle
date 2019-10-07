@@ -93,10 +93,10 @@ android {
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
-                    appId = rootProject.applicationId + ".debug"
+                    appId = '1:71275134527:android:3f5f59861a4a0730'
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
-                    testers = "daniel.frett@gmail.com"
+                    groups = 'android-testers'
                 }
             }
         }
@@ -195,6 +195,10 @@ dependencies {
 afterEvaluate {
     android.applicationVariants.all { variant ->
         def assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
+
+        def appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
+        appDistributionTask.dependsOn assembleTask
+
         def crashlyticsTask = project.tasks.getByName("crashlyticsUploadDistribution${variant.name.capitalize()}")
         crashlyticsTask.dependsOn assembleTask
     }
