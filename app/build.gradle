@@ -93,6 +93,7 @@ android {
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
+                    appId = rootProject.applicationId + ".debug"
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
                     testers = "daniel.frett@gmail.com"
