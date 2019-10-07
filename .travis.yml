@@ -25,15 +25,12 @@ branches:
   only:
     - develop
     - master
-    - firebaseAppDistribution
 
 stages:
-- name: compile
-  if: branch != firebaseAppDistribution
-- name: test
-  if: branch != firebaseAppDistribution
+- compile
+- test
 - name: deploy
-  if: type = push AND branch = develop OR branch = firebaseAppDistribution
+  if: type = push AND branch = develop
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -130,7 +127,7 @@ jobs:
       script: ./gradlew appDistributionUploadProductionDebug -PfirebaseAppDistributionBuild --parallel
       on:
         repo: CruGlobal/godtools-android
-        branch: firebaseAppDistribution
+        branch: develop
         jdk: oraclejdk8
 
 notifications:
