@@ -102,15 +102,15 @@ jobs:
     # Fetch the entire git history to correctly generate version codes
     - git fetch --unshallow
     # configure the keystore
-    - echo crashlyticsBetaKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
-    - echo crashlyticsBetaKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+    - echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+    - echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     script:
-    - ./gradlew clean :app:assembleProductionDebug -PcrashlyticsBetaBuild --continue --stacktrace --parallel
+    - ./gradlew clean :app:assembleProductionDebug -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
 
     deploy:
       provider: script
       skip_cleanup: true
-      script: ./gradlew crashlyticsUploadDistributionProductionDebug -PcrashlyticsBetaBuild --parallel
+      script: ./gradlew crashlyticsUploadDistributionProductionDebug -PfirebaseAppDistributionBuild --parallel
       on:
         repo: CruGlobal/godtools-android
         branch: develop

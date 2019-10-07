@@ -27,7 +27,7 @@ android {
         ext {
             betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
             betaDistributionNotifications = false
-            betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
+            betaDistributionReleaseNotes = generateFirebaseAppDistributionReleaseNotes()
         }
     }
 
@@ -65,11 +65,11 @@ android {
     }
 
     signingConfigs {
-        crashlyticsBeta {
-            storeFile rootProject.file(crashlyticsBetaKeystorePath)
-            storePassword crashlyticsBetaKeystoreStorePassword
-            keyAlias crashlyticsBetaKeystoreKeyAlias
-            keyPassword crashlyticsBetaKeystoreKeyPassword
+        firebaseAppDistribution {
+            storeFile rootProject.file(firebaseAppDistributionKeystorePath)
+            storePassword firebaseAppDistributionKeystoreStorePassword
+            keyAlias firebaseAppDistributionKeystoreKeyAlias
+            keyPassword firebaseAppDistributionKeystoreKeyPassword
         }
         release {
             storeFile rootProject.file(androidKeystorePath)
@@ -88,8 +88,8 @@ android {
             minifyEnabled false
             shrinkResources false
 
-            if (project.hasProperty('crashlyticsBetaBuild')) {
-                signingConfig signingConfigs.crashlyticsBeta
+            if (project.hasProperty('firebaseAppDistributionBuild')) {
+                signingConfig signingConfigs.firebaseAppDistribution
             }
         }
         release {
@@ -192,7 +192,7 @@ afterEvaluate {
     }
 }
 
-def generateCrashlyticsBetaReleaseNotes(size = 10) {
+def generateFirebaseAppDistributionReleaseNotes(size = 10) {
     def output = "Recent changes:\n\n"
     grgit.log {
         maxCommits = size
