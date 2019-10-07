@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
@@ -90,6 +91,12 @@ android {
 
             if (project.hasProperty('firebaseAppDistributionBuild')) {
                 signingConfig signingConfigs.firebaseAppDistribution
+
+                firebaseAppDistribution {
+                    releaseNotes = generateFirebaseAppDistributionReleaseNotes()
+                    serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
+                    testers = "daniel.frett@gmail.com"
+                }
             }
         }
         release {
