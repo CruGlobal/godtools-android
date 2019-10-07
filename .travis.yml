@@ -28,8 +28,10 @@ branches:
     - firebaseAppDistribution
 
 stages:
-- compile
-- test
+- name: compile
+  if: branch != firebaseAppDistribution
+- name: test
+  if: branch != firebaseAppDistribution
 - name: deploy
   if: type = push AND branch = develop OR branch = firebaseAppDistribution
 
