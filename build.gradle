@@ -8,7 +8,7 @@ buildscript {
                 calligraphy        : '2.3.0',
                 crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
-                evernoteAndroidJob : '1.4.1',
+                evernoteAndroidJob : '1.4.2',
                 facebook           : '5.8.0',
                 facebookStetho     : '1.5.1',
                 gtoSupport         : '3.0.1',
