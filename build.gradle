@@ -45,7 +45,7 @@ buildscript {
                 core            : '1.1.0',
                 fragment        : '1.1.0',
                 lifecycle       : '2.1.0',
-                loader          : '1.0.0',
+                loader          : '1.1.0',
                 multidex        : '2.0.1',
                 percentLayout   : '1.0.0',
                 recyclerView    : '1.0.0',
