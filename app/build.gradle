@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
@@ -27,7 +28,7 @@ android {
         ext {
             betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
             betaDistributionNotifications = false
-            betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
+            betaDistributionReleaseNotes = generateFirebaseAppDistributionReleaseNotes()
         }
     }
 
@@ -65,11 +66,11 @@ android {
     }
 
     signingConfigs {
-        crashlyticsBeta {
-            storeFile rootProject.file(crashlyticsBetaKeystorePath)
-            storePassword crashlyticsBetaKeystoreStorePassword
-            keyAlias crashlyticsBetaKeystoreKeyAlias
-            keyPassword crashlyticsBetaKeystoreKeyPassword
+        firebaseAppDistribution {
+            storeFile rootProject.file(firebaseAppDistributionKeystorePath)
+            storePassword firebaseAppDistributionKeystoreStorePassword
+            keyAlias firebaseAppDistributionKeystoreKeyAlias
+            keyPassword firebaseAppDistributionKeystoreKeyPassword
         }
         release {
             storeFile rootProject.file(androidKeystorePath)
@@ -88,8 +89,15 @@ android {
             minifyEnabled false
             shrinkResources false
 
-            if (project.hasProperty('crashlyticsBetaBuild')) {
-                signingConfig signingConfigs.crashlyticsBeta
+            if (project.hasProperty('firebaseAppDistributionBuild')) {
+                signingConfig signingConfigs.firebaseAppDistribution
+
+                firebaseAppDistribution {
+                    appId = '1:71275134527:android:3f5f59861a4a0730'
+                    releaseNotes = generateFirebaseAppDistributionReleaseNotes()
+                    serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
+                    groups = 'android-testers'
+                }
             }
         }
         release {
@@ -187,12 +195,16 @@ dependencies {
 afterEvaluate {
     android.applicationVariants.all { variant ->
         def assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
+
+        def appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
+        appDistributionTask.dependsOn assembleTask
+
         def crashlyticsTask = project.tasks.getByName("crashlyticsUploadDistribution${variant.name.capitalize()}")
         crashlyticsTask.dependsOn assembleTask
     }
 }
 
-def generateCrashlyticsBetaReleaseNotes(size = 10) {
+def generateFirebaseAppDistributionReleaseNotes(size = 10) {
     def output = "Recent changes:\n\n"
     grgit.log {
         maxCommits = size

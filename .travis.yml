@@ -12,6 +12,10 @@ env:
     - secure: nfuUV6H+kpR21OxyyFMGzjyItoE/bQIzxeWLKSFiisuVc4uG9unyk7XPHnKYV1u6d0FJ9ieV7bmri39igYANmGtzEzO2KbZhW4/xGQwcEbc0cxtPfwkXRP1bwoBMSqEYEHYwyLImFrtHNpP9rSVbR0L09f/kfWKUUOr9J/hRkNQ=
     # BETA_KEYSTORE_PASSWORD={password}
     - secure: jBb7ri2he+o7e17rtiNt6tnPb5gKpjP6Wuh5wTHi6ftdAC5cAGKPqSTGuCnyK/bSZqLdKDoLzgjXEwxY3L4qetrILcAJZKQWY4sb+OVk51/FY8VQx32LpwGtxtZn7XGdHNxTYxGFsDc/BW+Eo7vdRbvUBh2nCJisVYCWSlHdVB4=
+    # FIREBASE_API_KEY_IV={iv}
+    - secure: "ZbR/KKrMxXEH4nzByKWNJxn2W1P1Pm8hb095w5c5zdE+5NylB1RuySGUsKeRH3qHWKMP97ab5yv3Zf2kk6m/N7V+VEvA2oQoSHR/giyK1PaiuYClba70b2L95xFHiW7ixST2OIzFIXraxmTtQzCX41wq3M0y4Wsl3i3auoSLcxY="
+    # FIREBASE_API_KEY_KEY={key}
+    - secure: "OWotE1RHqcqlAwBDN3P4EBUzqhMe5ElGEXMnBNdVGRl/uPnaOqbvneEiYst7AwvgRX3q19awg0WGDhFlQoZbHMX6ZxrBPqAnZD+GH8Db7pjo04yq6pMcRfS3vx+w17b44nhvvWJahqNHzktNROJJz0yaomM9mwgzlLbnxlOP4HI="
   matrix:
     - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
@@ -26,7 +30,7 @@ stages:
 - compile
 - test
 - name: deploy
-  if: branch = develop AND type = push
+  if: type = push AND branch = develop
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -102,15 +106,25 @@ jobs:
     # Fetch the entire git history to correctly generate version codes
     - git fetch --unshallow
     # configure the keystore
-    - echo crashlyticsBetaKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
-    - echo crashlyticsBetaKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+    - echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+    - echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     script:
-    - ./gradlew clean :app:assembleProductionDebug -PcrashlyticsBetaBuild --continue --stacktrace --parallel
+    - ./gradlew clean :app:assembleProductionDebug -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
 
+    before_deploy:
+    # Configure Firebase App Distribution
+    - openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
     deploy:
-      provider: script
+#    - provider: script
+#      skip_cleanup: true
+#      script: ./gradlew crashlyticsUploadDistributionProductionDebug -PfirebaseAppDistributionBuild --parallel
+#      on:
+#        repo: CruGlobal/godtools-android
+#        branch: develop
+#        jdk: oraclejdk8
+    - provider: script
       skip_cleanup: true
-      script: ./gradlew crashlyticsUploadDistributionProductionDebug -PcrashlyticsBetaBuild --parallel
+      script: ./gradlew appDistributionUploadProductionDebug -PfirebaseAppDistributionBuild --parallel
       on:
         repo: CruGlobal/godtools-android
         branch: develop
