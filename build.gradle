@@ -56,7 +56,7 @@ buildscript {
         deps.firebase = [
                 core        : '17.2.0',
                 dynamicLinks: '16.1.5',
-                perf        : '19.0.0',
+                perf        : '19.0.1',
         ]
         deps.playServices = [
                 analytics: '17.0.0',
