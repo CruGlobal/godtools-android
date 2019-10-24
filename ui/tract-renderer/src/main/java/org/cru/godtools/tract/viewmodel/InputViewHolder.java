@@ -1,9 +1,11 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -77,8 +79,13 @@ final class InputViewHolder extends BaseViewHolder<Input> {
 
     @OnFocusChange(R2.id.input)
     void onFocusChanged(final boolean hasFocus) {
+        InputMethodManager keyboard = (InputMethodManager) mInputView.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (!hasFocus) {
             onValidate();
+            keyboard.hideSoftInputFromWindow(mInputView.getWindowToken(), 0);
+        } else {
+            keyboard.showSoftInput(mInputView, 0);
         }
     }
 
