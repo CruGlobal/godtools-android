@@ -81,7 +81,7 @@ class AemArticleFragment() : BaseFragment() {
     // endregion WebView content
 }
 
-private class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
+class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
     private val db = ArticleRoomDatabase.getInstance(application)
 
     val articleUri = MutableLiveData<Uri?>()
