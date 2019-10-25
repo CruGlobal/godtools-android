@@ -54,7 +54,7 @@ buildscript {
                 testJUnit       : '1.1.1',
         ]
         deps.firebase = [
-                core        : '17.2.0',
+                core        : '17.2.1',
                 dynamicLinks: '16.1.5',
                 perf        : '19.0.1',
         ]
