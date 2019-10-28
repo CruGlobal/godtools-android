@@ -32,6 +32,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         void onToggleCard(@NonNull CardViewHolder holder);
 
         void onDismissCard(@NonNull CardViewHolder holder);
+
+        void onNextCard();
+
+        void onPreviousCard();
     }
 
     @BindView(R2.id.background_image)
@@ -42,6 +46,12 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     TextView mLabel;
     @BindView(R2.id.label_divider)
     View mDivider;
+    @BindView(R2.id.next_card)
+    TextView mNextCardView;
+    @BindView(R2.id.card_position)
+    TextView mCardPositionView;
+    @BindView(R2.id.previous_card)
+    TextView mPreviousCardView;
 
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
@@ -134,6 +144,22 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     void toggleCard() {
         if (mCallbacks != null) {
             mCallbacks.onToggleCard(this);
+        }
+    }
+
+    @Optional
+    @OnClick(R2.id.next_card)
+    void nextCard() {
+        if (mCallbacks != null){
+            mCallbacks.onNextCard();
+        }
+    }
+
+    @Optional
+    @OnClick(R2.id.previous_card)
+    void previousCard(){
+        if (mCallbacks != null) {
+            mCallbacks.onPreviousCard();
         }
     }
 }
