@@ -79,6 +79,43 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
             </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/card_margin_bottom"
+                android:layout_gravity="center"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:id="@+id/previous_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="end"
+                    android:text="Prev"
+                    android:textAlignment="gravity"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/card_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:gravity="center"
+                    android:text="1/6" />
+
+                <TextView
+                    android:id="@+id/next_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start"
+                    android:textAlignment="gravity"
+                    android:text="NEXT"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
