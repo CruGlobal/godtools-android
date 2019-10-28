@@ -4,9 +4,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.cardview.widget.CardView;
+
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
@@ -16,12 +23,8 @@ import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
+import java.util.Locale;
 
-import androidx.annotation.CallSuper;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -53,22 +56,27 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     @BindView(R2.id.previous_card)
     TextView mPreviousCardView;
 
+    private int mCollectionSize;
+
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
     @Nullable
     private Callbacks mCallbacks;
 
-    CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
+    CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder, int size) {
         super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
         if (pageViewHolder != null) {
             setCallbacks(pageViewHolder);
+            mCollectionSize = pageViewHolder.mPageContentLayout.getChildCount();
         }
+        mCollectionSize = size;
     }
 
     @NonNull
     public static CardViewHolder create(@NonNull final ViewGroup parent,
-                                        @Nullable final PageViewHolder pageViewHolder) {
-        return new CardViewHolder(parent, pageViewHolder);
+                                        @Nullable final PageViewHolder pageViewHolder,
+                                        int size) {
+        return new CardViewHolder(parent, pageViewHolder, size);
     }
 
     // region Lifecycle Events
@@ -79,6 +87,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         super.onBind();
         bindBackground();
         bindLabel();
+        bindCardNavigation();
     }
 
     @Override
@@ -122,6 +131,29 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         final Text label = mModel != null ? mModel.getLabel() : null;
         TextViewUtils.bind(label, mLabel, R.dimen.text_size_card_label, Styles.getPrimaryColor(mModel));
         mDivider.setBackgroundColor(Styles.getTextColor(mModel));
+    }
+
+    private void bindCardNavigation() {
+        int cardPositionCount = getModel() != null ? getModel().getPosition() + 1 : 1;
+        Locale locale = getModel() != null ? getModel().getManifest().getLocale() : Locale.getDefault();
+        String positionText = String.format(locale ,"%d/%d", cardPositionCount, mCollectionSize);
+        mCardPositionView.setText(positionText);
+        if (cardPositionCount == 1) {
+            mPreviousCardView.setVisibility(View.INVISIBLE);
+            mPreviousCardView.setEnabled(false);
+        } else {
+            mPreviousCardView.setVisibility(View.VISIBLE);
+            mPreviousCardView.setEnabled(true);
+        }
+
+        if (cardPositionCount == mCollectionSize){
+            mNextCardView.setVisibility(View.INVISIBLE);
+            mNextCardView.setEnabled(false);
+        } else {
+            mNextCardView.setVisibility(View.VISIBLE);
+            mNextCardView.setEnabled(true);
+        }
+
     }
 
     private void checkForDismissEvent(@NonNull final Event event) {

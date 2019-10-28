@@ -299,7 +299,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
             if (holders[pos] == null) {
                 holders[pos] = mRecycledCardViewHolders.acquire();
                 if (holders[pos] == null) {
-                    holders[pos] = CardViewHolder.create(mPageContentLayout, this);
+                    holders[pos] = CardViewHolder.create(mPageContentLayout, this, holders.length);
                 }
             }
 
