@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
+import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Button;
 import org.cru.godtools.xml.model.Card;
@@ -26,6 +28,7 @@ import org.cru.godtools.xml.model.Form;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -142,7 +145,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
         String positionText = String.format(locale ,"%d/%d", cardPositionCount, mCollectionSize);
         mCardPositionView.setText(positionText);
-        if (isPrayerForm()) {
+        if (isPrayerForm() || isPrayerSelection()) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
             mPreviousCardView.setEnabled(false);
             mCardPositionView.setVisibility(View.INVISIBLE);
@@ -175,6 +178,17 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         if (mModel != null) {
             for (Content content : mModel.getContent()) {
                 if (content instanceof Form){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPrayerSelection() {
+        if (mModel != null) {
+            for (Event.Id dismissListener : mModel.getDismissListeners()) {
+                if(dismissListener.name.contains("followup-form")) {
                     return true;
                 }
             }
