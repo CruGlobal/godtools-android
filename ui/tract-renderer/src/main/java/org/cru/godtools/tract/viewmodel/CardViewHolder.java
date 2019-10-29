@@ -19,7 +19,10 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.xml.model.Button;
 import org.cru.godtools.xml.model.Card;
+import org.cru.godtools.xml.model.Content;
+import org.cru.godtools.xml.model.Form;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
@@ -139,6 +142,14 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
         String positionText = String.format(locale ,"%d/%d", cardPositionCount, mCollectionSize);
         mCardPositionView.setText(positionText);
+        if (isPrayerForm()) {
+            mPreviousCardView.setVisibility(View.INVISIBLE);
+            mPreviousCardView.setEnabled(false);
+            mCardPositionView.setVisibility(View.INVISIBLE);
+            mNextCardView.setVisibility(View.INVISIBLE);
+            mNextCardView.setEnabled(false);
+            return;
+        }
         Context localContext = LocaleUtils.localizeContextIfPossible(mCardView.getContext(), locale);
         if (cardPositionCount == 1) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
@@ -158,6 +169,17 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
             mNextCardView.setText(localContext.getString(R.string.next));
         }
 
+    }
+
+    private boolean isPrayerForm() {
+        if (mModel != null) {
+            for (Content content : mModel.getContent()) {
+                if (content instanceof Form){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void checkForDismissEvent(@NonNull final Event event) {
