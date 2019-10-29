@@ -63,27 +63,22 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     @BindView(R2.id.previous_card)
     TextView mPreviousCardView;
 
-    private int mCollectionSize;
-
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
     @Nullable
     private Callbacks mCallbacks;
 
-    CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder, int size) {
+    CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
         super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
         if (pageViewHolder != null) {
             setCallbacks(pageViewHolder);
-            mCollectionSize = pageViewHolder.mPageContentLayout.getChildCount();
         }
-        mCollectionSize = size;
     }
 
     @NonNull
     public static CardViewHolder create(@NonNull final ViewGroup parent,
-                                        @Nullable final PageViewHolder pageViewHolder,
-                                        int size) {
-        return new CardViewHolder(parent, pageViewHolder, size);
+                                        @Nullable final PageViewHolder pageViewHolder) {
+        return new CardViewHolder(parent, pageViewHolder);
     }
 
     // region Lifecycle Events
@@ -143,9 +138,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     private void bindCardNavigation() {
         int cardPositionCount = mModel!= null ? mModel.getPosition() + 1 : 1;
         Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
-        String positionText = String.format(locale ,"%d/%d", cardPositionCount, mCollectionSize);
+        int cardCount = getCardCount();
+        String positionText = String.format(locale ,"%d/%d", cardPositionCount, cardCount);
         mCardPositionView.setText(positionText);
-        if (isPrayerForm() || isPrayerSelection()) {
+        if (isPrayerForm(mModel) || isPrayerSelection(mModel)) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
             mPreviousCardView.setEnabled(false);
             mCardPositionView.setVisibility(View.INVISIBLE);
@@ -163,7 +159,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
             mPreviousCardView.setText(localContext.getString(R.string.previous));
         }
 
-        if (cardPositionCount == mCollectionSize){
+        if (cardPositionCount == cardCount){
             mNextCardView.setVisibility(View.INVISIBLE);
             mNextCardView.setEnabled(false);
         } else {
@@ -174,9 +170,9 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     }
 
-    private boolean isPrayerForm() {
-        if (mModel != null) {
-            for (Content content : mModel.getContent()) {
+    private boolean isPrayerForm(Card card) {
+        if (card != null) {
+            for (Content content : card.getContent()) {
                 if (content instanceof Form){
                     return true;
                 }
@@ -185,15 +181,27 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         return false;
     }
 
-    private boolean isPrayerSelection() {
-        if (mModel != null) {
-            for (Event.Id dismissListener : mModel.getDismissListeners()) {
+    private boolean isPrayerSelection(Card card) {
+        if (card != null) {
+            for (Event.Id dismissListener : card.getDismissListeners()) {
                 if(dismissListener.name.contains("followup-form")) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private int getCardCount() {
+        int count = 0;
+        if (mModel != null) {
+            for (Card card : mModel.getPage().getCards()) {
+                if (!isPrayerForm(card)  || !isPrayerSelection(card)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private void checkForDismissEvent(@NonNull final Event event) {
