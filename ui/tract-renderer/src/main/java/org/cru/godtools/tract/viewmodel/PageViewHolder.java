@@ -182,7 +182,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @Override
     public void onNextCard() {
-        mPageContentLayout.changeActiveCard(mPageContentLayout.getActiveCardPosition() +1, true);
+        mPageContentLayout.changeActiveCard(mPageContentLayout.getActiveCardPosition() + 1, true);
     }
 
     @Override

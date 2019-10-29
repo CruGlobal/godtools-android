@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,16 +18,13 @@ import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
-import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.xml.model.Button;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Content;
 import org.cru.godtools.xml.model.Form;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -125,8 +121,8 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     private void bindBackground() {
         mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
         ResourceViewUtils.bindBackgroundImage(Card.getBackgroundImageResource(mModel), mBackgroundView,
-                                              Card.getBackgroundImageScaleType(mModel),
-                                              Card.getBackgroundImageGravity(mModel));
+                Card.getBackgroundImageScaleType(mModel),
+                Card.getBackgroundImageGravity(mModel));
     }
 
     private void bindLabel() {
@@ -136,10 +132,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     private void bindCardNavigation() {
-        int cardPositionCount = mModel!= null ? mModel.getPosition() + 1 : 1;
+        int cardPositionCount = mModel != null ? mModel.getPosition() + 1 : 1;
         Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
         int cardCount = getCardCount();
-        String positionText = String.format(locale ,"%d/%d", cardPositionCount, cardCount);
+        String positionText = String.format(locale, "%d/%d", cardPositionCount, cardCount);
         mCardPositionView.setText(positionText);
         if (isPrayerForm(mModel) || isPrayerSelection(mModel)) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
@@ -159,7 +155,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
             mPreviousCardView.setText(localContext.getString(R.string.previous));
         }
 
-        if (cardPositionCount == cardCount){
+        if (cardPositionCount == cardCount) {
             mNextCardView.setVisibility(View.INVISIBLE);
             mNextCardView.setEnabled(false);
         } else {
@@ -173,7 +169,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     private boolean isPrayerForm(Card card) {
         if (card != null) {
             for (Content content : card.getContent()) {
-                if (content instanceof Form){
+                if (content instanceof Form) {
                     return true;
                 }
             }
@@ -184,7 +180,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     private boolean isPrayerSelection(Card card) {
         if (card != null) {
             for (Event.Id dismissListener : card.getDismissListeners()) {
-                if(dismissListener.name.contains("followup-form")) {
+                if (dismissListener.name.contains("followup-form")) {
                     return true;
                 }
             }
@@ -196,7 +192,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int count = 0;
         if (mModel != null) {
             for (Card card : mModel.getPage().getCards()) {
-                if (!isPrayerForm(card)  || !isPrayerSelection(card)) {
+                if (!isPrayerForm(card) || !isPrayerSelection(card)) {
                     count++;
                 }
             }
@@ -230,14 +226,14 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     @Optional
     @OnClick(R2.id.next_card)
     void nextCard() {
-        if (mCallbacks != null){
+        if (mCallbacks != null) {
             mCallbacks.onNextCard();
         }
     }
 
     @Optional
     @OnClick(R2.id.previous_card)
-    void previousCard(){
+    void previousCard() {
         if (mCallbacks != null) {
             mCallbacks.onPreviousCard();
         }
