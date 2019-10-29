@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -134,16 +135,18 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     private void bindCardNavigation() {
-        int cardPositionCount = getModel() != null ? getModel().getPosition() + 1 : 1;
-        Locale locale = getModel() != null ? getModel().getManifest().getLocale() : Locale.getDefault();
+        int cardPositionCount = mModel!= null ? mModel.getPosition() + 1 : 1;
+        Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
         String positionText = String.format(locale ,"%d/%d", cardPositionCount, mCollectionSize);
         mCardPositionView.setText(positionText);
+        Context localContext = LocaleUtils.localizeContextIfPossible(mCardView.getContext(), locale);
         if (cardPositionCount == 1) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
             mPreviousCardView.setEnabled(false);
         } else {
             mPreviousCardView.setVisibility(View.VISIBLE);
             mPreviousCardView.setEnabled(true);
+            mPreviousCardView.setText(localContext.getString(R.string.previous));
         }
 
         if (cardPositionCount == mCollectionSize){
@@ -152,6 +155,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         } else {
             mNextCardView.setVisibility(View.VISIBLE);
             mNextCardView.setEnabled(true);
+            mNextCardView.setText(localContext.getString(R.string.next));
         }
 
     }

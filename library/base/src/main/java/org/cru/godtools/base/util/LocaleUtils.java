@@ -54,7 +54,7 @@ public class LocaleUtils {
     }
 
     @NonNull
-    private static Context localizeContextIfPossible(@NonNull final Context context, @NonNull final Locale locale) {
+    public static Context localizeContextIfPossible(@NonNull final Context context, @NonNull final Locale locale) {
         // we can't localize the context if android is too old
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return context;
