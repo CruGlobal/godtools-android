@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="16dp"
@@ -74,49 +74,36 @@
             android:layout_marginBottom="32dp"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/action_tools_remove"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Widget.GodTools.Tools.Details.Subhead"
+        <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:text="@string/label_tools_about" />
+            android:id="@+id/detail_view_pager"
+            android:background="@color/gray_E6">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/description"
-            style="@style/Widget.GodTools.Tools.Details.Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="8dp"
-            android:autoLink="web|email"
-            tools:text="Chili can be enameled with bitter sausages, also try soaking the sauce with ice water.  To the diced avocado add ground beef, strudel, ricotta and tender chocolate.  Try toasting cucumber ricotta tossed with rice vinegar." />
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_tab_layout"
+                android:elevation="@dimen/card_elevation"
+                app:tabBackground="@color/action_bar_action_tint">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/languages_header"
-            style="@style/Widget.GodTools.Tools.Details.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            tools:text="40 Languages" />
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/label_tools_about" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/languages"
-            style="@style/Widget.GodTools.Tools.Details.Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="8dp"
-            tools:text="English, French, Spanish" />
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="40 Languages" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
 </org.ccci.gto.android.common.widget.HackyNestedScrollView>

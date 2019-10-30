@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
@@ -37,9 +39,13 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -84,14 +90,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @BindView(R.id.shares)
     TextView mShares;
     @Nullable
-    @BindView(R.id.description)
-    TextView mDescription;
+    @BindView(R.id.detail_view_pager)
+    ViewPager mViewPager;
     @Nullable
-    @BindView(R.id.languages_header)
-    TextView mLanguagesHeader;
-    @Nullable
-    @BindView(R.id.languages)
-    TextView mLanguagesView;
+    @BindView(R.id.detail_tab_layout)
+    TabLayout mTabLayout;
     @Nullable
     @BindView(R.id.download_progress)
     ProgressBar mDownloadProgressBar;
@@ -280,24 +283,23 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
         bindShares(mShares, mTool);
-        if (mDescription != null) {
-            mDescription.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
+
+        final int count = mLanguages.size();
+        if (mViewPager != null) {
+            ToolsDetailAdapter adapter = new ToolsDetailAdapter();
+            mViewPager.setAdapter(adapter);
+            if (mTabLayout != null) {
+                mTabLayout.setupWithViewPager(mViewPager, true);
+                if (mTabLayout.getTabAt(1) != null) {
+                    mTabLayout.getTabAt(1).setText(requireContext().getResources()
+                            .getQuantityString(R.plurals.label_tools_languages, count, count));
+                }
+                if (mTabLayout.getTabAt(0) != null) {
+                    mTabLayout.getTabAt(0).setText(R.string.label_tools_about);
+                }
+            }
         }
-        if (mLanguagesHeader != null) {
-            final int count = mLanguages.size();
-            mLanguagesHeader.setText(mLanguagesHeader.getResources()
-                                             .getQuantityString(R.plurals.label_tools_languages, count, count));
-        }
-        if (mLanguagesView != null) {
-            mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
-            mLanguagesView.setText(Stream.of(mLanguages)
-                                           .map(l -> LocaleUtils.getDisplayName(l, mLanguagesView.getContext(), null,
-                                                                                null))
-                                           .withoutNulls()
-                                           .sorted(String.CASE_INSENSITIVE_ORDER)
-                                           .reduce((l1, l2) -> l1 + ", " + l2)
-                                           .orElse(""));
-        }
+
         if (mActionAdd != null) {
             mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
             mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
@@ -451,6 +453,46 @@ public class ToolDetailsFragment extends BasePlatformFragment
                     onLoadAvailableLanguages(locales);
                     break;
             }
+        }
+    }
+
+    class ToolsDetailAdapter extends PagerAdapter {
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            TextView textView = new TextView(container.getContext());
+            textView.setPadding(10, 10, 10, 10);
+            switch (position) {
+                case 0:
+                    textView.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
+                    break;
+                case 1:
+                    textView.setText(Stream.of(mLanguages)
+                            .map(l -> LocaleUtils.getDisplayName(l, container.getContext(), null,
+                                    null))
+                            .withoutNulls()
+                            .sorted(String.CASE_INSENSITIVE_ORDER)
+                            .reduce((l1, l2) -> l1 + ", " + l2)
+                            .orElse(""));
+                    break;
+            }
+            container.addView(textView, position);
+            return textView;
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
         }
     }
 }
