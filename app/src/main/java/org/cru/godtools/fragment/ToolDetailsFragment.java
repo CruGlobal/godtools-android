@@ -12,12 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -39,12 +39,12 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -91,7 +91,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     TextView mShares;
     @Nullable
     @BindView(R.id.detail_view_pager)
-    ViewPager mViewPager;
+    ChildHeightAwareViewPager mViewPager;
     @Nullable
     @BindView(R.id.detail_tab_layout)
     TabLayout mTabLayout;
@@ -461,8 +461,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            TextView textView = new TextView(container.getContext());
-            textView.setPadding(10, 10, 10, 10);
+            AppCompatTextView textView = (AppCompatTextView) LayoutInflater.from(container.getContext())
+                    .inflate(R.layout.tool_detail_text_view, container, false);
             switch (position) {
                 case 0:
                     textView.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));

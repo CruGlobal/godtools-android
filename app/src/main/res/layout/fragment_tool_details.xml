@@ -79,17 +79,18 @@
             android:text="@string/action_tools_remove"
             tools:visibility="visible" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
             android:id="@+id/detail_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="false"
             android:background="@color/gray_E6">
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/detail_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/detail_tab_layout"
-                android:elevation="@dimen/card_elevation"
+                android:elevation="15dp"
                 app:tabBackground="@color/action_bar_action_tint">
 
                 <com.google.android.material.tabs.TabItem
@@ -104,6 +105,6 @@
 
             </com.google.android.material.tabs.TabLayout>
 
-        </androidx.viewpager.widget.ViewPager>
+        </org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager>
     </LinearLayout>
 </org.ccci.gto.android.common.widget.HackyNestedScrollView>
