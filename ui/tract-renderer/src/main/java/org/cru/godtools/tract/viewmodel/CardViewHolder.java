@@ -152,7 +152,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         } else {
             mPreviousCardView.setVisibility(View.VISIBLE);
             mPreviousCardView.setEnabled(true);
-            mPreviousCardView.setText(localContext.getString(R.string.previous));
+            mPreviousCardView.setText(localContext.getString(R.string.tract_card_previous));
         }
 
         if (cardPositionCount == cardCount) {
@@ -161,7 +161,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         } else {
             mNextCardView.setVisibility(View.VISIBLE);
             mNextCardView.setEnabled(true);
-            mNextCardView.setText(localContext.getString(R.string.next));
+            mNextCardView.setText(localContext.getString(R.string.tract_card_next));
         }
 
     }
@@ -192,9 +192,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int count = 0;
         if (mModel != null) {
             for (Card card : mModel.getPage().getCards()) {
-                if (!isPrayerForm(card) || !isPrayerSelection(card)) {
-                    count++;
+                if (isPrayerForm(card) || isPrayerSelection(card)) {
+                    continue;
                 }
+                count++;
             }
         }
         return count;

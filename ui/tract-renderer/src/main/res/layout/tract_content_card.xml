@@ -101,7 +101,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/card_position"
                     android:layout_marginBottom="@dimen/card_margin_bottom"
-                    android:text="@string/previous"
+                    android:text="@string/tract_card_previous"
                     android:textAlignment="viewEnd"
                     android:gravity="end"
                     android:textAllCaps="true" />
@@ -127,7 +127,7 @@
                     android:textAlignment="viewStart"
                     android:layout_marginBottom="@dimen/card_margin_bottom"
                     android:gravity="start"
-                    android:text="@string/next"
+                    android:text="@string/tract_card_next"
                     android:textAllCaps="true" />
 
 
