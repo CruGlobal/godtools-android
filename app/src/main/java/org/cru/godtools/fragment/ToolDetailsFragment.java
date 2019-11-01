@@ -19,6 +19,8 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
+import org.cru.godtools.article.activity.CategoriesActivityKt;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.AttachmentLoader;
@@ -32,6 +34,8 @@ import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
+import org.cru.godtools.tract.activity.TractActivity;
+import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,12 +44,10 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.viewpager.widget.PagerAdapter;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -104,6 +106,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Nullable
     @BindView(R.id.action_remove)
     View mActionRemove;
+    @Nullable
+    @BindView(R.id.action_open)
+    View mActionOpen;
 
     @Nullable
     private Tool mTool;
@@ -308,6 +313,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mActionRemove.setEnabled(mTool != null && mTool.isAdded());
             mActionRemove.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
+
+        if (mActionOpen != null) {
+            mActionOpen.setEnabled(mTool != null && mTool.isAdded());
+            mActionOpen.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Optional
@@ -330,6 +340,30 @@ public class ToolDetailsFragment extends BasePlatformFragment
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolRemoved();
+            }
+        }
+    }
+
+    @Optional
+    @OnClick(R.id.action_open)
+    void openTool() {
+        if (mTool != null && mTool.getCode() != null) {
+            Settings settings = Settings.getInstance(requireContext());
+            Locale primaryLanguage = settings.getPrimaryLanguage();
+            Locale parallelLanguages = settings.getParallelLanguage();
+            switch (mTool.getType()) {
+                case TRACT:
+                    // start preLoading the tract in the first language
+                    ManifestManager.getInstance(requireContext())
+                            .getLatestPublishedManifest(mTool.getCode(), primaryLanguage);
+
+                    TractActivity.start(requireActivity(), mTool.getCode(), primaryLanguage,
+                                        parallelLanguages);
+                    break;
+                case ARTICLE:
+                    CategoriesActivityKt.startCategoriesActivity(requireActivity(), mTool.getCode(),
+                                                                 primaryLanguage);
+                    break;
             }
         }
     }

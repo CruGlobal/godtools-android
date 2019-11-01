@@ -54,6 +54,22 @@
             tools:text="45,876 Views" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/action_open"
+            style="@style/Widget.GodTools.Button.Colored.Blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
+            android:layout_marginTop="16dp"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="@string/action_tools_open" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_add"
             style="@style/Widget.GodTools.Button.Colored.Green"
             android:layout_width="match_parent"
@@ -65,16 +81,16 @@
             android:layout_marginTop="16dp"
             android:text="@string/action_tools_download" />
 
-        <androidx.appcompat.widget.AppCompatButtonImpl
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_remove"
             style="@style/Widget.GodTools.Button.Colored.Red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
+            android:layout_marginBottom="32dp"
             android:gravity="center"
             android:text="@string/action_tools_remove"
             tools:visibility="visible" />
@@ -90,7 +106,7 @@
                 android:id="@+id/detail_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="15dp"
+                android:elevation="20dp"
                 app:tabBackground="@color/action_bar_action_tint">
 
                 <com.google.android.material.tabs.TabItem
