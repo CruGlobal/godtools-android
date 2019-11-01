@@ -5,12 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.CallSuper;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.cardview.widget.CardView;
-
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
@@ -28,6 +22,11 @@ import org.cru.godtools.xml.model.Text;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
