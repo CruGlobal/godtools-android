@@ -89,7 +89,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginBottom="32dp"
-            android:gravity="center"
+            android:drawableStart="@drawable/ic_remove"
+            android:paddingStart="80dp"
+            android:drawablePadding="-100dp"
+            android:drawableTint="@color/gt_red"
             android:text="@string/action_tools_remove"
             tools:visibility="visible" />
 

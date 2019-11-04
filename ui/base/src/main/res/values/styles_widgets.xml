@@ -19,6 +19,23 @@
         <item name="android:background">@drawable/btn_outline</item>
         <item name="backgroundTint">?attr/colorButtonNormal</item>
     </style>
+    <style name="Widget.GodTools.Button.Outline.Red" parent="Widget.GodTools.Button.Outline">
+        <item name="backgroundTint">@color/gt_red</item>
+        <item name="android:textColor">@color/gt_red</item>
+    </style>
+    <style name="Widget.GodTools.Button.Outline.Blue" parent="Widget.GodTools.Button.Outline">
+        <item name="backgroundTint">@color/gt_blue</item>
+    </style>
+    <style name="Widget.GodTools.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/btn_colored</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Widget.GodTools.Button.Borderless.Colored.Blue" parent="Widget.GodTools.Button.Borderless.Colored">
+        <item name="backgroundTint">@color/gt_blue</item>
+    </style>
+    <style name="Widget.GodTools.Button.Borderless.Colored.Green" parent="Widget.GodTools.Button.Borderless.Colored">
+        <item name="backgroundTint">@color/gt_green</item>
+    </style>
 
     <!-- ProgressBar -->
     <style name="Widget.GodTools.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal" />
