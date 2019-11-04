@@ -19,12 +19,10 @@ import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.LanguageSettingsActivityKt;
 import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.cru.godtools.article.activity.CategoriesActivityKt;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
-import org.cru.godtools.tract.activity.TractActivity;
-import org.cru.godtools.xml.service.ManifestManager;
+import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
 
@@ -175,18 +173,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             return;
         }
 
-        // launch activity based on the tool type
-        switch (type) {
-            case TRACT:
-                // start preloading the tract in the first language
-                ManifestManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
-
-                TractActivity.start(this, code, languages);
-                break;
-            case ARTICLE:
-                CategoriesActivityKt.startCategoriesActivity(this, code, languages[0]);
-                break;
-        }
+        ActivityUtilsKt.openToolActivity(this, code, type, languages);
     }
 
     @Override

@@ -19,7 +19,6 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
-import org.cru.godtools.article.activity.CategoriesActivityKt;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -34,8 +33,7 @@ import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
-import org.cru.godtools.tract.activity.TractActivity;
-import org.cru.godtools.xml.service.ManifestManager;
+import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Collections;
 import java.util.List;
@@ -291,7 +289,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
         final int count = mLanguages.size();
         if (mViewPager != null) {
-            ToolsDetailAdapter adapter = new ToolsDetailAdapter();
+            ToolDetailsAdapter adapter = new ToolDetailsAdapter();
             mViewPager.setAdapter(adapter);
             if (mTabLayout != null) {
                 mTabLayout.setupWithViewPager(mViewPager, true);
@@ -351,20 +349,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
             Settings settings = Settings.getInstance(requireContext());
             Locale primaryLanguage = settings.getPrimaryLanguage();
             Locale parallelLanguages = settings.getParallelLanguage();
-            switch (mTool.getType()) {
-                case TRACT:
-                    // start preLoading the tract in the first language
-                    ManifestManager.getInstance(requireContext())
-                            .getLatestPublishedManifest(mTool.getCode(), primaryLanguage);
-
-                    TractActivity.start(requireActivity(), mTool.getCode(), primaryLanguage,
-                                        parallelLanguages);
-                    break;
-                case ARTICLE:
-                    CategoriesActivityKt.startCategoriesActivity(requireActivity(), mTool.getCode(),
-                                                                 primaryLanguage);
-                    break;
-            }
+            ActivityUtilsKt.openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
+                                             primaryLanguage, parallelLanguages);
         }
     }
 
@@ -490,7 +476,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
     }
 
-    class ToolsDetailAdapter extends PagerAdapter {
+    class ToolDetailsAdapter extends PagerAdapter {
 
         @NonNull
         @Override
