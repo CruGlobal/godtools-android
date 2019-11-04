@@ -58,9 +58,6 @@ buildscript {
                 dynamicLinks: '16.1.5',
                 perf        : '19.0.1',
         ]
-        deps.playServices = [
-                analytics: '17.0.0',
-        ]
         uris = [
                 mobileContentApi: [
                         stage     : "https://mobile-content-api-stage.cru.org/",

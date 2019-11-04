@@ -22,7 +22,6 @@ public final class AnalyticsDispatcher implements InvocationHandler {
                                                            new Class<?>[] {AnalyticsService.class}, this);
         mEventBusHelper = new EventBusAnalyticsHelper(mProxy);
 
-        addAnalyticsService(GoogleAnalyticsService.getInstance(context));
         addAnalyticsService(AdobeAnalyticsService.getInstance(context));
     }
 
