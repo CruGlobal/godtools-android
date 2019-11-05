@@ -281,27 +281,12 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateViews() {
+        setUpViewPager();
         bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
         bindShares(mShares, mTool);
-
-        final int count = mLanguages.size();
-        if (mViewPager != null) {
-            ToolDetailsAdapter adapter = new ToolDetailsAdapter();
-            mViewPager.setAdapter(adapter);
-            if (mTabLayout != null) {
-                mTabLayout.setupWithViewPager(mViewPager, true);
-                if (mTabLayout.getTabAt(1) != null) {
-                    mTabLayout.getTabAt(1).setText(requireContext().getResources()
-                            .getQuantityString(R.plurals.label_tools_languages, count, count));
-                }
-                if (mTabLayout.getTabAt(0) != null) {
-                    mTabLayout.getTabAt(0).setText(R.string.label_tools_about);
-                }
-            }
-        }
 
         if (mActionAdd != null) {
             mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
@@ -476,6 +461,17 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
     }
 
+    private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
+
+    private void setUpViewPager() {
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mDetailsAdapter);
+            if (mTabLayout != null) {
+                mTabLayout.setupWithViewPager(mViewPager, true);
+            }
+        }
+    }
+
     class ToolDetailsAdapter extends PagerAdapter {
 
         @NonNull
@@ -508,6 +504,19 @@ public class ToolDetailsFragment extends BasePlatformFragment
         @Override
         public int getCount() {
             return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(final int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.label_tools_about);
+                case 1:
+                    int count = mLanguages.size();
+                    return getResources().getQuantityString(R.plurals.label_tools_languages, count, count);
+            }
+            return "";
         }
 
         @Override
