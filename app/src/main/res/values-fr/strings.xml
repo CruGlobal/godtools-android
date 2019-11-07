@@ -34,6 +34,7 @@
         <item quantity="other">%1$,d langues</item>
     </plurals>
     <string name="text_tools_all_installed">Vous avez téléchargé tous les outils disponibles.</string>
+    <string name="action_tools_open">Ouvrir l\'outil</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Plus de 60 langues</string>
     <string name="menu_language_settings">Paramètres de langue</string>

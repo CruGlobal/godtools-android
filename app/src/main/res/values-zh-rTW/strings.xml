@@ -32,6 +32,7 @@
         <item quantity="other">%1$,d 種語言</item>
     </plurals>
     <string name="text_tools_all_installed">您已經下載所有可用工具了。</string>
+    <string name="action_tools_open">開啟工具</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">超過 60 種語言</string>
     <string name="menu_language_settings">語言選項</string>
