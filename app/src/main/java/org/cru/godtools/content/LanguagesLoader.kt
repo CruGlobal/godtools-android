@@ -13,7 +13,8 @@ internal val QUERY_LANGUAGES = Query.select(Language::class.java)
     .join(LanguageTable.SQL_JOIN_TRANSLATION)
     .where(TranslationTable.SQL_WHERE_PUBLISHED)
 
-class LanguagesLoader(context: Context) : CachingAsyncTaskEventBusLoader<List<@JvmSuppressWildcards Language>>(context) {
+class LanguagesLoader(context: Context) :
+    CachingAsyncTaskEventBusLoader<List<@JvmSuppressWildcards Language>>(context) {
     private val dao = GodToolsDao.getInstance(context)
 
     init {
