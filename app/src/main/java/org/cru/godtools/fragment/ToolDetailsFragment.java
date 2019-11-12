@@ -166,6 +166,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         super.onViewCreated(view, savedInstanceState);
         updateViews();
         updateDownloadProgress();
+        setUpViewPager();
     }
 
     @Override
@@ -281,7 +282,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateViews() {
-        setUpViewPager();
         bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
@@ -300,6 +300,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
         if (mActionOpen != null) {
             mActionOpen.setEnabled(mTool != null && mTool.isAdded());
             mActionOpen.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
+        }
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mDetailsAdapter);
         }
     }
 
@@ -477,20 +480,20 @@ public class ToolDetailsFragment extends BasePlatformFragment
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            AppCompatTextView textView = (AppCompatTextView) LayoutInflater.from(container.getContext())
-                    .inflate(R.layout.tool_detail_text_view, container, false);
+            AppCompatTextView textView =
+                    (AppCompatTextView) LayoutInflater.from(container.getContext())
+                            .inflate(R.layout.tool_detail_text_view, container, false);
             switch (position) {
                 case 0:
-                    textView.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
+                    textView.setText(ModelUtils.getTranslationDescription(getContext(),
+                                                                          mLatestTranslation,
+                                                                          mTool));
                     break;
                 case 1:
-                    textView.setText(Stream.of(mLanguages)
-                            .map(l -> LocaleUtils.getDisplayName(l, container.getContext(), null,
-                                    null))
-                            .withoutNulls()
-                            .sorted(String.CASE_INSENSITIVE_ORDER)
-                            .reduce((l1, l2) -> l1 + ", " + l2)
-                            .orElse(""));
+                    textView.setText(Stream.of(mLanguages).map(l -> LocaleUtils
+                            .getDisplayName(l, container.getContext(), null, null)
+                    ).withoutNulls().sorted(String.CASE_INSENSITIVE_ORDER)
+                                             .reduce((l1, l2) -> l1 + ", " + l2).orElse(""));
                     break;
             }
             container.addView(textView, position);
@@ -498,7 +501,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
 
         @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position,
+                                @NonNull Object object) {
         }
 
         @Override
@@ -514,7 +518,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
                     return getString(R.string.label_tools_about);
                 case 1:
                     int count = mLanguages.size();
-                    return getResources().getQuantityString(R.plurals.label_tools_languages, count, count);
+                    return getResources()
+                            .getQuantityString(R.plurals.label_tools_languages, count, count);
             }
             return "";
         }
@@ -523,5 +528,5 @@ public class ToolDetailsFragment extends BasePlatformFragment
         public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
-    }
+    } // End of Adapter
 }
