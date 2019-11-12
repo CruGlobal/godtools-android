@@ -1,7 +1,9 @@
 package org.cru.godtools.fragment;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
@@ -34,6 +39,7 @@ import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.cru.godtools.util.ActivityUtilsKt;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,6 +89,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Nullable
     @BindView(R.id.banner)
     PicassoImageView mBanner;
+    @Nullable
+    @BindView(R.id.video_banner)
+    YouTubePlayerView mVideoBanner;
     @Nullable
     @BindView(R.id.title)
     TextView mTitle;
@@ -288,6 +297,20 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
         bindShares(mShares, mTool);
 
+        if (mBanner != null) {
+            mBanner.asImageView().setVisibility(
+                    (mTool != null && TextUtils.isEmpty(mTool.getOverviewVideo())) ||
+                            Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
+                            View.VISIBLE : View.GONE);
+        }
+        if (mVideoBanner != null) {
+            mVideoBanner.setVisibility(
+                    mTool != null && !TextUtils.isEmpty(mTool.getOverviewVideo()) ? View.VISIBLE :
+                            View.GONE);
+            if (mTool != null && !TextUtils.isEmpty(mTool.getOverviewVideo())) {
+                updateOverviewVideo();
+            }
+        }
         if (mActionAdd != null) {
             mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
             mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
@@ -303,6 +326,24 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
         if (mViewPager != null) {
             mViewPager.setAdapter(mDetailsAdapter);
+        }
+    }
+
+    private void updateOverviewVideo() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (mVideoBanner != null) {
+                mVideoBanner.setEnableAutomaticInitialization(false);
+                getLifecycle().addObserver(mVideoBanner);
+                mVideoBanner.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady(@NotNull final YouTubePlayer youTubePlayer) {
+                        if (mTool != null && mTool.getOverviewVideo() != null) {
+                            String videoId = mTool.getOverviewVideo().split("=")[1];
+                            youTubePlayer.loadVideo(videoId, 0);
+                        }
+                    }
+                });
+            }
         }
     }
 
