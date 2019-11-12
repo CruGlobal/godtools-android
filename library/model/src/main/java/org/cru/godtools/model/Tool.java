@@ -26,6 +26,7 @@ public class Tool extends Base {
     private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
     public static final String JSON_ATTACHMENTS = "attachments";
+    public static final String JSON_OVERVIEW_VIDEO = "attr-about-overview-video";
 
     public static final String INVALID_CODE = null;
     public static final String CODE_EVERYSTUDENT = "es";
@@ -94,6 +95,10 @@ public class Tool extends Base {
     @Nullable
     @JsonApiAttribute(name = JSON_COPYRIGHT)
     private String mCopyright;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_OVERVIEW_VIDEO)
+    private String mOverviewVideo;
 
     @JsonApiIgnore
     private int mOrder = Integer.MAX_VALUE;
@@ -181,6 +186,14 @@ public class Tool extends Base {
 
     public void setDetailsBannerId(final long attachmentId) {
         mDetailsBannerId = attachmentId;
+    }
+
+    public String getOverviewVideo() {
+        return mOverviewVideo;
+    }
+
+    public void setOverviewVideo(String videoUrl) {
+        mOverviewVideo = videoUrl;
     }
 
     @Nullable
