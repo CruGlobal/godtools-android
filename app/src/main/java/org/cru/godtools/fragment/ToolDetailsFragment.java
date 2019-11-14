@@ -299,7 +299,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
         if (mBanner != null) {
             mBanner.asImageView().setVisibility(
-                    (mTool != null && TextUtils.isEmpty(mTool.getOverviewVideo())) ||
+                    TextUtils.isEmpty(mTool != null ? mTool.getOverviewVideo() : null) ||
                             Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
                             View.VISIBLE : View.GONE);
         }
