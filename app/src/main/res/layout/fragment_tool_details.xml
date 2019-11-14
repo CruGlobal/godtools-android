@@ -11,27 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-                android:id="@+id/banner"
-                android:adjustViewBounds="true"
-                android:background="@color/gray_E6"
-                android:scaleType="centerCrop"
-                app:layout_aspectRatio="210%"
-                app:layout_widthPercent="100%" />
-
-            <ProgressBar
-                android:id="@+id/download_progress"
-                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_alignBottom="@id/banner"
-                android:visibility="gone"
-                tools:visibility="visible" />
-        </androidx.percentlayout.widget.PercentRelativeLayout>
+        <include layout="@layout/tool_detail_banner_view" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"

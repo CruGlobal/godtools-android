@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.percentlayout.widget.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+            android:id="@+id/banner"
+            android:adjustViewBounds="true"
+            android:background="@color/gray_E6"
+            android:scaleType="centerCrop"
+            app:layout_aspectRatio="210%"
+            app:layout_widthPercent="100%" />
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/video_banner"
+            android:adjustViewBounds="true"
+            android:background="@color/gray_E6"
+            android:scaleType="centerCrop"
+            app:autoPlay="false"
+            app:layout_aspectRatio="210%"
+            app:layout_widthPercent="100%"
+            app:showFullScreenButton="false"
+            tools:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/download_progress"
+            style="@style/Widget.GodTools.Tools.Download.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_alignBottom="@id/banner"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+
+</merge>
