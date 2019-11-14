@@ -54,69 +54,71 @@
             tools:text="45,876 Views" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_add"
-            style="@style/Widget.GodTools.Button.Colored.Green"
+            android:id="@+id/action_open"
+            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="@string/action_tools_open" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/action_add"
+            style="@style/Widget.GodTools.Button.Borderless.Colored.Green"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="16dp"
             android:text="@string/action_tools_download" />
 
-        <androidx.appcompat.widget.AppCompatButtonImpl
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_remove"
-            style="@style/Widget.GodTools.Button.Colored.Red"
+            style="@style/Widget.GodTools.Button.Outline.Red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:gravity="center"
             android:text="@string/action_tools_remove"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Widget.GodTools.Tools.Details.Subhead"
+        <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
+            android:id="@+id/detail_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:text="@string/label_tools_about" />
+            android:isScrollContainer="false"
+            android:background="@color/gray_E6">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/description"
-            style="@style/Widget.GodTools.Tools.Details.Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="8dp"
-            android:autoLink="web|email"
-            tools:text="Chili can be enameled with bitter sausages, also try soaking the sauce with ice water.  To the diced avocado add ground beef, strudel, ricotta and tender chocolate.  Try toasting cucumber ricotta tossed with rice vinegar." />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/detail_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="7dp"
+                app:tabBackground="@color/action_bar_action_tint">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/languages_header"
-            style="@style/Widget.GodTools.Tools.Details.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            tools:text="40 Languages" />
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/label_tools_about" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/languages"
-            style="@style/Widget.GodTools.Tools.Details.Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="8dp"
-            tools:text="English, French, Spanish" />
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="40 Languages" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager>
     </LinearLayout>
 </org.ccci.gto.android.common.widget.HackyNestedScrollView>

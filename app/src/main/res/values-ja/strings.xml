@@ -32,6 +32,7 @@
         <item quantity="other">%1$,d 言語</item>
     </plurals>
     <string name="text_tools_all_installed">利用可能なツールをすべてダウンロードしました。</string>
+    <string name="action_tools_open">ツールを開く</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60種類以上の言語</string>
     <string name="menu_language_settings">言語設定</string>

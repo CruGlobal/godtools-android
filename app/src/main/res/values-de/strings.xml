@@ -38,6 +38,7 @@
     </plurals>
     <string name="text_tools_all_installed">Es wurden bereits alle verfügbaren Tools heruntergeladen.</string>
     <string name="menu_add_to_home">Zum Homescreen hinzufügen</string>
+    <string name="action_tools_open">Tool öffnen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Über 60 Sprachen</string>
     <string name="menu_language_settings">Spracheinstellungen</string>

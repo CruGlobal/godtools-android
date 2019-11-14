@@ -12,11 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
+import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.AttachmentLoader;
@@ -30,6 +33,7 @@ import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
+import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +41,11 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
+import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -84,14 +90,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @BindView(R.id.shares)
     TextView mShares;
     @Nullable
-    @BindView(R.id.description)
-    TextView mDescription;
+    @BindView(R.id.detail_view_pager)
+    ChildHeightAwareViewPager mViewPager;
     @Nullable
-    @BindView(R.id.languages_header)
-    TextView mLanguagesHeader;
-    @Nullable
-    @BindView(R.id.languages)
-    TextView mLanguagesView;
+    @BindView(R.id.detail_tab_layout)
+    TabLayout mTabLayout;
     @Nullable
     @BindView(R.id.download_progress)
     ProgressBar mDownloadProgressBar;
@@ -101,6 +104,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Nullable
     @BindView(R.id.action_remove)
     View mActionRemove;
+    @Nullable
+    @BindView(R.id.action_open)
+    View mActionOpen;
 
     @Nullable
     private Tool mTool;
@@ -160,6 +166,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         super.onViewCreated(view, savedInstanceState);
         updateViews();
         updateDownloadProgress();
+        setUpViewPager();
     }
 
     @Override
@@ -280,24 +287,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
         bindShares(mShares, mTool);
-        if (mDescription != null) {
-            mDescription.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
-        }
-        if (mLanguagesHeader != null) {
-            final int count = mLanguages.size();
-            mLanguagesHeader.setText(mLanguagesHeader.getResources()
-                                             .getQuantityString(R.plurals.label_tools_languages, count, count));
-        }
-        if (mLanguagesView != null) {
-            mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
-            mLanguagesView.setText(Stream.of(mLanguages)
-                                           .map(l -> LocaleUtils.getDisplayName(l, mLanguagesView.getContext(), null,
-                                                                                null))
-                                           .withoutNulls()
-                                           .sorted(String.CASE_INSENSITIVE_ORDER)
-                                           .reduce((l1, l2) -> l1 + ", " + l2)
-                                           .orElse(""));
-        }
+
         if (mActionAdd != null) {
             mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
             mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
@@ -305,6 +295,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
         if (mActionRemove != null) {
             mActionRemove.setEnabled(mTool != null && mTool.isAdded());
             mActionRemove.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
+        }
+
+        if (mActionOpen != null) {
+            mActionOpen.setEnabled(mTool != null && mTool.isAdded());
+            mActionOpen.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
+        }
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mDetailsAdapter);
         }
     }
 
@@ -329,6 +327,18 @@ public class ToolDetailsFragment extends BasePlatformFragment
             if (callbacks != null) {
                 callbacks.onToolRemoved();
             }
+        }
+    }
+
+    @Optional
+    @OnClick(R.id.action_open)
+    void openTool() {
+        if (mTool != null && mTool.getCode() != null) {
+            Settings settings = Settings.getInstance(requireContext());
+            Locale primaryLanguage = settings.getPrimaryLanguage();
+            Locale parallelLanguages = settings.getParallelLanguage();
+            ActivityUtilsKt.openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
+                                             primaryLanguage, parallelLanguages);
         }
     }
 
@@ -453,4 +463,70 @@ public class ToolDetailsFragment extends BasePlatformFragment
             }
         }
     }
+
+    private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
+
+    private void setUpViewPager() {
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mDetailsAdapter);
+            if (mTabLayout != null) {
+                mTabLayout.setupWithViewPager(mViewPager, true);
+            }
+        }
+    }
+
+    class ToolDetailsAdapter extends PagerAdapter {
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            AppCompatTextView textView =
+                    (AppCompatTextView) LayoutInflater.from(container.getContext())
+                            .inflate(R.layout.tool_detail_text_view, container, false);
+            switch (position) {
+                case 0:
+                    textView.setText(ModelUtils.getTranslationDescription(getContext(),
+                                                                          mLatestTranslation,
+                                                                          mTool));
+                    break;
+                case 1:
+                    textView.setText(Stream.of(mLanguages).map(l -> LocaleUtils
+                            .getDisplayName(l, container.getContext(), null, null)
+                    ).withoutNulls().sorted(String.CASE_INSENSITIVE_ORDER)
+                                             .reduce((l1, l2) -> l1 + ", " + l2).orElse(""));
+                    break;
+            }
+            container.addView(textView, position);
+            return textView;
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position,
+                                @NonNull Object object) {
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(final int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.label_tools_about);
+                case 1:
+                    int count = mLanguages.size();
+                    return getResources()
+                            .getQuantityString(R.plurals.label_tools_languages, count, count);
+            }
+            return "";
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+    } // End of Adapter
 }
