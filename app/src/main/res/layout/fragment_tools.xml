@@ -63,6 +63,7 @@
                 android:id="@+id/openTutorialTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> callback.onTutorialOpen()}"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
                 app:drawableEndCompat="@drawable/ic_nav_next_arrow"

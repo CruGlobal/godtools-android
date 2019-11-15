@@ -26,6 +26,7 @@ import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
 import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolsCursorLoader;
+import org.cru.godtools.databinding.FragmentToolsBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
@@ -48,7 +49,6 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
 
 public class ToolsFragment extends BasePlatformFragment
         implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
@@ -61,6 +61,26 @@ public class ToolsFragment extends BasePlatformFragment
 
         void onNoToolsAvailableAction();
     }
+
+    public interface UICallbacks {
+        void onTutorialClose();
+
+        void onTutorialOpen();
+    }
+
+    private UICallbacks mUICallbacks = new UICallbacks() {
+        @Override
+        public void onTutorialClose() {
+            closeTutorial();
+        }
+
+        @Override
+        public void onTutorialOpen() {
+            openTutorial();
+        }
+    };
+
+
 
     public static final int MODE_ADDED = 1;
     public static final int MODE_AVAILABLE = 2;
@@ -75,9 +95,8 @@ public class ToolsFragment extends BasePlatformFragment
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ int mMode = MODE_ADDED;
 
-    @Nullable
-    @BindView(R.id.resources)
-    RecyclerView mToolsView;
+    FragmentToolsBinding mToolsBinding;
+
     @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
     @Nullable
@@ -89,6 +108,8 @@ public class ToolsFragment extends BasePlatformFragment
 
     @Nullable
     private Cursor mResources;
+
+    private Settings mSettings;
 
     public static Fragment newInstance(final int mode) {
         final Fragment fragment = new ToolsFragment();
@@ -117,19 +138,25 @@ public class ToolsFragment extends BasePlatformFragment
             mMode = args.getInt(EXTRA_MODE, mMode);
         }
 
+        mSettings = Settings.getInstance(requireContext());
+
         startLoaders();
     }
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tools, container, false);
+        mToolsBinding = FragmentToolsBinding.inflate(inflater, container, false);
+        return mToolsBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolsList();
+        mToolsBinding.setIsTutorialViewable(
+                !mSettings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED));
+        mToolsBinding.setCallback(mUICallbacks);
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
@@ -210,6 +237,14 @@ public class ToolsFragment extends BasePlatformFragment
         return mMode == MODE_AVAILABLE;
     }
 
+    private void closeTutorial() {
+        mToolsBinding.setIsTutorialViewable(false);
+    }
+
+    private void openTutorial() {
+        mSettings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED);
+    }
+
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
@@ -226,9 +261,9 @@ public class ToolsFragment extends BasePlatformFragment
 
     @SuppressWarnings("unchecked")
     private void setupToolsList() {
-        if (mToolsView != null) {
-            mToolsView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-            mToolsView.setHasFixedSize(false);
+        if (mToolsBinding.resources != null) {
+            mToolsBinding.resources.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            mToolsBinding.resources.setHasFixedSize(false);
 
             // create base tools adapter
             mToolsAdapter = new ToolsAdapter();
@@ -237,7 +272,7 @@ public class ToolsFragment extends BasePlatformFragment
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
-                mToolsView.setItemAnimator(new DraggableItemAnimator());
+                mToolsBinding.resources.setItemAnimator(new DraggableItemAnimator());
                 mToolsDragDropManager = new RecyclerViewDragDropManager();
                 mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
                         .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
@@ -271,11 +306,11 @@ public class ToolsFragment extends BasePlatformFragment
             }
 
             // attach the correct adapter to the tools RecyclerView
-            mToolsView.setAdapter(adapter);
+            mToolsBinding.resources.setAdapter(adapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
-                mToolsDragDropManager.attachRecyclerView(mToolsView);
+                mToolsDragDropManager.attachRecyclerView(mToolsBinding.resources);
             }
 
             updateToolsList();
@@ -298,9 +333,9 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
-        if (mToolsView != null) {
-            mToolsView.setItemAnimator(null);
-            mToolsView.setAdapter(null);
+        if (mToolsBinding.resources != null) {
+            mToolsBinding.resources.setItemAnimator(null);
+            mToolsBinding.resources.setAdapter(null);
         }
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
