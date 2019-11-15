@@ -150,6 +150,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
@@ -191,7 +192,6 @@ dependencies {
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
-    implementation "androidx.constraintlayout:constraintlayout${deps.androidX.constraintLayout}"
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants
