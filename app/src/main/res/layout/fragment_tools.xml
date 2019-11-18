@@ -7,7 +7,7 @@
         <import type="android.view.View" />
 
         <variable name="isTutorialViewable" type="Boolean" />
-        <variable name="callback" type="org.cru.godtools.fragment.ToolsFragment.UICallbacks" />
+        <variable name="callback" type="org.cru.godtools.fragment.ToolsFragment.TutorialCallbacks" />
 
     </data>
 

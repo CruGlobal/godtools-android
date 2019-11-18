@@ -62,13 +62,13 @@ public class ToolsFragment extends BasePlatformFragment
         void onNoToolsAvailableAction();
     }
 
-    public interface UICallbacks {
+    public interface TutorialCallbacks {
         void onTutorialClose();
 
         void onTutorialOpen();
     }
 
-    private UICallbacks mUICallbacks = new UICallbacks() {
+    private TutorialCallbacks mTutorialCallbacks = new TutorialCallbacks() {
         @Override
         public void onTutorialClose() {
             closeTutorial();
@@ -156,7 +156,7 @@ public class ToolsFragment extends BasePlatformFragment
         setupToolsList();
         mToolsBinding.setIsTutorialViewable(
                 !mSettings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED));
-        mToolsBinding.setCallback(mUICallbacks);
+        mToolsBinding.setCallback(mTutorialCallbacks);
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
