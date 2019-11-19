@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,12 +20,13 @@
             bind:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/onboarding_explore_text"
+            android:id="@+id/onboarding_prepare_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/onboarding_explore"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/onboarding_prepare"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
             bind:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
@@ -33,7 +35,7 @@
             bind:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/onboarding_video_slide_text"
+            android:id="@+id/appCompatTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -41,45 +43,28 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:gravity="center"
-            android:text="@string/onboarding_slide_1_description"
+            android:text="@string/onboarding_prepare_description"
             android:textAppearance="@style/TextAppearance.GodTools.Medium"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_youtube_container"
             bind:layout_constraintEnd_toEndOf="parent"
             bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_explore_text" />
-        <LinearLayout
-            android:id="@+id/onboarding_youtube_container"
+            bind:layout_constraintTop_toBottomOf="@id/onboarding_prepare_text" />
+
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="32dp"
-            android:gravity="top|center_horizontal"
-            android:orientation="vertical"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_next_button"
+            android:scaleType="fitCenter"
+            bind:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
             bind:layout_constraintEnd_toEndOf="parent"
             bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_video_slide_text">
-
-            <!-- The YouTube player is in a linear layout because you can't set gravity on it. -->
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                android:id="@+id/youTubePlayerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                bind:showFullScreenButton="false"
-                bind:showSeekBar="false"
-                bind:showVideoCurrentTime="false"
-                bind:showVideoDuration="false"
-                bind:showYouTubeButton="false"
-                bind:videoId="9HRYIFXbT_s" />
-
-        </LinearLayout>
-
-
+            bind:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
+            tools:srcCompat="@tools:sample/avatars[11]" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

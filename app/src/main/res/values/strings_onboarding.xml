@@ -6,4 +6,9 @@
     <string name="onboarding_explore">Explore</string>
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
     <string name="tutorial">Tutorial</string>
+    <string name="onboarding_prepare">Prepare</string>
+    <string name="onboarding_prepare_description">Get more familiar with a couple of tools. This is a good place to start.</string>
+    <string name="onboarding_try_description">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
+    <string name="onboarding_try">Try</string>
+    <string name="onboarding_menu">This tutorial is available to see again in the menu</string>
 </resources>

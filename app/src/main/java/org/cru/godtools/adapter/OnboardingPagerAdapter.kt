@@ -16,6 +16,6 @@ class OnboardingPagerAdapter(val callbacks: OnBoardingCallbacks, fm: FragmentMan
     }
 
     override fun getCount(): Int {
-        return 1
+        return 4
     }
 }
