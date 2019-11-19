@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="callback"
+            type="org.cru.godtools.activity.OnBoardingCallbacks" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/onboarding_navigation_view"
+            bind:callback="@{callback}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/onboarding_explore_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="@string/onboarding_explore"
+            android:textAppearance="@style/TextAppearance.GodTools.Large"
+            android:textColor="@color/design_default_color_primary_dark"
+            bind:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:layout_constraintStart_toStartOf="parent"
+            bind:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/onboarding_video_slide_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:gravity="center"
+            android:text="@string/onboarding_slide_1_description"
+            android:textAppearance="@style/TextAppearance.GodTools.Medium"
+            bind:layout_constraintBottom_toTopOf="@+id/youTubePlayerView"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:layout_constraintStart_toStartOf="parent"
+            bind:layout_constraintTop_toBottomOf="@+id/onboarding_explore_text" />
+
+        <!-- app:videoId is present only for visualization it isn't currently working -->
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youTubePlayerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="32dp"
+            app:videoId="9HRYIFXbT_s"
+            bind:layout_constraintBottom_toTopOf="@+id/onboarding_next_button"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:layout_constraintStart_toStartOf="parent"
+            bind:layout_constraintTop_toBottomOf="@+id/onboarding_video_slide_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

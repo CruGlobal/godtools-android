@@ -1,6 +1,7 @@
 package org.cru.godtools.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
+import org.cru.godtools.activity.OnBoardingActivity;
 import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
@@ -243,6 +245,10 @@ public class ToolsFragment extends BasePlatformFragment
 
     private void openTutorial() {
         mSettings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED);
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), OnBoardingActivity.class);
+            getActivity().startActivity(intent);
+        }
     }
 
     @CallSuper

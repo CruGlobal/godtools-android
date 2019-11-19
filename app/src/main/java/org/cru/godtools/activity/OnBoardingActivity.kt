@@ -1,16 +1,19 @@
 package org.cru.godtools.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import org.cru.godtools.R
+import org.cru.godtools.adapter.OnboardingPagerAdapter
 
 class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
 
-    // region lifecycle
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
+        val viewPager: ViewPager = findViewById(R.id.onboarding_viewpager)
+        val pagerAdapter = OnboardingPagerAdapter(this, supportFragmentManager)
+        viewPager.adapter = pagerAdapter
     }
 
     // endregion lifecycle
