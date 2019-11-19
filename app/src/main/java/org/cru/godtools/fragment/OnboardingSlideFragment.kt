@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import org.cru.godtools.activity.OnBoardingCallbacks
-import org.cru.godtools.databinding.OnboardingSlide1Binding
+import org.cru.godtools.databinding.OnboardingExploreSlideBinding
 
 
 class OnboardingSlideFragment : Fragment() {
@@ -23,7 +23,7 @@ class OnboardingSlideFragment : Fragment() {
 
         return when (arguments?.getInt(ARG_SLIDE_POSITION)) {
             0 -> {
-                val binding = OnboardingSlide1Binding.inflate(inflater, container, false).apply {
+                val binding = OnboardingExploreSlideBinding.inflate(inflater, container, false).apply {
                     setYoutubePlayer()
                 }
                 binding.callback = callback
@@ -33,7 +33,7 @@ class OnboardingSlideFragment : Fragment() {
         }
     }
 
-    private fun OnboardingSlide1Binding.setYoutubePlayer() {
+    private fun OnboardingExploreSlideBinding.setYoutubePlayer() {
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.getPlayerUiController().also {
             it.showVideoTitle(false)
