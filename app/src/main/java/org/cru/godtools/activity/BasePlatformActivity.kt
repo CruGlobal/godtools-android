@@ -185,6 +185,10 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 launchContactUs()
                 return true
             }
+            R.id.action_tutorial -> {
+                launchTutorial()
+                return true
+            }
             R.id.action_terms_of_use -> {
                 mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)))
                 WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE)
@@ -377,6 +381,11 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         } catch (e: ActivityNotFoundException) {
             WebUrlLauncher.openUrl(this, URI_SUPPORT)
         }
+    }
+
+    private fun launchTutorial() {
+        Intent(this, OnBoardingActivity::class.java)
+            .also { startActivity(it) }
     }
 
     // endregion Navigation Menu actions

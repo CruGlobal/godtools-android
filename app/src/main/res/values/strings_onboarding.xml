@@ -5,4 +5,5 @@
     <string name="onboarding_next">next</string>
     <string name="onboarding_explore">Explore</string>
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
+    <string name="tutorial">Tutorial</string>
 </resources>

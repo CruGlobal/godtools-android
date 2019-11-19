@@ -21,18 +21,23 @@
                 android:orderInCategory="400"
                 android:title="@string/menu_contact_us" />
 
+            <item
+                android:id="@+id/action_tutorial"
+                android:orderInCategory="500"
+                android:title="@string/tutorial"/>
+
             <group android:id="@+id/group_login_items">
                 <item
                     android:id="@+id/action_login"
-                    android:orderInCategory="500"
+                    android:orderInCategory="600"
                     android:title="@string/menu_login" />
                 <item
                     android:id="@+id/action_logout"
-                    android:orderInCategory="500"
+                    android:orderInCategory="600"
                     android:title="@string/menu_logout" />
                 <item
                     android:id="@+id/action_signup"
-                    android:orderInCategory="600"
+                    android:orderInCategory="700"
                     android:title="@string/menu_signup" />
             </group>
         </menu>
