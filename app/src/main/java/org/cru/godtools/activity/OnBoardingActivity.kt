@@ -46,4 +46,3 @@ interface OnBoardingCallbacks {
     fun onPreviousClicked()
     fun onCloseClicked()
 }
-

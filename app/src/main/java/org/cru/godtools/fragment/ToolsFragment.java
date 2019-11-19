@@ -82,8 +82,6 @@ public class ToolsFragment extends BasePlatformFragment
         }
     };
 
-
-
     public static final int MODE_ADDED = 1;
     public static final int MODE_AVAILABLE = 2;
 

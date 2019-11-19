@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import org.cru.godtools.activity.OnBoardingCallbacks
 import org.cru.godtools.databinding.OnboardingExploreSlideBinding
 import org.cru.godtools.databinding.OnboardingMenuSlideBinding
 import org.cru.godtools.databinding.OnboardingPrepareSlideBinding
 import org.cru.godtools.databinding.OnboardingTrySlideBinding
-
 
 class OnboardingSlideFragment : Fragment() {
 
@@ -39,13 +36,11 @@ class OnboardingSlideFragment : Fragment() {
                 OnboardingMenuSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
-
             }
             else -> {
                 OnboardingExploreSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
-
             }
         }
     }
