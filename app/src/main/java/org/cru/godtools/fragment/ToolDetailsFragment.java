@@ -304,11 +304,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
                             View.VISIBLE : View.GONE);
         }
         if (mVideoBanner != null) {
-            mVideoBanner.setVisibility(
-                    mTool != null && !TextUtils.isEmpty(mTool.getOverviewVideo()) ? View.VISIBLE :
-                            View.GONE);
             if (mTool != null && !TextUtils.isEmpty(mTool.getOverviewVideo())) {
+                mVideoBanner.setVisibility(View.VISIBLE);
                 updateOverviewVideo();
+            } else {
+                mVideoBanner.setVisibility(View.GONE);
             }
         }
         if (mActionAdd != null) {
