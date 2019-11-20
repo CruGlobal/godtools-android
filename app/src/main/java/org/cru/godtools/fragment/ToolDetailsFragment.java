@@ -297,18 +297,15 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
         bindShares(mShares, mTool);
 
+        boolean hasOverviewVideo = mVideoBanner != null && mTool != null &&
+                !TextUtils.isEmpty(mTool.getOverviewVideo());
         if (mBanner != null) {
-            mBanner.asImageView().setVisibility(
-                    TextUtils.isEmpty(mTool != null ? mTool.getOverviewVideo() : null) ||
-                            Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
-                            View.VISIBLE : View.GONE);
+            mBanner.asImageView().setVisibility(hasOverviewVideo ? View.GONE : View.VISIBLE);
         }
         if (mVideoBanner != null) {
-            if (mTool != null && !TextUtils.isEmpty(mTool.getOverviewVideo())) {
-                mVideoBanner.setVisibility(View.VISIBLE);
+            mVideoBanner.setVisibility(hasOverviewVideo ? View.VISIBLE : View.GONE);
+            if (hasOverviewVideo) {
                 updateOverviewVideo();
-            } else {
-                mVideoBanner.setVisibility(View.GONE);
             }
         }
         if (mActionAdd != null) {
