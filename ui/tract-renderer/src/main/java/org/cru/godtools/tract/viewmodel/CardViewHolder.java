@@ -136,7 +136,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int cardCount = getCardCount();
         String positionText = String.format(locale, "%d/%d", cardPositionCount, cardCount);
         mCardPositionView.setText(positionText);
-        if (isPrayerForm(mModel) || isPrayerSelection(mModel)) {
+        if (isPrayerForm(mModel)) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
             mPreviousCardView.setEnabled(false);
             mCardPositionView.setVisibility(View.INVISIBLE);
@@ -169,17 +169,6 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         if (card != null) {
             for (Content content : card.getContent()) {
                 if (content instanceof Form) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isPrayerSelection(Card card) {
-        if (card != null) {
-            for (Event.Id dismissListener : card.getDismissListeners()) {
-                if (dismissListener.name.contains("followup-form")) {
                     return true;
                 }
             }
