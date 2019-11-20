@@ -7,12 +7,13 @@ import org.cru.godtools.R
 import org.cru.godtools.adapter.OnboardingPagerAdapter
 
 class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
-    val viewPager by lazy { findViewById<ViewPager>(R.id.onboarding_viewpager) }
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
         val pagerAdapter = OnboardingPagerAdapter(this, supportFragmentManager)
+        viewPager = findViewById(R.id.onboarding_viewpager)
         viewPager.adapter = pagerAdapter
     }
 
