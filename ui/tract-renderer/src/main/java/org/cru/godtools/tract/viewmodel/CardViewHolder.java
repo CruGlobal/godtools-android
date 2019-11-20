@@ -191,7 +191,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int count = 0;
         if (mModel != null) {
             for (Card card : mModel.getPage().getCards()) {
-                if (isPrayerForm(card) || isPrayerSelection(card)) {
+                if (isPrayerForm(card)) {
                     continue;
                 }
                 count++;
