@@ -1,7 +1,6 @@
 package org.cru.godtools.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,7 +38,6 @@ import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.cru.godtools.util.ActivityUtilsKt;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -327,20 +325,18 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateOverviewVideo() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            if (mVideoBanner != null) {
-                mVideoBanner.setEnableAutomaticInitialization(false);
-                getLifecycle().addObserver(mVideoBanner);
-                mVideoBanner.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                    @Override
-                    public void onReady(@NotNull final YouTubePlayer youTubePlayer) {
-                        if (mTool != null && mTool.getOverviewVideo() != null) {
-                            String videoId = mTool.getOverviewVideo().split("=")[1];
-                            youTubePlayer.loadVideo(videoId, 0);
-                        }
+        if (mVideoBanner != null) {
+            mVideoBanner.setEnableAutomaticInitialization(false);
+            getLifecycle().addObserver(mVideoBanner);
+            mVideoBanner.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull final YouTubePlayer youTubePlayer) {
+                    if (mTool != null && mTool.getOverviewVideo() != null) {
+                        String videoId = mTool.getOverviewVideo().split("=")[1];
+                        youTubePlayer.loadVideo(videoId, 0);
                     }
-                });
-            }
+                }
+            });
         }
     }
 
