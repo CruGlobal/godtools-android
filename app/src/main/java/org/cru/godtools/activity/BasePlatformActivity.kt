@@ -384,8 +384,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchTutorial() {
-        Intent(this, OnBoardingActivity::class.java)
-            .also { startActivity(it) }
+        startActivity(Intent(this, OnBoardingActivity::class.java))
     }
 
     // endregion Navigation Menu actions
