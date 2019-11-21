@@ -389,7 +389,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             Settings settings = Settings.getInstance(requireContext());
             Locale primaryLanguage = null;
             Locale parallelLanguages = null;
-            if (mTool.getLatestTranslations() != null ) {
+            if (mTool.getLatestTranslations() != null) {
                 for (int i = 0; i < mTool.getLatestTranslations().size(); i++) {
                     Translation translation = mTool.getLatestTranslations().get(i);
                     if (settings.getPrimaryLanguage() == translation.getLanguageCode()) {
