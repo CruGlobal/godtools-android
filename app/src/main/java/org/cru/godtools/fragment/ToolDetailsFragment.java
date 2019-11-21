@@ -332,8 +332,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
                 @Override
                 public void onReady(@NonNull final YouTubePlayer youTubePlayer) {
                     if (mTool != null && mTool.getOverviewVideo() != null) {
-                        String videoId = mTool.getOverviewVideo().split("=")[1];
-                        youTubePlayer.loadVideo(videoId, 0);
+                        youTubePlayer.cueVideo(mTool.getOverviewVideo(), 0);
                     }
                 }
             });

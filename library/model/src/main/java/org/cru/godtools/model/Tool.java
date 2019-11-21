@@ -26,7 +26,7 @@ public class Tool extends Base {
     private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
     public static final String JSON_ATTACHMENTS = "attachments";
-    public static final String JSON_OVERVIEW_VIDEO = "attr-about-overview-video";
+    public static final String JSON_OVERVIEW_VIDEO = "attr-about-overview-video-youtube";
 
     public static final String INVALID_CODE = null;
     public static final String CODE_EVERYSTUDENT = "es";
