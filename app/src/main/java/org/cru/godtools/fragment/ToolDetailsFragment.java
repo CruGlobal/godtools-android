@@ -387,10 +387,29 @@ public class ToolDetailsFragment extends BasePlatformFragment
     void openTool() {
         if (mTool != null && mTool.getCode() != null) {
             Settings settings = Settings.getInstance(requireContext());
-            Locale primaryLanguage = settings.getPrimaryLanguage();
-            Locale parallelLanguages = settings.getParallelLanguage();
-            ActivityUtilsKt.openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
-                                             primaryLanguage, parallelLanguages);
+            Locale primaryLanguage = null;
+            Locale parallelLanguages = null;
+            if (mTool.getLatestTranslations() != null ) {
+                for (int i = 0; i < mTool.getLatestTranslations().size(); i++) {
+                    Translation translation = mTool.getLatestTranslations().get(i);
+                    if (settings.getPrimaryLanguage() == translation.getLanguageCode()) {
+                        primaryLanguage = translation.getLanguageCode();
+                    }
+                    if (settings.getParallelLanguage() == translation.getLanguageCode()) {
+                        parallelLanguages = translation.getLanguageCode();
+                    }
+                }
+            }
+            primaryLanguage = primaryLanguage != null ? primaryLanguage : Locale.ENGLISH;
+            if (parallelLanguages != null) {
+                ActivityUtilsKt
+                        .openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
+                                          primaryLanguage, parallelLanguages);
+            } else {
+                ActivityUtilsKt
+                        .openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
+                                          primaryLanguage);
+            }
         }
     }
 
