@@ -14,8 +14,6 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
-import org.cru.godtools.xml.model.Content;
-import org.cru.godtools.xml.model.Form;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
 
@@ -136,7 +134,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int cardCount = getCardCount();
         String positionText = String.format(locale, "%d/%d", cardPositionCount, cardCount);
         mCardPositionView.setText(positionText);
-        if (isPrayerForm(mModel) || isPrayerSelection(mModel)) {
+        if (isCardHidden(mModel)) {
             mPreviousCardView.setVisibility(View.INVISIBLE);
             mPreviousCardView.setEnabled(false);
             mCardPositionView.setVisibility(View.INVISIBLE);
@@ -165,24 +163,9 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     }
 
-    private boolean isPrayerForm(Card card) {
+    private boolean isCardHidden(Card card) {
         if (card != null) {
-            for (Content content : card.getContent()) {
-                if (content instanceof Form) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isPrayerSelection(Card card) {
-        if (card != null) {
-            for (Event.Id dismissListener : card.getDismissListeners()) {
-                if (dismissListener.name.contains("followup-form")) {
-                    return true;
-                }
-            }
+            return card.isHidden();
         }
         return false;
     }
@@ -191,7 +174,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         int count = 0;
         if (mModel != null) {
             for (Card card : mModel.getPage().getCards()) {
-                if (isPrayerForm(card) || isPrayerSelection(card)) {
+                if (isCardHidden(card)) {
                     continue;
                 }
                 count++;
