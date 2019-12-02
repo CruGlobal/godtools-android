@@ -17,6 +17,7 @@ import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPT
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ORDER;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_OVERVIEW_VIDEO;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_PENDING_SHARES;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_TYPE;
@@ -49,6 +50,9 @@ final class ToolMapper extends BaseMapper<Tool> {
                 break;
             case COLUMN_DETAILS_BANNER:
                 values.put(field, tool.getDetailsBannerId());
+                break;
+            case COLUMN_OVERVIEW_VIDEO:
+                values.put(field, tool.getOverviewVideo());
                 break;
             case COLUMN_COPYRIGHT:
                 values.put(field, tool.getCopyright());
@@ -84,6 +88,7 @@ final class ToolMapper extends BaseMapper<Tool> {
         tool.setPendingShares(getInt(c, COLUMN_PENDING_SHARES, 0));
         tool.setBannerId(getLong(c, COLUMN_BANNER, Attachment.INVALID_ID));
         tool.setDetailsBannerId(getLong(c, COLUMN_DETAILS_BANNER, Attachment.INVALID_ID));
+        tool.setOverviewVideo(getString(c, COLUMN_OVERVIEW_VIDEO, null));
         tool.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
         tool.setOrder(getInt(c, COLUMN_ORDER, Integer.MAX_VALUE));
         tool.setAdded(getBool(c, COLUMN_ADDED, false));

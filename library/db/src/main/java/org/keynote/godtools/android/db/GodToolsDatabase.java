@@ -23,7 +23,7 @@ import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 39;
+    private static final int DATABASE_VERSION = 40;
 
     /*
      * Version history
@@ -218,6 +218,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 39:
                         db.execSQL(LanguageTable.SQL_V39_ALTER_NAME);
+                        break;
+                    case 40:
+                        db.execSQL(ToolTable.SQL_V40_ALTER_OVERVIEW_VIDEO);
                         break;
                     default:
                         // unrecognized version

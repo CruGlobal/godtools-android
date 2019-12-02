@@ -87,6 +87,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_PENDING_SHARES = "pending_shares";
         public static final String COLUMN_BANNER = "banner";
         public static final String COLUMN_DETAILS_BANNER = "banner_details";
+        public static final String COLUMN_OVERVIEW_VIDEO = "overview_video";
         public static final String COLUMN_COPYRIGHT = "copyright";
         public static final String COLUMN_ORDER = "ordering";
         public static final String COLUMN_ADDED = "added";
@@ -100,9 +101,9 @@ public final class Contract extends BaseContract {
         private static final Field FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES);
 
         static final String[] PROJECTION_ALL =
-                {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES,
-                        COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ORDER,
-                        COLUMN_ADDED};
+                {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION,
+                        COLUMN_SHARES, COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_OVERVIEW_VIDEO,
+                        COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ORDER, COLUMN_ADDED};
 
         private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT";
         private static final String SQL_COLUMN_TYPE = COLUMN_TYPE + " TEXT";
@@ -112,6 +113,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_PENDING_SHARES = COLUMN_PENDING_SHARES + " INTEGER";
         private static final String SQL_COLUMN_BANNER = COLUMN_BANNER + " INTEGER";
         private static final String SQL_COLUMN_DETAILS_BANNER = COLUMN_DETAILS_BANNER + " INTEGER";
+        private static final String SQL_COLUMN_OVERVIEW_VIDEO = COLUMN_OVERVIEW_VIDEO + " TEXT";
         private static final String SQL_COLUMN_COPYRIGHT = COLUMN_COPYRIGHT + " TEXT";
         private static final String SQL_COLUMN_ORDER = COLUMN_ORDER + " INTEGER";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
@@ -126,8 +128,8 @@ public final class Contract extends BaseContract {
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_CODE, SQL_COLUMN_TYPE, SQL_COLUMN_NAME,
                        SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES, SQL_COLUMN_PENDING_SHARES, SQL_COLUMN_BANNER,
-                       SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ORDER, SQL_COLUMN_ADDED,
-                       SQL_PRIMARY_KEY);
+                       SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_OVERVIEW_VIDEO, SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ORDER,
+                       SQL_COLUMN_ADDED, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
@@ -148,6 +150,8 @@ public final class Contract extends BaseContract {
         static final String SQL_V38_ALTER_ORDER = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_ORDER;
         static final String SQL_V38_POPULATE_ORDER =
                 "UPDATE " + TABLE_NAME + " SET " + COLUMN_ORDER + " = " + Integer.MAX_VALUE;
+        static final String SQL_V40_ALTER_OVERVIEW_VIDEO =
+                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_OVERVIEW_VIDEO;
     }
 
     public static class TranslationTable extends BaseTable implements ToolCode {

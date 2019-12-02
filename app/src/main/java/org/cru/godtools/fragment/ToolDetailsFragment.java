@@ -2,6 +2,7 @@ package org.cru.godtools.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
@@ -84,6 +87,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @BindView(R.id.banner)
     PicassoImageView mBanner;
     @Nullable
+    @BindView(R.id.video_banner)
+    YouTubePlayerView mVideoBanner;
+    @Nullable
     @BindView(R.id.title)
     TextView mTitle;
     @Nullable
@@ -129,8 +135,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         return fragment;
     }
 
-    /* BEGIN lifecycle */
-
+    // region Lifecycle
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
@@ -166,6 +171,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         super.onViewCreated(view, savedInstanceState);
         updateViews();
         updateDownloadProgress();
+        setupOverviewVideo();
         setUpViewPager();
     }
 
@@ -245,7 +251,12 @@ public class ToolDetailsFragment extends BasePlatformFragment
         mPinShortcutItem = null;
     }
 
-    /* END lifecycle */
+    @Override
+    public void onDestroyView() {
+        cleanupOverviewVideo();
+        super.onDestroyView();
+    }
+    // endregion Lifecycle
 
     private void startProgressListener() {
         if (mDownloadManager != null && mToolCode != null) {
@@ -288,6 +299,17 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
         bindShares(mShares, mTool);
 
+        final String overviewVideo = mTool != null ? mTool.getOverviewVideo() : null;
+        final boolean hasOverviewVideo = mVideoBanner != null && !TextUtils.isEmpty(overviewVideo);
+        if (mBanner != null) {
+            mBanner.asImageView().setVisibility(hasOverviewVideo ? View.GONE : View.VISIBLE);
+        }
+        if (mVideoBanner != null) {
+            mVideoBanner.setVisibility(hasOverviewVideo ? View.VISIBLE : View.GONE);
+            if (hasOverviewVideo) {
+                updateOverviewVideo(overviewVideo);
+            }
+        }
         if (mActionAdd != null) {
             mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
             mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
@@ -305,6 +327,36 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mViewPager.setAdapter(mDetailsAdapter);
         }
     }
+
+    // region Overview Video
+    @Nullable
+    private YouTubePlayerTracker mYouTubePlayerTracker = null;
+
+    private void setupOverviewVideo() {
+        if (mVideoBanner != null) {
+            getViewLifecycleOwner().getLifecycle().addObserver(mVideoBanner);
+            mYouTubePlayerTracker = new YouTubePlayerTracker();
+            mVideoBanner.addYouTubePlayerListener(mYouTubePlayerTracker);
+        }
+    }
+
+    private void updateOverviewVideo(@NonNull final String videoId) {
+        if (mVideoBanner != null && mYouTubePlayerTracker != null) {
+            mVideoBanner.getYouTubePlayerWhenReady(player -> {
+                if (!videoId.equals(mYouTubePlayerTracker.getVideoId())) {
+                    player.cueVideo(videoId, 0);
+                }
+            });
+        }
+    }
+
+    private void cleanupOverviewVideo() {
+        if (mVideoBanner != null) {
+            mYouTubePlayerTracker = null;
+            getLifecycle().removeObserver(mVideoBanner);
+        }
+    }
+    // endregion Overview Video
 
     @Optional
     @OnClick(R.id.action_add)
