@@ -5,8 +5,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import org.cru.godtools.tutorial.fragment.OnboardingSlideFragment
 
-class OnboardingPagerAdapter(val callbacks: org.cru.godtools.tutorial.activity.OnBoardingCallbacks, fm: FragmentManager) :
-    FragmentPagerAdapter(fm) {
+class OnboardingPagerAdapter(
+    val callbacks: org.cru.godtools.tutorial.activity.OnBoardingCallbacks,
+    fm: FragmentManager
+) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return OnboardingSlideFragment.newInstance(position).apply {
