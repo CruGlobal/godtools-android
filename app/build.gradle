@@ -146,6 +146,7 @@ dependencies {
     implementation project(':ui:base-app')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
+    implementation project(':ui:tutorial-renderer')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
@@ -192,6 +193,7 @@ dependencies {
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    compile project(path: ':ui:tutorial-renderer')
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants

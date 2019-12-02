@@ -1,12 +1,13 @@
-package org.cru.godtools.activity
+package org.cru.godtools.tutorial.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import org.cru.godtools.R
-import org.cru.godtools.adapter.OnboardingPagerAdapter
+import org.cru.godtools.tutorial.adapter.OnboardingPagerAdapter
+import org.cru.godtools.tutorial.R
 
-class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
+class OnBoardingActivity : AppCompatActivity(),
+    OnBoardingCallbacks {
     private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {

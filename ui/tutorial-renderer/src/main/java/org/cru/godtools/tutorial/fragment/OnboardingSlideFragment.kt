@@ -1,19 +1,18 @@
-package org.cru.godtools.fragment
+package org.cru.godtools.tutorial.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.cru.godtools.activity.OnBoardingCallbacks
-import org.cru.godtools.databinding.OnboardingExploreSlideBinding
-import org.cru.godtools.databinding.OnboardingMenuSlideBinding
-import org.cru.godtools.databinding.OnboardingPrepareSlideBinding
-import org.cru.godtools.databinding.OnboardingTrySlideBinding
+import org.cru.godtools.tutorial.databinding.OnboardingExploreSlideBinding
+import org.cru.godtools.tutorial.databinding.OnboardingMenuSlideBinding
+import org.cru.godtools.tutorial.databinding.OnboardingPrepareSlideBinding
+import org.cru.godtools.tutorial.databinding.OnboardingTrySlideBinding
 
 class OnboardingSlideFragment : Fragment() {
 
-    private lateinit var callback: OnBoardingCallbacks
+    private lateinit var callback: org.cru.godtools.tutorial.activity.OnBoardingCallbacks
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +44,7 @@ class OnboardingSlideFragment : Fragment() {
         }
     }
 
-    fun setCallback(callback: OnBoardingCallbacks) {
+    fun setCallback(callback: org.cru.godtools.tutorial.activity.OnBoardingCallbacks) {
         this.callback = callback
     }
 

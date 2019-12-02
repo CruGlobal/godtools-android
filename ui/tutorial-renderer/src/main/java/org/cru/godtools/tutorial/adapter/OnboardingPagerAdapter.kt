@@ -1,12 +1,11 @@
-package org.cru.godtools.adapter
+package org.cru.godtools.tutorial.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import org.cru.godtools.activity.OnBoardingCallbacks
-import org.cru.godtools.fragment.OnboardingSlideFragment
+import org.cru.godtools.tutorial.fragment.OnboardingSlideFragment
 
-class OnboardingPagerAdapter(val callbacks: OnBoardingCallbacks, fm: FragmentManager) :
+class OnboardingPagerAdapter(val callbacks: org.cru.godtools.tutorial.activity.OnBoardingCallbacks, fm: FragmentManager) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {

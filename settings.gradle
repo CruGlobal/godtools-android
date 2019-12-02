@@ -23,6 +23,7 @@ include 'ui:base-app'
 include 'ui:base-tool'
 include 'ui:shortcuts'
 include 'ui:tract-renderer'
+include 'ui:tutorial-renderer'
 
 //include 'feature:tract'
 

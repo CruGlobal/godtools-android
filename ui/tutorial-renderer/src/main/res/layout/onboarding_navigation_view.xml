@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="callback" type="org.cru.godtools.activity.OnBoardingCallbacks" />
+        <variable name="callback" type="org.cru.godtools.tutorial.activity.OnBoardingCallbacks" />
     </data>
 
     <merge>

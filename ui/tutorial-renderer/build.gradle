@@ -1,0 +1,35 @@
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation project(':library:base')
+
+    implementation project(':ui:base-tool')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
+    implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
+
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "com.google.guava:guava:${deps.guava}"
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
+
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+
+
+}

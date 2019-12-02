@@ -384,7 +384,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchTutorial() {
-        startActivity(Intent(this, OnBoardingActivity::class.java))
+        startActivity(Intent(this, org.cru.godtools.tutorial.activity.OnBoardingActivity::class.java))
     }
 
     // endregion Navigation Menu actions
