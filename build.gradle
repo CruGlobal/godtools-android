@@ -23,7 +23,7 @@ buildscript {
                 leakcanary         : '1.6.3',
                 lightweightStream  : '1.2.1',
                 materialDesign     : '1.0.0',
-                mockito            : '3.1.0',
+                mockito            : '3.2.0',
                 mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.12.6',
                 picasso            : '2.71828',
