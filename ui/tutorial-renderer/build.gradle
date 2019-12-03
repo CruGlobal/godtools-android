@@ -24,12 +24,11 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation "me.relex:circleindicator:${deps.circleindicator}"
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-
-
 }
