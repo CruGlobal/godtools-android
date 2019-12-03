@@ -186,7 +186,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 return true
             }
             R.id.action_tutorial -> {
-                launchTutorial()
+                launchOptInTutorial()
                 return true
             }
             R.id.action_terms_of_use -> {
@@ -383,8 +383,8 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
     }
 
-    private fun launchTutorial() {
-        startActivity(Intent(this, org.cru.godtools.tutorial.activity.OnBoardingActivity::class.java))
+    private fun launchOptInTutorial() {
+        startActivity(Intent(this, org.cru.godtools.tutorial.activity.OptInOnBoardingActivity::class.java))
     }
 
     // endregion Navigation Menu actions

@@ -10,7 +10,7 @@ import org.cru.godtools.tutorial.databinding.OnboardingMenuSlideBinding
 import org.cru.godtools.tutorial.databinding.OnboardingPrepareSlideBinding
 import org.cru.godtools.tutorial.databinding.OnboardingTrySlideBinding
 
-class OnboardingSlideFragment : Fragment() {
+class OptInOnBoardingSlideFragment : Fragment() {
 
     private lateinit var callback: org.cru.godtools.tutorial.activity.OnBoardingCallbacks
 
@@ -53,8 +53,8 @@ class OnboardingSlideFragment : Fragment() {
         private const val ARG_SLIDE_POSITION = "slide_position"
 
         @JvmStatic
-        fun newInstance(position: Int): OnboardingSlideFragment {
-            return OnboardingSlideFragment().apply {
+        fun newInstance(position: Int): OptInOnBoardingSlideFragment {
+            return OptInOnBoardingSlideFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SLIDE_POSITION, position)
                 }

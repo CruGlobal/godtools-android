@@ -3,17 +3,17 @@ package org.cru.godtools.tutorial.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import org.cru.godtools.tutorial.adapter.OnboardingPagerAdapter
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.adapter.OptInOnboardingPagerAdapter
 
-class OnBoardingActivity : AppCompatActivity(),
+class OptInOnBoardingActivity : AppCompatActivity(),
     OnBoardingCallbacks {
     private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
-        val pagerAdapter = OnboardingPagerAdapter(this, supportFragmentManager)
+        val pagerAdapter = OptInOnboardingPagerAdapter(this, supportFragmentManager)
         viewPager = findViewById(R.id.onboarding_viewpager)
         viewPager.adapter = pagerAdapter
     }
