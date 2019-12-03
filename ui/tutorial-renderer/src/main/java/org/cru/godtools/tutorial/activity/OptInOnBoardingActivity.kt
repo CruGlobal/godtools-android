@@ -40,5 +40,7 @@ class OptInOnBoardingActivity : AppCompatActivity(),
     override fun onCloseClicked() {
         finish()
     }
+
+    override fun onOptInClicked() {} // Not used in this Activity
     // endregion OnBoardingCallbacks
 }

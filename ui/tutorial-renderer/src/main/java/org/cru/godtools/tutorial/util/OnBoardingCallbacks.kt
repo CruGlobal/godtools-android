@@ -4,4 +4,5 @@ interface OnBoardingCallbacks {
     fun onNextClicked()
     fun onPreviousClicked()
     fun onCloseClicked()
+    fun onOptInClicked()
 }

@@ -1,5 +1,6 @@
 package org.cru.godtools.tutorial.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -35,6 +36,11 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
     }
 
     override fun onCloseClicked() {
+        finish()
+    }
+
+    override fun onOptInClicked() {
+        startActivity(Intent(this, OptInOnBoardingActivity::class.java))
         finish()
     }
     // endregion OnBoardingCallbacks
