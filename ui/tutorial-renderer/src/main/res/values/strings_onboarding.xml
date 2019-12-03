@@ -3,7 +3,6 @@
 
     <string name="title_onboarding">Onboarding</string>
     <string name="onboarding_next">next</string>
-    <string name="onboarding_explore">Explore</string>
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
     <string name="tutorial">Tutorial</string>
     <string name="onboarding_prepare">Prepare</string>
@@ -11,4 +10,5 @@
     <string name="onboarding_try_description">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
     <string name="onboarding_try">Try</string>
     <string name="onboarding_menu">This tutorial is available to see again in the menu</string>
+    <string name="onboarding_watch">Watch</string>
 </resources>
