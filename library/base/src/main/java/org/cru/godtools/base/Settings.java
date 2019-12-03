@@ -31,6 +31,7 @@ public final class Settings {
     public static final String FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped";
     public static final String FEATURE_TRACT_CARD_CLICKED = "tractCardClicked";
     public static final String FEATURE_OPT_IN_TUTORIAL = "optInTutorial";
+    public static final String FEATURE_BAKED_IN_TUTORIAL = "bakedInTutorial";
 
     @NonNull
     private final Context mContext;
