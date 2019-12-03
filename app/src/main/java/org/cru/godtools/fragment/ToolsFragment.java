@@ -155,7 +155,7 @@ public class ToolsFragment extends BasePlatformFragment
         super.onViewCreated(view, savedInstanceState);
         setupToolsList();
         mToolsBinding.setIsTutorialViewable(
-                !mSettings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED));
+                !mSettings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
         mToolsBinding.setCallback(mTutorialCallbacks);
     }
 
@@ -242,7 +242,7 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     private void openTutorial() {
-        mSettings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_VIEWED);
+        mSettings.setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL);
         if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), OptInOnBoardingActivity.class);
             getActivity().startActivity(intent);

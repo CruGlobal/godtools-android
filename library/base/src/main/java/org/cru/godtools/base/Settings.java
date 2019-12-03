@@ -30,7 +30,7 @@ public final class Settings {
     public static final String FEATURE_LOGIN = "login";
     public static final String FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped";
     public static final String FEATURE_TRACT_CARD_CLICKED = "tractCardClicked";
-    public static final String FEATURE_TUTORIAL_VIEWED = "tutorialViewed";
+    public static final String FEATURE_OPT_IN_TUTORIAL = "optInTutorial";
 
     @NonNull
     private final Context mContext;
