@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -16,7 +16,7 @@
 
         <include
             layout="@layout/onboarding_navigation_view"
-            bind:callback="@{callback}" />
+            app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_explore_text"
@@ -27,10 +27,10 @@
             android:text="@string/onboarding_explore"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
+            app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_video_slide_text"
@@ -44,10 +44,10 @@
             android:gravity="center"
             android:text="@string/onboarding_slide_1_description"
             android:textAppearance="@style/TextAppearance.GodTools.Medium"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_youtube_container"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_explore_text" />
+            app:layout_constraintBottom_toTopOf="@+id/onboarding_youtube_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_explore_text" />
         <LinearLayout
             android:id="@+id/onboarding_youtube_container"
             android:layout_width="0dp"
@@ -60,22 +60,22 @@
             android:layout_marginBottom="32dp"
             android:gravity="top|center_horizontal"
             android:orientation="vertical"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_next_button"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_video_slide_text">
+            app:layout_constraintBottom_toTopOf="@+id/onboarding_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_video_slide_text">
 
             <!-- The YouTube player is in a linear layout because you can't set gravity on it. -->
             <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                 android:id="@+id/youTubePlayerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                bind:showFullScreenButton="false"
-                bind:showSeekBar="false"
-                bind:showVideoCurrentTime="false"
-                bind:showVideoDuration="false"
-                bind:showYouTubeButton="false"
-                bind:videoId="9HRYIFXbT_s" />
+                app:showFullScreenButton="false"
+                app:showSeekBar="false"
+                app:showVideoCurrentTime="false"
+                app:showVideoDuration="false"
+                app:showYouTubeButton="false"
+                app:videoId="9HRYIFXbT_s" />
 
         </LinearLayout>
 

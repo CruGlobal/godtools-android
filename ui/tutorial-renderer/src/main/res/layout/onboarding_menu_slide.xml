@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -17,7 +17,7 @@
 
         <include
             layout="@layout/onboarding_navigation_view"
-            bind:callback="@{callback}" />
+            app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_menu_text"
@@ -33,10 +33,10 @@
             android:text="@string/onboarding_menu"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
-            bind:layout_constraintBottom_toTopOf="@id/onboarding_menu_image"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@id/onboarding_previous_button" />
+            app:layout_constraintBottom_toTopOf="@id/onboarding_menu_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_previous_button" />
 
         <ImageView
             android:id="@+id/onboarding_menu_image"
@@ -50,10 +50,10 @@
             android:layout_marginBottom="32dp"
             android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars[11]"
-            bind:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@id/onboarding_menu_text" />
+            app:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_menu_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

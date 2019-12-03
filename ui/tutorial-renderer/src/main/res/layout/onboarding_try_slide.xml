@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -16,7 +16,7 @@
 
         <include
             layout="@layout/onboarding_navigation_view"
-            bind:callback="@{callback}" />
+            app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_try_text"
@@ -27,10 +27,10 @@
             android:text="@string/onboarding_try"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
-            bind:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
+            app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_try_descrip_text"
@@ -43,9 +43,9 @@
             android:layout_marginRight="32dp"
             android:text="@string/onboarding_try_description"
             android:textAppearance="@style/TextAppearance.GodTools.Medium"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_try_text" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_try_text" />
 
         <ImageView
             android:id="@+id/onboarding_try_image"
@@ -59,11 +59,11 @@
             android:layout_marginBottom="32dp"
             android:contentDescription="@string/onboarding_try_description"
             android:scaleType="fitCenter"
-            bind:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/onboarding_try_descrip_text"
-            bind:srcCompat="@drawable/img_try_slide" />
+            app:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_try_descrip_text"
+            app:srcCompat="@drawable/img_try_slide" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
