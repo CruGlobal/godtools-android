@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.databinding.OptinOnboardingExploreSlideBinding
 import org.cru.godtools.tutorial.databinding.OptinOnboardingMenuSlideBinding
 import org.cru.godtools.tutorial.databinding.OptinOnboardingPrepareSlideBinding
@@ -20,18 +21,18 @@ class OptInOnBoardingSlideFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return when (arguments?.getInt(ARG_SLIDE_POSITION)) {
-            1 -> {
+        return when (arguments?.getInt(ARG_LAYOUT_ID)) {
+            R.layout.optin_onboarding_prepare_slide -> {
                 OptinOnboardingPrepareSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
-            2 -> {
+            R.layout.optin_onboarding_try_slide -> {
                 OptinOnboardingTrySlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
-            3 -> {
+            R.layout.optin_onboarding_menu_slide -> {
                 OptinOnboardingMenuSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
@@ -50,13 +51,13 @@ class OptInOnBoardingSlideFragment : Fragment() {
 
     companion object {
 
-        private const val ARG_SLIDE_POSITION = "slide_position"
+        private const val ARG_LAYOUT_ID = "layout_id"
 
         @JvmStatic
         fun newInstance(position: Int): OptInOnBoardingSlideFragment {
             return OptInOnBoardingSlideFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_SLIDE_POSITION, position)
+                    putInt(ARG_LAYOUT_ID, position)
                 }
             }
         }
