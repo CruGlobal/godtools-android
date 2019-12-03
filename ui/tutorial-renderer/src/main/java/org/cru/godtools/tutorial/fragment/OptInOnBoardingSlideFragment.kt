@@ -10,10 +10,11 @@ import org.cru.godtools.tutorial.databinding.OptinOnboardingExploreSlideBinding
 import org.cru.godtools.tutorial.databinding.OptinOnboardingMenuSlideBinding
 import org.cru.godtools.tutorial.databinding.OptinOnboardingPrepareSlideBinding
 import org.cru.godtools.tutorial.databinding.OptinOnboardingTrySlideBinding
+import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
 class OptInOnBoardingSlideFragment : Fragment() {
 
-    private lateinit var callback: org.cru.godtools.tutorial.activity.OnBoardingCallbacks
+    private lateinit var callback: OnBoardingCallbacks
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +46,7 @@ class OptInOnBoardingSlideFragment : Fragment() {
         }
     }
 
-    fun setCallback(callback: org.cru.godtools.tutorial.activity.OnBoardingCallbacks) {
+    fun setCallback(callback: OnBoardingCallbacks) {
         this.callback = callback
     }
 

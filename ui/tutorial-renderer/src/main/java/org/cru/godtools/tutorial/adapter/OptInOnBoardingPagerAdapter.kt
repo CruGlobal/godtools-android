@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.activity.OnBoardingCallbacks
 import org.cru.godtools.tutorial.fragment.OptInOnBoardingSlideFragment
+import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
 class OptInOnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks, fm: FragmentManager) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
@@ -21,7 +21,7 @@ class OptInOnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks, fm: Fragme
         return OnBoardingPages.values().size
     }
 
-    enum class OnBoardingPages(@StringRes val layout: Int) {
+    private enum class OnBoardingPages(@StringRes val layout: Int) {
         WATCH(R.layout.optin_onboarding_explore_slide),
         PREPARE(R.layout.optin_onboarding_prepare_slide),
         TRY(R.layout.optin_onboarding_try_slide),

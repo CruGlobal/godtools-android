@@ -4,21 +4,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.adapter.OptInOnBoardingPagerAdapter
+import org.cru.godtools.tutorial.adapter.BakedInOnBoardingPagerAdapter
 import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
-class OptInOnBoardingActivity : AppCompatActivity(),
-    OnBoardingCallbacks {
+class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
     private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_optin_onboarding)
-        viewPager = findViewById(R.id.onboarding_viewpager)
-        viewPager.adapter = OptInOnBoardingPagerAdapter(this, supportFragmentManager)
+        setContentView(R.layout.activity_baked_in_onboarding)
+        viewPager = findViewById(R.id.baked_in_viewpager)
+        viewPager.adapter = BakedInOnBoardingPagerAdapter(this, supportFragmentManager)
     }
-
-    // endregion lifecycle
 
     // region OnBoardingCallbacks
     override fun onNextClicked() {

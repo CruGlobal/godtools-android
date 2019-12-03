@@ -19,6 +19,7 @@ import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.LanguageSettingsActivityKt;
 import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
@@ -38,6 +39,7 @@ import static androidx.lifecycle.Lifecycle.State.RESUMED;
 import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
+import static org.cru.godtools.base.Settings.FEATURE_BAKED_IN_TUTORIAL;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
@@ -108,6 +110,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onResume() {
         super.onResume();
         trackInAnalytics();
+        shouldShowBakedInTutorial();
     }
 
     @Override
@@ -296,6 +299,13 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
+        }
+    }
+
+    private void shouldShowBakedInTutorial() {
+        Settings settings = Settings.getInstance(this);
+        if (!settings.isFeatureDiscovered(FEATURE_BAKED_IN_TUTORIAL)) {
+            launchBakedInTutorial();
         }
     }
 

@@ -7,7 +7,7 @@
 
         <variable
             name="callback"
-            type="org.cru.godtools.tutorial.activity.OnBoardingCallbacks" />
+            type="org.cru.godtools.tutorial.util.OnBoardingCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
