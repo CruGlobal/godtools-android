@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/onboarding_navigation_view"
+            layout="@layout/optin_onboarding_navigation_view"
             app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -33,6 +33,7 @@
             android:text="@string/onboarding_menu"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
+            tools:textColor="@color/gt_blue_dark"
             app:layout_constraintBottom_toTopOf="@id/onboarding_menu_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

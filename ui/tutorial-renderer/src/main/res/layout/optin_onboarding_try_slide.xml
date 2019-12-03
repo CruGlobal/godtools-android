@@ -15,16 +15,16 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/onboarding_navigation_view"
+            layout="@layout/optin_onboarding_navigation_view"
             app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/onboarding_explore_text"
+            android:id="@+id/onboarding_try_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/onboarding_explore"
+            android:gravity="center"
+            android:text="@string/onboarding_try"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@color/design_default_color_primary_dark"
             app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
@@ -33,7 +33,7 @@
             app:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/onboarding_video_slide_text"
+            android:id="@+id/onboarding_try_descrip_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -41,45 +41,29 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:gravity="center"
-            android:text="@string/onboarding_slide_1_description"
+            android:text="@string/onboarding_try_description"
             android:textAppearance="@style/TextAppearance.GodTools.Medium"
-            app:layout_constraintBottom_toTopOf="@+id/onboarding_youtube_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboarding_explore_text" />
-        <LinearLayout
-            android:id="@+id/onboarding_youtube_container"
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_try_text" />
+
+        <ImageView
+            android:id="@+id/onboarding_try_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="32dp"
-            android:gravity="top|center_horizontal"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/onboarding_next_button"
+            android:contentDescription="@string/onboarding_try_description"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboarding_video_slide_text">
-
-            <!-- The YouTube player is in a linear layout because you can't set gravity on it. -->
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                android:id="@+id/youTubePlayerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:showFullScreenButton="false"
-                app:showSeekBar="false"
-                app:showVideoCurrentTime="false"
-                app:showVideoDuration="false"
-                app:showYouTubeButton="false"
-                app:videoId="9HRYIFXbT_s" />
-
-        </LinearLayout>
-
-
+            app:layout_constraintTop_toBottomOf="@+id/onboarding_try_descrip_text"
+            app:srcCompat="@drawable/img_optin_try" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

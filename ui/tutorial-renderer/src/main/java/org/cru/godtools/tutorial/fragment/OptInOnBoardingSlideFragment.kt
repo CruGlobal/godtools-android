@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.cru.godtools.tutorial.databinding.OnboardingExploreSlideBinding
-import org.cru.godtools.tutorial.databinding.OnboardingMenuSlideBinding
-import org.cru.godtools.tutorial.databinding.OnboardingPrepareSlideBinding
-import org.cru.godtools.tutorial.databinding.OnboardingTrySlideBinding
+import org.cru.godtools.tutorial.databinding.OptinOnboardingExploreSlideBinding
+import org.cru.godtools.tutorial.databinding.OptinOnboardingMenuSlideBinding
+import org.cru.godtools.tutorial.databinding.OptinOnboardingPrepareSlideBinding
+import org.cru.godtools.tutorial.databinding.OptinOnboardingTrySlideBinding
 
 class OptInOnBoardingSlideFragment : Fragment() {
 
@@ -22,22 +22,22 @@ class OptInOnBoardingSlideFragment : Fragment() {
 
         return when (arguments?.getInt(ARG_SLIDE_POSITION)) {
             1 -> {
-                OnboardingPrepareSlideBinding.inflate(inflater, container, false).also {
+                OptinOnboardingPrepareSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
             2 -> {
-                OnboardingTrySlideBinding.inflate(inflater, container, false).also {
+                OptinOnboardingTrySlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
             3 -> {
-                OnboardingMenuSlideBinding.inflate(inflater, container, false).also {
+                OptinOnboardingMenuSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
             else -> {
-                OnboardingExploreSlideBinding.inflate(inflater, container, false).also {
+                OptinOnboardingExploreSlideBinding.inflate(inflater, container, false).also {
                     it.callback = callback
                 }.root
             }
