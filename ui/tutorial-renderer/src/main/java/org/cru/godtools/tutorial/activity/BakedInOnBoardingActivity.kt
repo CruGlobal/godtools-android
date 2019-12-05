@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.adapter.BakedInOnBoardingPagerAdapter
+import org.cru.godtools.tutorial.adapter.OnBoardingPagerAdapter
 import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
 class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
@@ -18,7 +18,16 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_baked_in_onboarding)
         viewPager = findViewById(R.id.baked_in_viewpager)
-        viewPager.adapter = BakedInOnBoardingPagerAdapter(this)
+        viewPager.adapter = OnBoardingPagerAdapter(this).also {
+            it.onBoardingPagesLayout = listOf(
+                R.layout.baked_in_onboarding_welcome,
+                R.layout.baked_in_onboarding_others,
+                R.layout.baked_in_onboarding_tools,
+                R.layout.baked_in_onboarding_ready,
+                R.layout.baked_in_onboarding_final
+            )
+            it.notifyDataSetChanged()
+        }
         setupIndicator()
     }
 

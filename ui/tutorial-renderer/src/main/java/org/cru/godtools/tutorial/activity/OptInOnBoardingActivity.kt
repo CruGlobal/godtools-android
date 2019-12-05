@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.adapter.OptInOnBoardingPagerAdapter
+import org.cru.godtools.tutorial.adapter.OnBoardingPagerAdapter
 import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
 class OptInOnBoardingActivity : AppCompatActivity(),
@@ -15,7 +15,15 @@ class OptInOnBoardingActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_optin_onboarding)
         viewPager = findViewById(R.id.onboarding_viewpager)
-        viewPager.adapter = OptInOnBoardingPagerAdapter(this, supportFragmentManager)
+        viewPager.adapter = OnBoardingPagerAdapter(this).also {
+            it.onBoardingPagesLayout = listOf(
+                R.layout.optin_onboarding_explore_slide,
+                R.layout.optin_onboarding_prepare_slide,
+                R.layout.optin_onboarding_try_slide,
+                R.layout.optin_onboarding_menu_slide
+            )
+            it.notifyDataSetChanged()
+        }
     }
 
     // endregion lifecycle
