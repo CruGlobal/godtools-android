@@ -3,6 +3,7 @@ package org.cru.godtools.tutorial.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.adapter.OnBoardingPagerAdapter
 import org.cru.godtools.tutorial.util.OnBoardingCallbacks
@@ -24,6 +25,8 @@ class OptInOnBoardingActivity : AppCompatActivity(),
             )
             it.notifyDataSetChanged()
         }
+        val indicator: CircleIndicator = findViewById(R.id.on_boarding_indicator)
+        indicator.setViewPager(viewPager)
     }
 
     // endregion lifecycle
