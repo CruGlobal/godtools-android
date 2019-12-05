@@ -133,7 +133,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> callback.onNextClicked()}"
+            android:onClick="@{() -> callback.onCloseClicked()}"
             android:text="Get Started"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

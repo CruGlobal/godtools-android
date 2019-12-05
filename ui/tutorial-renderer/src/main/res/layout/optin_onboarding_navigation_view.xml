@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_nav_prev_arrow"
-            app:tint="@color/design_default_color_primary_dark" />
+            app:tint="@color/gt_blue" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/onboarding_close_button"
@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_close"
-            app:tint="@color/design_default_color_primary_dark" />
+            app:tint="@color/gt_blue" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/onboarding_next_button"
@@ -41,7 +41,7 @@
             android:layout_margin="32dp"
             android:onClick="@{() -> callback.onNextClicked()}"
             style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
-            android:text="@string/onboarding_next"
+            android:text="Continue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

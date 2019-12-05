@@ -72,7 +72,7 @@
             android:layout_margin="32dp"
             android:onClick="@{() -> callback.onNextClicked()}"
             style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
-            android:text="@string/onboarding_next"
+            android:text="Continue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

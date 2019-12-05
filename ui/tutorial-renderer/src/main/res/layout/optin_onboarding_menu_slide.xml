@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -14,10 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <include
-            layout="@layout/optin_onboarding_navigation_view"
-            app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_menu_text"
@@ -32,8 +27,7 @@
             android:gravity="bottom|center_horizontal"
             android:text="@string/onboarding_menu"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
-            android:textColor="@color/design_default_color_primary_dark"
-            tools:textColor="@color/gt_blue_dark"
+            android:textColor="@color/gt_blue"
             app:layout_constraintBottom_toTopOf="@id/onboarding_menu_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +36,7 @@
         <ImageView
             android:id="@+id/onboarding_menu_image"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="8dp"
@@ -50,11 +44,49 @@
             android:layout_marginRight="32dp"
             android:layout_marginBottom="32dp"
             android:scaleType="fitCenter"
-            tools:srcCompat="@tools:sample/avatars[11]"
             app:layout_constraintBottom_toTopOf="@id/onboarding_next_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/onboarding_menu_text" />
+            app:layout_constraintTop_toBottomOf="@id/onboarding_menu_text"
+            app:srcCompat="@drawable/img_opt_in_menu" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/onboarding_previous_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:onClick="@{() -> callback.onPreviousClicked()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_nav_prev_arrow"
+            app:tint="@color/gt_blue" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/onboarding_close_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:onClick="@{() -> callback.onCloseClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="@color/gt_blue" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/onboarding_next_button"
+            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:onClick="@{() -> callback.onCloseClicked()}"
+            android:text="Start Using GodTools"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
