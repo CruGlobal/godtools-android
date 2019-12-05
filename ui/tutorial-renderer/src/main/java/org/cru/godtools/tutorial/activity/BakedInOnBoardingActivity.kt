@@ -60,7 +60,7 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
 
     // region OnBoardingCallbacks
     override fun onNextClicked() {
-        if (viewPager.currentItem < viewPager.childCount) {
+        if (viewPager.currentItem < viewPager.adapter?.count ?: 0) {
             viewPager.currentItem = viewPager.currentItem + 1
         } else {
             finish()
