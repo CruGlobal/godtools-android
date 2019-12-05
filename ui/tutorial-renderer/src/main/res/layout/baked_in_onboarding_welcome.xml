@@ -35,7 +35,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome"
+            android:text="@string/baked_in_welcome"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/gt_blue"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:onClick="@{() -> callback.onNextClicked()}"
-            android:text="Begin"
+            android:text="@string/baked_in_begin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

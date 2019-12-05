@@ -11,4 +11,20 @@
     <string name="onboarding_try">Try</string>
     <string name="onboarding_menu">This tutorial is available to see again in the menu</string>
     <string name="onboarding_watch">Watch</string>
+    <string name="baked_in_show_me_more">Show Me More</string>
+    <string name="baked_in_get_started">Get Started</string>
+    <string name="baked_in_help_start_sentence">Help someone get started as a Christian</string>
+    <string name="baked_in_choose_language">Choose from over 80 languages</string>
+    <string name="baked_in_side_by_side">Run two languages side by side</string>
+    <string name="baked_in_walk_through_sentence">Walk someone through the gospel</string>
+    <string name="baked_in_prepare_sentence">Prepare for any conversation</string>
+    <string name="baked_in_share_with_others">Share With Others</string>
+    <string name="baked_in_share_sentence">GodTools is built to guide your faith conversations</string>
+    <string name="on_boarding_continue">Continue</string>
+    <string name="baked_in_ready_sentence">GodTools is here to help and is ready when you are</string>
+    <string name="baked_in_always_ready">Always Ready</string>
+    <string name="baked_in_tools_sentence">GodTools helps you before, during, and after a spiritual conversation</string>
+    <string name="baked_in_choose_your_tools">Choose Your Tools</string>
+    <string name="baked_in_welcome">Welcome</string>
+    <string name="baked_in_begin">Begin</string>
 </resources>

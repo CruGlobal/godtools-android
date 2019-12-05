@@ -27,7 +27,7 @@
             android:gravity="bottom|center_horizontal"
             android:text="@string/onboarding_watch"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
-            android:textColor="@color/design_default_color_primary_dark"
+            android:textColor="@color/gt_blue"
             tools:textColor="@color/gt_blue_dark"
             app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
             app:layout_constraintEnd_toEndOf="parent"
