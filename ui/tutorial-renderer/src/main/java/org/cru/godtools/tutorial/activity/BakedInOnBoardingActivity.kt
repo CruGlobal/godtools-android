@@ -75,5 +75,4 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
         finish()
     }
     // endregion OnBoardingCallbacks
-
 }
