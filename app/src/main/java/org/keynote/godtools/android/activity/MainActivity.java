@@ -306,6 +306,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         Settings settings = Settings.getInstance(this);
         if (!settings.isFeatureDiscovered(FEATURE_BAKED_IN_TUTORIAL)) {
             launchBakedInTutorial();
+            settings.setFeatureDiscovered(FEATURE_BAKED_IN_TUTORIAL);
         }
     }
 

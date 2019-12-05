@@ -154,9 +154,14 @@ public class ToolsFragment extends BasePlatformFragment
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolsList();
+        mToolsBinding.setCallback(mTutorialCallbacks);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mToolsBinding.setIsTutorialViewable(
                 !mSettings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
-        mToolsBinding.setCallback(mTutorialCallbacks);
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {

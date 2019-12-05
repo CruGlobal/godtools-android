@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
+import org.cru.godtools.base.Settings
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.adapter.OnBoardingPagerAdapter
 import org.cru.godtools.tutorial.util.OnBoardingCallbacks
@@ -81,6 +82,7 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
 
     override fun onOptInClicked() {
         startActivity(Intent(this, OptInOnBoardingActivity::class.java))
+        Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
         finish()
     }
     // endregion OnBoardingCallbacks
