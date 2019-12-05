@@ -54,6 +54,7 @@ before_install:
 install:
   # Install the rest of tools (e.g., avdmanager)
   - sdkmanager tools
+  - sdkmanager emulator
   # Install the system image
   - sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI"
   # Create and start emulator for the script. Meant to race the install task.
