@@ -3,7 +3,7 @@ package org.cru.godtools.tutorial.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
@@ -45,7 +45,7 @@ class BakedInOnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks) : PagerA
 
     override fun getCount(): Int = OnBoardingPages.values().size
 
-    private enum class OnBoardingPages(@StringRes val layout: Int) {
+    private enum class OnBoardingPages(@LayoutRes val layout: Int) {
         WELCOME(R.layout.baked_in_onboarding_welcome),
         OTHERS(R.layout.baked_in_onboarding_others),
         TOOLS(R.layout.baked_in_onboarding_tools),
