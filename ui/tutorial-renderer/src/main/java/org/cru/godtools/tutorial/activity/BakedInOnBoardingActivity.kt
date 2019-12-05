@@ -18,7 +18,7 @@ class BakedInOnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_baked_in_onboarding)
         viewPager = findViewById(R.id.baked_in_viewpager)
-        viewPager.adapter = BakedInOnBoardingPagerAdapter(this, supportFragmentManager)
+        viewPager.adapter = BakedInOnBoardingPagerAdapter(this)
         setupIndicator()
     }
 
