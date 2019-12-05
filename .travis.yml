@@ -1,8 +1,6 @@
 language: android
 dist: trusty
-sudo: required
-jdk:
-  - oraclejdk8
+jdk: oraclejdk8
 env:
   global:
     - GRADLE_OPTS="-Xmx3072m"
