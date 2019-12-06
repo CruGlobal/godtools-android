@@ -8,14 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.base.Settings
+import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.adapter.TutorialPagerAdapter
 import org.cru.godtools.tutorial.util.TutorialCallbacks
-import org.cru.godtools.tutorial.util.TutorialState
 
 private const val ARG_PAGE_SET = "pageSet"
 
-fun Activity.startTutorialActivity(pageSet: TutorialState = TutorialState.DEFAULT) {
+fun Activity.startTutorialActivity(pageSet: PageSet = PageSet.DEFAULT) {
     Intent(this, TutorialActivity::class.java)
         .putExtra(ARG_PAGE_SET, pageSet)
         .also { startActivity(it) }
@@ -25,9 +25,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private lateinit var viewPager: ViewPager
     private lateinit var indicator: CircleIndicator
 
-    private val pageSet: TutorialState
-        get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? TutorialState
-            ?: TutorialState.DEFAULT
+    private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +39,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
 
     private fun setUpAdapterViews(it: TutorialPagerAdapter) {
         when (pageSet) {
-            TutorialState.BAKED_IN -> {
+            PageSet.BAKED_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
                 it.pages = listOf(
                     R.layout.baked_in_tutorial_welcome,
@@ -51,7 +49,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
                     R.layout.baked_in_tutorial_final
                 )
             }
-            TutorialState.OPT_IN -> {
+            PageSet.OPT_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
                 it.pages = listOf(
                     R.layout.optin_tutorial_explore_slide,
@@ -67,7 +65,8 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         indicator = findViewById(R.id.on_boarding_indicator)
         indicator.setViewPager(viewPager)
         when (pageSet) {
-            TutorialState.BAKED_IN -> viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            PageSet.BAKED_IN -> viewPager.addOnPageChangeListener(object :
+                ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     displayIndicator()
                 }
@@ -84,7 +83,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
                     displayIndicator()
                 }
             })
-            TutorialState.OPT_IN -> indicator.visibility = View.VISIBLE
+            PageSet.OPT_IN -> indicator.visibility = View.VISIBLE
         }
     }
 
@@ -119,7 +118,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     override fun onOptInClicked() {
-        startTutorialActivity(TutorialState.OPT_IN)
+        startTutorialActivity(PageSet.OPT_IN)
         finish()
     }
     // endregion OnBoardingCallbacks

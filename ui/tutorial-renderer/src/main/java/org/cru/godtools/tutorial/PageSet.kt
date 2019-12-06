@@ -1,8 +1,6 @@
-package org.cru.godtools.tutorial.util
+package org.cru.godtools.tutorial
 
-import org.cru.godtools.tutorial.Page
-
-enum class TutorialState(internal vararg val pages: Page) {
+enum class PageSet(internal vararg val pages: Page) {
     BAKED_IN(
         Page.ONBOARDING_WELCOME,
         Page.ONBOARDING_OTHERS,
