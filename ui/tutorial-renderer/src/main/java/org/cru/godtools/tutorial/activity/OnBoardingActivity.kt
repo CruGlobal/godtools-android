@@ -35,7 +35,7 @@ class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
         when (state) {
             BAKED_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
-                it.onBoardingPagesLayout = listOf(
+                it.pages = listOf(
                     R.layout.baked_in_onboarding_welcome,
                     R.layout.baked_in_onboarding_others,
                     R.layout.baked_in_onboarding_tools,
@@ -45,7 +45,7 @@ class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
             }
             OPT_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
-                it.onBoardingPagesLayout = listOf(
+                it.pages = listOf(
                     R.layout.optin_onboarding_explore_slide,
                     R.layout.optin_onboarding_prepare_slide,
                     R.layout.optin_onboarding_try_slide,
@@ -53,7 +53,6 @@ class OnBoardingActivity : AppCompatActivity(), OnBoardingCallbacks {
                 )
             }
         }
-        it.notifyDataSetChanged()
     }
 
     private fun setupIndicator() {

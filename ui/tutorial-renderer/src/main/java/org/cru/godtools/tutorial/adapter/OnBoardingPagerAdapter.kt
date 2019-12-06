@@ -14,10 +14,14 @@ import org.cru.godtools.tutorial.util.OnBoardingCallbacks
 
 class OnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks) : PagerAdapter() {
 
-    lateinit var onBoardingPagesLayout: List<Int>
+    var pages: List<Int> = arrayListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val layoutID = onBoardingPagesLayout[position]
+        val layoutID = pages[position]
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(container.context),
             layoutID,
@@ -35,7 +39,7 @@ class OnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks) : PagerAdapter(
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
 
-    override fun getCount(): Int = onBoardingPagesLayout.size
+    override fun getCount(): Int = pages.size
 
     private fun ViewDataBinding.setDataBindingAnimation() {
         when (this) {
