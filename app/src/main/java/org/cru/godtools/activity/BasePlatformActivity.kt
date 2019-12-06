@@ -40,7 +40,8 @@ import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.WebUrlLauncher
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
-import org.cru.godtools.tutorial.activity.BakedInOnBoardingActivity
+import org.cru.godtools.tutorial.activity.OnBoardingActivity.Companion.startOnBoardingActivity
+import org.cru.godtools.tutorial.util.OnBoardingState
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
@@ -385,11 +386,11 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchOptInTutorial() {
-        startActivity(Intent(this, org.cru.godtools.tutorial.activity.OptInOnBoardingActivity::class.java))
+        startOnBoardingActivity(OnBoardingState.OPT_IN)
     }
 
     fun launchBakedInTutorial() {
-        startActivity(Intent(this, BakedInOnBoardingActivity::class.java))
+        startOnBoardingActivity(OnBoardingState.BAKED_IN)
     }
 
     // endregion Navigation Menu actions

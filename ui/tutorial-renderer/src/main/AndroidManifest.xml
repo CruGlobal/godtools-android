@@ -3,16 +3,7 @@
 
     <application>
         <activity
-            android:name=".activity.OptInOnBoardingActivity"
-            android:label="@string/title_onboarding"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activity.BakedInOnBoardingActivity"
+            android:name=".activity.OnBoardingActivity"
             android:label="@string/title_onboarding"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
