@@ -1,6 +1,5 @@
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     defaultConfig {
