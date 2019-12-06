@@ -21,7 +21,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_baked_in_onboarding)
+        setContentView(R.layout.activity_tutorial)
         viewPager = findViewById(R.id.baked_in_viewpager)
         state = TutorialState.values()[intent.getIntExtra(ARG_STATE_INDEX, 0)]
         viewPager.adapter = TutorialPagerAdapter(this).also {
@@ -35,20 +35,20 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
             TutorialState.BAKED_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
                 it.pages = listOf(
-                    R.layout.baked_in_onboarding_welcome,
-                    R.layout.baked_in_onboarding_others,
-                    R.layout.baked_in_onboarding_tools,
-                    R.layout.baked_in_onboarding_ready,
-                    R.layout.baked_in_onboarding_final
+                    R.layout.baked_in_tutorial_welcome,
+                    R.layout.baked_in_tutorial_others,
+                    R.layout.baked_in_tutorial_tools,
+                    R.layout.baked_in_tutorial_ready,
+                    R.layout.baked_in_tutorial_final
                 )
             }
             TutorialState.OPT_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
                 it.pages = listOf(
-                    R.layout.optin_onboarding_explore_slide,
-                    R.layout.optin_onboarding_prepare_slide,
-                    R.layout.optin_onboarding_try_slide,
-                    R.layout.optin_onboarding_menu_slide
+                    R.layout.optin_tutorial_explore_slide,
+                    R.layout.optin_tutorial_prepare_slide,
+                    R.layout.optin_tutorial_try_slide,
+                    R.layout.optin_tutorial_menu_slide
                 )
             }
         }

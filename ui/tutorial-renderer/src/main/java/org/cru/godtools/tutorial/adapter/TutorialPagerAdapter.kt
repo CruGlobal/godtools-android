@@ -9,7 +9,7 @@ import androidx.viewpager.widget.PagerAdapter
 import org.cru.godtools.tutorial.BR
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.animation.animateToNextText
-import org.cru.godtools.tutorial.databinding.BakedInOnboardingWelcomeBinding
+import org.cru.godtools.tutorial.databinding.BakedInTutorialWelcomeBinding
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
 class TutorialPagerAdapter(val callbacks: TutorialCallbacks) : PagerAdapter() {
@@ -43,7 +43,7 @@ class TutorialPagerAdapter(val callbacks: TutorialCallbacks) : PagerAdapter() {
 
     private fun ViewDataBinding.setDataBindingAnimation() {
         when (this) {
-            is BakedInOnboardingWelcomeBinding -> welcomeTextView.animateToNextText(R.string.baked_in_welcome_helping)
+            is BakedInTutorialWelcomeBinding -> welcomeTextView.animateToNextText(R.string.baked_in_welcome_helping)
         }
     }
 }

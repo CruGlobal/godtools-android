@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/optin_onboarding_navigation_view"
+            layout="@layout/optin_tutorial_navigation_view"
             app:callback="@{callback}" />
 
         <androidx.appcompat.widget.AppCompatTextView
