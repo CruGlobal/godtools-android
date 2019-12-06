@@ -24,6 +24,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/img_baked_in_background_tools" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/baked_in_skip"
+            android:textAppearance="@style/TextAppearance.GodTools.Medium"
+            android:textColor="@color/gt_blue"
+            android:onClick="@{() -> callback.onCloseClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView2"
             android:layout_width="0dp"
