@@ -3,6 +3,15 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
+            }
+        }
+    }
     dataBinding {
         enabled = true
     }
