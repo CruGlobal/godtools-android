@@ -33,7 +33,7 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
-import org.cru.godtools.tutorial.activity.TutorialActivity;
+import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.util.TutorialState;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
@@ -249,7 +249,7 @@ public class ToolsFragment extends BasePlatformFragment
 
     private void openTutorial() {
         if (getActivity() != null) {
-            TutorialActivity.startOnBoardingActivity(getActivity(), TutorialState.OPT_IN);
+            TutorialActivityKt.startTutorialActivity(getActivity(), TutorialState.OPT_IN);
         }
     }
 

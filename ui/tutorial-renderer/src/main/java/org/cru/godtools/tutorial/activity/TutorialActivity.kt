@@ -10,9 +10,16 @@ import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.adapter.TutorialPagerAdapter
-
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 import org.cru.godtools.tutorial.util.TutorialState
+
+private const val ARG_STATE_INDEX = "state_index"
+
+fun Activity.startTutorialActivity(pageSet: TutorialState = TutorialState.BAKED_IN) {
+    Intent(this, TutorialActivity::class.java)
+        .putExtra(ARG_STATE_INDEX, TutorialState.values().indexOf(pageSet))
+        .also { startActivity(it) }
+}
 
 class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private lateinit var viewPager: ViewPager
@@ -110,22 +117,8 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     override fun onOptInClicked() {
-        startOnBoardingActivity(TutorialState.OPT_IN)
+        startTutorialActivity(TutorialState.OPT_IN)
         finish()
     }
     // endregion OnBoardingCallbacks
-
-    // region Instantiate new Instance
-    companion object {
-
-        const val ARG_STATE_INDEX = "state_index"
-
-        @JvmStatic
-        fun Activity.startOnBoardingActivity(state: TutorialState) {
-            val intent = Intent(this, TutorialActivity::class.java)
-            intent.putExtra(ARG_STATE_INDEX, TutorialState.values().indexOf(state))
-            startActivity(intent)
-        }
-    }
-    // endregion Instantiate new Instance
 }
