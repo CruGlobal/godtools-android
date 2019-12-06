@@ -10,9 +10,9 @@ import org.cru.godtools.tutorial.BR
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.animation.animateToNextText
 import org.cru.godtools.tutorial.databinding.BakedInOnboardingWelcomeBinding
-import org.cru.godtools.tutorial.util.OnBoardingCallbacks
+import org.cru.godtools.tutorial.util.TutorialCallbacks
 
-class OnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks) : PagerAdapter() {
+class TutorialPagerAdapter(val callbacks: TutorialCallbacks) : PagerAdapter() {
 
     var pages: List<Int> = arrayListOf()
         set(value) {

@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".activity.OnBoardingActivity"
+            android:name=".activity.TutorialActivity"
             android:label="@string/title_onboarding"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
