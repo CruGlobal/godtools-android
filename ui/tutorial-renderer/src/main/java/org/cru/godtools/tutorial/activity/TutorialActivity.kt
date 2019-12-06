@@ -31,21 +31,13 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         viewPager = findViewById(R.id.baked_in_viewpager)
-        viewPager.adapter = TutorialPagerAdapter(pageSet.pages.toList(), this).also {
-            setUpAdapterViews(it)
-        }
+        viewPager.adapter = TutorialPagerAdapter(pageSet.pages, this)
         setupIndicator()
     }
 
-    private fun setUpAdapterViews(it: TutorialPagerAdapter) {
-        when (pageSet) {
-            PageSet.BAKED_IN -> {
-                Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
-            }
-            PageSet.OPT_IN -> {
-                Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
-            }
-        }
+    override fun onStart() {
+        super.onStart()
+        pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
 
     private fun setupIndicator() {
