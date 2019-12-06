@@ -31,7 +31,7 @@
             android:onClick="@{() -> callback.onCloseClicked()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close"
+            app:srcCompat="@drawable/ic_close_tutorial"
             app:tint="@color/gt_blue" />
 
         <androidx.appcompat.widget.AppCompatButton

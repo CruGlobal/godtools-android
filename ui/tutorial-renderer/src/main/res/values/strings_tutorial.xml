@@ -29,4 +29,5 @@
     <string name="baked_in_begin">Begin</string>
     <string name="baked_in_welcome_helping">Helping You Share Your Faith</string>
     <string name="baked_in_skip">Skip</string>
+    <string name="tutorial_start_using_godtools">Start Using GodTools</string>
 </resources>
