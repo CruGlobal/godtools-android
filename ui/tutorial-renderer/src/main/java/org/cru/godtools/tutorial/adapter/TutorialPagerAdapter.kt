@@ -7,24 +7,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
 import org.cru.godtools.tutorial.BR
+import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.animation.animateToNextText
 import org.cru.godtools.tutorial.databinding.BakedInTutorialWelcomeBinding
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
-class TutorialPagerAdapter(val callbacks: TutorialCallbacks) : PagerAdapter() {
-
-    var pages: List<Int> = arrayListOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
+internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks: TutorialCallbacks) : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val layoutID = pages[position]
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(container.context),
-            layoutID,
+            pages[position].layout,
             container,
             false
         ).also { it.setVariable(BR.callback, callbacks) }

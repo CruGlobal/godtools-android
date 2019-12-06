@@ -2,7 +2,7 @@ package org.cru.godtools.tutorial
 
 import androidx.annotation.LayoutRes
 
-internal enum class Page(@LayoutRes layout: Int) {
+internal enum class Page(@LayoutRes val layout: Int) {
     ONBOARDING_WELCOME(R.layout.baked_in_tutorial_welcome),
     ONBOARDING_OTHERS(R.layout.baked_in_tutorial_others),
     ONBOARDING_TOOLS(R.layout.baked_in_tutorial_tools),

@@ -31,7 +31,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         viewPager = findViewById(R.id.baked_in_viewpager)
-        viewPager.adapter = TutorialPagerAdapter(this).also {
+        viewPager.adapter = TutorialPagerAdapter(pageSet.pages.toList(), this).also {
             setUpAdapterViews(it)
         }
         setupIndicator()
@@ -41,22 +41,9 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         when (pageSet) {
             PageSet.BAKED_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
-                it.pages = listOf(
-                    R.layout.baked_in_tutorial_welcome,
-                    R.layout.baked_in_tutorial_others,
-                    R.layout.baked_in_tutorial_tools,
-                    R.layout.baked_in_tutorial_ready,
-                    R.layout.baked_in_tutorial_final
-                )
             }
             PageSet.OPT_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL)
-                it.pages = listOf(
-                    R.layout.optin_tutorial_explore_slide,
-                    R.layout.optin_tutorial_prepare_slide,
-                    R.layout.optin_tutorial_try_slide,
-                    R.layout.optin_tutorial_menu_slide
-                )
             }
         }
     }
