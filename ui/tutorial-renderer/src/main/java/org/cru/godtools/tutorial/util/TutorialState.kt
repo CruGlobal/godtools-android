@@ -15,5 +15,9 @@ enum class TutorialState(internal vararg val pages: Page) {
         Page.TRAINING_PREPARE,
         Page.TRAINING_TRY,
         Page.TRAINING_MENU
-    )
+    );
+
+    companion object {
+        val DEFAULT = BAKED_IN
+    }
 }

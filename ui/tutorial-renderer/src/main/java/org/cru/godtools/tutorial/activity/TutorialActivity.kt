@@ -13,24 +13,26 @@ import org.cru.godtools.tutorial.adapter.TutorialPagerAdapter
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 import org.cru.godtools.tutorial.util.TutorialState
 
-private const val ARG_STATE_INDEX = "state_index"
+private const val ARG_PAGE_SET = "pageSet"
 
-fun Activity.startTutorialActivity(pageSet: TutorialState = TutorialState.BAKED_IN) {
+fun Activity.startTutorialActivity(pageSet: TutorialState = TutorialState.DEFAULT) {
     Intent(this, TutorialActivity::class.java)
-        .putExtra(ARG_STATE_INDEX, TutorialState.values().indexOf(pageSet))
+        .putExtra(ARG_PAGE_SET, pageSet)
         .also { startActivity(it) }
 }
 
 class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private lateinit var viewPager: ViewPager
     private lateinit var indicator: CircleIndicator
-    private lateinit var state: TutorialState
+
+    private val pageSet: TutorialState
+        get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? TutorialState
+            ?: TutorialState.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         viewPager = findViewById(R.id.baked_in_viewpager)
-        state = TutorialState.values()[intent.getIntExtra(ARG_STATE_INDEX, 0)]
         viewPager.adapter = TutorialPagerAdapter(this).also {
             setUpAdapterViews(it)
         }
@@ -38,7 +40,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     private fun setUpAdapterViews(it: TutorialPagerAdapter) {
-        when (state) {
+        when (pageSet) {
             TutorialState.BAKED_IN -> {
                 Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_BAKED_IN_TUTORIAL)
                 it.pages = listOf(
@@ -64,7 +66,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun setupIndicator() {
         indicator = findViewById(R.id.on_boarding_indicator)
         indicator.setViewPager(viewPager)
-        when (state) {
+        when (pageSet) {
             TutorialState.BAKED_IN -> viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     displayIndicator()
