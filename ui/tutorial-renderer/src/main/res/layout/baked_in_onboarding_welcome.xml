@@ -40,6 +40,7 @@
             android:layout_marginRight="32dp"
             android:layout_marginBottom="32dp"
             android:gravity="center"
+            android:animateLayoutChanges="true"
             android:text="@string/baked_in_welcome"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/gt_blue"

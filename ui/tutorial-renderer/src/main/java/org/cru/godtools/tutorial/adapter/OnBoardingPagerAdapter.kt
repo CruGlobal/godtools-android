@@ -39,12 +39,7 @@ class OnBoardingPagerAdapter(val callbacks: OnBoardingCallbacks) : PagerAdapter(
 
     private fun ViewDataBinding.setDataBindingAnimation() {
         when (this) {
-            is BakedInOnboardingWelcomeBinding -> {
-                welcomeTextView.postDelayed(
-                    { welcomeTextView.animateToNextText(R.string.baked_in_welcome_helping) },
-                    3000
-                )
-            }
+            is BakedInOnboardingWelcomeBinding -> welcomeTextView.animateToNextText(R.string.baked_in_welcome_helping)
         }
     }
 }

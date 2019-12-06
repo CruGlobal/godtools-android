@@ -1,22 +1,40 @@
 package org.cru.godtools.tutorial.animation
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatTextView
 
 fun AppCompatTextView.animateToNextText(@StringRes animateNextText: Int) {
     alpha = 1f
-    animate().setDuration(3000).alpha(0f).setListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
-            super.onAnimationEnd(animation)
-            fadeInToNewText(animateNextText)
-        }
-    }).start()
+    val fadOutAnimator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
+        duration = fadeDuration
+        setTextAfterAnimation(animateNextText, this@animateToNextText)
+    }
+    val fadeInAnimator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+        duration = fadeDuration
+    }
+    AnimatorSet().apply {
+        startDelay = delayDuration
+        play(fadOutAnimator).before(fadeInAnimator)
+        start()
+    }
 }
 
-private fun AppCompatTextView.fadeInToNewText(@StringRes newText: Int) {
-    alpha = 0f
-    setText(newText)
-    animate().alpha(1f).setDuration(3000).setListener(null).start()
+private fun ObjectAnimator.setTextAfterAnimation(@StringRes animateNextText: Int, textView: AppCompatTextView) {
+    addListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {}
+
+        override fun onAnimationEnd(animation: Animator?) {
+            textView.setText(animateNextText)
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {}
+
+        override fun onAnimationStart(animation: Animator?) {}
+    })
 }
+
+private const val delayDuration: Long = 3000
+private const val fadeDuration = 1000L
