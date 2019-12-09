@@ -4,12 +4,6 @@ apply plugin: 'kotlin-kapt'
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
-            }
-        }
     }
     dataBinding {
         enabled = true
