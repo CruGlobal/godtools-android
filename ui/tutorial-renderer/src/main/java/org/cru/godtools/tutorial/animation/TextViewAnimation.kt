@@ -6,18 +6,21 @@ import android.animation.ObjectAnimator
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatTextView
 
+private const val DELAY_DURATION = 3000L
+private const val FADE_DURATION = 1000L
+
 fun AppCompatTextView.animateToNextText(@StringRes animateNextText: Int) {
     alpha = 1f
-    val fadOutAnimator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
-        duration = fadeDuration
+    val fadeOutAnimator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
+        duration = FADE_DURATION
         setTextAfterAnimation(animateNextText, this@animateToNextText)
     }
     val fadeInAnimator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
-        duration = fadeDuration
+        duration = FADE_DURATION
     }
     AnimatorSet().apply {
-        startDelay = delayDuration
-        play(fadOutAnimator).before(fadeInAnimator)
+        startDelay = DELAY_DURATION
+        play(fadeOutAnimator).before(fadeInAnimator)
         start()
     }
 }
@@ -35,6 +38,3 @@ private fun ObjectAnimator.setTextAfterAnimation(@StringRes animateNextText: Int
         override fun onAnimationStart(animation: Animator?) {}
     })
 }
-
-private const val delayDuration: Long = 3000
-private const val fadeDuration = 1000L
