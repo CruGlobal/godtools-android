@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/baked_in_viewpager"
+        android:id="@+id/tutorial_viewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/on_boarding_indicator"

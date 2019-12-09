@@ -30,7 +30,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
-        viewPager = findViewById(R.id.baked_in_viewpager)
+        viewPager = findViewById(R.id.tutorial_viewpager)
         viewPager.adapter = TutorialPagerAdapter(pageSet.pages, this)
         setupIndicator()
     }
