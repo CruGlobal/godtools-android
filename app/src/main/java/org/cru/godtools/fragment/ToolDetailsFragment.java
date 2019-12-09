@@ -22,7 +22,6 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
-import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.AttachmentLoader;
@@ -68,8 +67,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     private static final int LOADER_TOOL = 101;
     private static final int LOADER_BANNER = 102;
-    private static final int LOADER_LATEST_TRANSLATION = 103;
+    private static final int LOADER_LATEST_PRIMARY_TRANSLATION = 103;
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
+    private static final int LOADER_LATEST_PARALLEL_TRANSLATION = 105;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -119,7 +119,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Nullable
     private Attachment mBannerAttachment;
     @Nullable
-    private Translation mLatestTranslation;
+    private Translation mLatestPrimaryTranslation;
+    @Nullable
+    private Translation mLatestParallelTranslation;
     @Nullable
     private DownloadProgress mDownloadProgress;
     @NonNull
@@ -223,8 +225,13 @@ public class ToolDetailsFragment extends BasePlatformFragment
         updateViews();
     }
 
-    void onLoadLatestTranslation(@Nullable final Translation translation) {
-        mLatestTranslation = translation;
+    void onLoadLatestPrimaryTranslation(@Nullable final Translation translation) {
+        mLatestPrimaryTranslation = translation;
+        updateViews();
+    }
+
+    void onLoadLatestParallelTranslation(@Nullable final Translation translation) {
+        mLatestParallelTranslation = translation;
         updateViews();
     }
 
@@ -295,7 +302,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     private void updateViews() {
         bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
+            mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestPrimaryTranslation, mTool));
         }
         bindShares(mShares, mTool);
 
@@ -386,29 +393,24 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @OnClick(R.id.action_open)
     void openTool() {
         if (mTool != null && mTool.getCode() != null) {
-            Settings settings = Settings.getInstance(requireContext());
-            Locale primaryLanguage = null;
-            Locale parallelLanguages = null;
-            if (mTool.getLatestTranslations() != null) {
-                for (int i = 0; i < mTool.getLatestTranslations().size(); i++) {
-                    Translation translation = mTool.getLatestTranslations().get(i);
-                    if (settings.getPrimaryLanguage() == translation.getLanguageCode()) {
-                        primaryLanguage = translation.getLanguageCode();
-                    }
-                    if (settings.getParallelLanguage() == translation.getLanguageCode()) {
-                        parallelLanguages = translation.getLanguageCode();
-                    }
-                }
-            }
-            primaryLanguage = primaryLanguage != null ? primaryLanguage : Locale.ENGLISH;
+            Locale primaryLanguage =
+                    mLatestPrimaryTranslation != null ? mLatestPrimaryTranslation.getLanguageCode() :
+                            Locale.ENGLISH;
+            Locale parallelLanguages = mLatestParallelTranslation != null ?
+                    mLatestParallelTranslation.getLanguageCode() : null;
             if (parallelLanguages != null) {
-                ActivityUtilsKt
-                        .openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
-                                          primaryLanguage, parallelLanguages);
+                ActivityUtilsKt.openToolActivity(
+                        requireActivity(),
+                        mTool.getCode(),
+                        mTool.getType(),
+                        primaryLanguage,
+                        parallelLanguages);
             } else {
-                ActivityUtilsKt
-                        .openToolActivity(requireActivity(), mTool.getCode(), mTool.getType(),
-                                          primaryLanguage);
+                ActivityUtilsKt.openToolActivity(
+                        requireActivity(),
+                        mTool.getCode(),
+                        mTool.getType(),
+                        primaryLanguage);
             }
         }
     }
@@ -417,7 +419,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
         final LoaderManager lm = getLoaderManager();
         lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
         lm.initLoader(LOADER_BANNER, null, new AttachmentLoaderCallbacks());
-        lm.initLoader(LOADER_LATEST_TRANSLATION, null, new TranslationLoaderCallbacks());
+        lm.initLoader(LOADER_LATEST_PRIMARY_TRANSLATION, null, new TranslationLoaderCallbacks());
+        lm.initLoader(LOADER_LATEST_PARALLEL_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
 
         updateBannerLoader();
@@ -431,7 +434,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateLatestTranslationLoader() {
-        final Loader<Translation> loader = getLoaderManager().getLoader(LOADER_LATEST_TRANSLATION);
+        final Loader<Translation> loader = getLoaderManager().getLoader(
+                LOADER_LATEST_PRIMARY_TRANSLATION);
         if (loader instanceof LatestTranslationLoader) {
             ((LatestTranslationLoader) loader).setLocale(getPrimaryLanguage());
         }
@@ -489,9 +493,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
         @Override
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
-                case LOADER_LATEST_TRANSLATION:
+                case LOADER_LATEST_PRIMARY_TRANSLATION:
                     if (mToolCode != null) {
                         return new LatestTranslationLoader(requireContext(), mToolCode, getPrimaryLanguage());
+                    }
+                    break;
+                case LOADER_LATEST_PARALLEL_TRANSLATION:
+                    if (mToolCode != null && getParallelLanguage() != null) {
+                        return new LatestTranslationLoader(requireContext(), mToolCode, getParallelLanguage());
                     }
                     break;
             }
@@ -502,8 +511,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
         @Override
         public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
             switch (loader.getId()) {
-                case LOADER_LATEST_TRANSLATION:
-                    onLoadLatestTranslation(translation);
+                case LOADER_LATEST_PRIMARY_TRANSLATION:
+                    onLoadLatestPrimaryTranslation(translation);
+                    break;
+                case LOADER_LATEST_PARALLEL_TRANSLATION:
+                    onLoadLatestParallelTranslation(translation);
                     break;
             }
         }
@@ -557,7 +569,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             switch (position) {
                 case 0:
                     textView.setText(ModelUtils.getTranslationDescription(getContext(),
-                                                                          mLatestTranslation,
+                                                                          mLatestPrimaryTranslation,
                                                                           mTool));
                     break;
                 case 1:
