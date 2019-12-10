@@ -65,25 +65,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_below="@id/label_divider"
-                app:layout_constraintTop_toBottomOf="@id/label_divider"
-                app:layout_constraintBottom_toTopOf="@id/card_position"
-                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toTopOf="@id/content_scroll_view"
+                app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
                 android:adjustViewBounds="true"
                 android:cropToPadding="false" />
 
             <org.ccci.gto.android.common.widget.HackyNestedScrollView
+                android:id="@+id/content_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_below="@id/label_divider"
-                app:layout_constraintTop_toBottomOf="@id/label_divider"
-                app:layout_constraintBottom_toTopOf="@id/card_position"
-                android:layout_marginBottom="@dimen/card_margin_content_bottom"
                 android:layout_marginLeft="@dimen/card_margin_content_horiz"
-                android:layout_marginRight="@dimen/card_margin_content_horiz"
                 android:layout_marginTop="4dp"
+                android:layout_marginRight="@dimen/card_margin_content_horiz"
                 android:fadingEdgeLength="24dp"
                 android:fillViewport="true"
-                android:requiresFadingEdge="vertical">
+                android:requiresFadingEdge="vertical"
+                app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+                app:layout_constraintTop_toBottomOf="@id/label_divider">
 
                 <LinearLayout
                     android:id="@+id/content"
@@ -92,48 +91,58 @@
                     android:orientation="vertical" />
             </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="previous_card,card_position,next_card" />
 
-                <TextView
-                    android:id="@+id/previous_card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/card_position"
-                    android:layout_marginBottom="@dimen/card_margin_bottom"
-                    android:paddingTop="8dp"
-                    android:text="@string/tract_card_previous"
-                    android:textAlignment="viewEnd"
-                    android:gravity="end"
-                    android:textAllCaps="true" />
+            <TextView
+                android:id="@+id/previous_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="start"
+                android:paddingTop="8dp"
+                android:paddingBottom="@dimen/card_margin_bottom"
+                android:text="@string/tract_card_previous"
+                android:textAlignment="viewStart"
+                android:textAllCaps="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/card_position"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/card_position"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/previous_card"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/next_card"
-                    android:layout_marginBottom="@dimen/card_margin_bottom"
-                    android:paddingTop="8dp"
-                    android:gravity="center"
-                    tools:text="1/6" />
+            <TextView
+                android:id="@+id/card_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_margin_bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/next_card"
+                app:layout_constraintStart_toEndOf="@id/previous_card"
+                tools:text="1/6" />
 
-                <TextView
-                    android:id="@+id/next_card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/card_position"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:textAlignment="viewStart"
-                    android:layout_marginBottom="@dimen/card_margin_bottom"
-                    android:paddingTop="8dp"
-                    android:gravity="start"
-                    android:text="@string/tract_card_next"
-                    android:textAllCaps="true" />
-
-
+            <TextView
+                android:id="@+id/next_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="end|bottom"
+                android:paddingTop="8dp"
+                android:paddingBottom="@dimen/card_margin_bottom"
+                android:text="@string/tract_card_next"
+                android:textAlignment="viewEnd"
+                android:textAllCaps="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/card_position" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
