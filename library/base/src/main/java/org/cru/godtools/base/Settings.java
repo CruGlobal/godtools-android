@@ -3,6 +3,8 @@ package org.cru.godtools.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -14,6 +16,7 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import me.thekey.android.TheKey;
+import timber.log.Timber;
 
 public final class Settings {
     private static final String PREFS_SETTINGS = "GodTools";
@@ -36,6 +39,7 @@ public final class Settings {
     private Settings(@NonNull final Context context) {
         mContext = context;
         mPrefs = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
+        trackFirstLaunchVersion();
     }
 
     @Nullable
@@ -99,6 +103,43 @@ public final class Settings {
                 .putBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), added)
                 .apply();
     }
+
+    // region Version tracking
+    private static final String PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch";
+    private static final int VERSION_5_1_4 = 4033503;
+
+    private void trackFirstLaunchVersion() {
+        if (mPrefs.contains(PREF_VERSION_FIRST_LAUNCH)) {
+            return;
+        }
+
+        // The app was used before we started tracking the initial version, so just assume it was the most recent
+        // version before we started tracking the first launch version
+        if (mPrefs.contains(PREF_PRIMARY_LANGUAGE)) {
+            mPrefs.edit().putInt(PREF_VERSION_FIRST_LAUNCH, VERSION_5_1_4).apply();
+            return;
+        }
+
+        // resolve the current version code as the first launch code
+        mPrefs.edit().putInt(PREF_VERSION_FIRST_LAUNCH, getCurrentVersion()).apply();
+    }
+
+    private int getCurrentVersion() {
+        // lookup the current version from the package info
+        try {
+            final PackageInfo info = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+            return info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Timber.tag("Settings").e(e, "Error retrieving the Package Info");
+        }
+
+        return -1;
+    }
+
+    private int getFirstLaunchVersion() {
+        return mPrefs.getInt(PREF_VERSION_FIRST_LAUNCH, getCurrentVersion());
+    }
+    // endregion Version tracking
 
     @NonNull
     public Locale getPrimaryLanguage() {
