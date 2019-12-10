@@ -194,8 +194,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     protected void onUpdateFeatureDiscovered() {
         super.onUpdateFeatureDiscovered();
-        mToolsBinding.setIsTutorialViewable(
-                !settings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
+        mToolsBinding.setIsTutorialViewable(!settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING));
     }
 
     @Override
@@ -244,7 +243,7 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     private void closeTutorial() {
-        settings.setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL);
+        settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING);
     }
 
     private void openTutorial() {

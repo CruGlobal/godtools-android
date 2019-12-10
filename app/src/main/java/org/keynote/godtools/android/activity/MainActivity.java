@@ -39,8 +39,8 @@ import static androidx.lifecycle.Lifecycle.State.RESUMED;
 import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
-import static org.cru.godtools.base.Settings.FEATURE_BAKED_IN_TUTORIAL;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
+import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
@@ -303,7 +303,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     private void shouldShowBakedInTutorial() {
-        if (!Settings.getInstance(this).isFeatureDiscovered(FEATURE_BAKED_IN_TUTORIAL)) {
+        if (!Settings.getInstance(this).isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
             launchBakedInTutorial();
         }
     }
