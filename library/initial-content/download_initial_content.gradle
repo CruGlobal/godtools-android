@@ -27,6 +27,8 @@ android.libraryVariants.all { variant ->
     // languages json
     def languagesJsonFile = new File(assetGenDir, 'languages.json')
     def downloadLanguagesTask = project.tasks.create "download${variant.name.capitalize()}BundledLanguages", Download, {
+        mustRunAfter clean
+
         src "${mobileContentApi}languages"
         dest languagesJsonFile
         quiet true
@@ -40,6 +42,8 @@ android.libraryVariants.all { variant ->
     // tools json
     def toolsJsonFile = new File(assetGenDir, 'tools.json')
     def downloadToolsTask = project.tasks.create "download${variant.name.capitalize()}BundledTools", Download, {
+        mustRunAfter clean
+
         src "${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language"
         dest toolsJsonFile
         quiet true
@@ -53,6 +57,7 @@ android.libraryVariants.all { variant ->
     // download attachments
     def attachmentsDir = new File(assetGenDir, 'attachments')
     def downloadAttachmentsTask = project.tasks.create("download${variant.name.capitalize()}BundledAttachments") {
+        mustRunAfter clean
         dependsOn downloadToolsTask
 
         doLast {
@@ -83,6 +88,7 @@ android.libraryVariants.all { variant ->
     // download translations
     def translationsDir = new File(assetGenDir, 'translations')
     def downloadTranslationsTask = project.tasks.create("download${variant.name.capitalize()}BundledTranslations") {
+        mustRunAfter clean
         dependsOn downloadToolsTask
 
         doLast {
