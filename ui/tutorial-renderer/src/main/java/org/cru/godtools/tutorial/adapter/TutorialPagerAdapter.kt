@@ -14,29 +14,24 @@ import org.cru.godtools.tutorial.databinding.BakedInTutorialWelcomeBinding
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
 internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks: TutorialCallbacks) : PagerAdapter() {
+    override fun getCount() = pages.size
+
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(container.context),
-            pages[position].layout,
-            container,
-            false
-        ).also { it.setVariable(BR.callback, callbacks) }
-        container.addView(binding.root)
-        binding.setDataBindingAnimation()
-        return binding.root
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
-    }
-
-    override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
-
-    override fun getCount(): Int = pages.size
-
-    private fun ViewDataBinding.setDataBindingAnimation() {
-        when (this) {
-            is BakedInTutorialWelcomeBinding -> welcomeTextView.animateToNextText(R.string.baked_in_welcome_helping)
+        return DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(container.context), pages[position].layout, container, true
+        ).also {
+            it.setVariable(BR.callback, callbacks)
+            it.startAnimations()
         }
+    }
+
+    override fun isViewFromObject(view: View, obj: Any) = view == obj
+
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        container.removeView((obj as ViewDataBinding).root)
+    }
+
+    private fun ViewDataBinding.startAnimations() {
+        (this as? BakedInTutorialWelcomeBinding)?.welcomeTextView?.animateToNextText(R.string.baked_in_welcome_helping)
     }
 }
