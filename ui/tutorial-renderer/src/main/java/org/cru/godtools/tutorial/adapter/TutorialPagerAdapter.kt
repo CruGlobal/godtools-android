@@ -18,10 +18,11 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         return DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(container.context), pages[position].layout, container, true
+            LayoutInflater.from(container.context), pages[position].layout, container, false
         ).also {
             it.setVariable(BR.callback, callbacks)
             it.startAnimations()
+            container.addView(it.root)
         }
     }
 
