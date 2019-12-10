@@ -109,7 +109,6 @@ public class ToolsFragment extends BasePlatformFragment
     @Nullable
     private Cursor mResources;
 
-    private Settings mSettings;
 
     public static Fragment newInstance(final int mode) {
         final Fragment fragment = new ToolsFragment();
@@ -138,8 +137,6 @@ public class ToolsFragment extends BasePlatformFragment
             mMode = args.getInt(EXTRA_MODE, mMode);
         }
 
-        mSettings = Settings.getInstance(requireContext());
-
         startLoaders();
     }
 
@@ -161,7 +158,7 @@ public class ToolsFragment extends BasePlatformFragment
     public void onResume() {
         super.onResume();
         mToolsBinding.setIsTutorialViewable(
-                !mSettings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
+                !settings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
@@ -243,7 +240,7 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     private void closeTutorial() {
-        mSettings.setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL);
+        settings.setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL);
         mToolsBinding.setIsTutorialViewable(false);
     }
 
