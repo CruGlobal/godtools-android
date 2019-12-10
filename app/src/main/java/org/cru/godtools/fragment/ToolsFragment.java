@@ -117,7 +117,7 @@ public class ToolsFragment extends BasePlatformFragment
         return fragment;
     }
 
-    /* BEGIN lifecycle */
+    //region BEGIN lifecycle
 
     @Override
     public void onAttach(final Context context) {
@@ -158,6 +158,22 @@ public class ToolsFragment extends BasePlatformFragment
         super.onResume();
         onUpdateFeatureDiscovered();
     }
+
+    @Override
+    public void onPause() {
+        if (mToolsDragDropManager != null) {
+            mToolsDragDropManager.cancelDrag();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        cleanupToolsList();
+        super.onDestroyView();
+    }
+
+    //endregion lifecycle
 
     void onLoadResources(@Nullable final Cursor cursor) {
         mResources = cursor;
@@ -223,22 +239,6 @@ public class ToolsFragment extends BasePlatformFragment
             listener.onNoToolsAvailableAction();
         }
     }
-
-    @Override
-    public void onPause() {
-        if (mToolsDragDropManager != null) {
-            mToolsDragDropManager.cancelDrag();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        cleanupToolsList();
-        super.onDestroyView();
-    }
-
-    /* END lifecycle */
 
     private boolean showDownloading() {
         return mMode == MODE_AVAILABLE;
@@ -354,6 +354,7 @@ public class ToolsFragment extends BasePlatformFragment
         mToolsDragDropAdapter = null;
         mToolsDragDropManager = null;
         mToolsAdapter = null;
+        mToolsBinding = null;
     }
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
