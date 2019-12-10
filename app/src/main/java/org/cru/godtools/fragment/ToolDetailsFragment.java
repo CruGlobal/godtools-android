@@ -499,7 +499,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
                     }
                     break;
                 case LOADER_LATEST_PARALLEL_TRANSLATION:
-                    if (mToolCode != null && getParallelLanguage() != null) {
+                    if (mToolCode != null) {
                         return new LatestTranslationLoader(requireContext(), mToolCode, getParallelLanguage());
                     }
                     break;

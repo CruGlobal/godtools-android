@@ -10,17 +10,18 @@ import java.util.Locale;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoader<Translation> {
     @NonNull
     private final GodToolsDao mDao;
     @NonNull
     private final String mTool;
-    @NonNull
+    @Nullable
     private Locale mLocale;
 
     public LatestTranslationLoader(@NonNull final Context context, @NonNull final String toolCode,
-                                   @NonNull final Locale locale) {
+                                   @Nullable final Locale locale) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
         mTool = toolCode;
@@ -29,12 +30,12 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
     }
 
     @MainThread
-    public void setLocale(@NonNull final Locale locale) {
+    public void setLocale(@Nullable final Locale locale) {
         mLocale = locale;
         onContentChanged();
     }
 
-    @NonNull
+    @Nullable
     public Locale getLocale() {
         return mLocale;
     }
