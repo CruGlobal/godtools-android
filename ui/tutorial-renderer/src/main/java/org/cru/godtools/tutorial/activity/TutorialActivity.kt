@@ -22,73 +22,70 @@ fun Activity.startTutorialActivity(pageSet: PageSet = PageSet.DEFAULT) {
 }
 
 class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
-    private lateinit var viewPager: ViewPager
-    private lateinit var indicator: CircleIndicator
-
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tutorial)
-        viewPager = findViewById(R.id.tutorial_viewpager)
-        viewPager.adapter = TutorialPagerAdapter(pageSet.pages, this)
-        setupIndicator()
+        setContentView(R.layout.tutorial_activity)
+    }
+
+    override fun onContentChanged() {
+        super.onContentChanged()
+        setupViewPager()
     }
 
     override fun onStart() {
         super.onStart()
         pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
+    // endregion Lifecycle
 
-    private fun setupIndicator() {
-        indicator = findViewById(R.id.on_boarding_indicator)
-        indicator.setViewPager(viewPager)
-        when (pageSet) {
-            PageSet.ONBOARDING -> viewPager.addOnPageChangeListener(object :
-                ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) {
-                    displayIndicator()
-                }
+    // region ViewPager
+    private var viewPager: ViewPager? = null
 
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) {
-                    displayIndicator()
-                }
+    private fun setupViewPager() {
+        viewPager = findViewById<ViewPager>(R.id.tutorial_viewpager)?.also {
+            it.adapter = TutorialPagerAdapter(pageSet.pages, this)
+            it.setupIndicator()
+        }
+    }
 
+    private fun ViewPager.setupIndicator() {
+        findViewById<CircleIndicator>(R.id.on_boarding_indicator)?.let { indicator ->
+            indicator.setViewPager(this)
+            addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
-                    displayIndicator()
+                    updateIndicatorVisibility(indicator, position)
                 }
             })
-            PageSet.TRAINING -> indicator.visibility = View.VISIBLE
+            updateIndicatorVisibility(indicator)
         }
     }
 
-    private fun displayIndicator() {
-        // The Indicator is not displayed on the first Screen
-        if (viewPager.currentItem != 0) {
-            indicator.visibility = View.VISIBLE
-        } else {
-            indicator.visibility = View.GONE
-        }
+    private fun ViewPager.updateIndicatorVisibility(indicator: CircleIndicator, page: Int = currentItem) {
+        indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
+    // endregion ViewPager
 
-    // region OnBoardingCallbacks
+    // region TutorialCallbacks
     override fun onNextClicked() {
-        if (viewPager.currentItem < viewPager.adapter?.count ?: 0) {
-            viewPager.currentItem = viewPager.currentItem + 1
-        } else {
-            finish()
+        viewPager?.let { pager ->
+            if (pager.currentItem < pager.adapter?.count ?: 0) {
+                pager.currentItem = pager.currentItem + 1
+            } else {
+                finish()
+            }
         }
     }
 
     override fun onPreviousClicked() {
-        if (viewPager.currentItem > 0) {
-            viewPager.currentItem = viewPager.currentItem - 1
-        } else {
-            finish()
+        viewPager?.let { pager ->
+            if (pager.currentItem > 0) {
+                pager.currentItem = pager.currentItem - 1
+            } else {
+                finish()
+            }
         }
     }
 
@@ -100,5 +97,5 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         startTutorialActivity(PageSet.TRAINING)
         finish()
     }
-    // endregion OnBoardingCallbacks
+    // endregion TutorialCallbacks
 }
