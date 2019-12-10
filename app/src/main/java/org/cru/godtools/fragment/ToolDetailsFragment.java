@@ -528,7 +528,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     class ToolDetailsAdapter extends PagerAdapter {
-
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -580,5 +579,5 @@ public class ToolDetailsFragment extends BasePlatformFragment
         public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
-    } // End of Adapter
+    }
 }
