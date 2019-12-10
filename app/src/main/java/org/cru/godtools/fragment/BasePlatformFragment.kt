@@ -12,6 +12,7 @@ import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.fragment.BaseFragment
@@ -69,6 +70,8 @@ abstract class BasePlatformFragment : BaseFragment() {
     protected open fun onUpdatePrimaryLanguage() {}
 
     protected open fun onUpdateParallelLanguage() {}
+
+    protected open fun onUpdateFeatureDiscovered() {}
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -134,6 +137,9 @@ abstract class BasePlatformFragment : BaseFragment() {
         override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
             when (key) {
                 PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
+            }
+            if (key?.startsWith(PREF_FEATURE_DISCOVERED) == true) {
+                onUpdateFeatureDiscovered()
             }
         }
     }

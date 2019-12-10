@@ -49,7 +49,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ToolsFragment extends BasePlatformFragment
@@ -157,8 +156,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public void onResume() {
         super.onResume();
-        mToolsBinding.setIsTutorialViewable(
-                !settings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
+        onUpdateFeatureDiscovered();
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
@@ -176,6 +174,13 @@ public class ToolsFragment extends BasePlatformFragment
     protected void onUpdateParallelLanguage() {
         super.onUpdateParallelLanguage();
         restartToolsLoader();
+    }
+
+    @Override
+    protected void onUpdateFeatureDiscovered() {
+        super.onUpdateFeatureDiscovered();
+        mToolsBinding.setIsTutorialViewable(
+                !settings.isFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL));
     }
 
     @Override
@@ -241,7 +246,6 @@ public class ToolsFragment extends BasePlatformFragment
 
     private void closeTutorial() {
         settings.setFeatureDiscovered(Settings.FEATURE_OPT_IN_TUTORIAL);
-        mToolsBinding.setIsTutorialViewable(false);
     }
 
     private void openTutorial() {
@@ -267,7 +271,6 @@ public class ToolsFragment extends BasePlatformFragment
     @SuppressWarnings("unchecked")
     private void setupToolsList() {
         if (mToolsBinding.resources != null) {
-            mToolsBinding.resources.setLayoutManager(new LinearLayoutManager(requireActivity()));
             mToolsBinding.resources.setHasFixedSize(false);
 
             // create base tools adapter
