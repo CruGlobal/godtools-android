@@ -189,6 +189,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     public void onStart() {
         super.onStart();
         updateLatestTranslationLoader();
+        updateLatestParallelTranslationLoader();
         startProgressListener();
     }
 
@@ -209,6 +210,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
         updateLatestTranslationLoader();
 
         // restart the progress listener
+        stopProgressListener();
+        startProgressListener();
+    }
+
+    @Override
+    protected void onUpdateParallelLanguage() {
+        updateLatestParallelTranslationLoader();
+
         stopProgressListener();
         startProgressListener();
     }
@@ -438,6 +447,13 @@ public class ToolDetailsFragment extends BasePlatformFragment
                 LOADER_LATEST_PRIMARY_TRANSLATION);
         if (loader instanceof LatestTranslationLoader) {
             ((LatestTranslationLoader) loader).setLocale(getPrimaryLanguage());
+        }
+    }
+
+    private void updateLatestParallelTranslationLoader() {
+        final Loader loader = getLoaderManager().getLoader(LOADER_LATEST_PARALLEL_TRANSLATION);
+        if (loader instanceof LatestTranslationLoader) {
+            ((LatestTranslationLoader) loader).setLocale(getParallelLanguage());
         }
     }
 
