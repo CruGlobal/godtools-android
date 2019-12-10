@@ -137,12 +137,12 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     // region Lifecycle
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
-        if (mDownloadManager == null && context != null) {
+        if (mDownloadManager == null) {
             mDownloadManager = GodToolsDownloadManager.getInstance(context);
         }
-        if (mShortcutManager == null && context != null) {
+        if (mShortcutManager == null) {
             mShortcutManager = GodToolsShortcutManager.getInstance(context);
         }
     }
