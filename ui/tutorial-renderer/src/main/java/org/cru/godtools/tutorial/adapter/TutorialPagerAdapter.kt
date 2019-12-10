@@ -25,7 +25,7 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
         }
     }
 
-    override fun isViewFromObject(view: View, obj: Any) = view == obj
+    override fun isViewFromObject(view: View, obj: Any) = view == (obj as? ViewDataBinding)?.root
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         container.removeView((obj as ViewDataBinding).root)
