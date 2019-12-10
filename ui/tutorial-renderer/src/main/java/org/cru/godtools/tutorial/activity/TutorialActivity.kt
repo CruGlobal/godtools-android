@@ -44,7 +44,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         indicator = findViewById(R.id.on_boarding_indicator)
         indicator.setViewPager(viewPager)
         when (pageSet) {
-            PageSet.BAKED_IN -> viewPager.addOnPageChangeListener(object :
+            PageSet.ONBOARDING -> viewPager.addOnPageChangeListener(object :
                 ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     displayIndicator()
@@ -62,7 +62,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
                     displayIndicator()
                 }
             })
-            PageSet.OPT_IN -> indicator.visibility = View.VISIBLE
+            PageSet.TRAINING -> indicator.visibility = View.VISIBLE
         }
     }
 
@@ -97,7 +97,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     override fun onOptInClicked() {
-        startTutorialActivity(PageSet.OPT_IN)
+        startTutorialActivity(PageSet.TRAINING)
         finish()
     }
     // endregion OnBoardingCallbacks

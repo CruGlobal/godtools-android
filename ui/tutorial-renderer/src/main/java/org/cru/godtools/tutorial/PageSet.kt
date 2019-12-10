@@ -6,7 +6,7 @@ enum class PageSet(
     internal val feature: String? = null,
     internal val pages: List<Page>
 ) {
-    BAKED_IN(
+    ONBOARDING(
         feature = Settings.FEATURE_BAKED_IN_TUTORIAL,
         pages = listOf(
             Page.ONBOARDING_WELCOME,
@@ -16,7 +16,7 @@ enum class PageSet(
             Page.ONBOARDING_FINAL
         )
     ),
-    OPT_IN(
+    TRAINING(
         feature = Settings.FEATURE_OPT_IN_TUTORIAL,
         pages = listOf(
             Page.TRAINING_EXPLORE,
@@ -27,6 +27,6 @@ enum class PageSet(
     );
 
     companion object {
-        val DEFAULT = BAKED_IN
+        val DEFAULT = ONBOARDING
     }
 }

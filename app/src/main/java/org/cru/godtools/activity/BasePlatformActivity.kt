@@ -386,11 +386,11 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchOptInTutorial() {
-        startTutorialActivity(PageSet.OPT_IN)
+        startTutorialActivity(PageSet.TRAINING)
     }
 
     fun launchBakedInTutorial() {
-        startTutorialActivity(PageSet.BAKED_IN)
+        startTutorialActivity(PageSet.ONBOARDING)
     }
 
     // endregion Navigation Menu actions

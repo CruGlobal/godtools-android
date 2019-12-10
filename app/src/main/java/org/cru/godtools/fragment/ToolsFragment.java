@@ -249,7 +249,7 @@ public class ToolsFragment extends BasePlatformFragment
 
     private void openTutorial() {
         if (getActivity() != null) {
-            TutorialActivityKt.startTutorialActivity(getActivity(), PageSet.OPT_IN);
+            TutorialActivityKt.startTutorialActivity(getActivity(), PageSet.TRAINING);
         }
     }
 
