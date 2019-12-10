@@ -4,11 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View" />
-
-        <variable name="isTutorialViewable" type="Boolean" />
+        <variable name="isTutorialViewable" type="boolean" />
         <variable name="callback" type="org.cru.godtools.fragment.ToolsFragment.TutorialCallbacks" />
-
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -25,11 +22,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#DBF3FF"
-                android:visibility="@{isTutorialViewable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="@id/openTutorialTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleIf="@{isTutorialViewable}" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/closeTutorialImage"
@@ -40,11 +37,11 @@
                 android:layout_marginRight="10dp"
                 android:onClick="@{() -> callback.onTutorialClose()}"
                 android:tint="@color/design_default_color_primary_dark"
-                android:visibility="@{isTutorialViewable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_close"
-                app:tint="@color/design_default_color_primary_dark" />
+                app:tint="@color/design_default_color_primary_dark"
+                app:visibleIf="@{isTutorialViewable}" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tutorialQuestionTextView"
@@ -54,28 +51,28 @@
                 android:gravity="center"
                 android:text="Not sure where to start?"
                 android:textAppearance="@style/TextAppearance.GodTools.About.Text"
-                android:visibility="@{isTutorialViewable ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleIf="@{isTutorialViewable}" />
 
             <TextView
                 android:id="@+id/openTutorialTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal|center_vertical"
                 android:onClick="@{() -> callback.onTutorialOpen()}"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
-                app:drawableEndCompat="@drawable/ic_nav_next_arrow"
-                android:gravity="center|center_horizontal|center_vertical"
                 android:text="Open Tutorial"
                 android:textAppearance="@style/TextAppearance.GodTools.About.Text"
                 android:textColor="@color/design_default_color_primary_dark"
-                android:visibility="@{isTutorialViewable ? View.VISIBLE : View.GONE}"
+                app:drawableEndCompat="@drawable/ic_nav_next_arrow"
                 app:drawableTint="@color/design_default_color_primary_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tutorialQuestionTextView" />
+                app:layout_constraintTop_toBottomOf="@id/tutorialQuestionTextView"
+                app:visibleIf="@{isTutorialViewable}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/resources"
@@ -89,8 +86,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/openTutorialTextView"
                 tools:listitem="@layout/list_item_tool_card" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
