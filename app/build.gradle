@@ -193,7 +193,6 @@ dependencies {
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
-    compile project(path: ':ui:tutorial-renderer')
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants
