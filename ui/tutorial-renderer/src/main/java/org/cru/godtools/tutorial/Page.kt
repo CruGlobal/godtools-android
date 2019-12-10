@@ -12,5 +12,4 @@ internal enum class Page(@LayoutRes val layout: Int) {
     TRAINING_PREPARE(R.layout.optin_tutorial_prepare_slide),
     TRAINING_TRY(R.layout.optin_tutorial_try_slide),
     TRAINING_MENU(R.layout.optin_tutorial_menu_slide),
-
 }
