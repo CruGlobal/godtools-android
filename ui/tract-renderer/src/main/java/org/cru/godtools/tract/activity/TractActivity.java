@@ -777,7 +777,10 @@ public class TractActivity extends BaseToolActivity
             switch (loader.getId() & LOADER_TYPE_MASK) {
                 case LOADER_TYPE_TRANSLATION:
                     if (loader instanceof LatestTranslationLoader) {
-                        setTranslation(((LatestTranslationLoader) loader).getLocale(), translation);
+                        Locale locale = ((LatestTranslationLoader) loader).getLocale();
+                        if (locale != null) {
+                            setTranslation(locale, translation);
+                        }
                     }
                     break;
             }
