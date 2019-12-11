@@ -217,9 +217,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Override
     protected void onUpdateParallelLanguage() {
         updateLatestParallelTranslationLoader();
-
-        stopProgressListener();
-        startProgressListener();
     }
 
     void onLoadTool(@Nullable final Tool tool) {
