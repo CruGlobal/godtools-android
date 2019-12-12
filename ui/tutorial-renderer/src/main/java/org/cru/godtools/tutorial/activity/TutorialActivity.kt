@@ -52,7 +52,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     private fun ViewPager.setupIndicator() {
-        findViewById<CircleIndicator>(R.id.on_boarding_indicator)?.let { indicator ->
+        this@TutorialActivity.findViewById<CircleIndicator>(R.id.on_boarding_indicator)?.let { indicator ->
             indicator.setViewPager(this)
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
