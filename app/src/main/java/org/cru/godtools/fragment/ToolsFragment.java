@@ -108,7 +108,6 @@ public class ToolsFragment extends BasePlatformFragment
     @Nullable
     private Cursor mResources;
 
-
     public static Fragment newInstance(final int mode) {
         final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle(1);
