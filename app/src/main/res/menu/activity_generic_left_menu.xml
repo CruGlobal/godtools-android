@@ -24,7 +24,7 @@
             <item
                 android:id="@+id/action_tutorial"
                 android:orderInCategory="500"
-                android:title="@string/tutorial"/>
+                android:title="@string/menu_tutorial" />
 
             <group android:id="@+id/group_login_items">
                 <item
