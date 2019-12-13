@@ -150,8 +150,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
