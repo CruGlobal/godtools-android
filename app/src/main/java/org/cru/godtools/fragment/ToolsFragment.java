@@ -1,5 +1,6 @@
 package org.cru.godtools.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.NinePatchDrawable;
@@ -54,7 +55,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
 public class ToolsFragment extends BasePlatformFragment
-        implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
+        implements TrainingBannerCallbacks, ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -64,24 +65,6 @@ public class ToolsFragment extends BasePlatformFragment
 
         void onNoToolsAvailableAction();
     }
-
-    public interface TutorialCallbacks {
-        void onTutorialClose();
-
-        void onTutorialOpen();
-    }
-
-    private TutorialCallbacks mTutorialCallbacks = new TutorialCallbacks() {
-        @Override
-        public void onTutorialClose() {
-            dismissTrainingBanner();
-        }
-
-        @Override
-        public void onTutorialOpen() {
-            openTrainingTutorial();
-        }
-    };
 
     public static final int MODE_ADDED = 1;
     public static final int MODE_AVAILABLE = 2;
@@ -96,7 +79,8 @@ public class ToolsFragment extends BasePlatformFragment
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ int mMode = MODE_ADDED;
 
-    FragmentToolsBinding mToolsBinding;
+    @Nullable
+    private FragmentToolsBinding mBinding;
 
     @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
@@ -142,16 +126,15 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        mToolsBinding = FragmentToolsBinding.inflate(inflater, container, false);
-        mToolsBinding.setCallback(mTutorialCallbacks);
-        return mToolsBinding.getRoot();
+        mBinding = FragmentToolsBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupTrainingBanner();
         setupToolsList();
-        updateTrainingBannerVisibility();
     }
 
     @Override
@@ -237,6 +220,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public void onDestroyView() {
         cleanupToolsList();
+        mBinding = null;
         super.onDestroyView();
     }
     // endregion Lifecycle
@@ -246,19 +230,27 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     // region Training Banner
+    private void setupTrainingBanner() {
+        if (mBinding != null) {
+            mBinding.setTrainingBannerCallbacks(this);
+            updateTrainingBannerVisibility();
+        }
+    }
+
     private void updateTrainingBannerVisibility() {
-        if (mToolsBinding != null) {
-            mToolsBinding.setIsTutorialViewable(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+        if (mBinding != null) {
+            mBinding.setIsTrainingBannerVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
         }
     }
 
-    private void openTrainingTutorial() {
-        if (getActivity() != null) {
-            TutorialActivityKt.startTutorialActivity(getActivity(), PageSet.TRAINING);
+    public void openTrainingTutorial() {
+        final Activity activity = getActivity();
+        if (activity != null) {
+            TutorialActivityKt.startTutorialActivity(activity, PageSet.TRAINING);
         }
     }
 
-    private void dismissTrainingBanner() {
+    public void dismissTrainingBanner() {
         settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
     }
     // endregion Training Banner
@@ -279,8 +271,8 @@ public class ToolsFragment extends BasePlatformFragment
 
     @SuppressWarnings("unchecked")
     private void setupToolsList() {
-        if (mToolsBinding.resources != null) {
-            mToolsBinding.resources.setHasFixedSize(false);
+        if (mBinding != null) {
+            mBinding.tools.setHasFixedSize(false);
 
             // create base tools adapter
             mToolsAdapter = new ToolsAdapter();
@@ -289,7 +281,7 @@ public class ToolsFragment extends BasePlatformFragment
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
-                mToolsBinding.resources.setItemAnimator(new DraggableItemAnimator());
+                mBinding.tools.setItemAnimator(new DraggableItemAnimator());
                 mToolsDragDropManager = new RecyclerViewDragDropManager();
                 mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
                         .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
@@ -323,11 +315,11 @@ public class ToolsFragment extends BasePlatformFragment
             }
 
             // attach the correct adapter to the tools RecyclerView
-            mToolsBinding.resources.setAdapter(adapter);
+            mBinding.tools.setAdapter(adapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
-                mToolsDragDropManager.attachRecyclerView(mToolsBinding.resources);
+                mToolsDragDropManager.attachRecyclerView(mBinding.tools);
             }
 
             updateToolsList();
@@ -350,9 +342,9 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
-        if (mToolsBinding.resources != null) {
-            mToolsBinding.resources.setItemAnimator(null);
-            mToolsBinding.resources.setAdapter(null);
+        if (mBinding != null) {
+            mBinding.tools.setItemAnimator(null);
+            mBinding.tools.setAdapter(null);
         }
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
@@ -363,7 +355,6 @@ public class ToolsFragment extends BasePlatformFragment
         mToolsDragDropAdapter = null;
         mToolsDragDropManager = null;
         mToolsAdapter = null;
-        mToolsBinding = null;
     }
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {

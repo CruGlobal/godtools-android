@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="isTutorialViewable" type="boolean" />
-        <variable name="callback" type="org.cru.godtools.fragment.ToolsFragment.TutorialCallbacks" />
+        <variable name="isTrainingBannerVisible" type="boolean" />
+        <variable name="trainingBannerCallbacks" type="org.cru.godtools.fragment.TrainingBannerCallbacks" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -26,7 +26,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:visibleIf="@{isTutorialViewable}" />
+                app:visibleIf="@{isTrainingBannerVisible}" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/closeTutorialImage"
@@ -35,13 +35,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:onClick="@{() -> callback.onTutorialClose()}"
+                android:onClick="@{() -> trainingBannerCallbacks.dismissTrainingBanner()}"
                 android:tint="@color/design_default_color_primary_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_close"
                 app:tint="@color/design_default_color_primary_dark"
-                app:visibleIf="@{isTutorialViewable}" />
+                app:visibleIf="@{isTrainingBannerVisible}" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tutorialQuestionTextView"
@@ -54,14 +54,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:visibleIf="@{isTutorialViewable}" />
+                app:visibleIf="@{isTrainingBannerVisible}" />
 
             <TextView
                 android:id="@+id/openTutorialTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center|center_horizontal|center_vertical"
-                android:onClick="@{() -> callback.onTutorialOpen()}"
+                android:onClick="@{() -> trainingBannerCallbacks.openTrainingTutorial()}"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
                 android:text="@string/open_tutorial"
@@ -72,10 +72,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tutorialQuestionTextView"
-                app:visibleIf="@{isTutorialViewable}" />
+                app:visibleIf="@{isTrainingBannerVisible}" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/resources"
+                android:id="@+id/tools"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
