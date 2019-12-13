@@ -64,6 +64,11 @@ public final class Settings {
         if (!discovered) {
             boolean changed = false;
             switch (feature) {
+                case FEATURE_TUTORIAL_ONBOARDING:
+                    if (getFirstLaunchVersion() <= VERSION_5_1_4) {
+                        setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
+                        changed = true;
+                    }
                 case FEATURE_LANGUAGE_SETTINGS:
                     if (getParallelLanguage() != null) {
                         setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
