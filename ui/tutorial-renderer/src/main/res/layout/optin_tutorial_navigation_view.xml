@@ -10,11 +10,14 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/onboarding_next_button"
+            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="@dimen/tutorial_bottom_padding"
             android:onClick="@{() -> callback.onNextClicked()}"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
             android:text="@string/on_boarding_continue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
