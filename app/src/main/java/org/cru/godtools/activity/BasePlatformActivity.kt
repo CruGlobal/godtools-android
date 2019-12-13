@@ -188,7 +188,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 return true
             }
             R.id.action_tutorial -> {
-                launchOptInTutorial()
+                launchTrainingTutorial()
                 return true
             }
             R.id.action_terms_of_use -> {
@@ -385,13 +385,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
     }
 
-    private fun launchOptInTutorial() {
-        startTutorialActivity(PageSet.TRAINING)
-    }
-
-    fun launchBakedInTutorial() {
-        startTutorialActivity(PageSet.ONBOARDING)
-    }
-
+    private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
     // endregion Navigation Menu actions
 }

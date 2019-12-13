@@ -23,6 +23,8 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
+import org.cru.godtools.tutorial.PageSet;
+import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
@@ -304,7 +306,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     private void shouldShowBakedInTutorial() {
         if (!Settings.getInstance(this).isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
-            launchBakedInTutorial();
+            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
         }
     }
 
