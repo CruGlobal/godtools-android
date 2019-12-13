@@ -57,6 +57,7 @@ private const val SHARE_LINK = "{{share_link}}"
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
 abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNavigationItemSelectedListener {
+    protected val settings by lazy { Settings.getInstance(this) }
     private val settingsChangeListener = OnSharedPreferenceChangeListener { prefs, k -> onSettingsUpdated(prefs, k) }
     protected val theKey by lazy { TheKey.getInstance(this) }
 
@@ -222,8 +223,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun theKeyEvent(event: TheKeyEvent) = onTheKeyEvent(event)
 
-    protected fun prefs(): Settings = Settings.getInstance(this)
-
     private fun setupNavigationDrawer() {
         drawerLayout?.let {
             drawerToggle =
@@ -281,10 +280,8 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
         val oldParallel = parallelLanguage
-        prefs().let {
-            primaryLanguage = it.primaryLanguage
-            parallelLanguage = it.parallelLanguage
-        }
+        primaryLanguage = settings.primaryLanguage
+        parallelLanguage = settings.parallelLanguage
 
         // trigger lifecycle events
         if (!initial) {
@@ -293,10 +290,11 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
     }
 
-    private fun startSettingsChangeListener() = prefs().registerOnSharedPreferenceChangeListener(settingsChangeListener)
+    private fun startSettingsChangeListener() =
+        settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
 
     private fun stopSettingsChangeListener() =
-        prefs().unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
+        settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
 
     // region Navigation Menu actions
 

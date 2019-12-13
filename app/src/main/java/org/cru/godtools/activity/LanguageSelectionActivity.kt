@@ -58,12 +58,10 @@ class LanguageSelectionActivity : BasePlatformActivity(), LanguagesFragment.Call
     // endregion Lifecycle Events
 
     private fun storeLocale(locale: Locale?) {
-        prefs().apply {
-            if (primary) {
-                setPrimaryLanguage(locale)
-            } else {
-                parallelLanguage = locale
-            }
+        if (primary) {
+            settings.setPrimaryLanguage(locale)
+        } else {
+            settings.parallelLanguage = locale
         }
     }
 

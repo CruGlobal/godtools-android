@@ -36,7 +36,7 @@ class LanguageSettingsActivity : BasePlatformActivity() {
 
     override fun onResume() {
         super.onResume()
-        prefs().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
+        settings.setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
         mEventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SETTINGS))
     }
 

@@ -293,7 +293,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     // region Feature Discovery logic
 
     void showNextFeatureDiscovery() {
-        if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+        if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
         }
@@ -332,7 +332,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
 
         // short-circuit if this feature was discovered and we aren't forcing it
-        if (prefs().isFeatureDiscovered(feature) && !force) {
+        if (getSettings().isFeatureDiscovered(feature) && !force) {
             return;
         }
 
@@ -402,7 +402,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         public void onTargetDismissed(final TapTargetView view, final boolean userInitiated) {
             super.onTargetDismissed(view, userInitiated);
             if (userInitiated) {
-                prefs().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
+                getSettings().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
                 mFeatureDiscoveryActive = null;
                 showNextFeatureDiscovery();
             }
