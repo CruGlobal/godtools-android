@@ -51,6 +51,8 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
+
 public class ToolsFragment extends BasePlatformFragment
         implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
@@ -72,12 +74,12 @@ public class ToolsFragment extends BasePlatformFragment
     private TutorialCallbacks mTutorialCallbacks = new TutorialCallbacks() {
         @Override
         public void onTutorialClose() {
-            closeTutorial();
+            dismissTrainingBanner();
         }
 
         @Override
         public void onTutorialOpen() {
-            openTutorial();
+            openTrainingTutorial();
         }
     };
 
@@ -141,6 +143,7 @@ public class ToolsFragment extends BasePlatformFragment
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
         mToolsBinding = FragmentToolsBinding.inflate(inflater, container, false);
+        mToolsBinding.setCallback(mTutorialCallbacks);
         return mToolsBinding.getRoot();
     }
 
@@ -148,13 +151,13 @@ public class ToolsFragment extends BasePlatformFragment
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolsList();
-        mToolsBinding.setCallback(mTutorialCallbacks);
+        updateTrainingBannerVisibility();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        onUpdateFeatureDiscovery();
+    public void onStart() {
+        super.onStart();
+        updateTrainingBannerVisibility();
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
@@ -177,7 +180,9 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     protected void onUpdateFeatureDiscovery(@NonNull final String feature) {
         super.onUpdateFeatureDiscovery(feature);
-        mToolsBinding.setIsTutorialViewable(!settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING));
+        if (FEATURE_TUTORIAL_TRAINING.equals(feature)) {
+            updateTrainingBannerVisibility();
+        }
     }
 
     @Override
@@ -240,15 +245,23 @@ public class ToolsFragment extends BasePlatformFragment
         return mMode == MODE_AVAILABLE;
     }
 
-    private void closeTutorial() {
-        settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING);
+    // region Training Banner
+    private void updateTrainingBannerVisibility() {
+        if (mToolsBinding != null) {
+            mToolsBinding.setIsTutorialViewable(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+        }
     }
 
-    private void openTutorial() {
+    private void openTrainingTutorial() {
         if (getActivity() != null) {
             TutorialActivityKt.startTutorialActivity(getActivity(), PageSet.TRAINING);
         }
     }
+
+    private void dismissTrainingBanner() {
+        settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
+    }
+    // endregion Training Banner
 
     @CallSuper
     protected void syncData(final boolean force) {
