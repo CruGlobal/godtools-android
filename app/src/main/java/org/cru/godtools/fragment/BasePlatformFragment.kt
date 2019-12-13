@@ -62,7 +62,7 @@ abstract class BasePlatformFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
-        startLanguagesChangeListener()
+        startSettingsChangeListener()
         loadLanguages(false)
         syncHelper.updateState()
     }
@@ -77,7 +77,7 @@ abstract class BasePlatformFragment : BaseFragment() {
 
     override fun onStop() {
         super.onStop()
-        stopLanguagesChangeListener()
+        stopSettingsChangeListener()
         EventBus.getDefault().unregister(this)
     }
 
@@ -113,11 +113,11 @@ abstract class BasePlatformFragment : BaseFragment() {
         }
     }
 
-    private fun startLanguagesChangeListener() {
+    private fun startSettingsChangeListener() {
         settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
     }
 
-    private fun stopLanguagesChangeListener() {
+    private fun stopSettingsChangeListener() {
         settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
     }
 
