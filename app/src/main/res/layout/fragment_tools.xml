@@ -67,7 +67,7 @@
                 android:text="@string/open_tutorial"
                 android:textAppearance="@style/TextAppearance.GodTools.About.Text"
                 android:textColor="@color/design_default_color_primary_dark"
-                app:drawableEndCompat="@drawable/ic_nav_next_arrow"
+                app:drawableEndCompat="@drawable/ic_tutorial_open_arrow"
                 app:drawableTint="@color/design_default_color_primary_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
