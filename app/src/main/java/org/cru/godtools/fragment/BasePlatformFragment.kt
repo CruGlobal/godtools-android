@@ -67,11 +67,9 @@ abstract class BasePlatformFragment : BaseFragment() {
         syncHelper.updateState()
     }
 
-    protected open fun onUpdatePrimaryLanguage() {}
-
-    protected open fun onUpdateParallelLanguage() {}
-
-    protected open fun onUpdateFeatureDiscovered() {}
+    protected open fun onUpdatePrimaryLanguage() = Unit
+    protected open fun onUpdateParallelLanguage() = Unit
+    protected open fun onUpdateFeatureDiscovery(feature: String) = Unit
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -139,7 +137,7 @@ abstract class BasePlatformFragment : BaseFragment() {
                 PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
             }
             if (key?.startsWith(PREF_FEATURE_DISCOVERED) == true) {
-                onUpdateFeatureDiscovered()
+                onUpdateFeatureDiscovery(key.removePrefix(PREF_FEATURE_DISCOVERED))
             }
         }
     }

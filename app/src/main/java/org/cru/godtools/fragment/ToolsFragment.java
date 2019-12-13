@@ -155,7 +155,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public void onResume() {
         super.onResume();
-        onUpdateFeatureDiscovered();
+        onUpdateFeatureDiscovery();
     }
 
     @Override
@@ -192,8 +192,8 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     @Override
-    protected void onUpdateFeatureDiscovered() {
-        super.onUpdateFeatureDiscovered();
+    protected void onUpdateFeatureDiscovery(@NonNull final String feature) {
+        super.onUpdateFeatureDiscovery(feature);
         mToolsBinding.setIsTutorialViewable(!settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING));
     }
 
