@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button"
+            app:layout_constraintTop_toTopOf="parent"
             tools:textColor="@color/gt_blue_dark" />
 
         <androidx.appcompat.widget.AppCompatTextView

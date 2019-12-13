@@ -3,8 +3,11 @@ package org.cru.godtools.tutorial.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.base.Settings
@@ -28,6 +31,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tutorial_activity)
+        setUpToolbar()
     }
 
     override fun onContentChanged() {
@@ -39,6 +43,27 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         super.onStart()
         pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
+
+    private var tutorialMenu: Menu? = null
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (pageSet == PageSet.ONBOARDING) {
+            menuInflater.inflate(R.menu.tutorial_menu, menu)
+            tutorialMenu = menu
+            setMenuVisibility(false)
+        } else {
+            setHomLinkVisibility(true)
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.onboarding_close_menu -> onCloseClicked()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     // endregion Lifecycle
 
     // region ViewPager
@@ -57,16 +82,46 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
                     updateIndicatorVisibility(indicator, position)
+                    updateMenuVisibility(position)
                 }
             })
             updateIndicatorVisibility(indicator)
+            updateMenuVisibility()
         }
     }
 
     private fun ViewPager.updateIndicatorVisibility(indicator: CircleIndicator, page: Int = currentItem) {
         indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
+
+    private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
+        setMenuVisibility(pageSet.pages[page].showMenu)
+        setHomLinkVisibility(pageSet.pages[page].showHomeLink)
+    }
     // endregion ViewPager
+
+    // region ToolBar
+
+    private fun setUpToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.tutorial_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    private fun setMenuVisibility(isToolbarVisible: Boolean) {
+        var i = 0
+        val size = tutorialMenu?.size() ?: 0
+        while (i < size) {
+            tutorialMenu?.getItem(i)?.isVisible = isToolbarVisible
+            i++
+        }
+    }
+
+    private fun setHomLinkVisibility(isHomeLinkVisible: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(isHomeLinkVisible)
+    }
+
+    // endregion
 
     // region TutorialCallbacks
     override fun onNextClicked() {

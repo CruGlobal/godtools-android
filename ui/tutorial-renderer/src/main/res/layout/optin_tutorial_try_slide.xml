@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toTopOf="@+id/onboarding_video_slide_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboarding_previous_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_try_descrip_text"
