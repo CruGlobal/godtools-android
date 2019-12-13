@@ -104,11 +104,9 @@ public class ToolsFragment extends BasePlatformFragment
 
     // region Lifecycle
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
-        if (context != null) {
-            mDao = GodToolsDao.getInstance(context);
-        }
+        mDao = GodToolsDao.getInstance(context);
     }
 
     @Override
