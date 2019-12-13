@@ -52,7 +52,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
             tutorialMenu = menu
             setMenuVisibility(false)
         } else {
-            setHomLinkVisibility(true)
+            setHomeLinkVisibility(true)
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -96,7 +96,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
 
     private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
         setMenuVisibility(pageSet.pages[page].showMenu)
-        setHomLinkVisibility(pageSet.pages[page].showHomeLink)
+        setHomeLinkVisibility(pageSet.pages[page].showHomeLink)
     }
     // endregion ViewPager
 
@@ -117,7 +117,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         }
     }
 
-    private fun setHomLinkVisibility(isHomeLinkVisible: Boolean) {
+    private fun setHomeLinkVisibility(isHomeLinkVisible: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(isHomeLinkVisible)
     }
 
