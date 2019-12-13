@@ -19,7 +19,6 @@ import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.LanguageSettingsActivityKt;
 import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.cru.godtools.base.Settings;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
@@ -112,7 +111,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onResume() {
         super.onResume();
         trackInAnalytics();
-        shouldShowBakedInTutorial();
     }
 
     @Override
@@ -296,17 +294,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     // region Feature Discovery logic
-
     void showNextFeatureDiscovery() {
-        if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+        if (!getSettings().isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
+            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
+        } else if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
-        }
-    }
-
-    private void shouldShowBakedInTutorial() {
-        if (!Settings.getInstance(this).isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
-            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
         }
     }
 
@@ -394,7 +387,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
         mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
-
     // endregion Feature Discovery logic
 
     class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
