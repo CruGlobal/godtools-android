@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="?attr/actionBarSize"
             android:layout_marginRight="32dp"
             android:drawableLeft="@drawable/img_baked_in_tutorial_check"
             android:drawableStart="@drawable/img_baked_in_tutorial_check"

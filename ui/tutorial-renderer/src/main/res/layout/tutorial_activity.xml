@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/on_boarding_indicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/on_boarding_indicator"
