@@ -47,13 +47,13 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private var tutorialMenu: Menu? = null
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if (pageSet == PageSet.ONBOARDING) {
-            menuInflater.inflate(R.menu.tutorial_menu, menu)
+        pageSet.menu?.let {
+            menuInflater.inflate(it, menu)
             tutorialMenu = menu
             setMenuVisibility(false)
-        } else {
-            setHomeLinkVisibility(true)
+            return super.onCreateOptionsMenu(menu)
         }
+        setHomeLinkVisibility(true)
         return super.onCreateOptionsMenu(menu)
     }
 

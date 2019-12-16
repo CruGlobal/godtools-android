@@ -4,10 +4,12 @@ import org.cru.godtools.base.Settings
 
 enum class PageSet(
     internal val feature: String? = null,
-    internal val pages: List<Page>
+    internal val pages: List<Page>,
+    internal val menu: Int? = null
 ) {
     ONBOARDING(
         feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
+        menu = R.menu.tutorial_menu,
         pages = listOf(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_OTHERS,
