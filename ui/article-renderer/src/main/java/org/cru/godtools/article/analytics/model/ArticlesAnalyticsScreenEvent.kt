@@ -11,9 +11,7 @@ private const val SITE_SUB_SECTION_ARTICLES_LIST = "articles-list"
 
 open class ArticlesAnalyticsScreenEvent(tool: String?, locale: Locale?, screen: String = SCREEN_ARTICLES_ALL) :
     ToolAnalyticsScreenEvent(screen, tool, locale) {
-    override fun getAdobeSiteSubSection(): String? {
-        return SITE_SUB_SECTION_ARTICLES_LIST
-    }
+    override fun getAdobeSiteSubSection() = SITE_SUB_SECTION_ARTICLES_LIST
 }
 
 class ArticlesCategoryAnalyticsScreenEvent(tool: String, locale: Locale, category: String) :
