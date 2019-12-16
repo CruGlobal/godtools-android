@@ -9,10 +9,16 @@ private const val SCREEN_ARTICLES_CATEGORY_PREFIX = "Category : "
 
 private const val SITE_SUB_SECTION_ARTICLES_LIST = "articles-list"
 
+private const val SITE_SECTION_ARTICLES_LIST = "article"
+
 open class ArticlesAnalyticsScreenEvent(tool: String?, locale: Locale?, screen: String = SCREEN_ARTICLES_ALL) :
     ToolAnalyticsScreenEvent(screen, tool, locale) {
     override fun getAdobeSiteSubSection(): String? {
         return SITE_SUB_SECTION_ARTICLES_LIST
+    }
+
+    override fun getAdobeSiteSection(): String? {
+        return SITE_SECTION_ARTICLES_LIST
     }
 }
 

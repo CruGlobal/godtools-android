@@ -13,4 +13,8 @@ class ArticleAnalyticsScreenEvent(article: Article, tool: String?, locale: Local
     override fun getAdobeSiteSubSection(): String? {
         return SITE_SUB_SECTION_ARTICLE
     }
+
+    override fun getAdobeSiteSection(): String? {
+        return SITE_SUB_SECTION_ARTICLE
+    }
 }
