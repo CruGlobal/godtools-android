@@ -104,20 +104,13 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun setupToolbar() {
         val toolbar: Toolbar = findViewById(R.id.tutorial_toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowHomeEnabled(pageSet.showUpNavigation)
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
-        setHomeLinkVisibility(pageSet.pages[page].showHomeLink)
-        updateMenuVisibility(pageSet.pages[page].hideMenu)
-    }
-
-    private fun updateMenuVisibility(visible: Boolean) {
+        val visible = pageSet.pages[page].showMenu
         menu?.forEach { it.isVisible = visible }
-    }
-
-    private fun setHomeLinkVisibility(isHomeLinkVisible: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(isHomeLinkVisible)
     }
     // endregion Toolbar
 
