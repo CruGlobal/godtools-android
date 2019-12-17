@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_onboarding">Onboarding</string>
     <string name="onboarding_next">next</string>
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
     <string name="onboarding_prepare">Prepare</string>

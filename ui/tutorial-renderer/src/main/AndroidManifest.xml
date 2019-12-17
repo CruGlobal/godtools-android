@@ -2,17 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools.tutorial">
 
-    <uses-sdk tools:overrideLibrary="com.pierfrancescosoffritti.androidyoutubeplayer"/>
+    <uses-sdk tools:overrideLibrary="com.pierfrancescosoffritti.androidyoutubeplayer" />
 
     <application>
         <activity
             android:name=".activity.TutorialActivity"
-            android:label="@string/title_onboarding"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:screenOrientation="@integer/default_screen_orientation" />
     </application>
 </manifest>
