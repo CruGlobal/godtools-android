@@ -31,11 +31,11 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tutorial_activity)
-        setUpToolbar()
     }
 
     override fun onContentChanged() {
         super.onContentChanged()
+        setupToolbar()
         setupViewPager()
     }
 
@@ -44,12 +44,10 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
 
-    private var tutorialMenu: Menu? = null
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         pageSet.menu?.let {
             menuInflater.inflate(it, menu)
-            tutorialMenu = menu
+            this.menu = menu
             setMenuVisibility(false)
             return super.onCreateOptionsMenu(menu)
         }
@@ -57,13 +55,13 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.onboarding_close_menu -> onCloseClicked()
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.onboarding_close_menu -> {
+            onCloseClicked()
+            true
         }
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
-
     // endregion Lifecycle
 
     // region ViewPager
@@ -101,8 +99,9 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     // endregion ViewPager
 
     // region ToolBar
+    private var menu: Menu? = null
 
-    private fun setUpToolbar() {
+    private fun setupToolbar() {
         val toolbar: Toolbar = findViewById(R.id.tutorial_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -110,9 +109,9 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
 
     private fun setMenuVisibility(isToolbarVisible: Boolean) {
         var i = 0
-        val size = tutorialMenu?.size() ?: 0
+        val size = menu?.size() ?: 0
         while (i < size) {
-            tutorialMenu?.getItem(i)?.isVisible = isToolbarVisible
+            menu?.getItem(i)?.isVisible = isToolbarVisible
             i++
         }
     }
