@@ -1,6 +1,7 @@
 package org.cru.godtools.tutorial.animation
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import androidx.annotation.StringRes
@@ -26,15 +27,9 @@ fun AppCompatTextView.animateToNextText(@StringRes animateNextText: Int) {
 }
 
 private fun ObjectAnimator.setTextAfterAnimation(@StringRes animateNextText: Int, textView: AppCompatTextView) {
-    addListener(object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {}
-
+    addListener(object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator?) {
             textView.setText(animateNextText)
         }
-
-        override fun onAnimationCancel(animation: Animator?) {}
-
-        override fun onAnimationStart(animation: Animator?) {}
     })
 }
