@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GodTools.Activity.Tutorial" parent="Theme.GodTools.AppBar">
+        <item name="actionMenuTextColor">@color/gt_blue</item>
+        <item name="colorControlNormal">@color/gt_blue</item>
+    </style>
+</resources>

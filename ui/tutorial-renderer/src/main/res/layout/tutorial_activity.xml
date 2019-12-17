@@ -12,20 +12,18 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appbar"
-        style="@style/Theme.GodTools.AppBar.Tutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/Theme.GodTools.AppBar.Tutorial"
         tools:menu="@menu/tutorial_onboarding_menu" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/on_boarding_indicator"
         android:layout_width="match_parent"
         android:layout_height="@dimen/circle_indicator_height"
-        android:layout_marginBottom="8dp"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="8dp"
         app:ci_drawable="@drawable/img_tutorial_selected"
         app:ci_drawable_unselected="@drawable/img_tutorial_unselected" />
 </FrameLayout>
