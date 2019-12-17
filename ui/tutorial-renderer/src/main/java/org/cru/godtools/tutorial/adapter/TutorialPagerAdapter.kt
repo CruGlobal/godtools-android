@@ -32,7 +32,6 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
     }
 
     private fun ViewDataBinding.startAnimations() {
-        (this as? TutorialOnboardingWelcomeBinding)?.welcomeTextView
-            ?.animateToNextText(R.string.baked_in_welcome_helping)
+        (this as? TutorialOnboardingWelcomeBinding)?.welcomeTextView?.animateToNextText(R.string.baked_in_welcome_helping)
     }
 }

@@ -4,13 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.AppCompatTextView
 
 private const val DELAY_DURATION = 3000L
 private const val FADE_DURATION = 1000L
 
-fun AppCompatTextView.animateToNextText(@StringRes animateNextText: Int) {
+fun TextView.animateToNextText(@StringRes animateNextText: Int) {
     alpha = 1f
     val fadeOutAnimator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
         duration = FADE_DURATION
@@ -26,7 +26,7 @@ fun AppCompatTextView.animateToNextText(@StringRes animateNextText: Int) {
     }
 }
 
-private fun ObjectAnimator.setTextAfterAnimation(@StringRes animateNextText: Int, textView: AppCompatTextView) {
+private fun ObjectAnimator.setTextAfterAnimation(@StringRes animateNextText: Int, textView: TextView) {
     addListener(object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator?) {
             textView.setText(animateNextText)
