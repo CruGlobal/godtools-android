@@ -21,6 +21,7 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
             LayoutInflater.from(container.context), pages[position].layout, container, true
         ).also {
             it.setVariable(BR.callback, callbacks)
+            it.setVariable(BR.callbacks, callbacks)
             it.startAnimations()
         }
     }

@@ -2,4 +2,7 @@
 <resources>
     <dimen name="circle_indicator_height">48dp</dimen>
     <dimen name="tutorial_bottom_padding">64dp</dimen>
+
+    <dimen name="tutorial_page_inset_top">48dp</dimen>
+    <dimen name="tutorial_page_inset_bottom">64dp</dimen>
 </resources>
