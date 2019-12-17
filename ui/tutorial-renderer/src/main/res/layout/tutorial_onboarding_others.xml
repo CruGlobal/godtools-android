@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bkg_tutorial_onboarding_others" />
+            app:srcCompat="@drawable/bkg_tutorial_onboarding_wave_1" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView2"
