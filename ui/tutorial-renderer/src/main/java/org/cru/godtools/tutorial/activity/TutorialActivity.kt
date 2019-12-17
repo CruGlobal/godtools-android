@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.adapter.TutorialPagerAdapter
@@ -25,7 +24,7 @@ fun Activity.startTutorialActivity(pageSet: PageSet = PageSet.DEFAULT) {
         .also { startActivity(it) }
 }
 
-class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
+class TutorialActivity : BaseActivity(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
     // region Lifecycle
@@ -36,8 +35,12 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
 
     override fun onContentChanged() {
         super.onContentChanged()
-        setupToolbar()
         setupViewPager()
+    }
+
+    override fun onSetupActionBar() {
+        super.onSetupActionBar()
+        setupAppBar()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,22 +68,23 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
     // endregion Lifecycle
 
+    private fun setupAppBar() {
+        mActionBar?.apply {
+            setDisplayShowHomeEnabled(false)
+            setDisplayHomeAsUpEnabled(pageSet.showUpNavigation)
+            setDisplayShowTitleEnabled(false)
+        }
+    }
+
     // region ViewPager
     private var viewPager: ViewPager? = null
 
     private fun setupViewPager() {
         viewPager = findViewById<ViewPager>(R.id.tutorial_viewpager)?.also {
             it.adapter = TutorialPagerAdapter(pageSet.pages, this)
-            it.setupToolbar()
+            it.setupMenuVisibility()
             it.setupIndicator()
         }
-    }
-
-    private fun ViewPager.setupToolbar() {
-        addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) = updateMenuVisibility(position)
-        })
-        updateMenuVisibility()
     }
 
     private fun ViewPager.setupIndicator() {
@@ -98,21 +102,21 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
     // endregion ViewPager
 
-    // region Toolbar
+    // region Menu
     private var menu: Menu? = null
 
-    private fun setupToolbar() {
-        val toolbar: Toolbar = findViewById(R.id.tutorial_toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowHomeEnabled(pageSet.showUpNavigation)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    private fun ViewPager.setupMenuVisibility() {
+        addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) = updateMenuVisibility(position)
+        })
+        updateMenuVisibility()
     }
 
     private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
         val visible = pageSet.pages[page].showMenu
         menu?.forEach { it.isVisible = visible }
     }
-    // endregion Toolbar
+    // endregion Menu
 
     // region TutorialCallbacks
     override fun onNextClicked() {

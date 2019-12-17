@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tutorial_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        style="@style/Theme.GodTools.AppBar.Tutorial"
-        app:menu="@menu/tutorial_onboarding_menu"
-        android:theme="@style/Theme.GodTools.AppBar.Tutorial"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/tutorial_viewpager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/on_boarding_indicator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/appbar"
+        style="@style/Theme.GodTools.AppBar.Tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.GodTools.AppBar.Tutorial"
+        tools:menu="@menu/tutorial_onboarding_menu" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/on_boarding_indicator"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/circle_indicator_height"
         android:layout_marginBottom="8dp"
+        android:layout_gravity="bottom"
         app:ci_drawable="@drawable/img_tutorial_selected"
-        app:ci_drawable_unselected="@drawable/img_tutorial_unselected"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:ci_drawable_unselected="@drawable/img_tutorial_unselected" />
+</FrameLayout>
