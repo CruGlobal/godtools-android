@@ -3,21 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="callback"
-            type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize"
-        android:orientation="vertical">
-
-        <include
-            layout="@layout/optin_tutorial_navigation_view"
-            app:callback="@{callback}" />
+        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/onboarding_try_text"
@@ -62,5 +55,8 @@
             app:layout_constraintTop_toBottomOf="@+id/onboarding_try_descrip_text"
             app:srcCompat="@drawable/img_optin_try" />
 
+        <include
+            layout="@layout/optin_tutorial_navigation_view"
+            app:callbacks="@{callbacks}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

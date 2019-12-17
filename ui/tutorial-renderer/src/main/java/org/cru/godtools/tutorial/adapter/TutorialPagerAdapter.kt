@@ -20,7 +20,6 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
         return DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(container.context), pages[position].layout, container, true
         ).also {
-            it.setVariable(BR.callback, callbacks)
             it.setVariable(BR.callbacks, callbacks)
             it.startAnimations()
         }
