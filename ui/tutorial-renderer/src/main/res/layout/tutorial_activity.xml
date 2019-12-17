@@ -24,6 +24,6 @@
         android:layout_height="@dimen/circle_indicator_height"
         android:layout_gravity="bottom"
         android:layout_marginBottom="8dp"
-        app:ci_drawable="@drawable/img_tutorial_selected"
-        app:ci_drawable_unselected="@drawable/img_tutorial_unselected" />
+        app:ci_drawable="@drawable/ic_tutorial_indicator_selected"
+        app:ci_drawable_unselected="@drawable/ic_tutorial_indicator_unselected" />
 </FrameLayout>
