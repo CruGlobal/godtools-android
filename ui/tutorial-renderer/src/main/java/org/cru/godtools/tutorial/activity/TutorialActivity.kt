@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.forEach
 import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import org.cru.godtools.base.Settings
@@ -107,17 +108,12 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
-        setMenuVisibility(pageSet.pages[page].showMenu)
         setHomeLinkVisibility(pageSet.pages[page].showHomeLink)
+        updateMenuVisibility(pageSet.pages[page].hideMenu)
     }
 
-    private fun setMenuVisibility(isToolbarVisible: Boolean) {
-        var i = 0
-        val size = menu?.size() ?: 0
-        while (i < size) {
-            menu?.getItem(i)?.isVisible = isToolbarVisible
-            i++
-        }
+    private fun updateMenuVisibility(visible: Boolean) {
+        menu?.forEach { it.isVisible = visible }
     }
 
     private fun setHomeLinkVisibility(isHomeLinkVisible: Boolean) {

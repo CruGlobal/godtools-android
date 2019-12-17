@@ -5,13 +5,13 @@ import androidx.annotation.LayoutRes
 internal enum class Page(
     @LayoutRes val layout: Int,
     val showIndicator: Boolean = true,
-    val showMenu: Boolean = true,
+    val hideMenu: Boolean = false,
     val showHomeLink: Boolean = true
 ) {
     ONBOARDING_WELCOME(
         R.layout.baked_in_tutorial_welcome,
         showIndicator = false,
-        showMenu = false,
+        hideMenu = true,
         showHomeLink = false
     ),
     ONBOARDING_OTHERS(
@@ -28,23 +28,11 @@ internal enum class Page(
     ),
     ONBOARDING_FINAL(
         R.layout.baked_in_tutorial_final,
-        showMenu = false,
+        hideMenu = true,
         showHomeLink = false
     ),
-    TRAINING_EXPLORE(
-        R.layout.optin_tutorial_explore_slide,
-        showMenu = false
-    ),
-    TRAINING_PREPARE(
-        R.layout.optin_tutorial_prepare_slide,
-        showMenu = false
-    ),
-    TRAINING_TRY(
-        R.layout.optin_tutorial_try_slide,
-        showMenu = false
-    ),
-    TRAINING_MENU(
-        R.layout.optin_tutorial_menu_slide,
-        showMenu = false
-    )
+    TRAINING_EXPLORE(R.layout.optin_tutorial_explore_slide),
+    TRAINING_PREPARE(R.layout.optin_tutorial_prepare_slide),
+    TRAINING_TRY(R.layout.optin_tutorial_try_slide),
+    TRAINING_MENU(R.layout.optin_tutorial_menu_slide)
 }
