@@ -129,16 +129,6 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         }
     }
 
-    override fun onPreviousClicked() {
-        viewPager?.let { pager ->
-            if (pager.currentItem > 0) {
-                pager.currentItem = pager.currentItem - 1
-            } else {
-                finish()
-            }
-        }
-    }
-
     override fun onCloseClicked() {
         finish()
     }
