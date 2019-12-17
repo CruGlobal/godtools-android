@@ -39,20 +39,20 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         setupViewPager()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        pageSet.menu?.let { menuInflater.inflate(it, menu) }
+        this.menu = menu
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onStart() {
         super.onStart()
         pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        pageSet.menu?.let {
-            menuInflater.inflate(it, menu)
-            this.menu = menu
-            setMenuVisibility(false)
-            return super.onCreateOptionsMenu(menu)
-        }
-        setHomeLinkVisibility(true)
-        return super.onCreateOptionsMenu(menu)
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        viewPager?.updateMenuVisibility()
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -91,11 +91,6 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun ViewPager.updateIndicatorVisibility(indicator: CircleIndicator, page: Int = currentItem) {
         indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
-
-    private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
-        setMenuVisibility(pageSet.pages[page].showMenu)
-        setHomeLinkVisibility(pageSet.pages[page].showHomeLink)
-    }
     // endregion ViewPager
 
     // region ToolBar
@@ -105,6 +100,11 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         val toolbar: Toolbar = findViewById(R.id.tutorial_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
+        setMenuVisibility(pageSet.pages[page].showMenu)
+        setHomeLinkVisibility(pageSet.pages[page].showHomeLink)
     }
 
     private fun setMenuVisibility(isToolbarVisible: Boolean) {
