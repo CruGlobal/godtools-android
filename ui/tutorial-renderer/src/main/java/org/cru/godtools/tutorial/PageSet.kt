@@ -9,7 +9,7 @@ enum class PageSet(
 ) {
     ONBOARDING(
         feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
-        menu = R.menu.tutorial_menu,
+        menu = R.menu.tutorial_onboarding_menu,
         pages = listOf(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_OTHERS,

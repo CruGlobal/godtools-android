@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         style="@style/Theme.GodTools.AppBar.Tutorial"
-        app:menu="@menu/tutorial_menu"
+        app:menu="@menu/tutorial_onboarding_menu"
         android:theme="@style/Theme.GodTools.AppBar.Tutorial"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

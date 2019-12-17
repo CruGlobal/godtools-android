@@ -44,7 +44,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
         pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         pageSet.menu?.let {
             menuInflater.inflate(it, menu)
             this.menu = menu
@@ -56,8 +56,8 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.onboarding_close_menu -> {
-            onCloseClicked()
+        R.id.onboarding_action_skip -> {
+            finish()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -119,8 +119,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun setHomeLinkVisibility(isHomeLinkVisible: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(isHomeLinkVisible)
     }
-
-    // endregion
+    // endregion ToolBar
 
     // region TutorialCallbacks
     override fun onNextClicked() {
