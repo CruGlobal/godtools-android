@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.SilentLogger;
 import timber.log.Timber;
@@ -43,6 +44,9 @@ public class BaseGodToolsApplication extends Application {
 
         // start various services
         startServices();
+
+        // enable compat vector images
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     private void initializeCrashlytics() {

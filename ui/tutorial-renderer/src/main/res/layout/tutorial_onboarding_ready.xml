@@ -9,9 +9,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/img_baked_in_background_ready"
-        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:background="@color/tutorial_onboarding_bkg"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/inset_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bkg_tutorial_onboarding_ready" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView2"
@@ -24,7 +39,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inset_top"
             app:srcCompat="@drawable/img_baked_in_ready" />
 
         <androidx.appcompat.widget.AppCompatTextView
