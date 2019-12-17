@@ -8,14 +8,14 @@ internal enum class Page(
     val showMenu: Boolean = true
 ) {
     ONBOARDING_WELCOME(
-        R.layout.baked_in_tutorial_welcome,
+        R.layout.tutorial_onboarding_welcome,
         showIndicator = false,
         showMenu = false
     ),
-    ONBOARDING_OTHERS(R.layout.baked_in_tutorial_others),
-    ONBOARDING_TOOLS(R.layout.baked_in_tutorial_tools),
-    ONBOARDING_READY(R.layout.baked_in_tutorial_ready),
-    ONBOARDING_FINAL(R.layout.baked_in_tutorial_final, showMenu = false),
+    ONBOARDING_OTHERS(R.layout.tutorial_onboarding_others),
+    ONBOARDING_TOOLS(R.layout.tutorial_onboarding_tools),
+    ONBOARDING_READY(R.layout.tutorial_onboarding_ready),
+    ONBOARDING_FINAL(R.layout.tutorial_onboarding_final, showMenu = false),
     TRAINING_EXPLORE(R.layout.optin_tutorial_explore_slide),
     TRAINING_PREPARE(R.layout.optin_tutorial_prepare_slide),
     TRAINING_TRY(R.layout.optin_tutorial_try_slide),
