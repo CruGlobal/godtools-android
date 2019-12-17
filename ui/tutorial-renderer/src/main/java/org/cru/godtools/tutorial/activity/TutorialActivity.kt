@@ -70,21 +70,25 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun setupViewPager() {
         viewPager = findViewById<ViewPager>(R.id.tutorial_viewpager)?.also {
             it.adapter = TutorialPagerAdapter(pageSet.pages, this)
+            it.setupToolbar()
             it.setupIndicator()
         }
+    }
+
+    private fun ViewPager.setupToolbar() {
+        addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) = updateMenuVisibility(position)
+        })
+        updateMenuVisibility()
     }
 
     private fun ViewPager.setupIndicator() {
         this@TutorialActivity.findViewById<CircleIndicator>(R.id.on_boarding_indicator)?.let { indicator ->
             indicator.setViewPager(this)
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    updateIndicatorVisibility(indicator, position)
-                    updateMenuVisibility(position)
-                }
+                override fun onPageSelected(position: Int) = updateIndicatorVisibility(indicator, position)
             })
             updateIndicatorVisibility(indicator)
-            updateMenuVisibility()
         }
     }
 
@@ -93,7 +97,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     }
     // endregion ViewPager
 
-    // region ToolBar
+    // region Toolbar
     private var menu: Menu? = null
 
     private fun setupToolbar() {
@@ -119,7 +123,7 @@ class TutorialActivity : AppCompatActivity(), TutorialCallbacks {
     private fun setHomeLinkVisibility(isHomeLinkVisible: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(isHomeLinkVisible)
     }
-    // endregion ToolBar
+    // endregion Toolbar
 
     // region TutorialCallbacks
     override fun onNextClicked() {
