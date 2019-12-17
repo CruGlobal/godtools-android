@@ -17,14 +17,14 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
-    implementation "me.relex:circleindicator:${deps.circleindicator}"
 
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
+    implementation "me.relex:circleindicator:${deps.circleindicator}"
 }
