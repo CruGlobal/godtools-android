@@ -47,8 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/baked_in_choose_your_tools"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="@color/gt_blue"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +59,7 @@
             android:layout_margin="32dp"
             android:gravity="center"
             android:text="@string/baked_in_tools_sentence"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
