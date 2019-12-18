@@ -72,7 +72,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/onboarding_show_more"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
+            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -85,7 +85,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/onboarding_get_started"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
+            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

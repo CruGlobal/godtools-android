@@ -68,7 +68,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_next"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
+            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
