@@ -12,6 +12,10 @@
         android:background="@color/tutorial_onboarding_bkg"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
+        <include layout="@layout/tutorial_onboarding_margins" />
+
+        <include layout="@layout/tutorial_onboarding_positioning" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/inset_top"
             android:layout_width="wrap_content"
@@ -29,42 +33,40 @@
             app:srcCompat="@drawable/bkg_tutorial_onboarding_wave_3" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/image"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="32dp"
-            android:layout_marginBottom="8dp"
-            android:padding="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/img_tutorial_onboarding_rocket"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inset_top" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/img_tutorial_onboarding_rocket"
+            app:layout_constraintBottom_toTopOf="@id/headlinePosition"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/inset_top"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
             android:text="@string/baked_in_always_ready"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
+            android:id="@+id/subhead"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="32dp"
-            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
             android:text="@string/baked_in_ready_sentence"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/onboarding_next_button"
