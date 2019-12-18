@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/bkg_tutorial_onboarding_wave_3" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/imageView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -36,11 +36,11 @@
             android:layout_marginBottom="8dp"
             android:padding="32dp"
             android:scaleType="fitCenter"
+            android:src="@drawable/img_tutorial_onboarding_rocket"
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inset_top"
-            app:srcCompat="@drawable/img_baked_in_ready" />
+            app:layout_constraintTop_toBottomOf="@id/inset_top" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView"
