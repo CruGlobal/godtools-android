@@ -19,6 +19,7 @@
     <string name="tutorial_onboarding_final_action_start">Get Started</string>
     <string name="tutorial_onboarding_action_begin">Begin</string>
     <string name="tutorial_onboarding_action_continue">Continue</string>
+    <string name="tutorial_onboarding_action_skip">Skip</string>
 
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
     <string name="onboarding_prepare">Prepare</string>
@@ -27,7 +28,6 @@
     <string name="onboarding_try">Try</string>
     <string name="onboarding_menu">This tutorial is available to see again in the menu</string>
     <string name="onboarding_watch">Watch</string>
-    <string name="baked_in_skip">Skip</string>
     <string name="tutorial_start_using_godtools">Start Using GodTools</string>
     <string name="open_tutorial">Open Tutorial</string>
     <string name="tutorial_open_description">Not sure where to start?</string>
