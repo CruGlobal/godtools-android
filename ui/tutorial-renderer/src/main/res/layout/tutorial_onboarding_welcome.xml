@@ -12,6 +12,8 @@
         android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
+        <include layout="@layout/tutorial_onboarding_margins" />
+
         <ImageView
             android:id="@+id/logo"
             android:layout_width="130dp"
@@ -37,18 +39,16 @@
             android:id="@+id/welcome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="112dp"
+            android:alpha="1"
             android:breakStrategy="balanced"
             android:gravity="top|center"
             android:text="@string/baked_in_welcome"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
-            android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/logo_title" />
 
         <TextView
@@ -71,12 +71,10 @@
             style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:onClick="@{() -> callbacks.onNextClicked()}"
             android:text="@string/baked_in_begin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
