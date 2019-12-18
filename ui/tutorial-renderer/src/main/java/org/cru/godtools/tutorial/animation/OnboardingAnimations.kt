@@ -7,7 +7,7 @@ import android.animation.ObjectAnimator
 import android.view.View
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 
-private const val WELCOME_FADE_DELAY = 3000L
+private const val WELCOME_FADE_DELAY = 2000L
 private const val WELCOME_FADE_OUT_DURATION = 600L
 private const val WELCOME_FADE_IN_DURATION = 600L
 
