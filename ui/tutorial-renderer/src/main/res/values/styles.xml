@@ -5,7 +5,9 @@
         <item name="colorControlNormal">@color/gt_blue</item>
     </style>
 
-    <style name="Widget.GodTools.Tutorial.Button" parent="Widget.GodTools.Button.Borderless.Colored.Blue" />
+    <style name="Widget.GodTools.Tutorial.Button" parent="Widget.GodTools.Button.Borderless.Colored.Blue">
+        <item name="android:textSize">16sp</item>
+    </style>
 
     <style name="TextAppearance.GodTools.Tutorial.Headline" parent="TextAppearance.GodTools.Headline">
         <item name="android:textColor">@color/gt_blue</item>
