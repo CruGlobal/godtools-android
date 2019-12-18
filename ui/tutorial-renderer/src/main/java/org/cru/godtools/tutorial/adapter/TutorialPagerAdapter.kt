@@ -8,8 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
 import org.cru.godtools.tutorial.BR
 import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.animation.animateToNextText
+import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
@@ -32,6 +31,6 @@ internal class TutorialPagerAdapter(private val pages: List<Page>, val callbacks
     }
 
     private fun ViewDataBinding.startAnimations() {
-        (this as? TutorialOnboardingWelcomeBinding)?.welcomeTextView?.animateToNextText(R.string.baked_in_welcome_helping)
+        (this as? TutorialOnboardingWelcomeBinding)?.animateViews()
     }
 }

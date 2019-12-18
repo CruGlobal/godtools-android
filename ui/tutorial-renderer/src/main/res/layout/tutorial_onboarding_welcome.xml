@@ -28,39 +28,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_logo_title"
-            app:layout_constraintBottom_toTopOf="@id/textSpacing"
+            app:layout_constraintBottom_toTopOf="@id/welcome"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <TextView
-            android:id="@+id/textSpacing"
+            android:id="@+id/welcome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="112dp"
-            android:lines="1"
+            android:breakStrategy="balanced"
+            android:gravity="top|center"
+            android:text="@string/baked_in_welcome"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:visibility="invisible"
+            android:textColor="@color/gt_blue"
+            android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo_title" />
 
         <TextView
-            android:id="@+id/welcomeTextView"
+            android:id="@+id/welcome2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
+            android:alpha="0"
             android:breakStrategy="balanced"
             android:gravity="top|center"
-            android:text="@string/baked_in_welcome"
+            android:text="@string/baked_in_welcome_helping"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/gt_blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textSpacing" />
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/welcome"
+            app:layout_constraintStart_toStartOf="@id/welcome"
+            app:layout_constraintTop_toTopOf="@id/welcome" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_next"
