@@ -41,7 +41,7 @@ buildscript {
                 annotation        : '1.1.0',
                 appCompat         : '1.1.0',
                 archCore          : '2.1.0',
-                browser           : '1.0.0',
+                browser           : '1.2.0',
                 cardView          : '1.0.0',
                 collection        : '1.1.0',
                 constraintLayout  : '1.1.3',
