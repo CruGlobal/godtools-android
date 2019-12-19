@@ -235,7 +235,8 @@ public class ToolsFragment extends BasePlatformFragment
     // region Training Banner
     private void updateTrainingBannerVisibility() {
         if (mBannerAdapter != null && mComposedAdapter != null) {
-            mBannerAdapter.setTutorialVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+            mBannerAdapter.setTutorialVisible(
+                    !settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
             mComposedAdapter.notifyDataSetChanged();
         }
     }
