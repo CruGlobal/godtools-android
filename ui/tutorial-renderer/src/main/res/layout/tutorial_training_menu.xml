@@ -21,6 +21,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/onboarding_menu"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
@@ -30,10 +32,11 @@
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/img_tutorial_training_menu"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/subheadBottom"
-            app:srcCompat="@drawable/img_opt_in_menu" />
+            app:layout_constraintTop_toBottomOf="@id/subheadBottom" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/action_next"
