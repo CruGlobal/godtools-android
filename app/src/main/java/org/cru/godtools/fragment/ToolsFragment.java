@@ -29,7 +29,6 @@ import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.adapter.TutorialBannerAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolsCursorLoader;
-import org.cru.godtools.databinding.FragmentToolsBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
@@ -53,6 +52,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
@@ -80,9 +80,6 @@ public class ToolsFragment extends BasePlatformFragment
 
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ int mMode = MODE_ADDED;
-
-    @Nullable
-    private FragmentToolsBinding mBinding;
 
     @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
@@ -130,8 +127,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        mBinding = FragmentToolsBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        return inflater.inflate(R.layout.fragment_tools, container, false);
     }
 
     @Override
@@ -223,7 +219,6 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public void onDestroyView() {
         cleanupToolsList();
-        mBinding = null;
         super.onDestroyView();
     }
     // endregion Lifecycle
@@ -267,10 +262,15 @@ public class ToolsFragment extends BasePlatformFragment
         getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
+    // region Tools List
+    @Nullable
+    @BindView(R.id.tools)
+    RecyclerView mToolsView;
+
     @SuppressWarnings("unchecked")
     private void setupToolsList() {
-        if (mBinding != null) {
-            mBinding.tools.setHasFixedSize(false);
+        if (mToolsView != null) {
+            mToolsView.setHasFixedSize(false);
 
             // Create ComposeAdapter
             mComposedAdapter = new ComposedAdapter();
@@ -287,7 +287,7 @@ public class ToolsFragment extends BasePlatformFragment
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
-                mBinding.tools.setItemAnimator(new DraggableItemAnimator());
+                mToolsView.setItemAnimator(new DraggableItemAnimator());
                 mToolsDragDropManager = new RecyclerViewDragDropManager();
                 mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
                         .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
@@ -323,11 +323,11 @@ public class ToolsFragment extends BasePlatformFragment
             // attach the correct adapter to the tools RecyclerView
             mComposedAdapter.addAdapter(mBannerAdapter);
             mComposedAdapter.addAdapter(adapter);
-            mBinding.tools.setAdapter(mComposedAdapter);
+            mToolsView.setAdapter(mComposedAdapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
-                mToolsDragDropManager.attachRecyclerView(mBinding.tools);
+                mToolsDragDropManager.attachRecyclerView(mToolsView);
             }
 
             updateToolsList();
@@ -350,9 +350,9 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
-        if (mBinding != null) {
-            mBinding.tools.setItemAnimator(null);
-            mBinding.tools.setAdapter(null);
+        if (mToolsView != null) {
+            mToolsView.setItemAnimator(null);
+            mToolsView.setAdapter(null);
         }
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
@@ -370,6 +370,7 @@ public class ToolsFragment extends BasePlatformFragment
         mBannerAdapter = null;
         mComposedAdapter = null;
     }
+    // endregion Tools List
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
