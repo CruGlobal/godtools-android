@@ -60,7 +60,7 @@ buildscript {
         deps.firebase = [
                 core        : '17.2.1',
                 dynamicLinks: '16.1.5',
-                perf        : '19.0.3',
+                perf        : '19.0.4',
         ]
         uris = [
                 mobileContentApi: [
