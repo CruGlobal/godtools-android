@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/tutorial_onboarding_bkg"
+        android:background="@drawable/bkg_tutorial_onboarding"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
         <include layout="@layout/tutorial_onboarding_margins" />
