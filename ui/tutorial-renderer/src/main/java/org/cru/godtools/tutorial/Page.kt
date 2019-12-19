@@ -16,8 +16,8 @@ internal enum class Page(
     ONBOARDING_TOOLS(R.layout.tutorial_onboarding_tools),
     ONBOARDING_READY(R.layout.tutorial_onboarding_ready),
     ONBOARDING_FINAL(R.layout.tutorial_onboarding_final, showMenu = false),
-    TRAINING_EXPLORE(R.layout.optin_tutorial_explore_slide),
-    TRAINING_PREPARE(R.layout.optin_tutorial_prepare_slide),
-    TRAINING_TRY(R.layout.optin_tutorial_try_slide),
-    TRAINING_MENU(R.layout.optin_tutorial_menu_slide)
+    TRAINING_EXPLORE(R.layout.tutorial_training_explore),
+    TRAINING_PREPARE(R.layout.tutorial_training_prepare),
+    TRAINING_TRY(R.layout.tutorial_training_try),
+    TRAINING_MENU(R.layout.tutorial_training_menu)
 }

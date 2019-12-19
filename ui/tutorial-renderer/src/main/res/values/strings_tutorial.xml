@@ -21,6 +21,10 @@
     <string name="tutorial_onboarding_action_continue">Continue</string>
     <string name="tutorial_onboarding_action_skip">Skip</string>
 
+    <!-- Onboarding Tutorial -->
+    <eat-comment />
+    <string name="tutorial_training_action_continue">Continue</string>
+
     <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
     <string name="onboarding_prepare">Prepare</string>
     <string name="onboarding_prepare_description">Get more familiar with a couple of tools. This is a good place to start.</string>
