@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.composedadapter.ComposedAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
@@ -25,6 +26,7 @@ import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
 import org.cru.godtools.adapter.ToolsAdapter;
+import org.cru.godtools.adapter.TutorialBannerAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolsCursorLoader;
 import org.cru.godtools.databinding.FragmentToolsBinding;
@@ -90,6 +92,10 @@ public class ToolsFragment extends BasePlatformFragment
     private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
+    @Nullable
+    TutorialBannerAdapter mBannerAdapter;
+    @Nullable
+    ComposedAdapter mComposedAdapter;
 
     @Nullable
     private Cursor mResources;
@@ -131,7 +137,6 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupTrainingBanner();
         setupToolsList();
     }
 
@@ -228,16 +233,10 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     // region Training Banner
-    private void setupTrainingBanner() {
-        if (mBinding != null) {
-            mBinding.setTrainingBannerCallbacks(this);
-            updateTrainingBannerVisibility();
-        }
-    }
-
     private void updateTrainingBannerVisibility() {
-        if (mBinding != null) {
-            mBinding.setIsTrainingBannerVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+        if (mBannerAdapter != null && mComposedAdapter != null) {
+            mBannerAdapter.setTutorialVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+            mComposedAdapter.notifyDataSetChanged();
         }
     }
 
@@ -272,10 +271,18 @@ public class ToolsFragment extends BasePlatformFragment
         if (mBinding != null) {
             mBinding.tools.setHasFixedSize(false);
 
+            // Create ComposeAdapter
+            mComposedAdapter = new ComposedAdapter();
+
             // create base tools adapter
             mToolsAdapter = new ToolsAdapter();
             mToolsAdapter.setCallbacks(this);
             RecyclerView.Adapter adapter = mToolsAdapter;
+
+            // create Tutorial Banner Fragment
+            mBannerAdapter = new TutorialBannerAdapter();
+            mBannerAdapter.setListener(this);
+            updateTrainingBannerVisibility();
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
@@ -313,7 +320,9 @@ public class ToolsFragment extends BasePlatformFragment
             }
 
             // attach the correct adapter to the tools RecyclerView
-            mBinding.tools.setAdapter(adapter);
+            mComposedAdapter.addAdapter(mBannerAdapter);
+            mComposedAdapter.addAdapter(adapter);
+            mBinding.tools.setAdapter(mComposedAdapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
@@ -347,12 +356,18 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
         }
+
+        if (mBannerAdapter != null) {
+            mBannerAdapter.setListener(null);
+        }
         WrapperAdapterUtils.releaseAll(mToolsDragDropAdapter);
 
         mToolsHeaderAdapter = null;
         mToolsDragDropAdapter = null;
         mToolsDragDropManager = null;
         mToolsAdapter = null;
+        mBannerAdapter = null;
+        mComposedAdapter = null;
     }
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {

@@ -3,91 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable name="isTrainingBannerVisible" type="boolean" />
-        <variable name="trainingBannerCallbacks" type="org.cru.godtools.fragment.TrainingBannerCallbacks" />
-    </data>
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/list_item_tool_card" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="#DBF3FF"
-                app:layout_constraintBottom_toBottomOf="@id/openTutorialTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:visibleIf="@{isTrainingBannerVisible}" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/closeTutorialImage"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:onClick="@{() -> trainingBannerCallbacks.dismissTrainingBanner()}"
-                android:tint="@color/design_default_color_primary_dark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_close"
-                app:tint="@color/design_default_color_primary_dark"
-                app:visibleIf="@{isTrainingBannerVisible}" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tutorialQuestionTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:text="@string/tutorial_open_description"
-                android:textAppearance="@style/TextAppearance.GodTools.About.Text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:visibleIf="@{isTrainingBannerVisible}" />
-
-            <TextView
-                android:id="@+id/openTutorialTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal|center_vertical"
-                android:onClick="@{() -> trainingBannerCallbacks.openTrainingTutorial()}"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
-                android:text="@string/open_tutorial"
-                android:textAppearance="@style/TextAppearance.GodTools.About.Text"
-                android:textColor="@color/design_default_color_primary_dark"
-                app:drawableEndCompat="@drawable/ic_tutorial_open_arrow"
-                app:drawableTint="@color/design_default_color_primary_dark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tutorialQuestionTextView"
-                app:visibleIf="@{isTrainingBannerVisible}" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tools"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:clipToPadding="false"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/openTutorialTextView"
-                tools:listitem="@layout/list_item_tool_card" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
