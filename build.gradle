@@ -24,7 +24,7 @@ buildscript {
                 leakcanary         : '1.6.3',
                 lightweightStream  : '1.2.1',
                 materialDesign     : '1.0.0',
-                mockito            : '3.2.0',
+                mockito            : '3.2.4',
                 mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.12.6',
                 picasso            : '2.71828',
@@ -53,7 +53,7 @@ buildscript {
                 multidex          : '2.0.1',
                 percentLayout     : '1.0.0',
                 recyclerView      : '1.1.0',
-                room              : '2.2.2',
+                room              : '2.2.3',
                 swipeRefreshLayout: '1.0.0',
                 test              : '1.2.0',
                 testJUnit         : '1.1.1',
@@ -61,7 +61,7 @@ buildscript {
         deps.firebase = [
                 core        : '17.2.1',
                 dynamicLinks: '16.1.5',
-                perf        : '19.0.3',
+                perf        : '19.0.4',
         ]
         uris = [
                 mobileContentApi: [
@@ -79,7 +79,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.google.firebase:perf-plugin:1.3.1'
-        classpath 'com.google.firebase:firebase-appdistribution-gradle:1.3.0'
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:1.3.1'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath 'io.fabric.tools:gradle:1.31.2'
