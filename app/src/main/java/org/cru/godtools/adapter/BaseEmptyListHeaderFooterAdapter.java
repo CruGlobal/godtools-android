@@ -23,8 +23,8 @@ import butterknife.Optional;
 import static org.ccci.gto.android.common.base.Constants.INVALID_DRAWABLE_RES;
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
-public abstract class BaseHeaderFooterAdapter
-        extends AbstractHeaderFooterWrapperAdapter<BaseViewHolder, BaseViewHolder> {
+public abstract class BaseEmptyListHeaderFooterAdapter
+        extends AbstractHeaderFooterWrapperAdapter<RecyclerView.ViewHolder, BaseViewHolder> {
     public abstract static class Builder<T extends Builder> {
         @LayoutRes
         int mLayout = R.layout.list_item_none;
@@ -89,7 +89,7 @@ public abstract class BaseHeaderFooterAdapter
     @Nullable
     EmptyCallbacks mEmptyCallbacks;
 
-    protected BaseHeaderFooterAdapter(@NonNull final Builder builder) {
+    protected BaseEmptyListHeaderFooterAdapter(@NonNull final Builder builder) {
         mLayout = builder.mLayout;
         mEmptyIcon = builder.mEmptyIcon;
         mEmptyLabel = builder.mEmptyLabel;
@@ -109,20 +109,22 @@ public abstract class BaseHeaderFooterAdapter
         }
     }
 
+    // region Header
+
     @Override
     public int getHeaderItemCount() {
         return 0;
     }
 
     @Override
-    public BaseViewHolder onCreateHeaderItemViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+    public RecyclerView.ViewHolder onCreateHeaderItemViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         throw new UnsupportedOperationException("onCreateHeaderItemViewHolder not supported");
     }
 
     @Override
-    public void onBindHeaderItemViewHolder(@NonNull final BaseViewHolder holder, final int localPosition) {
-        holder.bind(localPosition);
-    }
+    public void onBindHeaderItemViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int localPosition) { }
+
+    // endregion Header
 
     @Override
     public int getFooterItemCount() {

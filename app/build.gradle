@@ -146,9 +146,11 @@ dependencies {
     implementation project(':ui:base-app')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
+    implementation project(':ui:tutorial-renderer')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
+    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"

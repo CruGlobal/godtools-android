@@ -1,5 +1,6 @@
 package org.cru.godtools.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.NinePatchDrawable;
@@ -20,9 +21,11 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
-import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
-import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
+import org.cru.godtools.adapter.Banner;
+import org.cru.godtools.adapter.BannerCallbacks;
+import org.cru.godtools.adapter.BannerHeaderAdapter;
+import org.cru.godtools.adapter.BannerHeaderAdapter.Builder;
+import org.cru.godtools.adapter.BaseEmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolsCursorLoader;
@@ -32,6 +35,8 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
+import org.cru.godtools.tutorial.PageSet;
+import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -46,12 +51,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
+import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
+
 public class ToolsFragment extends BasePlatformFragment
-        implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
+        implements BannerCallbacks, ToolsAdapter.Callbacks, BaseEmptyListHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -76,14 +82,11 @@ public class ToolsFragment extends BasePlatformFragment
     /*final*/ int mMode = MODE_ADDED;
 
     @Nullable
-    @BindView(R.id.resources)
-    RecyclerView mToolsView;
-    @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
     @Nullable
     private RecyclerView.Adapter mToolsDragDropAdapter;
     @Nullable
-    private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
+    private BannerHeaderAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
 
@@ -129,6 +132,12 @@ public class ToolsFragment extends BasePlatformFragment
         setupToolsList();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateTrainingBannerVisibility();
+    }
+
     void onLoadResources(@Nullable final Cursor cursor) {
         mResources = cursor;
         updateToolsList();
@@ -144,6 +153,14 @@ public class ToolsFragment extends BasePlatformFragment
     protected void onUpdateParallelLanguage() {
         super.onUpdateParallelLanguage();
         restartToolsLoader();
+    }
+
+    @Override
+    protected void onUpdateFeatureDiscovery(@NonNull final String feature) {
+        super.onUpdateFeatureDiscovery(feature);
+        if (FEATURE_TUTORIAL_TRAINING.equals(feature)) {
+            updateTrainingBannerVisibility();
+        }
     }
 
     @Override
@@ -206,6 +223,29 @@ public class ToolsFragment extends BasePlatformFragment
         return mMode == MODE_AVAILABLE;
     }
 
+    // region Training Banner
+    private void updateTrainingBannerVisibility() {
+        if (mToolsHeaderAdapter != null) {
+            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
+                mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
+            } else {
+                mToolsHeaderAdapter.setBanner(null);
+            }
+        }
+    }
+
+    public void openTrainingTutorial() {
+        final Activity activity = getActivity();
+        if (activity != null) {
+            TutorialActivityKt.startTutorialActivity(activity, PageSet.TRAINING);
+        }
+    }
+
+    public void dismissBanner() {
+        settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
+    }
+    // endregion Training Banner
+
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
@@ -220,10 +260,14 @@ public class ToolsFragment extends BasePlatformFragment
         getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
+    // region Tools List
+    @Nullable
+    @BindView(R.id.tools)
+    RecyclerView mToolsView;
+
     @SuppressWarnings("unchecked")
     private void setupToolsList() {
         if (mToolsView != null) {
-            mToolsView.setLayoutManager(new LinearLayoutManager(requireActivity()));
             mToolsView.setHasFixedSize(false);
 
             // create base tools adapter
@@ -261,6 +305,7 @@ public class ToolsFragment extends BasePlatformFragment
                     mToolsHeaderAdapter = null;
             }
             if (mToolsHeaderAdapter != null) {
+                mToolsHeaderAdapter.getCallbacks().set(this);
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
                 adapter = mToolsHeaderAdapter;
@@ -274,6 +319,7 @@ public class ToolsFragment extends BasePlatformFragment
                 mToolsDragDropManager.attachRecyclerView(mToolsView);
             }
 
+            updateTrainingBannerVisibility();
             updateToolsList();
         }
     }
@@ -308,6 +354,7 @@ public class ToolsFragment extends BasePlatformFragment
         mToolsDragDropManager = null;
         mToolsAdapter = null;
     }
+    // endregion Tools List
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable

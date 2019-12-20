@@ -30,6 +30,8 @@ public final class Settings {
     public static final String FEATURE_LOGIN = "login";
     public static final String FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped";
     public static final String FEATURE_TRACT_CARD_CLICKED = "tractCardClicked";
+    public static final String FEATURE_TUTORIAL_TRAINING = "tutorialTraining";
+    public static final String FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding";
 
     @NonNull
     private final Context mContext;
@@ -62,6 +64,11 @@ public final class Settings {
         if (!discovered) {
             boolean changed = false;
             switch (feature) {
+                case FEATURE_TUTORIAL_ONBOARDING:
+                    if (getFirstLaunchVersion() <= VERSION_5_1_4) {
+                        setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
+                        changed = true;
+                    }
                 case FEATURE_LANGUAGE_SETTINGS:
                     if (getParallelLanguage() != null) {
                         setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);

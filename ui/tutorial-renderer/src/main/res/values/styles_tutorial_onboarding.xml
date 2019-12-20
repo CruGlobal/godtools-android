@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tutorial_onboarding_bkg">#F4FBFF</color>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Final.Point" parent="Base">
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Subhead</item>
+        <item name="drawableStartCompat">@drawable/ic_tutorial_onboarding_final_point</item>
+        <item name="drawableLeftCompat">@drawable/ic_tutorial_onboarding_final_point</item>
+        <item name="android:drawablePadding">16dp</item>
+    </style>
+</resources>

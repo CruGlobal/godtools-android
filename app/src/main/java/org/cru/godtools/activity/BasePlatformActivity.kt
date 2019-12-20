@@ -40,6 +40,8 @@ import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.WebUrlLauncher
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
@@ -184,6 +186,10 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             }
             R.id.action_contact_us -> {
                 launchContactUs()
+                return true
+            }
+            R.id.action_tutorial -> {
+                launchTrainingTutorial()
                 return true
             }
             R.id.action_terms_of_use -> {
@@ -377,5 +383,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
     }
 
+    private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
     // endregion Navigation Menu actions
 }

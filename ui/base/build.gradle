@@ -1,5 +1,11 @@
 apply plugin: 'com.jakewharton.butterknife'
 
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+}
+
 dependencies {
     api project(':library:analytics')
     implementation project(':library:model')

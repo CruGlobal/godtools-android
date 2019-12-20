@@ -9,6 +9,10 @@
                 android:orderInCategory="100"
                 android:title="@string/menu_language_settings" />
             <item
+                android:id="@+id/action_tutorial"
+                android:orderInCategory="150"
+                android:title="@string/menu_tutorial" />
+            <item
                 android:id="@+id/action_about"
                 android:orderInCategory="200"
                 android:title="@string/menu_about" />
@@ -24,15 +28,15 @@
             <group android:id="@+id/group_login_items">
                 <item
                     android:id="@+id/action_login"
-                    android:orderInCategory="500"
+                    android:orderInCategory="600"
                     android:title="@string/menu_login" />
                 <item
                     android:id="@+id/action_logout"
-                    android:orderInCategory="500"
+                    android:orderInCategory="600"
                     android:title="@string/menu_logout" />
                 <item
                     android:id="@+id/action_signup"
-                    android:orderInCategory="600"
+                    android:orderInCategory="700"
                     android:title="@string/menu_signup" />
             </group>
         </menu>

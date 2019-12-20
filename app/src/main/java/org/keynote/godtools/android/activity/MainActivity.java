@@ -22,6 +22,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
+import org.cru.godtools.tutorial.PageSet;
+import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
@@ -39,6 +41,7 @@ import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
+import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
@@ -291,9 +294,10 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     // region Feature Discovery logic
-
     void showNextFeatureDiscovery() {
-        if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+        if (!getSettings().isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
+            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
+        } else if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
         }
@@ -383,7 +387,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
         mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
-
     // endregion Feature Discovery logic
 
     class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {

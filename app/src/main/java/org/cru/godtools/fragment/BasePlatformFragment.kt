@@ -12,6 +12,7 @@ import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.fragment.BaseFragment
@@ -61,14 +62,14 @@ abstract class BasePlatformFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
-        startLanguagesChangeListener()
+        startSettingsChangeListener()
         loadLanguages(false)
         syncHelper.updateState()
     }
 
-    protected open fun onUpdatePrimaryLanguage() {}
-
-    protected open fun onUpdateParallelLanguage() {}
+    protected open fun onUpdatePrimaryLanguage() = Unit
+    protected open fun onUpdateParallelLanguage() = Unit
+    protected open fun onUpdateFeatureDiscovery(feature: String) = Unit
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -76,7 +77,7 @@ abstract class BasePlatformFragment : BaseFragment() {
 
     override fun onStop() {
         super.onStop()
-        stopLanguagesChangeListener()
+        stopSettingsChangeListener()
         EventBus.getDefault().unregister(this)
     }
 
@@ -112,11 +113,11 @@ abstract class BasePlatformFragment : BaseFragment() {
         }
     }
 
-    private fun startLanguagesChangeListener() {
+    private fun startSettingsChangeListener() {
         settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
     }
 
-    private fun stopLanguagesChangeListener() {
+    private fun stopSettingsChangeListener() {
         settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
     }
 
@@ -134,6 +135,9 @@ abstract class BasePlatformFragment : BaseFragment() {
         override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
             when (key) {
                 PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
+            }
+            if (key?.startsWith(PREF_FEATURE_DISCOVERED) == true) {
+                onUpdateFeatureDiscovery(key.removePrefix(PREF_FEATURE_DISCOVERED))
             }
         }
     }
