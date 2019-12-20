@@ -119,23 +119,17 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     // endregion Menu
 
     // region TutorialCallbacks
-    override fun onNextClicked() {
-        viewPager?.let { pager ->
-            if (pager.currentItem < pager.adapter?.count ?: 0) {
-                pager.currentItem = pager.currentItem + 1
-            } else {
-                finish()
-            }
+    override fun nextPage() {
+        viewPager?.apply {
+            currentItem = (currentItem + 1).coerceAtMost(adapter?.count ?: 0)
         }
     }
 
-    override fun onCloseClicked() {
-        finish()
-    }
-
-    override fun onOptInClicked() {
+    override fun launchTraining() {
         startTutorialActivity(PageSet.TRAINING)
         finish()
     }
+
+    override fun finishTutorial() = finish()
     // endregion TutorialCallbacks
 }

@@ -11,7 +11,7 @@
         style="@style/Widget.GodTools.Tutorial.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> callbacks.onNextClicked()}"
+        android:onClick="@{() -> callbacks.nextPage()}"
         android:text="@string/tutorial_training_action_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/marginEnd"

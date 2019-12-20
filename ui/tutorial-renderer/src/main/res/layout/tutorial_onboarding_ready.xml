@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:onClick="@{() -> callbacks.onNextClicked()}"
+            android:onClick="@{() -> callbacks.nextPage()}"
             android:text="@string/tutorial_onboarding_action_continue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
