@@ -6,7 +6,7 @@ buildscript {
                 adobeMobileServices: '4.17.10',
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
-                butterknife        : '10.2.0',
+                butterknife        : '10.2.1',
                 calligraphy        : '2.3.0',
                 crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
