@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="androidx.databinding.ObservableField" />
+        <import type="org.cru.godtools.adapter.BannerCallbacks" />
 
-        <variable
-            name="callback"
-            type="org.cru.godtools.fragment.HeaderBannerCallbacks" />
+        <variable name="callbacks" type="ObservableField&lt;BannerCallbacks&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tools_card_margin_horiz"
-        android:layout_marginRight="@dimen/tools_card_margin_horiz"
-        android:orientation="vertical">
+        android:layout_marginRight="@dimen/tools_card_margin_horiz">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/banner_open_description_text"
@@ -39,11 +38,11 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> callback.dismissTrainingBanner()}"
+            android:background="@android:color/transparent"
+            android:onClick="@{() -> callbacks.dismissBanner()}"
             android:padding="8dp"
             android:text="@string/dismiss_tutorial"
             android:textAllCaps="true"
-            android:background="@android:color/transparent"
             android:textColor="@color/gt_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +56,11 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="@{() -> callback.openTrainingTutorial()}"
+            android:background="@android:color/transparent"
+            android:onClick="@{() -> callbacks.openTrainingTutorial()}"
             android:padding="8dp"
             android:text="@string/open_tutorial"
             android:textAllCaps="true"
-            android:background="@android:color/transparent"
             android:textColor="@color/gt_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tools_dismiss_text"
@@ -75,7 +74,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

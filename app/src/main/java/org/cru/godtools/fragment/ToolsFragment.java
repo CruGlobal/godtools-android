@@ -21,12 +21,13 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
+import org.cru.godtools.adapter.Banner;
+import org.cru.godtools.adapter.BannerCallbacks;
+import org.cru.godtools.adapter.BannerHeaderAdapter;
+import org.cru.godtools.adapter.BannerHeaderAdapter.Builder;
 import org.cru.godtools.adapter.BaseEmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
-import org.cru.godtools.adapter.ToolsHeaderAdapter;
-import org.cru.godtools.adapter.ToolsHeaderAdapter.Builder;
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.content.ToolHeader;
 import org.cru.godtools.content.ToolsCursorLoader;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
@@ -56,7 +57,7 @@ import butterknife.BindView;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
 public class ToolsFragment extends BasePlatformFragment
-        implements HeaderBannerCallbacks, ToolsAdapter.Callbacks, BaseEmptyListHeaderFooterAdapter.EmptyCallbacks {
+        implements BannerCallbacks, ToolsAdapter.Callbacks, BaseEmptyListHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -85,7 +86,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Nullable
     private RecyclerView.Adapter mToolsDragDropAdapter;
     @Nullable
-    private ToolsHeaderAdapter mToolsHeaderAdapter;
+    private BannerHeaderAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
 
@@ -225,8 +226,11 @@ public class ToolsFragment extends BasePlatformFragment
     // region Training Banner
     private void updateTrainingBannerVisibility() {
         if (mToolsHeaderAdapter != null) {
-            mToolsHeaderAdapter
-                    .setHeaderVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
+            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
+                mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
+            } else {
+                mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
+            }
         }
     }
 
@@ -237,7 +241,7 @@ public class ToolsFragment extends BasePlatformFragment
         }
     }
 
-    public void dismissTrainingBanner() {
+    public void dismissBanner() {
         settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
     }
     // endregion Training Banner
@@ -290,21 +294,19 @@ public class ToolsFragment extends BasePlatformFragment
                             .layout(R.layout.list_item_none_large_icon)
                             .emptyIcon(R.drawable.ic_find_tools)
                             .emptyAction(R.string.nav_find_tools)
-                            .toolHeader(ToolHeader.TUTORIAL)
                             .build();
                     break;
                 case MODE_AVAILABLE:
                     mToolsHeaderAdapter = new Builder()
                             .emptyText(R.string.text_tools_all_installed)
-                            .toolHeader(ToolHeader.TUTORIAL)
                             .build();
                     break;
                 default:
                     mToolsHeaderAdapter = null;
             }
             if (mToolsHeaderAdapter != null) {
+                mToolsHeaderAdapter.getCallbacks().set(this);
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
-                mToolsHeaderAdapter.setHeaderBannerCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
 
                 // attach the correct adapter to the tools RecyclerView
