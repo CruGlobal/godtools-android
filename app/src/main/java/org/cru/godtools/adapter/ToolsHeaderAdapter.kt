@@ -31,7 +31,7 @@ class ToolsHeaderAdapter internal constructor(builder: Builder) : BaseEmptyListH
     var isHeaderVisible: Boolean = true
         set(value) {
             field = value
-            notifyDataSetChanged()
+            headerAdapter?.notifyDataSetChanged()
         }
 
     lateinit var headerBannerCallbacks: HeaderBannerCallbacks

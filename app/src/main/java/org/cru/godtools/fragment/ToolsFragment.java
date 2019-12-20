@@ -227,7 +227,6 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsHeaderAdapter != null) {
             mToolsHeaderAdapter
                     .setHeaderVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
-            mToolsHeaderAdapter.getHeaderAdapter().notifyDataSetChanged();
         }
     }
 
