@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.h6ah4i.android.widget.advrecyclerview.headerfooter.AbstractHeaderFooterWrapperAdapter;
 
 import org.cru.godtools.R;
+import org.cru.godtools.content.ToolHeader;
+import org.cru.godtools.databinding.ToolsTutorialBannerBinding;
+import org.cru.godtools.fragment.HeaderBannerCallbacks;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
@@ -24,7 +27,7 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_DRAWABLE_RES;
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 public abstract class BaseHeaderFooterAdapter
-        extends AbstractHeaderFooterWrapperAdapter<BaseViewHolder, BaseViewHolder> {
+        extends AbstractHeaderFooterWrapperAdapter<HeaderViewHolder, BaseViewHolder> {
     public abstract static class Builder<T extends Builder> {
         @LayoutRes
         int mLayout = R.layout.list_item_none;
@@ -36,6 +39,7 @@ public abstract class BaseHeaderFooterAdapter
         int mEmptyText = INVALID_STRING_RES;
         @StringRes
         int mEmptyAction = INVALID_STRING_RES;
+        ToolHeader mHeader;
 
         @SuppressWarnings("unchecked")
         protected T self() {
@@ -64,6 +68,11 @@ public abstract class BaseHeaderFooterAdapter
 
         public T emptyAction(@StringRes final int action) {
             mEmptyAction = action;
+            return self();
+        }
+
+        public T toolHeader(final ToolHeader toolHeader) {
+            mHeader = toolHeader;
             return self();
         }
     }
@@ -95,6 +104,7 @@ public abstract class BaseHeaderFooterAdapter
         mEmptyLabel = builder.mEmptyLabel;
         mEmptyText = builder.mEmptyText;
         mEmptyAction = builder.mEmptyAction;
+        mHeader = builder.mHeader;
     }
 
     public void setEmptyCallbacks(@Nullable EmptyCallbacks callbacks) {
@@ -109,20 +119,48 @@ public abstract class BaseHeaderFooterAdapter
         }
     }
 
+    // region Header
+
+    private Boolean mIsHeaderVisible = false;
+
+    public void setHeaderVisible(final Boolean headerVisible) {
+        mIsHeaderVisible = headerVisible;
+        notifyDataSetChanged();
+    }
+
+    private HeaderBannerCallbacks mHeaderBannerCallbacks;
+
+    public void setHeaderBannerCallbacks(final HeaderBannerCallbacks headerBannerCallbacks) {
+        mHeaderBannerCallbacks = headerBannerCallbacks;
+    }
+
+    private ToolHeader mHeader;
+
+    public void setHeader(final ToolHeader header) {
+        mHeader = header;
+    }
+
     @Override
     public int getHeaderItemCount() {
-        return 0;
+        return mIsHeaderVisible ? 1 : 0;
     }
 
     @Override
-    public BaseViewHolder onCreateHeaderItemViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        throw new UnsupportedOperationException("onCreateHeaderItemViewHolder not supported");
+    public HeaderViewHolder onCreateHeaderItemViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        return new HeaderViewHolder(
+                ToolsTutorialBannerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindHeaderItemViewHolder(@NonNull final BaseViewHolder holder, final int localPosition) {
-        holder.bind(localPosition);
+    public void onBindHeaderItemViewHolder(@NonNull final HeaderViewHolder holder, final int localPosition) {
+        holder.getBinding().setCallback(mHeaderBannerCallbacks);
+        // Set View
+        holder.getBinding().bannerOpenDescriptionText.setText(mHeader.getDescriptionText());
+        holder.getBinding().bannerOpenText.setText(mHeader.getOpenText());
+        holder.getBinding().toolsDismissText.setText(mHeader.getDismissText());
     }
+
+    // endregion Header
 
     @Override
     public int getFooterItemCount() {

@@ -1,6 +1,6 @@
 package org.cru.godtools.fragment
 
-interface TrainingBannerCallbacks {
+interface HeaderBannerCallbacks {
     fun openTrainingTutorial()
     fun dismissTrainingBanner()
 }

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator;
-import com.h6ah4i.android.widget.advrecyclerview.composedadapter.ComposedAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
@@ -26,8 +25,8 @@ import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
 import org.cru.godtools.adapter.ToolsAdapter;
-import org.cru.godtools.adapter.TutorialBannerAdapter;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.content.ToolHeader;
 import org.cru.godtools.content.ToolsCursorLoader;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
@@ -57,7 +56,7 @@ import butterknife.BindView;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
 public class ToolsFragment extends BasePlatformFragment
-        implements TrainingBannerCallbacks, ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
+        implements HeaderBannerCallbacks, ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -89,10 +88,6 @@ public class ToolsFragment extends BasePlatformFragment
     private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
-    @Nullable
-    TutorialBannerAdapter mBannerAdapter;
-    @Nullable
-    ComposedAdapter mComposedAdapter;
 
     @Nullable
     private Cursor mResources;
@@ -229,10 +224,9 @@ public class ToolsFragment extends BasePlatformFragment
 
     // region Training Banner
     private void updateTrainingBannerVisibility() {
-        if (mBannerAdapter != null && mComposedAdapter != null) {
-            mBannerAdapter.setTutorialVisible(
-                    !settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
-            mComposedAdapter.notifyDataSetChanged();
+        if (mToolsHeaderAdapter != null) {
+            mToolsHeaderAdapter
+                    .setHeaderVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
         }
     }
 
@@ -272,17 +266,10 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsView != null) {
             mToolsView.setHasFixedSize(false);
 
-            // Create ComposeAdapter
-            mComposedAdapter = new ComposedAdapter();
-
             // create base tools adapter
             mToolsAdapter = new ToolsAdapter();
             mToolsAdapter.setCallbacks(this);
             RecyclerView.Adapter adapter = mToolsAdapter;
-
-            // create Tutorial Banner Fragment
-            mBannerAdapter = new TutorialBannerAdapter();
-            mBannerAdapter.setListener(this);
             updateTrainingBannerVisibility();
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
@@ -304,11 +291,13 @@ public class ToolsFragment extends BasePlatformFragment
                             .layout(R.layout.list_item_none_large_icon)
                             .emptyIcon(R.drawable.ic_find_tools)
                             .emptyAction(R.string.nav_find_tools)
+                            .toolHeader(ToolHeader.TUTORIAL)
                             .build();
                     break;
                 case MODE_AVAILABLE:
                     mToolsHeaderAdapter = new Builder()
                             .emptyText(R.string.text_tools_all_installed)
+                            .toolHeader(ToolHeader.TUTORIAL)
                             .build();
                     break;
                 default:
@@ -316,14 +305,13 @@ public class ToolsFragment extends BasePlatformFragment
             }
             if (mToolsHeaderAdapter != null) {
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
+                mToolsHeaderAdapter.setHeaderBannerCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
                 adapter = mToolsHeaderAdapter;
             }
 
             // attach the correct adapter to the tools RecyclerView
-            mComposedAdapter.addAdapter(mBannerAdapter);
-            mComposedAdapter.addAdapter(adapter);
-            mToolsView.setAdapter(mComposedAdapter);
+            mToolsView.setAdapter(adapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
@@ -358,17 +346,12 @@ public class ToolsFragment extends BasePlatformFragment
             mToolsDragDropManager.release();
         }
 
-        if (mBannerAdapter != null) {
-            mBannerAdapter.setListener(null);
-        }
         WrapperAdapterUtils.releaseAll(mToolsDragDropAdapter);
 
         mToolsHeaderAdapter = null;
         mToolsDragDropAdapter = null;
         mToolsDragDropManager = null;
         mToolsAdapter = null;
-        mBannerAdapter = null;
-        mComposedAdapter = null;
     }
     // endregion Tools List
 
