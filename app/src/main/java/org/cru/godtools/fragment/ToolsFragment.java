@@ -308,19 +308,18 @@ public class ToolsFragment extends BasePlatformFragment
                 mToolsHeaderAdapter.getCallbacks().set(this);
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
-
-                // attach the correct adapter to the tools RecyclerView
-                updateTrainingBannerVisibility();
-                mToolsView.setAdapter(mToolsHeaderAdapter);
-            } else {
-                mToolsView.setAdapter(adapter);
+                adapter = mToolsHeaderAdapter;
             }
+
+            // attach the correct adapter to the tools RecyclerView
+            mToolsView.setAdapter(adapter);
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
                 mToolsDragDropManager.attachRecyclerView(mToolsView);
             }
 
+            updateTrainingBannerVisibility();
             updateToolsList();
         }
     }
@@ -348,7 +347,6 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
         }
-
         WrapperAdapterUtils.releaseAll(mToolsDragDropAdapter);
 
         mToolsHeaderAdapter = null;
