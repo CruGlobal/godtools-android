@@ -40,7 +40,7 @@ class BannerHeaderAdapter internal constructor(builder: Builder) : BaseEmptyList
 }
 
 enum class Banner(@LayoutRes val layout: Int) {
-    TUTORIAL_TRAINING(R.layout.tools_tutorial_banner)
+    TUTORIAL_TRAINING(R.layout.banner_tutorial_training)
 }
 
 interface BannerCallbacks {

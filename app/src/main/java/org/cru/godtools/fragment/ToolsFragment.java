@@ -229,7 +229,7 @@ public class ToolsFragment extends BasePlatformFragment
             if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
                 mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
             } else {
-                mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
+                mToolsHeaderAdapter.setBanner(null);
             }
         }
     }

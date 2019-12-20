@@ -35,7 +35,7 @@
 
     <!-- Training Tutorial Banner -->
     <eat-comment />
-    <string name="open_tutorial">Open Tutorial</string>
-    <string name="tutorial_open_description">Not sure where to start?</string>
-    <string name="dismiss_tutorial">dismiss</string>
+    <string name="tutorial_training_banner_text">Not sure where to start?</string>
+    <string name="tutorial_training_banner_action_open">Open Tutorial</string>
+    <string name="tutorial_training_banner_action_dismiss">Dismiss</string>
 </resources>
