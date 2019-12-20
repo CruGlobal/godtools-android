@@ -21,10 +21,10 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
-import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
-import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
+import org.cru.godtools.adapter.BaseEmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
+import org.cru.godtools.adapter.ToolsHeaderAdapter;
+import org.cru.godtools.adapter.ToolsHeaderAdapter.Builder;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolHeader;
 import org.cru.godtools.content.ToolsCursorLoader;
@@ -56,7 +56,7 @@ import butterknife.BindView;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
 public class ToolsFragment extends BasePlatformFragment
-        implements HeaderBannerCallbacks, ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
+        implements HeaderBannerCallbacks, ToolsAdapter.Callbacks, BaseEmptyListHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -85,7 +85,7 @@ public class ToolsFragment extends BasePlatformFragment
     @Nullable
     private RecyclerView.Adapter mToolsDragDropAdapter;
     @Nullable
-    private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
+    private ToolsHeaderAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
 
@@ -227,6 +227,7 @@ public class ToolsFragment extends BasePlatformFragment
         if (mToolsHeaderAdapter != null) {
             mToolsHeaderAdapter
                     .setHeaderVisible(!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED);
+            mToolsHeaderAdapter.getHeaderAdapter().notifyDataSetChanged();
         }
     }
 
@@ -270,7 +271,6 @@ public class ToolsFragment extends BasePlatformFragment
             mToolsAdapter = new ToolsAdapter();
             mToolsAdapter.setCallbacks(this);
             RecyclerView.Adapter adapter = mToolsAdapter;
-            updateTrainingBannerVisibility();
 
             // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
@@ -307,11 +307,13 @@ public class ToolsFragment extends BasePlatformFragment
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setHeaderBannerCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
-                adapter = mToolsHeaderAdapter;
-            }
 
-            // attach the correct adapter to the tools RecyclerView
-            mToolsView.setAdapter(adapter);
+                // attach the correct adapter to the tools RecyclerView
+                updateTrainingBannerVisibility();
+                mToolsView.setAdapter(mToolsHeaderAdapter);
+            } else {
+                mToolsView.setAdapter(adapter);
+            }
 
             // handle some post-adapter configuration
             if (mToolsDragDropManager != null) {
