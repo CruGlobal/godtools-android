@@ -8,8 +8,8 @@ import com.facebook.stetho.inspector.database.DatabaseFilesProvider
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.facebook.stetho.timber.StethoTree
-import com.squareup.leakcanary.LeakCanary
-import org.ccci.gto.android.common.leakcanary.CrashlyticsLeakService
+import leakcanary.LeakCanary
+import org.ccci.gto.android.common.leakcanary.CrashlyticsOnHeapAnalyzedListener
 import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider
 import org.cru.godtools.analytics.AnalyticsDispatcher
@@ -22,13 +22,7 @@ class DebugGodToolsApplication : GodToolsApplication() {
     internal val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
 
     override fun onCreate() {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return
-        }
-        initLeakCanary()
-
+        configLeakCanary()
         initStetho()
         super.onCreate()
         initTimber()
@@ -39,17 +33,17 @@ class DebugGodToolsApplication : GodToolsApplication() {
         MultiDex.install(this)
     }
 
+    private fun configLeakCanary() {
+        LeakCanary.config = LeakCanary.config.copy(
+            onHeapAnalyzedListener = CrashlyticsOnHeapAnalyzedListener()
+        )
+    }
+
     override fun configureAnalyticsServices() {
         super.configureAnalyticsServices()
 
         // enable debug logging for various Analytics Services
         Config.setDebugLogging(true)
-    }
-
-    private fun initLeakCanary() {
-        LeakCanary.refWatcher(this)
-            .listenerServiceClass(CrashlyticsLeakService::class.java)
-            .buildAndInstall()
     }
 
     private fun initStetho() {
