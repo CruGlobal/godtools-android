@@ -23,10 +23,10 @@ enum class PageSet(
     TRAINING(
         feature = Settings.FEATURE_TUTORIAL_TRAINING,
         pages = listOf(
-            Page.TRAINING_EXPLORE,
+            Page.TRAINING_WATCH,
             Page.TRAINING_PREPARE,
             Page.TRAINING_TRY,
-            Page.TRAINING_MENU
+            Page.TRAINING_FINAL
         )
     );
 

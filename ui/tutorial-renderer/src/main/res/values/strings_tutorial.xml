@@ -23,16 +23,18 @@
 
     <!-- Onboarding Tutorial -->
     <eat-comment />
+    <string name="tutorial_training_watch_headline">Watch</string>
+    <string name="tutorial_training_watch_subhead">See what the app offers in our demo video</string>
+    <string name="tutorial_training_prepare_headline">Prepare</string>
+    <string name="tutorial_training_prepare_subhead">Get more familiar with a couple of tools. This is a good place to start.</string>
+    <string name="tutorial_training_try_headline">Try</string>
+    <string name="tutorial_training_try_subhead">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
+    <string name="tutorial_training_final_headline">This tutorial is available to see again in the menu</string>
     <string name="tutorial_training_action_continue">Continue</string>
+    <string name="tutorial_training_action_start">Start Using GodTools</string>
 
-    <string name="onboarding_slide_1_description">See what the app offers in our demo video</string>
-    <string name="onboarding_prepare">Prepare</string>
-    <string name="onboarding_prepare_description">Get more familiar with a couple of tools. This is a good place to start.</string>
-    <string name="onboarding_try_description">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
-    <string name="onboarding_try">Try</string>
-    <string name="onboarding_menu">This tutorial is available to see again in the menu</string>
-    <string name="onboarding_watch">Watch</string>
-    <string name="tutorial_start_using_godtools">Start Using GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <eat-comment />
     <string name="open_tutorial">Open Tutorial</string>
     <string name="tutorial_open_description">Not sure where to start?</string>
     <string name="dismiss_tutorial">dismiss</string>
