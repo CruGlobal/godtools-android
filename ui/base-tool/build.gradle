@@ -28,5 +28,5 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

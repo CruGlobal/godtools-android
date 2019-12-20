@@ -1,5 +1,3 @@
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -9,10 +7,6 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/room-schemas".toString()]
             }
         }
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     sourceSets {
@@ -29,8 +23,6 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:base-tool')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"

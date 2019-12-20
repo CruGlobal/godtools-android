@@ -20,5 +20,5 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

@@ -52,7 +52,7 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4-rule:${deps.powermock}"
     testImplementation "org.ccci.gto.android:gto-support-testing:${deps.gtoSupport}"
 
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
+    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

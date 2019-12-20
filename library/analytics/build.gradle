@@ -1,6 +1,3 @@
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
 android {
     defaultConfig {
         javaCompileOptions {
@@ -32,8 +29,6 @@ android {
 dependencies {
     implementation project(':library:base')
     api project(':library:base-kt')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 
