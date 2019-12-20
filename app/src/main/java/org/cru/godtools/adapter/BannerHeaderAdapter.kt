@@ -24,7 +24,7 @@ class BannerHeaderAdapter internal constructor(builder: Builder) : BaseEmptyList
             if (changed) headerAdapter?.notifyDataSetChanged()
         }
 
-    val callbacks: ObservableField<BannerCallbacks?> = ObservableField()
+    val callbacks = ObservableField<BannerCallbacks?>()
 
     override fun getHeaderItemCount() = if (banner != null) 1 else 0
     override fun getHeaderItemViewType(localPosition: Int) = banner?.ordinal ?: 0
