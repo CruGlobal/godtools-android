@@ -8,15 +8,12 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_ID
+import com.h6ah4i.android.widget.advrecyclerview.headerfooter.AbstractHeaderFooterWrapperAdapter
 import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder
 import org.cru.godtools.BR
 import org.cru.godtools.R
 
-class BannerHeaderAdapter internal constructor(builder: Builder) : BaseEmptyListHeaderFooterAdapter(builder) {
-    class Builder : BaseEmptyListHeaderFooterAdapter.Builder<Builder>() {
-        fun build() = BannerHeaderAdapter(this)
-    }
-
+class BannerHeaderAdapter : AbstractHeaderFooterWrapperAdapter<RecyclerView.ViewHolder, RecyclerView.ViewHolder>() {
     var banner: Banner? = null
         set(value) {
             val changed = field != value
@@ -26,6 +23,7 @@ class BannerHeaderAdapter internal constructor(builder: Builder) : BaseEmptyList
 
     val callbacks = ObservableField<BannerCallbacks?>()
 
+    // region Header
     override fun getHeaderItemCount() = if (banner != null) 1 else 0
     override fun getHeaderItemViewType(localPosition: Int) = banner?.ordinal ?: 0
     override fun getHeaderItemId(localPosition: Int) = banner?.ordinal?.toLong() ?: NO_ID
@@ -37,6 +35,15 @@ class BannerHeaderAdapter internal constructor(builder: Builder) : BaseEmptyList
         binding.setVariable(BR.callbacks, callbacks)
         return DataBindingViewHolder(binding)
     }
+    override fun onBindHeaderItemViewHolder(holder: RecyclerView.ViewHolder, localPosition: Int) = Unit
+    // endregion Header
+
+    // region Footer
+    override fun getFooterItemCount() = 0
+    override fun onCreateFooterItemViewHolder(parent: ViewGroup, viewType: Int) =
+        throw UnsupportedOperationException("onCreateFooterItemViewHolder not supported")
+    override fun onBindFooterItemViewHolder(holder: RecyclerView.ViewHolder, localPosition: Int) = Unit
+    // endregion Footer
 }
 
 enum class Banner(@LayoutRes val layout: Int) {
