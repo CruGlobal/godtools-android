@@ -2,5 +2,5 @@
 <resources>
     <dimen name="tools_card_corner_radius">6dp</dimen>
     <dimen name="tools_card_margin_horiz">16dp</dimen>
-    <dimen name="tools_card_margin_vert">5dp</dimen>
+    <dimen name="tools_card_margin_vert">12dp</dimen>
 </resources>
