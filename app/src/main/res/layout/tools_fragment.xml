@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.ViewGroup.LayoutParams" />
+
+        <variable name="tools" type="android.database.Cursor" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/emptyListUi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:visibleIf="@{tools != null &amp;&amp; tools.count == 0}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tools"
+                android:layout_width="match_parent"
+                android:layout_height="@{tools.count == 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT, default=match_parent}"
+                android:layout_gravity="top"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_tool_card" />
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

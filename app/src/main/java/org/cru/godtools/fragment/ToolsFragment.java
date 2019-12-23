@@ -24,11 +24,10 @@ import org.cru.godtools.R;
 import org.cru.godtools.adapter.Banner;
 import org.cru.godtools.adapter.BannerCallbacks;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
-import org.cru.godtools.adapter.BannerHeaderAdapter.Builder;
-import org.cru.godtools.adapter.BaseEmptyListHeaderFooterAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.content.ToolsCursorLoader;
+import org.cru.godtools.databinding.ToolsFragmentBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
@@ -56,8 +55,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
-public class ToolsFragment extends BasePlatformFragment
-        implements BannerCallbacks, ToolsAdapter.Callbacks, BaseEmptyListHeaderFooterAdapter.EmptyCallbacks {
+public class ToolsFragment extends BasePlatformFragment implements BannerCallbacks, ToolsAdapter.Callbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -80,6 +78,9 @@ public class ToolsFragment extends BasePlatformFragment
 
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ int mMode = MODE_ADDED;
+
+    @Nullable
+    private ToolsFragmentBinding mBinding;
 
     @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
@@ -123,12 +124,15 @@ public class ToolsFragment extends BasePlatformFragment
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tools, container, false);
+        mBinding = ToolsFragmentBinding.inflate(inflater, container, false);
+        inflateEmptyListUi(inflater, savedInstanceState);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateBindingTools();
         setupToolsList();
     }
 
@@ -140,6 +144,7 @@ public class ToolsFragment extends BasePlatformFragment
 
     void onLoadResources(@Nullable final Cursor cursor) {
         mResources = cursor;
+        updateBindingTools();
         updateToolsList();
     }
 
@@ -196,8 +201,7 @@ public class ToolsFragment extends BasePlatformFragment
         }
     }
 
-    @Override
-    public void onEmptyActionClick() {
+    void onEmptyActionClick() {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onNoToolsAvailableAction();
@@ -216,6 +220,7 @@ public class ToolsFragment extends BasePlatformFragment
     public void onDestroyView() {
         cleanupToolsList();
         super.onDestroyView();
+        mBinding = null;
     }
     // endregion Lifecycle
 
@@ -260,6 +265,12 @@ public class ToolsFragment extends BasePlatformFragment
         getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
+    private void updateBindingTools() {
+        if (mBinding != null) {
+            mBinding.setTools(mResources);
+        }
+    }
+
     // region Tools List
     @Nullable
     @BindView(R.id.tools)
@@ -287,26 +298,10 @@ public class ToolsFragment extends BasePlatformFragment
                 adapter = mToolsDragDropAdapter;
             }
 
-            // configure empty list view if required for the current mode
-            switch (mMode) {
-                case MODE_ADDED:
-                    mToolsHeaderAdapter = new Builder()
-                            .layout(R.layout.list_item_none_large_icon)
-                            .emptyIcon(R.drawable.ic_find_tools)
-                            .emptyAction(R.string.nav_find_tools)
-                            .build();
-                    break;
-                case MODE_AVAILABLE:
-                    mToolsHeaderAdapter = new Builder()
-                            .emptyText(R.string.text_tools_all_installed)
-                            .build();
-                    break;
-                default:
-                    mToolsHeaderAdapter = null;
-            }
-            if (mToolsHeaderAdapter != null) {
+            // configure banner view if required for the current mode
+            if (mMode == MODE_ADDED) {
+                mToolsHeaderAdapter = new BannerHeaderAdapter();
                 mToolsHeaderAdapter.getCallbacks().set(this);
-                mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
                 adapter = mToolsHeaderAdapter;
             }
@@ -325,18 +320,12 @@ public class ToolsFragment extends BasePlatformFragment
     }
 
     private void updateToolsList() {
-        if (mToolsHeaderAdapter != null) {
-            mToolsHeaderAdapter.setShowEmptyFooter(mResources != null && mResources.getCount() == 0);
-        }
         if (mToolsAdapter != null) {
             mToolsAdapter.swapCursor(mResources);
         }
     }
 
     private void cleanupToolsList() {
-        if (mToolsHeaderAdapter != null) {
-            mToolsHeaderAdapter.setEmptyCallbacks(null);
-        }
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
@@ -355,6 +344,21 @@ public class ToolsFragment extends BasePlatformFragment
         mToolsAdapter = null;
     }
     // endregion Tools List
+
+    // region Empty List UI
+    private void inflateEmptyListUi(@NonNull final LayoutInflater inflater, @Nullable final Bundle savedInstanceState) {
+        if (mBinding != null) {
+            final int layout = mMode == MODE_ADDED ? R.layout.tools_added_empty_ui : R.layout.tools_available_empty_ui;
+            final View emptyUi = inflater.inflate(layout, mBinding.emptyListUi);
+
+            // HACK: quick and dirty way to attach an OnClickListener
+            final View button = emptyUi.findViewById(R.id.action);
+            if (button != null) {
+                button.setOnClickListener(v -> onEmptyActionClick());
+            }
+        }
+    }
+    // endregion Empty List UI
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
