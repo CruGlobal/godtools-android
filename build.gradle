@@ -23,7 +23,7 @@ buildscript {
                 kotlin             : '1.3.61',
                 leakcanary         : '2.0',
                 lightweightStream  : '1.2.1',
-                materialDesign     : '1.1.0-rc01',
+                materialDesign     : '1.2.0-alpha03',
                 mockito            : '3.2.4',
                 mockitoKotlin      : '2.1.0',
                 okhttp3            : '3.12.6',
