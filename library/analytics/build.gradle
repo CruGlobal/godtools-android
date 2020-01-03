@@ -28,7 +28,6 @@ android {
 
 dependencies {
     implementation project(':library:base')
-    api project(':library:base-kt')
 
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 

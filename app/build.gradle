@@ -128,7 +128,6 @@ kapt {
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')
-    implementation project(':library:base-kt')
     implementation project(':library:config')
     implementation project(':library:db')
     implementation project(':library:download-manager')

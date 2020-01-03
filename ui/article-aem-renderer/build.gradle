@@ -16,7 +16,6 @@ android {
 
 dependencies {
     implementation project(':library:base')
-    api project(':library:base-kt')
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:model-events')
