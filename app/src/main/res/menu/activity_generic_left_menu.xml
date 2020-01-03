@@ -28,7 +28,7 @@
     </item>
 
     <item
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/menu_heading_account">
         <menu>
             <group android:id="@+id/group_login_items">
@@ -49,7 +49,7 @@
     </item>
 
     <item
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         android:title="@string/menu_heading_share">
         <menu>
             <item
@@ -69,7 +69,7 @@
     </item>
 
     <item
-        android:orderInCategory="300"
+        android:orderInCategory="400"
         android:title="@string/menu_heading_legal">
         <menu>
             <item
