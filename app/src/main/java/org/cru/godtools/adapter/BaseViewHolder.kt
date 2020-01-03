@@ -9,5 +9,5 @@ internal abstract class BaseViewHolder(rootView: View) : RecyclerView.ViewHolder
         ButterKnife.bind(this, rootView)
     }
 
-    protected open fun bind(position: Int) {}
+    protected open fun bind(position: Int) = Unit
 }
