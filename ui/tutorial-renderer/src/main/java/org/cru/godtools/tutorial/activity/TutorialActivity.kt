@@ -81,7 +81,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     private fun setupViewPager() {
         viewPager = findViewById<ViewPager>(R.id.tutorial_viewpager)?.also {
-            it.adapter = TutorialPagerAdapter(pageSet.pages, this)
+            it.adapter = TutorialPagerAdapter(supportFragmentManager, pageSet.pages)
             it.setupMenuVisibility()
             it.setupIndicator()
         }

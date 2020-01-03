@@ -8,6 +8,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -22,6 +26,9 @@ dependencies {
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
 
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "me.relex:circleindicator:${deps.circleindicator}"
 }
