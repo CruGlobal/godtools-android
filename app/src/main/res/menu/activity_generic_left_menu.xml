@@ -29,7 +29,7 @@
 
     <item
         android:orderInCategory="100"
-        android:title="Account">
+        android:title="@string/menu_heading_account">
         <menu>
             <group android:id="@+id/group_login_items">
                 <item
