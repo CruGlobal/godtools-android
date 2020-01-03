@@ -21,7 +21,6 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.Banner;
 import org.cru.godtools.adapter.BannerCallbacks;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
@@ -36,6 +35,7 @@ import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
+import org.cru.godtools.widget.BannerType;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -232,7 +232,9 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
     private void updateTrainingBannerVisibility() {
         if (mToolsHeaderAdapter != null) {
             if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
-                mToolsHeaderAdapter.setBanner(Banner.TUTORIAL_TRAINING);
+                mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
+                mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
+                mToolsHeaderAdapter.setSecondaryCallback(b -> dismissBanner());
             } else {
                 mToolsHeaderAdapter.setBanner(null);
             }
@@ -301,7 +303,6 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
             // configure banner view if required for the current mode
             if (mMode == MODE_ADDED) {
                 mToolsHeaderAdapter = new BannerHeaderAdapter();
-                mToolsHeaderAdapter.getCallbacks().set(this);
                 mToolsHeaderAdapter.setAdapter(adapter);
                 adapter = mToolsHeaderAdapter;
             }
