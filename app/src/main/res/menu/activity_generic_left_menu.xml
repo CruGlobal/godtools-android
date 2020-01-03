@@ -24,19 +24,25 @@
                 android:id="@+id/action_contact_us"
                 android:orderInCategory="400"
                 android:title="@string/menu_contact_us" />
+        </menu>
+    </item>
 
+    <item
+        android:orderInCategory="100"
+        android:title="Account">
+        <menu>
             <group android:id="@+id/group_login_items">
                 <item
                     android:id="@+id/action_login"
-                    android:orderInCategory="600"
+                    android:orderInCategory="100"
                     android:title="@string/menu_login" />
                 <item
                     android:id="@+id/action_logout"
-                    android:orderInCategory="600"
+                    android:orderInCategory="200"
                     android:title="@string/menu_logout" />
                 <item
                     android:id="@+id/action_signup"
-                    android:orderInCategory="700"
+                    android:orderInCategory="300"
                     android:title="@string/menu_signup" />
             </group>
         </menu>
