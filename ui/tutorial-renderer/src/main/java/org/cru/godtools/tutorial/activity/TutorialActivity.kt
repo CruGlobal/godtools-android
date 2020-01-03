@@ -7,13 +7,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.forEach
-import androidx.viewpager.widget.ViewPager
-import me.relex.circleindicator.CircleIndicator
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.adapter.TutorialPagerAdapter
+import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
 private const val ARG_PAGE_SET = "pageSet"
@@ -77,27 +80,27 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     // region ViewPager
-    private var viewPager: ViewPager? = null
+    private var viewPager: ViewPager2? = null
 
     private fun setupViewPager() {
-        viewPager = findViewById<ViewPager>(R.id.tutorial_viewpager)?.also {
-            it.adapter = TutorialPagerAdapter(supportFragmentManager, pageSet.pages)
+        viewPager = findViewById<ViewPager2>(R.id.tutorial_viewpager)?.also {
+            it.adapter = TutorialPagerAdapter(this, pageSet.pages)
             it.setupMenuVisibility()
             it.setupIndicator()
         }
     }
 
-    private fun ViewPager.setupIndicator() {
-        this@TutorialActivity.findViewById<CircleIndicator>(R.id.on_boarding_indicator)?.let { indicator ->
+    private fun ViewPager2.setupIndicator() {
+        this@TutorialActivity.findViewById<CircleIndicator3>(R.id.on_boarding_indicator)?.let { indicator ->
             indicator.setViewPager(this)
-            addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) = updateIndicatorVisibility(indicator, position)
             })
             updateIndicatorVisibility(indicator)
         }
     }
 
-    private fun ViewPager.updateIndicatorVisibility(indicator: CircleIndicator, page: Int = currentItem) {
+    private fun ViewPager2.updateIndicatorVisibility(indicator: CircleIndicator3, page: Int = currentItem) {
         indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
     // endregion ViewPager
@@ -105,14 +108,14 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     // region Menu
     private var menu: Menu? = null
 
-    private fun ViewPager.setupMenuVisibility() {
-        addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+    private fun ViewPager2.setupMenuVisibility() {
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = updateMenuVisibility(position)
         })
         updateMenuVisibility()
     }
 
-    private fun ViewPager.updateMenuVisibility(page: Int = currentItem) {
+    private fun ViewPager2.updateMenuVisibility(page: Int = currentItem) {
         val visible = pageSet.pages[page].showMenu
         menu?.forEach { it.isVisible = visible }
     }
@@ -121,7 +124,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     // region TutorialCallbacks
     override fun nextPage() {
         viewPager?.apply {
-            currentItem = (currentItem + 1).coerceAtMost(adapter?.count ?: 0)
+            currentItem = (currentItem + 1).coerceAtMost(adapter?.itemCount ?: 0)
         }
     }
 
@@ -132,4 +135,10 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     override fun finishTutorial() = finish()
     // endregion TutorialCallbacks
+}
+
+internal class TutorialPagerAdapter(activity: FragmentActivity, private val pages: List<Page>) :
+    FragmentStateAdapter(activity) {
+    override fun getItemCount() = pages.size
+    override fun createFragment(position: Int) = TutorialPageFragment(pages[position])
 }
