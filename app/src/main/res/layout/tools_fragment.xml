@@ -32,7 +32,6 @@
                 android:layout_gravity="top"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_tool_card" />
