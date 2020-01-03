@@ -96,8 +96,6 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
 
     // endregion Lifecycle Events
 
-    override fun enableAppsee(): Boolean = false
-
     /**
      * @return true if the intent was successfully processed, otherwise return false
      */
