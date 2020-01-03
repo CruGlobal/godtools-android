@@ -30,7 +30,7 @@ buildscript {
                 picasso            : '2.71828',
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.4',
-                retrofit2          : '2.6.2',
+                retrofit2          : '2.7.1',
                 snowplow           : '1.3.3',
                 splitties          : '3.0.0-alpha06',
                 taptargetview      : '1.13.0',
