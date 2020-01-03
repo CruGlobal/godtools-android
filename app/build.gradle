@@ -180,6 +180,9 @@ dependencies {
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
+    // enable firebase in app messaging in debug builds for Justin Sooter to test it out
+    debugImplementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
+
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
