@@ -92,6 +92,16 @@
         </activity>
 
         <activity
+            android:name=".activity.GlobalDashboardActivity"
+            android:label="@string/title_my_profile"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".activity.LanguageSelectionActivity"
             android:parentActivityName=".activity.LanguageSettingsActivity"
             android:screenOrientation="@integer/default_screen_orientation">
