@@ -3,7 +3,6 @@ package org.cru.godtools.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.RecyclerView
 import com.h6ah4i.android.widget.advrecyclerview.headerfooter.AbstractHeaderFooterWrapperAdapter
 import com.sergivonavi.materialbanner.Banner
@@ -30,8 +29,6 @@ class BannerHeaderAdapter : AbstractHeaderFooterWrapperAdapter<BannerViewHolder,
             headerAdapter?.notifyItemChanged(0)
         }
 
-    val callbacks = ObservableField<BannerCallbacks?>()
-
     // region Header
     override fun getHeaderItemCount() = 1
     override fun getHeaderItemId(localPosition: Int) = 1L
@@ -54,11 +51,6 @@ class BannerHeaderAdapter : AbstractHeaderFooterWrapperAdapter<BannerViewHolder,
         throw UnsupportedOperationException("onCreateFooterItemViewHolder not supported")
     override fun onBindFooterItemViewHolder(holder: RecyclerView.ViewHolder, localPosition: Int) = Unit
     // endregion Footer
-}
-
-interface BannerCallbacks {
-    fun openTrainingTutorial() = Unit
-    fun dismissBanner() = Unit
 }
 
 class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

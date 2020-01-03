@@ -21,7 +21,6 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.BannerCallbacks;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
@@ -55,7 +54,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
-public class ToolsFragment extends BasePlatformFragment implements BannerCallbacks, ToolsAdapter.Callbacks {
+public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.Callbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -139,7 +138,7 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
     @Override
     public void onStart() {
         super.onStart();
-        updateTrainingBannerVisibility();
+        updateVisibleBanner();
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
@@ -164,7 +163,7 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
     protected void onUpdateFeatureDiscovery(@NonNull final String feature) {
         super.onUpdateFeatureDiscovery(feature);
         if (FEATURE_TUTORIAL_TRAINING.equals(feature)) {
-            updateTrainingBannerVisibility();
+            updateVisibleBanner();
         }
     }
 
@@ -228,30 +227,26 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
         return mMode == MODE_AVAILABLE;
     }
 
-    // region Training Banner
-    private void updateTrainingBannerVisibility() {
+    // region Banners
+    private void updateVisibleBanner() {
         if (mToolsHeaderAdapter != null) {
             if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
-                mToolsHeaderAdapter.setSecondaryCallback(b -> dismissBanner());
+                mToolsHeaderAdapter.setSecondaryCallback(b -> settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
             } else {
                 mToolsHeaderAdapter.setBanner(null);
             }
         }
     }
 
-    public void openTrainingTutorial() {
+    private void openTrainingTutorial() {
         final Activity activity = getActivity();
         if (activity != null) {
             TutorialActivityKt.startTutorialActivity(activity, PageSet.TRAINING);
         }
     }
-
-    public void dismissBanner() {
-        settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
-    }
-    // endregion Training Banner
+    // endregion Banners
 
     @CallSuper
     protected void syncData(final boolean force) {
@@ -315,7 +310,7 @@ public class ToolsFragment extends BasePlatformFragment implements BannerCallbac
                 mToolsDragDropManager.attachRecyclerView(mToolsView);
             }
 
-            updateTrainingBannerVisibility();
+            updateVisibleBanner();
             updateToolsList();
         }
     }
