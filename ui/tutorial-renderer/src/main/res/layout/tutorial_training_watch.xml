@@ -4,6 +4,8 @@
 
     <data>
         <variable name="callbacks" type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
+        <variable name="isVisible" type="boolean" />
+        <variable name="lifecycleOwner2" type="androidx.lifecycle.LifecycleOwner" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,6 +58,8 @@
             app:layout_constraintTop_toBottomOf="@id/subheadBottom"
             app:showFullScreenButton="false"
             app:showSeekBar="false"
+            app:pauseVideoWhen="@{!isVisible}"
+            app:lifecycleOwner="@{lifecycleOwner2}"
             app:showVideoCurrentTime="false"
             app:showVideoDuration="false"
             app:showYouTubeButton="false"

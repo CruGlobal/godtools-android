@@ -23,10 +23,14 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     private var binding: ViewDataBinding? = null
 
     // region Lifecycle
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, page.layout, container, false)
-        return binding?.root
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        DataBindingUtil.inflate<ViewDataBinding>(inflater, page.layout, container, false).also {
+            it.lifecycleOwner = this
+            it.setVariable(BR.callbacks, this)
+            it.setVariable(BR.lifecycleOwner2, this)
+            it.setVariable(BR.isVisible, false)
+            binding = it
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,6 +43,12 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         super.onDestroyView()
     }
     // endregion Lifecycle
+
+    // HACK: we leverage menu visibility to infer when the fragment is visible or not
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        binding?.setVariable(BR.isVisible, menuVisible)
+    }
 
     private fun ViewDataBinding.startAnimations() {
         when (this) {
