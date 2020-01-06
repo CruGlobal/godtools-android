@@ -55,7 +55,6 @@
     <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
     <string name="menu_language_settings">Language Settings</string>
     <string name="title_language_settings">Language Settings</string>
-    <string name="title_my_profile">My Profile</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>
     <string name="action_language_parallel_select">Select a Parallel Language</string>
@@ -71,4 +70,6 @@
 Here’s a link to a web version of the app {{share_link}} \n\n
 
 Let’s talk more!</string>
+    <!-- Global Activity -->
+    <string name="title_my_profile">My Profile</string>
 </resources>

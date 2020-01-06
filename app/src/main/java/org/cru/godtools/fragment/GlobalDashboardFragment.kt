@@ -8,10 +8,15 @@ import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
 
 class GlobalDashboardFragment : BasePlatformFragment() {
 
-    private lateinit var binding: FragmentGlobalDashboardBinding
+    private var binding: FragmentGlobalDashboardBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGlobalDashboardBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
