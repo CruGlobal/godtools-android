@@ -16,7 +16,8 @@ android {
 }
 
 dependencies {
-
+    implementation project(':library:base')
+    api project(':library:base-kt')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
@@ -26,8 +27,11 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
 
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
+    implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
 }
