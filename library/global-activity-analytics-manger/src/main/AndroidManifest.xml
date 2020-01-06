@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.global.activity.analytics.manger">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+</manifest>
