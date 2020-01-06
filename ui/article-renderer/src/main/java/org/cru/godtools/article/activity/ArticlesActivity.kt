@@ -3,7 +3,7 @@ package org.cru.godtools.article.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.activity.startAemArticleActivity
@@ -16,8 +16,6 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.xml.model.Text
 import java.util.Locale
-
-private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
 fun Activity.startArticlesActivity(toolCode: String, language: Locale, category: String?) {
     val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
@@ -42,7 +40,7 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
 
     override fun onStart() {
         super.onStart()
-        loadInitialFragmentIfNeeded()
+        loadPrimaryFragmentIfNeeded()
     }
 
     override fun onResume() {
@@ -56,12 +54,14 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
 
     // endregion Lifecycle Events
 
-    private fun loadInitialFragmentIfNeeded() {
-        supportFragmentManager?.apply {
-            if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
-                transaction {
-                    replace(R.id.frame, newArticlesFragment(tool, locale, category), TAG_MAIN_FRAGMENT)
-                }
+    private fun loadPrimaryFragmentIfNeeded() {
+        with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return
+
+            commit {
+                val fragment = newArticlesFragment(tool, locale, category)
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
             }
         }
     }

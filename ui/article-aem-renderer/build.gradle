@@ -63,7 +63,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
-    kapt "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
