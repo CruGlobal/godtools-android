@@ -24,7 +24,7 @@ class GlobalDashboardActivity : BasePlatformActivity() {
 
     private fun loadInitialFragment() {
         supportFragmentManager.commit {
-           replace(R.id.frame, GlobalDashboardFragment(), TAG_GLOBAL_DASHBOARD_FRAGMENT)
+            replace(R.id.frame, GlobalDashboardFragment(), TAG_GLOBAL_DASHBOARD_FRAGMENT)
         }
     }
 }
