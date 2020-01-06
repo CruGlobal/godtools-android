@@ -25,5 +25,5 @@ dependencies {
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
     androidTestImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

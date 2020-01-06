@@ -1,5 +1,3 @@
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -13,8 +11,6 @@ dependencies {
 
     implementation project(':ui:article-aem-renderer')
     implementation project(':ui:base-tool')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"

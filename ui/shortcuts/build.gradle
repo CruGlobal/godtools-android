@@ -1,5 +1,3 @@
-apply plugin: 'kotlin-android'
-
 android {
     defaultConfig {
         javaCompileOptions {
@@ -21,8 +19,6 @@ dependencies {
     implementation project(':ui:base-app')
     implementation project(':ui:tract-renderer')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
-
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
@@ -31,5 +27,5 @@ dependencies {
     // transitive dependencies for ui:tract-renderer, needed to build this module
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
