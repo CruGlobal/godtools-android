@@ -39,10 +39,6 @@ android {
         lintConfig rootProject.file("analysis/lint/lint.xml")
         checkDependencies true
     }
-    packagingOptions {
-        pickFirst 'META-INF/NOTICE.txt'
-        pickFirst 'META-INF/LICENSE.txt'
-    }
 
     dataBinding {
         enabled = true
