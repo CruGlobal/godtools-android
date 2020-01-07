@@ -14,7 +14,7 @@ buildscript {
                 evernoteAndroidJob : '1.4.2',
                 facebook           : '5.13.0',
                 facebookStetho     : '1.5.1',
-                gtoSupport         : '3.2.0-SNAPSHOT',
+                gtoSupport         : '3.2.0',
                 guava              : '28.2-android',
                 hamcrest           : '2.2',
                 jetbrainsAnnotation: '18.0.0',
