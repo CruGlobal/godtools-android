@@ -23,13 +23,6 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // Crashlytics config
-        ext {
-            betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
-            betaDistributionNotifications = false
-            betaDistributionReleaseNotes = generateFirebaseAppDistributionReleaseNotes()
-        }
     }
 
     compileOptions {
