@@ -39,6 +39,11 @@ android {
         lintConfig rootProject.file("analysis/lint/lint.xml")
         checkDependencies true
     }
+    packagingOptions {
+        // XXX: Exclude Kotlin metadata to prevent a 'kotlin_module' collision and reduce the size of the APK.
+        //      If we ever start utilizing kotlin reflection this will need to be removed.
+        exclude '**/*.kotlin_*'
+    }
 
     dataBinding {
         enabled = true
