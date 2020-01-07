@@ -6,8 +6,9 @@ import org.cru.godtools.global.activity.analytics.manger.model.GlobalActivityAna
 
 @Dao
 abstract class GlobalActivityRepository internal constructor(private val db: GlobalActivityAnalyticsDatabase) {
+
     @Transaction
-    open fun addOrUpdateGlobalActivity(globalActivity: GlobalActivityAnalytics){
+    open fun addOrUpdateGlobalActivity(globalActivity: GlobalActivityAnalytics) {
         db.globalActivityDao().insertOrReplace(globalActivity)
     }
 }

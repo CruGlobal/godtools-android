@@ -17,7 +17,7 @@ abstract class GlobalActivityAnalyticsDatabase internal constructor() : RoomData
 
     abstract fun globalActivityDao(): GlobalActivityDao
 
-    abstract fun globalActivityRepository(): GlobalActivityAnalyticsDatabase
+    abstract fun globalActivityRepository(): GlobalActivityRepository
 
     companion object : SingletonHolder<GlobalActivityAnalyticsDatabase, Context>({
         Room.databaseBuilder(it.applicationContext, GlobalActivityAnalyticsDatabase::class.java, DATABASE_NAME)

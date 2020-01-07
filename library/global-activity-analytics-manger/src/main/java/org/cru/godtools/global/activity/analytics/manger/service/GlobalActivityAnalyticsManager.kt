@@ -29,14 +29,16 @@ class GlobalActivityAnalyticsManager internal constructor(private val context: C
     private fun buildGlobalActivityApi(): GlobalActivityAnalyticsApi {
         val okHttp = buildOkHttpClient()
 
-        val classConverter = JsonApiConverter.Builder()
-            .addClasses(GlobalActivityAnalytics::class.java)
-            .build()
-
         // create RetroFit API
         return Retrofit.Builder()
             .baseUrl(url)
-            .addConverterFactory(JsonApiConverterFactory.create(classConverter))
+            .addConverterFactory(
+                JsonApiConverterFactory.create(
+                    JsonApiConverter.Builder()
+                        .addClasses(GlobalActivityAnalytics::class.java)
+                        .build()
+                )
+            )
             .callFactory(okHttp)
             .build()
             .create(GlobalActivityAnalyticsApi::class.java)
