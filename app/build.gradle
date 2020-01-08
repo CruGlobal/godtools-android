@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
-        versionCode rootProject.versionCode + 1
+        versionCode rootProject.versionCode
 
         minSdkVersion minSdk
         targetSdkVersion targetSdk
@@ -23,13 +23,6 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // Crashlytics config
-        ext {
-            betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
-            betaDistributionNotifications = false
-            betaDistributionReleaseNotes = generateFirebaseAppDistributionReleaseNotes()
-        }
     }
 
     compileOptions {
@@ -45,10 +38,6 @@ android {
     lintOptions {
         lintConfig rootProject.file("analysis/lint/lint.xml")
         checkDependencies true
-    }
-    packagingOptions {
-        pickFirst 'META-INF/NOTICE.txt'
-        pickFirst 'META-INF/LICENSE.txt'
     }
 
     dataBinding {

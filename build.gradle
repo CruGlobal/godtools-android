@@ -14,7 +14,7 @@ buildscript {
                 evernoteAndroidJob : '1.4.2',
                 facebook           : '5.13.0',
                 facebookStetho     : '1.5.1',
-                gtoSupport         : '3.2.0-SNAPSHOT',
+                gtoSupport         : '3.2.0',
                 guava              : '28.2-android',
                 hamcrest           : '2.2',
                 jetbrainsAnnotation: '18.0.0',
@@ -60,9 +60,8 @@ buildscript {
                 viewPager2        : '1.0.0',
         ]
         deps.firebase = [
-                core        : '17.2.1',
-                dynamicLinks: '16.1.5',
-                perf        : '19.0.4',
+                core: '17.2.1',
+                perf: '19.0.4',
         ]
         uris = [
                 mobileContentApi: [
@@ -97,7 +96,7 @@ plugins {
 
 group 'org.cru.android'
 version '5.1.5-SNAPSHOT'
-ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4025200
+ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 
 // define dependency versions for this project
 ext {

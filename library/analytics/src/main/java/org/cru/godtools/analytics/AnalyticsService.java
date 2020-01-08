@@ -13,9 +13,6 @@ public interface AnalyticsService {
     String ACTION_SHARE = "Share Icon Engaged";
     String ACTION_EXIT_LINK = "Exit Link Engaged";
 
-    /* Legacy constants */
-    String CATEGORY_CONTENT_EVENT = "Content Event";
-
     @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
         return AnalyticsDispatcher.getAnalyticsService(context.getApplicationContext());
