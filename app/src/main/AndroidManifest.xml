@@ -73,7 +73,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ToolDetailsActivity"
+            android:name=".ui.tooldetails.ToolDetailsActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
             <meta-data

@@ -17,13 +17,13 @@ import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.LanguageSettingsActivityKt;
-import org.cru.godtools.activity.ToolDetailsActivityKt;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
+import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
