@@ -60,8 +60,9 @@ buildscript {
                 viewPager2        : '1.0.0',
         ]
         deps.firebase = [
-                core: '17.2.1',
-                perf: '19.0.4',
+                core          : '17.2.1',
+                inAppMessaging: '19.0.2',
+                perf          : '19.0.4',
         ]
         uris = [
                 mobileContentApi: [
