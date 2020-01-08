@@ -78,6 +78,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private var loginItem: MenuItem? = null
     private var signupItem: MenuItem? = null
     private var logoutItem: MenuItem? = null
+    private var myAccountItem: MenuItem? = null
 
     private var primaryLanguage = Settings.getDefaultLanguage()
     private var parallelLanguage: Locale? = null
@@ -161,6 +162,10 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             }
             R.id.action_signup -> {
                 launchLogin(true)
+                return true
+            }
+            R.id.action_my_account -> {
+                launchGlobalDashboard()
                 return true
             }
             R.id.action_logout -> {
@@ -252,6 +257,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 loginItem = findItem(R.id.action_login)
                 signupItem = findItem(R.id.action_signup)
                 logoutItem = findItem(R.id.action_logout)
+                myAccountItem = findItem(R.id.action_my_account)
             }
             updateNavigationDrawerMenu()
         }
@@ -262,6 +268,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         loginItem?.isVisible = guid == null
         signupItem?.isVisible = guid == null
         logoutItem?.isVisible = guid != null
+        myAccountItem?.isVisible = guid != null
 
         drawerMenu?.let {
             // hide all menu items if we aren't showing login items for this language
@@ -344,6 +351,10 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 loginDialogFragment.show(fm.beginTransaction().addToBackStack("loginDialog"), TAG_KEY_LOGIN_DIALOG)
             }
         }
+    }
+
+    private fun launchGlobalDashboard() {
+        this.startGlobalDashboardActvity()
     }
 
     private fun launchContactUs() {

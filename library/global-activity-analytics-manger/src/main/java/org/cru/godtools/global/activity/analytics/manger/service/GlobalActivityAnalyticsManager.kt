@@ -18,7 +18,7 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
 
-class GlobalActivityAnalyticsManager internal constructor(context: Context, private val url: String) {
+class GlobalActivityAnalyticsManager(context: Context, private val url: String) {
 
     // region database
 
@@ -27,7 +27,7 @@ class GlobalActivityAnalyticsManager internal constructor(context: Context, priv
     private fun getGlobalActivity() : GlobalActivityAnalytics {
         return globalActivityDatabase.globalActivityDao().getGlobalActivity()
     }
-    
+
     private fun updateOrAddGlobalActivity(globalActivityAnalytics: GlobalActivityAnalytics) {
         globalActivityAnalytics.lastUpdated = Date()
         globalActivityDatabase.globalActivityRepository().addOrUpdateGlobalActivity(globalActivityAnalytics)
@@ -93,6 +93,4 @@ class GlobalActivityAnalyticsManager internal constructor(context: Context, priv
     }
 
     // endregion api
-
-    companion object Singleton
 }

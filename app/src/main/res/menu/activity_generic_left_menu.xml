@@ -33,6 +33,11 @@
         <menu>
             <group android:id="@+id/group_login_items">
                 <item
+                    android:id="@+id/action_my_account"
+                    android:orderInCategory="500"
+                    android:title="My Account"
+                    />
+                <item
                     android:id="@+id/action_login"
                     android:orderInCategory="100"
                     android:title="@string/menu_login" />
