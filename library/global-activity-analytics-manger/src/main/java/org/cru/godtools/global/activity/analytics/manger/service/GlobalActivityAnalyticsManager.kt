@@ -1,6 +1,7 @@
 package org.cru.godtools.global.activity.analytics.manger.service
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
@@ -13,17 +14,44 @@ import org.cru.godtools.global.activity.analytics.manger.model.GlobalActivityAna
 import retrofit2.Retrofit
 import timber.log.Timber
 import java.security.NoSuchAlgorithmException
+import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
 
-class GlobalActivityAnalyticsManager internal constructor(private val context: Context, private val url: String) {
+class GlobalActivityAnalyticsManager internal constructor(context: Context, private val url: String) {
+
     // region database
 
-    val globalActivityDatabase = GlobalActivityAnalyticsDatabase.getInstance(context)
+    private val globalActivityDatabase = GlobalActivityAnalyticsDatabase.getInstance(context)
+
+    private fun getGlobalActivity() : GlobalActivityAnalytics {
+        return globalActivityDatabase.globalActivityDao().getGlobalActivity()
+    }
+    
+    private fun updateOrAddGlobalActivity(globalActivityAnalytics: GlobalActivityAnalytics) {
+        globalActivityAnalytics.lastUpdated = Date()
+        globalActivityDatabase.globalActivityRepository().addOrUpdateGlobalActivity(globalActivityAnalytics)
+    }
 
     //endregion database
 
+    // region global access
+
+    fun getGlobalActivityLiveData(): LiveData<GlobalActivityAnalytics> {
+
+        if (getGlobalActivity().lastUpdated?.time ?: 0 < Date().time) {
+            globalActivityApi.download().execute().body()?.data?.get(0)?.let {
+                updateOrAddGlobalActivity(it)
+            }
+        }
+
+        return globalActivityDatabase.globalActivityDao().getGlobalActivityLiveData()
+    }
+
+    // endregion global access
+
     // region api
+
     private val globalActivityApi: GlobalActivityAnalyticsApi = buildGlobalActivityApi()
 
     private fun buildGlobalActivityApi(): GlobalActivityAnalyticsApi {
@@ -65,4 +93,6 @@ class GlobalActivityAnalyticsManager internal constructor(private val context: C
     }
 
     // endregion api
+
+    companion object Singleton
 }

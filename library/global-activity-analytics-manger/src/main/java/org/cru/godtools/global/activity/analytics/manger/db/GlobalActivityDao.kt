@@ -18,5 +18,9 @@ interface GlobalActivityDao {
 
     @AnyThread
     @Query("SELECT * FROM global_activity_analytics WHERE id = 1")
-    fun getGlobalActivity(): LiveData<GlobalActivityAnalytics>
+    fun getGlobalActivityLiveData(): LiveData<GlobalActivityAnalytics>
+
+    @AnyThread
+    @Query("SELECT * FROM global_activity_analytics WHERE id = 1")
+    fun getGlobalActivity(): GlobalActivityAnalytics
 }
