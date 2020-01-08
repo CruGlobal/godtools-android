@@ -34,20 +34,19 @@
             <group android:id="@+id/group_login_items">
                 <item
                     android:id="@+id/action_my_account"
-                    android:orderInCategory="500"
-                    android:title="My Account"
-                    />
+                    android:orderInCategory="100"
+                    android:title="@string/menu_my_account" />
                 <item
                     android:id="@+id/action_login"
-                    android:orderInCategory="100"
+                    android:orderInCategory="200"
                     android:title="@string/menu_login" />
                 <item
                     android:id="@+id/action_logout"
-                    android:orderInCategory="200"
+                    android:orderInCategory="300"
                     android:title="@string/menu_logout" />
                 <item
                     android:id="@+id/action_signup"
-                    android:orderInCategory="300"
+                    android:orderInCategory="400"
                     android:title="@string/menu_signup" />
             </group>
         </menu>
