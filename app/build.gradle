@@ -121,7 +121,6 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:download-manager')
     implementation project(':library:initial-content')
-    implementation project(':library:global-activity-analytics-manger')
     implementation project(':library:model')
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
