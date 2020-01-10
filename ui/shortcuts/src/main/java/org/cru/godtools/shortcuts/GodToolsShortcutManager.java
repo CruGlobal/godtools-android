@@ -407,7 +407,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             try {
                 icon = IconCompat.createWithAdaptiveBitmap(
                         Picasso.get()
-                                .load(FileUtils.getFile(mContext, banner.getLocalFileName()))
+                                .load(FileUtils.getGodToolsFile(mContext, banner.getLocalFileName()))
                                 .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                                 .centerCrop()
                                 .get());

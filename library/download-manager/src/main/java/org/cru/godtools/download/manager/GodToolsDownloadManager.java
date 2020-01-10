@@ -302,7 +302,7 @@ public final class GodToolsDownloadManager {
     @SuppressWarnings("checkstyle:RightCurly")
     void downloadAttachment(final long attachmentId) {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -370,7 +370,7 @@ public final class GodToolsDownloadManager {
     public void importAttachment(@NonNull final Attachment attachment, @NonNull final InputStream in)
             throws IOException {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -440,7 +440,7 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     void downloadLatestPublishedTranslation(@NonNull final TranslationKey key) {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -489,7 +489,7 @@ public final class GodToolsDownloadManager {
     public void storeTranslation(@NonNull final Translation translation, @NonNull final InputStream zipStream,
                                  final long size) throws IOException {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -581,7 +581,7 @@ public final class GodToolsDownloadManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void cleanFilesystem() {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -609,7 +609,7 @@ public final class GodToolsDownloadManager {
                     .forEach(File::delete);
 
             // delete any orphaned files
-            Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+            Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
                     .map(Stream::of).stream().flatMap(s -> s)
                     .filter(f -> mDao.find(LocalFile.class, f.getName()) == null)
                     .forEach(File::delete);
@@ -622,7 +622,7 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     void detectMissingFiles() {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -632,7 +632,7 @@ public final class GodToolsDownloadManager {
             lock.lock();
 
             // get the set of all downloaded files
-            final Set<File> files = Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+            final Set<File> files = Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
                     .map(Stream::of).stream().flatMap(s -> s)
                     .filter(File::isFile)
                     .collect(Collectors.toSet());

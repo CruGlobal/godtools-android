@@ -160,7 +160,7 @@ public class ManifestManager {
         mExecutor.execute(() -> {
             try {
                 // find the file on disk
-                final File file = FileUtils.getFile(mContext, manifestName);
+                final File file = FileUtils.getGodToolsFile(mContext, manifestName);
 
                 // parse the Manifest from the specified XML file
                 final Manifest manifest;
@@ -216,7 +216,7 @@ public class ManifestManager {
         mExecutor.execute(() -> {
             try {
                 // find the file on disk
-                final File file = FileUtils.getFile(mContext, page.getLocalFileName());
+                final File file = FileUtils.getGodToolsFile(mContext, page.getLocalFileName());
                 if (file == null) {
                     result.set(page);
                     return;
