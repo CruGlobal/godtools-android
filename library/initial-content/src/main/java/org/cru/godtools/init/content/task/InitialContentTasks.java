@@ -87,7 +87,7 @@ public class InitialContentTasks implements Runnable {
             mJsonApiConverter = new JsonApiConverter.Builder()
                     .addClasses(Language.class)
                     .addClasses(Tool.class, Translation.class, Attachment.class)
-                    .addConverters(new ToolTypeConverter())
+                    .addConverters(ToolTypeConverter.INSTANCE)
                     .addConverters(new LocaleTypeConverter())
                     .build();
         }
