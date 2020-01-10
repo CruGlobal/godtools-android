@@ -123,9 +123,8 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     @CallSuper
     protected fun onTheKeyEvent(event: TheKeyEvent) = updateNavigationDrawerMenu()
 
-    protected fun onUpdatePrimaryLanguage() {}
-
-    protected fun onUpdateParallelLanguage() {}
+    protected fun onUpdatePrimaryLanguage() = Unit
+    protected fun onUpdateParallelLanguage() = Unit
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -302,7 +301,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
 
     // region Navigation Menu actions
-
     private fun openPlayStore() {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")))
