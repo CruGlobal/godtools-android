@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools">
 
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
@@ -24,8 +23,6 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="false" />
-
-    <uses-sdk tools:overrideLibrary="com.pierfrancescosoffritti.androidyoutubeplayer"/>
 
     <application
         android:name=".GodToolsApplication"
