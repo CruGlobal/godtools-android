@@ -1,4 +1,4 @@
-package org.cru.godtools.activity
+package org.cru.godtools.ui.languages
 
 import android.app.Activity
 import android.content.Intent
@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.fragment.newLanguageSettingsFragment
 
 fun Activity.startLanguageSettingsActivity() {
     Intent(this, LanguageSettingsActivity::class.java)
@@ -42,8 +42,9 @@ class LanguageSettingsActivity : BasePlatformActivity() {
     private fun loadPrimaryFragmentIfNeeded() {
         with(supportFragmentManager) {
             if (primaryNavigationFragment != null) return
+
             commit {
-                val fragment = newLanguageSettingsFragment()
+                val fragment = LanguageSettingsFragment()
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

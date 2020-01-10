@@ -1,4 +1,4 @@
-package org.cru.godtools.fragment
+package org.cru.godtools.ui.languages
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,7 @@ import butterknife.Optional
 import org.cru.godtools.R
 import org.cru.godtools.activity.startLanguageSelectionActivity
 import org.cru.godtools.base.util.LocaleUtils
-
-fun newLanguageSettingsFragment(): LanguageSettingsFragment = LanguageSettingsFragment()
+import org.cru.godtools.fragment.BasePlatformFragment
 
 class LanguageSettingsFragment : BasePlatformFragment() {
     @JvmField
@@ -22,8 +21,7 @@ class LanguageSettingsFragment : BasePlatformFragment() {
     @BindView(R.id.parallel_language)
     internal var parallelLanguageView: TextView? = null
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_language_settings, container, false)
     }
@@ -42,8 +40,7 @@ class LanguageSettingsFragment : BasePlatformFragment() {
         super.onUpdateParallelLanguage()
         updateLanguages()
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     private fun updateLanguages() {
         primaryLanguageView?.apply {

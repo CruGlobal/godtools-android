@@ -43,6 +43,7 @@ import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
+import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
