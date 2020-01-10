@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.GodTools.Headline"
-                    android:text="@{viewModel.globalActivityAnalytics.users}"
+                    android:text="@{viewModel.users}"
                     tools:text="750,520" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -168,7 +168,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.GodTools.Headline"
-                    android:text="@{viewModel.globalActivityAnalytics.gospelPresentation}"
                     tools:text="40,000" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -211,7 +210,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.GodTools.Headline"
-                    android:text="@{viewModel.globalActivityAnalytics.launches}"
                     tools:text="3,700" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -254,7 +252,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.GodTools.Headline"
-                    android:text="@{viewModel.globalActivityAnalytics.countries}"
                     tools:text="90" />
 
                 <androidx.appcompat.widget.AppCompatTextView

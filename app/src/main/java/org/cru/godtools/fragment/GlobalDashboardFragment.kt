@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
+import androidx.lifecycle.map
 import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
-import org.cru.godtools.global.activity.analytics.manger.service.GlobalActivityAnalyticsManager
+import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.GlobalActivityAnalytics
 
 class GlobalDashboardFragment : BasePlatformFragment() {
 
@@ -17,13 +20,9 @@ class GlobalDashboardFragment : BasePlatformFragment() {
 
     private lateinit var viewModel: GlobalDashboardViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(GlobalDashboardViewModel::class.java).also {
-            it.context = requireContext()
-            it.dataManger = GlobalActivityAnalyticsManager(requireContext(), MOBILE_CONTENT_API)
-        }
+        viewModel = ViewModelProviders.of(this).get(GlobalDashboardViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,6 +30,16 @@ class GlobalDashboardFragment : BasePlatformFragment() {
             it.viewModel = viewModel
         }
         return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getGlobalActivityData(requireContext())
+
+        viewModel.users.observe(this, Observer { users ->
+            users
+        })
     }
 
     override fun onDestroyView() {
@@ -41,9 +50,15 @@ class GlobalDashboardFragment : BasePlatformFragment() {
 
 class GlobalDashboardViewModel : ViewModel() {
 
-    var context: Context? = null
+    val globalActivity by lazy { MutableLiveData<GlobalActivityAnalytics>() }
 
-    var dataManger: GlobalActivityAnalyticsManager? = null
+    val users by lazy { globalActivity.map { it?.users.toString() } }
+    val sessions by lazy {  globalActivity.map { it?.launches.toString() } }
+    val countries by lazy {  globalActivity.map { it?.countries.toString() } }
+    val presentations by lazy {  globalActivity.map { it?.gospelPresentation.toString() } }
 
-    val globalActivityAnalytics = dataManger?.getGlobalActivityLiveData()
+    fun getGlobalActivityData(context: Context) {
+        val manager = GodToolsDownloadManager.getInstance(context)
+        globalActivity.value = manager.globalActivity
+    }
 }

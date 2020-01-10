@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
+import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
 import org.cru.godtools.api.GodToolsApi;
@@ -27,6 +28,7 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Attachment;
+import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
@@ -81,6 +83,7 @@ import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
@@ -829,6 +832,34 @@ public final class GodToolsDownloadManager {
         final Message m = Message.obtain(mHandler, GodToolsDownloadManager.this::enqueueCleanFilesystem);
         m.what = MSG_CLEAN;
         mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
+    }
+
+    @Nullable
+    public GlobalActivityAnalytics getGlobalActivity() {
+        GlobalActivityAnalytics data = getGlobalActivityFromDao();
+        if (data == null || data.getLastUpdated().getTime() - (1000*60*60*24) < new Date().getTime()) {
+            try {
+                JsonApiObject<GlobalActivityAnalytics> body = mApi.globalActivityApi.download().execute().body();
+                data = body != null ? body.getDataSingle() : null;
+                if (data != null) {
+                    data.setLastUpdated(new Date());
+                    mDao.update(data);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return data;
+    }
+
+    private GlobalActivityAnalytics getGlobalActivityFromDao() {
+        try {
+            return mDao.streamCompat(Query.select(GlobalActivityAnalytics.class)).findSingle().orElse(null);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+        return null;
     }
 
     // endregion Download & Cleaning Scheduling Methods
