@@ -258,7 +258,7 @@ public class ManifestManager {
         mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_MANIFEST.eq(manifestName)))
                 .peek(t -> t.setDownloaded(false))
                 .forEach(t -> mDao.update(t, TranslationTable.COLUMN_DOWNLOADED));
-        EventBus.getDefault().post(new TranslationUpdateEvent());
+        EventBus.getDefault().post(TranslationUpdateEvent.INSTANCE);
 
         // remove the broken manifest from the cache
         synchronized (mCache) {

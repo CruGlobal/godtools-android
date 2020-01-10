@@ -185,7 +185,7 @@ public final class GodToolsDownloadManager {
             language.setCode(locale);
             language.setAdded(true);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
+            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -204,7 +204,7 @@ public final class GodToolsDownloadManager {
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(this::pruneStaleTranslations, directExecutor());
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
+            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -216,7 +216,7 @@ public final class GodToolsDownloadManager {
         tool.setCode(code);
         tool.setAdded(true);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
         return update;
     }
 
@@ -227,7 +227,7 @@ public final class GodToolsDownloadManager {
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(this::pruneStaleTranslations, directExecutor());
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
     }
 
     @AnyThread
@@ -290,7 +290,7 @@ public final class GodToolsDownloadManager {
             // if any translations were updated, send a broadcast
             final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
-                eventBus.post(new TranslationUpdateEvent());
+                eventBus.post(TranslationUpdateEvent.INSTANCE);
                 enqueueCleanFilesystem();
             }
         } finally {
@@ -358,7 +358,7 @@ public final class GodToolsDownloadManager {
 
                     // update attachment download state
                     mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(new AttachmentUpdateEvent());
+                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
                 }
             } finally {
                 lock.unlock();
@@ -403,7 +403,7 @@ public final class GodToolsDownloadManager {
                 } finally {
                     // update attachment download state
                     mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(new AttachmentUpdateEvent());
+                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
                 }
             }
         } finally {
@@ -509,7 +509,7 @@ public final class GodToolsDownloadManager {
                 // mark translation as downloaded
                 translation.setDownloaded(true);
                 mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
-                mEventBus.post(new TranslationUpdateEvent());
+                mEventBus.post(TranslationUpdateEvent.INSTANCE);
             } finally {
                 lock.unlock();
 

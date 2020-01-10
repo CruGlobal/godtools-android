@@ -225,13 +225,13 @@ public class InitialContentTasks implements Runnable {
 
             // send a broadcast if we inserted any tools, translations, or attachments
             if (toolsChanged) {
-                mEventBus.post(new ToolUpdateEvent());
+                mEventBus.post(ToolUpdateEvent.INSTANCE);
             }
             if (translationsChanged) {
-                mEventBus.post(new TranslationUpdateEvent());
+                mEventBus.post(TranslationUpdateEvent.INSTANCE);
             }
             if (attachmentsChanged) {
-                mEventBus.post(new AttachmentUpdateEvent());
+                mEventBus.post(AttachmentUpdateEvent.INSTANCE);
             }
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
