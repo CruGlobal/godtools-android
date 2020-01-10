@@ -16,7 +16,7 @@ env:
     - secure: "OWotE1RHqcqlAwBDN3P4EBUzqhMe5ElGEXMnBNdVGRl/uPnaOqbvneEiYst7AwvgRX3q19awg0WGDhFlQoZbHMX6ZxrBPqAnZD+GH8Db7pjo04yq6pMcRfS3vx+w17b44nhvvWJahqNHzktNROJJz0yaomM9mwgzlLbnxlOP4HI="
   matrix:
     - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-17 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-18 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
