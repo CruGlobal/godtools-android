@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.MainThread
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ABOUT
@@ -19,11 +19,8 @@ fun Activity.startAboutActivity() {
         .also { startActivity(it) }
 }
 
-private const val TAG_MAIN_FRAGMENT = "mainFragment"
-
 class AboutActivity : BasePlatformActivity() {
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_generic_fragment_with_nav_drawer)
@@ -31,23 +28,24 @@ class AboutActivity : BasePlatformActivity() {
 
     override fun onStart() {
         super.onStart()
-        loadInitialFragmentIfNeeded()
+        loadPrimaryFragmentIfNeeded()
     }
 
     override fun onResume() {
         super.onResume()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, getDeviceLocale(this)))
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     @MainThread
-    private fun loadInitialFragmentIfNeeded() {
-        supportFragmentManager?.apply {
-            if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
-                transaction {
-                    replace(R.id.frame, createAboutFragment(), TAG_MAIN_FRAGMENT)
-                }
+    private fun loadPrimaryFragmentIfNeeded() {
+        with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return
+
+            commit {
+                val fragment = createAboutFragment()
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
             }
         }
     }
