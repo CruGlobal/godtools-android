@@ -6,6 +6,7 @@
     <!-- Tools UI -->
     <string name="nav_find_tools">Аспаптарды табуу</string>
     <string name="nav_my_tools">Менин аспаптарым</string>
+    <string name="action_tools_open">ачуу</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
 </resources>

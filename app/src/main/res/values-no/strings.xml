@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Del</string>
     <string name="menu_heading_legal">Juridisk</string>
     <string name="menu_about">Om</string>
-    <string name="menu_help">Hjelp</string>
+    <string name="menu_help">Vanlige spørsmål</string>
     <string name="menu_contact_us">Kontakt oss</string>
+    <string name="menu_login">Logg inn</string>
+    <string name="menu_signup">Opprett konto</string>
+    <string name="menu_logout">Logg ut</string>
     <string name="menu_share_godtools">Del GodTools-appen</string>
     <string name="menu_share_story">Del en historie med oss</string>
     <string name="menu_rate">Vurder GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d språk</item>
     </plurals>
     <string name="text_tools_all_installed">Du har lastet ned alle tilgjengelige verktøy.</string>
+    <string name="menu_add_to_home">Legg til å hjemskjermen</string>
+    <string name="action_tools_open">Åpne verktøy</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Over 60 språk</string>
+    <string name="feature_discovery_title_language_settings">Over 80 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
     <string name="title_language_settings">Språkinnstillinger</string>
     <string name="title_language_primary">Hovedspråk</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Del GodTools med noen på morsmålet deres.</string>
     <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
     <string name="label_language_none">Ingen</string>
+    <string name="label_language_search">Filtrer språk</string>
     <!-- Sharing -->
     <string name="share_general_message">Her er koblingen for å laste ned appen vi så på i dag: http://godtoolsapp.com \n\n
 
-		Her er en kobling til en nettversjon av appen {{share_link}} \n\n
+Her er en kobling til en nettversjon av appen {{share_link}} \n\n
 
-		La oss snakke mer!</string>
+La oss snakke mer!</string>
 </resources>

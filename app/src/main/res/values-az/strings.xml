@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Paylaş</string>
     <string name="menu_heading_legal">Hüquqi</string>
     <string name="menu_about">Haqqında</string>
-    <string name="menu_help">Kömək</string>
+    <string name="menu_help">Tez-tez verilən suallar</string>
     <string name="menu_contact_us">Bizimlə əlaqə</string>
+    <string name="menu_login">Daxil ol</string>
+    <string name="menu_signup">Hesab yarat</string>
+    <string name="menu_logout">Çıx</string>
     <string name="menu_share_godtools">GodTools App paylaşın</string>
     <string name="menu_share_story">Bizimlə hekayənizi paylaşın</string>
     <string name="menu_terms_of_use">İstifadə şərtləri</string>
@@ -33,8 +36,10 @@
         <item quantity="other">%1$,d Dillər</item>
     </plurals>
     <string name="text_tools_all_installed">Bütün mövcud alətləri yükləmisiniz.</string>
+    <string name="menu_add_to_home">Ana səhifəyə əlavə et</string>
+    <string name="action_tools_open">Aləti aç</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ Dillər</string>
+    <string name="feature_discovery_title_language_settings">80+ dil</string>
     <string name="menu_language_settings">Dil parametrləri</string>
     <string name="title_language_settings">Dil parametrləri</string>
     <string name="title_language_primary">Əsas dil</string>
@@ -43,10 +48,11 @@
     <string name="text_language_parallel_description">GodTools-u insanlarla öz dillərində paylaş</string>
     <string name="text_language_warning">Hər alət bütün dillərdə mövcud deyil.</string>
     <string name="label_language_none">Heç biri</string>
+    <string name="label_language_search">Dilləri filtrlə</string>
     <!-- Sharing -->
-    <string name="share_general_message">Bu gün baxdığımız app-a keçid aşağıdadır: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Bu gün baxdığımız tətbiqi yükləmək üçün keçid aşağıdadır: http://godtoolsapp.com \n\n
 
-App-ın veb versiyasına keçid {{share_link}} \n\n
+Tətbiqin veb versiyasına keçid {{share_link}} \n\n
 
 Gəlin daha çox danışaq!</string>
 </resources>

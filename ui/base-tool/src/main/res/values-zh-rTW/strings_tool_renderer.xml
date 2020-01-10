@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">安裝</string>
     <string name="menu_share_tool">分享</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">使用以下管道分享「%1$s」：</string>
     <string name="tool_not_found">找不到您要求的工具</string>
     <string name="tool_loading">工具正在載入中⋯⋯</string>

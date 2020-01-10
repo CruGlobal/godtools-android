@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Berbagi</string>
     <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Tentang</string>
-    <string name="menu_help">Bantuan</string>
+    <string name="menu_help">Tanya Jawab Umum</string>
     <string name="menu_contact_us">Hubungi Kami</string>
+    <string name="menu_login">Masuk</string>
+    <string name="menu_signup">Buat Akun</string>
+    <string name="menu_logout">Keluar</string>
     <string name="menu_share_godtools">Bergbagi App GodTools</string>
     <string name="menu_share_story">Berbagi Cerita Dengan Kami</string>
     <string name="menu_rate">Nilai GodTools</string>
@@ -32,8 +35,10 @@
         <item quantity="other">%1$,d Bahasa</item>
     </plurals>
     <string name="text_tools_all_installed">Anda sudah mengunduh semua tool yang tersedia.</string>
+    <string name="menu_add_to_home">Tambahkan ke Layar Beranda</string>
+    <string name="action_tools_open">Buka Alat</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ Bahasa</string>
+    <string name="feature_discovery_title_language_settings">80+ Bahasa</string>
     <string name="menu_language_settings">Pengaturan Bahasa</string>
     <string name="title_language_settings">Pengaturan Bahasa</string>
     <string name="title_language_primary">Bahasa Utama</string>
@@ -42,6 +47,7 @@
     <string name="text_language_parallel_description">Berbagi GodTools dengan seseorang dalam bahasa asli mereka.</string>
     <string name="text_language_warning">Tidak semua alat tersedia dalam setiap bahasa.</string>
     <string name="label_language_none">Tidak ada</string>
+    <string name="label_language_search">Filter Bahasa</string>
     <!-- Sharing -->
     <string name="share_general_message">Ini adalah tautan untuk mengunduh aplikasi yang kita lihat hari ini: http://godtoolsapp.com \n\n
 

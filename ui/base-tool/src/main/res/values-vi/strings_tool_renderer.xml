@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Cài đặt</string>
     <string name="menu_share_tool">Chia sẻ</string>
     <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Chia sẻ “%1$s” sử dụng</string>

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">分享</string>
     <string name="menu_heading_legal">法律條款</string>
     <string name="menu_about">關於</string>
-    <string name="menu_help">協助</string>
+    <string name="menu_help">常見問題</string>
     <string name="menu_contact_us">聯絡我們</string>
+    <string name="menu_login">登入</string>
+    <string name="menu_signup">建立帳號</string>
+    <string name="menu_logout">登出</string>
     <string name="menu_share_godtools">分享 GodTools 應用程式</string>
     <string name="menu_share_story">與我們分享故事</string>
     <string name="menu_rate">評價GodTools</string>
@@ -32,9 +35,10 @@
         <item quantity="other">%1$,d 種語言</item>
     </plurals>
     <string name="text_tools_all_installed">您已經下載所有可用工具了。</string>
+    <string name="menu_add_to_home">加到主頁</string>
     <string name="action_tools_open">開啟工具</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">超過 60 種語言</string>
+    <string name="feature_discovery_title_language_settings">超過 80 種語言</string>
     <string name="menu_language_settings">語言選項</string>
     <string name="title_language_settings">語言選項</string>
     <string name="title_language_primary">主要語言</string>
@@ -43,10 +47,11 @@
     <string name="text_language_parallel_description">以他人的母語與他人分享God Tools。</string>
     <string name="text_language_warning">並非所有工具都包含所有語言的版本。</string>
     <string name="label_language_none">無</string>
+    <string name="label_language_search">篩選語言</string>
     <!-- Sharing -->
-    <string name="share_general_message">我今天與您分享的應用程式下載連結為：http://godtoolsapp.com \n\n
+    <string name="share_general_message">這是我們今天體驗的應用程式：http://godtoolsapp.com \n\n
 
 這是通往應用程式網頁版的連結：{{share_link}}\n\n
 
-看完後我們可以再聊更多內容！</string>
+看完後再談！</string>
 </resources>

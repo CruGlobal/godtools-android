@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Jagamine</string>
     <string name="menu_heading_legal">Juriidiline teave</string>
     <string name="menu_about">Teave</string>
-    <string name="menu_help">Abi</string>
+    <string name="menu_help">Korduvalt küsitud küsimused</string>
     <string name="menu_contact_us">Kontakt</string>
+    <string name="menu_login">Logi sisse</string>
+    <string name="menu_signup">Loo konto</string>
+    <string name="menu_logout">Logi välja</string>
     <string name="menu_share_godtools">Jaga Jumala Tööriistu</string>
     <string name="menu_share_story">Jaga meiega oma lugu</string>
     <string name="menu_rate">Hinda Jumala Tööriistu</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d keelt</item>
     </plurals>
     <string name="text_tools_all_installed">"Sa oled alla laadinud kõik olemasolevad tööriistad. "</string>
+    <string name="menu_add_to_home">Lisa esilehele</string>
+    <string name="action_tools_open">Ava tööriist</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ keelt</string>
+    <string name="feature_discovery_title_language_settings">80+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
     <string name="title_language_settings">Keeleseaded</string>
     <string name="title_language_primary">Põhikeel</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Jaga Jumala Tööriistu kellegagi tema emakeeles</string>
     <string name="text_language_warning">Kõik tööriistad ei ole kõigis keeltes saadaval.</string>
     <string name="label_language_none">Mitte ühtki</string>
+    <string name="label_language_search">Filtri keeled</string>
     <!-- Sharing -->
-    <string name="share_general_message">Aadressilt htt://godtoolsapp.com\n\ saab alla laadida rakenduse, mida me täna vaatasime
+    <string name="share_general_message">Aadressilt http://godtoolsapp.com saab alla laadida rakenduse, mida me täna vaatame \n\n
 
 Rakenduse veebiversioon on saadaval aadressil {{share_link}}\n\n
 
-Räägime jälle!</string>
+Räägime lähemalt!</string>
 </resources>

@@ -37,6 +37,7 @@
     </plurals>
     <string name="text_tools_all_installed">"আপনি উপলব্ধ সকল সরঞ্জাম ডাউনলোড করেছেন "</string>
     <string name="menu_add_to_home">হোম স্ক্রিন এ যোগ করুন</string>
+    <string name="action_tools_open">খোলা</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">৭০+ ভাষা</string>
     <string name="menu_language_settings">ভাষা ব্যাবস্থা</string>

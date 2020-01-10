@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">インストール</string>
     <string name="menu_share_tool">シェア</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">次を使って “%1$s” をシェア</string>
     <string name="tool_not_found">リクエストしたツールが見つかりません</string>
     <string name="tool_loading">リクエストしたツールを読み込み中…</string>

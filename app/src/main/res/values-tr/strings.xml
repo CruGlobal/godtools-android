@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Paylaş</string>
     <string name="menu_heading_legal">Yasal</string>
     <string name="menu_about">Hakkında</string>
-    <string name="menu_help">Yardım</string>
+    <string name="menu_help">Sık Sorulan Sorular</string>
     <string name="menu_contact_us">Bize Ulaşın</string>
+    <string name="menu_login">Oturum Aç</string>
+    <string name="menu_signup">Hesap Oluştur</string>
+    <string name="menu_logout">Oturumu Kapat</string>
     <string name="menu_share_godtools">GodTools Uygulamasını Paylaş</string>
     <string name="menu_share_story">Bizimle bir Hikâye Paylaşın</string>
     <string name="menu_rate">GodTools\'a Puan Verin</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d Dil</item>
     </plurals>
     <string name="text_tools_all_installed">Kullanılabilir tüm araçları indirdin.</string>
+    <string name="menu_add_to_home">Ana Ekrana Ekle</string>
+    <string name="action_tools_open">Aracı Aç</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60\'ı Aşkın Dil</string>
+    <string name="feature_discovery_title_language_settings">80\'i Aşkın Dil</string>
     <string name="menu_language_settings">Dil Ayarları</string>
     <string name="title_language_settings">Dil Ayarları</string>
     <string name="title_language_primary">Birincil Dil</string>
@@ -44,8 +49,9 @@
     <string name="text_language_parallel_description">God Tools\'u birisiyle kendi ana dilinde paylaşın.</string>
     <string name="text_language_warning">Her araç her dilde kullanıma hazır değildir.</string>
     <string name="label_language_none">Hiçbiri</string>
+    <string name="label_language_search">Dilleri Filtrele</string>
     <!-- Sharing -->
-    <string name="share_general_message">İşte bugün baktığımız uygulamanın indirme bağlantısı: http://godtoolsapp.com \n\n
+    <string name="share_general_message">İşte bugün incelediğimiz uygulamanın indirme bağlantısı: http://godtoolsapp.com \n\n
 
 İşte uygulamanın web sürümünün bir bağlantısı {{share_link}} \n\n
 

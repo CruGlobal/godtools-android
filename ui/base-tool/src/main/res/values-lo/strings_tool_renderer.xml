@@ -3,5 +3,5 @@
     <string name="menu_share_tool">ແບ່ງປັນ</string>
     <string name="share_tool_title">ແບ່ງປັນ “%1$s” ໃຊ້ງານ</string>
     <string name="tool_not_found">ບໍ່ພົບເຄື່ອງມືທີ່ທ່ານຂໍ</string>
-    <string name="tool_loading">ເຄື່ອງມືທີ່ທ່ານຂໍກຳລັງໂຫຼດ...</string>
+    <string name="tool_loading">ເຄື່ອງມືທີ່ທ່ານຂໍກຳລັງໂຫຼດ…</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Встановити</string>
     <string name="menu_share_tool">Переслати</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Перешліть “%1$s” з допомогою</string>
     <string name="tool_not_found">Інструмент не знайдено</string>
     <string name="tool_loading">Ваш інструмент завантажується...</string>

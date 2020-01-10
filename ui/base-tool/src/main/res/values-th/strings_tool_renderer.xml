@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ติดตั้ง</string>
     <string name="menu_share_tool">แชร์</string>
     <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">แชร์การใช้ “%1$s”</string>

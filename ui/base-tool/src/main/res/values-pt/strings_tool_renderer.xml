@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Instalar</string>
     <string name="menu_share_tool">Partilhar</string>
     <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Partilhar \"%1$s\" com</string>

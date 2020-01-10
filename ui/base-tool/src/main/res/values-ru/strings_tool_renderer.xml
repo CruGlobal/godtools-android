@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Установка</string>
     <string name="menu_share_tool">Поделиться</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Поделиться «%1$s» с помощью</string>
     <string name="tool_not_found">Не удалось найти инструмент</string>
     <string name="tool_loading">Загрузка требуемого инструмента...</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Installer</string>
     <string name="menu_share_tool">Del</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Del “%1$s” med</string>
     <string name="tool_not_found">Det værktøj, du anmodede om, blev ikke fundet</string>
-    <string name="tool_loading">Det værktøj, du anmodede om, indlæses...</string>
+    <string name="tool_loading">Det værktøj, du anmodede om, indlæses…</string>
 </resources>

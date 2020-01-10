@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Inštalovať</string>
     <string name="menu_share_tool">Zdieľanie</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Zdieľať „%1$s“ pomocou</string>
     <string name="tool_not_found">Nástroj, o ktorý ste požiadali, sa nepodarilo nájsť</string>
     <string name="tool_loading">Nástroj, o ktorý ste požiadali, sa načítava…</string>

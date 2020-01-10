@@ -12,6 +12,7 @@
         <item quantity="one">%1$d լեզու</item>
         <item quantity="other">%1$d լեզուներով</item>
     </plurals>
+    <string name="action_tools_open">Բացեք</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
 </resources>

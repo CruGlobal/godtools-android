@@ -37,6 +37,7 @@
         <item quantity="many">%1$,d языков</item>
     </plurals>
     <string name="text_tools_all_installed">Вы загрузили все доступные инструменты.</string>
+    <string name="action_tools_open">Открыть инструмент</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 60 языков</string>
     <string name="menu_language_settings">Настройки языка</string>

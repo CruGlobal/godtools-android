@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Partager</string>
     <string name="menu_heading_legal">Mentions légales</string>
     <string name="menu_about">À propos</string>
-    <string name="menu_help">Aide</string>
+    <string name="menu_help">Questions fréquemment posées</string>
     <string name="menu_contact_us">Nous contacter</string>
+    <string name="menu_login">Connexion</string>
+    <string name="menu_signup">Créer un compte</string>
+    <string name="menu_logout">Déconnexion</string>
     <string name="menu_share_godtools">Partager l\'application GodTools</string>
     <string name="menu_share_story">Partager une histoire avec nous</string>
     <string name="menu_rate">Noter GodTools</string>
@@ -34,9 +37,10 @@
         <item quantity="other">%1$,d langues</item>
     </plurals>
     <string name="text_tools_all_installed">Vous avez téléchargé tous les outils disponibles.</string>
+    <string name="menu_add_to_home">Ajouter à l\'écran d\'accueil</string>
     <string name="action_tools_open">Ouvrir l\'outil</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Plus de 60 langues</string>
+    <string name="feature_discovery_title_language_settings">Plus de 80 langues</string>
     <string name="menu_language_settings">Paramètres de langue</string>
     <string name="title_language_settings">Paramètres de langue</string>
     <string name="title_language_primary">Langue principale</string>
@@ -45,10 +49,11 @@
     <string name="text_language_parallel_description">Partagez God Tools avec quelqu\'un dans sa langue maternelle.</string>
     <string name="text_language_warning">Tous les outils ne sont pas disponibles dans toutes les langues.</string>
     <string name="label_language_none">Aucun(e)</string>
+    <string name="label_language_search">Filtrer les langues</string>
     <!-- Sharing -->
-    <string name="share_general_message">Voici le lien pour télécharger l\'application que nous avons découverte aujourd\'hui : http://godtoolsapp.com \n\n
+    <string name="share_general_message">Voici le lien pour télécharger l\'application que nous regardions aujourd\'hui : http://godtoolsapp.com \n\n
 
-Voici un lien vers une version Internet de l\'appli {{share_link}} \n\n
+Voici un lien vers une version web de l\'application {{share_link}} \n\n
 
-Diffusons la parole !</string>
+Parlons plus !</string>
 </resources>

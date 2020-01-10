@@ -7,7 +7,7 @@
     <string name="menu_heading_share">साझा करें</string>
     <string name="menu_heading_legal">वैद्य</string>
     <string name="menu_about">के बारे में</string>
-    <string name="menu_help">सहायता</string>
+    <string name="menu_help">अक्सर पूछे जाने वाले प्रश्न</string>
     <string name="menu_contact_us">सम्पर्क करें</string>
     <string name="menu_login">भीतर आएँ</string>
     <string name="menu_signup">एकाउन्ट खोलें</string>
@@ -37,8 +37,9 @@
     </plurals>
     <string name="text_tools_all_installed">आपने सभी उपलब्ध टूल्स डाउनलोड किए हैं।</string>
     <string name="menu_add_to_home">मुख्य पृष्ठ में जोड़ दें</string>
+    <string name="action_tools_open">टूल खोलें</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">70+ भाषाएँ</string>
+    <string name="feature_discovery_title_language_settings">80+ भाषाएँ</string>
     <string name="menu_language_settings">भाषा को चुनें</string>
     <string name="title_language_settings">भाषा को चुनें</string>
     <string name="title_language_primary">मुख्य भाषा</string>
@@ -47,6 +48,7 @@
     <string name="text_language_parallel_description">GodTools को किसी के साथ अपनी मूल भाषा में साझा करें।</string>
     <string name="text_language_warning">प्रत्येक भाषा में प्रत्येक टूल उपलब्ध नहीं है।</string>
     <string name="label_language_none">कोई नहीं</string>
+    <string name="label_language_search">भाषाएं फिल्टर करें</string>
     <!-- Sharing -->
     <string name="share_general_message">ऐप डाउनलोड करने का लिंक यहाँ दिया गया है जिसे हम आज देख रहे थे: http://godtoolsapp.com \ n \ n
 

@@ -7,12 +7,12 @@
     <string name="menu_heading_share">ਦੱਸੋ</string>
     <string name="menu_heading_legal">ਕਾਨੂੰਨੀ</string>
     <string name="menu_about">ਇਸਦੇ ਬਾਰੇ</string>
-    <string name="menu_help">ਮਦਦ</string>
+    <string name="menu_help">ਅਕਸਰ ਪੁੱਛੇ ਜਾਣ ਵਾਲੇ ਸਵਾਲ</string>
     <string name="menu_contact_us">ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ</string>
     <string name="menu_login">ਲਾਗਿਨ</string>
     <string name="menu_signup">ਖਾਤਾ ਬਣਾਉ</string>
     <string name="menu_logout">ਲਾੱਗ ਆਊਟ</string>
-    <string name="menu_share_godtools">ਗੋਡਟੂਲ ਦੇ ਬਾਰੇ ਦੱਸੋ</string>
+    <string name="menu_share_godtools">ਗੌਡਟੂਲਜ਼ ਐਪ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="menu_share_story">ਸਾਨੂੰ ਆਪਣੀ ਕਹਾਣੀ ਦੱਸੋ</string>
     <string name="menu_rate">ਗੋਡਟੂਲ ਨੂੰ ਦਰਜਾ ਦਿਓ</string>
     <string name="menu_terms_of_use">ਵਰਤੋ ਦੀਆਂ ਸ਼ਰਤਾਂ</string>
@@ -38,8 +38,9 @@
     </plurals>
     <string name="text_tools_all_installed">ਤੁਸੀਂ ਸਾਰੇ ਉਪਲਬਧ ਟੂਲਸ ਡਾਉਨਲੋਡ ਕੀਤੇ ਹਨ।</string>
     <string name="menu_add_to_home">ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ</string>
+    <string name="action_tools_open">ਟੂਲ ਖੋਲ੍ਹੋ</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ ਭਾਸ਼ਾਵਾਂ</string>
+    <string name="feature_discovery_title_language_settings">80+ ਭਾਸ਼ਾਵਾਂ</string>
     <string name="menu_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
     <string name="title_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
     <string name="title_language_primary">ਮੂਲ ਭਾਸ਼ਾ</string>
@@ -48,10 +49,11 @@
     <string name="text_language_parallel_description">ਗੋਡਟੂਲ ਨੂੰ ਕਿਸੇ ਦੂਜੇ ਨਾਲ ਉਸ ਦੀ ਹੀ ਭਾਸ਼ਾ ਵਿੱਚ ਸਾਂਝਿਆਂ ਕਰੋ।</string>
     <string name="text_language_warning">ਹਰੋਕ ਡੂਲ ਹਰੇਕ ਭਾਸ਼ਾ ਵਿੱਚ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ ।</string>
     <string name="label_language_none">ਕੋਈ ਵੀ ਨਹੀਂ</string>
+    <string name="label_language_search">ਭਾਸ਼ਾਵਾਂ ਫਿਲਟਰ ਕਰੋ</string>
     <!-- Sharing -->
-    <string name="share_general_message">"ਜਿਸ ਐਪ ਨੂੰ ਅਸੀਂ ਅੱਜ ਵੇਖ ਰਹੇ ਹਾਂ ਉਸ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰਨ ਦੇ ਲਈ ਇੱਥੇ ਲਿੰਕ ਦਿੱਤਾ ਗਿਆ ਹੈ : http://godtoolsapp.com \n\n
+    <string name="share_general_message">ਇਹ ਜਿਸ ਐਪ ਨੂੰ ਅਸੀਂ ਅੱਜ ਵੇਖ ਰਹੇ ਸੀ ਉਸਨੂੰ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਲਿੰਕ ਹੈ: http://godtoolsapp.com \n\n
 
-ਇਸ ਐਪ ਦੇ ਵੈਬਸਾਈਟ ਅਨੁਵਾਦ ਦਾ ਲਿੰਕ ਇਹ ਹੈ {{share_link}} \n\n
+ਇਹ ਐਪ ਦੇ ਵੈਬ ਸੰਸਕਰਣ ਦਾ ਲਿੰਕ ਹੈ {{share_link}} \n\n
 
-ਆਓ ਹੋਰ ਵੱਧ ਗੱਲ ਕਰੀਏ! "</string>
+ਚਲੋ ਹੋਰ ਗੱਲ ਕਰੀਏ!</string>
 </resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">Veldu hvernig þú myndir vilja deila</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Almennt</string>
+    <string name="menu_heading_share">Deila</string>
+    <string name="menu_heading_legal">Lagaleg atriði</string>
+    <string name="menu_about">Um</string>
+    <string name="menu_help">Algengar spurningar</string>
+    <string name="menu_contact_us">Hafa samband við okkur</string>
+    <string name="menu_login">Innskrá</string>
+    <string name="menu_signup">Búa til aðgang</string>
+    <string name="menu_logout">Útskrá</string>
+    <string name="menu_share_godtools">Deila GodTools appinu</string>
+    <string name="menu_share_story">Deila sögu með okkur</string>
+    <string name="menu_terms_of_use">Notkunarskilmálar</string>
+    <string name="menu_privacy_policy">Persónuverndarstefna</string>
+    <string name="menu_copyright">Höfundarréttur</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Heyrðu hvernig Guð ferðast!</string>
+    <!-- Tools UI -->
+    <string name="nav_find_tools">Finna tól</string>
+    <string name="nav_my_tools">Mín tól</string>
+    <string name="menu_switch_language">Skipta um tungumál</string>
+    <string name="title_add_new_tools">Bæta við nýjum tólum</string>
+    <string name="action_tools_download">Niðurhala</string>
+    <string name="action_tools_remove">Fjarlægja</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">skoðun</item>
+        <item quantity="other">skoðanir</item>
+    </plurals>
+    <string name="label_tools_about">Um</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">Tungumál</item>
+        <item quantity="other">Tungumál</item>
+    </plurals>
+    <string name="text_tools_all_installed">Þú hefur niðurhalað öllum tiltækum tólum.</string>
+    <string name="menu_add_to_home">Bæta við á heimaskjá</string>
+    <string name="action_tools_open">Opna tól</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">80+ tungumál</string>
+    <string name="menu_language_settings">Tungumálastillingar</string>
+    <string name="title_language_settings">Tungumálastillingar</string>
+    <string name="title_language_primary">Aðaltungumál</string>
+    <string name="title_language_parallel">Hliðstætt tungumál</string>
+    <string name="action_language_parallel_select">Veldu hliðstætt tungumál</string>
+    <string name="text_language_parallel_description">Deildu GodTools með einhverjum á þeirra móðurmáli.</string>
+    <string name="text_language_warning">Ekki eru öll tól tiltæk í hverju tungumáli.</string>
+    <string name="label_language_none">Ekkert</string>
+    <string name="label_language_search">Sía tungumál</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Hér er tengilinn til að sækja appið sem við erum að skoða í dag: http://godtoolsapp.com \n\n
+
+Hér er tengill fyrir vefútgáfu appsins {{share_link}}
+\n\n
+
+Spjöllum meira saman!</string>
+</resources>

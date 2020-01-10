@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Magbahagi</string>
     <string name="menu_heading_legal">Ayon sa Batas</string>
     <string name="menu_about">Tungkol dito</string>
-    <string name="menu_help">Tulong</string>
+    <string name="menu_help">Mga Madalas Itanong</string>
     <string name="menu_contact_us">Kontakin Kami</string>
+    <string name="menu_login">Mag-log in</string>
+    <string name="menu_signup">Gumawa ng Account</string>
+    <string name="menu_logout">Mag-log out</string>
     <string name="menu_share_godtools">I-share ang GodTools App</string>
     <string name="menu_share_story">Magbahagi ng Kuwento sa Amin</string>
     <string name="menu_rate">I-rate ang GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d (na) Wika</item>
     </plurals>
     <string name="text_tools_all_installed">Na-download mo ang lahat ng available na tool.</string>
+    <string name="menu_add_to_home">Idagdag sa Home screen</string>
+    <string name="action_tools_open">Buksan ang Tool</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ Wika</string>
+    <string name="feature_discovery_title_language_settings">80+ na Wika</string>
     <string name="menu_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_primary">Pangunahing Wika</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Ibahagi ang GodTools sa isang tao sa kanilang katutubong wika.</string>
     <string name="text_language_warning">Ang bawat tool ay hindi available sa bawat wika.</string>
     <string name="label_language_none">Wala</string>
+    <string name="label_language_search">I-filter ang mga Wika</string>
     <!-- Sharing -->
-    <string name="share_general_message">Narito ang link para i-download ang app na tinitingnan namin ngayon: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Narito ang link para i-download ang app na tinitingnan namin ngayong araw: http://godtoolsapp.com \n\n
 
-		Narito ang isang link sa web na bersyon ng app {{share_link}} \n\n
+Narito ang isang link sa web na bersyon ng app {{share_link}} \n\n
 
-		Mag-usap pa tayo!</string>
+Mag-usap pa tayo!</string>
 </resources>

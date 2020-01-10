@@ -4,5 +4,5 @@
     <string name="menu_share_tool">Jaa</string>
     <string name="share_tool_title">Jaa “%1$s”</string>
     <string name="tool_not_found">Haluamaasi työkalua ei löydy</string>
-    <string name="tool_loading">Haluamaasi työkalua ladataan...</string>
+    <string name="tool_loading">Haluamaasi työkalua ladataan…</string>
 </resources>

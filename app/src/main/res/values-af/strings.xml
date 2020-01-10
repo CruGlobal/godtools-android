@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Deel</string>
     <string name="menu_heading_legal">Wetlik</string>
     <string name="menu_about">Aangaande</string>
-    <string name="menu_help">Hulp</string>
+    <string name="menu_help">Veelgestelde vrae</string>
     <string name="menu_contact_us">Kontak ons</string>
+    <string name="menu_login">Meld aan</string>
+    <string name="menu_signup">Skep rekening</string>
+    <string name="menu_logout">Teken uit</string>
     <string name="menu_share_godtools">Deel die GodTools-toep</string>
     <string name="menu_share_story">Deel \'n storie met ons</string>
     <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
@@ -33,8 +36,10 @@
         <item quantity="other">%1$,d Tale</item>
     </plurals>
     <string name="text_tools_all_installed">Jy het alle beskikbare nutsmiddele afgelaai.</string>
+    <string name="menu_add_to_home">Voeg by tuisskerm</string>
+    <string name="action_tools_open">Maak hulpmiddel oop</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+Tale</string>
+    <string name="feature_discovery_title_language_settings">80+Tale</string>
     <string name="menu_language_settings">Taalinstellings</string>
     <string name="title_language_settings">Taalinstellings</string>
     <string name="title_language_primary">Primêre taal</string>
@@ -43,6 +48,7 @@
     <string name="text_language_parallel_description">Deel GodTools met iemand in hulle moedertaal.</string>
     <string name="text_language_warning">Nie elke hulpmiddel is in elke taal beskikbaar nie.</string>
     <string name="label_language_none">Geen</string>
+    <string name="label_language_search">Filter tale</string>
     <!-- Sharing -->
     <string name="share_general_message">Hier is die skakel om die toep waarna ons vandag kyk af te laai: http://godtoolsapp.com\n\n
 

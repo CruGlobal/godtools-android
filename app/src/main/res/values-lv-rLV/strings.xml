@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Dalīties</string>
     <string name="menu_heading_legal">Jurisprudence</string>
     <string name="menu_about">Par</string>
-    <string name="menu_help">Palīdzība</string>
+    <string name="menu_help">Biežāk uzdotie jautājumi</string>
     <string name="menu_contact_us">Sazinieties ar mums</string>
+    <string name="menu_login">Pierakstīties</string>
+    <string name="menu_signup">Izveidot kontu</string>
+    <string name="menu_logout">Izrakstīties</string>
     <string name="menu_share_godtools">Dalīties ar lietotni GodTools</string>
     <string name="menu_share_story">Pastāstiet mums savu stāstu</string>
     <string name="menu_terms_of_use">Lietošanas noteikumi</string>
@@ -35,8 +38,10 @@
         <item quantity="zero">%1$,d valodu</item>
     </plurals>
     <string name="text_tools_all_installed">Jūs lejupielādējāt visus pieejamos rīkus.</string>
+    <string name="menu_add_to_home">Pievienot sākuma ekrānam</string>
+    <string name="action_tools_open">Atvērt rīku</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ valodas</string>
+    <string name="feature_discovery_title_language_settings">80+ valodas</string>
     <string name="menu_language_settings">Valodas iestatījumi</string>
     <string name="title_language_settings">Valodas iestatījumi</string>
     <string name="title_language_primary">Pirmā valoda</string>
@@ -45,10 +50,11 @@
     <string name="text_language_parallel_description">Dalieties ar GodTools ar citiem viņu dzimtajā valodā</string>
     <string name="text_language_warning">Ne visi rīki ir pieejami visās valodās</string>
     <string name="label_language_none">Nav</string>
+    <string name="label_language_search">Atlasīt valodas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Lūk ir saite uz lietotni, ko šodien apskatījām: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Lūk saite šodien apspriestās lietotnes lejupielādei: http://godtoolsapp.com \n\n
 
-		Lūk saite uz lietotnes pārlūka versiju {{share_link}} \n\n
+Lūk saite uz lietotnes tīmekļa versiju {{share_link}} \n\n
 
-		Aprunāsimies!</string>
+Parunāsim vēl!</string>
 </resources>

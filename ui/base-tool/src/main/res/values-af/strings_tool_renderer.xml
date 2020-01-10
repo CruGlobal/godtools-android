@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Installeer</string>
     <string name="menu_share_tool">Deel</string>
     <string name="share_tool_title">Deel \"%1$s\" deur gebruik te maak van</string>
     <string name="tool_not_found">Die hulpmiddel wat jy gevra het kannie gevind word nie</string>
-    <string name="tool_loading">Die hulpmiddel wat jy aangevra het is besig om te laai...</string>
+    <string name="tool_loading">Die hulpmiddel wat jy aangevra het is besig om te laai…</string>
 </resources>
