@@ -23,7 +23,7 @@ import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 40;
+    private static final int DATABASE_VERSION = 41;
 
     /*
      * Version history
@@ -74,6 +74,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 38: 2018-06-15
      * v5.0.13 - v5.0.18
      * 39: 2018-10-24
+     * 41: 2020-1-10
      */
 
     @NonNull
@@ -111,6 +112,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
+            db.execSQL(Contract.GlobalAnalyticsTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -222,6 +224,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 40:
                         db.execSQL(ToolTable.SQL_V40_ALTER_OVERVIEW_VIDEO);
                         break;
+                    case 41:
+                        db.execSQL(Contract.GlobalAnalyticsTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -263,6 +268,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE);
+            db.execSQL(Contract.GlobalAnalyticsTable.SQL_DELETE_TABLE);
 
             // legacy tables
             db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);

@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
@@ -29,6 +30,7 @@ import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.Contract.GlobalAnalyticsTable;
 
 import java.util.Locale;
 
@@ -54,6 +56,9 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
                      LocalFileTable.SQL_WHERE_PRIMARY_KEY);
         registerType(TranslationFile.class, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
                      new TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(GlobalActivityAnalytics.class, GlobalAnalyticsTable.TABLE_NAME,
+                     GlobalAnalyticsTable.PROJECTION_ALL, new GlobalActivityAnalyticsMapper(),
+                     GlobalAnalyticsTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Nullable
@@ -84,6 +89,8 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
             return getPrimaryKeyWhere(Tool.class, ((Tool) obj).getCode());
         } else if (obj instanceof Base) {
             return getPrimaryKeyWhere(obj.getClass(), ((Base) obj).getId());
+        } else if (obj instanceof GlobalActivityAnalytics) {
+            return getPrimaryKeyWhere(GlobalActivityAnalytics.class, ((GlobalActivityAnalytics) obj).getId());
         }
 
         return super.getPrimaryKeyWhere(obj);
