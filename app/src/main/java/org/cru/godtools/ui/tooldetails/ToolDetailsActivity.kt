@@ -1,18 +1,16 @@
-package org.cru.godtools.activity
+package org.cru.godtools.ui.tooldetails
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.MainThread
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_TOOL_DETAILS
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.fragment.ToolDetailsFragment
-
-private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
     Intent(this, ToolDetailsActivity::class.java)
@@ -25,8 +23,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,8 +58,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
     override fun onToolRemoved() {
         finish()
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     /**
      * @return true if the intent was successfully processed, otherwise return false
@@ -74,11 +70,13 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
 
     @MainThread
     private fun loadInitialFragmentIfNeeded() {
-        supportFragmentManager?.apply {
-            if (findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
-                transaction {
-                    replace(R.id.frame, ToolDetailsFragment.newInstance(tool), TAG_MAIN_FRAGMENT)
-                }
+        with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return
+
+            commit {
+                val fragment = ToolDetailsFragment.newInstance(tool)
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
             }
         }
     }

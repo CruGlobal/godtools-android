@@ -116,13 +116,6 @@ jobs:
     # Configure Firebase App Distribution
     - openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
     deploy:
-#    - provider: script
-#      skip_cleanup: true
-#      script: ./gradlew crashlyticsUploadDistributionProductionDebug -PfirebaseAppDistributionBuild --parallel
-#      on:
-#        repo: CruGlobal/godtools-android
-#        branch: develop
-#        jdk: oraclejdk8
     - provider: script
       skip_cleanup: true
       script: ./gradlew appDistributionUploadProductionDebug -PfirebaseAppDistributionBuild --parallel

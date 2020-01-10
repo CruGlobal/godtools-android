@@ -42,6 +42,8 @@ import org.cru.godtools.base.ui.util.WebUrlLauncher
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.ui.about.startAboutActivity
+import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
@@ -121,9 +123,8 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     @CallSuper
     protected fun onTheKeyEvent(event: TheKeyEvent) = updateNavigationDrawerMenu()
 
-    protected fun onUpdatePrimaryLanguage() {}
-
-    protected fun onUpdateParallelLanguage() {}
+    protected fun onUpdatePrimaryLanguage() = Unit
+    protected fun onUpdateParallelLanguage() = Unit
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -149,67 +150,64 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     @CallSuper
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_about -> {
-                startAboutActivity()
-                return true
-            }
-            R.id.action_login -> {
-                launchLogin(false)
-                return true
-            }
-            R.id.action_signup -> {
-                launchLogin(true)
-                return true
-            }
-            R.id.action_logout -> {
-                theKey.logout()
-                return true
-            }
-            R.id.action_help -> {
-                mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, getDeviceLocale(this)))
-                WebUrlLauncher.openUrl(this, URI_HELP)
-                return true
-            }
-            R.id.action_rate -> {
-                openPlayStore()
-                return true
-            }
-            R.id.action_share -> {
-                launchShare()
-                return true
-            }
-            R.id.action_share_story -> {
-                launchShareStory()
-                return true
-            }
-            R.id.action_contact_us -> {
-                launchContactUs()
-                return true
-            }
-            R.id.action_tutorial -> {
-                launchTrainingTutorial()
-                return true
-            }
-            R.id.action_terms_of_use -> {
-                mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)))
-                WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE)
-                return true
-            }
-            R.id.action_privacy_policy -> {
-                mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, getDeviceLocale(this)))
-                WebUrlLauncher.openUrl(this, URI_PRIVACY)
-                return true
-            }
-            R.id.action_copyright -> {
-                mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, getDeviceLocale(this)))
-                WebUrlLauncher.openUrl(this, URI_COPYRIGHT)
-                return true
-            }
+    override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_about -> {
+            startAboutActivity()
+            true
         }
-
-        return onOptionsItemSelected(item)
+        R.id.action_login -> {
+            launchLogin(false)
+            true
+        }
+        R.id.action_signup -> {
+            launchLogin(true)
+            true
+        }
+        R.id.action_logout -> {
+            theKey.logout()
+            true
+        }
+        R.id.action_help -> {
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, getDeviceLocale(this)))
+            WebUrlLauncher.openUrl(this, URI_HELP)
+            true
+        }
+        R.id.action_rate -> {
+            openPlayStore()
+            true
+        }
+        R.id.action_share -> {
+            launchShare()
+            true
+        }
+        R.id.action_share_story -> {
+            launchShareStory()
+            true
+        }
+        R.id.action_contact_us -> {
+            launchContactUs()
+            true
+        }
+        R.id.action_tutorial -> {
+            launchTrainingTutorial()
+            true
+        }
+        R.id.action_terms_of_use -> {
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)))
+            WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE)
+            true
+        }
+        R.id.action_privacy_policy -> {
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, getDeviceLocale(this)))
+            WebUrlLauncher.openUrl(this, URI_PRIVACY)
+            true
+        }
+        R.id.action_copyright -> {
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, getDeviceLocale(this)))
+            WebUrlLauncher.openUrl(this, URI_COPYRIGHT)
+            true
+        }
+        else -> onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() = when {
@@ -303,7 +301,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
 
     // region Navigation Menu actions
-
     private fun openPlayStore() {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")))

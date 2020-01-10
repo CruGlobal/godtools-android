@@ -60,7 +60,7 @@
         </activity>
 
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".ui.about.AboutActivity"
             android:label="@string/title_about"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
@@ -70,7 +70,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ToolDetailsActivity"
+            android:name=".ui.tooldetails.ToolDetailsActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
@@ -79,7 +79,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LanguageSettingsActivity"
+            android:name=".ui.languages.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
@@ -90,11 +90,11 @@
 
         <activity
             android:name=".activity.LanguageSelectionActivity"
-            android:parentActivityName=".activity.LanguageSettingsActivity"
+            android:parentActivityName=".ui.languages.LanguageSettingsActivity"
             android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cru.godtools.activity.LanguageSettingsActivity" />
+                android:value="org.cru.godtools.ui.languages.LanguageSettingsActivity" />
         </activity>
 
         <activity

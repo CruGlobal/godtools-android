@@ -1,4 +1,4 @@
-package org.cru.godtools.fragment;
+package org.cru.godtools.ui.tooldetails;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -29,6 +29,7 @@ import org.cru.godtools.content.AvailableLanguagesLoader;
 import org.cru.godtools.content.ToolLoader;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.fragment.BasePlatformFragment;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
