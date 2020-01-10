@@ -1,4 +1,4 @@
-package org.cru.godtools.activity
+package org.cru.godtools.ui.about
 
 import android.app.Activity
 import android.content.Intent
@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
-import org.cru.godtools.fragment.createAboutFragment
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -43,7 +43,7 @@ class AboutActivity : BasePlatformActivity() {
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = createAboutFragment()
+                val fragment = AboutFragment()
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

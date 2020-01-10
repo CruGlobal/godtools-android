@@ -63,7 +63,7 @@
         </activity>
 
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".ui.about.AboutActivity"
             android:label="@string/title_about"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
