@@ -3,7 +3,6 @@ package org.cru.godtools.base.util;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 
 import java.util.Locale;
 
@@ -55,12 +54,6 @@ public class LocaleUtils {
 
     @NonNull
     public static Context localizeContextIfPossible(@NonNull final Context context, @NonNull final Locale locale) {
-        // we can't localize the context if android is too old
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return context;
-        }
-
-        // create a localized context
         final Configuration conf = new Configuration(context.getResources().getConfiguration());
         conf.setLocale(locale);
         return context.createConfigurationContext(conf);
