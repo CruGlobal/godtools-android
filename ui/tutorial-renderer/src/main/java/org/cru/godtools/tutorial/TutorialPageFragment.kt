@@ -68,7 +68,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     // region TutorialCallbacks
     override fun nextPage() {
-        eventBus.post(TutorialAnalyticsScreenEvent(page.screenName))
         findListener<TutorialCallbacks>()?.nextPage()
     }
 
