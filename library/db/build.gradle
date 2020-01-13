@@ -1,8 +1,12 @@
 dependencies {
     implementation project(':library:model')
+    implementation project(':library:model-events')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-async:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-db-livedata:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }
