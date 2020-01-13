@@ -6,6 +6,12 @@ android {
     }
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += ['-module-name', 'base-ui']
+    }
+}
+
 dependencies {
     api project(':library:analytics')
     implementation project(':library:model')
