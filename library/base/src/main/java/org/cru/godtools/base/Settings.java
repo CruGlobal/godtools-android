@@ -65,7 +65,7 @@ public final class Settings {
             boolean changed = false;
             switch (feature) {
                 case FEATURE_TUTORIAL_ONBOARDING:
-                    if (getFirstLaunchVersion() <= VERSION_5_1_4) {
+                    if (getFirstLaunchVersion() <= VERSION_5_1_4 || Locale.getDefault() != Locale.ENGLISH) {
                         setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
                         changed = true;
                     }
