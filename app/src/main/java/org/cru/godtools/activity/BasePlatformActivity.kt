@@ -80,6 +80,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private var loginItem: MenuItem? = null
     private var signupItem: MenuItem? = null
     private var logoutItem: MenuItem? = null
+    private var tutorialItem: MenuItem? = null
 
     private var primaryLanguage = Settings.getDefaultLanguage()
     private var parallelLanguage: Locale? = null
@@ -250,6 +251,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 loginItem = findItem(R.id.action_login)
                 signupItem = findItem(R.id.action_signup)
                 logoutItem = findItem(R.id.action_logout)
+                tutorialItem = findItem(R.id.action_tutorial)
             }
             updateNavigationDrawerMenu()
         }
@@ -260,6 +262,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         loginItem?.isVisible = guid == null
         signupItem?.isVisible = guid == null
         logoutItem?.isVisible = guid != null
+        tutorialItem?.isVisible = Locale.getDefault().language.startsWith("en")
 
         drawerMenu?.let {
             // hide all menu items if we aren't showing login items for this language
