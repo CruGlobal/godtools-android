@@ -61,7 +61,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             for (final Language language : existing.values()) {
                 if (language != null && !language.isAdded()) {
                     mDao.delete(language);
-                    coalesceEvent(events, new LanguageUpdateEvent());
+                    coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
                 }
             }
         }
@@ -81,7 +81,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         }
 
         mDao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
-        coalesceEvent(events, new LanguageUpdateEvent());
+        coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
     }
 
     void storeTools(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Tool> tools,
@@ -99,7 +99,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                 final Tool tool = existing.valueAt(i);
                 if (!tool.isAdded()) {
                     mDao.delete(tool);
-                    coalesceEvent(events, new ToolUpdateEvent());
+                    coalesceEvent(events, ToolUpdateEvent.INSTANCE);
 
                     // delete any attachments for this tool
                     mDao.delete(Attachment.class, AttachmentTable.FIELD_TOOL.eq(tool.getId()));
@@ -111,7 +111,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private void storeTool(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
                            @NonNull final Includes includes) {
         mDao.updateOrInsert(tool, CONFLICT_REPLACE, API_FIELDS_TOOL);
-        coalesceEvent(events, new ToolUpdateEvent());
+        coalesceEvent(events, ToolUpdateEvent.INSTANCE);
 
         // persist any related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
@@ -154,7 +154,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                 final Translation translation = mDao.refresh(existing.valueAt(i));
                 if (translation != null && !translation.isDownloaded()) {
                     mDao.delete(translation);
-                    coalesceEvent(events, new TranslationUpdateEvent());
+                    coalesceEvent(events, TranslationUpdateEvent.INSTANCE);
                 }
             }
         }
@@ -163,7 +163,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private void storeTranslation(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                   @NonNull final Translation translation, @NonNull final Includes includes) {
         mDao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
-        coalesceEvent(events, new TranslationUpdateEvent());
+        coalesceEvent(events, TranslationUpdateEvent.INSTANCE);
 
         if (includes.include(Translation.JSON_LANGUAGE)) {
             final Language language = translation.getLanguage();
@@ -189,7 +189,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             for (int i = 0; i < existing.size(); i++) {
                 final Attachment attachment = existing.valueAt(i);
                 mDao.delete(attachment);
-                coalesceEvent(events, new AttachmentUpdateEvent());
+                coalesceEvent(events, AttachmentUpdateEvent.INSTANCE);
             }
         }
     }
@@ -197,6 +197,6 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private void storeAttachment(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                  @NonNull final Attachment attachment, @NonNull final Includes includes) {
         mDao.updateOrInsert(attachment, API_FIELDS_ATTACHMENT);
-        coalesceEvent(events, new AttachmentUpdateEvent());
+        coalesceEvent(events, AttachmentUpdateEvent.INSTANCE);
     }
 }

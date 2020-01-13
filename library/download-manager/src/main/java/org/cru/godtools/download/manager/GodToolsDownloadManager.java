@@ -185,7 +185,7 @@ public final class GodToolsDownloadManager {
             language.setCode(locale);
             language.setAdded(true);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
+            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -204,7 +204,7 @@ public final class GodToolsDownloadManager {
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(this::pruneStaleTranslations, directExecutor());
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
+            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -216,7 +216,7 @@ public final class GodToolsDownloadManager {
         tool.setCode(code);
         tool.setAdded(true);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
         return update;
     }
 
@@ -227,7 +227,7 @@ public final class GodToolsDownloadManager {
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(this::pruneStaleTranslations, directExecutor());
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
     }
 
     @AnyThread
@@ -290,7 +290,7 @@ public final class GodToolsDownloadManager {
             // if any translations were updated, send a broadcast
             final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
-                eventBus.post(new TranslationUpdateEvent());
+                eventBus.post(TranslationUpdateEvent.INSTANCE);
                 enqueueCleanFilesystem();
             }
         } finally {
@@ -302,7 +302,7 @@ public final class GodToolsDownloadManager {
     @SuppressWarnings("checkstyle:RightCurly")
     void downloadAttachment(final long attachmentId) {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -358,7 +358,7 @@ public final class GodToolsDownloadManager {
 
                     // update attachment download state
                     mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(new AttachmentUpdateEvent());
+                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
                 }
             } finally {
                 lock.unlock();
@@ -370,7 +370,7 @@ public final class GodToolsDownloadManager {
     public void importAttachment(@NonNull final Attachment attachment, @NonNull final InputStream in)
             throws IOException {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -403,7 +403,7 @@ public final class GodToolsDownloadManager {
                 } finally {
                     // update attachment download state
                     mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(new AttachmentUpdateEvent());
+                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
                 }
             }
         } finally {
@@ -440,7 +440,7 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     void downloadLatestPublishedTranslation(@NonNull final TranslationKey key) {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -489,7 +489,7 @@ public final class GodToolsDownloadManager {
     public void storeTranslation(@NonNull final Translation translation, @NonNull final InputStream zipStream,
                                  final long size) throws IOException {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -509,7 +509,7 @@ public final class GodToolsDownloadManager {
                 // mark translation as downloaded
                 translation.setDownloaded(true);
                 mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
-                mEventBus.post(new TranslationUpdateEvent());
+                mEventBus.post(TranslationUpdateEvent.INSTANCE);
             } finally {
                 lock.unlock();
 
@@ -581,7 +581,7 @@ public final class GodToolsDownloadManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void cleanFilesystem() {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -609,7 +609,7 @@ public final class GodToolsDownloadManager {
                     .forEach(File::delete);
 
             // delete any orphaned files
-            Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+            Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
                     .map(Stream::of).stream().flatMap(s -> s)
                     .filter(f -> mDao.find(LocalFile.class, f.getName()) == null)
                     .forEach(File::delete);
@@ -622,7 +622,7 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     void detectMissingFiles() {
         // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createResourcesDir(mContext)) {
+        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
             return;
         }
 
@@ -632,7 +632,7 @@ public final class GodToolsDownloadManager {
             lock.lock();
 
             // get the set of all downloaded files
-            final Set<File> files = Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+            final Set<File> files = Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
                     .map(Stream::of).stream().flatMap(s -> s)
                     .filter(File::isFile)
                     .collect(Collectors.toSet());

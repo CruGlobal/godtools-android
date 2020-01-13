@@ -22,7 +22,7 @@ import static android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM;
 import static android.widget.RelativeLayout.ALIGN_PARENT_TOP;
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_VERTICAL;
-import static org.cru.godtools.base.util.FileUtils.getFile;
+import static org.cru.godtools.base.util.FileUtils.getGodToolsFile;
 
 public class ResourceViewUtils {
     private static final int ALIGN_PARENT_START =
@@ -34,7 +34,7 @@ public class ResourceViewUtils {
 
     public static void bind(@Nullable final Resource resource, @Nullable final PicassoImageView view) {
         if (view != null) {
-            view.setPicassoFile(resource != null ? getFile(view.getContext(), resource.getLocalName()) : null);
+            view.setPicassoFile(resource != null ? getGodToolsFile(view.getContext(), resource.getLocalName()) : null);
         }
     }
 

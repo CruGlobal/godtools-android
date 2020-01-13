@@ -108,7 +108,7 @@ public class GodToolsApi {
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
                 .addClasses(Followup.class)
-                .addConverters(new ToolTypeConverter())
+                .addConverters(ToolTypeConverter.INSTANCE)
                 .addConverters(new LocaleTypeConverter())
                 .build();
     }
