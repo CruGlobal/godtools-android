@@ -66,7 +66,7 @@ public final class Settings {
             switch (feature) {
                 case FEATURE_TUTORIAL_ONBOARDING:
                     if (getFirstLaunchVersion() <= VERSION_5_1_4 ||
-                            Locale.getDefault().getLanguage().startsWith("en")) {
+                            !Locale.getDefault().getLanguage().startsWith("en")) {
                         setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
                         changed = true;
                     }
