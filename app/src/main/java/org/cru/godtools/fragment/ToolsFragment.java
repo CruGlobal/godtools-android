@@ -230,7 +230,8 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     // region Banners
     private void updateVisibleBanner() {
         if (mToolsHeaderAdapter != null) {
-            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED) {
+            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED &&
+                    Locale.getDefault().getLanguage().startsWith("en")) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
                 mToolsHeaderAdapter.setSecondaryCallback(b -> settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
