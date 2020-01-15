@@ -60,7 +60,7 @@ buildscript {
                 viewPager2        : '1.0.0',
         ]
         deps.firebase = [
-                core          : '17.2.1',
+                core          : '17.2.2',
                 inAppMessaging: '19.0.3',
                 perf          : '19.0.5',
         ]
