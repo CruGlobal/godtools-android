@@ -61,7 +61,7 @@ buildscript {
         ]
         deps.firebase = [
                 core          : '17.2.1',
-                inAppMessaging: '19.0.2',
+                inAppMessaging: '19.0.3',
                 perf          : '19.0.5',
         ]
         uris = [
