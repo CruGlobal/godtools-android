@@ -14,6 +14,7 @@ buildscript {
                 evernoteAndroidJob : '1.4.2',
                 facebook           : '5.15.0',
                 facebookStetho     : '1.5.1',
+                findbugs           : '3.0.2',
                 gtoSupport         : '3.3.0-SNAPSHOT',
                 guava              : '28.2-android',
                 hamcrest           : '2.2',
@@ -211,6 +212,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
         dependencies {
             compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
+            compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
             compileOnly "org.jetbrains:annotations:${deps.jetbrainsAnnotation}"
 
             implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
