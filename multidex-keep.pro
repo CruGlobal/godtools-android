@@ -9,3 +9,4 @@
 -keep class com.facebook.**
 -keep class com.google.firebase.**
 -keep class com.squareup.picasso.**
+-keep class kotlin.**
