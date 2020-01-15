@@ -60,6 +60,7 @@ public class AnalyticsActionEvent extends AnalyticsBaseEvent {
         return null;
     }
 
+    @NonNull
     @Override
     public Uri.Builder getSnowPlowContentScoringUri() {
         return super.getSnowPlowContentScoringUri()

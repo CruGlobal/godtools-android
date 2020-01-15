@@ -1,0 +1,23 @@
+package org.cru.godtools.analytics.model
+
+import android.net.Uri
+import java.util.Locale
+import javax.annotation.concurrent.Immutable
+
+private const val SNOWPLOW_CONTENT_SCORING_URI_SCHEME = "godtools"
+
+@Immutable
+abstract class AnalyticsBaseEvent internal constructor(val locale: Locale? = null) {
+    /**
+     * Return whether or not this Analytics event should be tracked in the specified service
+     */
+    open fun isForSystem(system: AnalyticsSystem) = true
+
+    open val adobeSiteSection: String? get() = null
+    open val adobeSiteSubSection: String? get() = null
+
+    open val snowPlowPageTitle: String? get() = null
+    open val snowPlowContentScoringUri: Uri.Builder get() =
+        Uri.Builder()
+            .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME)
+}
