@@ -6,7 +6,7 @@ import android.net.Uri;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.cru.godtools.xml.model.Utils.parseColor;
 import static org.cru.godtools.xml.model.Utils.parseUrl;

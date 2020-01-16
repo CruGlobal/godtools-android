@@ -32,8 +32,7 @@ public final class ToggleLanguageAnalyticsActionEvent extends AnalyticsActionEve
 
     @Override
     public boolean isForSystem(@NonNull final AnalyticsSystem system) {
-        return system == AnalyticsSystem.ADOBE || system == AnalyticsSystem.APPSEE ||
-                system == AnalyticsSystem.FACEBOOK;
+        return system == AnalyticsSystem.ADOBE || system == AnalyticsSystem.FACEBOOK;
     }
 
     @Nullable
