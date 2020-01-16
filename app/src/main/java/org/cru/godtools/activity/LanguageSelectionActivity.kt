@@ -7,7 +7,7 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SELECTION
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SELECTION
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.LanguagesFragment

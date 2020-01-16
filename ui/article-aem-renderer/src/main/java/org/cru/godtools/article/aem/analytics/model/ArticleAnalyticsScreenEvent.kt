@@ -10,5 +10,5 @@ private const val SITE_SUB_SECTION_ARTICLE = "article"
 
 class ArticleAnalyticsScreenEvent(article: Article, tool: String?, locale: Locale?) :
     ToolAnalyticsScreenEvent("$SCREEN_ARTICLE_PREFIX${article.title}", tool, locale) {
-    override fun getAdobeSiteSubSection() = SITE_SUB_SECTION_ARTICLE
+    override val adobeSiteSubSection get() = SITE_SUB_SECTION_ARTICLE
 }
