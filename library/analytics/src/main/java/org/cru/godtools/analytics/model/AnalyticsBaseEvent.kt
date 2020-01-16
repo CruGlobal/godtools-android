@@ -16,8 +16,8 @@ abstract class AnalyticsBaseEvent internal constructor(val locale: Locale? = nul
     open val adobeSiteSection: String? get() = null
     open val adobeSiteSubSection: String? get() = null
 
-    open val snowPlowPageTitle: String? get() = null
-    open val snowPlowContentScoringUri: Uri.Builder get() =
+    open val snowplowPageTitle: String? get() = null
+    open val snowplowContentScoringUri: Uri.Builder get() =
         Uri.Builder()
             .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME)
 }
