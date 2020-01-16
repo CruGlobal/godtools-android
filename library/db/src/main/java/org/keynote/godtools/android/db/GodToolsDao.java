@@ -52,7 +52,7 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
 
         registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
                      FollowupTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Language.class, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, new LanguageMapper(),
+        registerType(Language.class, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, LanguageMapper.INSTANCE,
                      LanguageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Tool.class, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, new ToolMapper(),
                      ToolTable.SQL_WHERE_PRIMARY_KEY);
