@@ -17,6 +17,7 @@ import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialPageFragment
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.util.TutorialCallbacks
 
 private const val ARG_PAGE_SET = "pageSet"
@@ -62,6 +63,11 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onResume() {
+        super.onResume()
+        trackScreenAnalytics()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.onboarding_action_skip -> {
             finish()
@@ -85,6 +91,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     private fun setupViewPager() {
         viewPager = findViewById<ViewPager2>(R.id.tutorial_viewpager)?.also {
             it.adapter = TutorialPagerAdapter(this, pageSet.pages)
+            it.setupAnalytics()
             it.setupMenuVisibility()
             it.setupIndicator()
         }
@@ -104,6 +111,18 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
     // endregion ViewPager
+
+    // region Analytics
+    private fun ViewPager2.setupAnalytics() {
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
+        })
+    }
+
+    private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
+        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page))
+    }
+    // endregion Analytics
 
     // region Menu
     private var menu: Menu? = null

@@ -1,10 +1,10 @@
 package org.cru.godtools.tutorial.analytics.model
 
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.tutorial.PageSet
 import java.util.Locale
 
-private const val TUTORIAL_SCREEN_SITE_SECTION = "tutorial"
-
-class TutorialAnalyticsScreenEvent(screen: String) : AnalyticsScreenEvent(screen, Locale.getDefault()) {
-    override val adobeSiteSection get() = TUTORIAL_SCREEN_SITE_SECTION
+class TutorialAnalyticsScreenEvent(tutorial: PageSet, page: Int) :
+    AnalyticsScreenEvent("${tutorial.analyticsBaseScreenName}-${page + 1}", Locale.getDefault()) {
+    override val adobeSiteSection get() = ADOBE_SITE_SECTION_TUTORIAL
 }
