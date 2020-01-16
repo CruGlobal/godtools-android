@@ -60,8 +60,8 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
                      new AttachmentMapper(), AttachmentTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Translation.class, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL,
                      new TranslationMapper(), TranslationTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(LocalFile.class, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL, new LocalFileMapper(),
-                     LocalFileTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(LocalFile.class, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL,
+                     LocalFileMapper.INSTANCE, LocalFileTable.SQL_WHERE_PRIMARY_KEY);
         registerType(TranslationFile.class, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
                      new TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY);
 
