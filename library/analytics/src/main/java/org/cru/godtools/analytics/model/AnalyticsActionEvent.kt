@@ -13,11 +13,11 @@ open class AnalyticsActionEvent @JvmOverloads constructor(
     val label: String? = null,
     locale: Locale? = null
 ) : AnalyticsBaseEvent(locale) {
-    open val attributes: Map<String?, *>? get() = null
+    open val adobeAttributes: Map<String?, *>? get() = null
 
-    override val snowPlowPageTitle =
+    override val snowplowPageTitle =
         listOf(category, action, label).filterNot { it.isNullOrEmpty() }.joinToString(" : ")
-    override val snowPlowContentScoringUri: Uri.Builder = super.snowPlowContentScoringUri
+    override val snowplowContentScoringUri: Uri.Builder = super.snowplowContentScoringUri
         .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
         .appendPath(category)
         .appendPath(action)

@@ -164,14 +164,14 @@ public class SnowplowAnalyticsService {
     @NonNull
     private SelfDescribingJson contentScoringContext(@NonNull final AnalyticsBaseEvent event) {
         final Map<String, String> data = new HashMap<>();
-        data.put(CONTEXT_ATTR_SCORING_URI, event.getSnowPlowContentScoringUri().toString());
+        data.put(CONTEXT_ATTR_SCORING_URI, event.getSnowplowContentScoringUri().toString());
 
         return new SelfDescribingJson(CONTEXT_SCHEMA_SCORING, data);
     }
 
     private void populateSubject(@NonNull final Subject subject, @NonNull final AnalyticsBaseEvent event) {
-        subject.getSubject().put("url", event.getSnowPlowContentScoringUri().toString());
-        subject.getSubject().put("page", event.getSnowPlowPageTitle());
+        subject.getSubject().put("url", event.getSnowplowContentScoringUri().toString());
+        subject.getSubject().put("page", event.getSnowplowPageTitle());
     }
 
     private void resetSubject(@NonNull final Subject subject) {

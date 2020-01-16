@@ -55,9 +55,9 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
             else -> null
         }
 
-    override val snowPlowPageTitle get() = screen
-    override val snowPlowContentScoringUri: Uri.Builder
-        get() = super.snowPlowContentScoringUri
+    override val snowplowPageTitle get() = screen
+    override val snowplowContentScoringUri: Uri.Builder
+        get() = super.snowplowContentScoringUri
             .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
             .appendPath(screen)
 }

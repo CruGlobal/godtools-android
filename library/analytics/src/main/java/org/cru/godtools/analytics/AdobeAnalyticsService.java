@@ -98,7 +98,7 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
-            trackAction(event.getAction(), event, event.getAttributes());
+            trackAction(event.getAction(), event, event.getAdobeAttributes());
         }
     }
 
