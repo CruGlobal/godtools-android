@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.util.findListener
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_FINISH
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
@@ -65,12 +67,12 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     }
 
     override fun launchTraining() {
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionEvent.TUTORIAL_MORE_ACTION))
+        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
         findListener<TutorialCallbacks>()?.launchTraining()
     }
 
     override fun finishTutorial() {
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionEvent.TUTORIAL_START_ACTION))
+        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_FINISH))
         findListener<TutorialCallbacks>()?.finishTutorial()
     }
     // endregion TutorialCallbacks
