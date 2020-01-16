@@ -13,5 +13,5 @@ class TutorialAnalyticsActionEvent(private val actionName: String) : AnalyticsAc
     }
 
     override val adobeSiteSection get() = ADOBE_SITE_SECTION_TUTORIAL
-    override fun getAttributes() = mapOf(actionName to 1)
+    override val adobeAttributes: Map<String?, Any> = mapOf(actionName to 1)
 }
