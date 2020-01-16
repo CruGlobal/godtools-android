@@ -12,7 +12,6 @@ import leakcanary.LeakCanary
 import org.ccci.gto.android.common.leakcanary.CrashlyticsOnHeapAnalyzedListener
 import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider
-import org.cru.godtools.analytics.AnalyticsDispatcher
 import org.cru.godtools.analytics.TimberAnalyticsService
 import org.keynote.godtools.android.db.GodToolsDatabase
 import timber.log.Timber
@@ -62,7 +61,7 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
-        AnalyticsDispatcher.getInstance(this).addAnalyticsService(TimberAnalyticsService.getInstance())
+        TimberAnalyticsService.start()
     }
 
     internal inner class GtDatabaseFilesProvider : DatabaseFilesProvider {

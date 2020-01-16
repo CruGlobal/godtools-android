@@ -7,12 +7,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import timber.log.Timber;
 
-public class TimberAnalyticsService implements AnalyticsService {
+public class TimberAnalyticsService {
     private TimberAnalyticsService() {
         EventBus.getDefault().register(this);
     }
@@ -21,7 +21,7 @@ public class TimberAnalyticsService implements AnalyticsService {
     private static TimberAnalyticsService sInstance;
 
     @NonNull
-    public static synchronized TimberAnalyticsService getInstance() {
+    public static synchronized TimberAnalyticsService start() {
         if (sInstance == null) {
             sInstance = new TimberAnalyticsService();
         }
@@ -29,27 +29,26 @@ public class TimberAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    /* BEGIN lifecycle */
-
-    @Override
+    // region Events
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTrackContentEvent(@NonNull final Event event) {
         Timber.tag("AnalyticsService")
                 .d("onTrackContentEvent(%s:%s)", event.id.namespace, event.id.name);
     }
 
-    @UiThread
+    @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         Timber.tag("AnalyticsService")
                 .d("onAnalyticsScreenEvent('%s', '%s')", event.getScreen(), event.getLocale());
     }
 
-    @UiThread
+    @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
         Timber.tag("AnalyticsService")
                 .d("onAnalyticsActionEvent('%s')", event.getAction());
     }
-
-    /* END lifecycle */
+    // endregion Events
 }
