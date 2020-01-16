@@ -64,6 +64,7 @@ public class AnalyticsEvent {
         }
     }
 
+    @Nullable
     private String mAction;
     private int mDelay = 0;
     @NonNull
@@ -73,6 +74,7 @@ public class AnalyticsEvent {
     @NonNull
     private Map<String, String> mAttributes = ImmutableMap.of();
 
+    @Nullable
     public String getAction() {
         return mAction;
     }
