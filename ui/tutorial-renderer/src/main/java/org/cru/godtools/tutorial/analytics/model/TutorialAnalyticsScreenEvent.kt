@@ -6,7 +6,6 @@ import java.util.Locale
 const val TUTORIAL_SCREEN_SITE_SECTION = "tutorial"
 
 class TutorialAnalyticsScreenEvent(screenName: String) : AnalyticsScreenEvent(screenName, Locale.getDefault()) {
-    override fun getAdobeSiteSection(): String? {
-        return TUTORIAL_SCREEN_SITE_SECTION
-    }
+    override val adobeSiteSection: String?
+        get() = TUTORIAL_SCREEN_SITE_SECTION
 }
