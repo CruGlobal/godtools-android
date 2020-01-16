@@ -37,7 +37,7 @@ public final class ToggleLanguageAnalyticsActionEvent extends AnalyticsActionEve
 
     @Nullable
     @Override
-    public Map<String, ?> getAttributes() {
+    public Map<String, ?> getAdobeAttributes() {
         return mAttrs;
     }
 

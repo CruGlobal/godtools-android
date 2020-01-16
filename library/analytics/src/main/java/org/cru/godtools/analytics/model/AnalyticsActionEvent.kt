@@ -13,7 +13,7 @@ open class AnalyticsActionEvent @JvmOverloads constructor(
     val label: String? = null,
     locale: Locale? = null
 ) : AnalyticsBaseEvent(locale) {
-    open val attributes: Map<String?, *>? get() = null
+    open val adobeAttributes: Map<String?, *>? get() = null
 
     override val snowplowPageTitle =
         listOf(category, action, label).filterNot { it.isNullOrEmpty() }.joinToString(" : ")
