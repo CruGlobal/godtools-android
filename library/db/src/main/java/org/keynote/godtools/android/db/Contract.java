@@ -27,6 +27,7 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_GTLANGUAGES_OLD = drop("gtlanguages_old");
         static final String SQL_DELETE_GTPACKAGES = drop("gtpackages");
         static final String SQL_DELETE_GTPACKAGES_OLD = drop("gtpackages_old");
+        static final String SQL_DELETE_RESOURCES = drop("resources");
     }
 
     @SuppressWarnings("checkstyle:InterfaceIsType")
@@ -133,20 +134,6 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
-        static final String SQL_V19_DROP_LEGACY = drop("resources");
-        static final String SQL_V19_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES,
-                       SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ADDED);
-        static final String SQL_V24_ALTER_BANNER = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_BANNER;
-        static final String SQL_V25_ALTER_DETAILS_BANNER =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_DETAILS_BANNER;
-        static final String SQL_V30_ALTER_PENDING_SHARES =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_PENDING_SHARES;
-        static final String SQL_V31_ALTER_CODE = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CODE;
-        static final String SQL_V31_ALTER_TYPE = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TYPE;
-        static final String SQL_V35_UNIQUE_CODE =
-                "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + COLUMN_CODE + " ON " + TABLE_NAME + " (" + COLUMN_CODE +
-                        ")";
         static final String SQL_V38_ALTER_ORDER = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_ORDER;
         static final String SQL_V38_POPULATE_ORDER =
                 "UPDATE " + TABLE_NAME + " SET " + COLUMN_ORDER + " = " + Integer.MAX_VALUE;
@@ -209,14 +196,6 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
-        static final String SQL_V34_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_MANIFEST, SQL_COLUMN_PUBLISHED,
-                       SQL_COLUMN_DOWNLOADED);
-        static final String SQL_V36_ALTER_LAST_ACCESSED =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_LAST_ACCESSED;
-        static final String SQL_V36_POPULATE_LAST_ACCESSED =
-                "UPDATE " + TABLE_NAME + " SET " + COLUMN_LAST_ACCESSED + " = 0";
         static final String SQL_V37_ALTER_TAGLINE =
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TAGLINE;
     }
@@ -334,16 +313,5 @@ public final class Contract extends BaseContract {
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_EMAIL, SQL_COLUMN_DESTINATION,
                        SQL_COLUMN_LANGUAGE, SQL_COLUMN_CREATE_TIME);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        /* DB migrations */
-        static final String SQL_V28_MIGRATE_SUBSCRIBERS =
-                "INSERT INTO " + TABLE_NAME + " (" +
-                        COLUMN_NAME + "," +
-                        COLUMN_EMAIL + "," +
-                        COLUMN_LANGUAGE + "," +
-                        COLUMN_DESTINATION + "," +
-                        COLUMN_CREATE_TIME + ") " +
-                        "SELECT first_name || ' ' || last_name,email,language_code,1,created_timestamp " +
-                        "FROM gssubscribers";
     }
 }

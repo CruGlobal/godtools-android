@@ -28,46 +28,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     /*
      * Version history
      *
-     * v4.0.2
-     * 2: 2015-05-26
-     * v4.0.3 - v4.1.6
-     * 3: 2016-02-09
-     * v4.1.7
-     * 4: 2016-04-01
-     * 5: 2016-04-04
-     * 6: 2016-04-05
-     * v4.2.0 - v4.3.3
-     * 7: 2017-04-19
-     * 8: 2017-04-19
-     * 9: 2017-04-24
-     * 10: 2017-04-26
-     * 11: 2017-04-27
-     * 12: 2017-04-28
-     * 13: 2017-04-28
-     * 14: 2017-05-03
-     * 15: 2017-05-04
-     * 16: 2017-05-04
-     * 17: 2017-05-05
-     * 18: 2017-05-08
-     * 19: 2017-05-10
-     * 20: 2017-05-11
-     * 21: 2017-05-11
-     * 22: 2017-05-15
-     * 23: 2017-05-15
-     * 24: 2017-05-15
-     * 25: 2017-06-19
-     * 26: 2017-06-26
-     * 27: 2017-06-27
-     * 28: 2017-06-27
-     * 29: 2017-06-27
-     * 30: 2017-06-29
-     * 31: 2017-06-30
-     * 32: 2017-07-06
-     * 33: 2017-07-06
-     * 34: 2017-07-07
-     * 35: 2017-07-07
-     * v5.0.0-beta1
-     * 36: 2017-07-12
      * v5.0.0 - v5.0.10
      * 37: 2018-04-23
      * v5.0.11 - v5.0.12
@@ -125,90 +85,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             int upgradeTo = oldVersion + 1;
             while (upgradeTo <= newVersion) {
                 switch (upgradeTo) {
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                        break;
-                    case 12:
-                        db.execSQL(LanguageTable.SQL_DELETE_TABLE);
-                        db.execSQL(LanguageTable.SQL_CREATE_TABLE);
-                        break;
-                    case 13:
-                    case 14:
-                    case 15:
-                    case 16:
-                    case 17:
-                    case 18:
-                        break;
-                    case 19:
-                        db.execSQL(ToolTable.SQL_V19_DROP_LEGACY);
-                        db.execSQL(ToolTable.SQL_V19_CREATE_TABLE);
-                        break;
-                    case 20:
-                        db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
-                        break;
-                    case 21:
-                        db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
-                        break;
-                    case 22:
-                        break;
-                    case 23:
-                        db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
-                        break;
-                    case 24:
-                        db.execSQL(ToolTable.SQL_V24_ALTER_BANNER);
-                        break;
-                    case 25:
-                        db.execSQL(ToolTable.SQL_V25_ALTER_DETAILS_BANNER);
-                        break;
-                    case 26:
-                        break;
-                    case 27:
-                        db.execSQL(FollowupTable.SQL_DELETE_TABLE);
-                        db.execSQL(FollowupTable.SQL_CREATE_TABLE);
-                        break;
-                    case 28:
-                        db.execSQL(FollowupTable.SQL_V28_MIGRATE_SUBSCRIBERS);
-                        break;
-                    case 29:
-                        db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);
-                        break;
-                    case 30:
-                        db.execSQL(ToolTable.SQL_V30_ALTER_PENDING_SHARES);
-                        break;
-                    case 31:
-                        db.execSQL(ToolTable.SQL_V31_ALTER_CODE);
-                        db.execSQL(ToolTable.SQL_V31_ALTER_TYPE);
-                        break;
-                    case 32:
-                        db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES);
-                        db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES_OLD);
-                        break;
-                    case 33:
-                        db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES);
-                        db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES_OLD);
-                        break;
-                    case 34:
-                        db.execSQL(TranslationTable.SQL_DELETE_TABLE);
-                        db.execSQL(TranslationTable.SQL_V34_CREATE_TABLE);
-
-                        db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
-                        db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
-                        break;
-                    case 35:
-                        db.execSQL(ToolTable.SQL_V35_UNIQUE_CODE);
-                        break;
-                    case 36:
-                        db.execSQL(TranslationTable.SQL_V36_ALTER_LAST_ACCESSED);
-                        db.execSQL(TranslationTable.SQL_V36_POPULATE_LAST_ACCESSED);
-                        break;
                     case 37:
                         db.execSQL(TranslationTable.SQL_V37_ALTER_TAGLINE);
                         break;
@@ -270,6 +146,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES_OLD);
             db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES);
             db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES_OLD);
+            db.execSQL(LegacyTables.SQL_DELETE_RESOURCES);
 
             onCreate(db);
 
