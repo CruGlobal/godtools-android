@@ -2,24 +2,17 @@ package org.cru.godtools.tutorial.analytics.model
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import java.util.HashMap
 
 private const val TUTORIAL_SITE_SECTION = "tutorial"
 
-class TutorialAnalyticsActionEvent(private val actionName: String) : AnalyticsActionEvent(null, actionName) {
-
+class TutorialAnalyticsActionEvent(action: String) : AnalyticsActionEvent(null, action) {
     override fun isForSystem(system: AnalyticsSystem): Boolean {
         return system == AnalyticsSystem.ADOBE || system == AnalyticsSystem.FACEBOOK
     }
 
-    override val adobeSiteSection: String?
-        get() = TUTORIAL_SITE_SECTION
+    override val adobeSiteSection get() = TUTORIAL_SITE_SECTION
 
-    override fun getAttributes(): MutableMap<String, *> {
-        val attrs = HashMap<String, Any>()
-        attrs[actionName] = 1
-        return attrs
-    }
+    override fun getAttributes() = mapOf(action to 1)
 
     companion object {
         const val TUTORIAL_MORE_ACTION = "onboarding_more"
