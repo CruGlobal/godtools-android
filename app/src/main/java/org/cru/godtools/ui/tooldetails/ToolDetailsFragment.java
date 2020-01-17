@@ -586,13 +586,10 @@ public class ToolDetailsFragment extends BasePlatformFragment
                                                                           mTool));
                     break;
                 case 1:
-                    StringBuilder langList = new StringBuilder();
-                    for (String lang : Stream.of(mLanguages)
-                            .map(l -> LocaleUtils.getDisplayName(l, container.getContext(), null, null)).withoutNulls()
-                            .sorted(String.CASE_INSENSITIVE_ORDER).toList()) {
-                        langList.append(lang).append("\n");
-                    }
-                    textView.setText(langList.toString());
+                    textView.setText(Stream.of(mLanguages).map(l -> LocaleUtils
+                            .getDisplayName(l, container.getContext(), null, null)
+                    ).withoutNulls().sorted(String.CASE_INSENSITIVE_ORDER)
+                                             .reduce((l1, l2) -> l1 + ", " + l2).orElse(""));
                     break;
             }
             container.addView(textView, position);
