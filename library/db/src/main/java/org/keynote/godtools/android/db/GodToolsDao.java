@@ -24,14 +24,6 @@ import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
-import org.cru.godtools.model.event.AttachmentUpdateEvent;
-import org.cru.godtools.model.event.LanguageUpdateEvent;
-import org.cru.godtools.model.event.ToolUpdateEvent;
-import org.cru.godtools.model.event.TranslationUpdateEvent;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -64,29 +56,6 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
                      LocalFileMapper.INSTANCE, LocalFileTable.SQL_WHERE_PRIMARY_KEY);
         registerType(TranslationFile.class, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
                      new TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY);
-
-        // TODO: this may be temporary until a better solution is available
-        EventBus.getDefault().register(new Object() {
-            @Subscribe(threadMode = ThreadMode.MAIN)
-            public void event(AttachmentUpdateEvent event) {
-                invalidateLiveData(Attachment.class);
-            }
-
-            @Subscribe(threadMode = ThreadMode.MAIN)
-            public void event(LanguageUpdateEvent event) {
-                invalidateLiveData(Language.class);
-            }
-
-            @Subscribe(threadMode = ThreadMode.MAIN)
-            public void event(ToolUpdateEvent event) {
-                invalidateLiveData(Tool.class);
-            }
-
-            @Subscribe(threadMode = ThreadMode.MAIN)
-            public void event(TranslationUpdateEvent event) {
-                invalidateLiveData(Translation.class);
-            }
-        });
     }
 
     @Nullable
@@ -122,10 +91,16 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
         return super.getPrimaryKeyWhere(obj);
     }
 
+    @Override
+    protected void onInvalidateClass(@NonNull final Class<?> clazz) {
+        super.onInvalidateClass(clazz);
+        getLiveDataRegistry().invalidate(clazz);
+    }
+
     // region LiveDataDao
     private final LiveDataRegistry mLiveDataRegistry = new LiveDataRegistry();
 
-    @NotNull
+    @NonNull
     @Override
     public LiveDataRegistry getLiveDataRegistry() {
         return mLiveDataRegistry;
