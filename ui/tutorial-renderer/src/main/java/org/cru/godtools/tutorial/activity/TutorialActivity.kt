@@ -153,6 +153,10 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     override fun finishTutorial() = finish()
+
+    override fun analyticsMore() {}
+
+    override fun analyticsStart() {}
     // endregion TutorialCallbacks
 }
 
