@@ -67,13 +67,21 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     }
 
     override fun launchTraining() {
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+        if (shouldSendOnBoardingEvent()) {
+            EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+        }
         findListener<TutorialCallbacks>()?.launchTraining()
     }
 
     override fun finishTutorial() {
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_FINISH))
+        if (shouldSendOnBoardingEvent()) {
+            EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_FINISH))
+        }
         findListener<TutorialCallbacks>()?.finishTutorial()
     }
     // endregion TutorialCallbacks
+
+    private fun shouldSendOnBoardingEvent(): Boolean {
+        return page.layout == R.layout.tutorial_onboarding_final
+    }
 }
