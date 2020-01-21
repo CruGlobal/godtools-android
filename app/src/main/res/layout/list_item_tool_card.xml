@@ -57,7 +57,7 @@
                 android:layout_toEndOf="@id/action_add"
                 android:background="@color/gray_E6" />
 
-            <androidx.appcompat.widget.AppCompatTextViewImpl
+            <TextView
                 android:id="@+id/language_parallel"
                 style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
                 android:layout_width="wrap_content"

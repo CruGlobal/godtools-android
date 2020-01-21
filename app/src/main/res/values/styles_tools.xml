@@ -29,7 +29,7 @@
         <item name="android:ellipsize">end</item>
 
         <!-- parallel language checkmark -->
-        <item name="drawableStart">@drawable/ic_tool_checkmark</item>
+        <item name="drawableStartCompat">@drawable/ic_tool_checkmark</item>
         <item name="drawableTint">@color/gray_BE</item>
         <item name="android:drawablePadding">4dp</item>
     </style>
