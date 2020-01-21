@@ -101,19 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="7dp"
-            app:tabBackground="@color/action_bar_action_tint">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/label_tools_about" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="40 Languages" />
-
-        </com.google.android.material.tabs.TabLayout>
+            app:tabBackground="@color/action_bar_action_tint"/>
 
         <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
             android:id="@+id/detail_view_pager"
