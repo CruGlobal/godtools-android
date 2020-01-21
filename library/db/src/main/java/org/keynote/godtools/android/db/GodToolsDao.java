@@ -155,8 +155,9 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
 
         // perform update and sanitize PersonalMeasurements
         final SQLiteDatabase db = getWritableDatabase();
-        inNonExclusiveTransaction(db, () -> {
+        inTransaction(db, false, () -> {
             db.execSQL(sql.toString(), args);
+            invalidateClass(Tool.class);
             return null;
         });
     }
