@@ -69,22 +69,22 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
         EventBus.getDefault().register(new Object() {
             @Subscribe(threadMode = ThreadMode.MAIN)
             public void event(AttachmentUpdateEvent event) {
-                invalidateLiveData(Attachment.class);
+                onInvalidateClass(Attachment.class);
             }
 
             @Subscribe(threadMode = ThreadMode.MAIN)
             public void event(LanguageUpdateEvent event) {
-                invalidateLiveData(Language.class);
+                onInvalidateClass(Language.class);
             }
 
             @Subscribe(threadMode = ThreadMode.MAIN)
             public void event(ToolUpdateEvent event) {
-                invalidateLiveData(Tool.class);
+                onInvalidateClass(Tool.class);
             }
 
             @Subscribe(threadMode = ThreadMode.MAIN)
             public void event(TranslationUpdateEvent event) {
-                invalidateLiveData(Translation.class);
+                onInvalidateClass(Translation.class);
             }
         });
     }
