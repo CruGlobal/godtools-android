@@ -7,6 +7,7 @@ import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
@@ -316,8 +317,8 @@ public final class Contract extends BaseContract {
     }
 
     static class GlobalActivityAnalyticsTable extends BaseTable {
-        static final String TABLE_NAME = "followups";
-        private static final Table<Followup> TABLE = Table.forClass(Followup.class);
+        static final String TABLE_NAME = "global_activity_analytics";
+        private static final Table<GlobalActivityAnalytics> TABLE = Table.forClass(GlobalActivityAnalytics.class);
 
         static final String COLUMN_USERS = "users";
         static final String COLUMN_COUNTRIES = "countries";
@@ -340,5 +341,6 @@ public final class Contract extends BaseContract {
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
                        SQL_COLUMN_GOSPEL_PRESENTATIONS);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+        static final String SQL_V41_CREATE_GLOBAL_ANALYTICS = SQL_CREATE_TABLE;
     }
 }
