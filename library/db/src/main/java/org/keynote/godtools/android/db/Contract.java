@@ -314,4 +314,31 @@ public final class Contract extends BaseContract {
                        SQL_COLUMN_LANGUAGE, SQL_COLUMN_CREATE_TIME);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
+
+    static class GlobalActivityAnalyticsTable extends BaseTable {
+        static final String TABLE_NAME = "followups";
+        private static final Table<Followup> TABLE = Table.forClass(Followup.class);
+
+        static final String COLUMN_USERS = "users";
+        static final String COLUMN_COUNTRIES = "countries";
+        static final String COLUMN_LAUNCHES = "launches";
+        static final String COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations";
+
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+
+        static final String[] PROJECTION_ALL =
+                {COLUMN_ID, COLUMN_USERS, COLUMN_COUNTRIES, COLUMN_LAUNCHES, COLUMN_GOSPEL_PRESENTATIONS};
+
+        private static final String SQL_COLUMN_USERS = COLUMN_USERS + " INTEGER";
+        private static final String SQL_COLUMN_COUNTRIES = COLUMN_COUNTRIES + " INTEGER";
+        private static final String SQL_COLUMN_LAUNCHES = COLUMN_LAUNCHES + " INTEGER";
+        private static final String SQL_COLUMN_GOSPEL_PRESENTATIONS = COLUMN_GOSPEL_PRESENTATIONS + " INTEGER";
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
+                       SQL_COLUMN_GOSPEL_PRESENTATIONS);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
 }
