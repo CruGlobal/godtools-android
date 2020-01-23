@@ -45,7 +45,7 @@ public class GlobalActivityAnalyticsMapper extends BaseMapper<GlobalActivityAnal
     @NonNull
     @Override
     public GlobalActivityAnalytics toObject(@NonNull final Cursor c) {
-        final GlobalActivityAnalytics globalActivityAnalytics =  super.toObject(c);
+        final GlobalActivityAnalytics globalActivityAnalytics = super.toObject(c);
 
         globalActivityAnalytics.setUsers(getInt(c, COLUMN_USERS, 0));
         globalActivityAnalytics.setCountries(getInt(c, COLUMN_LAUNCHES, 0));

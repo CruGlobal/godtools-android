@@ -97,7 +97,6 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
         return super.getPrimaryKeyWhere(obj);
     }
 
-
     @Override
     protected void onInvalidateClass(@NonNull final Class<?> clazz) {
         super.onInvalidateClass(clazz);

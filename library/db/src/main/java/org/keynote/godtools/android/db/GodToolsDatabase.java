@@ -11,13 +11,13 @@ import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LegacyTables;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
-import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
 
 import androidx.annotation.NonNull;
 import timber.log.Timber;
