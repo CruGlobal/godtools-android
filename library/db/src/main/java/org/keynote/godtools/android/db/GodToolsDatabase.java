@@ -17,13 +17,14 @@ import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
 
 import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 40;
+    private static final int DATABASE_VERSION = 41;
 
     /*
      * Version history
@@ -71,6 +72,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
+            db.execSQL(GlobalActivityAnalyticsTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -98,6 +100,8 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 40:
                         db.execSQL(ToolTable.SQL_V40_ALTER_OVERVIEW_VIDEO);
                         break;
+                    case 41:
+                        db.execSQL(GlobalActivityAnalyticsTable.SQL_V41_CREATE_GLOBAL_ANALYTICS);
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -139,6 +143,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE);
+            db.execSQL(Contract.GlobalActivityAnalyticsTable.SQL_DELETE_TABLE);
 
             // legacy tables
             db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);
