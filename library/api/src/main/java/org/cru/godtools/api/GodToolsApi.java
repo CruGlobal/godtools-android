@@ -12,6 +12,7 @@ import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.api.model.ToolViews;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -48,6 +49,8 @@ public class GodToolsApi {
     public final FollowupApi followups;
     @NonNull
     public final ViewsApi views;
+    @NonNull
+    public final GlobalActivityAnalyticsApi globalActivityAnalyticsApi;
 
     private GodToolsApi(@NonNull final Context context, @NonNull final String apiUri) {
         mContext = context;
@@ -63,6 +66,7 @@ public class GodToolsApi {
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
         views = retrofit.create(ViewsApi.class);
+        globalActivityAnalyticsApi = retrofit.create(GlobalActivityAnalyticsApi.class);
 
         // Adobe Campaign Forms APIs
         campaignForms = new Retrofit.Builder().baseUrl(CAMPAIGN_FORMS_API)
@@ -108,6 +112,7 @@ public class GodToolsApi {
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
                 .addClasses(Followup.class)
+                .addClasses(GlobalActivityAnalytics.class)
                 .addConverters(ToolTypeConverter.INSTANCE)
                 .addConverters(new LocaleTypeConverter())
                 .build();
