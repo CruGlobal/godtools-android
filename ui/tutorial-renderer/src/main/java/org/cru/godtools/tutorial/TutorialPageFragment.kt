@@ -9,9 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
@@ -71,22 +69,8 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         findListener<TutorialCallbacks>()?.onTutorialAction(view)
     }
 
-    override fun launchTraining() {
-        findListener<TutorialCallbacks>()?.launchTraining()
-    }
-
     override fun finishTutorial() {
         findListener<TutorialCallbacks>()?.finishTutorial()
-    }
-
-    override fun analyticsMore() {
-        launchTraining()
-        EventBus.getDefault().post(
-            TutorialAnalyticsActionEvent(
-                actionName = ACTION_TUTORIAL_ONBOARDING_TRAINING,
-                actionTitle = ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
-            )
-        )
     }
 
     override fun analyticsStart() {

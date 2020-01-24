@@ -18,6 +18,9 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
+import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 
 private const val ARG_PAGE_SET = "pageSet"
@@ -149,18 +152,20 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     override fun onTutorialAction(view: View) {
         when (view.id) {
-
+            R.id.action_onboarding_training -> {
+                mEventBus.post(
+                    TutorialAnalyticsActionEvent(
+                        actionName = ACTION_TUTORIAL_ONBOARDING_TRAINING,
+                        actionTitle = ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
+                    )
+                )
+                startTutorialActivity(PageSet.TRAINING)
+                finish()
+            }
         }
     }
 
-    override fun launchTraining() {
-        startTutorialActivity(PageSet.TRAINING)
-        finish()
-    }
-
     override fun finishTutorial() = finish()
-
-    override fun analyticsMore() {}
 
     override fun analyticsStart() {}
     // endregion TutorialCallbacks
