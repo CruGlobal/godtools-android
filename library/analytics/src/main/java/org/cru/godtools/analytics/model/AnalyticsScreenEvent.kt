@@ -31,6 +31,7 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
 
         /* Adobe Site Sections */
         const val ADOBE_SITE_SECTION_TOOLS = "tools"
+        const val SCREEN_GLOBAL_DASHBOARD = "Global Dashboard"
     }
 
     override val adobeSiteSection
