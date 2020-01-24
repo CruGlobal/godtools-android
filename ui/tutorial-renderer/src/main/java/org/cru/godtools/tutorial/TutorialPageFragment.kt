@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.util.findListener
+import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_FINISH
+import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_FINISH
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
@@ -76,12 +78,22 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     override fun analyticsMore() {
         launchTraining()
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+        EventBus.getDefault().post(
+            TutorialAnalyticsActionEvent(
+                actionName = ACTION_TUTORIAL_ONBOARDING_TRAINING,
+                actionTitle = ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
+            )
+        )
     }
 
     override fun analyticsStart() {
         finishTutorial()
-        EventBus.getDefault().post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_FINISH))
+        EventBus.getDefault().post(
+            TutorialAnalyticsActionEvent(
+                actionName = ACTION_TUTORIAL_FINISH,
+                actionTitle = ACTION_NAME_TUTORIAL_FINISH
+            )
+        )
     }
     // endregion TutorialCallbacks
 }
