@@ -173,10 +173,9 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
                 )
                 finish()
             }
+            R.id.action_training_finish -> finish()
         }
     }
-
-    override fun finishTutorial() = finish()
     // endregion TutorialCallbacks
 }
 
