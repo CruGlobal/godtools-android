@@ -18,9 +18,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
-import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_FINISH
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
@@ -155,22 +153,12 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     override fun onTutorialAction(view: View) {
         when (view.id) {
             R.id.action_onboarding_training -> {
-                mEventBus.post(
-                    TutorialAnalyticsActionEvent(
-                        actionName = ACTION_TUTORIAL_ONBOARDING_TRAINING,
-                        actionTitle = ACTION_NAME_TUTORIAL_ONBOARDING_TRAINING
-                    )
-                )
+                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
                 startTutorialActivity(PageSet.TRAINING)
                 finish()
             }
             R.id.action_onboarding_finish -> {
-                mEventBus.post(
-                    TutorialAnalyticsActionEvent(
-                        actionName = ACTION_TUTORIAL_FINISH,
-                        actionTitle = ACTION_NAME_TUTORIAL_FINISH
-                    )
-                )
+                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
             R.id.action_training_finish -> finish()
