@@ -67,6 +67,10 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         findListener<TutorialCallbacks>()?.nextPage()
     }
 
+    override fun onTutorialAction(view: View) {
+        findListener<TutorialCallbacks>()?.onTutorialAction(view)
+    }
+
     override fun launchTraining() {
         findListener<TutorialCallbacks>()?.launchTraining()
     }

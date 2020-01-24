@@ -147,6 +147,12 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         }
     }
 
+    override fun onTutorialAction(view: View) {
+        when (view.id) {
+
+        }
+    }
+
     override fun launchTraining() {
         startTutorialActivity(PageSet.TRAINING)
         finish()
