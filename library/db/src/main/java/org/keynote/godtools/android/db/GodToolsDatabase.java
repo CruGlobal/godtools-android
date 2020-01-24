@@ -102,6 +102,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 41:
                         db.execSQL(GlobalActivityAnalyticsTable.SQL_V41_CREATE_GLOBAL_ANALYTICS);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");

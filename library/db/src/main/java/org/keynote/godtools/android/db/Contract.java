@@ -341,6 +341,8 @@ public final class Contract extends BaseContract {
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
                        SQL_COLUMN_GOSPEL_PRESENTATIONS);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-        static final String SQL_V41_CREATE_GLOBAL_ANALYTICS = SQL_CREATE_TABLE;
+        static final String SQL_V41_CREATE_GLOBAL_ANALYTICS =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
+                       SQL_COLUMN_GOSPEL_PRESENTATIONS);
     }
 }
