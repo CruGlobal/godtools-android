@@ -6,30 +6,21 @@ import org.cru.godtools.model.GlobalActivityAnalytics
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
 
 internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalytics?>() {
-    override fun mapField(values: ContentValues, field: String, globalActivityAnalytics: GlobalActivityAnalytics) {
+    override fun mapField(values: ContentValues, field: String, analytics: GlobalActivityAnalytics) {
         when (field) {
-            GlobalActivityAnalyticsTable.COLUMN_USERS -> values.put(field, globalActivityAnalytics.users)
-            GlobalActivityAnalyticsTable.COLUMN_COUNTRIES -> values.put(field, globalActivityAnalytics.countries)
-            GlobalActivityAnalyticsTable.COLUMN_LAUNCHES -> values.put(field, globalActivityAnalytics.launches)
-            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS -> {
-                values.put(field, globalActivityAnalytics.gospelPresentation)
-            }
-            else -> super.mapField(values, field, globalActivityAnalytics)
+            GlobalActivityAnalyticsTable.COLUMN_USERS -> values.put(field, analytics.users)
+            GlobalActivityAnalyticsTable.COLUMN_COUNTRIES -> values.put(field, analytics.countries)
+            GlobalActivityAnalyticsTable.COLUMN_LAUNCHES -> values.put(field, analytics.launches)
+            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS -> values.put(field, analytics.gospelPresentation)
+            else -> super.mapField(values, field, analytics)
         }
     }
 
-    override fun newObject(c: Cursor): GlobalActivityAnalytics = GlobalActivityAnalytics()
-
-    override fun toObject(c: Cursor): GlobalActivityAnalytics {
-        val globalActivityAnalytics = super.toObject(c)
-        globalActivityAnalytics.users = getInt(c, GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
-        globalActivityAnalytics.countries = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        globalActivityAnalytics.launches = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        globalActivityAnalytics.gospelPresentation = getInt(
-            c,
-            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS,
-            0
-        )
-        return globalActivityAnalytics
+    override fun newObject(c: Cursor) = GlobalActivityAnalytics()
+    override fun toObject(c: Cursor) = super.toObject(c).apply {
+        users = getInt(c, GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
+        countries = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
+        launches = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
+        gospelPresentation = getInt(c, GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
     }
 }
