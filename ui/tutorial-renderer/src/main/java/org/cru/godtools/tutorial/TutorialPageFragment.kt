@@ -8,12 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.util.findListener
-import org.cru.godtools.tutorial.analytics.model.ACTION_NAME_TUTORIAL_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_FINISH
-import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
-import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 
 internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
@@ -71,16 +67,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     override fun finishTutorial() {
         findListener<TutorialCallbacks>()?.finishTutorial()
-    }
-
-    override fun analyticsStart() {
-        finishTutorial()
-        EventBus.getDefault().post(
-            TutorialAnalyticsActionEvent(
-                actionName = ACTION_TUTORIAL_FINISH,
-                actionTitle = ACTION_NAME_TUTORIAL_FINISH
-            )
-        )
     }
     // endregion TutorialCallbacks
 }
