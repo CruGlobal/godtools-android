@@ -15,7 +15,6 @@ import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAI
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
-import org.cru.godtools.tutorial.util.TutorialCallbacks
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 

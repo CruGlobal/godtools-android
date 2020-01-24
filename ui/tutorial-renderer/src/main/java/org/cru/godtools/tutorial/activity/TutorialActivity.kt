@@ -16,9 +16,9 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
-import org.cru.godtools.tutorial.util.TutorialCallbacks
 
 private const val ARG_PAGE_SET = "pageSet"
 

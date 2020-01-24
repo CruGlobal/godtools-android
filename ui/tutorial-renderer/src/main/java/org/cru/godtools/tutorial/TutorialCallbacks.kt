@@ -1,4 +1,4 @@
-package org.cru.godtools.tutorial.util
+package org.cru.godtools.tutorial
 
 interface TutorialCallbacks {
     fun nextPage()

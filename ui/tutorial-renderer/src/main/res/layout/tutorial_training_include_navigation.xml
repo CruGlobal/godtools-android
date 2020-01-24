@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="callbacks" type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.appcompat.widget.AppCompatButton
