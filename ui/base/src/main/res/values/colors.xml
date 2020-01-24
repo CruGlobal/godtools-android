@@ -16,4 +16,9 @@
     <color name="gt_green">#6EDC50</color>
     <color name="gt_green_25">#406EDC50</color>
     <color name="gt_red">#E55B36</color>
+
+    <!-- global Dashboard Colors -->
+    <color name="gt_gd_profile_background">#F9F9F9</color>
+    <color name="gt_gd_activity_background">#F2F2F2</color>
+    <color name="gt_gd_text_color">#979797</color>
 </resources>
