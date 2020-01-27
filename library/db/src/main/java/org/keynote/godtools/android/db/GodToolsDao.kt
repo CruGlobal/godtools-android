@@ -27,8 +27,8 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
-abstract class GodToolsDaoKotlin(context: Context) : AbstractAsyncDao(GodToolsDatabase.getInstance(context)),
-    LiveDataDao, StreamDao {
+abstract class GodToolsDaoKotlin protected constructor(context: Context) :
+    AbstractAsyncDao(GodToolsDatabase.getInstance(context)), LiveDataDao, StreamDao {
     override val liveDataRegistry = LiveDataRegistry()
 
     init {
