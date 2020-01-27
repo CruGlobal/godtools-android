@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="callbacks" type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,32 +65,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/tutorial_onboarding_final_help_others"
-            app:layout_constraintBottom_toTopOf="@id/action_training"
+            app:layout_constraintBottom_toTopOf="@id/action_onboarding_training"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/languages" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_training"
+            android:id="@+id/action_onboarding_training"
             style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:onClick="@{() -> callbacks.launchTraining()}"
+            android:onClick="@{callbacks::onTutorialAction}"
             android:text="@string/tutorial_onboarding_final_action_show_more"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/action_finish"
+            app:layout_constraintEnd_toStartOf="@id/action_onboarding_finish"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_finish"
+            android:id="@+id/action_onboarding_finish"
             style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> callbacks.finishTutorial()}"
+            android:onClick="@{callbacks::onTutorialAction}"
             android:text="@string/tutorial_onboarding_final_action_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
-            app:layout_constraintStart_toEndOf="@id/action_training" />
+            app:layout_constraintStart_toEndOf="@id/action_onboarding_training" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

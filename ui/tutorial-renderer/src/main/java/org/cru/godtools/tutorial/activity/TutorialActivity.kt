@@ -16,8 +16,12 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
-import org.cru.godtools.tutorial.util.TutorialCallbacks
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 
 private const val ARG_PAGE_SET = "pageSet"
 
@@ -62,6 +66,11 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onResume() {
+        super.onResume()
+        trackScreenAnalytics()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.onboarding_action_skip -> {
             finish()
@@ -85,6 +94,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     private fun setupViewPager() {
         viewPager = findViewById<ViewPager2>(R.id.tutorial_viewpager)?.also {
             it.adapter = TutorialPagerAdapter(this, pageSet.pages)
+            it.setupAnalytics()
             it.setupMenuVisibility()
             it.setupIndicator()
         }
@@ -104,6 +114,18 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
     }
     // endregion ViewPager
+
+    // region Analytics
+    private fun ViewPager2.setupAnalytics() {
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
+        })
+    }
+
+    private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
+        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page))
+    }
+    // endregion Analytics
 
     // region Menu
     private var menu: Menu? = null
@@ -128,12 +150,20 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         }
     }
 
-    override fun launchTraining() {
-        startTutorialActivity(PageSet.TRAINING)
-        finish()
+    override fun onTutorialAction(view: View) {
+        when (view.id) {
+            R.id.action_onboarding_training -> {
+                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+                startTutorialActivity(PageSet.TRAINING)
+                finish()
+            }
+            R.id.action_onboarding_finish -> {
+                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
+                finish()
+            }
+            R.id.action_training_finish -> finish()
+        }
     }
-
-    override fun finishTutorial() = finish()
     // endregion TutorialCallbacks
 }
 

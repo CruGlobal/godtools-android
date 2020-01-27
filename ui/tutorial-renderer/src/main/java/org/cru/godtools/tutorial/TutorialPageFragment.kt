@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
-import org.cru.godtools.tutorial.util.TutorialCallbacks
 import splitties.fragmentargs.arg
 
 internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
@@ -62,12 +61,8 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         findListener<TutorialCallbacks>()?.nextPage()
     }
 
-    override fun launchTraining() {
-        findListener<TutorialCallbacks>()?.launchTraining()
-    }
-
-    override fun finishTutorial() {
-        findListener<TutorialCallbacks>()?.finishTutorial()
+    override fun onTutorialAction(view: View) {
+        findListener<TutorialCallbacks>()?.onTutorialAction(view)
     }
     // endregion TutorialCallbacks
 }

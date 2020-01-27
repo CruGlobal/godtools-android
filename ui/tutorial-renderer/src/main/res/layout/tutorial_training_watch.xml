@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="callbacks" type="org.cru.godtools.tutorial.util.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
         <variable name="isVisible" type="boolean" />
         <variable name="lifecycleOwner2" type="androidx.lifecycle.LifecycleOwner" />
     </data>
