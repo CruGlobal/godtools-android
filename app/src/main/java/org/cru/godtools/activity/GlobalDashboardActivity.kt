@@ -33,7 +33,12 @@ class GlobalDashboardActivity : BasePlatformActivity() {
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
     }
 
-    fun loadGlobalDashboardFragment() {
+    override fun onSetupActionBar() {
+        super.onSetupActionBar()
+        setTitle(R.string.gt_gd_my_profile_text)
+    }
+
+    private fun loadGlobalDashboardFragment() {
         with(supportFragmentManager) {
             commit {
                 val fragment = GlobalDashboardFragment()

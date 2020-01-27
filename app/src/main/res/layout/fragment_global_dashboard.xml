@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="org.cru.godtools.viewmodel.GlobalDashboardDataModel" />
+
+        <variable
+            name="year"
+            type="String" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +37,7 @@
             android:layout_marginTop="32dp"
             android:elevation="10dp"
             android:gravity="center"
+            android:text="@{viewModel.accountName}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +52,7 @@
             android:layout_marginTop="8dp"
             android:elevation="10dp"
             android:gravity="center"
+            android:text="@{viewModel.accountDate}"
             android:textAppearance="@style/TextAppearance.GodTools"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +73,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Activity" />
+                android:text="@string/gt_gd_activity_text" />
         </com.google.android.material.tabs.TabLayout>
 
         <TextView
@@ -68,6 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
+            android:text="@{@string/gt_gd_year_text(year)}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,15 +116,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:text="@{viewModel.uniqueUsers}"
                     android:textAppearance="@style/TextAppearance.GodTools.Large"
                     android:textColor="@color/gt_gd_text_color"
+                    android:textStyle="bold"
                     tools:text="750,520" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Unique Users"
+                    android:text="@string/gt_gd_sessions_text"
                     android:textColor="@color/gt_gd_text_color" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -142,15 +158,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:text="@{viewModel.gospelPresentation}"
                     android:textAppearance="@style/TextAppearance.GodTools.Large"
                     android:textColor="@color/gt_gd_text_color"
+                    android:textStyle="bold"
                     tools:text="40,000" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Gospel Presentation"
+                    android:text="@string/gt_gd_gospel_presentation_text"
                     android:textColor="@color/gt_gd_text_color" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -203,15 +221,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:text="@{viewModel.sessions}"
                     android:textAppearance="@style/TextAppearance.GodTools.Large"
                     android:textColor="@color/gt_gd_text_color"
+                    android:textStyle="bold"
                     tools:text="3,700" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Sessions"
+                    android:text="@string/gt_gd_sessions_text"
                     android:textColor="@color/gt_gd_text_color" />
             </LinearLayout>
 
@@ -244,15 +264,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:text="@{viewModel.countries}"
                     android:textAppearance="@style/TextAppearance.GodTools.Large"
                     android:textColor="@color/gt_gd_text_color"
+                    android:textStyle="bold"
                     tools:text="90" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Countries"
+                    android:text="@string/gt_gd_countries_text"
                     android:textColor="@color/gt_gd_text_color" />
             </LinearLayout>
 
