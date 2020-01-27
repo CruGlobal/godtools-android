@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import org.ccci.gto.android.common.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -44,27 +46,17 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     private val category: String? by lazy { arguments?.getString(EXTRA_CATEGORY, null) }
-    private val viewModel: ArticleListViewModel by lazy {
-        ViewModelProviders.of(this).get(ArticleListViewModel::class.java)
-    }
 
     private var binding: FragmentArticlesBinding? = null
-    @JvmField
-    @BindView(R2.id.articles)
-    internal var articlesView: RecyclerView? = null
     @JvmField
     @BindView(R2.id.article_swipe_container)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
-    private var articlesAdapter: ArticlesAdapter? = null
-
-    private lateinit var articles: LiveData<List<Article>>
-
-    // region LifeCycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateViewModelArticles()
+        setupDataModel()
+        updateDataModelTags()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,7 +74,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
         super.onManifestUpdated()
         updateDataBindingManifest()
         updateArticlesViewManifest()
-        updateViewModelArticles()
+        updateDataModelTags()
     }
 
     override fun onRefresh() = syncData(true)
@@ -98,34 +90,28 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     override fun onDestroyView() {
-        cleanupArticlesView()
         cleanupDataBinding()
         super.onDestroyView()
     }
+    // endregion Lifecycle
 
-    // endregion LifeCycle Events
+    // region Data Model
+    private val dataModel: ArticlesFragmentDataModel by viewModels()
 
-    // region ViewModel methods
-
-    private fun updateViewModelArticles() {
-        val old = if (this::articles.isInitialized) articles else null
-        articles = when {
-            // lookup AEM tags from the manifest category
-            category != null -> {
-                val tags = mManifest?.findCategory(category)?.orElse(null)?.aemTags ?: setOf()
-                viewModel.getArticlesForTags(mTool, mLocale, tags)
-            }
-            // no category, so show all articles for this tool
-            else -> viewModel.getArticles(mTool, mLocale)
-        }
-
-        if (articles !== old) {
-            old?.removeObservers(this)
-            updateArticlesViewArticles()
-        }
+    private fun setupDataModel() {
+        dataModel.tool.value = mTool
+        dataModel.locale.value = mLocale
     }
 
-    // endregion ViewModel methods
+    private fun updateDataModelTags() {
+        dataModel.tags.value = when {
+            // lookup AEM tags from the manifest category
+            category != null -> mManifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
+            // no category, so show all articles for this tool
+            else -> null
+        }
+    }
+    // endregion Data Model
 
     private fun syncData(force: Boolean) {
         AemArticleManger.getInstance(requireContext())
@@ -138,9 +124,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     // region View Logic
-
     // region Data Binding
-
     private fun setupDataBinding(view: View) {
         binding = FragmentArticlesBinding.bind(view)
         updateDataBindingManifest()
@@ -153,75 +137,46 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     private fun cleanupDataBinding() {
         binding = null
     }
-
     // endregion Data Binding
 
     // region ArticlesView
+    @JvmField
+    @BindView(R2.id.articles)
+    internal var articlesView: RecyclerView? = null
+
+    private val articlesAdapter: ArticlesAdapter by lazy {
+        ArticlesAdapter()
+            .apply { setCallbacks(this@ArticlesFragment) }
+            .also { dataModel.articles.observe(this, it) }
+    }
 
     private fun setupArticlesView() {
-        articlesView
-            ?.apply {
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-                adapter = ArticlesAdapter()
-                    .apply { setCallbacks(this@ArticlesFragment) }
-                    .also { articlesAdapter = it }
-            }
-            ?.also {
-                updateArticlesViewManifest()
-                updateArticlesViewArticles()
-            }
-    }
-
-    private fun updateArticlesViewManifest() = articlesAdapter?.setManifest(mManifest)
-
-    private fun updateArticlesViewArticles() = articlesAdapter?.let { articles.observe(this, it) }
-
-    private fun cleanupArticlesView() {
-        articlesAdapter?.apply {
-            setCallbacks(null)
-            this@ArticlesFragment.articles.removeObserver(this)
+        articlesView?.apply {
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = articlesAdapter
         }
-        articlesAdapter = null
+        updateArticlesViewManifest()
     }
 
+    private fun updateArticlesViewManifest() = articlesAdapter.setManifest(mManifest)
     // endregion ArticlesView
 
     private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)
-
     // endregion View Logic
+}
 
-    class ArticleListViewModel(application: Application) : AndroidViewModel(application) {
-        private val aemDb = ArticleRoomDatabase.getInstance(application)
+class ArticlesFragmentDataModel(application: Application) : AndroidViewModel(application) {
+    private val aemDb = ArticleRoomDatabase.getInstance(application)
 
-        private var tool: String? = null
-        private var locale: Locale? = null
-        private var tags: Set<String>? = null
-        private lateinit var articles: LiveData<List<Article>>
+    internal var tool = MutableLiveData<String>()
+    internal var locale = MutableLiveData<Locale>()
+    internal var tags = MutableLiveData<Set<String>?>(null)
 
-        internal fun getArticles(tool: String, locale: Locale): LiveData<List<Article>> {
-            if (isArticlesLiveDataStale(tool, locale, null)) {
-                this.tool = tool
-                this.locale = locale
-                tags = null
-                articles = aemDb.articleDao().getArticles(tool, locale)
-            }
-
-            return articles
-        }
-
-        internal fun getArticlesForTags(tool: String, locale: Locale, tags: Set<String>): LiveData<List<Article>> {
-            if (isArticlesLiveDataStale(tool, locale, tags)) {
-                this.tool = tool
-                this.locale = locale
-                this.tags = tags
-                articles = aemDb.articleDao().getArticles(tool, locale, tags.toList())
-            }
-
-            return articles
-        }
-
-        private fun isArticlesLiveDataStale(tool: String, locale: Locale, tags: Set<String>?): Boolean {
-            return !this::articles.isInitialized || this.tool != tool || this.locale != locale || this.tags != tags
+    internal val articles = tool.switchCombineWith(locale, tags) { tool, locale, tags ->
+        when {
+            tool == null || locale == null -> emptyLiveData<List<Article>>()
+            tags == null -> aemDb.articleDao().getArticles(tool, locale)
+            else -> aemDb.articleDao().getArticles(tool, locale, tags.toList())
         }
     }
 }

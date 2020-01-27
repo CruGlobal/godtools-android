@@ -11,7 +11,7 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.databinding.ListItemArticleBinding
 import org.cru.godtools.xml.model.Manifest
 
-class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Observer<List<Article>> {
+class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Observer<List<Article>?> {
     interface Callbacks {
         fun onArticleSelected(article: Article?)
     }
@@ -22,7 +22,7 @@ class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Obse
 
     private val callbacks = ObservableField<Callbacks>()
     private val manifest = ObservableField<Manifest>()
-    var articles: List<Article>? = null
+    private var articles: List<Article>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
