@@ -56,12 +56,11 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     @BindView(R2.id.article_swipe_container)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
-    private lateinit var articles: LiveData<List<Article>?>
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateViewModelArticles()
+        setupDataModel()
+        updateDataModelTags()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,7 +78,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
         super.onManifestUpdated()
         updateDataBindingManifest()
         updateArticlesViewManifest()
-        updateViewModelArticles()
+        updateDataModelTags()
     }
 
     override fun onRefresh() = syncData(true)
@@ -104,21 +103,17 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     // region Data Model
     private val dataModel: ArticlesFragmentDataModel by viewModels()
 
-    private fun updateViewModelArticles() {
-        val old = if (this::articles.isInitialized) articles else null
+    private fun setupDataModel() {
         dataModel.tool.value = mTool
         dataModel.locale.value = mLocale
+    }
+
+    private fun updateDataModelTags() {
         dataModel.tags.value = when {
             // lookup AEM tags from the manifest category
             category != null -> mManifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
             // no category, so show all articles for this tool
             else -> null
-        }
-        articles = dataModel.articles
-
-        if (articles !== old) {
-            old?.removeObservers(this)
-            updateArticlesViewArticles()
         }
     }
     // endregion Data Model
@@ -171,12 +166,12 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
 
     private fun updateArticlesViewManifest() = articlesAdapter?.setManifest(mManifest)
 
-    private fun updateArticlesViewArticles() = articlesAdapter?.let { articles.observe(this, it) }
+    private fun updateArticlesViewArticles() = articlesAdapter?.let { dataModel.articles.observe(this, it) }
 
     private fun cleanupArticlesView() {
         articlesAdapter?.apply {
             setCallbacks(null)
-            this@ArticlesFragment.articles.removeObserver(this)
+            dataModel.articles.removeObserver(this)
         }
         articlesAdapter = null
     }
