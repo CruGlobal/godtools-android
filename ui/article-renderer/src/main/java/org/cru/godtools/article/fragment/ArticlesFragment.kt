@@ -124,9 +124,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     // region View Logic
-
     // region Data Binding
-
     private fun setupDataBinding(view: View) {
         binding = FragmentArticlesBinding.bind(view)
         updateDataBindingManifest()
@@ -139,7 +137,6 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     private fun cleanupDataBinding() {
         binding = null
     }
-
     // endregion Data Binding
 
     // region ArticlesView
@@ -165,22 +162,21 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     // endregion ArticlesView
 
     private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)
-
     // endregion View Logic
+}
 
-    class ArticlesFragmentDataModel(application: Application) : AndroidViewModel(application) {
-        private val aemDb = ArticleRoomDatabase.getInstance(application)
+class ArticlesFragmentDataModel(application: Application) : AndroidViewModel(application) {
+    private val aemDb = ArticleRoomDatabase.getInstance(application)
 
-        internal var tool = MutableLiveData<String>()
-        internal var locale = MutableLiveData<Locale>()
-        internal var tags = MutableLiveData<Set<String>?>(null)
+    internal var tool = MutableLiveData<String>()
+    internal var locale = MutableLiveData<Locale>()
+    internal var tags = MutableLiveData<Set<String>?>(null)
 
-        internal val articles = tool.switchCombineWith(locale, tags) { tool, locale, tags ->
-            when {
-                tool == null || locale == null -> emptyLiveData<List<Article>>()
-                tags == null -> aemDb.articleDao().getArticles(tool, locale)
-                else -> aemDb.articleDao().getArticles(tool, locale, tags.toList())
-            }
+    internal val articles = tool.switchCombineWith(locale, tags) { tool, locale, tags ->
+        when {
+            tool == null || locale == null -> emptyLiveData<List<Article>>()
+            tags == null -> aemDb.articleDao().getArticles(tool, locale)
+            else -> aemDb.articleDao().getArticles(tool, locale, tags.toList())
         }
     }
 }
