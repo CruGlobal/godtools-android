@@ -2,6 +2,7 @@ package org.keynote.godtools.android.db
 
 import android.content.ContentValues
 import android.database.Cursor
+import org.ccci.gto.android.common.util.database.getInt
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
 
@@ -18,9 +19,9 @@ internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalyti
 
     override fun newObject(c: Cursor) = GlobalActivityAnalytics()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        users = getInt(c, GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
-        countries = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        launches = getInt(c, GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        gospelPresentation = getInt(c, GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
+        users = c.getInt(GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
+        countries = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
+        launches = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
+        gospelPresentation = c.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
     }
 }
