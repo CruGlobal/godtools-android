@@ -127,5 +127,26 @@ abstract class GodToolsDaoKotlin protected constructor(context: Context) :
                 .limit(1)
         ).findFirst()
     }
+
+    @WorkerThread
+    fun updateSharesDelta(toolCode: String?, shares: Int) {
+        if (toolCode == null) return
+        if (shares == 0) return
+
+        // build query
+        val where = compileExpression(getPrimaryKeyWhere(Tool::class.java, toolCode))
+        val sql = """
+            UPDATE ${getTable(Tool::class.java)}
+            SET ${ToolTable.COLUMN_PENDING_SHARES} = coalesce(${ToolTable.COLUMN_PENDING_SHARES}, 0) + ?
+            WHERE ${where.first}
+        """
+        val args = bindValues(shares) + where.second
+
+        // execute query
+        transaction(exclusive = false) { db ->
+            db.execSQL(sql, args)
+            invalidateClass(Tool::class.java)
+        }
+    }
     // endregion Custom DAO methods
 }
