@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -50,9 +49,6 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
 
     private var binding: FragmentArticlesBinding? = null
     @JvmField
-    @BindView(R2.id.articles)
-    internal var articlesView: RecyclerView? = null
-    @JvmField
     @BindView(R2.id.article_swipe_container)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
@@ -94,7 +90,6 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     override fun onDestroyView() {
-        cleanupArticlesView()
         cleanupDataBinding()
         super.onDestroyView()
     }
@@ -148,34 +143,25 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     // endregion Data Binding
 
     // region ArticlesView
-    private var articlesAdapter: ArticlesAdapter? = null
+    @JvmField
+    @BindView(R2.id.articles)
+    internal var articlesView: RecyclerView? = null
+
+    private val articlesAdapter: ArticlesAdapter by lazy {
+        ArticlesAdapter()
+            .apply { setCallbacks(this@ArticlesFragment) }
+            .also { dataModel.articles.observe(this, it) }
+    }
 
     private fun setupArticlesView() {
-        articlesView
-            ?.apply {
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-                adapter = ArticlesAdapter()
-                    .apply { setCallbacks(this@ArticlesFragment) }
-                    .also { articlesAdapter = it }
-            }
-            ?.also {
-                updateArticlesViewManifest()
-                updateArticlesViewArticles()
-            }
-    }
-
-    private fun updateArticlesViewManifest() = articlesAdapter?.setManifest(mManifest)
-
-    private fun updateArticlesViewArticles() = articlesAdapter?.let { dataModel.articles.observe(this, it) }
-
-    private fun cleanupArticlesView() {
-        articlesAdapter?.apply {
-            setCallbacks(null)
-            dataModel.articles.removeObserver(this)
+        articlesView?.apply {
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = articlesAdapter
         }
-        articlesAdapter = null
+        updateArticlesViewManifest()
     }
 
+    private fun updateArticlesViewManifest() = articlesAdapter.setManifest(mManifest)
     // endregion ArticlesView
 
     private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)

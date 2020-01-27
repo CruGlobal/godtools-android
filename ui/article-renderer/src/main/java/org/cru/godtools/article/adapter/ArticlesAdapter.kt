@@ -22,7 +22,7 @@ class ArticlesAdapter : SimpleDataBindingAdapter<ListItemArticleBinding>(), Obse
 
     private val callbacks = ObservableField<Callbacks>()
     private val manifest = ObservableField<Manifest>()
-    var articles: List<Article>? = null
+    private var articles: List<Article>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
