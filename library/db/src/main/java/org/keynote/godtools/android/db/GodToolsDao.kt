@@ -1,7 +1,10 @@
 package org.keynote.godtools.android.db
 
 import android.content.Context
+import android.database.SQLException
+import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.WorkerThread
+import com.annimon.stream.Optional
 import com.annimon.stream.Stream
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
@@ -26,6 +29,7 @@ import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
+import java.util.Locale
 
 abstract class GodToolsDaoKotlin protected constructor(context: Context) :
     AbstractAsyncDao(GodToolsDatabase.getInstance(context)), LiveDataDao, StreamDao {
@@ -83,4 +87,31 @@ abstract class GodToolsDaoKotlin protected constructor(context: Context) :
         super.onInvalidateClass(clazz)
         liveDataRegistry.invalidate(clazz)
     }
+
+    // region Custom DAO methods
+    @WorkerThread
+    fun insertNew(obj: Base): Long {
+        var attempts = 10
+        while (true) {
+            obj.initNew()
+            try {
+                return insert(obj, SQLiteDatabase.CONFLICT_ABORT)
+            } catch (e: SQLException) {
+                // propagate exception if we've exhausted our attempts
+                if (--attempts < 0) throw e
+            }
+        }
+    }
+
+    @WorkerThread
+    fun getLatestTranslation(code: String?, locale: Locale?): Optional<Translation> {
+        if (code == null || locale == null) return Optional.empty()
+        return streamCompat(
+            Query.select<Translation>()
+                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale))
+                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                .limit(1)
+        ).findFirst()
+    }
+    // endregion Custom DAO methods
 }
