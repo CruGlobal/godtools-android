@@ -113,11 +113,13 @@
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
 
-        <activity android:name=".activity.GlobalDashboardActivity"
+        <activity
+            android:name=".activity.GlobalDashboardActivity"
+            android:label="@string/gt_gd_my_profile_text"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity"/>
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
 
         <meta-data
