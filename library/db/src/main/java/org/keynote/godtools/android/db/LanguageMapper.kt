@@ -6,7 +6,7 @@ import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract.LanguageTable
 
-internal object LanguageMapper : BaseMapper<Language?>() {
+internal object LanguageMapper : BaseMapper<Language>() {
     override fun mapField(values: ContentValues, field: String, language: Language) {
         when (field) {
             LanguageTable.COLUMN_CODE -> values.put(field, serialize(language.code))

@@ -6,7 +6,7 @@ import org.ccci.gto.android.common.util.database.getInt
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
 
-internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalytics?>() {
+internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalytics>() {
     override fun mapField(values: ContentValues, field: String, analytics: GlobalActivityAnalytics) {
         when (field) {
             GlobalActivityAnalyticsTable.COLUMN_USERS -> values.put(field, analytics.users)

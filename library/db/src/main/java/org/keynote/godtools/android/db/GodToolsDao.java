@@ -13,22 +13,14 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
-import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
-import org.cru.godtools.model.Followup;
 import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
-import org.keynote.godtools.android.db.Contract.AttachmentTable;
-import org.keynote.godtools.android.db.Contract.FollowupTable;
-import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
-import org.keynote.godtools.android.db.Contract.LanguageTable;
-import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import java.util.Locale;
@@ -39,25 +31,7 @@ import androidx.annotation.WorkerThread;
 
 public class GodToolsDao extends GodToolsDaoKotlin implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
-        super(GodToolsDatabase.getInstance(context));
-
-        registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
-                     FollowupTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Language.class, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, LanguageMapper.INSTANCE,
-                     LanguageTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Tool.class, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, new ToolMapper(),
-                     ToolTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Attachment.class, AttachmentTable.TABLE_NAME, AttachmentTable.PROJECTION_ALL,
-                     new AttachmentMapper(), AttachmentTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Translation.class, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL,
-                     new TranslationMapper(), TranslationTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(LocalFile.class, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL,
-                     LocalFileMapper.INSTANCE, LocalFileTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(TranslationFile.class, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
-                     new TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(GlobalActivityAnalytics.class, GlobalActivityAnalyticsTable.TABLE_NAME,
-                     GlobalActivityAnalyticsTable.PROJECTION_ALL, GlobalActivityAnalyticsMapper.INSTANCE,
-                     GlobalActivityAnalyticsTable.SQL_WHERE_PRIMARY_KEY);
+        super(context);
     }
 
     @Nullable
