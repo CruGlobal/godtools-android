@@ -104,6 +104,20 @@ abstract class GodToolsDaoKotlin protected constructor(context: Context) :
     }
 
     @WorkerThread
+    fun updateToolOrder(vararg tools: Long) {
+        val tool = Tool()
+        transaction(exclusive = false) { _ ->
+            update(tool, where = null, projection = *arrayOf(ToolTable.COLUMN_ORDER))
+
+            // set order for each specified tool
+            tools.forEachIndexed { index, toolId ->
+                tool.order = index
+                update(tool, ToolTable.FIELD_ID.eq(toolId), ToolTable.COLUMN_ORDER)
+            }
+        }
+    }
+
+    @WorkerThread
     fun getLatestTranslation(code: String?, locale: Locale?): Optional<Translation> {
         if (code == null || locale == null) return Optional.empty()
         return streamCompat(

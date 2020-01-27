@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
-import com.annimon.stream.LongStream;
-
-import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -62,24 +59,6 @@ public class GodToolsDao extends GodToolsDaoKotlin {
         inTransaction(db, false, () -> {
             db.execSQL(sql.toString(), args);
             invalidateClass(Tool.class);
-            return null;
-        });
-    }
-
-    @WorkerThread
-    public void updateToolOrder(final long... tools) {
-        final Tool tool = new Tool();
-
-        inNonExclusiveTransaction(() -> {
-            // reset order for all tools
-            update(tool, (Expression) null, ToolTable.COLUMN_ORDER);
-
-            // set order for each specified tool
-            LongStream.of(tools).boxed().indexed()
-                    .forEach(t -> {
-                        tool.setOrder(t.getFirst());
-                        update(tool, ToolTable.FIELD_ID.eq(t.getSecond()), ToolTable.COLUMN_ORDER);
-                    });
             return null;
         });
     }
