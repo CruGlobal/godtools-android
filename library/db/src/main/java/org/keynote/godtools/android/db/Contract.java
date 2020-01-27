@@ -7,6 +7,7 @@ import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
@@ -313,5 +314,38 @@ public final class Contract extends BaseContract {
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_EMAIL, SQL_COLUMN_DESTINATION,
                        SQL_COLUMN_LANGUAGE, SQL_COLUMN_CREATE_TIME);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    static class GlobalActivityAnalyticsTable extends BaseTable {
+        static final String TABLE_NAME = "global_activity_analytics";
+        private static final Table<GlobalActivityAnalytics> TABLE = Table.forClass(GlobalActivityAnalytics.class);
+
+        static final String COLUMN_USERS = "users";
+        static final String COLUMN_COUNTRIES = "countries";
+        static final String COLUMN_LAUNCHES = "launches";
+        static final String COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations";
+
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+
+        static final String[] PROJECTION_ALL =
+                {COLUMN_ID, COLUMN_USERS, COLUMN_COUNTRIES, COLUMN_LAUNCHES, COLUMN_GOSPEL_PRESENTATIONS};
+
+        private static final String SQL_COLUMN_USERS = COLUMN_USERS + " INTEGER";
+        private static final String SQL_COLUMN_COUNTRIES = COLUMN_COUNTRIES + " INTEGER";
+        private static final String SQL_COLUMN_LAUNCHES = COLUMN_LAUNCHES + " INTEGER";
+        private static final String SQL_COLUMN_GOSPEL_PRESENTATIONS = COLUMN_GOSPEL_PRESENTATIONS + " INTEGER";
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
+                       SQL_COLUMN_GOSPEL_PRESENTATIONS);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        // region DB Migrations
+        static final String SQL_V41_CREATE_GLOBAL_ANALYTICS =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
+                       SQL_COLUMN_GOSPEL_PRESENTATIONS);
+        // endregion DB Migrations
     }
 }
