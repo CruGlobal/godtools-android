@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import org.ccci.gto.android.common.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -56,9 +59,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     @BindView(R2.id.article_swipe_container)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
-    private var articlesAdapter: ArticlesAdapter? = null
-
-    private lateinit var articles: LiveData<List<Article>>
+    private lateinit var articles: LiveData<List<Article>?>
 
     // region LifeCycle Events
 
@@ -109,15 +110,15 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
 
     private fun updateViewModelArticles() {
         val old = if (this::articles.isInitialized) articles else null
-        articles = when {
+        viewModel.tool.value = mTool
+        viewModel.locale.value = mLocale
+        viewModel.tags.value = when {
             // lookup AEM tags from the manifest category
-            category != null -> {
-                val tags = mManifest?.findCategory(category)?.orElse(null)?.aemTags ?: setOf()
-                viewModel.getArticlesForTags(mTool, mLocale, tags)
-            }
+            category != null -> mManifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
             // no category, so show all articles for this tool
-            else -> viewModel.getArticles(mTool, mLocale)
+            else -> null
         }
+        articles = viewModel.articles
 
         if (articles !== old) {
             old?.removeObservers(this)
@@ -157,6 +158,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     // endregion Data Binding
 
     // region ArticlesView
+    private var articlesAdapter: ArticlesAdapter? = null
 
     private fun setupArticlesView() {
         articlesView
@@ -193,35 +195,16 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     class ArticleListViewModel(application: Application) : AndroidViewModel(application) {
         private val aemDb = ArticleRoomDatabase.getInstance(application)
 
-        private var tool: String? = null
-        private var locale: Locale? = null
-        private var tags: Set<String>? = null
-        private lateinit var articles: LiveData<List<Article>>
+        internal var tool = MutableLiveData<String>()
+        internal var locale = MutableLiveData<Locale>()
+        internal var tags = MutableLiveData<Set<String>?>(null)
 
-        internal fun getArticles(tool: String, locale: Locale): LiveData<List<Article>> {
-            if (isArticlesLiveDataStale(tool, locale, null)) {
-                this.tool = tool
-                this.locale = locale
-                tags = null
-                articles = aemDb.articleDao().getArticles(tool, locale)
+        internal val articles = tool.switchCombineWith(locale, tags) { tool, locale, tags ->
+            when {
+                tool == null || locale == null -> emptyLiveData<List<Article>>()
+                tags == null -> aemDb.articleDao().getArticles(tool, locale)
+                else -> aemDb.articleDao().getArticles(tool, locale, tags.toList())
             }
-
-            return articles
-        }
-
-        internal fun getArticlesForTags(tool: String, locale: Locale, tags: Set<String>): LiveData<List<Article>> {
-            if (isArticlesLiveDataStale(tool, locale, tags)) {
-                this.tool = tool
-                this.locale = locale
-                this.tags = tags
-                articles = aemDb.articleDao().getArticles(tool, locale, tags.toList())
-            }
-
-            return articles
-        }
-
-        private fun isArticlesLiveDataStale(tool: String, locale: Locale, tags: Set<String>?): Boolean {
-            return !this::articles.isInitialized || this.tool != tool || this.locale != locale || this.tags != tags
         }
     }
 }
