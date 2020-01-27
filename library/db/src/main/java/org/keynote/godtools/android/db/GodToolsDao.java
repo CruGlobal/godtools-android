@@ -7,11 +7,9 @@ import android.util.Pair;
 
 import com.annimon.stream.LongStream;
 import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.db.StreamDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Base;
 import org.cru.godtools.model.Tool;
@@ -25,7 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
-public class GodToolsDao extends GodToolsDaoKotlin implements StreamDao {
+public class GodToolsDao extends GodToolsDaoKotlin {
     private GodToolsDao(@NonNull final Context context) {
         super(context);
     }
@@ -42,13 +40,6 @@ public class GodToolsDao extends GodToolsDaoKotlin implements StreamDao {
         }
 
         return sInstance;
-    }
-
-    @NonNull
-    @Override
-    @WorkerThread
-    public <T> Stream<T> streamCompat(@NonNull final Query<T> query) {
-        return StreamHelper.stream(this, query);
     }
 
     /* Miscellaneous app specific dao methods */

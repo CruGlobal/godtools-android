@@ -1,8 +1,13 @@
 package org.keynote.godtools.android.db
 
 import android.content.Context
+import androidx.annotation.WorkerThread
+import com.annimon.stream.Stream
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
+import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.StreamDao
+import org.ccci.gto.android.common.db.StreamDao.StreamHelper
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
@@ -23,7 +28,7 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
 abstract class GodToolsDaoKotlin(context: Context) : AbstractAsyncDao(GodToolsDatabase.getInstance(context)),
-    LiveDataDao {
+    LiveDataDao, StreamDao {
     override val liveDataRegistry = LiveDataRegistry()
 
     init {
@@ -70,6 +75,9 @@ abstract class GodToolsDaoKotlin(context: Context) : AbstractAsyncDao(GodToolsDa
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
     }
+
+    @WorkerThread
+    override fun <T> streamCompat(query: Query<T>): Stream<T> = StreamHelper.stream(this, query)
 
     override fun onInvalidateClass(clazz: Class<*>) {
         super.onInvalidateClass(clazz)
