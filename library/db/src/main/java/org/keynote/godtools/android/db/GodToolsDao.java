@@ -10,11 +10,8 @@ import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.db.Expression;
-import org.ccci.gto.android.common.db.LiveDataDao;
-import org.ccci.gto.android.common.db.LiveDataRegistry;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
-import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
@@ -40,7 +37,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
-public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, StreamDao {
+public class GodToolsDao extends GodToolsDaoKotlin implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
 
@@ -102,16 +99,6 @@ public class GodToolsDao extends AbstractAsyncDao implements LiveDataDao, Stream
         super.onInvalidateClass(clazz);
         getLiveDataRegistry().invalidate(clazz);
     }
-
-    // region LiveDataDao
-    private final LiveDataRegistry mLiveDataRegistry = new LiveDataRegistry();
-
-    @NonNull
-    @Override
-    public LiveDataRegistry getLiveDataRegistry() {
-        return mLiveDataRegistry;
-    }
-    // endregion LiveDataDao
 
     @NonNull
     @Override
