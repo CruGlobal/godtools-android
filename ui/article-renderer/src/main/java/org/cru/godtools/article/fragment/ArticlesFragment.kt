@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -47,9 +47,6 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
     }
 
     private val category: String? by lazy { arguments?.getString(EXTRA_CATEGORY, null) }
-    private val viewModel: ArticleListViewModel by lazy {
-        ViewModelProviders.of(this).get(ArticleListViewModel::class.java)
-    }
 
     private var binding: FragmentArticlesBinding? = null
     @JvmField
@@ -61,8 +58,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
 
     private lateinit var articles: LiveData<List<Article>?>
 
-    // region LifeCycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         updateViewModelArticles()
@@ -103,30 +99,29 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
         cleanupDataBinding()
         super.onDestroyView()
     }
+    // endregion Lifecycle
 
-    // endregion LifeCycle Events
-
-    // region ViewModel methods
+    // region Data Model
+    private val dataModel: ArticlesFragmentDataModel by viewModels()
 
     private fun updateViewModelArticles() {
         val old = if (this::articles.isInitialized) articles else null
-        viewModel.tool.value = mTool
-        viewModel.locale.value = mLocale
-        viewModel.tags.value = when {
+        dataModel.tool.value = mTool
+        dataModel.locale.value = mLocale
+        dataModel.tags.value = when {
             // lookup AEM tags from the manifest category
             category != null -> mManifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
             // no category, so show all articles for this tool
             else -> null
         }
-        articles = viewModel.articles
+        articles = dataModel.articles
 
         if (articles !== old) {
             old?.removeObservers(this)
             updateArticlesViewArticles()
         }
     }
-
-    // endregion ViewModel methods
+    // endregion Data Model
 
     private fun syncData(force: Boolean) {
         AemArticleManger.getInstance(requireContext())
@@ -192,7 +187,7 @@ class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRef
 
     // endregion View Logic
 
-    class ArticleListViewModel(application: Application) : AndroidViewModel(application) {
+    class ArticlesFragmentDataModel(application: Application) : AndroidViewModel(application) {
         private val aemDb = ArticleRoomDatabase.getInstance(application)
 
         internal var tool = MutableLiveData<String>()
