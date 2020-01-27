@@ -21,10 +21,6 @@ class GlobalDashboardActivity : BasePlatformActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_generic_fragment)
-    }
-
-    override fun onStart() {
-        super.onStart()
         loadGlobalDashboardFragment()
     }
 
@@ -34,10 +30,11 @@ class GlobalDashboardActivity : BasePlatformActivity() {
     }
 
     private fun loadGlobalDashboardFragment() {
+        val tag = "GlobalDashboardFragment"
         with(supportFragmentManager) {
             commit {
-                val fragment = GlobalDashboardFragment()
-                replace(R.id.frame, fragment)
+                val fragment = findFragmentByTag(tag) ?: GlobalDashboardFragment()
+                replace(R.id.frame, fragment, tag).setPrimaryNavigationFragment(fragment)
             }
         }
     }
