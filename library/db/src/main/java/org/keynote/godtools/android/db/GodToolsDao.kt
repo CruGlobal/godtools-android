@@ -5,6 +5,7 @@ import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Base
 import org.cru.godtools.model.Followup
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.model.Language
@@ -59,5 +60,19 @@ abstract class GodToolsDaoKotlin(context: Context) : AbstractAsyncDao(GodToolsDa
             GlobalActivityAnalyticsTable.PROJECTION_ALL, GlobalActivityAnalyticsMapper,
             GlobalActivityAnalyticsTable.SQL_WHERE_PRIMARY_KEY
         )
+    }
+
+    override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
+        is LocalFile -> getPrimaryKeyWhere(LocalFile::class.java, obj.fileName!!)
+        is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.fileName!!)
+        is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)
+        is Tool -> getPrimaryKeyWhere(Tool::class.java, obj.code!!)
+        is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
+        else -> super.getPrimaryKeyWhere(obj)
+    }
+
+    override fun onInvalidateClass(clazz: Class<*>) {
+        super.onInvalidateClass(clazz)
+        liveDataRegistry.invalidate(clazz)
     }
 }

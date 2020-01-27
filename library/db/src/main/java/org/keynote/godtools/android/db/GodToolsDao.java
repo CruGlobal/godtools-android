@@ -14,12 +14,8 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Base;
-import org.cru.godtools.model.GlobalActivityAnalytics;
-import org.cru.godtools.model.Language;
-import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.TranslationFile;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
@@ -46,32 +42,6 @@ public class GodToolsDao extends GodToolsDaoKotlin implements StreamDao {
         }
 
         return sInstance;
-    }
-
-    @NonNull
-    @Override
-    public Expression getPrimaryKeyWhere(@NonNull final Object obj) {
-        if (obj instanceof LocalFile) {
-            return getPrimaryKeyWhere(LocalFile.class, ((LocalFile) obj).getFileName());
-        } else if (obj instanceof TranslationFile) {
-            final TranslationFile file = (TranslationFile) obj;
-            return getPrimaryKeyWhere(TranslationFile.class, file.getTranslationId(), file.getFileName());
-        } else if (obj instanceof Language) {
-            return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
-        } else if (obj instanceof Tool) {
-            return getPrimaryKeyWhere(Tool.class, ((Tool) obj).getCode());
-        } else if (obj instanceof GlobalActivityAnalytics) {
-            return getPrimaryKeyWhere(obj.getClass(), ((GlobalActivityAnalytics) obj).getId());
-        } else if (obj instanceof Base) {
-            return getPrimaryKeyWhere(obj.getClass(), ((Base) obj).getId());
-        }
-        return super.getPrimaryKeyWhere(obj);
-    }
-
-    @Override
-    protected void onInvalidateClass(@NonNull final Class<?> clazz) {
-        super.onInvalidateClass(clazz);
-        getLiveDataRegistry().invalidate(clazz);
     }
 
     @NonNull
