@@ -23,7 +23,7 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
     public LatestTranslationLoader(@NonNull final Context context, @NonNull final String toolCode,
                                    @Nullable final Locale locale) {
         super(context);
-        mDao = GodToolsDao.getInstance(context);
+        mDao = GodToolsDao.Companion.getInstance(context);
         mTool = toolCode;
         mLocale = locale;
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));

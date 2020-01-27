@@ -105,7 +105,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     @Override
     public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
-        mDao = GodToolsDao.getInstance(context);
+        mDao = GodToolsDao.Companion.getInstance(context);
     }
 
     @Override

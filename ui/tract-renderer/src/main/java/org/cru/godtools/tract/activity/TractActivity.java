@@ -185,7 +185,7 @@ public class TractActivity extends BaseToolActivity
         if (savedInstanceState == null) {
             EventBus.getDefault().post(new ToolUsedEvent(mTool));
 
-            final GodToolsDao dao = GodToolsDao.getInstance(this);
+            final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
         }
 

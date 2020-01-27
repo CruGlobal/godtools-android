@@ -32,7 +32,7 @@ public final class FollowupService {
 
     private FollowupService(@NonNull final Context context) {
         mContext = context;
-        mDao = GodToolsDao.getInstance(context);
+        mDao = GodToolsDao.Companion.getInstance(context);
         EventBus.getDefault().register(this);
 
         // sync any currently pending followups

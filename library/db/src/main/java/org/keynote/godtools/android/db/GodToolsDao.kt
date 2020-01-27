@@ -12,6 +12,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.StreamDao
 import org.ccci.gto.android.common.db.StreamDao.StreamHelper
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao
+import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
 import org.cru.godtools.model.Followup
@@ -31,8 +32,10 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import java.util.Locale
 
-abstract class GodToolsDaoKotlin protected constructor(context: Context) :
+class GodToolsDao private constructor(context: Context) :
     AbstractAsyncDao(GodToolsDatabase.getInstance(context)), LiveDataDao, StreamDao {
+    companion object : SingletonHolder<GodToolsDao, Context>(::GodToolsDao)
+
     override val liveDataRegistry = LiveDataRegistry()
 
     init {
@@ -71,7 +74,7 @@ abstract class GodToolsDaoKotlin protected constructor(context: Context) :
         )
     }
 
-    override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
+    public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
         is LocalFile -> getPrimaryKeyWhere(LocalFile::class.java, obj.fileName!!)
         is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.fileName!!)
         is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)

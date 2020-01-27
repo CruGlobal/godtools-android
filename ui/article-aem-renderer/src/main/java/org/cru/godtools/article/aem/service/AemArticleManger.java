@@ -126,7 +126,7 @@ public class AemArticleManger {
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.Companion.getInstance(mContext);
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
-        mDao = GodToolsDao.getInstance(mContext);
+        mDao = GodToolsDao.Companion.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AemArticleManger.class.getSimpleName()));

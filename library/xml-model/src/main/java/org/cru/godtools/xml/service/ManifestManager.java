@@ -72,7 +72,7 @@ public class ManifestManager {
 
     private ManifestManager(@NonNull final Context context) {
         mContext = context;
-        mDao = GodToolsDao.getInstance(mContext);
+        mDao = GodToolsDao.Companion.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
     }
