@@ -23,7 +23,6 @@ import org.cru.godtools.xml.model.Text;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
@@ -159,10 +158,11 @@ final class InputViewHolder extends BaseViewHolder<Input> {
 
         // style the input view
         final Styles stylesParent = Base.getStylesParent(mModel);
+        if (mInputLayout != null) {
+            mInputLayout.setBoxStrokeColor(Styles.getPrimaryColor(stylesParent));
+        }
         if (mInputView != null) {
             mInputView.setTextColor(Styles.getTextColor(stylesParent));
-            ViewCompat.setBackgroundTintList(mInputView,
-                                             ColorStateList.valueOf(Styles.getPrimaryColor(stylesParent)));
         }
     }
 
