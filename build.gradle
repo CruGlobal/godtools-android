@@ -183,6 +183,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             compileSdkVersion compileSdk
 
             defaultConfig {
+                versionCode rootProject.versionCode
+
                 minSdkVersion minSdk
                 targetSdkVersion targetSdk
 

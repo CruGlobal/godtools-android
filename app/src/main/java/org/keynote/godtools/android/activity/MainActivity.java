@@ -70,11 +70,11 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Nullable
     String mFeatureDiscoveryActive;
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        triggerOnboardingIfNecessary();
         mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
@@ -203,8 +203,15 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         mTaskHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
+    // endregion Lifecycle
 
-    // endregion Lifecycle Events
+    // region Onboarding
+    private void triggerOnboardingIfNecessary() {
+        if (!getSettings().isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
+            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
+        }
+    }
+    // endregion Onboarding
 
     private void processIntent(@Nullable final Intent intent) {
         final String action = intent != null ? intent.getAction() : null;
@@ -295,9 +302,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     // region Feature Discovery logic
     void showNextFeatureDiscovery() {
-        if (!getSettings().isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
-            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
-        } else if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+        if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
         }
