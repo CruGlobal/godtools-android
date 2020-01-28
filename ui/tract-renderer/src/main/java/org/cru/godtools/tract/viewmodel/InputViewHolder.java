@@ -2,6 +2,8 @@ package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,6 +165,16 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         }
         if (mInputView != null) {
             mInputView.setTextColor(Styles.getTextColor(stylesParent));
+
+            // set the cursor color
+            // TODO: add support for older versions of Android by creating compat methods in GTO-Support for modifying
+            //       the TextCursorDrawable.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                final Drawable cursor = mInputView.getTextCursorDrawable();
+                if (cursor != null) {
+                    cursor.setTint(Styles.getPrimaryColor(stylesParent));
+                }
+            }
         }
     }
 
