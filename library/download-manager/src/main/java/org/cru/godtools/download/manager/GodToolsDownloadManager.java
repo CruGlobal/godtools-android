@@ -118,7 +118,7 @@ public final class GodToolsDownloadManager {
     private GodToolsDownloadManager(@NonNull final Context context) {
         mContext = context;
         mApi = GodToolsApi.getInstance(mContext);
-        mDao = GodToolsDao.getInstance(mContext);
+        mDao = GodToolsDao.Companion.getInstance(mContext);
         mEventBus = EventBus.getDefault();
         mHandler = new Handler(Looper.getMainLooper());
         mPrefs = Settings.getInstance(mContext);

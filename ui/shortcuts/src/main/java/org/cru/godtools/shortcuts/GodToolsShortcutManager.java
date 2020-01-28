@@ -84,7 +84,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     private GodToolsShortcutManager(@NonNull final Context context) {
         mContext = context;
         mSettings = Settings.getInstance(context);
-        mDao = GodToolsDao.getInstance(context);
+        mDao = GodToolsDao.Companion.getInstance(context);
         mHandler = new Handler(Looper.getMainLooper());
 
         // native ShortcutManager support

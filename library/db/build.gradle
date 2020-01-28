@@ -1,4 +1,5 @@
 dependencies {
+    api project(':library:base')
     implementation project(':library:model')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

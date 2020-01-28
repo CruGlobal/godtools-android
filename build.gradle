@@ -196,6 +196,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             }
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
+                freeCompilerArgs += '-Xjvm-default=enable'
             }
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")

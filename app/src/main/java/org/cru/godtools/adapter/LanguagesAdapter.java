@@ -60,7 +60,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     public LanguagesAdapter(@NonNull final Context context) {
         setHasStableIds(true);
-        mDao = GodToolsDao.getInstance(context);
+        mDao = GodToolsDao.Companion.getInstance(context);
         mTools = GodToolsDownloadManager.getInstance(context);
     }
 
