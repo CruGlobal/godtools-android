@@ -31,10 +31,11 @@ class GlobalDashboardActivity : BasePlatformActivity() {
 
     private fun loadGlobalDashboardFragment() {
         with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return@with
             commit {
-                if (primaryNavigationFragment != null) return@with
                 val fragment = GlobalDashboardFragment()
-                replace(R.id.frame, fragment).setPrimaryNavigationFragment(fragment)
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
             }
         }
     }
