@@ -151,6 +151,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
     implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
@@ -161,6 +162,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
