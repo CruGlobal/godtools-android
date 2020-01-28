@@ -11,7 +11,7 @@ import java.util.Calendar
 
 class GlobalDashboardFragment : BasePlatformFragment() {
     private var binding: FragmentGlobalDashboardBinding? = null
-    private val viewModel: GlobalDashboardDataModel by viewModels { defaultViewModelProviderFactory }
+    private val viewModel: GlobalDashboardDataModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGlobalDashboardBinding.inflate(inflater, container, false)
