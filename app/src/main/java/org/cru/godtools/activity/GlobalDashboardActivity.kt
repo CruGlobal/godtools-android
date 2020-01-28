@@ -30,11 +30,11 @@ class GlobalDashboardActivity : BasePlatformActivity() {
     }
 
     private fun loadGlobalDashboardFragment() {
-        val tag = "GlobalDashboardFragment"
         with(supportFragmentManager) {
             commit {
-                val fragment = findFragmentByTag(tag) ?: GlobalDashboardFragment()
-                replace(R.id.frame, fragment, tag).setPrimaryNavigationFragment(fragment)
+                if (primaryNavigationFragment != null) return@with
+                val fragment = GlobalDashboardFragment()
+                replace(R.id.frame, fragment).setPrimaryNavigationFragment(fragment)
             }
         }
     }
