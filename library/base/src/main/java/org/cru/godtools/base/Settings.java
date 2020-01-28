@@ -3,8 +3,6 @@ package org.cru.godtools.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -16,7 +14,6 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import me.thekey.android.TheKey;
-import timber.log.Timber;
 
 public final class Settings {
     private static final String PREFS_SETTINGS = "GodTools";
@@ -129,23 +126,11 @@ public final class Settings {
         }
 
         // resolve the current version code as the first launch code
-        mPrefs.edit().putInt(PREF_VERSION_FIRST_LAUNCH, getCurrentVersion()).apply();
-    }
-
-    private int getCurrentVersion() {
-        // lookup the current version from the package info
-        try {
-            final PackageInfo info = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-            return info.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.tag("Settings").e(e, "Error retrieving the Package Info");
-        }
-
-        return -1;
+        mPrefs.edit().putInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE).apply();
     }
 
     private int getFirstLaunchVersion() {
-        return mPrefs.getInt(PREF_VERSION_FIRST_LAUNCH, getCurrentVersion());
+        return mPrefs.getInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE);
     }
     // endregion Version tracking
 
