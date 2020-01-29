@@ -1,6 +1,8 @@
 package org.cru.godtools.tutorial
 
 import org.cru.godtools.base.Settings
+import org.cru.godtools.tutorial.analytics.model.BASE_SCREEN_NAME_ON_BOARDING
+import org.cru.godtools.tutorial.analytics.model.BASE_SCREEN_NAME_TUTOIRAL
 
 enum class PageSet(
     internal val feature: String? = null,
@@ -13,7 +15,7 @@ enum class PageSet(
         feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
         showUpNavigation = false,
         menu = R.menu.tutorial_onboarding_menu,
-        analyticsBaseScreenName = "onboarding",
+        analyticsBaseScreenName = BASE_SCREEN_NAME_ON_BOARDING,
         pages = listOf(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_OTHERS,
@@ -24,7 +26,7 @@ enum class PageSet(
     ),
     TRAINING(
         feature = Settings.FEATURE_TUTORIAL_TRAINING,
-        analyticsBaseScreenName = "tutorial",
+        analyticsBaseScreenName = BASE_SCREEN_NAME_TUTOIRAL,
         pages = listOf(
             Page.TRAINING_WATCH,
             Page.TRAINING_PREPARE,
