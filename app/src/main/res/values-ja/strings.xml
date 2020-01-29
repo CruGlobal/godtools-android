@@ -7,8 +7,11 @@
     <string name="menu_heading_share">シェア</string>
     <string name="menu_heading_legal">法定事項</string>
     <string name="menu_about">情報</string>
-    <string name="menu_help">ヘルプ</string>
+    <string name="menu_help">よくある質問</string>
     <string name="menu_contact_us">お問い合わせ</string>
+    <string name="menu_login">ログイン</string>
+    <string name="menu_signup">アカウント作成</string>
+    <string name="menu_logout">ログアウト</string>
     <string name="menu_share_godtools">GodToolsアプリをシェア</string>
     <string name="menu_share_story">体験談を紹介</string>
     <string name="menu_rate">GodToolsの評価</string>
@@ -32,9 +35,10 @@
         <item quantity="other">%1$,d 言語</item>
     </plurals>
     <string name="text_tools_all_installed">利用可能なツールをすべてダウンロードしました。</string>
+    <string name="menu_add_to_home">ホーム画面に追加</string>
     <string name="action_tools_open">ツールを開く</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60種類以上の言語</string>
+    <string name="feature_discovery_title_language_settings">80種類以上の言語</string>
     <string name="menu_language_settings">言語設定</string>
     <string name="title_language_settings">言語設定</string>
     <string name="title_language_primary">第1言語</string>
@@ -43,10 +47,11 @@
     <string name="text_language_parallel_description">同じ言語を母国語とする仲間にGodToolsをシェア</string>
     <string name="text_language_warning">全言語ですべてのツールが利用できるわけではありません。</string>
     <string name="label_language_none">なし</string>
+    <string name="label_language_search">言語を絞り込む</string>
     <!-- Sharing -->
     <string name="share_general_message">今日見たアプリは、こちらからダウンロードできます：http://godtoolsapp.com \n\n
 
-		アプリのウェブ版のリンクはこちらです{{share_link}} \n\n
+アプリのウェブ版のリンクはこちらです{{share_link}} \n\n
 
-		もっとお話しましょう！</string>
+もっとお話しましょう！</string>
 </resources>

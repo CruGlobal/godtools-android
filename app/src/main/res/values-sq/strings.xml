@@ -33,6 +33,7 @@
         <item quantity="one">%1$,d gjuhë</item>
         <item quantity="other">%1$,d e gjuhëve</item>
     </plurals>
+    <string name="action_tools_open">Hapur</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ gjuhët</string>
     <string name="menu_language_settings">Kushtet e gjuhës</string>

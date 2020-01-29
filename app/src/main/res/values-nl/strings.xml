@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Delen</string>
     <string name="menu_heading_legal">Legaal</string>
     <string name="menu_about">Over</string>
-    <string name="menu_help">Hulp</string>
+    <string name="menu_help">Veelgestelde vragen</string>
     <string name="menu_contact_us">Contacteer Ons</string>
+    <string name="menu_login">Inloggen</string>
+    <string name="menu_signup">Account aanmaken</string>
+    <string name="menu_logout">Uitloggen</string>
     <string name="menu_share_godtools">Deel de GodTools app</string>
     <string name="menu_share_story">Deel een verhaal met ons</string>
     <string name="menu_rate">Waardeer GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d Talen</item>
     </plurals>
     <string name="text_tools_all_installed">Je hebt alle beschikbare tools gedownload.</string>
+    <string name="menu_add_to_home">Toevoegen aan startscherm</string>
+    <string name="action_tools_open">Tool openen</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ talen</string>
+    <string name="feature_discovery_title_language_settings">80+ talen</string>
     <string name="menu_language_settings">Taal Instellingen</string>
     <string name="title_language_settings">Taal Instellingen</string>
     <string name="title_language_primary">Hoofdtaal</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Deel God Tools met iemand in hun moedertaal</string>
     <string name="text_language_warning">Niet elke tool is beschikbaar in elke taal</string>
     <string name="label_language_none">Geen</string>
+    <string name="label_language_search">Talen filteren</string>
     <!-- Sharing -->
     <string name="share_general_message">Hier is de link om de app te downloaden die we vandaag hebben bekeken: http://godtoolsapp.com \n\n
 
-		Hier is een link naar een webversie van de app {{share_link}} \n\n
+Hier is een link naar een webversie van de app {{share_link}} \n\n
 
-		Laten we verder praten!</string>
+Laten we verder praten!</string>
 </resources>

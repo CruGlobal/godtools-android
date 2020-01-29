@@ -37,6 +37,7 @@
     </plurals>
     <string name="text_tools_all_installed">ሁሉንም መሳሪያዎች አዉርደዋል</string>
     <string name="menu_add_to_home">ዋና ስክሪን ይጨምሩት</string>
+    <string name="action_tools_open">ክፈት</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ከ 70 በላይ ቋንቋዎች</string>
     <string name="menu_language_settings">የቋንቋ ማስተካከያ</string>

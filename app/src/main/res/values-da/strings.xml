@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Del</string>
     <string name="menu_heading_legal">Juridisk</string>
     <string name="menu_about">Om</string>
-    <string name="menu_help">Hjælp</string>
+    <string name="menu_help">Ofte stillede spørgsmål</string>
     <string name="menu_contact_us">Kontakt os</string>
+    <string name="menu_login">Log på</string>
+    <string name="menu_signup">Opret konto</string>
+    <string name="menu_logout">Log af</string>
     <string name="menu_share_godtools">Del GodTools-appen</string>
     <string name="menu_share_story">Del en historie med os</string>
     <string name="menu_rate">Bedøm GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d Sprog</item>
     </plurals>
     <string name="text_tools_all_installed">Du har hentet alle tilgængelige værktøjer.</string>
+    <string name="menu_add_to_home">Føj til startside</string>
+    <string name="action_tools_open">Åbn værktøj</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Over 60 sprog</string>
+    <string name="feature_discovery_title_language_settings">Over 90 sprog</string>
     <string name="menu_language_settings">Sprogindstillinger</string>
     <string name="title_language_settings">Sprogindstillinger</string>
     <string name="title_language_primary">Primært sprog</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Del God Tools med en på deres eget sprog.</string>
     <string name="text_language_warning">Ikke alle værktøjer findes på alle sprog.</string>
     <string name="label_language_none">Ingen</string>
+    <string name="label_language_search">Filtrer sprog</string>
     <!-- Sharing -->
-    <string name="share_general_message">Herer linket til overførsel af appen, som vi så på i dag: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Her er linket til overførsel af appen, som vi så på i dag: http://godtoolsapp.com \n\n
 
-		Her er et link til en webversion af appen {{share_link}} \n\n
+Her er et link til en webversion af appen {{share_link}} \n\n
 
-		Lad os tale mere sammen!</string>
+Lad os tale mere sammen!</string>
 </resources>

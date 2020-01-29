@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Distribuie</string>
     <string name="menu_heading_legal">Juridic</string>
     <string name="menu_about">Despre</string>
-    <string name="menu_help">Ajutor</string>
+    <string name="menu_help">Întrebări frecvente</string>
     <string name="menu_contact_us">Contactează-ne</string>
+    <string name="menu_login">Conectare</string>
+    <string name="menu_signup">Creează cont</string>
+    <string name="menu_logout">Deconectare</string>
     <string name="menu_share_godtools">Distribuie aplicația GodTools</string>
     <string name="menu_share_story">Împărtășește o poveste cu noi</string>
     <string name="menu_rate">Evaluează GodTools</string>
@@ -36,8 +39,10 @@
         <item quantity="few">%1$,d limbi</item>
     </plurals>
     <string name="text_tools_all_installed">Ai descărcat toate instrumentele disponibile.</string>
+    <string name="menu_add_to_home">Adaugă la ecranul de pornire</string>
+    <string name="action_tools_open">Deschide instrumentul</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Peste 60 de limbi</string>
+    <string name="feature_discovery_title_language_settings">Peste 80 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
     <string name="title_language_settings">Setări de limbă</string>
     <string name="title_language_primary">Limba principală</string>
@@ -46,10 +51,11 @@
     <string name="text_language_parallel_description">Distribuie God Tools unei persoane în limba nativă a acesteia.</string>
     <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
     <string name="label_language_none">Niciunul</string>
+    <string name="label_language_search">Filtrează limbile</string>
     <!-- Sharing -->
     <string name="share_general_message">Iată linkul de descărcare a aplicației pe care am analizat-o azi: http://godtoolsapp.com \n\n
 
-		Iată linkul către versiunea web a aplicației {{share_link}} \n\n
+Iată linkul către versiunea web a aplicației {{share_link}} \n\n
 
-		Să discutăm mai multe!</string>
+Să discutăm mai multe!</string>
 </resources>

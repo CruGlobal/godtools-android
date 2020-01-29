@@ -7,7 +7,7 @@
     <string name="menu_heading_share">Jakaminen</string>
     <string name="menu_heading_legal">Juridiset</string>
     <string name="menu_about">Info</string>
-    <string name="menu_help">Apua</string>
+    <string name="menu_help">Usein kysytyt kysymykset</string>
     <string name="menu_contact_us">Ota yhteyttä</string>
     <string name="menu_login">Kirjaudu sisään</string>
     <string name="menu_signup">Luo tili</string>
@@ -15,8 +15,10 @@
     <string name="menu_share_godtools">Jaa GodTools -sovellus</string>
     <string name="menu_share_story">Jaa meille tarina</string>
     <string name="menu_terms_of_use">Käyttöehdot</string>
+    <string name="menu_privacy_policy">Tietosuojakäytäntö</string>
     <string name="menu_copyright">Tekijänoikeudet</string>
     <!-- Share a story -->
+    <string name="share_story_subject">Kuule, kuinka Jumala liikkuu!</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Etsi työkaluja</string>
     <string name="nav_my_tools">Omat työkalut</string>
@@ -35,6 +37,7 @@
     </plurals>
     <string name="text_tools_all_installed">Olet jo ladannut kaikki käytettävissä olevat työkalut.</string>
     <string name="menu_add_to_home">Lisää aloitusnäyttöön</string>
+    <string name="action_tools_open">Avaa työkalu</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kieltä</string>
     <string name="menu_language_settings">Kieliasetukset</string>

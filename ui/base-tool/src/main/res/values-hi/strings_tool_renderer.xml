@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">इन्स्टॉल करें</string>
     <string name="menu_share_tool">शेयर करें</string>
     <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">“%1$s” शेयर करें इसका प्रयोग करते हुए</string>

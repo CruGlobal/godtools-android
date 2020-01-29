@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">Setja upp</string>
+    <string name="menu_share_tool">Deila</string>
+    <string name="share_tool_title">Deila “%1$s” með því að nota</string>
+    <string name="tool_not_found">Tólið sem þú baðst um finnst ekki</string>
+    <string name="tool_loading">Tólið sem þú baðst um er að hlaðast...</string>
+</resources>

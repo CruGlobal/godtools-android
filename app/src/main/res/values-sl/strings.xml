@@ -7,9 +7,12 @@
     <string name="menu_heading_share">Deli</string>
     <string name="menu_heading_legal">Zakonito</string>
     <string name="menu_about">O aplikaciji</string>
-    <string name="menu_help">Pomoč</string>
+    <string name="menu_help">Pogosta vprašanja</string>
     <string name="menu_contact_us">Vprašaj nas</string>
-    <string name="menu_share_godtools">Deli GodTools</string>
+    <string name="menu_login">Prijava</string>
+    <string name="menu_signup">Ustvari račun</string>
+    <string name="menu_logout">Odjava</string>
+    <string name="menu_share_godtools">Deli aplikacijo GodTools</string>
     <string name="menu_share_story">Deli zgodbo z nami</string>
     <string name="menu_rate">Oceni GodTools</string>
     <string name="menu_terms_of_use">Pogoji uporabe</string>
@@ -37,8 +40,11 @@
         <item quantity="few">%1$,d jezikov</item>
         <item quantity="two">%1$,d jezika</item>
     </plurals>
+    <string name="text_tools_all_installed">Prenesli ste vsa razpoložljiva orodja.</string>
+    <string name="menu_add_to_home">Dodaj na domači zaslon</string>
+    <string name="action_tools_open">Odpri orodje</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ jezike</string>
+    <string name="feature_discovery_title_language_settings">80+ jezikov</string>
     <string name="menu_language_settings">Jezikovne nastavitve</string>
     <string name="title_language_settings">Jezikovne nastavitve</string>
     <string name="title_language_primary">Osnovni jezik</string>
@@ -47,8 +53,11 @@
     <string name="text_language_parallel_description">Deli GodTools z drugimi v njihovem maternem jeziku</string>
     <string name="text_language_warning">Vsa orodja niso na voljo v vseh jezikih</string>
     <string name="label_language_none">Noben</string>
+    <string name="label_language_search">Filtriraj jezike</string>
     <!-- Sharing -->
-    <string name="share_general_message">Naloži aplikacijo GodTools tukaj: http://godtoolsapp.com  \n\n
+    <string name="share_general_message">Tukaj je povezava za prenos današnje gledane aplikacije: http://godtoolsapp.com  \n\n
 
-Here’s a link to a web version of the app {{share_link}} \n\n</string>
+Tukaj je povezava do spletne različice aplikacije {{share_link}} \n\n
+
+Govorimo več!</string>
 </resources>

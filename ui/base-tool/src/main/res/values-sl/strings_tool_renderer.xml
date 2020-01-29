@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Namestitev</string>
     <string name="menu_share_tool">Deli</string>
     <string name="share_tool_title">Deli \"%1$s\" na</string>
     <string name="tool_not_found">Zahtevanega orodja ni bilo mogoče najti</string>

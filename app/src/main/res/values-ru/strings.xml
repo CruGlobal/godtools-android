@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Поделиться</string>
     <string name="menu_heading_legal">Юридическая информация</string>
     <string name="menu_about">О приложении</string>
-    <string name="menu_help">Справка</string>
+    <string name="menu_help">Частые вопросы</string>
     <string name="menu_contact_us">Связаться с нами</string>
+    <string name="menu_login">Войти</string>
+    <string name="menu_signup">Создать учетную запись</string>
+    <string name="menu_logout">Выйти</string>
     <string name="menu_share_godtools">Поделиться приложением GodTools</string>
     <string name="menu_share_story">Поделитесь с нами историей</string>
     <string name="menu_rate">Оценить GodTools</string>
@@ -38,8 +41,10 @@
         <item quantity="many">%1$,d языков</item>
     </plurals>
     <string name="text_tools_all_installed">Вы загрузили все доступные инструменты.</string>
+    <string name="menu_add_to_home">Добавить на главный экран</string>
+    <string name="action_tools_open">Открыть инструмент</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Более 60 языков</string>
+    <string name="feature_discovery_title_language_settings">Более 80 языков</string>
     <string name="menu_language_settings">Настройки языка</string>
     <string name="title_language_settings">Настройки языка</string>
     <string name="title_language_primary">Основной язык</string>
@@ -48,10 +53,11 @@
     <string name="text_language_parallel_description">Поделитеьсь GodTools с кем-нибудь на его/ее родном языке.</string>
     <string name="text_language_warning">Не все инструменты доступны на всех языках.</string>
     <string name="label_language_none">Нет</string>
+    <string name="label_language_search">Фильтр языков</string>
     <!-- Sharing -->
     <string name="share_general_message">Вот ссылка на загрузку приложения, которое мы с вами смотрели сегодня: http://godtoolsapp.com \n\n
 
-  Вот ссылка на веб-версию приложения {{share_link}} \n\n
+Вот ссылка на веб-версию приложения {{share_link}} \n\n
 
 Давайте чаще общаться!</string>
 </resources>

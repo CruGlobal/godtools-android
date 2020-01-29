@@ -2,8 +2,7 @@
 <resources>
     <string name="menu_install">Installieren</string>
     <string name="menu_share_tool">Teilen</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Teilen Sie „%1$s“ mit</string>
     <string name="tool_not_found">Das von Ihnen angeforderte Tool konnte nicht gefunden werden.</string>
-    <string name="tool_loading">Das von Ihnen angeforderte Tool wird geladen ...</string>
+    <string name="tool_loading">Das von Ihnen angeforderte Tool wird geladen…</string>
 </resources>

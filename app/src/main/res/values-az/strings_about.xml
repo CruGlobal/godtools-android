@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_about">Haqqında</string>
+    <string name="general_about_1">GodTools inancınızı asan və aydın şəkildə paylaşmağınıza kömək edir.</string>
+    <string name="general_about_2">Əvvəllər inancınızı kimsəylə paylaşmamış olsanız da, yaxud fərqli dildə danışsanız da, bu alətlər İsa Məsih vasitəsilə Tanrı ilə əlaqə yaratmağın yollarını inamlı şəkildə insanlara izah etməyinizə kömək edir.</string>
+    <string name="general_about_3">İstəyinizə və auditoriyanıza görə görə müxtəlif alətlərdən seçin. Bütün alətlər hər dildə mövcud deyil.</string>
+    <string name="general_about_4">Digər mənbələrə keçidlər hər bir alətin sonunda verilmişdir.</string>
+    <string name="general_about_5">Hər yeni alət və/ya dili yükləmək üçün onlayn bağlantı lazımdır. Yükləndikdən sonra offlayn rejimdə istifadə oluna bilər.</string>
+    <string name="general_about_6">Sual, təklif və sorğularınız varsa support@godtoolsapp.com ünvanından bizimlə əlaqə saxlayın</string>
+    <string name="general_about_7">Bu alətlərin onlayn versiyası knowgod.com səhifəsindən əldə edilə bilər. Öz səhifənizə keçirin!</string>
+    <string name="general_about_8">Daha ətraflı məlumat üçün godtoolsapp.com ziyarət edin</string>
+    <string name="general_about_9">İnancınız paylaşmaq təşəbbüsü göstərdikdə unutmayn ki, Tanrı qəlbləri dəyişən varlıqdır. Hər kəsi sevin, onları başa düşmək üçün dinləyin.</string>
+    <string name="general_about_10">\"Söhbətlərinizi səmimi və maraqlı et ki, hər kəsin sualını cavablandıra biləsən.\" 
+Colossians 4:6</string>
+</resources>

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Chia sẻ</string>
     <string name="menu_heading_legal">Hợp pháp</string>
     <string name="menu_about">Giới thiệu về</string>
-    <string name="menu_help">Trợ giúp</string>
+    <string name="menu_help">Câu hỏi Thường Gặp</string>
     <string name="menu_contact_us">Liên hệ chúng tôi</string>
+    <string name="menu_login">Đăng nhập</string>
+    <string name="menu_signup">Tạo Tài khoản</string>
+    <string name="menu_logout">Đăng xuất</string>
     <string name="menu_share_godtools">Chia sẻ Ứng dụng GodTools</string>
     <string name="menu_share_story">Chia sẻ một Câu chuyện với Chúng tôi</string>
     <string name="menu_rate">Đánh giá GodTools</string>
@@ -32,8 +35,10 @@
         <item quantity="other">%1$,d Ngôn ngữ</item>
     </plurals>
     <string name="text_tools_all_installed">Bạn đã tải về tất cả các công cụ sẵn có.</string>
+    <string name="menu_add_to_home">Thêm vào màn hình Trang chủ</string>
+    <string name="action_tools_open">Mở Công cụ</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Hơn 60 Thứ Tiếng</string>
+    <string name="feature_discovery_title_language_settings">Hơn 80 Ngôn ngữ</string>
     <string name="menu_language_settings">Các thiết lập Ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập Ngôn ngữ</string>
     <string name="title_language_primary">Ngôn ngữ Chính</string>
@@ -42,6 +47,7 @@
     <string name="text_language_parallel_description">Chia sẻ GodTools với một ai đó bằng ngôn ngữ bản địa của họ</string>
     <string name="text_language_warning">Không phải mọi công cụ đều có sẵn trong mọi ngôn ngữ</string>
     <string name="label_language_none">Không gì cả</string>
+    <string name="label_language_search">Lọc các Ngôn ngữ</string>
     <!-- Sharing -->
     <string name="share_general_message">Đây là đường dẫn để tải về ứng dụng chúng tôi đang tìm kiếm ngày hôm nay: http://godtoolsapp.com\n\n
 

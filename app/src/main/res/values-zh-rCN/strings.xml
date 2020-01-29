@@ -7,8 +7,11 @@
     <string name="menu_heading_share">分享</string>
     <string name="menu_heading_legal">法律</string>
     <string name="menu_about">关于</string>
-    <string name="menu_help">帮助</string>
+    <string name="menu_help">常见问题</string>
     <string name="menu_contact_us">联系我们</string>
+    <string name="menu_login">登录</string>
+    <string name="menu_signup">创建账户</string>
+    <string name="menu_logout">退出</string>
     <string name="menu_share_godtools">分享GodTools应用</string>
     <string name="menu_share_story">与我们分享故事</string>
     <string name="menu_rate">为GodTools评分</string>
@@ -32,8 +35,10 @@
         <item quantity="other">%1$,d 种语言</item>
     </plurals>
     <string name="text_tools_all_installed">您已下载所有可用工具。</string>
+    <string name="menu_add_to_home">添加到主屏幕</string>
+    <string name="action_tools_open">打开工具</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60多种语言</string>
+    <string name="feature_discovery_title_language_settings">80多种语言</string>
     <string name="menu_language_settings">语言设置</string>
     <string name="title_language_settings">语言设置</string>
     <string name="title_language_primary">主要语言</string>
@@ -42,6 +47,7 @@
     <string name="text_language_parallel_description">用他人的母语与他们分享GodTools。</string>
     <string name="text_language_warning">有些工具不能涵盖所有语种。</string>
     <string name="label_language_none">无</string>
+    <string name="label_language_search">筛选语言</string>
     <!-- Sharing -->
     <string name="share_general_message">以下链接可以下载我们今天看到的应用：
 http://godtoolsapp.com \n\n

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Partilhar</string>
     <string name="menu_heading_legal">Aviso legal</string>
     <string name="menu_about">Sobre</string>
-    <string name="menu_help">Ajuda</string>
+    <string name="menu_help">Perguntas frequentes</string>
     <string name="menu_contact_us">Contactar-nos</string>
+    <string name="menu_login">Iniciar sessão</string>
+    <string name="menu_signup">Criar conta</string>
+    <string name="menu_logout">Sair</string>
     <string name="menu_share_godtools">Partilhar a aplicação GodTools</string>
     <string name="menu_share_story">Partilhar uma história connosco</string>
     <string name="menu_rate">Avaliar GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d idiomas</item>
     </plurals>
     <string name="text_tools_all_installed">Transferiu todas as ferramentas disponíveis.</string>
+    <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
+    <string name="action_tools_open">Abrir ferramenta</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Mais de 60 idiomas</string>
+    <string name="feature_discovery_title_language_settings">Mais de 80 idiomas</string>
     <string name="menu_language_settings">Definições de idioma</string>
     <string name="title_language_settings">Definições de idioma</string>
     <string name="title_language_primary">Idioma principal</string>
@@ -44,10 +49,11 @@
     <string name="text_language_parallel_description">Partilha a aplicação GodTools com uma pessoa no seu idioma nativo.</string>
     <string name="text_language_warning">Nem todas as ferramentas estão disponíveis em todos os idiomas.</string>
     <string name="label_language_none">Nenhum</string>
+    <string name="label_language_search">Filtrar idiomas</string>
     <!-- Sharing -->
     <string name="share_general_message">Aqui está a ligação para transferir a aplicação que estávamos a ver hoje: http://godtoolsapp.com \n\n
 
-		Aqui está uma ligação para a versão online da aplicação {{share_link}} \n\n
+Aqui está uma ligação para a versão online da aplicação {{share_link}} \n\n
 
-		Vamos falar mais!</string>
+Vamos falar mais!</string>
 </resources>

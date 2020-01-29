@@ -38,6 +38,7 @@
     </plurals>
     <string name="text_tools_all_installed">"आफ्नो सबै उपलब्ध टुल्स डाउनलोड गर्नु भयो। "</string>
     <string name="menu_add_to_home">"मुख्य पृष्ठमा जोड दिनुहोस "</string>
+    <string name="action_tools_open">खोल्नुहोस्</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">"70+ भाषाहरु "</string>
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Zdieľanie</string>
     <string name="menu_heading_legal">Právne informácie</string>
     <string name="menu_about">O nás</string>
-    <string name="menu_help">Pomoc</string>
+    <string name="menu_help">Časté otázky</string>
     <string name="menu_contact_us">Kontaktujte nás</string>
+    <string name="menu_login">Prihlásiť sa</string>
+    <string name="menu_signup">Vytvoriť účet</string>
+    <string name="menu_logout">Odhlásiť sa</string>
     <string name="menu_share_godtools">Zdieľanie aplikácie GodTools</string>
     <string name="menu_share_story">Podeľte sa s nami o príbeh</string>
     <string name="menu_rate">Ohodnotiť aplikáciu GodTools</string>
@@ -38,8 +41,10 @@
         <item quantity="many">%1$,d jazyka</item>
     </plurals>
     <string name="text_tools_all_installed">Stiahli ste si všetky dostupné nástroje</string>
+    <string name="menu_add_to_home">Pridať na domovskú obrazovku</string>
+    <string name="action_tools_open">Otvoriť nástroj</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Vyše 60 jazykov</string>
+    <string name="feature_discovery_title_language_settings">Vyše 80 jazykov</string>
     <string name="menu_language_settings">Nastavenia jazyka</string>
     <string name="title_language_settings">Nastavenia jazyka</string>
     <string name="title_language_primary">Hlavný jazyk</string>
@@ -48,6 +53,7 @@
     <string name="text_language_parallel_description">Podeľte sa o aplikáciu GodTools s niekým v jeho rodnom jazyku.</string>
     <string name="text_language_warning">Nie všetky nástroje sú dostupné vo všetkých jazykoch.</string>
     <string name="label_language_none">Žiadne</string>
+    <string name="label_language_search">Filtrovať jazyky</string>
     <!-- Sharing -->
     <string name="share_general_message">Tu je odkaz na stiahnutie aplikácie, na ktorú sme sa dnes pozerali: http://godtoolsapp.com \n\n
 

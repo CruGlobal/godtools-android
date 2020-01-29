@@ -7,8 +7,11 @@
     <string name="menu_heading_share">اشتراک‌گذاری</string>
     <string name="menu_heading_legal">قانونی</string>
     <string name="menu_about">درباره</string>
-    <string name="menu_help">راهنمایی</string>
+    <string name="menu_help">سؤالات متداول</string>
     <string name="menu_contact_us">تماس با ما</string>
+    <string name="menu_login">ورود</string>
+    <string name="menu_signup">ایجاد حساب</string>
+    <string name="menu_logout">خروج</string>
     <string name="menu_share_godtools">اشتراگ‌گذاری برنامه GodTools</string>
     <string name="menu_share_story">یک داستان با ما به اشتراک بگذارید</string>
     <string name="menu_rate">امتیازدهی به GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d زبان</item>
     </plurals>
     <string name="text_tools_all_installed">همه ابزارهای موجود را دانلود کرده‌اید.</string>
+    <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
+    <string name="action_tools_open">باز کردن ابزار</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">+60 زبان</string>
+    <string name="feature_discovery_title_language_settings">+80 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>
     <string name="title_language_settings">تنظیمات زبان</string>
     <string name="title_language_primary">زبان اصلی</string>
@@ -44,11 +49,12 @@
     <string name="text_language_parallel_description">GodTools را با دیگران به زبان اصلی آن‌ها به اشتراک بگذارید.</string>
     <string name="text_language_warning">تمام ابزار به تمام زبان‌ها در دسترس نیستند.</string>
     <string name="label_language_none">هیچکدام</string>
+    <string name="label_language_search">فیلتر کردن زبان‌ها</string>
     <!-- Sharing -->
     <string name="share_general_message">لینک دانلود برنامه‌ای که امروز مشاهده می‌کردیم اینجا قرار دارد:
-GodTools
+http://godtoolsapp.com \n\n
 
-یک لینک برای نسخه اینترنتی برنامه اینجا قرار دارد {{share_link}} \n\n
+یک لینک برای نسخه اینترنتی برنامه اینجا قرار دارد  {{share_link}} \n\n
 
 بیایید بیشتر صحبت کنیم!</string>
 </resources>

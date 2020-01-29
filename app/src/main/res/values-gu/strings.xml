@@ -37,6 +37,7 @@
     </plurals>
     <string name="text_tools_all_installed">પ્રાપ્ય બધાં જ સાધનો/ટુલ્સ તમે ડાઉનલોડ કરી લીધાં છે.</string>
     <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
+    <string name="action_tools_open">ખુલ્લું સાધન</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સુયોજન</string>

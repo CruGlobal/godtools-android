@@ -3,5 +3,5 @@
     <string name="menu_share_tool">Поделиться</string>
     <string name="share_tool_title">Поделиться «%1$s» с помощью</string>
     <string name="tool_not_found">Не удалось найти инструмент</string>
-    <string name="tool_loading">Загрузка требуемого инструмента...</string>
+    <string name="tool_loading">Загрузка требуемого инструмента…</string>
 </resources>

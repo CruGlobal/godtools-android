@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">Quraşdır</string>
+    <string name="menu_share_tool">Paylaş</string>
+    <string name="share_tool_title">İstifadə etməklə \"%1$s\" paylaş</string>
+    <string name="tool_not_found">Sorğuladığınız alət tapılmır</string>
+    <string name="tool_loading">Sorğuladığınız alət yüklənir…</string>
+</resources>

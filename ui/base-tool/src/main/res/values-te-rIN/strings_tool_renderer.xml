@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ఇన్‌స్టాల్ చేయి</string>
     <string name="menu_share_tool">పంచుకోండి</string>
     <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>

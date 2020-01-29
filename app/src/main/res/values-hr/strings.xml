@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Podijeli</string>
     <string name="menu_heading_legal">Pravno</string>
     <string name="menu_about">O nama</string>
-    <string name="menu_help">Pomoć</string>
+    <string name="menu_help">Često postavljana pitanja</string>
     <string name="menu_contact_us">Kontaktirajte nas</string>
+    <string name="menu_login">Prijava</string>
+    <string name="menu_signup">Stvori račun</string>
+    <string name="menu_logout">Odjava</string>
     <string name="menu_share_godtools">Podijelite aplikaciju GodTools</string>
     <string name="menu_share_story">Podijelite priču s nama</string>
     <string name="menu_rate">Ocijenite GodTools</string>
@@ -36,8 +39,10 @@
         <item quantity="few">%1$,d jezika</item>
     </plurals>
     <string name="text_tools_all_installed">Preuzeli ste sve raspoložive alate.</string>
+    <string name="menu_add_to_home">Dodaj na početni zaslon</string>
+    <string name="action_tools_open">Otvori alat</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Više od 60</string>
+    <string name="feature_discovery_title_language_settings">Više od 80 jezika</string>
     <string name="menu_language_settings">Postavke jezika</string>
     <string name="title_language_settings">Postavke jezika</string>
     <string name="title_language_primary">Primarni jezik</string>
@@ -46,6 +51,7 @@
     <string name="text_language_parallel_description">Podijelite GodTools s korisnicima na njihovom materinjem jeziku.</string>
     <string name="text_language_warning">Nije svaki alat dostupan na svakom od jezika.</string>
     <string name="label_language_none">Ništa</string>
+    <string name="label_language_search">Filtriraj jezike</string>
     <!-- Sharing -->
     <string name="share_general_message">U nastavku je veza za preuzimanje aplikacije o kojoj smo danas razgovarali: http://godtoolsapp.com \n\n
 

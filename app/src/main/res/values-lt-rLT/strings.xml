@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Dalytis</string>
     <string name="menu_heading_legal">Teisė</string>
     <string name="menu_about">Apie</string>
-    <string name="menu_help">Pagalba</string>
+    <string name="menu_help">Dažnai užduodami klausimai</string>
     <string name="menu_contact_us">Susisiekite su mumis</string>
+    <string name="menu_login">Prisijungti</string>
+    <string name="menu_signup">Susikurti paskyrą</string>
+    <string name="menu_logout">Atsijungti</string>
     <string name="menu_share_godtools">Dalytis „GodTools“ programėle</string>
     <string name="menu_share_story">Pasidalykite istorija su mumis</string>
     <string name="menu_terms_of_use">Naudojimosi sąlygos</string>
@@ -37,8 +40,10 @@
         <item quantity="many">%1$,d kalbų</item>
     </plurals>
     <string name="text_tools_all_installed">Parsisiuntėte visus siūlomus įrankius.</string>
+    <string name="menu_add_to_home">Pridėti į pagrindinį puslapį</string>
+    <string name="action_tools_open">Atidaryti įrankį</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ kalbų</string>
+    <string name="feature_discovery_title_language_settings">80+ kalbų</string>
     <string name="menu_language_settings">Kalbos nustatymai</string>
     <string name="title_language_settings">Kalbos nustatymai</string>
     <string name="title_language_primary">Pagrindinė kalba</string>
@@ -47,8 +52,9 @@
     <string name="text_language_parallel_description">Pasidalykite „GodTools“ su kitais jų gimtąja kalba</string>
     <string name="text_language_warning">Ne kiekvienas įrankis pateikiamas kiekviena kalba</string>
     <string name="label_language_none">Joks</string>
+    <string name="label_language_search">Filtruoti kalbas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Čia pateikiama nuoroda, iš kur galima parsisiųsti šiandien mūsų aprašomą programėlę: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Štai nuoroda, iš kur galima atsisiųsti mūsų šiandien pristatomą programėlę: http://godtoolsapp.com \n\n
 
 		Štai nuoroda į programėlės internetinę versiją {{share_link}} \n\n
 

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Condividi</string>
     <string name="menu_heading_legal">Legale</string>
     <string name="menu_about">Informazioni</string>
-    <string name="menu_help">Assistenza</string>
+    <string name="menu_help">Domande frequenti</string>
     <string name="menu_contact_us">Contattaci</string>
+    <string name="menu_login">Accesso</string>
+    <string name="menu_signup">Crea account</string>
+    <string name="menu_logout">Esci</string>
     <string name="menu_share_godtools">Condividi l\'app GodTools</string>
     <string name="menu_share_story">Condividi con noi una storia</string>
     <string name="menu_rate">Recensisci GodTools</string>
@@ -34,8 +37,10 @@
         <item quantity="other">%1$,d lingue</item>
     </plurals>
     <string name="text_tools_all_installed">Hai scaricato tutti gli strumenti disponibili.</string>
+    <string name="menu_add_to_home">Aggiungi alla schermata della Home</string>
+    <string name="action_tools_open">Apri Strumento</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Oltre 60 lingue</string>
+    <string name="feature_discovery_title_language_settings">Oltre 80 lingue</string>
     <string name="menu_language_settings">Impostazioni della lingua</string>
     <string name="title_language_settings">Impostazioni della lingua</string>
     <string name="title_language_primary">Lingua principale</string>
@@ -44,6 +49,7 @@
     <string name="text_language_parallel_description">Condividi God Tools con qualcuno nella loro lingua materna.</string>
     <string name="text_language_warning">Gli strumenti disponibili variano a seconda della lingua.</string>
     <string name="label_language_none">Nessuno</string>
+    <string name="label_language_search">Filtra le lingue</string>
     <!-- Sharing -->
     <string name="share_general_message">Ecco qui il link per scaricare l\'app che abbiamo visto oggi: http://godtoolsapp.com \n\n
 

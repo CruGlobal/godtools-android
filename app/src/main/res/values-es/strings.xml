@@ -7,9 +7,10 @@
     <string name="menu_heading_share">Compartir</string>
     <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Acerca de</string>
-    <string name="menu_help">Ayuda</string>
+    <string name="menu_help">Preguntas frecuentes</string>
     <string name="menu_contact_us">Contáctanos</string>
     <string name="menu_login">Iniciar</string>
+    <string name="menu_signup">Crear cuenta</string>
     <string name="menu_logout">Cerrar sesión</string>
     <string name="menu_share_godtools">Comparte la aplicación GodTools</string>
     <string name="menu_share_story">Comparte una historia con nosotros</string>
@@ -36,8 +37,10 @@
         <item quantity="other">%1$,d idiomas</item>
     </plurals>
     <string name="text_tools_all_installed">Has descargado todas las herramientas disponibles.</string>
+    <string name="menu_add_to_home">Añadir a pantalla de inicio</string>
+    <string name="action_tools_open">Abrir herramienta</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Más de 60 idiomas</string>
+    <string name="feature_discovery_title_language_settings">Más de 80 idiomas</string>
     <string name="menu_language_settings">Ajustes de idioma</string>
     <string name="title_language_settings">Ajustes de idioma</string>
     <string name="title_language_primary">Idioma primario</string>
@@ -46,8 +49,9 @@
     <string name="text_language_parallel_description">Comparte GodTools con alguien en su idioma nativo.</string>
     <string name="text_language_warning">No todas las herramientas están disponibles en todos los idiomas.</string>
     <string name="label_language_none">Ninguno</string>
+    <string name="label_language_search">Filtrar idiomas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Aquí está el enlace para descargar la aplicación que estábamos viendo hoy: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Aquí está el enlace para descargar la aplicación que estábamos viendo: http://godtoolsapp.com \n\n
 
 Aquí tienes un enlace a una versión web de la aplicación {{share_link}} \n\n
 

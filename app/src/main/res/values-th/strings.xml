@@ -7,8 +7,11 @@
     <string name="menu_heading_share">แชร์</string>
     <string name="menu_heading_legal">กฎหมาย</string>
     <string name="menu_about">เกี่ยวกับ</string>
-    <string name="menu_help">ช่วยเหลือ</string>
+    <string name="menu_help">คำถามที่พบบ่อย</string>
     <string name="menu_contact_us">ติดต่อเรา</string>
+    <string name="menu_login">เข้าสู่ระบบ</string>
+    <string name="menu_signup">สร้างบัญชี</string>
+    <string name="menu_logout">ออกจากระบบ</string>
     <string name="menu_share_godtools">แชร์แอป GodTools</string>
     <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
     <string name="menu_rate">ให้คะแนน GodTools</string>
@@ -32,8 +35,10 @@
         <item quantity="other">%1$,d ภาษา</item>
     </plurals>
     <string name="text_tools_all_installed">คุณดาวน์โหลดเครื่องมือทั้งหมดแล้ว</string>
+    <string name="menu_add_to_home">เพิ่มไปยังหน้าหลัก</string>
+    <string name="action_tools_open">เปิดเครื่องมือ</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">กว่า 60 ภาษา</string>
+    <string name="feature_discovery_title_language_settings">กว่า 80 ภาษา</string>
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_primary">ภาษาหลัก</string>
@@ -42,10 +47,11 @@
     <string name="text_language_parallel_description">แชร์ God Tools เป็นภาษาของผู้รับ</string>
     <string name="text_language_warning">มีเครื่องมือไม่ครบทุกภาษา</string>
     <string name="label_language_none">ไม่มี</string>
+    <string name="label_language_search">กรองภาษา</string>
     <!-- Sharing -->
-    <string name="share_general_message">ดาวน์โหลดแอปที่เราดูไปเมื่อวันนี้ได้จาก: http://godtoolsapp.com \n\n
+    <string name="share_general_message">ลิงก์สำหรับดาวน์โหลดแอปที่เราดูไปเมื่อวันนี้: http://godtoolsapp.com \n\n
 
-		และใช้งานแอปในรูปแบบเว็บได้จากลิงก์นี้  {{share_link}} \n\n
+ลิงก์สำหรับใช้งานแอปในรูปแบบเว็บ {{share_link}} \n\n
 
-		มาคุยกันอีก!</string>
+มาคุยกันอีก!</string>
 </resources>

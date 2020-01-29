@@ -9,10 +9,7 @@
     <string name="nav_find_tools">Құралдарды табу</string>
     <string name="nav_my_tools">Менің құралдарым</string>
     <string name="menu_switch_language">Тілді ауыстыру</string>
+    <string name="action_tools_open">Ашық</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
-    <string name="share_general_message">Мұнда бүгін қарайтын бағдарламаны жүктеу үшін сілтеме: http://godtoolsapp.com
-Мұнда бағдарламаның {{share_link}} веб нұсқасына сілтеме
-Көбірек әңгімелесейік!</string>
-    <!-- iOS -->
 </resources>

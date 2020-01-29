@@ -7,8 +7,11 @@
     <string name="menu_heading_share">Udostępnij</string>
     <string name="menu_heading_legal">Prawne</string>
     <string name="menu_about">O aplikacji</string>
-    <string name="menu_help">Pomoc</string>
+    <string name="menu_help">Często zadawane pytania</string>
     <string name="menu_contact_us">Kontakt</string>
+    <string name="menu_login">Zaloguj</string>
+    <string name="menu_signup">Utwórz konto</string>
+    <string name="menu_logout">Wyloguj</string>
     <string name="menu_share_godtools">Podziel się aplikacją GodTools</string>
     <string name="menu_share_story">Podziel się z nami swoją historią</string>
     <string name="menu_rate">Oceń GodTools</string>
@@ -38,8 +41,10 @@
         <item quantity="many">%1$,d języków</item>
     </plurals>
     <string name="text_tools_all_installed">Pobrałeś(aś) wszystkie dostępne prezentacje.</string>
+    <string name="menu_add_to_home">Dodaj do ekranu głównego</string>
+    <string name="action_tools_open">Otwórz narzędzie</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ języków</string>
+    <string name="feature_discovery_title_language_settings">80+ języków</string>
     <string name="menu_language_settings">Ustawienia języka</string>
     <string name="title_language_settings">Ustawienia języka</string>
     <string name="title_language_primary">Język podstawowy</string>
@@ -48,10 +53,11 @@
     <string name="text_language_parallel_description">Udostępnij GodTools dla kogoś w jego języku</string>
     <string name="text_language_warning">Nie każde narzędzie jest dostępne w każdym języku</string>
     <string name="label_language_none">Żaden</string>
+    <string name="label_language_search">Filtruj języki</string>
     <!-- Sharing -->
-    <string name="share_general_message">Przesyłam link do prezentacji, o której rozmawialiśmy dzisiaj: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Przesyłam link do pobrania aplikacji, o której dzisiaj rozmawialiśmy: http://godtoolsapp.com \n\n
 
-		A ty łącze do webowej wersji aplikacji {{share_link}} \n\n
+Oto link do do wersji internetowej aplikacji {{share_link}} \n\n
 
-		Rozmawiajmy więcej ze sobą!</string>
+Bądźmy w kontakcie!</string>
 </resources>

@@ -7,8 +7,11 @@
     <string name="menu_heading_share">공유</string>
     <string name="menu_heading_legal">법률</string>
     <string name="menu_about">정보</string>
-    <string name="menu_help">도움말</string>
+    <string name="menu_help">자주 묻는 질문</string>
     <string name="menu_contact_us">연락처</string>
+    <string name="menu_login">로그인</string>
+    <string name="menu_signup">계정 생성</string>
+    <string name="menu_logout">로그아웃</string>
     <string name="menu_share_godtools">GodTools 앱 공유</string>
     <string name="menu_share_story">이야기를 공유하세요</string>
     <string name="menu_rate">GodTools 평가</string>
@@ -32,8 +35,10 @@
         <item quantity="other">%1$,d 언어</item>
     </plurals>
     <string name="text_tools_all_installed">모든 이용 가능한 도구를 다운로드했습니다.</string>
+    <string name="menu_add_to_home">홈 스크린에 추가</string>
+    <string name="action_tools_open">툴 열기</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60개 이상의 언어</string>
+    <string name="feature_discovery_title_language_settings">80개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>
     <string name="title_language_settings">언어 설정</string>
     <string name="title_language_primary">기본 언어</string>
@@ -42,10 +47,11 @@
     <string name="text_language_parallel_description">다른 사람의 언어로 GodTools를 공유하세요.</string>
     <string name="text_language_warning">모든 언어로 모든 도구를 이용할 수 있지는 않습니다.</string>
     <string name="label_language_none">없음</string>
+    <string name="label_language_search">언어 필터</string>
     <!-- Sharing -->
-    <string name="share_general_message">저희가 지금 보고 있는 앱을 다운로드할 수 있는 링크: http://godtoolsapp.com \n\n
+    <string name="share_general_message">저희가 오늘 봤던 앱을 다운로드할 수 있는 링크: http://godtoolsapp.com \n\n
 
-		앱의 웹 버전 링크: {{share_link}} \n\n
+앱의 웹 버전 링크: {{share_link}} \n\n
 
-		더 이야기해요!</string>
+더 이야기해요!</string>
 </resources>
