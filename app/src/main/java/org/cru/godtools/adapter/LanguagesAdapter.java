@@ -1,11 +1,9 @@
 package org.cru.godtools.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -26,13 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindColor;
-import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
-import butterknife.ViewCollections;
-
-import static org.cru.godtools.butterknife.Setters.TINT_LIST;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public interface Callbacks {
@@ -130,13 +123,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @NonNull
         final ListItemLanguageBinding mBinding;
 
-        @BindColor(R.color.states_remove)
-        ColorStateList mActionRemoveTint;
-
-        @Nullable
-        @BindView(R.id.action_remove)
-        ImageView mActionRemove;
-
         @Nullable
         Language mLanguage = null;
         @Nullable
@@ -146,9 +132,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         LanguageViewHolder(@NonNull final ListItemLanguageBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            if (mActionRemove != null) {
-                ViewCollections.set(mActionRemove, TINT_LIST, mActionRemoveTint);
-            }
         }
 
         @Override
@@ -159,11 +142,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
             mBinding.setLanguage(mLanguage);
             mBinding.executePendingBindings();
-
-            if (mActionRemove != null) {
-                mActionRemove.setEnabled(!mProtected.contains(mLocale));
-                mActionRemove.setVisibility(mAdded ? View.VISIBLE : View.GONE);
-            }
         }
 
         @Optional
