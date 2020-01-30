@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable name="language" type="org.cru.godtools.model.Language" />
+    </data>
+
     <androidx.appcompat.widget.AppCompatRelativeLayoutImpl
         android:id="@+id/root"
         android:layout_width="match_parent"
@@ -33,6 +37,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toStartOf="@id/action_add"
             android:gravity="start|center_vertical"
+            android:text="@{language.getDisplayName(context) ?? @string/label_language_none}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textIsSelectable="false"
             tools:text="really really really really really really really really long language name" />

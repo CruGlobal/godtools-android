@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -138,9 +137,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @BindView(R.id.root)
         View mRoot;
         @Nullable
-        @BindView(R.id.title)
-        TextView mTitle;
-        @Nullable
         @BindView(R.id.action_add)
         View mActionAdd;
         @Nullable
@@ -167,15 +163,10 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
             mLocale = mLanguage != null ? mLanguage.getCode() : null;
             mAdded = mLanguage != null && mLanguage.isAdded();
 
+            mBinding.setLanguage(mLanguage);
+
             if (mRoot != null) {
                 mRoot.setSelected(Objects.equal(mSelected, mLocale));
-            }
-            if (mTitle != null) {
-                if (mLanguage != null) {
-                    mTitle.setText(mLanguage.getDisplayName(mTitle.getContext()));
-                } else {
-                    mTitle.setText(R.string.label_language_none);
-                }
             }
             if (mActionAdd != null) {
                 mActionAdd.setVisibility(mAdded || mLocale == null ? View.GONE : View.VISIBLE);
