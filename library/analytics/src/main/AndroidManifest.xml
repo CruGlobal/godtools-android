@@ -1,5 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.cru.godtools.analytics">
+    <!-- Permissions required for AppsFlyer -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- XXX: we only target newer versions of Android for this permission to provide seamless upgrades for old devices -->
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <!-- Permissions required for Facebook Analytics -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -7,6 +14,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application>
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
