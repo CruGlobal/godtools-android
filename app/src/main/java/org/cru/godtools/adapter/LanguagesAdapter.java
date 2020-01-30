@@ -134,9 +134,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         ColorStateList mActionRemoveTint;
 
         @Nullable
-        @BindView(R.id.action_add)
-        View mActionAdd;
-        @Nullable
         @BindView(R.id.action_remove)
         ImageView mActionRemove;
 
@@ -163,9 +160,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
             mBinding.setLanguage(mLanguage);
             mBinding.executePendingBindings();
 
-            if (mActionAdd != null) {
-                mActionAdd.setVisibility(mAdded || mLocale == null ? View.GONE : View.VISIBLE);
-            }
             if (mActionRemove != null) {
                 mActionRemove.setEnabled(!mProtected.contains(mLocale));
                 mActionRemove.setVisibility(mAdded ? View.VISIBLE : View.GONE);

@@ -28,6 +28,7 @@
             android:layout_marginEnd="8dp"
             android:padding="8dp"
             android:tint="@color/gt_green"
+            app:visibleIf="@{language != null &amp;&amp; !language.added}"
             app:srcCompat="@drawable/ic_download" />
 
         <TextView
