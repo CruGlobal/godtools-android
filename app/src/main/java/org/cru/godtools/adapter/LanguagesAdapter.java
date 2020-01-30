@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import com.google.common.base.Objects;
 
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
@@ -25,6 +24,7 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -51,8 +51,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     @NonNull
     List<Language> mLanguages = Collections.emptyList();
-    @Nullable
-    Locale mSelected;
+    private final ObservableField<Locale> mSelected = new ObservableField<>();
     @NonNull
     Set<Locale> mDisabled = Collections.emptySet();
     @NonNull
@@ -86,8 +85,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     }
 
     public void setSelected(@Nullable final Locale selected) {
-        mSelected = selected;
-        notifyItemRangeChanged(0, getItemCount());
+        mSelected.set(selected);
     }
 
     public void setDisabled(@NonNull final Locale... disabled) {
@@ -117,8 +115,10 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     @Override
     public LanguageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        return new LanguageViewHolder(
-                ListItemLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        final ListItemLanguageBinding binding =
+                ListItemLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        binding.setSelected(mSelected);
+        return new LanguageViewHolder(binding);
     }
 
     @Override
@@ -133,9 +133,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @BindColor(R.color.states_remove)
         ColorStateList mActionRemoveTint;
 
-        @Nullable
-        @BindView(R.id.root)
-        View mRoot;
         @Nullable
         @BindView(R.id.action_add)
         View mActionAdd;
@@ -164,10 +161,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
             mAdded = mLanguage != null && mLanguage.isAdded();
 
             mBinding.setLanguage(mLanguage);
+            mBinding.executePendingBindings();
 
-            if (mRoot != null) {
-                mRoot.setSelected(Objects.equal(mSelected, mLocale));
-            }
             if (mActionAdd != null) {
                 mActionAdd.setVisibility(mAdded || mLocale == null ? View.GONE : View.VISIBLE);
             }

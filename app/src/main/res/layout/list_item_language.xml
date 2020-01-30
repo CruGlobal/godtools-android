@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="androidx.databinding.ObservableField" />
+
         <variable name="language" type="org.cru.godtools.model.Language" />
+        <variable name="selected" type="ObservableField&lt;java.util.Locale&gt;" />
     </data>
 
     <androidx.appcompat.widget.AppCompatRelativeLayoutImpl
@@ -12,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_list_item_language"
-        android:minHeight="48dp">
+        android:minHeight="48dp"
+        app:selected="@{language.code == selected}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/action_add"
