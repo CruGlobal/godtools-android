@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
-import org.cru.godtools.R;
+import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.cru.godtools.databinding.ListItemLanguageBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.ui.languages.LanguageSelectedListener;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Collections;
@@ -24,10 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.OnClick;
-import butterknife.Optional;
 
-public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
+public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> implements LanguageSelectedListener {
     public interface Callbacks {
         void onLanguageSelected(@Nullable Locale language);
     }
@@ -110,6 +109,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public LanguageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         final ListItemLanguageBinding binding =
                 ListItemLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        binding.setListener(this);
         binding.setSelected(mSelected);
         return new LanguageViewHolder(binding);
     }
@@ -119,37 +119,27 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         holder.bind(position);
     }
 
-    class LanguageViewHolder extends BaseViewHolder {
-        @NonNull
-        final ListItemLanguageBinding mBinding;
-
-        @Nullable
-        Locale mLocale = null;
-
-        LanguageViewHolder(@NonNull final ListItemLanguageBinding binding) {
-            super(binding.getRoot());
-            mBinding = binding;
-        }
-
-        @Override
-        protected void bind(final int position) {
-            final Language lang = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
-            mLocale = lang != null ? lang.getCode() : null;
-
-            mBinding.setLanguage(lang);
-            mBinding.executePendingBindings();
-        }
-
-        @Optional
-        @OnClick(R.id.root)
-        void onSelectLanguage() {
-            if (mCallbacks != null) {
-                if (!mDisabled.contains(mLocale)) {
-                    mCallbacks.onLanguageSelected(mLocale);
-                } else {
-                    // TODO: toast: You cannot select this language.
-                }
+    @Override
+    public void onLanguageSelected(@Nullable final Language language) {
+        if (mCallbacks != null) {
+            final Locale locale = language != null ? language.getCode() : null;
+            if (!mDisabled.contains(locale)) {
+                mCallbacks.onLanguageSelected(locale);
+            } else {
+                // TODO: toast: You cannot select this language.
             }
+        }
+    }
+
+    class LanguageViewHolder extends DataBindingViewHolder<ListItemLanguageBinding> {
+        LanguageViewHolder(@NonNull final ListItemLanguageBinding binding) {
+            super(binding);
+        }
+
+        void bind(final int position) {
+            getBinding()
+                    .setLanguage(mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0)));
+            getBinding().executePendingBindings();
         }
     }
 }

@@ -6,6 +6,7 @@
     <data>
         <import type="androidx.databinding.ObservableField" />
 
+        <variable name="listener" type="org.cru.godtools.ui.languages.LanguageSelectedListener" />
         <variable name="language" type="org.cru.godtools.model.Language" />
         <variable name="selected" type="ObservableField&lt;java.util.Locale&gt;" />
     </data>
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_list_item_language"
         android:minHeight="48dp"
+        android:onClick="@{() -> listener.onLanguageSelected(language)}"
         app:selected="@{language.code == selected}">
 
         <androidx.appcompat.widget.AppCompatImageView
