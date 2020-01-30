@@ -14,6 +14,7 @@ import com.google.common.base.Objects;
 
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
+import org.cru.godtools.databinding.ListItemLanguageBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -117,8 +118,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     @Override
     public LanguageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_language, parent, false);
-        return new LanguageViewHolder(v);
+        return new LanguageViewHolder(
+                ListItemLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -127,6 +128,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     }
 
     class LanguageViewHolder extends BaseViewHolder {
+        @NonNull
+        final ListItemLanguageBinding mBinding;
+
         @BindColor(R.color.states_remove)
         ColorStateList mActionRemoveTint;
 
@@ -149,8 +153,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         Locale mLocale = null;
         boolean mAdded = false;
 
-        LanguageViewHolder(@NonNull final View view) {
-            super(view);
+        LanguageViewHolder(@NonNull final ListItemLanguageBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
             if (mActionRemove != null) {
                 ViewCollections.set(mActionRemove, TINT_LIST, mActionRemoveTint);
             }
