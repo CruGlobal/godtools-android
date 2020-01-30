@@ -17,10 +17,10 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.LanguagesAdapter;
 import org.cru.godtools.content.LanguagesLoader;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
+import org.cru.godtools.ui.languages.LanguagesAdapter;
 import org.cru.godtools.ui.languages.LocaleSelectedListener;
 
 import java.util.List;
@@ -246,7 +246,7 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
 
     void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
-            mLanguagesAdapter.setSelected(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
+            mLanguagesAdapter.getSelected().set(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
             mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
             mLanguagesAdapter.setDisabled(mPrimary ? null : getPrimaryLanguage());
         }
