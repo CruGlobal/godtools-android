@@ -124,10 +124,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         final ListItemLanguageBinding mBinding;
 
         @Nullable
-        Language mLanguage = null;
-        @Nullable
         Locale mLocale = null;
-        boolean mAdded = false;
 
         LanguageViewHolder(@NonNull final ListItemLanguageBinding binding) {
             super(binding.getRoot());
@@ -136,11 +133,10 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
         @Override
         protected void bind(final int position) {
-            mLanguage = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
-            mLocale = mLanguage != null ? mLanguage.getCode() : null;
-            mAdded = mLanguage != null && mLanguage.isAdded();
+            final Language lang = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
+            mLocale = lang != null ? lang.getCode() : null;
 
-            mBinding.setLanguage(mLanguage);
+            mBinding.setLanguage(lang);
             mBinding.executePendingBindings();
         }
 
@@ -153,16 +149,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
                 } else {
                     // TODO: toast: You cannot select this language.
                 }
-            }
-        }
-
-        @Optional
-        @OnClick(R.id.action_remove)
-        void onRemoveLanguage() {
-            if (!mProtected.contains(mLocale)) {
-                mTools.removeLanguage(mLocale);
-            } else {
-                // TODO: toast: You cannot remove this language from the device
             }
         }
     }
