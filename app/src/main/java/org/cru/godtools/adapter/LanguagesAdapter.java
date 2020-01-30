@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder;
 import org.cru.godtools.databinding.ListItemLanguageBinding;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.ui.languages.LanguageSelectedListener;
+import org.cru.godtools.ui.languages.LocaleSelectedListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,12 +24,8 @@ import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<DataBindingViewHolder<ListItemLanguageBinding>> implements LanguageSelectedListener {
-    public interface Callbacks {
-        void onLanguageSelected(@Nullable Locale language);
-    }
-
     @Nullable
-    Callbacks mCallbacks;
+    LocaleSelectedListener mCallbacks;
 
     final boolean mShowNone;
 
@@ -43,7 +40,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<DataBindingViewHolder
         mShowNone = showNone;
     }
 
-    public void setCallbacks(@Nullable final Callbacks callbacks) {
+    public void setCallbacks(@Nullable final LocaleSelectedListener callbacks) {
         mCallbacks = callbacks;
     }
 
@@ -97,7 +94,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<DataBindingViewHolder
         if (mCallbacks != null) {
             final Locale locale = language != null ? language.getCode() : null;
             if (!mDisabled.contains(locale)) {
-                mCallbacks.onLanguageSelected(locale);
+                mCallbacks.onLocaleSelected(locale);
             } else {
                 // TODO: toast: You cannot select this language.
             }
