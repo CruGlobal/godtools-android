@@ -64,7 +64,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
         public static final Join<Language, Translation> SQL_JOIN_TRANSLATION =
-                Join.create(TABLE, TranslationTable.TABLE).on(FIELD_CODE.eq(TranslationTable.FIELD_LANGUAGE));
+                TABLE.join(TranslationTable.TABLE).on(FIELD_CODE.eq(TranslationTable.FIELD_LANGUAGE));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
@@ -122,7 +122,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
         public static final Join<Tool, Attachment> SQL_JOIN_BANNER =
-                Join.create(TABLE, AttachmentTable.TABLE).on(FIELD_BANNER.eq(AttachmentTable.FIELD_ID));
+                TABLE.join(AttachmentTable.TABLE).on(FIELD_BANNER.eq(AttachmentTable.FIELD_ID));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0);
@@ -179,9 +179,9 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_LAST_ACCESSED = COLUMN_LAST_ACCESSED + " INTEGER";
 
         public static final Join<Translation, Language> SQL_JOIN_LANGUAGE =
-                Join.create(TABLE, LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE));
+                TABLE.join(LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE));
         public static final Join<Translation, Tool> SQL_JOIN_TOOL =
-                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE));
+                TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()));
@@ -215,9 +215,9 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME);
 
         public static final Join<LocalFile, Attachment> SQL_JOIN_ATTACHMENT =
-                Join.create(TABLE, AttachmentTable.TABLE).on(FIELD_NAME.eq(AttachmentTable.FIELD_LOCALFILENAME));
+                TABLE.join(AttachmentTable.TABLE).on(FIELD_NAME.eq(AttachmentTable.FIELD_LOCALFILENAME));
         public static final Join<LocalFile, TranslationFile> SQL_JOIN_TRANSLATION_FILE =
-                Join.create(TABLE, TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE));
+                TABLE.join(TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_NAME.eq(bind());
 
@@ -242,7 +242,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE);
 
         public static final Join<TranslationFile, Translation> SQL_JOIN_TRANSLATION =
-                Join.create(TABLE, TranslationTable.TABLE).on(FIELD_TRANSLATION.eq(TranslationTable.FIELD_ID));
+                TABLE.join(TranslationTable.TABLE).on(FIELD_TRANSLATION.eq(TranslationTable.FIELD_ID));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_FILE.eq(bind()));
 
@@ -274,9 +274,9 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
         public static final Join<Attachment, Tool> SQL_JOIN_TOOL =
-                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
+                TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
         public static final Join<Attachment, LocalFile> SQL_JOIN_LOCAL_FILE =
-                Join.create(TABLE, LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME));
+                TABLE.join(LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true);
