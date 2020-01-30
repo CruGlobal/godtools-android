@@ -237,8 +237,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguagesView.setLayoutManager(layoutManager);
             mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
 
-            mLanguagesAdapter = new LanguagesAdapter(context);
-            mLanguagesAdapter.setShowNone(!mPrimary);
+            mLanguagesAdapter = new LanguagesAdapter(!mPrimary);
             mLanguagesAdapter.setCallbacks(this);
             mLanguagesView.setAdapter(mLanguagesAdapter);
         }
@@ -249,7 +248,6 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguagesAdapter.setSelected(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
             mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
             mLanguagesAdapter.setDisabled(mPrimary ? null : getPrimaryLanguage());
-            mLanguagesAdapter.setProtected(getSettings() != null ? getSettings().getProtectedLanguages() : null);
         }
     }
 
