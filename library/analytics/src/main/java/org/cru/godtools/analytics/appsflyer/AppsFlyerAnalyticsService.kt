@@ -3,6 +3,7 @@ package org.cru.godtools.analytics.appsflyer
 import android.app.Application
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.base.util.SingletonHolder
 import timber.log.Timber
 
@@ -13,7 +14,7 @@ class AppsFlyerAnalyticsService private constructor(app: Application) {
 
     init {
         AppsFlyerLib.getInstance()
-            .init("", GodToolsAppsFlyerConversionListener, app.applicationContext)
+            .init(BuildConfig.APPSFLYER_DEV_KEY, GodToolsAppsFlyerConversionListener, app.applicationContext)
             .startTracking(app)
     }
 }
