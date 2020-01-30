@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
-import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder;
+import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter;
 import org.cru.godtools.databinding.ListItemLanguageBinding;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.ui.languages.LanguageSelectedListener;
 import org.cru.godtools.ui.languages.LocaleSelectedListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
-import androidx.recyclerview.widget.RecyclerView;
 
-public class LanguagesAdapter extends RecyclerView.Adapter<DataBindingViewHolder<ListItemLanguageBinding>> implements LanguageSelectedListener {
+public class LanguagesAdapter extends SimpleDataBindingAdapter<ListItemLanguageBinding>
+        implements LanguageSelectedListener {
     @Nullable
     LocaleSelectedListener mCallbacks;
 
@@ -73,20 +74,19 @@ public class LanguagesAdapter extends RecyclerView.Adapter<DataBindingViewHolder
         return mLanguages.get(position - (mShowNone ? 1 : 0)).getId();
     }
 
+    @NonNull
     @Override
-    public DataBindingViewHolder<ListItemLanguageBinding> onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+    protected ListItemLanguageBinding onCreateViewDataBinding(@NotNull final ViewGroup parent, final int viewType) {
         final ListItemLanguageBinding binding =
                 ListItemLanguageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         binding.setListener(this);
         binding.setSelected(mSelected);
-        return new DataBindingViewHolder<>(binding);
+        return binding;
     }
 
     @Override
-    public void onBindViewHolder(DataBindingViewHolder<ListItemLanguageBinding> holder, int position) {
-        holder.getBinding()
-                .setLanguage(mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0)));
-        holder.getBinding().executePendingBindings();
+    protected void onBindViewDataBinding(@NotNull final ListItemLanguageBinding binding, final int position) {
+        binding.setLanguage(mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0)));
     }
 
     @Override
