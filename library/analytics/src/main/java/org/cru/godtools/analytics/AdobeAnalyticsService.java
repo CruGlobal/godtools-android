@@ -35,7 +35,7 @@ import me.thekey.android.TheKey;
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 
-public final class AdobeAnalyticsService implements AnalyticsService, Application.ActivityLifecycleCallbacks {
+public final class AdobeAnalyticsService implements Application.ActivityLifecycleCallbacks {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
