@@ -114,7 +114,7 @@
         </activity>
 
         <activity
-            android:name=".activity.GlobalDashboardActivity"
+            android:name=".ui.profile.GlobalDashboardActivity"
             android:label="@string/gt_gd_my_profile_text"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data

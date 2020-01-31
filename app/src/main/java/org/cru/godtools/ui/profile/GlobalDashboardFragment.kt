@@ -1,4 +1,4 @@
-package org.cru.godtools.fragment
+package org.cru.godtools.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.viewmodel.GlobalDashboardDataModel
 import java.util.Calendar
 

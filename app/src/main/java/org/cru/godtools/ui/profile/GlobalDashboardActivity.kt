@@ -1,14 +1,14 @@
-package org.cru.godtools.activity
+package org.cru.godtools.ui.profile
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.commit
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.fragment.GlobalDashboardFragment
 
 fun Activity.startGlobalDashboardActivity() {
     Intent(this, GlobalDashboardActivity::class.java)
