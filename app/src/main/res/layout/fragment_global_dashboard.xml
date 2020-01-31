@@ -4,78 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="viewModel"
-            type="org.cru.godtools.viewmodel.GlobalDashboardDataModel" />
-
-        <variable
-            name="year"
-            type="String" />
+        <variable name="viewModel" type="org.cru.godtools.viewmodel.GlobalDashboardDataModel" />
+        <variable name="year" type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gt_gd_activity_background">
-
-        <View
-            android:id="@+id/global_dashboard_background"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/gt_gd_profile_background"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/global_dashboard_tab_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/account_name_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:elevation="10dp"
-            android:gravity="center"
-            android:text="@{viewModel.accountName}"
-            android:textAppearance="@style/TextAppearance.GodTools.Large"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="John Smith" />
-
-        <TextView
-            android:id="@+id/account_date_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="10dp"
-            android:gravity="center"
-            android:text="@{viewModel.accountDate}"
-            android:textAppearance="@style/TextAppearance.GodTools"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="invisible"
-            app:layout_constraintTop_toBottomOf="@+id/account_name_text"
-            tools:text="April 10, 2019" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/global_dashboard_tab_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@color/gt_gd_profile_background"
-            android:elevation="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_date_text">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/gt_gd_activity_text" />
-        </com.google.android.material.tabs.TabLayout>
 
         <TextView
             android:id="@+id/global_activity_text"
@@ -87,7 +23,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/global_dashboard_background"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="2020 Global Activity" />
 
         <androidx.cardview.widget.CardView
@@ -127,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/gt_gd_sessions_text"
+                    android:text="@string/gt_gd_unique_users_text"
                     android:textColor="@color/gt_gd_text_color" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
