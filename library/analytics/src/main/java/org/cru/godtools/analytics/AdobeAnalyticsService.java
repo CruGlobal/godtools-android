@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.adobe.mobile.Analytics;
@@ -20,7 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -48,7 +46,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
     public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
-    private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SITE_SECTION = "cru.sitesection";
     private static final String KEY_SITE_SUB_SECTION = "cru.sitesubsection";
 
@@ -105,11 +102,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
             trackState(event);
         }
-    }
-
-    @Override
-    public void onTrackExitUrl(@NonNull final Uri url) {
-        trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
     // region ActivityLifecycleCallbacks
