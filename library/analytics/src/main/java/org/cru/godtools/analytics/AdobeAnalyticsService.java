@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -108,10 +107,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
             trackState(event);
         }
-    }
-
-    public void onProcessReferrer(@NonNull final Intent intent) {
-        mAnalyticsExecutor.execute(() -> Analytics.processReferrer(mContext, intent));
     }
 
     @Override
