@@ -10,13 +10,13 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.base.ui.activity.BaseActivity
 
-fun Activity.startGlobalDashboardActivity() {
-    Intent(this, GlobalDashboardActivity::class.java)
+fun Activity.startMyProfileActivity() {
+    Intent(this, MyProfileActivity::class.java)
         .putExtras(BaseActivity.buildExtras(this))
         .also { startActivity(it) }
 }
 
-class GlobalDashboardActivity : BasePlatformActivity() {
+class MyProfileActivity : BasePlatformActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
