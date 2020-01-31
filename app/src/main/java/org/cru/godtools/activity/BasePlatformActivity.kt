@@ -38,7 +38,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
-import org.cru.godtools.base.ui.util.WebUrlLauncher
+import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
@@ -169,7 +169,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
         R.id.action_help -> {
             mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, getDeviceLocale(this)))
-            WebUrlLauncher.openUrl(this, URI_HELP)
+            openUrl(URI_HELP)
             true
         }
         R.id.action_rate -> {
@@ -194,17 +194,17 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         }
         R.id.action_terms_of_use -> {
             mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)))
-            WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE)
+            openUrl(URI_TERMS_OF_USE)
             true
         }
         R.id.action_privacy_policy -> {
             mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, getDeviceLocale(this)))
-            WebUrlLauncher.openUrl(this, URI_PRIVACY)
+            openUrl(URI_PRIVACY)
             true
         }
         R.id.action_copyright -> {
             mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, getDeviceLocale(this)))
-            WebUrlLauncher.openUrl(this, URI_COPYRIGHT)
+            openUrl(URI_COPYRIGHT)
             true
         }
         else -> onOptionsItemSelected(item)
@@ -308,10 +308,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")))
         } catch (e: ActivityNotFoundException) {
-            WebUrlLauncher.openUrl(
-                this,
-                Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
-            )
+            openUrl(Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"))
         }
     }
 
@@ -325,8 +322,8 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         // try using an external browser first if we will deeplink back to GodTools
         var handled = false
         if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity::class.java, redirectUri)) {
-            handled = WebUrlLauncher.openUrl(
-                this, theKey.loginUriBuilder()
+            handled = openUrl(
+                theKey.loginUriBuilder()
                     .redirectUri(redirectUri)
                     .signup(signup)
                     .build()
@@ -351,7 +348,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
         } catch (e: ActivityNotFoundException) {
-            WebUrlLauncher.openUrl(this, URI_SUPPORT)
+            openUrl(URI_SUPPORT)
         }
     }
 
@@ -375,11 +372,12 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private fun launchShareStory() {
         mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, getDeviceLocale(this)))
         try {
-            Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
-                .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject))
-                .also { startActivity(it) }
+            startActivity(
+                Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
+                    .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject))
+            )
         } catch (e: ActivityNotFoundException) {
-            WebUrlLauncher.openUrl(this, URI_SUPPORT)
+            openUrl(URI_SUPPORT)
         }
     }
 
