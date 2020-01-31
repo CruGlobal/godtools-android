@@ -10,16 +10,12 @@ import androidx.annotation.NonNull;
 
 public interface AnalyticsService {
     /* Action event names */
-    String ACTION_SHARE = "Share Icon Engaged";
     String ACTION_EXIT_LINK = "Exit Link Engaged";
 
     @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
         return AnalyticsDispatcher.getAnalyticsService(context.getApplicationContext());
     }
-
-    @AnyThread
-    default void onTrackShareAction() {}
 
     @AnyThread
     default void onTrackExitUrl(@NonNull final Uri url) {}

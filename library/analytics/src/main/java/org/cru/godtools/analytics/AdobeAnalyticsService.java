@@ -49,7 +49,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
     public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
-    private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
     private static final String KEY_SITE_SECTION = "cru.sitesection";
     private static final String KEY_SITE_SUB_SECTION = "cru.sitesubsection";
 
@@ -92,7 +91,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     }
 
     // region Tracking Events
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
@@ -110,17 +108,11 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     }
 
     @Override
-    public void onTrackShareAction() {
-        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, 1));
-    }
-
-    @Override
     public void onTrackExitUrl(@NonNull final Uri url) {
         trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
     // region ActivityLifecycleCallbacks
-
     @Override
     public void onActivityCreated(final Activity activity, final Bundle savedInstanceState) {}
 
@@ -151,9 +143,7 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
 
     @Override
     public void onActivityDestroyed(final Activity activity) {}
-
     // endregion ActivityLifecycleCallbacks
-
     // endregion Tracking Events
 
     @AnyThread
