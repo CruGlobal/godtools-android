@@ -65,7 +65,7 @@ class GodToolsDao private constructor(context: Context) :
         )
         registerType(
             TranslationFile::class.java, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
-            TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY
+            TranslationFileMapper, TranslationFileTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
             GlobalActivityAnalytics::class.java, GlobalActivityAnalyticsTable.TABLE_NAME,

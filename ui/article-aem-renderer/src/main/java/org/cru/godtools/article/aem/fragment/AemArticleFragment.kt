@@ -30,7 +30,7 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.base.ui.fragment.BaseFragment
-import org.cru.godtools.base.ui.util.WebUrlLauncher
+import org.cru.godtools.base.ui.util.openUrl
 import splitties.fragmentargs.arg
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -139,7 +139,7 @@ private class ArticleWebViewClient(context: Context) : WebViewClient() {
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        activity?.let { WebUrlLauncher.openUrl(it, Uri.parse(url)) }
+        activity?.openUrl(Uri.parse(url))
         return true
     }
 

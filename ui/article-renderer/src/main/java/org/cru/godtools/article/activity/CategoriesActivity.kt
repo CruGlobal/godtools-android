@@ -11,8 +11,8 @@ import org.cru.godtools.article.fragment.CategoriesFragment
 import org.cru.godtools.article.fragment.newCategoriesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
+import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
-import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent.SCREEN_CATEGORIES
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
