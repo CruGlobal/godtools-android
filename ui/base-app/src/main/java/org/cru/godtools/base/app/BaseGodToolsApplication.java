@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
 import org.ccci.gto.android.common.eventbus.TimberLogger;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
-import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.cru.godtools.analytics.FirebaseAnalyticsService;
 import org.cru.godtools.analytics.SnowplowAnalyticsService;
@@ -67,7 +66,6 @@ public class BaseGodToolsApplication extends Application {
         FacebookAnalyticsService.Companion.getInstance(null);
         FirebaseAnalyticsService.getInstance(this);
         SnowplowAnalyticsService.getInstance(this);
-        AnalyticsDispatcher.getInstance(this);
     }
 
     protected void configureApis() {}
