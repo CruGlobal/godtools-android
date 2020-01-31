@@ -15,12 +15,10 @@ public final class AnalyticsDispatcher implements InvocationHandler {
     private final Set<AnalyticsService> mServices = new HashSet<>();
 
     private final AnalyticsService mProxy;
-    private final EventBusAnalyticsHelper mEventBusHelper;
 
     private AnalyticsDispatcher(@NonNull final Context context) {
         mProxy = (AnalyticsService) Proxy.newProxyInstance(getClass().getClassLoader(),
                                                            new Class<?>[] {AnalyticsService.class}, this);
-        mEventBusHelper = new EventBusAnalyticsHelper(mProxy);
 
         addAnalyticsService(AdobeAnalyticsService.getInstance(context));
     }

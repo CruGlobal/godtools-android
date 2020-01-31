@@ -3,8 +3,6 @@ package org.cru.godtools.analytics;
 import android.content.Context;
 import android.net.Uri;
 
-import org.cru.godtools.base.model.Event;
-
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 
@@ -19,7 +17,4 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackExitUrl(@NonNull final Uri url) {}
-
-    @AnyThread
-    default void onTrackContentEvent(@NonNull Event event) {}
 }
