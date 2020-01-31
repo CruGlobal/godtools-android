@@ -1,37 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.AppCompatRelativeLayoutImpl xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bkg_list_item_language"
-    android:minHeight="48dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/action_add"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="-8dp"
-        android:padding="8dp"
-        android:tint="@color/gt_green"
-        app:srcCompat="@drawable/ic_download" />
+    <data>
+        <import type="androidx.databinding.ObservableField" />
 
-    <TextView
-        android:id="@+id/title"
+        <variable name="listener" type="org.cru.godtools.ui.languages.LanguageSelectedListener" />
+        <variable name="language" type="org.cru.godtools.model.Language" />
+        <variable name="selected" type="ObservableField&lt;java.util.Locale&gt;" />
+    </data>
+
+    <androidx.appcompat.widget.AppCompatRelativeLayoutImpl
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_toStartOf="@id/action_add"
-        android:gravity="start|center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textIsSelectable="false"
-        tools:text="really really really really really really really really long language name" />
-</androidx.appcompat.widget.AppCompatRelativeLayoutImpl>
+        android:background="@drawable/bkg_list_item_language"
+        android:minHeight="48dp"
+        android:onClick="@{() -> listener.onLanguageSelected(language)}"
+        app:selected="@{language.code == selected}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_add"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="-8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="8dp"
+            android:tint="@color/gt_green"
+            app:visibleIf="@{language != null &amp;&amp; !language.added}"
+            app:srcCompat="@drawable/ic_download" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toStartOf="@id/action_add"
+            android:gravity="start|center_vertical"
+            android:text="@{language.getDisplayName(context) ?? @string/label_language_none}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textIsSelectable="false"
+            tools:text="really really really really really really really really long language name" />
+    </androidx.appcompat.widget.AppCompatRelativeLayoutImpl>
+</layout>

@@ -17,10 +17,11 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.adapter.LanguagesAdapter;
 import org.cru.godtools.content.LanguagesLoader;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
+import org.cru.godtools.ui.languages.LanguagesAdapter;
+import org.cru.godtools.ui.languages.LocaleSelectedListener;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
-public class LanguagesFragment extends BasePlatformFragment implements LanguagesAdapter.Callbacks {
+public class LanguagesFragment extends BasePlatformFragment implements LocaleSelectedListener {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
     private static final String EXTRA_SEARCH = LanguagesFragment.class.getName() + ".SEARCH";
     private static final String EXTRA_SEARCH_OPEN = LanguagesFragment.class.getName() + ".SEARCH_OPEN";
@@ -140,7 +141,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
     }
 
     @Override
-    public void onLanguageSelected(@Nullable final Locale language) {
+    public void onLocaleSelected(@Nullable final Locale language) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onLocaleSelected(language);
@@ -237,8 +238,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguagesView.setLayoutManager(layoutManager);
             mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
 
-            mLanguagesAdapter = new LanguagesAdapter(context);
-            mLanguagesAdapter.setShowNone(!mPrimary);
+            mLanguagesAdapter = new LanguagesAdapter(!mPrimary);
             mLanguagesAdapter.setCallbacks(this);
             mLanguagesView.setAdapter(mLanguagesAdapter);
         }
@@ -246,10 +246,9 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
 
     void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
-            mLanguagesAdapter.setSelected(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
+            mLanguagesAdapter.getSelected().set(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
             mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
             mLanguagesAdapter.setDisabled(mPrimary ? null : getPrimaryLanguage());
-            mLanguagesAdapter.setProtected(getSettings() != null ? getSettings().getProtectedLanguages() : null);
         }
     }
 
