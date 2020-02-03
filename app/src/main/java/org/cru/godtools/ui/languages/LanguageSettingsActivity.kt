@@ -24,10 +24,6 @@ class LanguageSettingsActivity : BasePlatformActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_generic_fragment_with_nav_drawer)
-    }
-
-    override fun onStart() {
-        super.onStart()
         loadPrimaryFragmentIfNeeded()
     }
 

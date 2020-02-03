@@ -49,7 +49,7 @@ buildscript {
                 constraintLayout  : '1.1.3',
                 core              : '1.1.0',
                 fragment          : '1.2.0',
-                lifecycle         : '2.1.0',
+                lifecycle         : '2.2.0',
                 loader            : '1.1.0',
                 multidex          : '2.0.1',
                 percentLayout     : '1.0.0',
@@ -116,15 +116,17 @@ subprojects {
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
-        // XXX: temporary to use beta version of powermock
-        maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
     }
 
     configurations.all {
         resolutionStrategy {
             force "androidx.annotation:annotation:${deps.androidX.annotation}"
-            force "androidx.core:core:${deps.androidX.core}"
+            force "androidx.collection:collection:${deps.androidX.collection}"
+            force "androidx.fragment:fragment:${deps.androidX.fragment}"
+            force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
+            force "androidx.loader:loader:${deps.androidX.loader}"
+            force "androidx.multidex:multidex:${deps.androidX.multidex}"
             force "org.jetbrains:annotations:${deps.jetbrainsAnnotation}"
 
             dependencySubstitution {
