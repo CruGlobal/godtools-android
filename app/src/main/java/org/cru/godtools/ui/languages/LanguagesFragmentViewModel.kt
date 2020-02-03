@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import org.ccci.gto.android.common.db.Query
@@ -13,11 +14,16 @@ import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
 
-class LanguagesFragmentViewModel(application: Application) : AndroidViewModel(application) {
+private const val KEY_QUERY = "query"
+
+class LanguagesFragmentViewModel(
+    application: Application,
+    savedState: SavedStateHandle
+) : AndroidViewModel(application) {
     private val dao = GodToolsDao.getInstance(application)
 
-    val query = MutableLiveData<String?>(null)
     val showNone = MutableLiveData<Boolean>(false)
+    val query: MutableLiveData<String> = savedState.getLiveData(KEY_QUERY, null)
 
     private val rawLanguages = Query.select<Language>()
         .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
