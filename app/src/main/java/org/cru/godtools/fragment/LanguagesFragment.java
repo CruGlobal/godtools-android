@@ -10,31 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
-import com.google.common.collect.ImmutableList;
-
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.content.LanguagesLoader;
-import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.ui.languages.LanguagesAdapter;
+import org.cru.godtools.ui.languages.LanguagesFragmentViewModel;
 import org.cru.godtools.ui.languages.LocaleSelectedListener;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,10 +32,7 @@ import butterknife.BindView;
 
 public class LanguagesFragment extends BasePlatformFragment implements LocaleSelectedListener {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
-    private static final String EXTRA_SEARCH = LanguagesFragment.class.getName() + ".SEARCH";
     private static final String EXTRA_SEARCH_OPEN = LanguagesFragment.class.getName() + ".SEARCH_OPEN";
-
-    private static final int LOADER_LANGUAGES = 101;
 
     public interface Callbacks {
         void onLocaleSelected(@Nullable Locale locale);
@@ -64,12 +51,8 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
 
-    @Nullable
-    private SortedMap<String, Language> mLanguages;
-
     // search related properties
     private boolean mIsSearchViewOpen = false;
-    String mQuery = "";
 
     public static Fragment newInstance(final boolean primary) {
         final Fragment fragment = new LanguagesFragment();
@@ -79,8 +62,7 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         return fragment;
     }
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,15 +74,14 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         }
 
         if (savedInstanceState != null) {
-            mQuery = savedInstanceState.getString(EXTRA_SEARCH, mQuery);
             mIsSearchViewOpen = savedInstanceState.getBoolean(EXTRA_SEARCH_OPEN, mIsSearchViewOpen);
         }
 
-        startLoaders();
+        setupDataModel();
     }
 
     @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull final Menu menu, final @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_language_search, menu);
         mSearchItem = menu.findItem(R.id.action_search);
@@ -108,7 +89,7 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_languages, container, false);
     }
@@ -129,17 +110,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         updateLanguagesList();
     }
 
-    void onLoadLanguages(@Nullable final List<Language> languages) {
-        if (languages == null) {
-            mLanguages = null;
-        } else {
-            mLanguages = Stream.of(languages)
-                    .collect(Collectors.toMap(l -> l.getDisplayName(getContext()), l -> l, (l1, l2) -> l1,
-                                              () -> new TreeMap<>(String::compareToIgnoreCase)));
-        }
-        updateLanguagesList();
-    }
-
     @Override
     public void onLocaleSelected(@Nullable final Locale language) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
@@ -153,7 +123,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_SEARCH_OPEN,
                             mSearchItem != null ? mSearchItem.isActionViewExpanded() : mIsSearchViewOpen);
-        outState.putString(EXTRA_SEARCH, mQuery);
     }
 
     @Override
@@ -167,8 +136,17 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         cleanupLanguagesList();
         super.onDestroyView();
     }
+    // endregion Lifecycle
 
-    // endregion Lifecycle Events
+    // region ViewModel
+    private LanguagesFragmentViewModel mViewModel;
+
+    private void setupDataModel() {
+        mViewModel =
+                ViewModelProviders.of(this, getDefaultViewModelProviderFactory()).get(LanguagesFragmentViewModel.class);
+        mViewModel.getShowNone().setValue(!mPrimary);
+    }
+    // endregion ViewModel
 
     // region Search Action Item
 
@@ -183,23 +161,21 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         // Configuring the SearchView
         if (mSearchView != null) {
             mSearchView.setQueryHint(getString(R.string.label_language_search));
-            if (!TextUtils.isEmpty(mQuery)) {
-                mSearchView.setQuery(mQuery, false);
+            if (!TextUtils.isEmpty(mViewModel.getQuery().getValue())) {
+                mSearchView.setQuery(mViewModel.getQuery().getValue(), false);
             }
 
             // Will listen for search event and trigger
             mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(@Nullable final String query) {
-                    mQuery = query;
-                    updateLanguagesList();
+                    mViewModel.getQuery().setValue(query);
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(@Nullable final String newText) {
-                    mQuery = newText;
-                    updateLanguagesList();
+                    mViewModel.getQuery().setValue(newText);
                     return true;
                 }
             });
@@ -219,10 +195,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
 
     // endregion Search Action Item
 
-    private void startLoaders() {
-        getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
-    }
-
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
@@ -230,7 +202,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     }
 
     // region Languages List
-
     private void setupLanguagesList() {
         if (mLanguagesView != null) {
             final Context context = mLanguagesView.getContext();
@@ -238,8 +209,9 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
             mLanguagesView.setLayoutManager(layoutManager);
             mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
 
-            mLanguagesAdapter = new LanguagesAdapter(!mPrimary);
+            mLanguagesAdapter = new LanguagesAdapter();
             mLanguagesAdapter.setCallbacks(this);
+            mViewModel.getLanguages().observe(getViewLifecycleOwner(), mLanguagesAdapter);
             mLanguagesView.setAdapter(mLanguagesAdapter);
         }
     }
@@ -247,28 +219,8 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
             mLanguagesAdapter.getSelected().set(mPrimary ? getPrimaryLanguage() : getParallelLanguage());
-            mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
             mLanguagesAdapter.setDisabled(mPrimary ? null : getPrimaryLanguage());
         }
-    }
-
-    @Nullable
-    private List<Language> filterLangs(@Nullable final Map<String, Language> languages, @Nullable final String query) {
-        // short-circuit if there aren't any languages to filter
-        if (languages == null || languages.isEmpty()) {
-            return ImmutableList.of();
-        }
-
-        // short-circuit if there isn't a query
-        if (TextUtils.isEmpty(query)) {
-            return ImmutableList.copyOf(languages.values());
-        }
-
-        // otherwise filter the list of languages based on the query
-        return Stream.of(languages)
-                .filter(l -> l.getKey().toLowerCase().contains(query.toLowerCase()))
-                .map(Map.Entry::getValue)
-                .toList();
     }
 
     private void cleanupLanguagesList() {
@@ -277,29 +229,5 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         }
         mLanguagesAdapter = null;
     }
-
     // endregion Languages List
-
-    class LanguagesLoaderCallbacks extends SimpleLoaderCallbacks<List<Language>> {
-        @Nullable
-        @Override
-        public Loader<List<Language>> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_LANGUAGES:
-                    return new LanguagesLoader(requireContext());
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<List<Language>> loader,
-                                   @Nullable final List<Language> languages) {
-            switch (loader.getId()) {
-                case LOADER_LANGUAGES:
-                    onLoadLanguages(languages);
-                    break;
-            }
-        }
-    }
 }
