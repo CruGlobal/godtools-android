@@ -50,9 +50,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
 
-    // search related properties
-    private boolean mIsSearchViewOpen = false;
-
     public static Fragment newInstance(final boolean primary) {
         final Fragment fragment = new LanguagesFragment();
         final Bundle args = new Bundle();
@@ -70,10 +67,6 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
         final Bundle args = getArguments();
         if (args != null) {
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
-        }
-
-        if (savedInstanceState != null) {
-            mIsSearchViewOpen = savedInstanceState.getBoolean(EXTRA_SEARCH_OPEN, mIsSearchViewOpen);
         }
 
         setupDataModel();
@@ -120,8 +113,9 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(EXTRA_SEARCH_OPEN,
-                            mSearchItem != null ? mSearchItem.isActionViewExpanded() : mIsSearchViewOpen);
+        if (mSearchItem != null) {
+            mViewModel.setSearchViewOpen(mSearchItem.isActionViewExpanded());
+        }
     }
 
     @Override
@@ -152,7 +146,7 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     private void setupSearchMenu() {
         if (mSearchItem != null) {
             mSearchView = (SearchView) mSearchItem.getActionView();
-            if (mIsSearchViewOpen) {
+            if (mViewModel.isSearchViewOpen()) {
                 mSearchItem.expandActionView();
             }
         }
@@ -186,7 +180,7 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
             mSearchView.setOnQueryTextListener(null);
         }
         if (mSearchItem != null) {
-            mIsSearchViewOpen = mSearchItem.isActionViewExpanded();
+            mViewModel.setSearchViewOpen(mSearchItem.isActionViewExpanded());
         }
         mSearchView = null;
         mSearchItem = null;

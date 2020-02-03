@@ -15,15 +15,24 @@ import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val KEY_QUERY = "query"
+private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
 class LanguagesFragmentViewModel(
     application: Application,
-    savedState: SavedStateHandle
+    private val savedState: SavedStateHandle
 ) : AndroidViewModel(application) {
     private val dao = GodToolsDao.getInstance(application)
 
-    val showNone = MutableLiveData<Boolean>(false)
+    // region Search
     val query: MutableLiveData<String> = savedState.getLiveData(KEY_QUERY, null)
+
+    var isSearchViewOpen: Boolean
+        get() = savedState.get<Boolean>(KEY_IS_SEARCH_VIEW_OPEN) == true
+        set(value) = savedState.set(KEY_IS_SEARCH_VIEW_OPEN, value)
+    // endregion Search
+
+    // region Languages
+    val showNone = MutableLiveData<Boolean>(false)
 
     private val rawLanguages = Query.select<Language>()
         .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
@@ -45,4 +54,5 @@ class LanguagesFragmentViewModel(
             else -> languages.orEmpty()
         }
     }
+    // endregion Languages
 }
