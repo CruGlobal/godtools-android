@@ -122,7 +122,9 @@ subprojects {
     configurations.all {
         resolutionStrategy {
             force "androidx.annotation:annotation:${deps.androidX.annotation}"
-            force "androidx.core:core:${deps.androidX.core}"
+            force "androidx.collection:collection:${deps.androidX.collection}"
+            force "androidx.fragment:fragment:${deps.androidX.fragment}"
+            force "androidx.loader:loader:${deps.androidX.loader}"
             force "org.jetbrains:annotations:${deps.jetbrainsAnnotation}"
 
             dependencySubstitution {
