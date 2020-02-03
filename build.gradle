@@ -41,7 +41,7 @@ buildscript {
         ]
         deps.androidX = [
                 annotation        : '1.1.0',
-                appCompat         : '1.1.0',
+                appCompat         : '1.2.0-alpha02',
                 archCore          : '2.1.0',
                 browser           : '1.2.0',
                 cardView          : '1.0.0',
