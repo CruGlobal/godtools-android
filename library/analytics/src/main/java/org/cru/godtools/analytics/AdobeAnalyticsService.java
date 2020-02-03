@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.adobe.mobile.Analytics;
@@ -20,7 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +35,7 @@ import me.thekey.android.TheKey;
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 
-public final class AdobeAnalyticsService implements AnalyticsService, Application.ActivityLifecycleCallbacks {
+public final class AdobeAnalyticsService implements Application.ActivityLifecycleCallbacks {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
@@ -48,8 +46,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
     public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
-    private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
-    private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
     private static final String KEY_SITE_SECTION = "cru.sitesection";
     private static final String KEY_SITE_SUB_SECTION = "cru.sitesubsection";
 
@@ -92,7 +88,6 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
     }
 
     // region Tracking Events
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
@@ -109,18 +104,7 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
         }
     }
 
-    @Override
-    public void onTrackShareAction() {
-        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, 1));
-    }
-
-    @Override
-    public void onTrackExitUrl(@NonNull final Uri url) {
-        trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
-    }
-
     // region ActivityLifecycleCallbacks
-
     @Override
     public void onActivityCreated(final Activity activity, final Bundle savedInstanceState) {}
 
@@ -151,9 +135,7 @@ public final class AdobeAnalyticsService implements AnalyticsService, Applicatio
 
     @Override
     public void onActivityDestroyed(final Activity activity) {}
-
     // endregion ActivityLifecycleCallbacks
-
     // endregion Tracking Events
 
     @AnyThread

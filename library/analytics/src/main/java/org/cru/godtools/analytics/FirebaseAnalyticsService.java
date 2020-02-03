@@ -24,7 +24,7 @@ import androidx.annotation.Nullable;
 import me.thekey.android.TheKey;
 import me.thekey.android.eventbus.event.TheKeyEvent;
 
-public class FirebaseAnalyticsService implements AnalyticsService, Application.ActivityLifecycleCallbacks {
+public class FirebaseAnalyticsService implements Application.ActivityLifecycleCallbacks {
     private static final String USER_PROP_APP_TYPE = "godtools_app_type";
     private static final String VALUE_APP_TYPE_INSTANT = "instant";
     private static final String VALUE_APP_TYPE_INSTALLED = "installed";

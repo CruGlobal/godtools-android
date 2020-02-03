@@ -16,6 +16,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import org.ccci.gto.android.common.util.WeakTask;
 import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
+import org.cru.godtools.base.tool.analytics.model.ShareActionEvent;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
@@ -214,7 +215,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         }
 
         // track the share action
-        mAnalytics.onTrackShareAction();
+        mEventBus.post(ShareActionEvent.INSTANCE);
 
         // start the share activity chooser with our share link
         final String title = getShareLinkTitle();

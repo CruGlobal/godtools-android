@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.cru.godtools.analytics.AnalyticsService;
+import org.cru.godtools.base.tool.analytics.model.ExitLinkActionEvent;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
@@ -14,6 +14,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Button;
 import org.cru.godtools.xml.model.Text;
+import org.greenrobot.eventbus.EventBus;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +54,7 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
                     final Uri url = mModel.getUrl();
                     if (url != null) {
                         final Context context = mRoot.getContext();
-                        AnalyticsService.getInstance(context).onTrackExitUrl(url);
+                        EventBus.getDefault().post(new ExitLinkActionEvent(url));
                         WebUrlLauncher.openUrl(context, url);
                     }
                     break;

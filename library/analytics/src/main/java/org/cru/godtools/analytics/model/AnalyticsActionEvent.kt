@@ -8,7 +8,7 @@ private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION = "action"
 
 @Immutable
 open class AnalyticsActionEvent @JvmOverloads constructor(
-    val category: String?,
+    val category: String? = null,
     val action: String,
     val label: String? = null,
     locale: Locale? = null

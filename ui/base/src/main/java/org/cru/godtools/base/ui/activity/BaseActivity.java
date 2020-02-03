@@ -8,7 +8,6 @@ import android.os.Parcelable;
 
 import com.google.common.base.Objects;
 
-import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.R2;
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,8 +34,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ActionBar mActionBar;
 
     @NonNull
-    protected /*final*/ AnalyticsService mAnalytics;
-    @NonNull
     protected /*final*/ EventBus mEventBus;
 
     @NonNull
@@ -53,7 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAnalytics = AnalyticsService.getInstance(this);
         mEventBus = EventBus.getDefault();
     }
 
