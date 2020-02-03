@@ -1,6 +1,5 @@
 package org.cru.godtools.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -204,10 +203,12 @@ public class LanguagesFragment extends BasePlatformFragment implements LocaleSel
     // region Languages List
     private void setupLanguagesList() {
         if (mLanguagesView != null) {
-            final Context context = mLanguagesView.getContext();
-            final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            mLanguagesView.setLayoutManager(layoutManager);
-            mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
+            final RecyclerView.LayoutManager layoutManager = mLanguagesView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLanguagesView.addItemDecoration(new DividerItemDecoration(
+                        mLanguagesView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation()
+                ));
+            }
 
             mLanguagesAdapter = new LanguagesAdapter();
             mLanguagesAdapter.setCallbacks(this);
