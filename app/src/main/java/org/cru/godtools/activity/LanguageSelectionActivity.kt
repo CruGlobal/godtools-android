@@ -10,7 +10,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SELECTION
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.fragment.LanguagesFragment
+import org.cru.godtools.ui.languages.LanguagesFragment
+import org.cru.godtools.ui.languages.LocaleSelectedListener
 import java.util.Locale
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.activity.LanguageSelectionActivity.PRIMARY"
@@ -22,7 +23,7 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
-class LanguageSelectionActivity : BasePlatformActivity(), LanguagesFragment.Callbacks {
+class LanguageSelectionActivity : BasePlatformActivity(), LocaleSelectedListener {
     private val primary: Boolean by lazy { intent?.getBooleanExtra(EXTRA_PRIMARY, true) ?: true }
 
     // region Lifecycle
@@ -67,7 +68,7 @@ class LanguageSelectionActivity : BasePlatformActivity(), LanguagesFragment.Call
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = LanguagesFragment.newInstance(primary)
+                val fragment = LanguagesFragment(primary)
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

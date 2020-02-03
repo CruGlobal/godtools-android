@@ -172,6 +172,7 @@ dependencies {
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
