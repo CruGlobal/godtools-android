@@ -55,7 +55,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/gt_gd_activity_text" />
+            tools:text="@string/gt_gd_activity_text" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager

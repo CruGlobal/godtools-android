@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
-import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.viewmodel.GlobalDashboardDataModel
 import java.util.Calendar
 
-class GlobalDashboardFragment : BasePlatformFragment() {
+class GlobalDashboardFragment : Fragment() {
     private var binding: FragmentGlobalDashboardBinding? = null
     private val viewModel: GlobalDashboardDataModel by viewModels()
 

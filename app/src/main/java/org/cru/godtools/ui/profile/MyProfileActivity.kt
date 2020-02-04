@@ -3,9 +3,11 @@ package org.cru.godtools.ui.profile
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import me.thekey.android.TheKey
+import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
@@ -25,15 +27,14 @@ class MyProfileActivity : BasePlatformActivity() {
     // region lifeCycle Calls
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyProfileBinding.inflate(layoutInflater).also {
-            setContentView(it.root.id)
-        }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_profile)
+        setBindingData()
     }
 
     override fun onResume() {
         super.onResume()
-        setBindingData()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
+        binding?.myProfileTabLayout?.getTabAt(0)?.setText(R.string.gt_gd_activity_text)
     }
 
     override fun onDestroy() {

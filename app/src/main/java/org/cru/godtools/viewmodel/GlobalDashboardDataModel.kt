@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 class GlobalDashboardDataModel(application: Application) : AndroidViewModel(application) {
 
     // TODO:  Create temporary Data to be updated in later PR
-    val uniqueUsers = MutableLiveData<Int>()
-    val gospelPresentation = MutableLiveData<Int>()
-    val sessions = MutableLiveData<Int>()
-    val countries = MutableLiveData<Int>()
+    val uniqueUsers = MutableLiveData<String>()
+    val gospelPresentation = MutableLiveData<String>()
+    val sessions = MutableLiveData<String>()
+    val countries = MutableLiveData<String>()
 }
