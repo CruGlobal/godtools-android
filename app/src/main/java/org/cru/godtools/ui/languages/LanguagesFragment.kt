@@ -1,27 +1,24 @@
 package org.cru.godtools.ui.languages
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.cru.godtools.R
-import org.cru.godtools.fragment.BasePlatformFragment
+import org.cru.godtools.databinding.LanguagesFragmentBinding
+import org.cru.godtools.fragment.BaseBindingPlatformFragment
 import org.cru.godtools.sync.syncLanguages
 import splitties.fragmentargs.argOrDefault
 import java.util.Locale
 
-class LanguagesFragment() : BasePlatformFragment(), LocaleSelectedListener {
+class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
+    LocaleSelectedListener {
     constructor(primary: Boolean) : this() {
         isPrimary = primary
     }
@@ -41,12 +38,9 @@ class LanguagesFragment() : BasePlatformFragment(), LocaleSelectedListener {
         menu.setupSearchView()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_languages, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupLanguagesList()
+    override fun onBindingCreated(binding: LanguagesFragmentBinding, savedInstanceState: Bundle?) {
+        super.onBindingCreated(binding, savedInstanceState)
+        binding.setupLanguagesList()
     }
 
     override fun onUpdatePrimaryLanguage() {
@@ -128,9 +122,6 @@ class LanguagesFragment() : BasePlatformFragment(), LocaleSelectedListener {
     }
 
     // region Languages List
-    @JvmField
-    @BindView(R.id.languages)
-    var languagesView: RecyclerView? = null
     private val languagesAdapter by lazy {
         LanguagesAdapter().also {
             it.callbacks = this
@@ -138,8 +129,8 @@ class LanguagesFragment() : BasePlatformFragment(), LocaleSelectedListener {
         }
     }
 
-    private fun setupLanguagesList() {
-        languagesView?.apply {
+    private fun LanguagesFragmentBinding.setupLanguagesList() {
+        languages.apply {
             adapter = languagesAdapter
             (layoutManager as? LinearLayoutManager)?.let {
                 addItemDecoration(DividerItemDecoration(context, it.orientation))
