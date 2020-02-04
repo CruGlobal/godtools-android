@@ -121,7 +121,7 @@ public final class GodToolsDownloadManager {
         mDao = GodToolsDao.Companion.getInstance(mContext);
         mEventBus = EventBus.getDefault();
         mHandler = new Handler(Looper.getMainLooper());
-        mPrefs = Settings.getInstance(mContext);
+        mPrefs = Settings.Companion.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(GodToolsDownloadManager.class.getSimpleName()));

@@ -12,9 +12,9 @@ import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED
-import org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE
-import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
+import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
+import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
+import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -32,7 +32,7 @@ abstract class BasePlatformFragment : BaseFragment() {
     internal var refreshLayout: SwipeRefreshLayout? = null
     protected val syncHelper = SwipeRefreshSyncHelper()
 
-    protected var primaryLanguage = Settings.getDefaultLanguage()
+    protected var primaryLanguage = Settings.defaultLanguage
     protected var parallelLanguage: Locale? = null
 
     // region Lifecycle Events

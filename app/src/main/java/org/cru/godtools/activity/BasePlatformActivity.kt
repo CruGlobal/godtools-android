@@ -35,8 +35,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE
-import org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE
+import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
+import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
@@ -81,7 +81,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private var signupItem: MenuItem? = null
     private var logoutItem: MenuItem? = null
 
-    private var primaryLanguage = Settings.getDefaultLanguage()
+    private var primaryLanguage = Settings.defaultLanguage
     private var parallelLanguage: Locale? = null
 
     // region Lifecycle Events
