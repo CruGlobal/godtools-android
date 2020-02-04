@@ -3,20 +3,21 @@ package org.cru.godtools.ui.languages
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.ListItemLanguageBinding
 import org.cru.godtools.model.Language
 import java.util.Locale
 
-class LanguagesAdapter(private val showNone: Boolean) : SimpleDataBindingAdapter<ListItemLanguageBinding>(),
-    LanguageSelectedListener {
+class LanguagesAdapter : SimpleDataBindingAdapter<ListItemLanguageBinding>(), LanguageSelectedListener,
+    Observer<List<Language?>> {
     init {
         setHasStableIds(true)
     }
 
     var callbacks: LocaleSelectedListener? = null
-    var languages: List<Language>? = null
+    var languages: List<Language?>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -28,12 +29,13 @@ class LanguagesAdapter(private val showNone: Boolean) : SimpleDataBindingAdapter
         this.disabled = disabled.toSet()
     }
 
-    private fun getLanguage(position: Int) = when {
-        showNone && position == 0 -> null
-        else -> languages?.get(position - (if (showNone) 1 else 0))
+    override fun onChanged(t: List<Language?>?) {
+        languages = t
     }
 
-    override fun getItemCount() = (languages?.size ?: 0) + if (showNone) 1 else 0
+    private fun getLanguage(position: Int) = languages?.get(position)
+
+    override fun getItemCount() = languages?.size ?: 0
     override fun getItemId(position: Int) = getLanguage(position)?.id ?: NO_ID
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ListItemLanguageBinding =
