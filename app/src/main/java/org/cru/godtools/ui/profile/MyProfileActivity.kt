@@ -53,11 +53,11 @@ class MyProfileActivity : BasePlatformActivity() {
         val key = TheKey.getInstance(this)
         binding?.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
         binding?.myProfileViewpager?.adapter = MyProfilePageAdapter(this)
-        binding?.myProfileTabLayout?.let {
-            binding?.myProfileViewpager?.let { it1 ->
-                TabLayoutMediator(it, it1) { tab, position ->
+        binding?.myProfileTabLayout?.let { tabLayout ->
+            binding?.myProfileViewpager?.let { viewPager ->
+                TabLayoutMediator(tabLayout, viewPager) { tab, _ ->
                     tab.text = getString(R.string.gt_gd_activity_text)
-                    it1.setCurrentItem(tab.position, true)
+                    viewPager.setCurrentItem(tab.position, true)
                 }.attach()
             }
         }
