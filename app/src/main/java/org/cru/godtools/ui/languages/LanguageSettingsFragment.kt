@@ -10,7 +10,7 @@ import butterknife.OnClick
 import butterknife.Optional
 import org.cru.godtools.R
 import org.cru.godtools.activity.startLanguageSelectionActivity
-import org.cru.godtools.base.util.LocaleUtils
+import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.fragment.BasePlatformFragment
 
 class LanguageSettingsFragment : BasePlatformFragment() {
@@ -44,10 +44,10 @@ class LanguageSettingsFragment : BasePlatformFragment() {
 
     private fun updateLanguages() {
         primaryLanguageView?.apply {
-            text = LocaleUtils.getDisplayName(primaryLanguage, context, null, null)
+            text = primaryLanguage.getDisplayName(context, null, null)
         }
         parallelLanguageView?.apply {
-            parallelLanguage?.also { text = LocaleUtils.getDisplayName(it, context, null, null) }
+            parallelLanguage?.also { text = it.getDisplayName(context, null, null) }
                 ?: setText(R.string.action_language_parallel_select)
         }
     }

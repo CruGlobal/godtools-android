@@ -62,7 +62,7 @@ public class InitialContentTasks implements Runnable {
         mContext = context.getApplicationContext();
         mDao = GodToolsDao.Companion.getInstance(context);
         mAssets = context.getAssets();
-        mSettings = Settings.getInstance(context);
+        mSettings = Settings.Companion.getInstance(context);
         mDownloadManager = GodToolsDownloadManager.getInstance(context);
         mEventBus = EventBus.getDefault();
     }

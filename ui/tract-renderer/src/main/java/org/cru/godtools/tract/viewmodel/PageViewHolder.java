@@ -90,7 +90,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     PageViewHolder(@NonNull final View root) {
         super(Page.class, root, null);
-        mSettings = Settings.getInstance(root.getContext());
+        mSettings = Settings.Companion.getInstance(root.getContext());
 
         mPageContentLayout.setActiveCardListener(this);
         mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);

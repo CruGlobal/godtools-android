@@ -9,7 +9,7 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SETTINGS
-import org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS
+import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
 
 fun Activity.startLanguageSettingsActivity() {

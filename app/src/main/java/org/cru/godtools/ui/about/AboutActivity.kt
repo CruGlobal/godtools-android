@@ -10,7 +10,7 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
+import org.cru.godtools.base.util.deviceLocale
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -29,7 +29,7 @@ class AboutActivity : BasePlatformActivity() {
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, getDeviceLocale(this)))
+        mEventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
 

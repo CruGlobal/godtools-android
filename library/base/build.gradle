@@ -1,5 +1,6 @@
 dependencies {
     implementation "androidx.core:core:${deps.androidX.core}"
+    implementation "androidx.core:core-ktx:${deps.androidX.core}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
