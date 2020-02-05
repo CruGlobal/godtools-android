@@ -2,70 +2,78 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <variable name="accountName" type="String" />
-        <variable name="accountDate" type="String" />
+
+        <variable
+            name="accountName"
+            type="String" />
+
+        <variable
+            name="accountDate"
+            type="String" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/account_name_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:elevation="10dp"
-        android:gravity="center"
-        android:text="@{accountName}"
-        android:textAppearance="@style/TextAppearance.GodTools.Large"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="John Smith" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/account_date_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:elevation="10dp"
-        android:gravity="center"
-        android:text="@{accountDate}"
-        android:textAppearance="@style/TextAppearance.GodTools"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/account_name_text"
-        tools:text="April 10, 2019" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/my_profile_tab_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@color/gt_gd_profile_background"
-        android:elevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_date_text">
-
-        <com.google.android.material.tabs.TabItem
+        <TextView
+            android:id="@+id/account_name_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="@string/gt_gd_activity_text" />
-    </com.google.android.material.tabs.TabLayout>
+            android:layout_marginTop="32dp"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:text="@{accountName}"
+            android:textAppearance="@style/TextAppearance.GodTools.Large"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="John Smith" />
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/my_profile_viewpager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_profile_tab_layout" />
+        <TextView
+            android:id="@+id/account_date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:text="@{accountDate}"
+            android:textAppearance="@style/TextAppearance.GodTools"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_name_text"
+            tools:text="April 10, 2019"
+            tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/my_profile_tab_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@color/gt_gd_profile_background"
+            android:elevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_date_text">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="@string/gt_gd_activity_text" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/my_profile_viewpager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/my_profile_tab_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
