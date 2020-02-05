@@ -4,8 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import me.thekey.android.TheKey
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
@@ -27,7 +32,8 @@ class MyProfileActivity : BasePlatformActivity() {
     // region lifeCycle Calls
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_profile)
+        binding = ActivityMyProfileBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
         setBindingData()
     }
 
@@ -46,13 +52,20 @@ class MyProfileActivity : BasePlatformActivity() {
     private fun setBindingData() {
         val key = TheKey.getInstance(this)
         binding?.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
-        binding?.myProfileTabLayout?.setupWithViewPager(binding?.myProfileViewpager)
-        binding?.myProfileViewpager?.adapter = MyProfilePageAdapter(supportFragmentManager)
+        binding?.myProfileViewpager?.adapter = MyProfilePageAdapter(this)
+        binding?.myProfileTabLayout?.let {
+            binding?.myProfileViewpager?.let { it1 ->
+                TabLayoutMediator(it, it1) { tab, position ->
+                    tab.text = getString(R.string.gt_gd_activity_text)
+                    it1.setCurrentItem(tab.position, true)
+                }.attach()
+            }
+        }
     }
 
-    private class MyProfilePageAdapter(fm: FragmentManager) :
-        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int) = GlobalDashboardFragment()
-        override fun getCount() = 1
+    private class MyProfilePageAdapter(fm: FragmentActivity) :
+        FragmentStateAdapter(fm) {
+        override fun getItemCount() = 1
+        override fun createFragment(position: Int) = GlobalDashboardFragment()
     }
 }
