@@ -3,12 +3,17 @@ package org.cru.godtools.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import org.ccci.gto.android.common.db.Query
+import org.cru.godtools.model.GlobalActivityAnalytics
+import org.keynote.godtools.android.db.GodToolsDao
 
-class GlobalDashboardDataModel(application: Application) : AndroidViewModel(application) {
+class GlobalDashboardDataModel(app: Application) : AndroidViewModel(app) {
 
-    // TODO:  Create temporary Data to be updated in later PR
-    val uniqueUsers = MutableLiveData<String>()
-    val gospelPresentation = MutableLiveData<String>()
-    val sessions = MutableLiveData<String>()
-    val countries = MutableLiveData<String>()
+    private val dao = GodToolsDao.getInstance(getApplication()).getLiveData(Query.select(GlobalActivityAnalytics::class.java).where("_id", 1))
+
+    val uniqueUsers = dao.map { it.first().users.toString() }
+    val gospelPresentation = dao.map { it.first().gospelPresentation.toString() }
+    val sessions = dao.map { it.first().launches.toString() }
+    val countries = dao.map { it.first().countries.toString() }
 }
