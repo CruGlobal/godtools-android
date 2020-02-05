@@ -15,7 +15,7 @@ buildscript {
                 facebook           : '6.0.0',
                 facebookStetho     : '1.5.1',
                 findbugs           : '3.0.2',
-                gtoSupport         : '3.3.0-SNAPSHOT',
+                gtoSupport         : '3.4.0-SNAPSHOT',
                 guava              : '28.2-android',
                 hamcrest           : '2.2',
                 jetbrainsAnnotation: '18.0.0',
