@@ -39,7 +39,7 @@ import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.base.util.LocaleUtils.getDeviceLocale
+import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
@@ -168,7 +168,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_help -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, getDeviceLocale(this)))
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
             openUrl(URI_HELP)
             true
         }
@@ -193,17 +193,17 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_terms_of_use -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)))
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
             openUrl(URI_TERMS_OF_USE)
             true
         }
         R.id.action_privacy_policy -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, getDeviceLocale(this)))
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
             openUrl(URI_PRIVACY)
             true
         }
         R.id.action_copyright -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, getDeviceLocale(this)))
+            mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
             openUrl(URI_COPYRIGHT)
             true
         }
@@ -344,7 +344,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchContactUs() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, getDeviceLocale(this)))
+        mEventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
         } catch (e: ActivityNotFoundException) {
@@ -370,7 +370,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShareStory() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, getDeviceLocale(this)))
+        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
         try {
             startActivity(
                 Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
