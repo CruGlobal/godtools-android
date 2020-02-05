@@ -3,9 +3,12 @@ package org.cru.godtools.base
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import me.thekey.android.TheKey
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
+import org.ccci.gto.android.common.lifecycle.getStringLiveData
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.base.util.deviceLocale
 import java.util.Locale
@@ -46,6 +49,10 @@ class Settings private constructor(private val context: Context) {
                 if (value == parallelLanguage) remove(PREF_PARALLEL_LANGUAGE)
             }
         }
+    val primaryLanguageLiveData by lazy {
+        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, null).distinctUntilChanged()
+            .map { it?.let { forLanguageTag(it) } ?: defaultLanguage }
+    }
 
     var parallelLanguage
         get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.let { forLanguageTag(it) }
@@ -53,6 +60,10 @@ class Settings private constructor(private val context: Context) {
             if (primaryLanguage == locale) return
             prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.let { toLanguageTag(it) }) }
         }
+    val parallelLanguageLiveData by lazy {
+        prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
+            .map { it?.let { forLanguageTag(it) } }
+    }
 
     fun isLanguageProtected(locale: Locale) = when (locale) {
         defaultLanguage -> true
