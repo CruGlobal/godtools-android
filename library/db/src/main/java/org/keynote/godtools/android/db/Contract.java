@@ -316,14 +316,14 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
-    static class GlobalActivityAnalyticsTable extends BaseTable {
+    public static class GlobalActivityAnalyticsTable extends BaseTable {
         static final String TABLE_NAME = "global_activity_analytics";
         private static final Table<GlobalActivityAnalytics> TABLE = Table.forClass(GlobalActivityAnalytics.class);
 
-        static final String COLUMN_USERS = "users";
-        static final String COLUMN_COUNTRIES = "countries";
-        static final String COLUMN_LAUNCHES = "launches";
-        static final String COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations";
+        public static final String COLUMN_USERS = "users";
+        public static final String COLUMN_COUNTRIES = "countries";
+        public static final String COLUMN_LAUNCHES = "launches";
+        public static final String COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
 

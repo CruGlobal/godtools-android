@@ -18,6 +18,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
+import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.sync.syncGlobalAnalytics
 
 fun Activity.startMyProfileActivity() {
     Intent(this, MyProfileActivity::class.java)
@@ -41,6 +43,7 @@ class MyProfileActivity : BasePlatformActivity() {
         super.onResume()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
         binding?.myProfileTabLayout?.getTabAt(0)?.setText(R.string.gt_gd_activity_text)
+        syncGlobalAnalytics(this)
     }
 
     override fun onDestroy() {
