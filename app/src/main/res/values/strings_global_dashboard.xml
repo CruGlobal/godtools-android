@@ -7,4 +7,5 @@
     <string name="gt_gd_countries_text">Countries</string>
     <string name="gt_gd_activity_text">Activity</string>
     <string name="gt_gd_my_profile_text">My Profile</string>
+    <string name="gt_gd_my_activity">My Activity</string>
 </resources>

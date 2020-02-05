@@ -116,6 +116,7 @@
         <activity
             android:name=".ui.profile.MyProfileActivity"
             android:label="@string/gt_gd_my_profile_text"
+            android:theme="@style/Theme.GodTools"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
