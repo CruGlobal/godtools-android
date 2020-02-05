@@ -14,7 +14,10 @@ abstract class BaseBindingPlatformFragment<T : ViewDataBinding>(@LayoutRes priva
 
     // region Lifecycle
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        DataBindingUtil.inflate<T>(inflater, layoutId, container, false).also { binding = it }.root
+        DataBindingUtil.inflate<T>(inflater, layoutId, container, false).apply {
+            binding = this
+            lifecycleOwner = viewLifecycleOwner
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

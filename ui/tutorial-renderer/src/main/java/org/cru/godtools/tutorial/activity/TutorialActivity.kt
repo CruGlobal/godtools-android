@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
@@ -123,7 +124,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
-        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page))
+        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
     }
     // endregion Analytics
 

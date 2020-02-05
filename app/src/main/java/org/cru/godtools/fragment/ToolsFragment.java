@@ -24,6 +24,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.ToolsCursorLoader;
 import org.cru.godtools.databinding.ToolsFragmentBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -231,7 +232,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     private void updateVisibleBanner() {
         if (mToolsHeaderAdapter != null) {
             if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED &&
-                    Locale.getDefault().getLanguage().startsWith("en")) {
+                    LocaleUtils.getDeviceLocale(requireContext()).getLanguage().equals(Locale.ENGLISH.getLanguage())) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
                 mToolsHeaderAdapter.setSecondaryCallback(b -> settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
