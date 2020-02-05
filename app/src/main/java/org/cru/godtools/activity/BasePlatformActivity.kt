@@ -252,7 +252,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                 logoutItem = findItem(R.id.action_logout)
 
                 // the tutorial menu item is currently only available in English
-                findItem(R.id.action_tutorial)?.isVisible = Locale.getDefault().language.startsWith("en")
+                findItem(R.id.action_tutorial)?.isVisible = deviceLocale.language == Locale.ENGLISH.language
             }
             updateNavigationDrawerMenu()
         }
