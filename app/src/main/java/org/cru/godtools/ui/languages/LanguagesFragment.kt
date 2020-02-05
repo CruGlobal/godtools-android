@@ -47,10 +47,6 @@ class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding
         updateLanguagesList()
     }
 
-    override fun onUpdateParallelLanguage() {
-        updateLanguagesList()
-    }
-
     override fun onLocaleSelected(locale: Locale?) {
         FragmentUtils.getListener(this, LocaleSelectedListener::class.java)?.onLocaleSelected(locale)
     }
@@ -65,7 +61,7 @@ class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding
     private val viewModel: LanguagesFragmentViewModel by viewModels()
 
     private fun setupViewModel() {
-        viewModel.showNone.value = !isPrimary
+        viewModel.isPrimary.value = isPrimary
     }
     // endregion ViewModel
 
@@ -123,7 +119,7 @@ class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding
 
     // region Languages List
     private val languagesAdapter by lazy {
-        LanguagesAdapter().also {
+        LanguagesAdapter(this, viewModel.selectedLanguage).also {
             it.callbacks = this
             viewModel.languages.observe(this, it)
         }
@@ -140,7 +136,6 @@ class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding
     }
 
     private fun updateLanguagesList() {
-        languagesAdapter.selected.set(if (isPrimary) primaryLanguage else parallelLanguage)
         languagesAdapter.setDisabled(*(if (isPrimary) emptyArray() else arrayOf(primaryLanguage)))
     }
     // endregion Languages List

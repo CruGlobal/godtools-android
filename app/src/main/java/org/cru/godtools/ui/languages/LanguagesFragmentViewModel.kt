@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.ccci.gto.android.common.lifecycle.combineWith
+import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
+import java.util.Locale
 
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
@@ -22,6 +25,9 @@ class LanguagesFragmentViewModel(
     private val savedState: SavedStateHandle
 ) : AndroidViewModel(application) {
     private val dao = GodToolsDao.getInstance(application)
+    private val settings = Settings.getInstance(application)
+
+    val isPrimary = MutableLiveData<Boolean>(true)
 
     // region Search
     val query: MutableLiveData<String> = savedState.getLiveData(KEY_QUERY, null)
@@ -32,7 +38,13 @@ class LanguagesFragmentViewModel(
     // endregion Search
 
     // region Languages
-    val showNone = MutableLiveData<Boolean>(false)
+    @Suppress("UNCHECKED_CAST")
+    val selectedLanguage = isPrimary.switchMap {
+        when (it) {
+            true -> settings.primaryLanguageLiveData as LiveData<Locale?>
+            else -> settings.parallelLanguageLiveData
+        }
+    }
 
     private val rawLanguages = Query.select<Language>()
         .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
@@ -48,9 +60,9 @@ class LanguagesFragmentViewModel(
     }
 
     // List of sorted filtered languages with none (null) prepended if requested
-    val languages = showNone.distinctUntilChanged().combineWith(filteredLanguages) { showNone, languages ->
-        when (showNone) {
-            true -> listOf<Language?>(null) + languages.orEmpty()
+    val languages = isPrimary.distinctUntilChanged().combineWith(filteredLanguages) { isPrimary, languages ->
+        when (isPrimary) {
+            false -> listOf<Language?>(null) + languages.orEmpty()
             else -> languages.orEmpty()
         }
     }
