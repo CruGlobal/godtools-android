@@ -6,11 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import org.ccci.gto.android.sync.ThreadedSyncIntentService
 import org.ccci.gto.android.sync.event.SyncFinishedEvent
-import org.cru.godtools.sync.job.scheduleSharesJob
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
+import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
 
@@ -80,9 +80,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
                 }
                 SYNCTYPE_TOOL_SHARES -> {
                     val result = mToolSyncTasks.syncShares()
-                    if (!result) {
-                        scheduleSharesJob()
-                    }
+                    if (!result) scheduleSyncToolSharesWork()
                 }
             }
         } catch (ignored: IOException) {
