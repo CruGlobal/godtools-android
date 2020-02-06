@@ -11,13 +11,22 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 class GlobalDashboardDataModel(app: Application) : AndroidViewModel(app) {
 
-    private val dao : LiveData<List<GlobalActivityAnalytics>>? by lazy {  Query.select(GlobalActivityAnalytics::class.java)
-        .getAsLiveData(GodToolsDao.getInstance(getApplication())) }
+    private val dao: LiveData<List<GlobalActivityAnalytics>>? by lazy {
+        Query.select(GlobalActivityAnalytics::class.java)
+            .getAsLiveData(GodToolsDao.getInstance(getApplication()))
+    }
 
-    private val globalActivityAnalytics by lazy{ dao?.map { it.first() } }
+    private val globalActivityAnalytics by lazy {
+        dao?.map {
+            if (it.count() > 0) {
+                return@map it.first()
+            }
+            return@map null
+        }
+    }
 
-    val uniqueUsers = globalActivityAnalytics?.map { "${it.users}" }
-    val gospelPresentation = globalActivityAnalytics?.map { "${it.gospelPresentation}" }
-    val sessions = globalActivityAnalytics?.map { "${it.launches}" }
-    val countries = globalActivityAnalytics?.map { "${it.countries}" }
+    val uniqueUsers = globalActivityAnalytics?.map { "${it?.users ?: 0}" }
+    val gospelPresentation = globalActivityAnalytics?.map { "${it?.gospelPresentation ?: 0}" }
+    val sessions = globalActivityAnalytics?.map { "${it?.launches ?: 0}" }
+    val countries = globalActivityAnalytics?.map { "${it?.countries ?: 0}" }
 }
