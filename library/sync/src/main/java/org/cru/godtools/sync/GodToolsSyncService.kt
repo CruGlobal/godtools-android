@@ -54,9 +54,10 @@ fun syncToolShares(context: Context): ThreadedSyncIntentService.SyncTask {
             .toSyncTask(context)
 }
 
-fun syncGlobalAnalytics(context: Context) : ThreadedSyncIntentService.SyncTask {
+fun syncGlobalAnalytics(context: Context, force: Boolean = false) : ThreadedSyncIntentService.SyncTask {
     return Intent(context, GodToolsSyncService::class.java)
         .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ANALYTICS)
+        .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
         .toSyncTask(context)
 }
 

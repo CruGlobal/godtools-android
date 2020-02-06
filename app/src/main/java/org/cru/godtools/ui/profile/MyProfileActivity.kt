@@ -3,13 +3,8 @@ package org.cru.godtools.ui.profile
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import me.thekey.android.TheKey
 import org.cru.godtools.R
@@ -18,8 +13,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
-import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.sync.syncGlobalAnalytics
 
 fun Activity.startMyProfileActivity() {
     Intent(this, MyProfileActivity::class.java)
@@ -43,7 +36,6 @@ class MyProfileActivity : BasePlatformActivity() {
         super.onResume()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
         binding?.myProfileTabLayout?.getTabAt(0)?.setText(R.string.gt_gd_activity_text)
-        syncGlobalAnalytics(this)
     }
 
     override fun onDestroy() {

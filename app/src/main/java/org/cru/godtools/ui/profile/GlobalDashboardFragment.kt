@@ -1,14 +1,11 @@
 package org.cru.godtools.ui.profile
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import org.cru.godtools.R
 import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
 import org.cru.godtools.fragment.BaseBindingPlatformFragment
+import org.cru.godtools.sync.syncGlobalAnalytics
 import org.cru.godtools.viewmodel.GlobalDashboardDataModel
 import java.util.Calendar
 
@@ -18,5 +15,10 @@ class GlobalDashboardFragment : BaseBindingPlatformFragment<FragmentGlobalDashbo
     override fun onBindingCreated(binding: FragmentGlobalDashboardBinding, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
         binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        syncGlobalAnalytics(requireContext(), true).sync()
     }
 }
