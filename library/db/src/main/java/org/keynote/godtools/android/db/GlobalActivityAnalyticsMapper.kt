@@ -20,7 +20,7 @@ internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalyti
     override fun newObject(c: Cursor) = GlobalActivityAnalytics()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
         users = c.getInt(GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
-        countries = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
+        countries = c.getInt(GlobalActivityAnalyticsTable.COLUMN_COUNTRIES, 0)
         launches = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
         gospelPresentation = c.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
     }
