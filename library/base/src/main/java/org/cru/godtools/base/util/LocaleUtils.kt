@@ -13,7 +13,8 @@ private const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"
 
 val Context.deviceLocale: Locale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
 
-fun Locale.getDisplayName(context: Context?, defaultName: String?, inLocale: Locale?): String {
+@JvmOverloads
+fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
     return context?.localizeIfPossible(inLocale)?.getLanguageNameStringRes(this)
         // use Locale.getDisplayName()
         ?: LocaleUtils.getOptionalDisplayName(this, inLocale)
