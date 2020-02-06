@@ -8,7 +8,7 @@ import androidx.work.WorkerParameters
 import org.cru.godtools.sync.task.ToolSyncTasks
 import java.io.IOException
 
-private const val WORK_NAME = "SyncFollowup"
+private const val WORK_NAME = "SyncToolShares"
 
 internal fun Context.scheduleSyncToolSharesWork() = WorkManager.getInstance(this)
     .enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, SyncWorkRequestBuilder<SyncToolSharesWorker>().build())
