@@ -14,11 +14,12 @@ class GlobalDashboardFragment : BaseBindingPlatformFragment<FragmentGlobalDashbo
 
     override fun onBindingCreated(binding: FragmentGlobalDashboardBinding, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
     }
 
     override fun onResume() {
         super.onResume()
-        syncGlobalAnalytics(requireContext(), true).sync()
+        syncGlobalAnalytics(requireContext()).sync()
     }
 }
