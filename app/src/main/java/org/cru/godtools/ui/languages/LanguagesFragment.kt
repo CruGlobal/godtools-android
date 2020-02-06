@@ -136,6 +136,7 @@ class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding
                 addItemDecoration(DividerItemDecoration(context, it.orientation))
             }
         }
+        updateLanguagesList()
     }
 
     private fun updateLanguagesList() {

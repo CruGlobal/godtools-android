@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="androidx.core.util.ObjectsCompat" />
         <import type="androidx.databinding.ObservableField" />
 
         <variable name="listener" type="org.cru.godtools.ui.languages.LanguageSelectedListener" />
@@ -18,7 +19,7 @@
         android:background="@drawable/bkg_list_item_language"
         android:minHeight="48dp"
         android:onClick="@{() -> listener.onLanguageSelected(language)}"
-        app:selected="@{language.code == selected}">
+        app:selected="@{ObjectsCompat.equals(language.code, selected)}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/action_add"
