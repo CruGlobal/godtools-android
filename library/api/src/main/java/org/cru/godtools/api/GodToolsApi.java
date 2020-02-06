@@ -50,7 +50,7 @@ public class GodToolsApi {
     @NonNull
     public final ViewsApi views;
     @NonNull
-    public final GlobalActivityAnalyticsApi globalActivityAnalyticsApi;
+    public final AnalyticsApi analytics;
 
     private GodToolsApi(@NonNull final Context context, @NonNull final String apiUri) {
         mContext = context;
@@ -66,7 +66,7 @@ public class GodToolsApi {
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
         views = retrofit.create(ViewsApi.class);
-        globalActivityAnalyticsApi = retrofit.create(GlobalActivityAnalyticsApi.class);
+        analytics = retrofit.create(AnalyticsApi.class);
 
         // Adobe Campaign Forms APIs
         campaignForms = new Retrofit.Builder().baseUrl(CAMPAIGN_FORMS_API)
