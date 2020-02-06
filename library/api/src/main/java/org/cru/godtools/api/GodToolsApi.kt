@@ -77,14 +77,14 @@ class GodToolsApi private constructor(mobileContentApiUrl: String) {
         @JvmStatic
         @Synchronized
         fun configure(apiUri: String) {
-            check(::INSTANCE.isInitialized) { "Attempted to configure GodToolsApi multiple times" }
+            check(!::INSTANCE.isInitialized) { "Attempted to configure GodToolsApi multiple times" }
             INSTANCE = GodToolsApi(apiUri)
         }
 
         @JvmStatic
         @Synchronized
         fun getInstance(): GodToolsApi {
-            check(!::INSTANCE.isInitialized) { "Attempted to use GodTools API before it was configured" }
+            check(::INSTANCE.isInitialized) { "Attempted to use GodTools API before it was configured" }
             return INSTANCE
         }
     }
