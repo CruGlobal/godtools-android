@@ -7,6 +7,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.util.LocaleUtils" />
 
+        <variable name="callbacks" type="org.cru.godtools.ui.languages.LanguageSettingsFragment" />
         <variable name="primaryLanguage" type="LiveData&lt;java.util.Locale&gt;" />
         <variable name="parallelLanguage" type="LiveData&lt;java.util.Locale&gt;" />
     </data>
@@ -44,6 +45,7 @@
             <Button
                 android:id="@+id/primary_language_button"
                 style="@style/Widget.GodTools.Settings.Language.Button"
+                android:onClick="@{() -> callbacks.editPrimaryLanguage()}"
                 android:text="@{primaryLanguage != null ? LocaleUtils.getDisplayName(primaryLanguage, context) : null}"
                 tools:text="Czech" />
 
@@ -68,6 +70,7 @@
             <Button
                 android:id="@+id/parallel_language_button"
                 style="@style/Widget.GodTools.Settings.Language.Button"
+                android:onClick="@{() -> callbacks.editParallelLanguage()}"
                 android:text="@{parallelLanguage != null ? LocaleUtils.getDisplayName(parallelLanguage, context) : @string/action_language_parallel_select}" />
 
             <View style="@style/Widget.GodTools.Settings.Language.Spacer" />
