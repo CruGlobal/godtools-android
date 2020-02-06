@@ -50,8 +50,8 @@ class Settings private constructor(private val context: Context) {
             }
         }
     val primaryLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, null).distinctUntilChanged()
-            .map { it?.parseLanguageTag() ?: defaultLanguage }
+        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, toLanguageTag(defaultLanguage)).distinctUntilChanged()
+            .map { it?.parseLanguageTag() ?: defaultLanguage.also { primaryLanguage = it } }
     }
 
     var parallelLanguage
