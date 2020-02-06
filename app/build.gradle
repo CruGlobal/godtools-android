@@ -167,7 +167,6 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
-    implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
