@@ -31,7 +31,7 @@ open class GodToolsApplication : BaseGodToolsApplication() {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(InitialContentTasks(this))
     }
 
-    override fun configureApis() = GodToolsApi.configure(this, MOBILE_CONTENT_API)
+    override fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
 
     override fun configureEventBus(builder: EventBusBuilder): EventBusBuilder {
         return super.configureEventBus(builder)

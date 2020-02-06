@@ -16,7 +16,7 @@ import timber.log.Timber
 import java.io.IOException
 
 class AccountListRegistrationService private constructor(context: Context) {
-    private val api = GodToolsApi.getInstance(context)
+    private val api = GodToolsApi.getInstance()
     private val theKey = TheKey.getInstance(context)
     private val prefs = Settings.getInstance(context)
 
