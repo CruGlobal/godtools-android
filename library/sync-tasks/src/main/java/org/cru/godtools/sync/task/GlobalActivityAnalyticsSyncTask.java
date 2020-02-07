@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 import retrofit2.Response;
 
-import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
 
 public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
@@ -69,10 +68,7 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
     private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data,
                                       LongSparseArray<GlobalActivityAnalytics> existing) {
         for (final GlobalActivityAnalytics globalActivityAnalytics : data) {
-            if (existing != null) {
-                existing.remove(globalActivityAnalytics.getId());
-            }
-            mDao.updateOrInsert(globalActivityAnalytics, CONFLICT_REPLACE, API_FIELDS_GLOBAL_ANALYTICS);
+            mDao.replace(globalActivityAnalytics);
         }
     }
 }

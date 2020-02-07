@@ -15,41 +15,33 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
 
 fun Activity.startMyProfileActivity() {
-    Intent(this, MyProfileActivity::class.java)
+    val intent = Intent(this, MyProfileActivity::class.java)
         .putExtras(BaseActivity.buildExtras(this))
-        .also { startActivity(it) }
+    startActivity(intent)
 }
 
 class MyProfileActivity : BasePlatformActivity() {
 
-    private var binding: ActivityMyProfileBinding? = null
-
     // region lifeCycle Calls
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyProfileBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
-        setBindingData()
+        val binding = ActivityMyProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setBindingData(binding)
     }
 
     override fun onResume() {
         super.onResume()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
-        binding?.myProfileTabLayout?.getTabAt(0)?.setText(R.string.gt_gd_activity_text)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
     // endregion lifeCycle Calls
 
-    private fun setBindingData() {
+    private fun setBindingData(binding: ActivityMyProfileBinding) {
         val key = TheKey.getInstance(this)
-        binding?.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
-        binding?.myProfileViewpager?.adapter = MyProfilePageAdapter(this)
-        binding?.myProfileTabLayout?.let { tabLayout ->
-            binding?.myProfileViewpager?.let { viewPager ->
+        binding.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
+        binding.myProfileViewpager?.adapter = MyProfilePageAdapter(this)
+        binding.myProfileTabLayout?.let { tabLayout ->
+            binding.myProfileViewpager?.let { viewPager ->
                 TabLayoutMediator(tabLayout, viewPager) { tab, _ ->
                     tab.text = getString(R.string.gt_gd_activity_text)
                     viewPager.setCurrentItem(tab.position, true)
@@ -57,10 +49,9 @@ class MyProfileActivity : BasePlatformActivity() {
             }
         }
     }
+}
 
-    private class MyProfilePageAdapter(fm: FragmentActivity) :
-        FragmentStateAdapter(fm) {
-        override fun getItemCount() = 1
-        override fun createFragment(position: Int) = GlobalDashboardFragment()
-    }
+private class MyProfilePageAdapter(fm: FragmentActivity) : FragmentStateAdapter(fm) {
+    override fun getItemCount() = 1
+    override fun createFragment(position: Int) = GlobalDashboardFragment()
 }
