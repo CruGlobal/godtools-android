@@ -47,7 +47,7 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
             }
 
             final Response<JsonApiObject<GlobalActivityAnalytics>> response =
-                    mApi.globalActivityAnalyticsApi.getAnalytics().execute();
+                    mApi.getAnalytics().getGlobalActivity().execute();
             if (response == null || response.code() != 200) {
                 return false;
             }
