@@ -9,7 +9,8 @@ import org.cru.godtools.sync.syncGlobalAnalytics
 import org.cru.godtools.viewmodel.GlobalDashboardDataModel
 import java.util.Calendar
 
-class GlobalDashboardFragment : BaseBindingPlatformFragment<FragmentGlobalDashboardBinding>(R.layout.fragment_global_dashboard) {
+class GlobalDashboardFragment :
+    BaseBindingPlatformFragment<FragmentGlobalDashboardBinding>(R.layout.fragment_global_dashboard) {
     private val viewModel: GlobalDashboardDataModel by viewModels()
 
     override fun onBindingCreated(binding: FragmentGlobalDashboardBinding, savedInstanceState: Bundle?) {

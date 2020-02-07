@@ -41,11 +41,13 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
 
         synchronized (LOCK_SYNC_GLOBAL_ANALYTICS) {
             final boolean force = isForced(args);
-            if (!force && System.currentTimeMillis() - mDao.getLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS) < STALE_DURATION_GLOBAL_ANALYTICS) {
+            if (!force && System.currentTimeMillis() - mDao.getLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS) <
+                    STALE_DURATION_GLOBAL_ANALYTICS) {
                 return true;
             }
 
-            final Response<JsonApiObject<GlobalActivityAnalytics>> response = mApi.globalActivityAnalyticsApi.getAnalytics().execute();
+            final Response<JsonApiObject<GlobalActivityAnalytics>> response =
+                    mApi.globalActivityAnalyticsApi.getAnalytics().execute();
             if (response == null || response.code() != 200) {
                 return false;
             }
@@ -53,7 +55,8 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
             final JsonApiObject<GlobalActivityAnalytics> json = response.body();
             if (json != null) {
                 mDao.inTransaction(() -> {
-                    final LongSparseArray<GlobalActivityAnalytics> existing = index(mDao.get(Query.select(GlobalActivityAnalytics.class)));
+                    final LongSparseArray<GlobalActivityAnalytics> existing =
+                            index(mDao.get(Query.select(GlobalActivityAnalytics.class)));
                     storeGlobalAnalytics(json.getData(), existing);
                     return null;
                 });
@@ -63,7 +66,8 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
         return true;
     }
 
-    private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data, LongSparseArray<GlobalActivityAnalytics> existing) {
+    private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data,
+                                      LongSparseArray<GlobalActivityAnalytics> existing) {
         for (final GlobalActivityAnalytics globalActivityAnalytics : data) {
             if (existing != null) {
                 existing.remove(globalActivityAnalytics.getId());
