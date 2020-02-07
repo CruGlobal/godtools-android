@@ -5,11 +5,11 @@
 
     <data>
         <import type="androidx.core.util.ObjectsCompat" />
-        <import type="androidx.databinding.ObservableField" />
+        <import type="androidx.lifecycle.LiveData" />
 
         <variable name="listener" type="org.cru.godtools.ui.languages.LanguageSelectedListener" />
         <variable name="language" type="org.cru.godtools.model.Language" />
-        <variable name="selected" type="ObservableField&lt;java.util.Locale&gt;" />
+        <variable name="selected" type="LiveData&lt;java.util.Locale&gt;" />
     </data>
 
     <androidx.appcompat.widget.AppCompatRelativeLayoutImpl
