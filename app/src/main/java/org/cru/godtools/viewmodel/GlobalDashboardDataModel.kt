@@ -11,13 +11,13 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 class GlobalDashboardDataModel(app: Application) : AndroidViewModel(app) {
 
-    private val dao: LiveData<List<GlobalActivityAnalytics>>? by lazy {
+    private val globalAnalyticsQuery: LiveData<List<GlobalActivityAnalytics>>? by lazy {
         Query.select(GlobalActivityAnalytics::class.java)
             .getAsLiveData(GodToolsDao.getInstance(getApplication()))
     }
 
     private val globalActivityAnalytics by lazy {
-        dao?.map {
+        globalAnalyticsQuery?.map {
             if (it.count() > 0) {
                 return@map it.first()
             }
