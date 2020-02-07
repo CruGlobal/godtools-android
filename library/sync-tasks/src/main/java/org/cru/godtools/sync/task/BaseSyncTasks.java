@@ -24,7 +24,7 @@ abstract class BaseSyncTasks {
     private final EventBus mEventBus;
 
     BaseSyncTasks(@NonNull final Context context) {
-        mApi = GodToolsApi.getInstance(context);
+        mApi = GodToolsApi.getInstance();
         mDao = GodToolsDao.Companion.getInstance(context);
         mEventBus = EventBus.getDefault();
     }

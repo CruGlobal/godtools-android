@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
@@ -95,7 +96,7 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
 
             for (final ToolViews views : viewsList) {
                 try {
-                    final Response<JsonApiObject<ToolViews>> response = mApi.views.submitViews(views).execute();
+                    final Response<ResponseBody> response = mApi.views.submitViews(views).execute();
                     if (response.isSuccessful()) {
                         mDao.updateSharesDelta(views.getToolCode(), 0 - views.getQuantity());
                     } else {
