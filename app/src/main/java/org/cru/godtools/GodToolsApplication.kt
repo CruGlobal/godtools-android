@@ -1,7 +1,6 @@
 package org.cru.godtools
 
 import android.os.AsyncTask
-import com.evernote.android.job.JobManager
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
 import org.cru.godtools.account.BuildConfig.ACCOUNT_TYPE
@@ -18,7 +17,6 @@ import org.cru.godtools.model.loader.ModelLoaderEventBusIndex
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.ShortcutsEventBusIndex
-import org.cru.godtools.sync.job.SyncJobCreator
 import org.cru.godtools.tract.TractEventBusIndex
 import org.cru.godtools.tract.service.FollowupService
 import org.greenrobot.eventbus.EventBusBuilder
@@ -52,7 +50,6 @@ open class GodToolsApplication : BaseGodToolsApplication() {
         AccountListRegistrationService.getInstance(this)
         AemArticleManger.getInstance(this)
         FollowupService.start(this)
-        JobManager.create(this).addJobCreator(SyncJobCreator())
     }
 
     private fun theKeyConfiguration(): TheKeyImpl.Configuration {
