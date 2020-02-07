@@ -63,7 +63,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
         super.onCreate()
         mLanguagesSyncTasks = LanguagesSyncTasks(this)
         mToolSyncTasks = ToolSyncTasks(this)
-        mFollowupSyncTasks = FollowupSyncTasks(this)
+        mFollowupSyncTasks = FollowupSyncTasks.getInstance(this)
     }
 
     override fun onHandleSyncIntent(intent: Intent) {

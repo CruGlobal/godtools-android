@@ -11,6 +11,7 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import java.util.Collection;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import androidx.annotation.WorkerThread;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
@@ -18,7 +19,8 @@ import androidx.collection.SimpleArrayMap;
 import static android.content.ContentResolver.SYNC_EXTRAS_MANUAL;
 
 @WorkerThread
-abstract class BaseSyncTasks {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public abstract class BaseSyncTasks {
     final GodToolsApi mApi;
     final GodToolsDao mDao;
     private final EventBus mEventBus;
