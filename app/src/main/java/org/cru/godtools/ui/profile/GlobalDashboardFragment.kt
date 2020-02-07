@@ -16,7 +16,6 @@ class GlobalDashboardFragment : BaseBindingPlatformFragment<FragmentGlobalDashbo
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
-        syncHelper.setRefreshLayout(binding.gdSwipeRefresh)
     }
 
     override fun onResume() {

@@ -3,20 +3,16 @@ package org.cru.godtools.sync.task;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.collection.LongSparseArray;
-import androidx.collection.SimpleArrayMap;
-
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import androidx.annotation.NonNull;
+import androidx.collection.LongSparseArray;
 import retrofit2.Response;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
@@ -62,6 +58,7 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
                     return null;
                 });
             }
+            mDao.updateLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS);
         }
         return true;
     }
