@@ -17,12 +17,12 @@ class FollowupSyncTasks private constructor(context: Context) : BaseSyncTasks(co
     @Throws(IOException::class)
     fun syncFollowups() {
         synchronized(LOCK_FOLLOWUPS) {
-            mDao.get(Query.select<Followup>()).forEach { followup ->
-                followup.languageCode?.let { followup.setLanguage(mDao.find(Language::class.java, it)) }
+            dao.get(Query.select<Followup>()).forEach { followup ->
+                followup.languageCode?.let { followup.setLanguage(dao.find(Language::class.java, it)) }
                 followup.stashId()
-                if (mApi.followups.subscribe(followup).execute().code() == 204) {
+                if (api.followups.subscribe(followup).execute().code() == 204) {
                     followup.restoreId()
-                    mDao.delete(followup)
+                    dao.delete(followup)
                 }
             }
         }

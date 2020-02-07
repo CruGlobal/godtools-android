@@ -24,26 +24,26 @@ class LanguagesSyncTasks private constructor(context: Context) : BaseDataSyncTas
     fun syncLanguages(args: Bundle): Boolean {
         synchronized(LOCK_SYNC_LANGUAGES) {
             // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!BaseSyncTasks.isForced(args) &&
-                System.currentTimeMillis() - mDao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
+            if (!isForced(args) &&
+                System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
             ) return true
 
             // fetch languages from the API, short-circuit if this response is invalid
-            val response = mApi.languages.list(JsonApiParams()).execute()
+            val response = api.languages.list(JsonApiParams()).execute()
             if (response.code() != 200) return false
 
             // store languages
             val events = SimpleArrayMap<Class<*>, Any>()
             response.body()?.let { json ->
-                mDao.transaction {
-                    val existing = mDao.get(Query.select<Language>())
+                dao.transaction {
+                    val existing = dao.get(Query.select<Language>())
                         .groupingBy { it.code }
                         .reduce { _, lang1, lang2 ->
                             Timber.tag("LanguagesSyncTask").d(
                                 RuntimeException("Duplicate Language sync error"),
                                 "Duplicate languages detected: %s %s", lang1, lang2
                             )
-                            mDao.delete(
+                            dao.delete(
                                 Language::class.java,
                                 LanguageTable.FIELD_ID.`in`(*constants(lang1.id, lang2.id))
                             )
@@ -53,7 +53,7 @@ class LanguagesSyncTasks private constructor(context: Context) : BaseDataSyncTas
                 }
 
                 sendEvents(events)
-                mDao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
+                dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
             }
         }
         return true

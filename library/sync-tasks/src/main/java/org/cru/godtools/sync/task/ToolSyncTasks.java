@@ -48,7 +48,7 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
         synchronized (LOCK_SYNC_TOOLS) {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             final boolean force = isForced(args);
-            if (!force && System.currentTimeMillis() - mDao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS) {
+            if (!force && System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS) {
                 return true;
             }
 
@@ -58,7 +58,7 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
 
             // fetch tools from the API
             // short-circuit if this response is invalid
-            final Response<JsonApiObject<Tool>> response = mApi.tools.list(params).execute();
+            final Response<JsonApiObject<Tool>> response = api.tools.list(params).execute();
             if (response == null || response.code() != 200) {
                 return false;
             }
@@ -66,8 +66,8 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
             // store fetched tools
             final JsonApiObject<Tool> json = response.body();
             if (json != null) {
-                mDao.inTransaction(() -> {
-                    final LongSparseArray<Tool> existing = index(mDao.get(Query.select(Tool.class)));
+                dao.inTransaction(() -> {
+                    final LongSparseArray<Tool> existing = index(dao.get(Query.select(Tool.class)));
                     storeTools(events, json.getData(), existing, includes);
                     return null;
                 });
@@ -77,7 +77,7 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
             sendEvents(events);
 
             // update the sync time
-            mDao.updateLastSyncTime(SYNC_TIME_TOOLS);
+            dao.updateLastSyncTime(SYNC_TIME_TOOLS);
         }
 
         return true;
@@ -90,15 +90,15 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
         boolean successful = true;
         synchronized (LOCK_SYNC_SHARES) {
             final List<ToolViews> viewsList =
-                    mDao.streamCompat(Query.select(Tool.class).where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES))
+                    dao.streamCompat(Query.select(Tool.class).where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES))
                             .map(ToolViews::new)
                             .toList();
 
             for (final ToolViews views : viewsList) {
                 try {
-                    final Response<ResponseBody> response = mApi.views.submitViews(views).execute();
+                    final Response<ResponseBody> response = api.views.submitViews(views).execute();
                     if (response.isSuccessful()) {
-                        mDao.updateSharesDelta(views.getToolCode(), 0 - views.getQuantity());
+                        dao.updateSharesDelta(views.getToolCode(), 0 - views.getQuantity());
                     } else {
                         successful = false;
                     }
