@@ -6,6 +6,7 @@ android {
             }
         }
 
+        buildConfigField "String", "APPSFLYER_DEV_KEY", "\"QdbVaVHi9bHRchUTWtoaij\""
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "SNOWPLOW_ENDPOINT", "\"s.cru.org\""
         consumerProguardFiles 'proguard-rules-adobe.pro'
@@ -35,6 +36,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
+    implementation "com.android.installreferrer:installreferrer:1.1.1"
+    implementation "com.appsflyer:af-android-sdk:${deps.appsFlyer}"
     implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
