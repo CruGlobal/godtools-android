@@ -7,7 +7,6 @@ android {
         }
 
         buildConfigField "String", "APPSFLYER_DEV_KEY", "\"QdbVaVHi9bHRchUTWtoaij\""
-        buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "SNOWPLOW_ENDPOINT", "\"s.cru.org\""
         consumerProguardFiles 'proguard-rules-adobe.pro'
         consumerProguardFiles 'proguard-rules-snowplow.pro'
