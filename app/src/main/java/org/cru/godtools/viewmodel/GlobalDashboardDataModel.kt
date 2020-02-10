@@ -12,16 +12,12 @@ class GlobalDashboardDataModel(app: Application) : AndroidViewModel(app) {
     private val globalActivityAnalytics =
         GodToolsDao.getInstance(getApplication()).findLiveData(GlobalActivityAnalytics::class.java, 1)
 
-    val uniqueUsers = globalActivityAnalytics.map {
-        NumberFormat.getInstance().format(it?.users ?: 0)
-    }
-    val gospelPresentation = globalActivityAnalytics.map {
-        NumberFormat.getInstance().format(it?.gospelPresentation ?: 0)
-    }
-    val sessions = globalActivityAnalytics.map {
-        NumberFormat.getInstance().format(it?.launches ?: 0)
-    }
-    val countries = globalActivityAnalytics.map {
-        NumberFormat.getInstance().format(it?.countries ?: 0)
+    val uniqueUsers = globalActivityAnalytics.map { it?.users.formatNumber() }
+    val gospelPresentation = globalActivityAnalytics.map { it?.gospelPresentation.formatNumber() }
+    val sessions = globalActivityAnalytics.map { it?.launches.formatNumber() }
+    val countries = globalActivityAnalytics.map { it?.countries.formatNumber() }
+
+    private fun Int?.formatNumber(): String {
+        return NumberFormat.getInstance().format(this ?: 0)
     }
 }
