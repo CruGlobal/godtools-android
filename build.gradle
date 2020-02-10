@@ -32,6 +32,7 @@ buildscript {
                 picassoTransforms  : '2.2.1',
                 powermock          : '2.0.5',
                 retrofit2          : '2.6.2',
+                robolectric        : '4.3.1',
                 snowplow           : '1.3.5',
                 splitties          : '3.0.0-alpha06',
                 taptargetview      : '1.13.0',
@@ -225,7 +226,9 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
             implementation "com.jakewharton.timber:timber:${deps.timber}"
 
+            testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
             testImplementation "junit:junit:${deps.junit}"
+            testImplementation "org.robolectric:robolectric:${deps.robolectric}"
         }
 
         // disable lint checks
