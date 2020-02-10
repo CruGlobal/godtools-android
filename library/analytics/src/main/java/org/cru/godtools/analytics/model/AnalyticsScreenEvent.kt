@@ -6,6 +6,8 @@ import javax.annotation.concurrent.Immutable
 
 private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview"
 
+/* Adobe Site Sections */
+const val SITE_SECTION_TOOLS = "tools"
 private const val SITE_SECTION_MENU = "menu"
 private const val SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings"
 
@@ -31,7 +33,7 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
 
     override val adobeSiteSection
         get() = when (screen) {
-            SCREEN_FIND_TOOLS,
+            SCREEN_FIND_TOOLS -> SITE_SECTION_TOOLS
             SCREEN_LANGUAGE_SETTINGS,
             SCREEN_LANGUAGE_SELECTION,
             SCREEN_ABOUT, SCREEN_HELP,
