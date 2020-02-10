@@ -1,10 +1,16 @@
 package org.cru.godtools.article.aem.util
 
+import android.app.Application
 import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
-class UriUtilsIT {
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
+class UriUtilsTest {
     @Test
     fun testUriAddExtension() {
         assertEquals("https://domain/a.txt", Uri.parse("https://domain/a").addExtension("txt").toString())
