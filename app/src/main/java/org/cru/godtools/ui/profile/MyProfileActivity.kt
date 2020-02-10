@@ -51,7 +51,7 @@ class MyProfileActivity : BasePlatformActivity() {
     }
 }
 
-private class MyProfilePageAdapter(fm: FragmentActivity) : FragmentStateAdapter(fm) {
+private class MyProfilePageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount() = 1
     override fun createFragment(position: Int) = GlobalDashboardFragment()
 }
