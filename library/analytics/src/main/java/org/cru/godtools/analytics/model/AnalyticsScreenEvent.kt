@@ -7,9 +7,7 @@ import javax.annotation.concurrent.Immutable
 private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview"
 
 /* Adobe Site Sections */
-private const val SITE_SECTION_TOOLS = "tools"
 private const val SITE_SECTION_MENU = "menu"
-private const val SITE_SUB_SECTION_ADD_TOOLS = "add tools"
 private const val SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings"
 
 @Immutable
@@ -19,7 +17,6 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         /* Screen event names */
         const val SCREEN_HOME = "Home"
         const val SCREEN_FIND_TOOLS = "Find Tools"
-        const val SCREEN_TOOL_DETAILS = "Tool Info"
         const val SCREEN_LANGUAGE_SETTINGS = "Language Settings"
         const val SCREEN_LANGUAGE_SELECTION = "Select Language"
         const val SCREEN_MENU = "Menu"
@@ -31,12 +28,14 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val SCREEN_TERMS_OF_USE = "Terms of Use"
         const val SCREEN_PRIVACY_POLICY = "Privacy Policy"
         const val SCREEN_COPYRIGHT = "Copyright Info"
+
+        /* Adobe Site Sections */
+        const val ADOBE_SITE_SECTION_TOOLS = "tools"
     }
 
     override val adobeSiteSection
         get() = when (screen) {
-            SCREEN_FIND_TOOLS,
-            SCREEN_TOOL_DETAILS -> SITE_SECTION_TOOLS
+            SCREEN_FIND_TOOLS -> ADOBE_SITE_SECTION_TOOLS
             SCREEN_LANGUAGE_SETTINGS,
             SCREEN_LANGUAGE_SELECTION,
             SCREEN_ABOUT, SCREEN_HELP,
@@ -50,7 +49,6 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         }
     override val adobeSiteSubSection
         get() = when (screen) {
-            SCREEN_TOOL_DETAILS -> SITE_SUB_SECTION_ADD_TOOLS
             SCREEN_LANGUAGE_SELECTION -> SITE_SUB_SECTION_LANGUAGE_SETTINGS
             else -> null
         }
