@@ -3,29 +3,18 @@ package org.cru.godtools.sync.task;
 import android.content.Context;
 import android.os.Bundle;
 
-import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.cru.godtools.model.GlobalActivityAnalytics;
-import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable;
 
 import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.collection.LongSparseArray;
 import retrofit2.Response;
 
 import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
 
 public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
-
-    private static final String[] API_FIELDS_GLOBAL_ANALYTICS = {
-            GlobalActivityAnalyticsTable.COLUMN_ID,
-            GlobalActivityAnalyticsTable.COLUMN_USERS,
-            GlobalActivityAnalyticsTable.COLUMN_COUNTRIES,
-            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS,
-            GlobalActivityAnalyticsTable.COLUMN_LAUNCHES
-    };
 
     private static final Object LOCK_SYNC_GLOBAL_ANALYTICS = new Object();
 
@@ -54,9 +43,7 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
             final JsonApiObject<GlobalActivityAnalytics> json = response.body();
             if (json != null) {
                 mDao.inTransaction(() -> {
-                    final LongSparseArray<GlobalActivityAnalytics> existing =
-                            index(mDao.get(Query.select(GlobalActivityAnalytics.class)));
-                    storeGlobalAnalytics(json.getData(), existing);
+                    storeGlobalAnalytics(json.getData());
                     return null;
                 });
             }
@@ -65,8 +52,7 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
         return true;
     }
 
-    private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data,
-                                      LongSparseArray<GlobalActivityAnalytics> existing) {
+    private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data) {
         for (final GlobalActivityAnalytics globalActivityAnalytics : data) {
             mDao.replace(globalActivityAnalytics);
         }
