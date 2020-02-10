@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.firebase.appdistribution'
+
 apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
+
+apply plugin: 'com.google.firebase.appdistribution'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion compileSdk
