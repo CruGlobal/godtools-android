@@ -1,17 +1,22 @@
 package org.cru.godtools.article.aem.service.support
 
+import android.app.Application
 import android.net.Uri
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.article.aem.model.Article
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
 class HtmlParserTest {
     @Test
     fun extractUrls() {
         val article = Article(Uri.parse("https://example.com/path/")).apply {
-            content = loadHtml("tests/HtmlParser/extract_urls.html")
+            content = loadHtml("HtmlParserTest_extract_urls.html")
         }
         val urls = extractResources(article).map { it.uri }
         assertThat(
@@ -30,5 +35,5 @@ class HtmlParserTest {
     }
 
     private fun loadHtml(file: String): String =
-        InstrumentationRegistry.getInstrumentation().context.assets.open(file).bufferedReader().use { it.readText() }
+        this.javaClass.getResourceAsStream(file)!!.bufferedReader().use { it.readText() }
 }
