@@ -15,9 +15,10 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
 
 fun Activity.startMyProfileActivity() {
-    val intent = Intent(this, MyProfileActivity::class.java)
-        .putExtras(BaseActivity.buildExtras(this))
-    startActivity(intent)
+    startActivity(
+        Intent(this, MyProfileActivity::class.java)
+            .putExtras(BaseActivity.buildExtras(this))
+    )
 }
 
 class MyProfileActivity : BasePlatformActivity() {
