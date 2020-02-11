@@ -45,7 +45,6 @@ class ProfileActivity : BasePlatformActivity() {
             binding.myProfileViewpager?.let { viewPager ->
                 TabLayoutMediator(tabLayout, viewPager) { tab, _ ->
                     tab.text = getString(R.string.gt_gd_activity_text)
-                    viewPager.setCurrentItem(tab.position, true)
                 }.attach()
             }
         }
