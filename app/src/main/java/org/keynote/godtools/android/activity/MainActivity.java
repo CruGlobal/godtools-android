@@ -260,7 +260,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     @Override
-    protected boolean showNavigationDrawerIndicator() {
+    protected boolean isShowNavigationDrawerIndicator() {
         return true;
     }
 
