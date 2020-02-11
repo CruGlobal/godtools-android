@@ -24,13 +24,15 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 
-abstract class BaseDataSyncTasks extends BaseSyncTasks {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID, LanguageTable.COLUMN_NAME};
     private static final String[] API_FIELDS_TOOL =
             {ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
@@ -60,7 +62,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (existing != null) {
             for (final Language language : existing.values()) {
                 if (language != null && !language.isAdded()) {
-                    mDao.delete(language);
+                    dao.delete(language);
                     coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
                 }
             }
@@ -70,17 +72,17 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     @VisibleForTesting
     void storeLanguage(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Language language) {
         // this language doesn't exist yet, check to see if a different language shares the same id
-        if (language.getId() != Base.INVALID_ID && mDao.refresh(language) == null) {
+        if (language.getId() != Base.INVALID_ID && dao.refresh(language) == null) {
             // update the language code to preserve the added state
-            mDao.streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ID.eq(language.getId())).limit(1))
+            dao.streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ID.eq(language.getId())).limit(1))
                     .findFirst()
                     .ifPresent(old -> {
-                        mDao.update(language, mDao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE);
+                        dao.update(language, dao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE);
                         coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
                     });
         }
 
-        mDao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
+        dao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
         coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
     }
 
@@ -98,11 +100,11 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             for (int i = 0; i < existing.size(); i++) {
                 final Tool tool = existing.valueAt(i);
                 if (!tool.isAdded()) {
-                    mDao.delete(tool);
+                    dao.delete(tool);
                     coalesceEvent(events, ToolUpdateEvent.INSTANCE);
 
                     // delete any attachments for this tool
-                    mDao.delete(Attachment.class, AttachmentTable.FIELD_TOOL.eq(tool.getId()));
+                    dao.delete(Attachment.class, AttachmentTable.FIELD_TOOL.eq(tool.getId()));
                 }
             }
         }
@@ -110,7 +112,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
 
     private void storeTool(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
                            @NonNull final Includes includes) {
-        mDao.updateOrInsert(tool, CONFLICT_REPLACE, API_FIELDS_TOOL);
+        dao.updateOrInsert(tool, CONFLICT_REPLACE, API_FIELDS_TOOL);
         coalesceEvent(events, ToolUpdateEvent.INSTANCE);
 
         // persist any related included objects
@@ -119,7 +121,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             if (translations != null) {
                 final LongSparseArray<Translation> existing;
                 if (tool.getCode() != null) {
-                    existing = index(mDao.get(
+                    existing = index(dao.get(
                             Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(tool.getCode()))));
                 } else {
                     existing = null;
@@ -130,7 +132,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
             final List<Attachment> attachments = tool.getAttachments();
             if (attachments != null) {
-                final LongSparseArray<Attachment> existing = index(mDao.get(
+                final LongSparseArray<Attachment> existing = index(dao.get(
                         Query.select(Attachment.class).where(AttachmentTable.FIELD_TOOL.eq(tool.getId()))));
                 storeAttachments(events, attachments, existing, includes.descendant(Tool.JSON_ATTACHMENTS));
             }
@@ -151,9 +153,9 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         // prune any existing translations that weren't synced and aren't downloaded to the device
         if (existing != null) {
             for (int i = 0; i < existing.size(); i++) {
-                final Translation translation = mDao.refresh(existing.valueAt(i));
+                final Translation translation = dao.refresh(existing.valueAt(i));
                 if (translation != null && !translation.isDownloaded()) {
-                    mDao.delete(translation);
+                    dao.delete(translation);
                     coalesceEvent(events, TranslationUpdateEvent.INSTANCE);
                 }
             }
@@ -162,7 +164,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
 
     private void storeTranslation(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                   @NonNull final Translation translation, @NonNull final Includes includes) {
-        mDao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
+        dao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
         coalesceEvent(events, TranslationUpdateEvent.INSTANCE);
 
         if (includes.include(Translation.JSON_LANGUAGE)) {
@@ -188,7 +190,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (existing != null) {
             for (int i = 0; i < existing.size(); i++) {
                 final Attachment attachment = existing.valueAt(i);
-                mDao.delete(attachment);
+                dao.delete(attachment);
                 coalesceEvent(events, AttachmentUpdateEvent.INSTANCE);
             }
         }
@@ -196,7 +198,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
 
     private void storeAttachment(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                  @NonNull final Attachment attachment, @NonNull final Includes includes) {
-        mDao.updateOrInsert(attachment, API_FIELDS_ATTACHMENT);
+        dao.updateOrInsert(attachment, API_FIELDS_ATTACHMENT);
         coalesceEvent(events, AttachmentUpdateEvent.INSTANCE);
     }
 }

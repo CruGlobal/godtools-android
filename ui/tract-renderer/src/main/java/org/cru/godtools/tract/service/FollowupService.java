@@ -76,7 +76,7 @@ public final class FollowupService {
     @WorkerThread
     private void syncPendingFollowups() {
         try {
-            new FollowupSyncTasks(mContext).syncFollowups();
+            FollowupSyncTasks.Companion.getInstance(mContext).syncFollowups();
         } catch (final IOException ignored) {
         }
     }

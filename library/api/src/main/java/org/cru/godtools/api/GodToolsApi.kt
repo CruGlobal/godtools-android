@@ -49,7 +49,6 @@ class GodToolsApi private constructor(mobileContentApiUrl: String) {
             .build()
 
     // Mobile Content APIs
-    @JvmField
     val languages: LanguagesApi = mobileContentRetrofit.create()
     @JvmField
     val tools: ToolsApi = mobileContentRetrofit.create()
@@ -57,7 +56,6 @@ class GodToolsApi private constructor(mobileContentApiUrl: String) {
     val translations: TranslationsApi = mobileContentRetrofit.create()
     @JvmField
     val attachments: AttachmentsApi = mobileContentRetrofit.create()
-    @JvmField
     val followups: FollowupApi = mobileContentRetrofit.create()
     @JvmField
     val views: ViewsApi = mobileContentRetrofit.create()
