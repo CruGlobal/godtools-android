@@ -14,16 +14,15 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GL
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
 
-fun Activity.startMyProfileActivity() {
+fun Activity.startProfileActivity() {
     startActivity(
-        Intent(this, MyProfileActivity::class.java)
+        Intent(this, ProfileActivity::class.java)
             .putExtras(BaseActivity.buildExtras(this))
     )
 }
 
-class MyProfileActivity : BasePlatformActivity() {
-
-    // region lifeCycle Calls
+class ProfileActivity : BasePlatformActivity() {
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMyProfileBinding.inflate(layoutInflater)
@@ -35,12 +34,12 @@ class MyProfileActivity : BasePlatformActivity() {
         super.onResume()
         mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
     }
-    // endregion lifeCycle Calls
+    // endregion Lifecycle
 
     private fun setBindingData(binding: ActivityMyProfileBinding) {
         val key = TheKey.getInstance(this)
         binding.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
-        binding.myProfileViewpager?.adapter = MyProfilePageAdapter(this)
+        binding.myProfileViewpager?.adapter = ProfilePageAdapter(this)
         binding.myProfileTabLayout?.let { tabLayout ->
             binding.myProfileViewpager?.let { viewPager ->
                 TabLayoutMediator(tabLayout, viewPager) { tab, _ ->
@@ -52,7 +51,7 @@ class MyProfileActivity : BasePlatformActivity() {
     }
 }
 
-private class MyProfilePageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+private class ProfilePageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount() = 1
     override fun createFragment(position: Int) = GlobalDashboardFragment()
 }

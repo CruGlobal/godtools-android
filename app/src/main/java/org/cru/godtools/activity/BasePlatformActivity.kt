@@ -43,7 +43,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
-import org.cru.godtools.ui.profile.startMyProfileActivity
+import org.cru.godtools.ui.profile.startProfileActivity
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
 
@@ -132,7 +132,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_my_profile -> {
-            startMyProfileActivity()
+            startProfileActivity()
             true
         }
         R.id.action_login -> {

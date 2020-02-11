@@ -114,7 +114,7 @@
         </activity>
 
         <activity
-            android:name=".ui.profile.MyProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:label="@string/gt_gd_my_profile_text"
             android:theme="@style/Theme.GodTools"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
