@@ -23,9 +23,9 @@ class ProfileActivity : BasePlatformActivity() {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMyProfileBinding.inflate(layoutInflater)
+        binding = ActivityMyProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setBindingData(binding)
+        setBindingData()
     }
 
     override fun onResume() {
@@ -34,7 +34,10 @@ class ProfileActivity : BasePlatformActivity() {
     }
     // endregion Lifecycle
 
-    private fun setBindingData(binding: ActivityMyProfileBinding) {
+    // region Data Binding
+    private lateinit var binding: ActivityMyProfileBinding
+
+    private fun setBindingData() {
         val key = TheKey.getInstance(this)
         binding.accountName = "${key.cachedAttributes.firstName} ${key.cachedAttributes.lastName}"
         binding.myProfileViewpager?.adapter = ProfilePageAdapter(this)
@@ -47,9 +50,10 @@ class ProfileActivity : BasePlatformActivity() {
             }
         }
     }
+    // endregion Data Binding
 }
 
-private class ProfilePageAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+private class ProfilePageAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount() = 1
     override fun createFragment(position: Int) = GlobalActivityFragment()
 }
