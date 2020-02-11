@@ -65,15 +65,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private val settingsChangeListener = OnSharedPreferenceChangeListener { prefs, k -> onSettingsUpdated(prefs, k) }
     protected val theKey by lazy { TheKey.getInstance(this) }
 
-    // Navigation Drawer
-    @JvmField
-    @BindView(R.id.drawer_layout)
-    protected var drawerLayout: DrawerLayout? = null
-    @JvmField
-    @BindView(R.id.drawer_menu)
-    internal var drawerMenu: NavigationView? = null
-    private var drawerToggle: ActionBarDrawerToggle? = null
-
     @JvmField
     @BindBool(R.bool.show_login_menu_items)
     internal var showLoginItems = false
@@ -84,8 +75,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private var primaryLanguage = Settings.defaultLanguage
     private var parallelLanguage: Locale? = null
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLanguages(true)
@@ -220,19 +210,29 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         mEventBus.unregister(this)
         stopSettingsChangeListener()
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun theKeyEvent(event: TheKeyEvent) = onTheKeyEvent(event)
+
+    // region Navigation Drawer
+    @JvmField
+    @BindView(R.id.drawer_layout)
+    protected var drawerLayout: DrawerLayout? = null
+    @JvmField
+    @BindView(R.id.drawer_menu)
+    internal var drawerMenu: NavigationView? = null
+    private var drawerToggle: ActionBarDrawerToggle? = null
+
+    protected open val isShowNavigationDrawerIndicator get() = false
 
     private fun setupNavigationDrawer() {
         drawerLayout?.let {
             drawerToggle =
                     ActionBarDrawerToggle(this, it, INVALID_STRING_RES, INVALID_STRING_RES)
                         .apply {
-                            isDrawerIndicatorEnabled = showNavigationDrawerIndicator()
+                            isDrawerIndicatorEnabled = isShowNavigationDrawerIndicator
                             isDrawerSlideAnimationEnabled = false
                         }
                         .also { toggle ->
@@ -243,7 +243,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         drawerMenu?.apply {
             setNavigationItemSelectedListener { item ->
                 onNavigationItemSelected(item)
-                    .also { if (it) closeNavigationDrawer() }
+                    .also { selected -> if (selected) closeNavigationDrawer() }
             }
 
             with(menu) {
@@ -281,8 +281,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
         return false
     }
-
-    protected open fun showNavigationDrawerIndicator(): Boolean = false
+    // endregion Navigation Drawer
 
     private fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
