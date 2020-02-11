@@ -35,5 +35,5 @@ class HtmlParserTest {
     }
 
     private fun loadHtml(file: String): String =
-        this.javaClass.getResourceAsStream(file)!!.bufferedReader().use { it.readText() }
+        HtmlParserTest::class.java.getResourceAsStream(file)!!.bufferedReader().use { it.readText() }
 }

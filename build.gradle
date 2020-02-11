@@ -131,6 +131,7 @@ subprojects {
             force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
             force "androidx.loader:loader:${deps.androidX.loader}"
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
+            force "junit:junit:${deps.junit}"
             force "org.jetbrains:annotations:${deps.jetbrainsAnnotation}"
 
             dependencySubstitution {
