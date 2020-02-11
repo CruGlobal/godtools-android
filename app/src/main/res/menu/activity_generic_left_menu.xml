@@ -33,7 +33,7 @@
         <menu>
             <group android:id="@+id/group_login_items">
                 <item
-                    android:id="@+id/action_my_profile"
+                    android:id="@+id/action_profile"
                     android:orderInCategory="100"
                     android:title="@string/gt_gd_my_activity" />
                 <item
