@@ -97,7 +97,7 @@ plugins {
     id "com.getkeepsafe.dexcount" version "1.0.2" apply false
     id "de.undercouch.download" version "4.0.4" apply false
     id "org.ajoberstar.grgit" version "4.0.1"
-    id "org.jlleitschuh.gradle.ktlint" version "9.1.1"
+    id "org.jlleitschuh.gradle.ktlint" version "9.2.0"
 }
 
 group 'org.cru.android'
