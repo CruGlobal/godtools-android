@@ -14,12 +14,10 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GL
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityMyProfileBinding
 
-fun Activity.startProfileActivity() {
-    startActivity(
-        Intent(this, ProfileActivity::class.java)
-            .putExtras(BaseActivity.buildExtras(this))
-    )
-}
+fun Activity.startProfileActivity() = startActivity(
+    Intent(this, ProfileActivity::class.java)
+        .putExtras(BaseActivity.buildExtras(this))
+)
 
 class ProfileActivity : BasePlatformActivity() {
     // region Lifecycle
