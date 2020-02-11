@@ -13,7 +13,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
-import butterknife.BindBool
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import me.thekey.android.TheKey
@@ -65,9 +64,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     private val settingsChangeListener = OnSharedPreferenceChangeListener { prefs, k -> onSettingsUpdated(prefs, k) }
     protected val theKey by lazy { TheKey.getInstance(this) }
 
-    @JvmField
-    @BindBool(R.bool.show_login_menu_items)
-    internal var showLoginItems = false
+    private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
     private var loginItem: MenuItem? = null
     private var signupItem: MenuItem? = null
     private var logoutItem: MenuItem? = null
