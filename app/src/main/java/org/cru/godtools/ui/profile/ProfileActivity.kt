@@ -12,7 +12,7 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.databinding.ActivityMyProfileBinding
+import org.cru.godtools.databinding.ProfileActivityBinding
 
 fun Activity.startProfileActivity() = startActivity(
     Intent(this, ProfileActivity::class.java)
@@ -23,7 +23,7 @@ class ProfileActivity : BasePlatformActivity() {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyProfileBinding.inflate(layoutInflater)
+        binding = ProfileActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setBindingData()
     }
@@ -35,7 +35,7 @@ class ProfileActivity : BasePlatformActivity() {
     // endregion Lifecycle
 
     // region Data Binding
-    private lateinit var binding: ActivityMyProfileBinding
+    private lateinit var binding: ProfileActivityBinding
 
     private fun setBindingData() {
         val key = TheKey.getInstance(this)
