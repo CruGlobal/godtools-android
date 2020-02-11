@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools.sync">
+
+    <!-- WorkManager permissions -->
+    <!-- XXX: we only target newer versions of Android for this permission to provide seamless upgrades for old devices -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove" />
+    <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application>
         <service
