@@ -56,6 +56,6 @@ open class GodToolsApplication : BaseGodToolsApplication() {
         return TheKeyImpl.Configuration.base()
             .accountType(ACCOUNT_TYPE)
             .clientId(THEKEY_CLIENTID)
-            .eventsManager(EventBusEventsManager())
+            .service(EventBusEventsManager())
     }
 }
