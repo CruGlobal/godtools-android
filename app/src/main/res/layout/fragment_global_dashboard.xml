@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="org.cru.godtools.viewmodel.GlobalDashboardDataModel" />
+        <variable name="viewModel" type="org.cru.godtools.ui.profile.GlobalActivityFragmentViewModel" />
         <variable name="year" type="String" />
     </data>
 
