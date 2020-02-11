@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="profile_title">My Profile</string>
+
     <string name="gt_gd_year_text">%s Global Activity</string>
     <string name="gt_gd_unique_users_text">Unique Users</string>
     <string name="gt_gd_gospel_presentation_text">Gospel Presentation</string>
     <string name="gt_gd_sessions_text">Sessions</string>
     <string name="gt_gd_countries_text">Countries</string>
     <string name="gt_gd_activity_text">Activity</string>
-    <string name="gt_gd_my_profile_text">My Profile</string>
     <string name="gt_gd_my_activity">My Activity</string>
 </resources>
