@@ -133,9 +133,12 @@ public final class Manifest extends Base implements Styles {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     public Manifest() {
-        mManifestName = "";
-        mCode = "";
-        mLocale = Locale.ENGLISH;
+        this("");
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    Manifest(@NonNull final String toolCode) {
+        this("", toolCode, Locale.ENGLISH);
     }
 
     private Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {

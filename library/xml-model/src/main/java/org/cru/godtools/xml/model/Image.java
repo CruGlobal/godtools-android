@@ -12,6 +12,7 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
@@ -21,7 +22,8 @@ public final class Image extends Content {
     private static final String XML_RESOURCE = "resource";
 
     @Nullable
-    private String mResource = null;
+    @VisibleForTesting
+    String mResourceName = null;
     @NonNull
     private Set<Event.Id> mEvents = ImmutableSet.of();
 
@@ -31,7 +33,7 @@ public final class Image extends Content {
 
     @Nullable
     public static Resource getResource(@Nullable final Image image) {
-        return image != null ? image.getResource(image.mResource) : null;
+        return image != null ? image.getResource(image.mResourceName) : null;
     }
 
     @NonNull
@@ -56,7 +58,7 @@ public final class Image extends Content {
     @Override
     void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
-        mResource = parser.getAttributeValue(null, XML_RESOURCE);
+        mResourceName = parser.getAttributeValue(null, XML_RESOURCE);
         mEvents = parseEvents(parser, XML_EVENTS);
     }
 }

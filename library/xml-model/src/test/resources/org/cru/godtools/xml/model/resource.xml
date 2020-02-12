@@ -1,2 +1,2 @@
 <?xml version="1.0"?>
-<resource filename="filename.ext" src="srcValue" xmlns="https://mobile-content-api.cru.org/xmlns/manifest" />
+<resource xmlns="https://mobile-content-api.cru.org/xmlns/manifest" filename="filename.ext" src="srcValue" />
