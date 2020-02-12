@@ -17,7 +17,7 @@ class DeviceTypeTest {
 
     @Test
     fun verifyParse() {
-        val defValue = mutableSetOf<DeviceType>()
+        val defValue: Set<DeviceType> = mutableSetOf()
         assertThat(DeviceType.parse(null, defValue), sameInstance(defValue))
         assertThat(DeviceType.parse("aljksdf ajklsdfa awe", defValue), containsInAnyOrder(DeviceType.UNKNOWN))
         assertThat(
