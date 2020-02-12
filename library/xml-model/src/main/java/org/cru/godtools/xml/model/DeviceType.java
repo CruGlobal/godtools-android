@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import java.util.EnumSet;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
@@ -37,7 +38,7 @@ enum DeviceType {
 
     @Nullable
     @Contract("_,!null -> !null; !null,_ -> !null")
-    static Set<DeviceType> parse(@Nullable final String types, @Nullable final Set<DeviceType> defValue) {
+    static Set<DeviceType> parse(@Nullable final String types, @NonNull final Set<DeviceType> defValue) {
         if (types == null) {
             return defValue;
         }
