@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,7 +32,6 @@ import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -50,7 +48,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
-import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -179,14 +176,10 @@ public class TractActivity extends BaseToolActivity
             finish();
             return;
         }
-        assert mTool != null : "If mTool was null, validStartState() would have failed";
 
         // track this view
         if (savedInstanceState == null) {
-            EventBus.getDefault().post(new ToolUsedEvent(mTool));
-
-            final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
+            trackToolView(mTool);
         }
 
         startLoaders();
