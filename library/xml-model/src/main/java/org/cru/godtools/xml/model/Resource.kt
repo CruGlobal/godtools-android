@@ -9,7 +9,7 @@ private const val XML_FILENAME = "filename"
 private const val XML_SRC = "src"
 
 class Resource : Base {
-    private constructor(manifest: Manifest, parser: XmlPullParser) : super(manifest) {
+    internal constructor(manifest: Manifest, parser: XmlPullParser) : super(manifest) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_MANIFEST, XML_RESOURCE)
 
         name = parser.getAttributeValue(null, XML_FILENAME)
@@ -28,6 +28,10 @@ class Resource : Base {
 
         @JvmStatic
         @WorkerThread
+        @Deprecated(
+            "Use Resource constructor instead",
+            ReplaceWith("Resource(manifest, parser)", "org.cru.godtools.xml.model.Resource")
+        )
         fun fromXml(manifest: Manifest, parser: XmlPullParser) = Resource(manifest, parser)
     }
 }

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 class ResourceTest {
     @Test
     fun testParseResource() {
-        val resource = Resource.fromXml(Manifest(), getXmlParserForResource("resource.xml"))
+        val resource = Resource(Manifest(), getXmlParserForResource("resource.xml"))
         assertEquals("filename.ext", resource.name)
         assertEquals("srcValue", resource.localName)
     }
