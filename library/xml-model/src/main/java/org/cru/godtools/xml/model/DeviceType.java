@@ -9,13 +9,15 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 enum DeviceType {
     MOBILE, UNKNOWN;
 
     public static final Set<DeviceType> ALL = Sets.immutableEnumSet(EnumSet.allOf(DeviceType.class));
 
-    private static final String XML_DEVICE_TYPE_MOBILE = "mobile";
+    @VisibleForTesting
+    static final String XML_DEVICE_TYPE_MOBILE = "mobile";
 
     @Nullable
     @Contract("!null -> !null; null -> null")
