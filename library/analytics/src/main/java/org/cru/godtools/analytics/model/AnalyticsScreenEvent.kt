@@ -28,10 +28,10 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val SCREEN_TERMS_OF_USE = "Terms of Use"
         const val SCREEN_PRIVACY_POLICY = "Privacy Policy"
         const val SCREEN_COPYRIGHT = "Copyright Info"
+        const val SCREEN_GLOBAL_DASHBOARD = "Global Dashboard"
 
         /* Adobe Site Sections */
         const val ADOBE_SITE_SECTION_TOOLS = "tools"
-        const val SCREEN_GLOBAL_DASHBOARD = "Global Dashboard"
     }
 
     override val adobeSiteSection
