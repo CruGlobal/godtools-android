@@ -21,8 +21,11 @@ import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.xml.model.Manifest;
+import org.greenrobot.eventbus.EventBus;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -78,8 +81,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         super(immersive);
     }
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,8 +150,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         updateToolbar();
         updateVisibilityState();
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
@@ -304,6 +305,13 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     }
 
     // endregion DownloadProgress logic
+
+    protected final void trackToolView(@NonNull final String tool) {
+        EventBus.getDefault().post(new ToolUsedEvent(tool));
+
+        final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(tool, 1));
+    }
 
     @Override
     public void setTitle(final CharSequence title) {
