@@ -177,6 +177,7 @@ dependencies {
     implementation "com.sergivonavi:materialbanner:1.2.0"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
+    implementation "me.thekey.android:thekey-livedata:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 

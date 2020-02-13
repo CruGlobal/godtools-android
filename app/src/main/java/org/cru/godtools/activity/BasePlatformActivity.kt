@@ -8,15 +8,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
-import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.observe
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import me.thekey.android.TheKey
-import me.thekey.android.eventbus.event.TheKeyEvent
+import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -43,8 +43,6 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
 
@@ -63,11 +61,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     protected val settings by lazy { Settings.getInstance(this) }
     private val settingsChangeListener = OnSharedPreferenceChangeListener { prefs, k -> onSettingsUpdated(prefs, k) }
     protected val theKey by lazy { TheKey.getInstance(this) }
-
-    private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
-    private var loginItem: MenuItem? = null
-    private var signupItem: MenuItem? = null
-    private var logoutItem: MenuItem? = null
 
     private var primaryLanguage = Settings.defaultLanguage
     private var parallelLanguage: Locale? = null
@@ -95,9 +88,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     override fun onStart() {
         super.onStart()
         startSettingsChangeListener()
-        mEventBus.register(this)
         loadLanguages(false)
-        updateNavigationDrawerMenu()
     }
 
     @CallSuper
@@ -106,9 +97,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
         }
     }
-
-    @CallSuper
-    protected fun onTheKeyEvent(event: TheKeyEvent) = updateNavigationDrawerMenu()
 
     protected fun onUpdatePrimaryLanguage() = Unit
     protected fun onUpdateParallelLanguage() = Unit
@@ -209,10 +197,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
     // endregion Lifecycle
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun theKeyEvent(event: TheKeyEvent) = onTheKeyEvent(event)
-
     // region Navigation Drawer
     @JvmField
     @BindView(R.id.drawer_layout)
@@ -222,6 +206,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     internal var drawerMenu: NavigationView? = null
     private var drawerToggle: ActionBarDrawerToggle? = null
 
+    private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
     protected open val isShowNavigationDrawerIndicator get() = false
 
     private fun setupNavigationDrawer() {
@@ -244,26 +229,24 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             }
 
             with(menu) {
-                loginItem = findItem(R.id.action_login)
-                signupItem = findItem(R.id.action_signup)
-                logoutItem = findItem(R.id.action_logout)
-
                 // the tutorial menu item is currently only available in English
                 findItem(R.id.action_tutorial)?.isVisible = deviceLocale.language == Locale.ENGLISH.language
+
+                // login items visibility
+                if (showLoginItems) {
+                    val loginItem = findItem(R.id.action_login)
+                    val signupItem = findItem(R.id.action_signup)
+                    val logoutItem = findItem(R.id.action_logout)
+                    theKey.defaultSessionGuidLiveData.observe(this@BasePlatformActivity) { guid ->
+                        loginItem?.isVisible = guid == null
+                        signupItem?.isVisible = guid == null
+                        logoutItem?.isVisible = guid != null
+                    }
+                } else {
+                    // hide all menu items if we aren't showing login items for this language
+                    MenuUtils.setGroupVisibleRecursively(this, R.id.group_login_items, false)
+                }
             }
-            updateNavigationDrawerMenu()
-        }
-    }
-
-    private fun updateNavigationDrawerMenu() {
-        val guid = theKey.defaultSessionGuid
-        loginItem?.isVisible = guid == null
-        signupItem?.isVisible = guid == null
-        logoutItem?.isVisible = guid != null
-
-        drawerMenu?.let {
-            // hide all menu items if we aren't showing login items for this language
-            if (!showLoginItems) MenuUtils.setGroupVisibleRecursively(it.menu, R.id.group_login_items, false)
         }
     }
 

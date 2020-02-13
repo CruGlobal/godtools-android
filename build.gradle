@@ -37,7 +37,7 @@ buildscript {
                 snowplow           : '1.3.5',
                 splitties          : '3.0.0-alpha06',
                 taptargetview      : '1.13.0',
-                thekey             : '3.0.0',
+                thekey             : '4.0.0-SNAPSHOT',
                 timber             : '4.7.1',
                 youtubeplayer      : '10.0.5'
         ]
