@@ -1,0 +1,3 @@
+<content:paragraph xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    <content:image resource="image.png" />
+</content:paragraph>
