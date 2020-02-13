@@ -29,32 +29,32 @@ public class GlobalActivityAnalyticsSyncTask extends BaseSyncTasks {
 
         synchronized (LOCK_SYNC_GLOBAL_ANALYTICS) {
             final boolean force = isForced(args);
-            if (!force && System.currentTimeMillis() - mDao.getLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS) <
+            if (!force && System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS) <
                     STALE_DURATION_GLOBAL_ANALYTICS) {
                 return true;
             }
 
             final Response<JsonApiObject<GlobalActivityAnalytics>> response =
-                    mApi.getAnalytics().getGlobalActivity().execute();
+                    this.api.getAnalytics().getGlobalActivity().execute();
             if (response == null || response.code() != 200) {
                 return false;
             }
 
             final JsonApiObject<GlobalActivityAnalytics> json = response.body();
             if (json != null) {
-                mDao.inTransaction(() -> {
+                dao.inTransaction(() -> {
                     storeGlobalAnalytics(json.getData());
                     return null;
                 });
             }
-            mDao.updateLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS);
+            dao.updateLastSyncTime(SYNC_TIME_GLOBAL_ANALYTICS);
         }
         return true;
     }
 
     private void storeGlobalAnalytics(List<GlobalActivityAnalytics> data) {
         for (final GlobalActivityAnalytics globalActivityAnalytics : data) {
-            mDao.replace(globalActivityAnalytics);
+            dao.replace(globalActivityAnalytics);
         }
     }
 }
