@@ -13,6 +13,12 @@ class ParagraphTest {
     @Test
     fun testParseParagraph() {
         val paragraph = Paragraph.fromXml(Manifest(), getXmlParserForResource("paragraph.xml"))
-        assertThat(paragraph.content, contains(instanceOf(Image::class.java)))
+        assertThat(paragraph.content, contains(instanceOf(Image::class.java), instanceOf(Text::class.java)))
+    }
+
+    @Test
+    fun testParseParagraphIgnoredContent() {
+        val paragraph = Paragraph.fromXml(Manifest(), getXmlParserForResource("paragraph_ignored_content.xml"))
+        assertThat(paragraph.content, contains(instanceOf(Text::class.java)))
     }
 }
