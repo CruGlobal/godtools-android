@@ -211,6 +211,12 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
+            testOptions {
+                unitTests.all {
+                    // increase unit tests max heap size
+                    jvmArgs "-Xmx2g"
+                }
+            }
 
             buildTypes {
                 debug {
