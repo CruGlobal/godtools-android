@@ -18,7 +18,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
@@ -249,8 +248,7 @@ public final class GodToolsDownloadManager {
 
     @WorkerThread
     void pruneStaleTranslations() {
-        final Transaction tx = mDao.newTransaction();
-        try {
+        mDao.inTransaction(() -> {
             // load the tools and languages that are added to this device
             final Object[] tools = mDao
                     .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
@@ -284,18 +282,15 @@ public final class GodToolsDownloadManager {
                     })
                     .count();
 
-            // mark this transaction as successful
-            tx.setTransactionSuccessful();
-
             // if any translations were updated, send a broadcast
             final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
                 eventBus.post(TranslationUpdateEvent.INSTANCE);
                 enqueueCleanFilesystem();
             }
-        } finally {
-            tx.endTransaction().recycle();
-        }
+
+            return true;
+        });
     }
 
     @WorkerThread
