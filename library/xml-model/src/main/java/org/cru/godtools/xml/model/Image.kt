@@ -11,12 +11,11 @@ private const val XML_RESOURCE = "resource"
 
 class Image : Content {
     @WorkerThread
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_IMAGE)
 
         resourceName = parser.getAttributeValue(null, XML_RESOURCE)
         events = parseEvents(parser, Base.XML_EVENTS)
-        parseAttrs(parser)
 
         XmlPullParserUtils.skipTag(parser)
     }

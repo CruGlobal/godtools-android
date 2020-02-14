@@ -182,7 +182,7 @@ public final class Input extends Content {
     }
 
     @Override
-    void parseAttrs(@NonNull final XmlPullParser parser) {
+    protected void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
         mName = parser.getAttributeValue(null, XML_NAME);

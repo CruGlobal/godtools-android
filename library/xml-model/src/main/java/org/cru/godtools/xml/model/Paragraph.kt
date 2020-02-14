@@ -6,9 +6,8 @@ import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
 class Paragraph : Content, Parent {
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_PARAGRAPH)
-        parseAttrs(parser)
 
         // process any child elements
         val contentList = mutableListOf<Content>()
