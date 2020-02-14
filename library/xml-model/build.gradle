@@ -12,9 +12,4 @@ dependencies {
     api "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
-
-    androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
-    androidTestImplementation "androidx.test:rules:${deps.androidX.test}"
-    androidTestImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
-    androidTestImplementation "org.hamcrest:hamcrest:${deps.hamcrest}"
 }
