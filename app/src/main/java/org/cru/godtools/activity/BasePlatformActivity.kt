@@ -211,16 +211,15 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
     private fun setupNavigationDrawer() {
         drawerLayout?.let {
-            drawerToggle =
-                    ActionBarDrawerToggle(this, it, INVALID_STRING_RES, INVALID_STRING_RES)
-                        .apply {
-                            isDrawerIndicatorEnabled = isShowNavigationDrawerIndicator
-                            isDrawerSlideAnimationEnabled = false
-                        }
-                        .also { toggle ->
-                            it.addDrawerListener(toggle)
-                            toggle.syncState()
-                        }
+            drawerToggle = ActionBarDrawerToggle(this, it, INVALID_STRING_RES, INVALID_STRING_RES)
+                .apply {
+                    isDrawerIndicatorEnabled = isShowNavigationDrawerIndicator
+                    isDrawerSlideAnimationEnabled = false
+                }
+                .also { toggle ->
+                    it.addDrawerListener(toggle)
+                    toggle.syncState()
+                }
         }
         drawerMenu?.apply {
             setNavigationItemSelectedListener { item ->
