@@ -10,7 +10,6 @@ import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
@@ -37,6 +36,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -117,17 +117,11 @@ public class InitialContentTasks implements Runnable {
             final JsonApiObject<Language> languages = getJsonApiConverter().fromJson(raw, Language.class);
 
             // store languages in the database
-            long changed;
-            final Transaction tx = mDao.newTransaction();
-            try {
-                tx.beginTransaction();
-                changed = Stream.of(languages.getData())
+            final long changed = mDao.inTransaction(() -> {
+                return Stream.of(languages.getData())
                         .mapToLong(l -> mDao.insert(l, CONFLICT_IGNORE))
                         .sum();
-                tx.setTransactionSuccessful();
-            } finally {
-                tx.endTransaction().recycle();
-            }
+            });
 
             // send a broadcast if we inserted any languages
             if (changed > 0) {
@@ -188,49 +182,50 @@ public class InitialContentTasks implements Runnable {
             final JsonApiObject<Tool> tools = getJsonApiConverter().fromJson(raw, Tool.class);
 
             // add any tools that we don't already have
-            boolean toolsChanged = false;
-            boolean translationsChanged = false;
-            boolean attachmentsChanged = false;
-            final Transaction tx = mDao.newTransaction();
-            try {
-                tx.beginTransaction();
-
+            final AtomicBoolean toolsChanged = new AtomicBoolean(false);
+            final AtomicBoolean translationsChanged = new AtomicBoolean(false);
+            final AtomicBoolean attachmentsChanged = new AtomicBoolean(false);
+            mDao.inTransaction(() -> {
                 for (final Tool tool : tools.getData()) {
                     if (mDao.refresh(tool) == null) {
                         if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
-                            toolsChanged = true;
+                            toolsChanged.set(true);
 
                             // import all bundled translations
                             final List<Translation> translations = tool.getLatestTranslations();
                             if (translations != null) {
-                                translationsChanged = Stream.of(tool.getLatestTranslations())
+                                final long changes = Stream.of(tool.getLatestTranslations())
                                         .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                                        .sum() > 0 || translationsChanged;
+                                        .sum();
+                                if (changes > 0) {
+                                    translationsChanged.set(true);
+                                }
                             }
 
                             // import all bundled attachments
                             final List<Attachment> attachments = tool.getAttachments();
                             if (attachments != null) {
-                                attachmentsChanged = Stream.of(tool.getAttachments())
+                                final long changes = Stream.of(tool.getAttachments())
                                         .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
-                                        .sum() > 0 || attachmentsChanged;
+                                        .sum();
+                                if (changes > 0) {
+                                    attachmentsChanged.set(true);
+                                }
                             }
                         }
                     }
                 }
-                tx.setSuccessful();
-            } finally {
-                tx.endTransaction().recycle();
-            }
+                return true;
+            });
 
             // send a broadcast if we inserted any tools, translations, or attachments
-            if (toolsChanged) {
+            if (toolsChanged.get()) {
                 mEventBus.post(ToolUpdateEvent.INSTANCE);
             }
-            if (translationsChanged) {
+            if (translationsChanged.get()) {
                 mEventBus.post(TranslationUpdateEvent.INSTANCE);
             }
-            if (attachmentsChanged) {
+            if (attachmentsChanged.get()) {
                 mEventBus.post(AttachmentUpdateEvent.INSTANCE);
             }
         } catch (final Exception e) {
