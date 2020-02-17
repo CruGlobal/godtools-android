@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 class TabsTest {
     @Test
     fun testParseTabs() {
-        val tabs = Tabs.fromXml(Manifest(), getXmlParserForResource("tabs.xml"))
+        val tabs = Tabs(Manifest(), getXmlParserForResource("tabs.xml"))
         assertThat(tabs.tabs, hasSize(2))
     }
 }

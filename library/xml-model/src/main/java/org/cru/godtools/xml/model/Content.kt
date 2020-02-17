@@ -32,7 +32,7 @@ abstract class Content protected constructor(parent: Base) : Base(parent) {
             return when (parser.namespace) {
                 Constants.XMLNS_CONTENT -> when (parser.name) {
                     Paragraph.XML_PARAGRAPH -> Paragraph(parent, parser)
-                    Tabs.XML_TABS -> Tabs.fromXml(parent, parser)
+                    Tabs.XML_TABS -> Tabs(parent, parser)
                     Text.XML_TEXT -> Text.fromXml(parent, parser)
                     Image.XML_IMAGE -> Image(parent, parser)
                     Button.XML_BUTTON -> Button.fromXml(parent, parser)
