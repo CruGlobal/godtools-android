@@ -8,14 +8,21 @@ import org.cru.godtools.article.aem.model.TranslationRefKt;
 import org.cru.godtools.model.Translation;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
 import java.util.Locale;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.annotation.Config.ALL_SDKS;
 
+@RunWith(AndroidJUnit4.class)
+@Config(sdk = ALL_SDKS)
 public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
     private static final String TOOL = "kgp";
     private static final Locale LANG = Locale.ENGLISH;
