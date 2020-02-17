@@ -5,13 +5,15 @@ import org.cru.godtools.xml.Constants
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
-class Paragraph : Content, Parent {
+class Form internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser), Parent {
     companion object {
-        internal const val XML_PARAGRAPH = "paragraph"
+        internal const val XML_FORM = "form"
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_PARAGRAPH)
+    override val content: List<Content>
+
+    init {
+        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_FORM)
 
         // process any child elements
         val contentList = mutableListOf<Content>()
@@ -30,6 +32,4 @@ class Paragraph : Content, Parent {
         }
         content = Collections.unmodifiableList(contentList)
     }
-
-    override val content: List<Content>
 }

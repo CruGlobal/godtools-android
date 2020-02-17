@@ -12,13 +12,13 @@ import org.junit.runner.RunWith
 class FormTest {
     @Test
     fun testParseForm() {
-        val form = Form.fromXml(Manifest(), getXmlParserForResource("form.xml"))
+        val form = Form(Manifest(), getXmlParserForResource("form.xml"))
         assertThat(form.content, contains(instanceOf(Image::class.java), instanceOf(Text::class.java)))
     }
 
     @Test
     fun testParseParagraphIgnoredContent() {
-        val form = Form.fromXml(Manifest(), getXmlParserForResource("form_ignored_content.xml"))
+        val form = Form(Manifest(), getXmlParserForResource("form_ignored_content.xml"))
         assertThat(form.content, contains(instanceOf(Text::class.java)))
     }
 }

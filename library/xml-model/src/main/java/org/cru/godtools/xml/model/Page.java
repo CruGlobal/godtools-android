@@ -19,6 +19,7 @@ import java.util.Set;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
@@ -84,7 +85,8 @@ public final class Page extends Base implements Styles, Parent {
     @NonNull
     private CallToAction mCallToAction;
 
-    private Page(@NonNull final Manifest manifest, final int position) {
+    @VisibleForTesting
+    Page(@NonNull final Manifest manifest, final int position) {
         super(manifest);
         mPosition = position;
         mCallToAction = new CallToAction(this);
