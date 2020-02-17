@@ -93,7 +93,7 @@ public final class Link extends Content {
     }
 
     @Override
-    void parseAttrs(@NonNull final XmlPullParser parser) {
+    protected void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mEvents = parseEvents(parser, XML_EVENTS);
     }

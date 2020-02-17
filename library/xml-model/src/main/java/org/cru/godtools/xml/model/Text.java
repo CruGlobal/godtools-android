@@ -155,7 +155,7 @@ public final class Text extends Content {
     }
 
     @Override
-    void parseAttrs(@NonNull final XmlPullParser parser) {
+    protected void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mTextAlign = Align.parse(parser.getAttributeValue(null, XML_TEXT_ALIGN), mTextAlign);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);

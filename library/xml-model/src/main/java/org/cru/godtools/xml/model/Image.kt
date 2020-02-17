@@ -11,12 +11,11 @@ private const val XML_RESOURCE = "resource"
 
 class Image : Content {
     @WorkerThread
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_IMAGE)
 
         resourceName = parser.getAttributeValue(null, XML_RESOURCE)
         events = parseEvents(parser, Base.XML_EVENTS)
-        parseAttrs(parser)
 
         XmlPullParserUtils.skipTag(parser)
     }
@@ -27,19 +26,11 @@ class Image : Content {
     val resource: Resource? get() = getResource(resourceName)
 
     companion object {
-        const val XML_IMAGE = "image"
+        internal const val XML_IMAGE = "image"
 
         @JvmStatic
         @Deprecated("Use Image?.resource extension value instead", ReplaceWith("image.resource"))
         fun getResource(image: Image?) = image.resource
-
-        @JvmStatic
-        @WorkerThread
-        @Deprecated(
-            "Use Image constructor instead",
-            ReplaceWith("Image(parent, parser)", "org.cru.godtools.xml.model.Image")
-        )
-        fun fromXml(parent: Base, parser: XmlPullParser) = Image(parent, parser)
     }
 }
 

@@ -162,7 +162,7 @@ public final class Button extends Content implements Styles {
     }
 
     @Override
-    void parseAttrs(@NonNull final XmlPullParser parser) {
+    protected void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mColor = Utils.parseColor(parser, XML_COLOR, mColor);
         mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);

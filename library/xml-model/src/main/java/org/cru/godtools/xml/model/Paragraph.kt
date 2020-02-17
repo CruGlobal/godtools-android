@@ -6,9 +6,12 @@ import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
 class Paragraph : Content, Parent {
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    companion object {
+        internal const val XML_PARAGRAPH = "paragraph"
+    }
+
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_PARAGRAPH)
-        parseAttrs(parser)
 
         // process any child elements
         val contentList = mutableListOf<Content>()
@@ -26,16 +29,4 @@ class Paragraph : Content, Parent {
     }
 
     override val content: List<Content>
-
-    // TODO: make this internal
-    companion object {
-        const val XML_PARAGRAPH = "paragraph"
-
-        @JvmStatic
-        @Deprecated(
-            "Use Paragraph constructor instead",
-            ReplaceWith("Paragraph(parent, parser)", "org.cru.godtools.xml.model.Paragraph")
-        )
-        fun fromXml(parent: Base, parser: XmlPullParser) = Paragraph(parent, parser)
-    }
 }
