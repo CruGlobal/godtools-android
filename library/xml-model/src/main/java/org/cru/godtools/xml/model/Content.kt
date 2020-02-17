@@ -29,21 +29,20 @@ abstract class Content protected constructor(parent: Base) : Base(parent) {
     companion object {
         fun fromXml(parent: Base, parser: XmlPullParser): Content? {
             parser.require(XmlPullParser.START_TAG, null, null)
-
-            when (parser.namespace) {
+            return when (parser.namespace) {
                 Constants.XMLNS_CONTENT -> when (parser.name) {
-                    Paragraph.XML_PARAGRAPH -> return Paragraph(parent, parser)
-                    Tabs.XML_TABS -> return Tabs.fromXml(parent, parser)
-                    Text.XML_TEXT -> return Text.fromXml(parent, parser)
-                    Image.XML_IMAGE -> return Image(parent, parser)
-                    Button.XML_BUTTON -> return Button.fromXml(parent, parser)
-                    Form.XML_FORM -> return Form(parent, parser)
-                    Input.XML_INPUT -> return Input.fromXml(parent, parser)
-                    Link.XML_LINK -> return Link.fromXml(parent, parser)
+                    Paragraph.XML_PARAGRAPH -> Paragraph(parent, parser)
+                    Tabs.XML_TABS -> Tabs.fromXml(parent, parser)
+                    Text.XML_TEXT -> Text.fromXml(parent, parser)
+                    Image.XML_IMAGE -> Image(parent, parser)
+                    Button.XML_BUTTON -> Button.fromXml(parent, parser)
+                    Form.XML_FORM -> Form(parent, parser)
+                    Input.XML_INPUT -> Input.fromXml(parent, parser)
+                    Link.XML_LINK -> Link.fromXml(parent, parser)
+                    else -> null
                 }
+                else -> null
             }
-
-            return null
         }
     }
 }
