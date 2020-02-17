@@ -20,10 +20,13 @@ class Paragraph : Content, Parent {
 
             // try parsing this child element as a content node
             val content = Content.fromXml(this, parser)
-            when {
-                content == null -> XmlPullParserUtils.skipTag(parser)
-                !content.isIgnored -> contentList.add(content)
+            if (content != null) {
+                if (!content.isIgnored) contentList.add(content)
+                continue
             }
+
+            // skip any unprocessed tags
+            XmlPullParserUtils.skipTag(parser)
         }
         content = Collections.unmodifiableList(contentList)
     }
