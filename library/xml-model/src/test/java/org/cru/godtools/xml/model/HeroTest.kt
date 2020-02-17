@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 class HeroTest {
     @Test
     fun testParseHero() {
-        val hero = Hero.fromXml(Manifest(), getXmlParserForResource("hero.xml"))
+        val hero = Hero(Manifest(), getXmlParserForResource("hero.xml"))
         assertThat(hero.analyticsEvents, hasSize(1))
         assertEquals("Heading", hero.heading!!.mText)
         assertThat(
@@ -25,7 +25,7 @@ class HeroTest {
 
     @Test
     fun testParseHeroIgnoredContent() {
-        val hero = Hero.fromXml(Manifest(), getXmlParserForResource("hero_ignored_content.xml"))
+        val hero = Hero(Manifest(), getXmlParserForResource("hero_ignored_content.xml"))
         assertThat(hero.content, contains(instanceOf(Paragraph::class.java), instanceOf(Tabs::class.java)))
     }
 }
