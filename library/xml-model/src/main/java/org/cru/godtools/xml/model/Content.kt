@@ -37,7 +37,7 @@ abstract class Content protected constructor(parent: Base) : Base(parent) {
                     Text.XML_TEXT -> return Text.fromXml(parent, parser)
                     Image.XML_IMAGE -> return Image(parent, parser)
                     Button.XML_BUTTON -> return Button.fromXml(parent, parser)
-                    Form.XML_FORM -> return Form.fromXml(parent, parser)
+                    Form.XML_FORM -> return Form(parent, parser)
                     Input.XML_INPUT -> return Input.fromXml(parent, parser)
                     Link.XML_LINK -> return Link.fromXml(parent, parser)
                 }
