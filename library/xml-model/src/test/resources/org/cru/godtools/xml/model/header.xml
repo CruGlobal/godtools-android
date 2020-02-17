@@ -1,0 +1,9 @@
+<tract:header xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    xmlns:tract="https://mobile-content-api.cru.org/xmlns/tract" background-color="rgba(255,0,0,1)">
+    <tract:number>
+        <content:text>5</content:text>
+    </tract:number>
+    <tract:title>
+        <content:text>title</content:text>
+    </tract:title>
+</tract:header>
