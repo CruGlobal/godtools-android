@@ -13,9 +13,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static org.cru.godtools.xml.model.ImageScaleType.FILL_X;
-import static org.cru.godtools.xml.model.ImageScaleType.FILL_Y;
-
 final class Utils {
     private static final Pattern COLOR_VALUE =
             Pattern.compile("^\\s*rgba\\(\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9.]+)\\s*\\)\\s*$");
@@ -61,26 +58,7 @@ final class Utils {
     @Nullable
     static ImageScaleType parseScaleType(@NonNull final XmlPullParser parser, @NonNull final String attribute,
                                          @Nullable final ImageScaleType defValue) {
-        return parseScaleType(parser.getAttributeValue(null, attribute), defValue);
-    }
-
-    @Nullable
-    @Contract("_, !null -> !null")
-    static ImageScaleType parseScaleType(@Nullable final String value, @Nullable final ImageScaleType defValue) {
-        if (value != null) {
-            try {
-                switch (value) {
-                    case "fill-y":
-                        return FILL_Y;
-                    case "fill-x":
-                        return FILL_X;
-                    default:
-                        return ImageScaleType.valueOf(value.toUpperCase());
-                }
-            } catch (final Exception ignored) {
-            }
-        }
-        return defValue;
+        return ImageScaleType.parse(parser.getAttributeValue(null, attribute), defValue);
     }
 
     @Nullable
