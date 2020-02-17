@@ -4,14 +4,13 @@ import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.map
+import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
 import org.cru.godtools.databinding.FragmentGlobalDashboardBinding
 import org.cru.godtools.fragment.BaseBindingPlatformFragment
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.sync.syncGlobalAnalytics
 import org.keynote.godtools.android.db.GodToolsDao
-import java.text.NumberFormat
 import java.util.Calendar
 
 class GlobalActivityFragment :
@@ -34,16 +33,7 @@ class GlobalActivityFragment :
     }
 }
 
-class GlobalActivityFragmentViewModel(app: Application) : AndroidViewModel(app) {
-    private val globalActivityAnalytics =
-        GodToolsDao.getInstance(getApplication()).findLiveData(GlobalActivityAnalytics::class.java, 1)
-
-    val uniqueUsers = globalActivityAnalytics.map { it?.users.formatNumber() }
-    val gospelPresentation = globalActivityAnalytics.map { it?.gospelPresentation.formatNumber() }
-    val sessions = globalActivityAnalytics.map { it?.launches.formatNumber() }
-    val countries = globalActivityAnalytics.map { it?.countries.formatNumber() }
-
-    private fun Int?.formatNumber(): String {
-        return NumberFormat.getInstance().format(this ?: 0)
-    }
+class GlobalActivityFragmentViewModel(application: Application) : AndroidViewModel(application) {
+    private val dao = GodToolsDao.getInstance(application)
+    val globalActivityAnalytics = dao.findLiveData<GlobalActivityAnalytics>(1)
 }

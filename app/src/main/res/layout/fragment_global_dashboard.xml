@@ -58,10 +58,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="@{viewModel.uniqueUsers}"
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
+                        app:number="@{viewModel.globalActivityAnalytics.users}"
                         tools:text="750,520" />
 
                     <TextView
@@ -100,10 +100,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="@{viewModel.gospelPresentation}"
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
+                        app:number="@{viewModel.globalActivityAnalytics.gospelPresentation}"
                         tools:text="40,000" />
 
                     <TextView
@@ -163,10 +163,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="@{viewModel.sessions}"
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
+                        app:number="@{viewModel.globalActivityAnalytics.launches}"
                         tools:text="3,700" />
 
                     <TextView
@@ -206,10 +206,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="@{viewModel.countries}"
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
+                        app:number="@{viewModel.globalActivityAnalytics.countries}"
                         tools:text="90" />
 
                     <TextView
