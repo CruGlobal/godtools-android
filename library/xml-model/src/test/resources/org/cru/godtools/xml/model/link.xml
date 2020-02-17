@@ -1,0 +1,6 @@
+<content:link xmlns:analytics="https://mobile-content-api.cru.org/xmlns/analytics" xmlns:content="https://mobile-content-api.cru.org/xmlns/content" events="ns:event1 event2">
+    <content:text>Test</content:text>
+    <analytics:events>
+        <analytics:event system="adobe" action="test" />
+    </analytics:events>
+</content:link>

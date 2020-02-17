@@ -14,6 +14,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
@@ -66,7 +67,8 @@ public final class Text extends Content {
     private Double mTextScale = null;
 
     @Nullable
-    private String mText;
+    @VisibleForTesting
+    String mText;
 
     private Text(@NonNull final Base parent) {
         super(parent);
