@@ -48,9 +48,6 @@ dependencies {
 
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
-    testImplementation "org.powermock:powermock-classloading-xstream:${deps.powermock}"
-    testImplementation "org.powermock:powermock-module-junit4-rule:${deps.powermock}"
-    testImplementation "org.ccci.gto.android:gto-support-testing:${deps.gtoSupport}"
 
     kapt "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
