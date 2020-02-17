@@ -5,13 +5,12 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.WorkerThread
 import com.annimon.stream.Optional
-import com.annimon.stream.Stream
+import org.ccci.gto.android.common.db.AbstractDao
+import org.ccci.gto.android.common.db.AsyncDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.StreamDao
-import org.ccci.gto.android.common.db.StreamDao.StreamHelper
-import org.ccci.gto.android.common.db.async.AbstractAsyncDao
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
@@ -33,7 +32,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import java.util.Locale
 
 class GodToolsDao private constructor(context: Context) :
-    AbstractAsyncDao(GodToolsDatabase.getInstance(context)), LiveDataDao, StreamDao {
+    AbstractDao(GodToolsDatabase.getInstance(context)), AsyncDao, LiveDataDao, StreamDao {
     companion object : SingletonHolder<GodToolsDao, Context>(::GodToolsDao)
 
     override val liveDataRegistry = LiveDataRegistry()
@@ -82,9 +81,6 @@ class GodToolsDao private constructor(context: Context) :
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
     }
-
-    @WorkerThread
-    override fun <T> streamCompat(query: Query<T>): Stream<T> = StreamHelper.stream(this, query)
 
     override fun onInvalidateClass(clazz: Class<*>) {
         super.onInvalidateClass(clazz)
