@@ -22,8 +22,7 @@ dependencies {
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
-    androidTestImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    testImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
