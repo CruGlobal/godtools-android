@@ -7,6 +7,7 @@ import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.Header;
+import org.cru.godtools.xml.model.HeaderKt;
 import org.cru.godtools.xml.model.Text;
 
 import androidx.annotation.NonNull;
@@ -44,7 +45,7 @@ final class HeaderViewHolder extends BaseViewHolder<Header> {
 
     private void bindHeader() {
         mRoot.setVisibility(mModel != null ? View.VISIBLE : View.GONE);
-        mRoot.setBackgroundColor(Header.getBackgroundColor(mModel));
+        mRoot.setBackgroundColor(HeaderKt.getBackgroundColor(mModel));
     }
 
     private void bindNumber() {

@@ -21,7 +21,7 @@ class HeaderTest {
 
     @Test
     fun testParseHeader() {
-        val header = Header.fromXml(Page(manifest, 1), getXmlParserForResource("header.xml"))
+        val header = Header(Page(manifest, 1), getXmlParserForResource("header.xml"))
         assertEquals("5", header.number!!.mText)
         assertEquals("title", header.title!!.mText)
         assertEquals(Color.RED, header.backgroundColor)
