@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import androidx.room.Room;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 
 public abstract class BaseArticleRoomDatabaseIT {
     Context mContext;
@@ -14,7 +14,7 @@ public abstract class BaseArticleRoomDatabaseIT {
 
     @Before
     public final void initDb() {
-        mContext = InstrumentationRegistry.getTargetContext();
+        mContext = ApplicationProvider.getApplicationContext();
         mDb = Room.inMemoryDatabaseBuilder(mContext, ArticleRoomDatabase.class)
                 .allowMainThreadQueries()
                 .build();
