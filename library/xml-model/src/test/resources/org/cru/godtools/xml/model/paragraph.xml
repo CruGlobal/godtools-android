@@ -1,4 +1,5 @@
 <content:paragraph xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
     <content:image resource="image.png" />
+    <content:unrecognized>Something</content:unrecognized>
     <content:text>Test</content:text>
 </content:paragraph>
