@@ -38,7 +38,7 @@ abstract class Content protected constructor(parent: Base) : Base(parent) {
                     Button.XML_BUTTON -> Button.fromXml(parent, parser)
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input.fromXml(parent, parser)
-                    Link.XML_LINK -> Link.fromXml(parent, parser)
+                    Link.XML_LINK -> Link(parent, parser)
                     else -> null
                 }
                 else -> null

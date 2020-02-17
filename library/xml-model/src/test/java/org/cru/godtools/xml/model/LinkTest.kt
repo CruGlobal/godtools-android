@@ -26,7 +26,7 @@ class LinkTest {
     @Test
     fun testParseLink() {
         val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
-        val link = Link.fromXml(manifest, getXmlParserForResource("link.xml"))
+        val link = Link(manifest, getXmlParserForResource("link.xml"))
         assertThat(link.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("Test", link.text!!.mText)
         assertThat(link.analyticsEvents, contains(instanceOf(AnalyticsEvent::class.java)))
