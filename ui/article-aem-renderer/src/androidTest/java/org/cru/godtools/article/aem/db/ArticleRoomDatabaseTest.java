@@ -1,6 +1,9 @@
 package org.cru.godtools.article.aem.db;
 
+import android.net.Uri;
+
 import org.cru.godtools.article.aem.model.Article;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +22,22 @@ import static junit.framework.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ArticleRoomDatabaseTest extends DBBaseTest {
+public class ArticleRoomDatabaseTest extends BaseArticleRoomDatabaseIT {
+    ArticleDao mArticleDao;
+
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
+    @Before
+    public void createDb() throws Exception {
+        mArticleDao = mDb.articleDao();
+        for (int i = 0; i < 12; i++) {
+            Article article = new Article(Uri.parse("test:" + i + "aaslf" + i));
+            article.setTitle(" The title = " + i);
+            article.setContent("<p> The Body </>");
+            mArticleDao.insertOrIgnore(article);
+        }
+    }
 
     @Test
     public void verifyGetAllArticles() {
