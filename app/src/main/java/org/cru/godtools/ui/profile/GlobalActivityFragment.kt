@@ -18,7 +18,7 @@ class GlobalActivityFragment :
     private val viewModel: GlobalActivityFragmentViewModel by viewModels()
 
     override fun onBindingCreated(binding: FragmentGlobalDashboardBinding, savedInstanceState: Bundle?) {
-        binding.viewModel = viewModel
+        binding.globalActivity = viewModel.globalActivity
         binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
     }
 
@@ -35,5 +35,5 @@ class GlobalActivityFragment :
 
 class GlobalActivityFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = GodToolsDao.getInstance(application)
-    val globalActivityAnalytics = dao.findLiveData<GlobalActivityAnalytics>(1)
+    val globalActivity = dao.findLiveData<GlobalActivityAnalytics>(1)
 }

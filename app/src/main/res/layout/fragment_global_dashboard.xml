@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="org.cru.godtools.ui.profile.GlobalActivityFragmentViewModel" />
+        <import type="androidx.lifecycle.LiveData" />
+
+        <variable name="globalActivity" type="LiveData&lt;org.cru.godtools.model.GlobalActivityAnalytics&gt;" />
         <variable name="year" type="String" />
     </data>
 
@@ -61,7 +63,7 @@
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
-                        app:number="@{viewModel.globalActivityAnalytics.users}"
+                        app:number="@{globalActivity.users}"
                         tools:text="750,520" />
 
                     <TextView
@@ -103,7 +105,7 @@
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
-                        app:number="@{viewModel.globalActivityAnalytics.gospelPresentation}"
+                        app:number="@{globalActivity.gospelPresentation}"
                         tools:text="40,000" />
 
                     <TextView
@@ -166,7 +168,7 @@
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
-                        app:number="@{viewModel.globalActivityAnalytics.launches}"
+                        app:number="@{globalActivity.launches}"
                         tools:text="3,700" />
 
                     <TextView
@@ -209,7 +211,7 @@
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textColor="@color/gt_gd_text_color"
                         android:textStyle="bold"
-                        app:number="@{viewModel.globalActivityAnalytics.countries}"
+                        app:number="@{globalActivity.countries}"
                         tools:text="90" />
 
                     <TextView
@@ -219,9 +221,7 @@
                         android:text="@string/gt_gd_countries_text"
                         android:textColor="@color/gt_gd_text_color" />
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
