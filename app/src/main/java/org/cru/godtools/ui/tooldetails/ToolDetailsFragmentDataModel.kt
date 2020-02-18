@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.lifecycle.orEmpty
+import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -16,4 +18,6 @@ class ToolDetailsFragmentDataModel(application: Application) : AndroidViewModel(
     val toolCode = MutableLiveData<String>()
 
     val tool = toolCode.distinctUntilChanged().switchMap { it?.let { dao.findLiveData<Tool>(it) }.orEmpty() }
+    val banner = tool.map { it?.detailsBannerId }.distinctUntilChanged()
+        .switchMap { it?.let { dao.findLiveData<Attachment>(it) }.orEmpty() }
 }
