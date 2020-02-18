@@ -8,7 +8,6 @@ import org.cru.godtools.model.Translation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.stubbing.OngoingStubbing
 import java.util.Locale
 
 class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
@@ -43,7 +42,5 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         assertTrue(repo.isProcessed(translation))
     }
 
-    private fun whenFindingTranslation(): OngoingStubbing<TranslationRef?> {
-        return whenever(translationDao.find(any(), any(), any()))
-    }
+    private fun whenFindingTranslation() = whenever(translationDao.find(any(), any(), any()))
 }
