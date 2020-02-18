@@ -22,7 +22,7 @@ class TabTest {
 
     @Test
     fun testParseTab() {
-        val tab = Tab.fromXml(tabs, getXmlParserForResource("tab.xml"), 5)
+        val tab = Tab(tabs, 5, getXmlParserForResource("tab.xml"))
         assertEquals(5, tab.position)
         assertThat(tab.analyticsEvents, hasSize(1))
         assertEquals("Tab 1", tab.label!!.mText)
@@ -34,7 +34,7 @@ class TabTest {
 
     @Test
     fun testParseTabIgnoredContent() {
-        val tab = Tab.fromXml(tabs, getXmlParserForResource("tab_ignored_content.xml"), 0)
+        val tab = Tab(tabs, 0, getXmlParserForResource("tab_ignored_content.xml"))
         assertThat(tab.content, contains(instanceOf(Paragraph::class.java), instanceOf(Tabs::class.java)))
     }
 }

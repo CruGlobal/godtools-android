@@ -29,7 +29,7 @@ class Tabs : Content {
             when (parser.namespace) {
                 Constants.XMLNS_CONTENT -> when (parser.name) {
                     Tab.XML_TAB -> {
-                        tabs.add(Tab.fromXml(this, parser, tabs.size))
+                        tabs.add(Tab(this, tabs.size, parser))
                         continue@parsingChildren
                     }
                 }
