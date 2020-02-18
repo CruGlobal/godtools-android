@@ -12,10 +12,11 @@ import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
-    Intent(this, ToolDetailsActivity::class.java)
-        .putExtras(BaseActivity.buildExtras(this))
-        .putExtra(EXTRA_TOOL, toolCode)
-        .also { startActivity(it) }
+    startActivity(
+        Intent(this, ToolDetailsActivity::class.java)
+            .putExtras(BaseActivity.buildExtras(this))
+            .putExtra(EXTRA_TOOL, toolCode)
+    )
 }
 
 class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callbacks {
@@ -50,13 +51,8 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
         mEventBus.post(ToolDetailsScreenEvent(tool))
     }
 
-    override fun onToolAdded() {
-        finish()
-    }
-
-    override fun onToolRemoved() {
-        finish()
-    }
+    override fun onToolAdded() = finish()
+    override fun onToolRemoved() = finish()
     // endregion Lifecycle
 
     /**
