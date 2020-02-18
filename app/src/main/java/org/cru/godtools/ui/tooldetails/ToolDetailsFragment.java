@@ -26,7 +26,6 @@ import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.AttachmentLoader;
 import org.cru.godtools.content.AvailableLanguagesLoader;
-import org.cru.godtools.content.ToolLoader;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BasePlatformFragment;
@@ -67,7 +66,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         void onToolRemoved();
     }
 
-    private static final int LOADER_TOOL = 101;
     private static final int LOADER_BANNER = 102;
     private static final int LOADER_LATEST_PRIMARY_TRANSLATION = 103;
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
@@ -436,7 +434,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
         lm.initLoader(LOADER_BANNER, null, new AttachmentLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_PRIMARY_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_PARALLEL_TRANSLATION, null, new TranslationLoaderCallbacks());
@@ -464,31 +461,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         final Loader loader = getLoaderManager().getLoader(LOADER_LATEST_PARALLEL_TRANSLATION);
         if (loader instanceof LatestTranslationLoader) {
             ((LatestTranslationLoader) loader).setLocale(getParallelLanguage());
-        }
-    }
-
-    class ToolLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
-        @Nullable
-        @Override
-        public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_TOOL:
-                    if (mToolCode != null) {
-                        return new ToolLoader(requireContext(), mToolCode);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
-            switch (loader.getId()) {
-                case LOADER_TOOL:
-                    onLoadTool(tool);
-                    break;
-            }
         }
     }
 
