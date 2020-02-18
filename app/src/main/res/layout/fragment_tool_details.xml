@@ -33,7 +33,6 @@
                 android:layout_alignBottom="@id/banner"
                 android:visibility="gone"
                 tools:visibility="visible" />
-
         </androidx.percentlayout.widget.PercentRelativeLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -101,14 +100,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="7dp"
-            app:tabBackground="@color/action_bar_action_tint"/>
+            app:tabBackground="@color/action_bar_action_tint" />
 
         <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
             android:id="@+id/detail_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/gray_E6"
-            android:isScrollContainer="false"/>
-
+            android:isScrollContainer="false" />
     </LinearLayout>
 </org.ccci.gto.android.common.widget.HackyNestedScrollView>
