@@ -1,0 +1,19 @@
+<content:tab xmlns:analytics="https://mobile-content-api.cru.org/xmlns/analytics"
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    <analytics:events>
+        <analytics:event action="test" system="adobe" />
+    </analytics:events>
+    <content:label>
+        <content:text>Tab 1</content:text>
+    </content:label>
+    <content:image resource="test.png" restrictTo="web" />
+    <content:paragraph />
+    <content:unrecognized />
+    <content:tabs>
+        <content:tab>
+            <content:label>
+                <content:text>Tab 1</content:text>
+            </content:label>
+        </content:tab>
+    </content:tabs>
+</content:tab>
