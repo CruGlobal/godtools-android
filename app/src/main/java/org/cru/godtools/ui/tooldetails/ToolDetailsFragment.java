@@ -24,7 +24,6 @@ import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.content.AttachmentLoader;
 import org.cru.godtools.content.AvailableLanguagesLoader;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -66,7 +65,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         void onToolRemoved();
     }
 
-    private static final int LOADER_BANNER = 102;
     private static final int LOADER_LATEST_PRIMARY_TRANSLATION = 103;
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
     private static final int LOADER_LATEST_PARALLEL_TRANSLATION = 105;
@@ -222,7 +220,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
-        updateBannerLoader();
         updatePinShortcutAction();
         updateViews();
     }
@@ -429,24 +426,15 @@ public class ToolDetailsFragment extends BasePlatformFragment
         mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
         mDataModel.getToolCode().setValue(mToolCode);
         mDataModel.getTool().observe(this, this::onLoadTool);
+        mDataModel.getBanner().observe(this, this::onLoadBanner);
     }
     // endregion Data Model
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_BANNER, null, new AttachmentLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_PRIMARY_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_PARALLEL_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
-
-        updateBannerLoader();
-    }
-
-    private void updateBannerLoader() {
-        final Loader loader = getLoaderManager().getLoader(LOADER_BANNER);
-        if (loader instanceof AttachmentLoader) {
-            ((AttachmentLoader) loader).setId(mTool != null ? mTool.getDetailsBannerId() : Attachment.INVALID_ID);
-        }
     }
 
     private void updateLatestPrimaryTranslationLoader() {
@@ -461,28 +449,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         final Loader loader = getLoaderManager().getLoader(LOADER_LATEST_PARALLEL_TRANSLATION);
         if (loader instanceof LatestTranslationLoader) {
             ((LatestTranslationLoader) loader).setLocale(getParallelLanguage());
-        }
-    }
-
-    class AttachmentLoaderCallbacks extends SimpleLoaderCallbacks<Attachment> {
-        @Nullable
-        @Override
-        public Loader<Attachment> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_BANNER:
-                    return new AttachmentLoader(requireContext());
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Attachment> loader, @Nullable final Attachment attachment) {
-            switch (loader.getId()) {
-                case LOADER_BANNER:
-                    onLoadBanner(attachment);
-                    break;
-            }
         }
     }
 
