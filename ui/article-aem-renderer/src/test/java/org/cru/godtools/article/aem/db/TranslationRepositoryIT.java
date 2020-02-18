@@ -46,32 +46,6 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
     }
 
     @Test
-    public void verifyIsProcessedTrue() {
-        // setup test
-        final TranslationRef translation = new TranslationRef(mTranslationKey);
-        translation.setProcessed(true);
-        mDb.translationDao().insertOrIgnore(translation);
-
-        // perform test
-        assertTrue(mRepository.isProcessed(mTranslation));
-    }
-
-    @Test
-    public void verifyIsProcessedFalse() {
-        // setup test
-        final TranslationRef translation = new TranslationRef(mTranslationKey);
-        mDb.translationDao().insertOrIgnore(translation);
-
-        // perform test
-        assertFalse(mRepository.isProcessed(mTranslation));
-    }
-
-    @Test
-    public void verifyIsProcessedNotPresent() {
-        assertFalse(mRepository.isProcessed(mTranslation));
-    }
-
-    @Test
     public void verifyAddAemImportsTranslationAlreadyPresent() {
         // setup test
         mDb.translationDao().insertOrIgnore(new TranslationRef(mTranslationKey));
