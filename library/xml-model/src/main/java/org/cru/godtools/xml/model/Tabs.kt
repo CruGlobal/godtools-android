@@ -1,18 +1,24 @@
 package org.cru.godtools.xml.model
 
+import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.xml.Constants
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
-class Tabs internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser) {
+class Tabs : Content {
     companion object {
         internal const val XML_TABS = "tabs"
     }
 
     val tabs: List<Tab>
 
-    init {
+    @VisibleForTesting
+    internal constructor(parent: Base, tabs: List<Tab>) : super(parent) {
+        this.tabs = tabs
+    }
+
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_TABS)
 
         // process any child elements
