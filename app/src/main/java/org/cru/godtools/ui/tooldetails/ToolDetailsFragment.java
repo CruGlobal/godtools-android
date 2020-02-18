@@ -46,6 +46,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.viewpager.widget.PagerAdapter;
@@ -160,6 +161,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
+        setupDataModel();
         startLoaders();
     }
 
@@ -421,6 +423,16 @@ public class ToolDetailsFragment extends BasePlatformFragment
             }
         }
     }
+
+    // region Data Model
+    private ToolDetailsFragmentDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
+        mDataModel.getToolCode().setValue(mToolCode);
+        mDataModel.getTool().observe(this, this::onLoadTool);
+    }
+    // endregion Data Model
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
