@@ -31,7 +31,6 @@ import org.cru.godtools.fragment.BasePlatformFragment;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.cru.godtools.util.ActivityUtilsKt;
@@ -65,9 +64,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         void onToolRemoved();
     }
 
-    private static final int LOADER_LATEST_PRIMARY_TRANSLATION = 103;
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
-    private static final int LOADER_LATEST_PARALLEL_TRANSLATION = 105;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -187,8 +184,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Override
     public void onStart() {
         super.onStart();
-        updateLatestPrimaryTranslationLoader();
-        updateLatestParallelTranslationLoader();
         startProgressListener();
     }
 
@@ -206,16 +201,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     @Override
     protected void onUpdatePrimaryLanguage() {
-        updateLatestPrimaryTranslationLoader();
-
         // restart the progress listener
         stopProgressListener();
         startProgressListener();
-    }
-
-    @Override
-    protected void onUpdateParallelLanguage() {
-        updateLatestParallelTranslationLoader();
     }
 
     void onLoadTool(@Nullable final Tool tool) {
@@ -427,62 +415,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
         mDataModel.getToolCode().setValue(mToolCode);
         mDataModel.getTool().observe(this, this::onLoadTool);
         mDataModel.getBanner().observe(this, this::onLoadBanner);
+        mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
+        mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
     }
     // endregion Data Model
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_LATEST_PRIMARY_TRANSLATION, null, new TranslationLoaderCallbacks());
-        lm.initLoader(LOADER_LATEST_PARALLEL_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
-    }
-
-    private void updateLatestPrimaryTranslationLoader() {
-        final Loader<Translation> loader = getLoaderManager().getLoader(
-                LOADER_LATEST_PRIMARY_TRANSLATION);
-        if (loader instanceof LatestTranslationLoader) {
-            ((LatestTranslationLoader) loader).setLocale(getPrimaryLanguage());
-        }
-    }
-
-    private void updateLatestParallelTranslationLoader() {
-        final Loader loader = getLoaderManager().getLoader(LOADER_LATEST_PARALLEL_TRANSLATION);
-        if (loader instanceof LatestTranslationLoader) {
-            ((LatestTranslationLoader) loader).setLocale(getParallelLanguage());
-        }
-    }
-
-    class TranslationLoaderCallbacks extends SimpleLoaderCallbacks<Translation> {
-        @Nullable
-        @Override
-        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_LATEST_PRIMARY_TRANSLATION:
-                    if (mToolCode != null) {
-                        return new LatestTranslationLoader(requireContext(), mToolCode, getPrimaryLanguage());
-                    }
-                    break;
-                case LOADER_LATEST_PARALLEL_TRANSLATION:
-                    if (mToolCode != null) {
-                        return new LatestTranslationLoader(requireContext(), mToolCode, getParallelLanguage());
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
-            switch (loader.getId()) {
-                case LOADER_LATEST_PRIMARY_TRANSLATION:
-                    onLoadLatestPrimaryTranslation(translation);
-                    break;
-                case LOADER_LATEST_PARALLEL_TRANSLATION:
-                    onLoadLatestParallelTranslation(translation);
-                    break;
-            }
-        }
     }
 
     class LocalesLoaderCallbacks extends SimpleLoaderCallbacks<List<Locale>> {
