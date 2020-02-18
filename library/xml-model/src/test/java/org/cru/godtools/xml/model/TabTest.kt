@@ -22,7 +22,8 @@ class TabTest {
 
     @Test
     fun testParseTab() {
-        val tab = Tab.fromXml(tabs, getXmlParserForResource("tab.xml"), 0)
+        val tab = Tab.fromXml(tabs, getXmlParserForResource("tab.xml"), 5)
+        assertEquals(5, tab.position)
         assertThat(tab.analyticsEvents, hasSize(1))
         assertEquals("Tab 1", tab.label!!.mText)
         assertThat(
