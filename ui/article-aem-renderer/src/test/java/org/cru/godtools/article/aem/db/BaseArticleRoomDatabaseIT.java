@@ -1,21 +1,17 @@
 package org.cru.godtools.article.aem.db;
 
-import android.content.Context;
-
 import org.junit.After;
 import org.junit.Before;
 
 import androidx.room.Room;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 
 public abstract class BaseArticleRoomDatabaseIT {
-    Context mContext;
     ArticleRoomDatabase mDb;
 
     @Before
     public final void initDb() {
-        mContext = InstrumentationRegistry.getTargetContext();
-        mDb = Room.inMemoryDatabaseBuilder(mContext, ArticleRoomDatabase.class)
+        mDb = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), ArticleRoomDatabase.class)
                 .allowMainThreadQueries()
                 .build();
     }

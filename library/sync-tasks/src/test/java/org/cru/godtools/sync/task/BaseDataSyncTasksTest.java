@@ -7,19 +7,25 @@ import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.model.Language;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.keynote.godtools.android.db.GodToolsDao;
+import org.robolectric.annotation.Config;
 
 import java.util.Locale;
 
 import androidx.collection.SimpleArrayMap;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.annotation.Config.ALL_SDKS;
 
+@RunWith(AndroidJUnit4.class)
+@Config(sdk = ALL_SDKS)
 public class BaseDataSyncTasksTest {
     private GodToolsDao mDao;
     private BaseDataSyncTasks mTasks;
@@ -27,7 +33,7 @@ public class BaseDataSyncTasksTest {
 
     @Before
     public void setup() {
-        final Context context = InstrumentationRegistry.getContext();
+        final Context context = ApplicationProvider.getApplicationContext();
         GodToolsApi.configure("https://mobile-content-api-stage.cru.org/");
         mDao = GodToolsDao.Companion.getInstance(context);
         mTasks = new BaseDataSyncTasks(context) {};

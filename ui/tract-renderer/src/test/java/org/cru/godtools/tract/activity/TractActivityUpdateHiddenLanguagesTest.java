@@ -1,31 +1,26 @@
 package org.cru.godtools.tract.activity;
 
-import android.graphics.Color;
 import android.util.SparseArray;
 
-import org.ccci.gto.android.common.testing.CommonMocks;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.xml.model.Manifest;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.OngoingStubbing;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.util.Locale;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@PrepareForTest({Color.class})
+@RunWith(AndroidJUnit4.class)
 public class TractActivityUpdateHiddenLanguagesTest {
-    @Rule
-    public final PowerMockRule mPowerMockRule = new PowerMockRule();
-
     private TractActivity mActivity;
     @Mock
     private SparseArray<Translation> mTranslations;
@@ -35,7 +30,6 @@ public class TractActivityUpdateHiddenLanguagesTest {
 
     @Before
     public void setup() {
-        CommonMocks.mockColor();
         MockitoAnnotations.initMocks(this);
 
         mActivity = new TractActivity(mTranslations, mManifests);

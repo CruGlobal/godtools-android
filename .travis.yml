@@ -94,13 +94,16 @@ jobs:
     stage: compile
 
     install: skip
-    script: ./gradlew check jacocoTestReport --continue --stacktrace --parallel
+    script: ./gradlew check -x test --continue --stacktrace --parallel
+
+  - name: "Unit Tests"
+    stage: compile
+
+    install: skip
+    script: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
 
     after_success:
     - bash <(curl -s https://codecov.io/bash)
-    after_failure:
-    - cat /home/travis/build/CruGlobal/godtools-android/build/reports/lint-results*.xml
-    - cat /home/travis/build/CruGlobal/godtools-android/*/build/reports/lint-results*.xml
 
   - name: "Release Beta"
     stage: deploy
