@@ -19,16 +19,17 @@
         <item name="android:background">@drawable/btn_outline</item>
         <item name="backgroundTint">?attr/colorButtonNormal</item>
     </style>
-    <style name="Widget.GodTools.Button.Outline.Red" parent="Widget.GodTools.Button.Outline">
-        <item name="backgroundTint">@color/gt_red</item>
+    <style name="Widget.GodTools.Button.Outline.Red" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/gt_red</item>
+        <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/gt_red</item>
+        <item name="cornerRadius">6dp</item>
     </style>
-    <style name="Widget.GodTools.Button.Outline.Blue" parent="Widget.GodTools.Button.Outline">
-        <item name="backgroundTint">@color/gt_blue</item>
-    </style>
-    <style name="Widget.GodTools.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/btn_colored</item>
+    <!-- Colored Button -->
+    <style name="Widget.GodTools.Button.Borderless.Colored" parent="Widget.MaterialComponents.Button">
+        <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">6dp</item>
     </style>
     <style name="Widget.GodTools.Button.Borderless.Colored.Blue" parent="Widget.GodTools.Button.Borderless.Colored">
         <item name="backgroundTint">@color/gt_blue</item>
