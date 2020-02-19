@@ -6,6 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
+        <variable name="fragment" type="org.cru.godtools.ui.tooldetails.ToolDetailsFragment" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
     </data>
 
@@ -87,6 +88,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="@dimen/tools_details_margin_horiz"
                 android:layout_marginBottom="8dp"
+                android:onClick="@{() -> fragment.addTool(tool.code)}"
                 android:text="@string/action_tools_download"
                 app:visibleIf="@{!tool.isAdded}" />
 
@@ -101,6 +103,7 @@
                 android:layout_marginRight="@dimen/tools_details_margin_horiz"
                 android:layout_marginBottom="32dp"
                 android:gravity="center"
+                android:onClick="@{() -> fragment.removeTool(tool.code)}"
                 android:text="@string/action_tools_remove"
                 app:visibleIf="@{tool.isAdded()}" />
 

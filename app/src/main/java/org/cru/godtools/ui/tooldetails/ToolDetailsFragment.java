@@ -154,6 +154,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     public void onBindingCreated(@NonNull final ToolDetailsFragmentBinding binding,
                                  @Nullable final Bundle savedInstanceState) {
         super.onBindingCreated(binding, savedInstanceState);
+        binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
     }
 
@@ -343,30 +344,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     // endregion Overview Video
 
     @Optional
-    @OnClick(R.id.action_add)
-    void addTool() {
-        if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(requireContext()).addTool(mToolCode);
-            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-            if (callbacks != null) {
-                callbacks.onToolAdded();
-            }
-        }
-    }
-
-    @Optional
-    @OnClick(R.id.action_remove)
-    void removeTool() {
-        if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(requireContext()).removeTool(mToolCode);
-            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-            if (callbacks != null) {
-                callbacks.onToolRemoved();
-            }
-        }
-    }
-
-    @Optional
     @OnClick(R.id.action_open)
     void openTool() {
         if (mTool != null && mTool.getCode() != null) {
@@ -405,6 +382,28 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         mDataModel.getAvailableLanguages().observe(this, this::onLoadAvailableLanguages);
     }
     // endregion Data Model
+
+    // region Data Binding
+    public void addTool(@Nullable final String toolCode) {
+        if (mDownloadManager != null && toolCode != null) {
+            mDownloadManager.addTool(toolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolAdded();
+            }
+        }
+    }
+
+    public void removeTool(@Nullable final String toolCode) {
+        if (mDownloadManager != null && toolCode != null) {
+            mDownloadManager.removeTool(toolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolRemoved();
+            }
+        }
+    }
+    // endregion Data Binding
 
     private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
 
