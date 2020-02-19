@@ -154,7 +154,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tool_details, container, false);
+        return inflater.inflate(R.layout.tool_details_fragment, container, false);
     }
 
     @Override
