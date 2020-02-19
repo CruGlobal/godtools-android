@@ -102,7 +102,7 @@
                 android:layout_marginBottom="32dp"
                 android:gravity="center"
                 android:text="@string/action_tools_remove"
-                tools:visibility="visible" />
+                app:visibleIf="@{tool.isAdded()}" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/detail_tab_layout"
