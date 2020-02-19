@@ -95,9 +95,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @BindView(R.id.download_progress)
     ProgressBar mDownloadProgressBar;
     @Nullable
-    @BindView(R.id.action_add)
-    View mActionAdd;
-    @Nullable
     @BindView(R.id.action_remove)
     View mActionRemove;
     @Nullable
@@ -154,6 +151,13 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         }
 
         setupDataModel();
+    }
+
+    @Override
+    public void onBindingCreated(@NonNull final ToolDetailsFragmentBinding binding,
+                                 @Nullable final Bundle savedInstanceState) {
+        super.onBindingCreated(binding, savedInstanceState);
+        binding.setTool(mDataModel.getTool());
     }
 
     @Override
@@ -300,10 +304,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             if (hasOverviewVideo) {
                 updateOverviewVideo(overviewVideo);
             }
-        }
-        if (mActionAdd != null) {
-            mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
-            mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
         if (mActionRemove != null) {
             mActionRemove.setEnabled(mTool != null && mTool.isAdded());

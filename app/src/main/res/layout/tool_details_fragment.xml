@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+
+        <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
+    </data>
+
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -81,7 +87,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="@dimen/tools_details_margin_horiz"
                 android:layout_marginBottom="8dp"
-                android:text="@string/action_tools_download" />
+                android:text="@string/action_tools_download"
+                app:visibleIf="@{!tool.isAdded}" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/action_remove"
