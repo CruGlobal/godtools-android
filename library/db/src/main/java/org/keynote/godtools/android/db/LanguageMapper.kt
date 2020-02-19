@@ -18,8 +18,8 @@ internal object LanguageMapper : BaseMapper<Language>() {
 
     override fun newObject(c: Cursor) = Language()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        setCode(getLocale(c, LanguageTable.COLUMN_CODE, Language.INVALID_CODE))
-        isAdded = getBool(c, LanguageTable.COLUMN_ADDED, false)
+        code = getLocale(c, LanguageTable.COLUMN_CODE) ?: Language.INVALID_CODE
         name = c.getString(LanguageTable.COLUMN_NAME)
+        isAdded = getBool(c, LanguageTable.COLUMN_ADDED, false)
     }
 }
