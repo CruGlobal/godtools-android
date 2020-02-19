@@ -18,13 +18,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.content.AvailableLanguagesLoader;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BasePlatformFragment;
@@ -44,8 +42,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,8 +59,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
         void onToolRemoved();
     }
-
-    private static final int LOADER_AVAILABLE_LANGUAGES = 104;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -155,7 +149,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
 
         setupDataModel();
-        startLoaders();
     }
 
     @Override
@@ -417,39 +410,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
         mDataModel.getBanner().observe(this, this::onLoadBanner);
         mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
         mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
+        mDataModel.getAvailableLanguages().observe(this, this::onLoadAvailableLanguages);
     }
     // endregion Data Model
-
-    private void startLoaders() {
-        final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
-    }
-
-    class LocalesLoaderCallbacks extends SimpleLoaderCallbacks<List<Locale>> {
-        @Nullable
-        @Override
-        public Loader<List<Locale>> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_AVAILABLE_LANGUAGES:
-                    if (mToolCode != null) {
-                        return new AvailableLanguagesLoader(requireContext(), mToolCode);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<List<Locale>> loader,
-                                   @Nullable final List<Locale> locales) {
-            switch (loader.getId()) {
-                case LOADER_AVAILABLE_LANGUAGES:
-                    onLoadAvailableLanguages(locales);
-                    break;
-            }
-        }
-    }
 
     private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
 
