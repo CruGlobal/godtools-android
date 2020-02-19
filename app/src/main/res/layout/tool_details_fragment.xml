@@ -1,112 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.ccci.gto.android.common.widget.HackyNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <org.ccci.gto.android.common.widget.HackyNestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-                android:id="@+id/banner"
-                android:adjustViewBounds="true"
-                android:background="@color/gray_E6"
-                android:scaleType="centerCrop"
-                app:layout_aspectRatio="210%"
-                app:layout_widthPercent="100%" />
-
-            <include layout="@layout/tool_detail_banner_video_view" />
-
-            <ProgressBar
-                android:id="@+id/download_progress"
-                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
+            <androidx.percentlayout.widget.PercentRelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_alignBottom="@id/banner"
+                android:layout_height="wrap_content">
+
+                <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+                    android:id="@+id/banner"
+                    android:adjustViewBounds="true"
+                    android:background="@color/gray_E6"
+                    android:scaleType="centerCrop"
+                    app:layout_aspectRatio="210%"
+                    app:layout_widthPercent="100%" />
+
+                <include layout="@layout/tool_detail_banner_video_view" />
+
+                <ProgressBar
+                    android:id="@+id/download_progress"
+                    style="@style/Widget.GodTools.Tools.Download.ProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_alignBottom="@id/banner"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </androidx.percentlayout.widget.PercentRelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                style="@style/Widget.GodTools.Tools.Details.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                tools:text="Knowing God Personally" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/shares"
+                style="@style/Widget.GodTools.Tools.Details.Shares"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                tools:text="45,876 Views" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/action_open"
+                style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                android:layout_marginBottom="8dp"
+                android:text="@string/action_tools_open"
                 android:visibility="gone"
                 tools:visibility="visible" />
-        </androidx.percentlayout.widget.PercentRelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/title"
-            style="@style/Widget.GodTools.Tools.Details.Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            tools:text="Knowing God Personally" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/action_add"
+                style="@style/Widget.GodTools.Button.Borderless.Colored.Green"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                android:layout_marginBottom="8dp"
+                android:text="@string/action_tools_download" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/shares"
-            style="@style/Widget.GodTools.Tools.Details.Shares"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            tools:text="45,876 Views" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/action_remove"
+                style="@style/Widget.GodTools.Button.Outline.Red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                android:layout_marginBottom="32dp"
+                android:gravity="center"
+                android:text="@string/action_tools_remove"
+                tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_open"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginBottom="8dp"
-            android:text="@string/action_tools_open"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/detail_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="7dp"
+                app:tabBackground="@color/action_bar_action_tint" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_add"
-            style="@style/Widget.GodTools.Button.Borderless.Colored.Green"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginBottom="8dp"
-            android:text="@string/action_tools_download" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/action_remove"
-            style="@style/Widget.GodTools.Button.Outline.Red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="@dimen/tools_details_margin_horiz"
-            android:layout_marginBottom="32dp"
-            android:gravity="center"
-            android:text="@string/action_tools_remove"
-            tools:visibility="visible" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/detail_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="7dp"
-            app:tabBackground="@color/action_bar_action_tint" />
-
-        <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
-            android:id="@+id/detail_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/gray_E6"
-            android:isScrollContainer="false" />
-    </LinearLayout>
-</org.ccci.gto.android.common.widget.HackyNestedScrollView>
+            <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
+                android:id="@+id/detail_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_E6"
+                android:isScrollContainer="false" />
+        </LinearLayout>
+    </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+</layout>

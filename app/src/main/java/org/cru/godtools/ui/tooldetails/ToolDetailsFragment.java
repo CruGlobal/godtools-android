@@ -23,9 +23,10 @@ import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
+import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.fragment.BasePlatformFragment;
+import org.cru.godtools.fragment.BaseBindingPlatformFragment;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -52,7 +53,7 @@ import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgr
 import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
 import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
-public class ToolDetailsFragment extends BasePlatformFragment
+public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     public interface Callbacks {
         void onToolAdded();
@@ -126,6 +127,10 @@ public class ToolDetailsFragment extends BasePlatformFragment
         return fragment;
     }
 
+    public ToolDetailsFragment() {
+        super(R.layout.tool_details_fragment);
+    }
+
     // region Lifecycle
     @Override
     public void onAttach(@NonNull final Context context) {
@@ -149,12 +154,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
 
         setupDataModel();
-    }
-
-    @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
-                             @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tool_details_fragment, container, false);
     }
 
     @Override
