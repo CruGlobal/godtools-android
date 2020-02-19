@@ -74,9 +74,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="@dimen/tools_details_margin_horiz"
                 android:layout_marginBottom="8dp"
+                android:onClick="@{() -> fragment.openTool(tool)}"
                 android:text="@string/action_tools_open"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                app:visibleIf="@{tool.isAdded}" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/action_add"

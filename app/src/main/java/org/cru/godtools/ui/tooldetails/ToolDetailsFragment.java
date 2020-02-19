@@ -45,8 +45,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
@@ -94,9 +92,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     @BindView(R.id.download_progress)
     ProgressBar mDownloadProgressBar;
-    @Nullable
-    @BindView(R.id.action_open)
-    View mActionOpen;
 
     @Nullable
     private Tool mTool;
@@ -304,10 +299,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             }
         }
 
-        if (mActionOpen != null) {
-            mActionOpen.setEnabled(mTool != null && mTool.isAdded());
-            mActionOpen.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
-        }
         if (mViewPager != null) {
             mViewPager.setAdapter(mDetailsAdapter);
         }
@@ -343,32 +334,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
     // endregion Overview Video
 
-    @Optional
-    @OnClick(R.id.action_open)
-    void openTool() {
-        if (mTool != null && mTool.getCode() != null) {
-            Locale primaryLanguage =
-                    mLatestPrimaryTranslation != null ? mLatestPrimaryTranslation.getLanguageCode() :
-                            Locale.ENGLISH;
-            Locale parallelLanguages = mLatestParallelTranslation != null ?
-                    mLatestParallelTranslation.getLanguageCode() : null;
-            if (parallelLanguages != null) {
-                ActivityUtilsKt.openToolActivity(
-                        requireActivity(),
-                        mTool.getCode(),
-                        mTool.getType(),
-                        primaryLanguage,
-                        parallelLanguages);
-            } else {
-                ActivityUtilsKt.openToolActivity(
-                        requireActivity(),
-                        mTool.getCode(),
-                        mTool.getType(),
-                        primaryLanguage);
-            }
-        }
-    }
-
     // region Data Model
     private ToolDetailsFragmentDataModel mDataModel;
 
@@ -400,6 +365,30 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolRemoved();
+            }
+        }
+    }
+
+    public void openTool(@Nullable final Tool tool) {
+        if (tool != null && tool.getCode() != null) {
+            Locale primaryLanguage =
+                    mLatestPrimaryTranslation != null ? mLatestPrimaryTranslation.getLanguageCode() :
+                            Locale.ENGLISH;
+            Locale parallelLanguages = mLatestParallelTranslation != null ?
+                    mLatestParallelTranslation.getLanguageCode() : null;
+            if (parallelLanguages != null) {
+                ActivityUtilsKt.openToolActivity(
+                        requireActivity(),
+                        tool.getCode(),
+                        tool.getType(),
+                        primaryLanguage,
+                        parallelLanguages);
+            } else {
+                ActivityUtilsKt.openToolActivity(
+                        requireActivity(),
+                        tool.getCode(),
+                        tool.getType(),
+                        primaryLanguage);
             }
         }
     }
