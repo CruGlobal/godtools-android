@@ -309,7 +309,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     private void updateViews() {
         bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestPrimaryTranslation, mTool));
+            mTitle.setText(ModelUtils.getTranslationName(mLatestPrimaryTranslation, mTool, getContext()));
         }
         bindShares(mShares, mTool);
 
@@ -581,9 +581,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
                             .inflate(R.layout.tool_detail_text_view, container, false);
             switch (position) {
                 case 0:
-                    textView.setText(ModelUtils.getTranslationDescription(getContext(),
-                                                                          mLatestPrimaryTranslation,
-                                                                          mTool));
+                    textView.setText(
+                            ModelUtils.getTranslationDescription(mLatestPrimaryTranslation, mTool, getContext()));
                     break;
                 case 1:
                     textView.setText(Stream.of(mLanguages).map(l -> LocaleUtils

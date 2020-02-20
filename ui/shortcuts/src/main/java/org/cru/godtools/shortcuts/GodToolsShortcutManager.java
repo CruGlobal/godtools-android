@@ -398,7 +398,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
                 .map(locale -> mDao.getLatestTranslation(code, locale))
                 .flatMap(Optional::stream)
                 .findFirst().orElse(null);
-        final CharSequence label = ModelUtils.getTranslationName(mContext, deviceTranslation, tool);
+        final CharSequence label = ModelUtils.getTranslationName(deviceTranslation, tool, mContext);
 
         // create the icon bitmap
         final Attachment banner = mDao.find(Attachment.class, tool.getDetailsBannerId());
