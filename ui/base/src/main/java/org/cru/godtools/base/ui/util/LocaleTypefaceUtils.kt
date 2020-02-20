@@ -36,5 +36,5 @@ fun Context?.getTypeface(locale: Locale?) = when {
 fun CharSequence?.applyTypefaceSpan(typeface: Typeface?) = when {
     // workaround a crash caused by setting a null Typeface span within Calligraphy.
     typeface != null -> CalligraphyUtils.applyTypefaceSpan(this, typeface)
-    else -> null
+    else -> this
 }
