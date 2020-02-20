@@ -27,7 +27,7 @@ class Translation : Base() {
     }
 
     @JsonApiAttribute(JSON_RESOURCE)
-    private val tool: Tool? = null
+    private var tool: Tool? = null
     @JsonApiIgnore
     private var _toolCode: String? = null
     var toolCode: String?
