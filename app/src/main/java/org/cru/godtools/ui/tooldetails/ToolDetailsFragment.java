@@ -13,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
-import com.google.android.material.tabs.TabLayout;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
@@ -77,9 +76,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
     @Nullable
-    @BindView(R.id.detail_tab_layout)
-    TabLayout mTabLayout;
-    @Nullable
     @BindView(R.id.download_progress)
     ProgressBar mDownloadProgressBar;
 
@@ -140,6 +136,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
         binding.setBanner(mDataModel.getBanner());
+        setupViewPager(binding);
     }
 
     @Override
@@ -148,7 +145,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         updateViews();
         updateDownloadProgress();
         setupOverviewVideo();
-        setUpViewPager();
     }
 
     @Override
@@ -372,15 +368,12 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
     // endregion Data Binding
 
+    // region ViewPager
     private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
 
-    private void setUpViewPager() {
-        if (mViewPager != null) {
-            mViewPager.setAdapter(mDetailsAdapter);
-            if (mTabLayout != null) {
-                mTabLayout.setupWithViewPager(mViewPager, true);
-            }
-        }
+    private void setupViewPager(@NonNull final ToolDetailsFragmentBinding binding) {
+        binding.detailViewPager.setAdapter(mDetailsAdapter);
+        binding.detailTabLayout.setupWithViewPager(binding.detailViewPager, true);
     }
 
     class ToolDetailsAdapter extends PagerAdapter {
@@ -436,4 +429,5 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             return view == object;
         }
     }
+    // endregion ViewPager
 }
