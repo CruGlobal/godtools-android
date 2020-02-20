@@ -49,7 +49,6 @@ import butterknife.BindView;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
-import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
@@ -80,9 +79,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     @BindView(R.id.title)
     TextView mTitle;
-    @Nullable
-    @BindView(R.id.shares)
-    TextView mShares;
     @Nullable
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
@@ -285,7 +281,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestPrimaryTranslation, mTool));
         }
-        bindShares(mShares, mTool);
 
         final String overviewVideo = mTool != null ? mTool.getOverviewVideo() : null;
         final boolean hasOverviewVideo = mVideoBanner != null && !TextUtils.isEmpty(overviewVideo);
