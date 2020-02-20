@@ -2,7 +2,6 @@ package org.cru.godtools.ui.tooldetails;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,8 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
@@ -66,9 +63,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     private MenuItem mPinShortcutItem;
 
-    @Nullable
-    @BindView(R.id.video_banner)
-    YouTubePlayerView mVideoBanner;
     @Nullable
     @BindView(R.id.title)
     TextView mTitle;
@@ -136,6 +130,8 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
         binding.setBanner(mDataModel.getBanner());
+
+        setupOverviewVideo(binding);
         setupViewPager(binding);
     }
 
@@ -144,7 +140,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         super.onViewCreated(view, savedInstanceState);
         updateViews();
         updateDownloadProgress();
-        setupOverviewVideo();
     }
 
     @Override
@@ -218,12 +213,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         super.onDestroyOptionsMenu();
         mPinShortcutItem = null;
     }
-
-    @Override
-    public void onDestroyView() {
-        cleanupOverviewVideo();
-        super.onDestroyView();
-    }
     // endregion Lifecycle
 
     private void startProgressListener() {
@@ -265,47 +254,14 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestPrimaryTranslation, mTool));
         }
 
-        final String overviewVideo = mTool != null ? mTool.getOverviewVideo() : null;
-        final boolean hasOverviewVideo = mVideoBanner != null && !TextUtils.isEmpty(overviewVideo);
-        if (mVideoBanner != null) {
-            mVideoBanner.setVisibility(hasOverviewVideo ? View.VISIBLE : View.GONE);
-            if (hasOverviewVideo) {
-                updateOverviewVideo(overviewVideo);
-            }
-        }
-
         if (mViewPager != null) {
             mViewPager.setAdapter(mDetailsAdapter);
         }
     }
 
     // region Overview Video
-    @Nullable
-    private YouTubePlayerTracker mYouTubePlayerTracker = null;
-
-    private void setupOverviewVideo() {
-        if (mVideoBanner != null) {
-            getViewLifecycleOwner().getLifecycle().addObserver(mVideoBanner);
-            mYouTubePlayerTracker = new YouTubePlayerTracker();
-            mVideoBanner.addYouTubePlayerListener(mYouTubePlayerTracker);
-        }
-    }
-
-    private void updateOverviewVideo(@NonNull final String videoId) {
-        if (mVideoBanner != null && mYouTubePlayerTracker != null) {
-            mVideoBanner.getYouTubePlayerWhenReady(player -> {
-                if (!videoId.equals(mYouTubePlayerTracker.getVideoId())) {
-                    player.cueVideo(videoId, 0);
-                }
-            });
-        }
-    }
-
-    private void cleanupOverviewVideo() {
-        if (mVideoBanner != null) {
-            mYouTubePlayerTracker = null;
-            getLifecycle().removeObserver(mVideoBanner);
-        }
+    private void setupOverviewVideo(@NonNull final ToolDetailsFragmentBinding binding) {
+        getViewLifecycleOwner().getLifecycle().addObserver(binding.videoBanner);
     }
     // endregion Overview Video
 

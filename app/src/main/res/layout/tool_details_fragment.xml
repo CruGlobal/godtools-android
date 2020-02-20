@@ -36,7 +36,21 @@
                     app:layout_widthPercent="100%"
                     app:visibleIf="@{TextUtils.isEmpty(tool.overviewVideo)}" />
 
-                <include layout="@layout/tool_detail_banner_video_view" />
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/video_banner"
+                    android:adjustViewBounds="true"
+                    android:background="@color/gray_E6"
+                    android:scaleType="centerCrop"
+                    android:soundEffectsEnabled="false"
+                    app:layout_aspectRatio="210%"
+                    app:layout_widthPercent="100%"
+                    app:showFullScreenButton="false"
+                    app:showSeekBar="false"
+                    app:showVideoCurrentTime="false"
+                    app:showVideoDuration="false"
+                    app:showYouTubeButton="false"
+                    app:videoId="@{tool.overviewVideo}"
+                    app:visibleIf="@{!TextUtils.isEmpty(tool.overviewVideo)}" />
 
                 <ProgressBar
                     android:id="@+id/download_progress"
