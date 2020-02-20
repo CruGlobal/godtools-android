@@ -17,7 +17,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
-import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
@@ -27,7 +26,6 @@ import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BaseBindingPlatformFragment;
-import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
@@ -48,7 +46,6 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
-import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
 
 public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
@@ -71,9 +68,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     private MenuItem mPinShortcutItem;
 
     @Nullable
-    @BindView(R.id.banner)
-    PicassoImageView mBanner;
-    @Nullable
     @BindView(R.id.video_banner)
     YouTubePlayerView mVideoBanner;
     @Nullable
@@ -91,8 +85,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
 
     @Nullable
     private Tool mTool;
-    @Nullable
-    private Attachment mBannerAttachment;
     @Nullable
     private Translation mLatestPrimaryTranslation;
     @Nullable
@@ -147,6 +139,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         super.onBindingCreated(binding, savedInstanceState);
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
+        binding.setBanner(mDataModel.getBanner());
     }
 
     @Override
@@ -194,11 +187,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
         updatePinShortcutAction();
-        updateViews();
-    }
-
-    void onLoadBanner(@Nullable final Attachment banner) {
-        mBannerAttachment = banner;
         updateViews();
     }
 
@@ -277,16 +265,12 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     private void updateViews() {
-        bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestPrimaryTranslation, mTool));
         }
 
         final String overviewVideo = mTool != null ? mTool.getOverviewVideo() : null;
         final boolean hasOverviewVideo = mVideoBanner != null && !TextUtils.isEmpty(overviewVideo);
-        if (mBanner != null) {
-            mBanner.asImageView().setVisibility(hasOverviewVideo ? View.GONE : View.VISIBLE);
-        }
         if (mVideoBanner != null) {
             mVideoBanner.setVisibility(hasOverviewVideo ? View.VISIBLE : View.GONE);
             if (hasOverviewVideo) {
@@ -336,7 +320,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
         mDataModel.getToolCode().setValue(mToolCode);
         mDataModel.getTool().observe(this, this::onLoadTool);
-        mDataModel.getBanner().observe(this, this::onLoadBanner);
         mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
         mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
         mDataModel.getAvailableLanguages().observe(this, this::onLoadAvailableLanguages);

@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.text.TextUtils" />
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="fragment" type="org.cru.godtools.ui.tooldetails.ToolDetailsFragment" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
+        <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
     </data>
 
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
@@ -29,8 +31,10 @@
                     android:adjustViewBounds="true"
                     android:background="@color/gray_E6"
                     android:scaleType="centerCrop"
+                    android:src="@{banner}"
                     app:layout_aspectRatio="210%"
-                    app:layout_widthPercent="100%" />
+                    app:layout_widthPercent="100%"
+                    app:visibleIf="@{TextUtils.isEmpty(tool.overviewVideo)}" />
 
                 <include layout="@layout/tool_detail_banner_video_view" />
 
