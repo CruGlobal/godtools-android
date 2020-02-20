@@ -55,7 +55,7 @@ buildscript {
                 multidex          : '2.0.1',
                 percentLayout     : '1.0.0',
                 recyclerView      : '1.1.0',
-                room              : '2.2.3',
+                room              : '2.2.4',
                 swipeRefreshLayout: '1.0.0',
                 test              : '1.2.0',
                 testJUnit         : '1.1.1',
