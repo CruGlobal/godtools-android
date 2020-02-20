@@ -93,7 +93,7 @@ public class ManifestManager {
                         .findFirst()
                         // update the last accessed time
                         .executeIfPresent(t -> {
-                            t.setLastAccessed();
+                            t.updateLastAccessed();
                             mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
                         })
                         .orElse(null)));

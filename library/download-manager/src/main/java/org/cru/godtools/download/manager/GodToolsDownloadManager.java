@@ -238,7 +238,7 @@ public final class GodToolsDownloadManager {
                         .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
                 .findFirst()
                 .executeIfPresent(t -> {
-                    t.setLastAccessed();
+                    t.updateLastAccessed();
                     mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
                 })
                 .map(TranslationKey::new)
