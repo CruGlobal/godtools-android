@@ -14,7 +14,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : TranslationRepository(db) {}
     private val translation = Translation().apply {
         toolCode = "kgp"
-        setLanguageCode(Locale.ENGLISH)
+        languageCode = Locale.ENGLISH
         version = 1
     }
     private val key = translation.toTranslationRefKey()!!
