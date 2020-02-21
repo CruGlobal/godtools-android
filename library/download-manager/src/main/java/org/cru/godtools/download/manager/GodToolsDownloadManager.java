@@ -661,7 +661,10 @@ public final class GodToolsDownloadManager {
 
     @NonNull
     @MainThread
-    public LiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final String tool, @NonNull final Locale locale) {
+    public LiveData<DownloadProgress> getDownloadProgressLiveData(
+            @NonNull final String tool,
+            @NonNull final Locale locale
+    ) {
         return getDownloadProgressLiveData(new TranslationKey(tool, locale));
     }
 
