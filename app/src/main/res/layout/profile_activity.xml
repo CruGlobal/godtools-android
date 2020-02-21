@@ -33,7 +33,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:elevation="10dp"
                 android:gravity="center"
                 android:text="@{accountName}"
                 android:textAppearance="@style/TextAppearance.GodTools.Large"
@@ -48,7 +47,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:elevation="10dp"
                 android:gravity="center"
                 android:text="@{accountDate}"
                 android:textAppearance="@style/TextAppearance.GodTools"
@@ -64,8 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@color/gt_gd_profile_background"
-                android:elevation="10dp"
+                android:background="@android:color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/account_date_text">
@@ -73,6 +70,8 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"
                     tools:text="@string/gt_gd_activity_text" />
             </com.google.android.material.tabs.TabLayout>
 
@@ -80,10 +79,13 @@
                 android:id="@+id/my_profile_viewpager"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                tools:background="@color/gray_E6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/my_profile_tab_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/my_profile_tab_layout" >
+
+            </androidx.viewpager2.widget.ViewPager2>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
