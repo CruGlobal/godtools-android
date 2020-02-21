@@ -15,10 +15,6 @@
         <item name="backgroundTint">@color/gt_red</item>
     </style>
 
-    <style name="Widget.GodTools.Button.Outline" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/btn_outline</item>
-        <item name="backgroundTint">?attr/colorButtonNormal</item>
-    </style>
     <style name="Widget.GodTools.Button.Outline.Red" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/gt_red</item>
         <item name="android:padding">10dp</item>
