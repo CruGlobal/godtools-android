@@ -285,7 +285,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
 
     // region Data Binding
     @Nullable
-    @Deprecated
     private ToolDetailsFragmentBinding mBinding;
 
     public void addTool(@Nullable final String toolCode) {
