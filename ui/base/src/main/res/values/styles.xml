@@ -12,6 +12,8 @@
         <item name="actionBarTheme">@style/ThemeOverlay.GodTools.Toolbar.AppBar</item>
         <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Solid</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="materialButtonStyle">@style/Widget.GodTools.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Button.OutlinedButton</item>
         <item name="toolbarStyle">@style/Widget.GodTools.Toolbar.AppBar</item>
     </style>
 
