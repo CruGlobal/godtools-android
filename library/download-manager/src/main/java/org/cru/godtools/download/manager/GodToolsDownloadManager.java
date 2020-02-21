@@ -108,10 +108,6 @@ public final class GodToolsDownloadManager {
     private final ThreadPoolExecutor mExecutor;
     final Handler mHandler;
 
-    private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
-    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
-            new SimpleArrayMap<>();
-
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
     private GodToolsDownloadManager(@NonNull final Context context) {
@@ -642,7 +638,10 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    // region Download Progress Methods
+    // region Download Progress
+    private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
+    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
+            new SimpleArrayMap<>();
 
     private void startProgress(@NonNull final TranslationKey translation) {
         synchronized (mDownloadingTranslations) {
@@ -756,8 +755,7 @@ public final class GodToolsDownloadManager {
             }
         }
     }
-
-    // endregion Download Progress Methods
+    // endregion Download Progress
 
     // region Download & Cleaning Scheduling Methods
 
