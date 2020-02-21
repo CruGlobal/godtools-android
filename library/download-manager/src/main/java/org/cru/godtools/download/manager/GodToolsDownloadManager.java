@@ -640,7 +640,6 @@ public final class GodToolsDownloadManager {
     }
 
     // region Download Progress
-    private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
     private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
             new SimpleArrayMap<>();
     private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
@@ -651,7 +650,7 @@ public final class GodToolsDownloadManager {
         synchronized (mDownloadingProgressLiveData) {
             MutableLiveData<DownloadProgress> liveData = mDownloadingProgressLiveData.get(translation);
             if (liveData == null) {
-                liveData = new MutableLiveData<>();
+                liveData = new DownloadProgressLiveData();
                 mDownloadingProgressLiveData.put(translation, liveData);
             }
             return liveData;
@@ -659,41 +658,20 @@ public final class GodToolsDownloadManager {
     }
 
     private void startProgress(@NonNull final TranslationKey translation) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INDETERMINATE);
-
-        synchronized (mDownloadingTranslations) {
-            if (!mDownloadingTranslations.containsKey(translation)) {
-                mDownloadingTranslations.put(translation, DownloadProgress.INDETERMINATE);
-                scheduleProgressUpdate(translation);
-            }
-        }
+        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL);
+        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
-        final DownloadProgress current = new DownloadProgress(progress, max);
-        getDownloadProgressLiveData(translation).postValue(current);
-
-        final DownloadProgress old;
-        synchronized (mDownloadingTranslations) {
-            old = mDownloadingTranslations.put(translation, current);
-        }
-        if (!current.equals(old)) {
-            scheduleProgressUpdate(translation);
-        }
+        getDownloadProgressLiveData(translation).postValue(new DownloadProgress(progress, max));
+        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void finishDownload(@NonNull final TranslationKey translation) {
         getDownloadProgressLiveData(translation).postValue(null);
-
-        final DownloadProgress old;
-        synchronized (mDownloadingTranslations) {
-            old = mDownloadingTranslations.remove(translation);
-        }
-        if (old != null) {
-            scheduleProgressUpdate(translation);
-        }
+        scheduleProgressUpdate(translation);
     }
 
     @Nullable
