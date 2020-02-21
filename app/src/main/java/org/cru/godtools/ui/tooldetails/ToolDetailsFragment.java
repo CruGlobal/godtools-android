@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
@@ -41,7 +40,6 @@ import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
-import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 
 public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
@@ -69,9 +67,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
-    @Nullable
-    @BindView(R.id.download_progress)
-    ProgressBar mDownloadProgressBar;
 
     @Nullable
     private Tool mTool;
@@ -130,6 +125,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
         binding.setBanner(mDataModel.getBanner());
+        mBinding = binding;
 
         setupOverviewVideo(binding);
         setupViewPager(binding);
@@ -213,6 +209,13 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         super.onDestroyOptionsMenu();
         mPinShortcutItem = null;
     }
+
+    @Override
+    public void onDestroyBinding(@NonNull final ToolDetailsFragmentBinding binding) {
+        mBinding = null;
+        super.onDestroyBinding(binding);
+    }
+
     // endregion Lifecycle
 
     private void startProgressListener() {
@@ -225,7 +228,9 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     private void updateDownloadProgress() {
-        bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
+        if (mBinding != null) {
+            mBinding.setProgress(mDownloadProgress);
+        }
     }
 
     private void stopProgressListener() {
@@ -279,6 +284,10 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     // endregion Data Model
 
     // region Data Binding
+    @Nullable
+    @Deprecated
+    private ToolDetailsFragmentBinding mBinding;
+
     public void addTool(@Nullable final String toolCode) {
         if (mDownloadManager != null && toolCode != null) {
             mDownloadManager.addTool(toolCode);

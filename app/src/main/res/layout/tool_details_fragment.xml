@@ -10,6 +10,7 @@
         <variable name="fragment" type="org.cru.godtools.ui.tooldetails.ToolDetailsFragment" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
+        <variable name="progress" type="org.cru.godtools.download.manager.DownloadProgress" />
     </data>
 
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
@@ -59,6 +60,7 @@
                     android:layout_height="10dp"
                     android:layout_alignBottom="@id/banner"
                     android:visibility="gone"
+                    android:progress="@{progress}"
                     tools:visibility="visible" />
             </androidx.percentlayout.widget.PercentRelativeLayout>
 
