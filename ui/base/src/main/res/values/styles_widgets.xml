@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Button Widgets -->
     <style name="Widget.GodTools.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
 
@@ -7,9 +7,8 @@
         <item name="backgroundTint">@color/gt_blue</item>
     </style>
 
-    <style name="Widget.GodTools.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="strokeColor" tools:ignore="PrivateResource">@color/mtrl_text_btn_text_color_selector</item>
-    </style>
+    <style name="Widget.GodTools.Button" parent="Widget.MaterialComponents.Button" />
+    <style name="Widget.GodTools.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton" />
 
     <!-- Colored Button -->
     <style name="Widget.GodTools.Button.Borderless.Colored" parent="Widget.MaterialComponents.Button">
@@ -20,14 +19,16 @@
     <style name="Widget.GodTools.Button.Borderless.Colored.Blue" parent="Widget.GodTools.Button.Borderless.Colored">
         <item name="backgroundTint">@color/gt_blue</item>
     </style>
-    <style name="Widget.GodTools.Button.Borderless.Colored.Green" parent="Widget.GodTools.Button.Borderless.Colored">
-        <item name="backgroundTint">@color/gt_green</item>
+
+    <!-- region Button ThemeOverlays -->
+    <style name="ThemeOverlay.GodTools.Button.Green" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/gt_green</item>
     </style>
 
-    <!-- Button color ThemeOverlays -->
     <style name="ThemeOverlay.GodTools.Button.Red" parent="ThemeOverlay.MaterialComponents">
         <item name="colorPrimary">@color/gt_red</item>
     </style>
+    <!-- endregion Button ThemeOverlays -->
 
     <!-- ProgressBar -->
     <style name="Widget.GodTools.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal" />
