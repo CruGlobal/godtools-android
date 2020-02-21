@@ -66,9 +66,8 @@
             app:layout_constraintStart_toStartOf="@id/welcome"
             app:layout_constraintTop_toTopOf="@id/welcome" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/action_next"
-            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{() -> callbacks.nextPage()}"

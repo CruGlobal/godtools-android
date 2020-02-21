@@ -18,7 +18,7 @@ dependencies {
 
     api "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
     implementation "androidx.browser:browser:${deps.androidX.browser}"
-    implementation "com.google.android.material:material:${deps.materialDesign}"
+    api "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 

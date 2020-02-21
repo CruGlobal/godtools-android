@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Button Widgets -->
+    <!-- region Buttons -->
     <style name="Widget.GodTools.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
 
     <style name="Widget.GodTools.Button.Colored.Blue">
@@ -9,16 +9,6 @@
 
     <style name="Widget.GodTools.Button" parent="Widget.MaterialComponents.Button" />
     <style name="Widget.GodTools.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton" />
-
-    <!-- Colored Button -->
-    <style name="Widget.GodTools.Button.Borderless.Colored" parent="Widget.MaterialComponents.Button">
-        <item name="android:padding">10dp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">6dp</item>
-    </style>
-    <style name="Widget.GodTools.Button.Borderless.Colored.Blue" parent="Widget.GodTools.Button.Borderless.Colored">
-        <item name="backgroundTint">@color/gt_blue</item>
-    </style>
 
     <!-- region Button ThemeOverlays -->
     <style name="ThemeOverlay.GodTools.Button.Green" parent="ThemeOverlay.MaterialComponents">
@@ -29,6 +19,7 @@
         <item name="colorPrimary">@color/gt_red</item>
     </style>
     <!-- endregion Button ThemeOverlays -->
+    <!-- endregion Buttons -->
 
     <!-- ProgressBar -->
     <style name="Widget.GodTools.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal" />
