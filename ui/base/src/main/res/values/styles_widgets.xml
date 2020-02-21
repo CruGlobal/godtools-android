@@ -7,14 +7,6 @@
         <item name="backgroundTint">@color/gt_blue</item>
     </style>
 
-    <style name="Widget.GodTools.Button.Colored.Green">
-        <item name="backgroundTint">@color/gt_green</item>
-    </style>
-
-    <style name="Widget.GodTools.Button.Colored.Red">
-        <item name="backgroundTint">@color/gt_red</item>
-    </style>
-
     <style name="Widget.GodTools.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor" tools:ignore="PrivateResource">@color/mtrl_text_btn_text_color_selector</item>
     </style>
