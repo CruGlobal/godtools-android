@@ -14,13 +14,13 @@ class DownloadProgressLiveDataTest {
 
     @Test
     fun testInitialProgress() {
-        val liveData =  DownloadProgressLiveData()
+        val liveData = DownloadProgressLiveData()
 
         assertNull(liveData.value)
         liveData.value = DownloadProgress.INITIAL
         assertSame(DownloadProgress.INITIAL, liveData.value)
 
-        liveData.value = DownloadProgress(1,2)
+        liveData.value = DownloadProgress(1, 2)
         liveData.value = DownloadProgress.INITIAL
         assertEquals(DownloadProgress(1, 2), liveData.value)
 
