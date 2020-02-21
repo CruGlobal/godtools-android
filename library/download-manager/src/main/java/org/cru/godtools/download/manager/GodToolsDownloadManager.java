@@ -78,6 +78,7 @@ import androidx.collection.ArrayMap;
 import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -646,6 +647,7 @@ public final class GodToolsDownloadManager {
             new SimpleArrayMap<>();
 
     @NonNull
+    @AnyThread
     private MutableLiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final TranslationKey translation) {
         synchronized (mDownloadingProgressLiveData) {
             MutableLiveData<DownloadProgress> liveData = mDownloadingProgressLiveData.get(translation);
@@ -655,6 +657,12 @@ public final class GodToolsDownloadManager {
             }
             return liveData;
         }
+    }
+
+    @NonNull
+    @MainThread
+    public LiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final String tool, @NonNull final Locale locale) {
+        return getDownloadProgressLiveData(new TranslationKey(tool, locale));
     }
 
     private void startProgress(@NonNull final TranslationKey translation) {
