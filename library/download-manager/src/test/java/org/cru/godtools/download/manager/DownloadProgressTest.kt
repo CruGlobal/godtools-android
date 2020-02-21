@@ -35,6 +35,7 @@ class DownloadProgressTest {
 
     @Test
     fun testEquals() {
+        assertTrue(DownloadProgress.INITIAL == DownloadProgress.INDETERMINATE)
         assertTrue(DownloadProgress.INDETERMINATE == DownloadProgress(0, 0))
         assertTrue(DownloadProgress(10, 20) == DownloadProgress(10, 20))
         assertFalse(DownloadProgress(9, 20) == DownloadProgress(10, 20))
