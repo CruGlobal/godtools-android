@@ -699,10 +699,7 @@ public final class GodToolsDownloadManager {
     @Nullable
     @AnyThread
     public DownloadProgress getDownloadProgress(@NonNull final String tool, @NonNull final Locale locale) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        synchronized (mDownloadingTranslations) {
-            return mDownloadingTranslations.get(key);
-        }
+        return getDownloadProgressLiveData(new TranslationKey(tool, locale)).getValue();
     }
 
     @AnyThread
@@ -724,10 +721,7 @@ public final class GodToolsDownloadManager {
 
         // dispatch any listeners we have
         if (listeners != null && !listeners.isEmpty()) {
-            final DownloadProgress progress;
-            synchronized (mDownloadingTranslations) {
-                progress = mDownloadingTranslations.get(translation);
-            }
+            final DownloadProgress progress = getDownloadProgressLiveData(translation).getValue();
 
             for (final OnDownloadProgressUpdateListener listener : listeners) {
                 listener.onDownloadProgressUpdated(progress);
