@@ -78,6 +78,7 @@ import androidx.collection.ArrayMap;
 import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
+import androidx.lifecycle.MutableLiveData;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -642,8 +643,24 @@ public final class GodToolsDownloadManager {
     private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
     private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
             new SimpleArrayMap<>();
+    private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
+            new SimpleArrayMap<>();
+
+    @NonNull
+    private MutableLiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final TranslationKey translation) {
+        synchronized (mDownloadingProgressLiveData) {
+            MutableLiveData<DownloadProgress> liveData = mDownloadingProgressLiveData.get(translation);
+            if (liveData == null) {
+                liveData = new MutableLiveData<>();
+                mDownloadingProgressLiveData.put(translation, liveData);
+            }
+            return liveData;
+        }
+    }
 
     private void startProgress(@NonNull final TranslationKey translation) {
+        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INDETERMINATE);
+
         synchronized (mDownloadingTranslations) {
             if (!mDownloadingTranslations.containsKey(translation)) {
                 mDownloadingTranslations.put(translation, DownloadProgress.INDETERMINATE);
@@ -654,8 +671,10 @@ public final class GodToolsDownloadManager {
 
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
-        final DownloadProgress old;
         final DownloadProgress current = new DownloadProgress(progress, max);
+        getDownloadProgressLiveData(translation).postValue(current);
+
+        final DownloadProgress old;
         synchronized (mDownloadingTranslations) {
             old = mDownloadingTranslations.put(translation, current);
         }
@@ -666,6 +685,8 @@ public final class GodToolsDownloadManager {
 
     @AnyThread
     private void finishDownload(@NonNull final TranslationKey translation) {
+        getDownloadProgressLiveData(translation).postValue(null);
+
         final DownloadProgress old;
         synchronized (mDownloadingTranslations) {
             old = mDownloadingTranslations.remove(translation);
