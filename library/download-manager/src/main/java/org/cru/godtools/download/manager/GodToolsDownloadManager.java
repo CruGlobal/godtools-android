@@ -78,6 +78,8 @@ import androidx.collection.ArrayMap;
 import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -107,10 +109,6 @@ public final class GodToolsDownloadManager {
     final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
     final Handler mHandler;
-
-    private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
-    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
-            new SimpleArrayMap<>();
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
@@ -642,47 +640,55 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    // region Download Progress Methods
+    // region Download Progress
+    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
+            new SimpleArrayMap<>();
+    private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
+            new SimpleArrayMap<>();
+
+    @NonNull
+    @AnyThread
+    private MutableLiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final TranslationKey translation) {
+        synchronized (mDownloadingProgressLiveData) {
+            MutableLiveData<DownloadProgress> liveData = mDownloadingProgressLiveData.get(translation);
+            if (liveData == null) {
+                liveData = new DownloadProgressLiveData();
+                mDownloadingProgressLiveData.put(translation, liveData);
+            }
+            return liveData;
+        }
+    }
+
+    @NonNull
+    @MainThread
+    public LiveData<DownloadProgress> getDownloadProgressLiveData(
+            @NonNull final String tool,
+            @NonNull final Locale locale
+    ) {
+        return getDownloadProgressLiveData(new TranslationKey(tool, locale));
+    }
 
     private void startProgress(@NonNull final TranslationKey translation) {
-        synchronized (mDownloadingTranslations) {
-            if (!mDownloadingTranslations.containsKey(translation)) {
-                mDownloadingTranslations.put(translation, DownloadProgress.INDETERMINATE);
-                scheduleProgressUpdate(translation);
-            }
-        }
+        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL);
+        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
-        final DownloadProgress old;
-        final DownloadProgress current = new DownloadProgress(progress, max);
-        synchronized (mDownloadingTranslations) {
-            old = mDownloadingTranslations.put(translation, current);
-        }
-        if (!current.equals(old)) {
-            scheduleProgressUpdate(translation);
-        }
+        getDownloadProgressLiveData(translation).postValue(new DownloadProgress(progress, max));
+        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void finishDownload(@NonNull final TranslationKey translation) {
-        final DownloadProgress old;
-        synchronized (mDownloadingTranslations) {
-            old = mDownloadingTranslations.remove(translation);
-        }
-        if (old != null) {
-            scheduleProgressUpdate(translation);
-        }
+        getDownloadProgressLiveData(translation).postValue(null);
+        scheduleProgressUpdate(translation);
     }
 
     @Nullable
     @AnyThread
     public DownloadProgress getDownloadProgress(@NonNull final String tool, @NonNull final Locale locale) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        synchronized (mDownloadingTranslations) {
-            return mDownloadingTranslations.get(key);
-        }
+        return getDownloadProgressLiveData(new TranslationKey(tool, locale)).getValue();
     }
 
     @AnyThread
@@ -704,10 +710,7 @@ public final class GodToolsDownloadManager {
 
         // dispatch any listeners we have
         if (listeners != null && !listeners.isEmpty()) {
-            final DownloadProgress progress;
-            synchronized (mDownloadingTranslations) {
-                progress = mDownloadingTranslations.get(translation);
-            }
+            final DownloadProgress progress = getDownloadProgressLiveData(translation).getValue();
 
             for (final OnDownloadProgressUpdateListener listener : listeners) {
                 listener.onDownloadProgressUpdated(progress);
@@ -756,8 +759,7 @@ public final class GodToolsDownloadManager {
             }
         }
     }
-
-    // endregion Download Progress Methods
+    // endregion Download Progress
 
     // region Download & Cleaning Scheduling Methods
 
