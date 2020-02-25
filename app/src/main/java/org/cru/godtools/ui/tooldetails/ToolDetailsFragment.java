@@ -18,7 +18,6 @@ import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
-import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BaseBindingPlatformFragment;
 import org.cru.godtools.model.Tool;
@@ -41,8 +40,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
-        implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
+public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding> {
     public interface Callbacks {
         void onToolAdded();
 
@@ -74,8 +72,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     private Translation mLatestPrimaryTranslation;
     @Nullable
     private Translation mLatestParallelTranslation;
-    @Nullable
-    private DownloadProgress mDownloadProgress;
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
     @Nullable
@@ -125,7 +121,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
         binding.setBanner(mDataModel.getBanner());
-        mBinding = binding;
+        binding.setDownloadProgress(mDataModel.getDownloadProgress());
 
         setupOverviewVideo(binding);
         setupViewPager(binding);
@@ -135,7 +131,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateViews();
-        updateDownloadProgress();
     }
 
     @Override
@@ -144,12 +139,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         inflater.inflate(R.menu.fragment_tool_details, menu);
         mPinShortcutItem = menu.findItem(R.id.action_pin_shortcut);
         updatePinShortcutAction();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        startProgressListener();
     }
 
     @Override
@@ -162,13 +151,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onUpdatePrimaryLanguage() {
-        // restart the progress listener
-        stopProgressListener();
-        startProgressListener();
     }
 
     void onLoadTool(@Nullable final Tool tool) {
@@ -193,51 +175,11 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     @Override
-    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
-        mDownloadProgress = progress;
-        updateDownloadProgress();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        stopProgressListener();
-    }
-
-    @Override
     public void onDestroyOptionsMenu() {
         super.onDestroyOptionsMenu();
         mPinShortcutItem = null;
     }
-
-    @Override
-    public void onDestroyBinding(@NonNull final ToolDetailsFragmentBinding binding) {
-        mBinding = null;
-        super.onDestroyBinding(binding);
-    }
-
     // endregion Lifecycle
-
-    private void startProgressListener() {
-        if (mDownloadManager != null && mToolCode != null) {
-            mDownloadManager.addOnDownloadProgressUpdateListener(mToolCode, getPrimaryLanguage(), this);
-
-            // get the initial progress
-            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mToolCode, getPrimaryLanguage()));
-        }
-    }
-
-    private void updateDownloadProgress() {
-        if (mBinding != null) {
-            mBinding.setProgress(mDownloadProgress);
-        }
-    }
-
-    private void stopProgressListener() {
-        if (mDownloadManager != null) {
-            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
-        }
-    }
 
     private void updatePinShortcutAction() {
         if (mPinShortcutItem != null) {
@@ -284,9 +226,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     // endregion Data Model
 
     // region Data Binding
-    @Nullable
-    private ToolDetailsFragmentBinding mBinding;
-
     public void addTool(@Nullable final String toolCode) {
         if (mDownloadManager != null && toolCode != null) {
             mDownloadManager.addTool(toolCode);
