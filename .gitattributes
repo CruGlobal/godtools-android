@@ -1,0 +1,11 @@
+/gradlew     text
+/gradlew.bat text
+*.gradle     text
+
+.gitignore   text
+*.java       text
+*.kt         text
+*.pro        text
+*.properties text
+*.xml        text
+*.yml        text
