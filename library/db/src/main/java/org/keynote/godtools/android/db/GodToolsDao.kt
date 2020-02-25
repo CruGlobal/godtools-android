@@ -3,7 +3,10 @@ package org.keynote.godtools.android.db
 import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
+import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.annimon.stream.Optional
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.AsyncDao
@@ -11,6 +14,8 @@ import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.StreamDao
+import org.ccci.gto.android.common.db.getAsLiveData
+import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
@@ -125,6 +130,17 @@ class GodToolsDao private constructor(context: Context) :
                 .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
                 .limit(1)
         ).findFirst()
+    }
+
+    @MainThread
+    fun getLatestTranslationLiveData(code: String?, locale: Locale?): LiveData<Translation?> {
+        if (code == null || locale == null) return emptyLiveData()
+
+        return Query.select<Translation>()
+            .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale))
+            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+            .limit(1)
+            .getAsLiveData(this).map { it.firstOrNull() }
     }
 
     @WorkerThread

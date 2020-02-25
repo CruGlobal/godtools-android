@@ -2,38 +2,27 @@ package org.cru.godtools.ui.tooldetails;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
-import com.google.android.material.tabs.TabLayout;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
-import org.ccci.gto.android.common.picasso.view.PicassoImageView;
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.content.AttachmentLoader;
-import org.cru.godtools.content.AvailableLanguagesLoader;
-import org.cru.godtools.content.ToolLoader;
+import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.fragment.BasePlatformFragment;
-import org.cru.godtools.model.Attachment;
+import org.cru.godtools.fragment.BaseBindingPlatformFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.cru.godtools.util.ActivityUtilsKt;
@@ -46,31 +35,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
-import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
-import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
-import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
-public class ToolDetailsFragment extends BasePlatformFragment
+public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetailsFragmentBinding>
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     public interface Callbacks {
         void onToolAdded();
 
         void onToolRemoved();
     }
-
-    private static final int LOADER_TOOL = 101;
-    private static final int LOADER_BANNER = 102;
-    private static final int LOADER_LATEST_PRIMARY_TRANSLATION = 103;
-    private static final int LOADER_AVAILABLE_LANGUAGES = 104;
-    private static final int LOADER_LATEST_PARALLEL_TRANSLATION = 105;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -85,40 +62,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
     private MenuItem mPinShortcutItem;
 
     @Nullable
-    @BindView(R.id.banner)
-    PicassoImageView mBanner;
-    @Nullable
-    @BindView(R.id.video_banner)
-    YouTubePlayerView mVideoBanner;
-    @Nullable
     @BindView(R.id.title)
     TextView mTitle;
     @Nullable
-    @BindView(R.id.shares)
-    TextView mShares;
-    @Nullable
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
-    @Nullable
-    @BindView(R.id.detail_tab_layout)
-    TabLayout mTabLayout;
-    @Nullable
-    @BindView(R.id.download_progress)
-    ProgressBar mDownloadProgressBar;
-    @Nullable
-    @BindView(R.id.action_add)
-    View mActionAdd;
-    @Nullable
-    @BindView(R.id.action_remove)
-    View mActionRemove;
-    @Nullable
-    @BindView(R.id.action_open)
-    View mActionOpen;
 
     @Nullable
     private Tool mTool;
-    @Nullable
-    private Attachment mBannerAttachment;
     @Nullable
     private Translation mLatestPrimaryTranslation;
     @Nullable
@@ -136,6 +87,10 @@ public class ToolDetailsFragment extends BasePlatformFragment
         args.putString(EXTRA_TOOL, code);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public ToolDetailsFragment() {
+        super(R.layout.tool_details_fragment);
     }
 
     // region Lifecycle
@@ -160,13 +115,20 @@ public class ToolDetailsFragment extends BasePlatformFragment
             mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
-        startLoaders();
+        setupDataModel();
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
-                             @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tool_details, container, false);
+    public void onBindingCreated(@NonNull final ToolDetailsFragmentBinding binding,
+                                 @Nullable final Bundle savedInstanceState) {
+        super.onBindingCreated(binding, savedInstanceState);
+        binding.setFragment(this);
+        binding.setTool(mDataModel.getTool());
+        binding.setBanner(mDataModel.getBanner());
+        mBinding = binding;
+
+        setupOverviewVideo(binding);
+        setupViewPager(binding);
     }
 
     @Override
@@ -174,8 +136,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
         super.onViewCreated(view, savedInstanceState);
         updateViews();
         updateDownloadProgress();
-        setupOverviewVideo();
-        setUpViewPager();
     }
 
     @Override
@@ -189,8 +149,6 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @Override
     public void onStart() {
         super.onStart();
-        updateLatestPrimaryTranslationLoader();
-        updateLatestParallelTranslationLoader();
         startProgressListener();
     }
 
@@ -208,27 +166,14 @@ public class ToolDetailsFragment extends BasePlatformFragment
 
     @Override
     protected void onUpdatePrimaryLanguage() {
-        updateLatestPrimaryTranslationLoader();
-
         // restart the progress listener
         stopProgressListener();
         startProgressListener();
     }
 
-    @Override
-    protected void onUpdateParallelLanguage() {
-        updateLatestParallelTranslationLoader();
-    }
-
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
-        updateBannerLoader();
         updatePinShortcutAction();
-        updateViews();
-    }
-
-    void onLoadBanner(@Nullable final Attachment banner) {
-        mBannerAttachment = banner;
         updateViews();
     }
 
@@ -266,10 +211,11 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     @Override
-    public void onDestroyView() {
-        cleanupOverviewVideo();
-        super.onDestroyView();
+    public void onDestroyBinding(@NonNull final ToolDetailsFragmentBinding binding) {
+        mBinding = null;
+        super.onDestroyBinding(binding);
     }
+
     // endregion Lifecycle
 
     private void startProgressListener() {
@@ -282,7 +228,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateDownloadProgress() {
-        bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
+        if (mBinding != null) {
+            mBinding.setProgress(mDownloadProgress);
+        }
     }
 
     private void stopProgressListener() {
@@ -307,76 +255,41 @@ public class ToolDetailsFragment extends BasePlatformFragment
     }
 
     private void updateViews() {
-        bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(mLatestPrimaryTranslation, mTool, getContext()));
         }
-        bindShares(mShares, mTool);
 
-        final String overviewVideo = mTool != null ? mTool.getOverviewVideo() : null;
-        final boolean hasOverviewVideo = mVideoBanner != null && !TextUtils.isEmpty(overviewVideo);
-        if (mBanner != null) {
-            mBanner.asImageView().setVisibility(hasOverviewVideo ? View.GONE : View.VISIBLE);
-        }
-        if (mVideoBanner != null) {
-            mVideoBanner.setVisibility(hasOverviewVideo ? View.VISIBLE : View.GONE);
-            if (hasOverviewVideo) {
-                updateOverviewVideo(overviewVideo);
-            }
-        }
-        if (mActionAdd != null) {
-            mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
-            mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
-        }
-        if (mActionRemove != null) {
-            mActionRemove.setEnabled(mTool != null && mTool.isAdded());
-            mActionRemove.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
-        }
-
-        if (mActionOpen != null) {
-            mActionOpen.setEnabled(mTool != null && mTool.isAdded());
-            mActionOpen.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
-        }
         if (mViewPager != null) {
             mViewPager.setAdapter(mDetailsAdapter);
         }
     }
 
     // region Overview Video
-    @Nullable
-    private YouTubePlayerTracker mYouTubePlayerTracker = null;
-
-    private void setupOverviewVideo() {
-        if (mVideoBanner != null) {
-            getViewLifecycleOwner().getLifecycle().addObserver(mVideoBanner);
-            mYouTubePlayerTracker = new YouTubePlayerTracker();
-            mVideoBanner.addYouTubePlayerListener(mYouTubePlayerTracker);
-        }
-    }
-
-    private void updateOverviewVideo(@NonNull final String videoId) {
-        if (mVideoBanner != null && mYouTubePlayerTracker != null) {
-            mVideoBanner.getYouTubePlayerWhenReady(player -> {
-                if (!videoId.equals(mYouTubePlayerTracker.getVideoId())) {
-                    player.cueVideo(videoId, 0);
-                }
-            });
-        }
-    }
-
-    private void cleanupOverviewVideo() {
-        if (mVideoBanner != null) {
-            mYouTubePlayerTracker = null;
-            getLifecycle().removeObserver(mVideoBanner);
-        }
+    private void setupOverviewVideo(@NonNull final ToolDetailsFragmentBinding binding) {
+        getViewLifecycleOwner().getLifecycle().addObserver(binding.videoBanner);
     }
     // endregion Overview Video
 
-    @Optional
-    @OnClick(R.id.action_add)
-    void addTool() {
-        if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(requireContext()).addTool(mToolCode);
+    // region Data Model
+    private ToolDetailsFragmentDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
+        mDataModel.getToolCode().setValue(mToolCode);
+        mDataModel.getTool().observe(this, this::onLoadTool);
+        mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
+        mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
+        mDataModel.getAvailableLanguages().observe(this, this::onLoadAvailableLanguages);
+    }
+    // endregion Data Model
+
+    // region Data Binding
+    @Nullable
+    private ToolDetailsFragmentBinding mBinding;
+
+    public void addTool(@Nullable final String toolCode) {
+        if (mDownloadManager != null && toolCode != null) {
+            mDownloadManager.addTool(toolCode);
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolAdded();
@@ -384,11 +297,9 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
     }
 
-    @Optional
-    @OnClick(R.id.action_remove)
-    void removeTool() {
-        if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(requireContext()).removeTool(mToolCode);
+    public void removeTool(@Nullable final String toolCode) {
+        if (mDownloadManager != null && toolCode != null) {
+            mDownloadManager.removeTool(toolCode);
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolRemoved();
@@ -396,10 +307,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
         }
     }
 
-    @Optional
-    @OnClick(R.id.action_open)
-    void openTool() {
-        if (mTool != null && mTool.getCode() != null) {
+    public void openTool(@Nullable final Tool tool) {
+        if (tool != null && tool.getCode() != null) {
             Locale primaryLanguage =
                     mLatestPrimaryTranslation != null ? mLatestPrimaryTranslation.getLanguageCode() :
                             Locale.ENGLISH;
@@ -408,168 +317,27 @@ public class ToolDetailsFragment extends BasePlatformFragment
             if (parallelLanguages != null) {
                 ActivityUtilsKt.openToolActivity(
                         requireActivity(),
-                        mTool.getCode(),
-                        mTool.getType(),
+                        tool.getCode(),
+                        tool.getType(),
                         primaryLanguage,
                         parallelLanguages);
             } else {
                 ActivityUtilsKt.openToolActivity(
                         requireActivity(),
-                        mTool.getCode(),
-                        mTool.getType(),
+                        tool.getCode(),
+                        tool.getType(),
                         primaryLanguage);
             }
         }
     }
+    // endregion Data Binding
 
-    private void startLoaders() {
-        final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
-        lm.initLoader(LOADER_BANNER, null, new AttachmentLoaderCallbacks());
-        lm.initLoader(LOADER_LATEST_PRIMARY_TRANSLATION, null, new TranslationLoaderCallbacks());
-        lm.initLoader(LOADER_LATEST_PARALLEL_TRANSLATION, null, new TranslationLoaderCallbacks());
-        lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
-
-        updateBannerLoader();
-    }
-
-    private void updateBannerLoader() {
-        final Loader loader = getLoaderManager().getLoader(LOADER_BANNER);
-        if (loader instanceof AttachmentLoader) {
-            ((AttachmentLoader) loader).setId(mTool != null ? mTool.getDetailsBannerId() : Attachment.INVALID_ID);
-        }
-    }
-
-    private void updateLatestPrimaryTranslationLoader() {
-        final Loader<Translation> loader = getLoaderManager().getLoader(
-                LOADER_LATEST_PRIMARY_TRANSLATION);
-        if (loader instanceof LatestTranslationLoader) {
-            ((LatestTranslationLoader) loader).setLocale(getPrimaryLanguage());
-        }
-    }
-
-    private void updateLatestParallelTranslationLoader() {
-        final Loader loader = getLoaderManager().getLoader(LOADER_LATEST_PARALLEL_TRANSLATION);
-        if (loader instanceof LatestTranslationLoader) {
-            ((LatestTranslationLoader) loader).setLocale(getParallelLanguage());
-        }
-    }
-
-    class ToolLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
-        @Nullable
-        @Override
-        public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_TOOL:
-                    if (mToolCode != null) {
-                        return new ToolLoader(requireContext(), mToolCode);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
-            switch (loader.getId()) {
-                case LOADER_TOOL:
-                    onLoadTool(tool);
-                    break;
-            }
-        }
-    }
-
-    class AttachmentLoaderCallbacks extends SimpleLoaderCallbacks<Attachment> {
-        @Nullable
-        @Override
-        public Loader<Attachment> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_BANNER:
-                    return new AttachmentLoader(requireContext());
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Attachment> loader, @Nullable final Attachment attachment) {
-            switch (loader.getId()) {
-                case LOADER_BANNER:
-                    onLoadBanner(attachment);
-                    break;
-            }
-        }
-    }
-
-    class TranslationLoaderCallbacks extends SimpleLoaderCallbacks<Translation> {
-        @Nullable
-        @Override
-        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_LATEST_PRIMARY_TRANSLATION:
-                    if (mToolCode != null) {
-                        return new LatestTranslationLoader(requireContext(), mToolCode, getPrimaryLanguage());
-                    }
-                    break;
-                case LOADER_LATEST_PARALLEL_TRANSLATION:
-                    if (mToolCode != null) {
-                        return new LatestTranslationLoader(requireContext(), mToolCode, getParallelLanguage());
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
-            switch (loader.getId()) {
-                case LOADER_LATEST_PRIMARY_TRANSLATION:
-                    onLoadLatestPrimaryTranslation(translation);
-                    break;
-                case LOADER_LATEST_PARALLEL_TRANSLATION:
-                    onLoadLatestParallelTranslation(translation);
-                    break;
-            }
-        }
-    }
-
-    class LocalesLoaderCallbacks extends SimpleLoaderCallbacks<List<Locale>> {
-        @Nullable
-        @Override
-        public Loader<List<Locale>> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_AVAILABLE_LANGUAGES:
-                    if (mToolCode != null) {
-                        return new AvailableLanguagesLoader(requireContext(), mToolCode);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<List<Locale>> loader,
-                                   @Nullable final List<Locale> locales) {
-            switch (loader.getId()) {
-                case LOADER_AVAILABLE_LANGUAGES:
-                    onLoadAvailableLanguages(locales);
-                    break;
-            }
-        }
-    }
-
+    // region ViewPager
     private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
 
-    private void setUpViewPager() {
-        if (mViewPager != null) {
-            mViewPager.setAdapter(mDetailsAdapter);
-            if (mTabLayout != null) {
-                mTabLayout.setupWithViewPager(mViewPager, true);
-            }
-        }
+    private void setupViewPager(@NonNull final ToolDetailsFragmentBinding binding) {
+        binding.detailViewPager.setAdapter(mDetailsAdapter);
+        binding.detailTabLayout.setupWithViewPager(binding.detailViewPager, true);
     }
 
     class ToolDetailsAdapter extends PagerAdapter {
@@ -624,4 +392,5 @@ public class ToolDetailsFragment extends BasePlatformFragment
             return view == object;
         }
     }
+    // endregion ViewPager
 }
