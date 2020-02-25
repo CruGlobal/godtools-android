@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 import okhttp3.ResponseBody;
@@ -24,7 +23,6 @@ import retrofit2.Response;
 
 import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
 
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_TOOLS = new Object();
     private static final Object LOCK_SYNC_SHARES = new Object();
