@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 

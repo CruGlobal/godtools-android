@@ -85,9 +85,8 @@
                 android:text="@{@plurals/label_tools_shares(tool.totalShares, tool.totalShares)}"
                 tools:text="45,876 Views" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_open"
-                style="@style/Widget.GodTools.Button.Borderless.Colored.Blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -99,9 +98,9 @@
                 android:text="@string/action_tools_open"
                 app:visibleIf="@{tool.isAdded}" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_add"
-                style="@style/Widget.GodTools.Button.Borderless.Colored.Green"
+                android:theme="@style/ThemeOverlay.GodTools.Button.Green"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -113,9 +112,10 @@
                 android:text="@string/action_tools_download"
                 app:visibleIf="@{!tool.isAdded}" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_remove"
-                style="@style/Widget.GodTools.Button.Outline.Red"
+                style="?attr/materialButtonOutlinedStyle"
+                android:theme="@style/ThemeOverlay.GodTools.Button.Red"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

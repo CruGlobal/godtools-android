@@ -3,9 +3,12 @@
     <style name="Theme.GodTools.Activity.Tutorial" parent="Theme.GodTools.AppBar">
         <item name="actionMenuTextColor">@color/gt_blue</item>
         <item name="colorControlNormal">@color/gt_blue</item>
+
+        <item name="materialButtonStyle">@style/Widget.GodTools.Tutorial.Button</item>
     </style>
 
-    <style name="Widget.GodTools.Tutorial.Button" parent="Widget.GodTools.Button.Borderless.Colored.Blue">
+    <style name="Widget.GodTools.Tutorial.Button" parent="Widget.GodTools.Button">
+        <item name="android:minHeight">64dp</item>
         <item name="android:textSize">16sp</item>
     </style>
 
