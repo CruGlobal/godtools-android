@@ -6,10 +6,12 @@
     <data>
         <import type="android.text.TextUtils" />
         <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="fragment" type="org.cru.godtools.ui.tooldetails.ToolDetailsFragment" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
+        <variable name="primaryTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />
     </data>
 
@@ -72,6 +74,7 @@
                 android:layout_marginLeft="@dimen/tools_details_margin_horiz"
                 android:layout_marginTop="40dp"
                 android:layout_marginRight="@dimen/tools_details_margin_horiz"
+                android:text="@{ModelUtils.getTranslationName(primaryTranslation, tool, context)}"
                 tools:text="Knowing God Personally" />
 
             <androidx.appcompat.widget.AppCompatTextView

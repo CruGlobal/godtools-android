@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 
@@ -59,9 +58,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     private MenuItem mPinShortcutItem;
 
-    @Nullable
-    @BindView(R.id.title)
-    TextView mTitle;
     @Nullable
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
@@ -121,6 +117,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         binding.setFragment(this);
         binding.setTool(mDataModel.getTool());
         binding.setBanner(mDataModel.getBanner());
+        binding.setPrimaryTranslation(mDataModel.getPrimaryTranslation());
         binding.setDownloadProgress(mDataModel.getDownloadProgress());
 
         setupOverviewVideo(binding);
@@ -197,10 +194,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     private void updateViews() {
-        if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(mLatestPrimaryTranslation, mTool, getContext()));
-        }
-
         if (mViewPager != null) {
             mViewPager.setAdapter(mDetailsAdapter);
         }
