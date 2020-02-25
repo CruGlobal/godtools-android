@@ -4,7 +4,6 @@
     <dimen name="tools_card_elevation">2dp</dimen>
     <dimen name="tools_card_margin_horiz">14dp</dimen>
     <dimen name="tools_card_margin_vert">6dp</dimen>
-    <dimen name="tools_details_margin_horiz">56dp</dimen>
 
     <color name="tools_download_progress_bg">#7F000000</color>
 
@@ -50,6 +49,10 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- region Tool Details -->
+    <dimen name="tool_details_margin_horizontal">56dp</dimen>
+    <dimen name="tool_details_page_padding_vertical">44dp</dimen>
+
     <style name="Widget.GodTools.Tools.Details.Title" parent="Base">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Title</item>
     </style>
@@ -58,12 +61,8 @@
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Shares</item>
     </style>
 
-    <style name="Widget.GodTools.Tools.Details.Subhead" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Subhead</item>
-    </style>
-
-    <style name="Widget.GodTools.Tools.Details.Content" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Content</item>
+    <style name="Widget.GodTools.Tools.Details.Page.Content" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Page.Content</item>
     </style>
 
     <style name="TextAppearance.GodTools.Tools.Details.Title" parent="TextAppearance.GodTools.Headline">
@@ -74,12 +73,6 @@
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 
-    <style name="TextAppearance.GodTools.Tools.Details.Subhead" parent="TextAppearance.GodTools.Subhead">
-        <item name="android:textColor">@color/gray_BE</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.GodTools.Tools.Details.Content" parent="TextAppearance.GodTools">
-        <item name="android:textColor">@color/gray_5A</item>
-    </style>
+    <style name="TextAppearance.GodTools.Tools.Details.Page.Content" parent="TextAppearance.GodTools" />
+    <!-- endregion Tool Details -->
 </resources>

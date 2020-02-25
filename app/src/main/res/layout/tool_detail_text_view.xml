@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:autoLink="web"
-    android:paddingLeft="@dimen/tools_details_margin_horiz"
+    android:paddingLeft="@dimen/tool_details_margin_horizontal"
     android:paddingTop="44dp"
-    android:paddingRight="@dimen/tools_details_margin_horiz"
+    android:paddingRight="@dimen/tool_details_margin_horizontal"
     android:paddingBottom="44dp"
-    android:textAppearance="@style/TextAppearance.GodTools.About.Text"
+    android:textAppearance="@style/TextAppearance.GodTools"
     tools:text="Classic gospel presentation of God's invitation to those who don't yet know him. \n\n Conversation starter: I have a summary of the Bible's message using four simple ideas. May I share it with you?\n\n All Bible references are from the New American Standard Bible unless otherwise stated." />
