@@ -52,8 +52,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     ChildHeightAwareViewPager mViewPager;
 
     @Nullable
-    private Tool mTool;
-    @Nullable
     private Translation mLatestParallelTranslation;
 
     public static Fragment newInstance(@Nullable final String code) {
@@ -127,10 +125,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         return super.onOptionsItemSelected(item);
     }
 
-    void onLoadTool(@Nullable final Tool tool) {
-        mTool = tool;
-    }
-
     void onLoadLatestParallelTranslation(@Nullable final Translation translation) {
         mLatestParallelTranslation = translation;
     }
@@ -154,7 +148,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     private void setupDataModel() {
         mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
         mDataModel.getToolCode().setValue(mToolCode);
-        mDataModel.getTool().observe(this, this::onLoadTool);
         mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
     }
     // endregion Data Model
