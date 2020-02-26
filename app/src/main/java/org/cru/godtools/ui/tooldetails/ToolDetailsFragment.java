@@ -20,8 +20,6 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.cru.godtools.util.ActivityUtilsKt;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -61,8 +59,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     private Translation mLatestPrimaryTranslation;
     @Nullable
     private Translation mLatestParallelTranslation;
-    @NonNull
-    private List<Locale> mLanguages = Collections.emptyList();
     @Nullable
     private PendingShortcut mPendingToolShortcut;
 
@@ -150,10 +146,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         mLatestParallelTranslation = translation;
     }
 
-    void onLoadAvailableLanguages(@Nullable final List<Locale> locales) {
-        mLanguages = locales != null ? locales : Collections.emptyList();
-    }
-
     @Override
     public void onDestroyOptionsMenu() {
         super.onDestroyOptionsMenu();
@@ -191,7 +183,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         mDataModel.getTool().observe(this, this::onLoadTool);
         mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
         mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
-        mDataModel.getAvailableLanguages().observe(this, this::onLoadAvailableLanguages);
     }
     // endregion Data Model
 
