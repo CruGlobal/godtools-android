@@ -18,6 +18,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -25,6 +26,7 @@ class ToolDetailsFragmentDataModel(application: Application) : AndroidViewModel(
     private val dao = GodToolsDao.getInstance(application)
     private val downloadManager = GodToolsDownloadManager.getInstance(application)
     private val settings = Settings.getInstance(application)
+    private val shortcutManager = GodToolsShortcutManager.getInstance(application)
 
     val toolCode = MutableLiveData<String>()
     private val distinctToolCode: LiveData<String> = toolCode.distinctUntilChanged()
@@ -37,6 +39,13 @@ class ToolDetailsFragmentDataModel(application: Application) : AndroidViewModel(
     }
     val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { tool, locale ->
         dao.getLatestTranslationLiveData(tool, locale)
+    }
+
+    val shortcut = tool.map {
+        when {
+            shortcutManager.canPinToolShortcut(it) -> shortcutManager.getPendingToolShortcut(it?.code)
+            else -> null
+        }
     }
 
     val downloadProgress = distinctToolCode.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->

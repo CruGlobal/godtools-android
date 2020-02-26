@@ -25,6 +25,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
 
@@ -47,9 +48,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     /*final*/ String mToolCode = Tool.INVALID_CODE;
 
     @Nullable
-    private MenuItem mPinShortcutItem;
-
-    @Nullable
     @BindView(R.id.detail_view_pager)
     ChildHeightAwareViewPager mViewPager;
 
@@ -57,8 +55,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     private Tool mTool;
     @Nullable
     private Translation mLatestParallelTranslation;
-    @Nullable
-    private PendingShortcut mPendingToolShortcut;
 
     public static Fragment newInstance(@Nullable final String code) {
         final ToolDetailsFragment fragment = new ToolDetailsFragment();
@@ -112,19 +108,19 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_tool_details, menu);
-        mPinShortcutItem = menu.findItem(R.id.action_pin_shortcut);
-        updatePinShortcutAction();
+        setupPinShortcutAction(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_pin_shortcut:
-                if (mShortcutManager != null && mPendingToolShortcut != null) {
-                    mShortcutManager.pinShortcut(mPendingToolShortcut);
+                final PendingShortcut shortcut = mDataModel.getShortcut().getValue();
+                if (mShortcutManager != null && shortcut != null) {
+                    mShortcutManager.pinShortcut(shortcut);
                 }
                 return true;
         }
@@ -133,7 +129,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
 
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
-        updatePinShortcutAction();
     }
 
     void onLoadLatestParallelTranslation(@Nullable final Translation translation) {
@@ -143,24 +138,9 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Override
     public void onDestroyOptionsMenu() {
         super.onDestroyOptionsMenu();
-        mPinShortcutItem = null;
+        destroyPinShortcutAction();
     }
     // endregion Lifecycle
-
-    private void updatePinShortcutAction() {
-        if (mPinShortcutItem != null) {
-            if (mShortcutManager != null && mShortcutManager.canPinToolShortcut(mTool)) {
-                // get a pending shortcut if we don't have one yet
-                if (mPendingToolShortcut == null) {
-                    mPendingToolShortcut = mShortcutManager.getPendingToolShortcut(mToolCode);
-                }
-
-                mPinShortcutItem.setVisible(mPendingToolShortcut != null);
-            } else {
-                mPinShortcutItem.setVisible(false);
-            }
-        }
-    }
 
     // region Overview Video
     private void setupOverviewVideo(@NonNull final ToolDetailsFragmentBinding binding) {
@@ -215,6 +195,26 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         }
     }
     // endregion Data Binding
+
+    // region Pin Shortcut
+    @Nullable
+    private Observer<PendingShortcut> mPinShortcutObserver;
+
+    private void setupPinShortcutAction(@NonNull final Menu menu) {
+        final MenuItem pinShortcutAction = menu.findItem(R.id.action_pin_shortcut);
+        if (pinShortcutAction != null) {
+            mPinShortcutObserver = shortcut -> pinShortcutAction.setVisible(shortcut != null);
+            mDataModel.getShortcut().observe(this, mPinShortcutObserver);
+        }
+    }
+
+    private void destroyPinShortcutAction() {
+        if (mPinShortcutObserver != null) {
+            mDataModel.getShortcut().removeObserver(mPinShortcutObserver);
+        }
+        mPinShortcutObserver = null;
+    }
+    // endregion Pin Shortcut
 
     // region ViewPager
     private void setupViewPager(@NonNull final ToolDetailsFragmentBinding binding) {
