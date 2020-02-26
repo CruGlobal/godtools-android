@@ -9,14 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.annimon.stream.Stream;
+import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
-import org.cru.godtools.base.ui.util.ModelUtils;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
+import org.cru.godtools.databinding.ToolDetailsPageDescriptionBinding;
+import org.cru.godtools.databinding.ToolDetailsPageLanguagesBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BaseBindingPlatformFragment;
 import org.cru.godtools.model.Tool;
@@ -31,8 +31,11 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
@@ -125,12 +128,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        updateViews();
-    }
-
-    @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_tool_details, menu);
@@ -153,22 +150,18 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
         updatePinShortcutAction();
-        updateViews();
     }
 
     void onLoadLatestPrimaryTranslation(@Nullable final Translation translation) {
         mLatestPrimaryTranslation = translation;
-        updateViews();
     }
 
     void onLoadLatestParallelTranslation(@Nullable final Translation translation) {
         mLatestParallelTranslation = translation;
-        updateViews();
     }
 
     void onLoadAvailableLanguages(@Nullable final List<Locale> locales) {
         mLanguages = locales != null ? locales : Collections.emptyList();
-        updateViews();
     }
 
     @Override
@@ -190,12 +183,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
             } else {
                 mPinShortcutItem.setVisible(false);
             }
-        }
-    }
-
-    private void updateViews() {
-        if (mViewPager != null) {
-            mViewPager.setAdapter(mDetailsAdapter);
         }
     }
 
@@ -265,39 +252,47 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     // endregion Data Binding
 
     // region ViewPager
-    private ToolDetailsAdapter mDetailsAdapter = new ToolDetailsAdapter();
-
     private void setupViewPager(@NonNull final ToolDetailsFragmentBinding binding) {
-        binding.detailViewPager.setAdapter(mDetailsAdapter);
+        binding.detailViewPager.setAdapter(new ToolDetailsAdapter(getViewLifecycleOwner()));
+        mDataModel.getAvailableLanguages().observe(getViewLifecycleOwner(), it -> TabLayoutUtils
+                .notifyPagerAdapterChanged(binding.detailTabLayout));
         binding.detailTabLayout.setupWithViewPager(binding.detailViewPager, true);
     }
 
     class ToolDetailsAdapter extends PagerAdapter {
+        final LifecycleOwner mLifecycleOwner;
+
+        ToolDetailsAdapter(final LifecycleOwner lifecycleOwner) {
+            mLifecycleOwner = lifecycleOwner;
+        }
+
         @NonNull
         @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            AppCompatTextView textView =
-                    (AppCompatTextView) LayoutInflater.from(container.getContext())
-                            .inflate(R.layout.tool_detail_text_view, container, false);
+        public Object instantiateItem(@NonNull final ViewGroup container, int position) {
+            final ViewDataBinding binding;
             switch (position) {
                 case 0:
-                    textView.setText(
-                            ModelUtils.getTranslationDescription(mLatestPrimaryTranslation, mTool, getContext()));
+                    binding = ToolDetailsPageDescriptionBinding
+                            .inflate(LayoutInflater.from(container.getContext()), container, true);
+                    binding.setVariable(BR.tool, mDataModel.getTool());
+                    binding.setVariable(BR.translation, mDataModel.getPrimaryTranslation());
                     break;
                 case 1:
-                    textView.setText(Stream.of(mLanguages).map(l -> LocaleUtils
-                            .getDisplayName(l, container.getContext(), null, null)
-                    ).withoutNulls().sorted(String.CASE_INSENSITIVE_ORDER)
-                                             .reduce((l1, l2) -> l1 + ", " + l2).orElse(""));
+                    binding = ToolDetailsPageLanguagesBinding
+                            .inflate(LayoutInflater.from(container.getContext()), container, true);
+                    binding.setVariable(BR.languages, mDataModel.getAvailableLanguages());
                     break;
+                default:
+                    throw new IllegalArgumentException("page " + position + " is not a valid page");
             }
-            container.addView(textView, position);
-            return textView;
+            binding.setLifecycleOwner(mLifecycleOwner);
+            return binding;
         }
 
         @Override
         public void destroyItem(@NonNull ViewGroup container, int position,
                                 @NonNull Object object) {
+            container.removeView(((ViewDataBinding) object).getRoot());
         }
 
         @Override
@@ -312,7 +307,8 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
                 case 0:
                     return getString(R.string.label_tools_about);
                 case 1:
-                    int count = mLanguages.size();
+                    final List<Locale> languages = mDataModel.getAvailableLanguages().getValue();
+                    final int count = languages != null ? languages.size() : 0;
                     return getResources()
                             .getQuantityString(R.plurals.label_tools_languages, count, count);
             }
@@ -321,7 +317,7 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
 
         @Override
         public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
+            return DataBindingUtil.findBinding(view) == object;
         }
     }
     // endregion ViewPager
