@@ -2,12 +2,9 @@ package org.cru.godtools.ui.tooldetails;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayoutUtils;
 
@@ -15,8 +12,6 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager;
 import org.cru.godtools.R;
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding;
-import org.cru.godtools.databinding.ToolDetailsPageDescriptionBinding;
-import org.cru.godtools.databinding.ToolDetailsPageLanguagesBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.BaseBindingPlatformFragment;
 import org.cru.godtools.model.Tool;
@@ -31,13 +26,8 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.PagerAdapter;
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
@@ -253,72 +243,11 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
 
     // region ViewPager
     private void setupViewPager(@NonNull final ToolDetailsFragmentBinding binding) {
-        binding.detailViewPager.setAdapter(new ToolDetailsAdapter(getViewLifecycleOwner()));
+        binding.detailViewPager
+                .setAdapter(new ToolDetailsPagerAdapter(requireContext(), getViewLifecycleOwner(), mDataModel));
         mDataModel.getAvailableLanguages().observe(getViewLifecycleOwner(), it -> TabLayoutUtils
                 .notifyPagerAdapterChanged(binding.detailTabLayout));
         binding.detailTabLayout.setupWithViewPager(binding.detailViewPager, true);
-    }
-
-    class ToolDetailsAdapter extends PagerAdapter {
-        final LifecycleOwner mLifecycleOwner;
-
-        ToolDetailsAdapter(final LifecycleOwner lifecycleOwner) {
-            mLifecycleOwner = lifecycleOwner;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull final ViewGroup container, int position) {
-            final ViewDataBinding binding;
-            switch (position) {
-                case 0:
-                    binding = ToolDetailsPageDescriptionBinding
-                            .inflate(LayoutInflater.from(container.getContext()), container, true);
-                    binding.setVariable(BR.tool, mDataModel.getTool());
-                    binding.setVariable(BR.translation, mDataModel.getPrimaryTranslation());
-                    break;
-                case 1:
-                    binding = ToolDetailsPageLanguagesBinding
-                            .inflate(LayoutInflater.from(container.getContext()), container, true);
-                    binding.setVariable(BR.languages, mDataModel.getAvailableLanguages());
-                    break;
-                default:
-                    throw new IllegalArgumentException("page " + position + " is not a valid page");
-            }
-            binding.setLifecycleOwner(mLifecycleOwner);
-            return binding;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position,
-                                @NonNull Object object) {
-            container.removeView(((ViewDataBinding) object).getRoot());
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(final int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.label_tools_about);
-                case 1:
-                    final List<Locale> languages = mDataModel.getAvailableLanguages().getValue();
-                    final int count = languages != null ? languages.size() : 0;
-                    return getResources()
-                            .getQuantityString(R.plurals.label_tools_languages, count, count);
-            }
-            return "";
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return DataBindingUtil.findBinding(view) == object;
-        }
     }
     // endregion ViewPager
 }
