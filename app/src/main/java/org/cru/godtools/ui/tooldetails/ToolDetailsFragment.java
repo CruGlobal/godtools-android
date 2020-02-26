@@ -56,8 +56,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
     @Nullable
     private Tool mTool;
     @Nullable
-    private Translation mLatestPrimaryTranslation;
-    @Nullable
     private Translation mLatestParallelTranslation;
     @Nullable
     private PendingShortcut mPendingToolShortcut;
@@ -138,10 +136,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         updatePinShortcutAction();
     }
 
-    void onLoadLatestPrimaryTranslation(@Nullable final Translation translation) {
-        mLatestPrimaryTranslation = translation;
-    }
-
     void onLoadLatestParallelTranslation(@Nullable final Translation translation) {
         mLatestParallelTranslation = translation;
     }
@@ -181,7 +175,6 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         mDataModel = new ViewModelProvider(this).get(ToolDetailsFragmentDataModel.class);
         mDataModel.getToolCode().setValue(mToolCode);
         mDataModel.getTool().observe(this, this::onLoadTool);
-        mDataModel.getPrimaryTranslation().observe(this, this::onLoadLatestPrimaryTranslation);
         mDataModel.getParallelTranslation().observe(this, this::onLoadLatestParallelTranslation);
     }
     // endregion Data Model
@@ -207,26 +200,17 @@ public class ToolDetailsFragment extends BaseBindingPlatformFragment<ToolDetails
         }
     }
 
-    public void openTool(@Nullable final Tool tool) {
+    public void openTool(@Nullable final Tool tool, @Nullable final Translation primaryTranslation) {
         if (tool != null && tool.getCode() != null) {
-            Locale primaryLanguage =
-                    mLatestPrimaryTranslation != null ? mLatestPrimaryTranslation.getLanguageCode() :
-                            Locale.ENGLISH;
+            final Locale primaryLanguage =
+                    primaryTranslation != null ? primaryTranslation.getLanguageCode() : Locale.ENGLISH;
             Locale parallelLanguages = mLatestParallelTranslation != null ?
                     mLatestParallelTranslation.getLanguageCode() : null;
             if (parallelLanguages != null) {
                 ActivityUtilsKt.openToolActivity(
-                        requireActivity(),
-                        tool.getCode(),
-                        tool.getType(),
-                        primaryLanguage,
-                        parallelLanguages);
+                        requireActivity(), tool.getCode(), tool.getType(), primaryLanguage, parallelLanguages);
             } else {
-                ActivityUtilsKt.openToolActivity(
-                        requireActivity(),
-                        tool.getCode(),
-                        tool.getType(),
-                        primaryLanguage);
+                ActivityUtilsKt.openToolActivity(requireActivity(), tool.getCode(), tool.getType(), primaryLanguage);
             }
         }
     }
