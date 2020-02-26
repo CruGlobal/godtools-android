@@ -9,5 +9,6 @@ import java.util.Locale
 
 @BindingAdapter("languages")
 @SuppressLint("RestrictedApi")
-fun TextView.bindLanguages(languages: List<Locale>?) =
-    TextViewBindingAdapter.setText(this, languages?.joinToString(", ") { it.getDisplayName(context) })
+fun TextView.bindLanguages(languages: List<Locale>?) = TextViewBindingAdapter.setText(
+    this, languages?.map { it.getDisplayName(context) }?.sortedWith(String.CASE_INSENSITIVE_ORDER)?.joinToString(", ")
+)
