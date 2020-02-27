@@ -19,6 +19,6 @@
         android:paddingTop="@dimen/tool_details_page_padding_vertical"
         android:paddingRight="@dimen/tool_details_margin_horizontal"
         android:paddingBottom="@dimen/tool_details_page_padding_vertical"
-        android:text="@{ModelUtils.getTranslationName(translation, tool, context)}"
+        android:text="@{ModelUtils.getTranslationDescription(translation, tool, context)}"
         tools:text="Classic gospel presentation of God's invitation to those who don't yet know him. \n\n Conversation starter: I have a summary of the Bible's message using four simple ideas. May I share it with you?\n\n All Bible references are from the New American Standard Bible unless otherwise stated." />
 </layout>
