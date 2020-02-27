@@ -23,6 +23,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
 import org.cru.godtools.adapter.ToolsAdapter;
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.content.ToolsCursorLoader;
@@ -35,7 +36,10 @@ import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
 import org.cru.godtools.widget.BannerType;
+import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -235,7 +239,10 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
                     LocaleUtils.getDeviceLocale(requireContext()).getLanguage().equals(Locale.ENGLISH.getLanguage())) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
-                mToolsHeaderAdapter.setSecondaryCallback(b -> settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+                mToolsHeaderAdapter.setSecondaryCallback(b -> {
+                    EventBus.getDefault().post(new TutorialAnalyticsActionEvent(TutorialAnalyticsActionEventKt.ADOBE_TUTORIAL_HOME_DISMISS));
+                    settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
+                });
             } else {
                 mToolsHeaderAdapter.setBanner(null);
             }
