@@ -34,8 +34,6 @@ class ToolDetailsFragment : BaseBindingPlatformFragment<ToolDetailsFragmentBindi
     // these properties should be treated as final and only set/modified in onCreate()
     var mToolCode = Tool.INVALID_CODE
 
-    private var mLatestParallelTranslation: Translation? = null
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +51,7 @@ class ToolDetailsFragment : BaseBindingPlatformFragment<ToolDetailsFragmentBindi
         binding.tool = dataModel.tool
         binding.setBanner(dataModel.banner)
         binding.primaryTranslation = dataModel.primaryTranslation
+        binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
 
         binding.setupOverviewVideo()
@@ -73,10 +72,6 @@ class ToolDetailsFragment : BaseBindingPlatformFragment<ToolDetailsFragmentBindi
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun onLoadLatestParallelTranslation(translation: Translation?) {
-        mLatestParallelTranslation = translation
-    }
-
     override fun onDestroyOptionsMenu() {
         super.onDestroyOptionsMenu()
         cleanupPinShortcutAction()
@@ -88,7 +83,6 @@ class ToolDetailsFragment : BaseBindingPlatformFragment<ToolDetailsFragmentBindi
 
     private fun setupDataModel() {
         dataModel.toolCode.value = mToolCode
-        dataModel.parallelTranslation.observe(this) { onLoadLatestParallelTranslation(it) }
     }
     // endregion Data Model
 
@@ -107,10 +101,10 @@ class ToolDetailsFragment : BaseBindingPlatformFragment<ToolDetailsFragmentBindi
         }
     }
 
-    fun openTool(tool: Tool?, primaryTranslation: Translation?) {
+    fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
         tool?.code?.let { code ->
             val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
-            val parallelLanguage = mLatestParallelTranslation?.languageCode
+            val parallelLanguage = parallelTranslation?.languageCode
             if (parallelLanguage != null) {
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage, parallelLanguage)
             } else {
