@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.Locale" />
+
+        <variable name="languages" type="LiveData&lt;java.util.List&lt;Locale&gt;&gt;" />
+    </data>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/Widget.GodTools.Tools.Details.Page.Content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/tool_details_margin_horizontal"
+        android:paddingTop="@dimen/tool_details_page_padding_vertical"
+        android:paddingRight="@dimen/tool_details_margin_horizontal"
+        android:paddingBottom="@dimen/tool_details_page_padding_vertical"
+        app:languages="@{languages}"
+        tools:text="Arabic, English, French, Klingon" />
+</layout>

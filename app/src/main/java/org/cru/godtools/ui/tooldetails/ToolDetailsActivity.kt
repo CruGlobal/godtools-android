@@ -69,7 +69,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = ToolDetailsFragment.newInstance(tool)
+                val fragment = ToolDetailsFragment(tool)
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
