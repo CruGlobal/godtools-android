@@ -7,7 +7,10 @@ import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
-import com.google.android.material.tabs.notifyPagerAdapterChanged
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
+import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
@@ -53,7 +56,7 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
         binding.setDownloadProgress(dataModel.downloadProgress)
 
         binding.setupOverviewVideo()
-        binding.setupViewPager()
+        binding.setupPages()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -132,11 +135,25 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
     private fun ToolDetailsFragmentBinding.setupOverviewVideo() = viewLifecycleOwner.lifecycle.addObserver(videoBanner)
     // endregion Overview Video
 
-    // region ViewPager
-    private fun ToolDetailsFragmentBinding.setupViewPager() {
-        detailViewPager.adapter = ToolDetailsPagerAdapter(requireContext(), viewLifecycleOwner, dataModel)
-        detailTabLayout.setupWithViewPager(detailViewPager, true)
-        dataModel.availableLanguages.observe(viewLifecycleOwner) { detailTabLayout.notifyPagerAdapterChanged() }
+    // region Pages
+    private fun ToolDetailsFragmentBinding.setupPages() {
+        // Setup the ViewPager
+        pages.setHeightWrapContent()
+        pages.offscreenPageLimit = 2
+        pages.adapter = ToolDetailsPagerAdapter(viewLifecycleOwner, dataModel)
+
+        // Setup the TabLayout
+        val mediator = TabLayoutMediator(tabs, pages) { tab: TabLayout.Tab, i: Int ->
+            when (i) {
+                0 -> tab.setText(R.string.label_tools_about)
+                1 -> {
+                    val count = dataModel.availableLanguages.value?.size ?: 0
+                    tab.text = resources.getQuantityString(R.plurals.label_tools_languages, count, count)
+                }
+            }
+        }
+        mediator.attach()
+        dataModel.availableLanguages.observe(viewLifecycleOwner) { mediator.notifyChanged() }
     }
-    // endregion ViewPager
+    // region Pages
 }

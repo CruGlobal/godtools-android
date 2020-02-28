@@ -153,6 +153,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
