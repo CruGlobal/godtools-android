@@ -34,7 +34,7 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
     private val downloadManager by lazy { GodToolsDownloadManager.getInstance(requireContext()) }
     private val shortcutManager by lazy { GodToolsShortcutManager.getInstance(requireContext()) }
 
-    var toolCode: String by arg()
+    private var toolCode: String by arg()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
