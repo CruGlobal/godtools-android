@@ -63,7 +63,7 @@ buildscript {
                 work              : '2.3.2',
         ]
         deps.firebase = [
-                core          : '17.2.2',
+                core          : '17.2.3',
                 inAppMessaging: '19.0.3',
                 perf          : '19.0.5',
         ]
