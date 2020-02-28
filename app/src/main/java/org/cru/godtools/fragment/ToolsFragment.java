@@ -35,6 +35,8 @@ import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
+import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
 import org.cru.godtools.widget.BannerType;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
@@ -51,6 +53,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
@@ -235,7 +238,12 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
                     LocaleUtils.getDeviceLocale(requireContext()).getLanguage().equals(Locale.ENGLISH.getLanguage())) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
-                mToolsHeaderAdapter.setSecondaryCallback(b -> settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING));
+                mToolsHeaderAdapter.setSecondaryCallback(b -> {
+                    EventBus.getDefault().post(new TutorialAnalyticsActionEvent(
+                            TutorialAnalyticsActionEventKt.ADOBE_TUTORIAL_HOME_DISMISS)
+                    );
+                    settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
+                });
             } else {
                 mToolsHeaderAdapter.setBanner(null);
             }
