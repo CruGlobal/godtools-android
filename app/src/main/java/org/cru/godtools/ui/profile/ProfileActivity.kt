@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.observe
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.getAttributesLiveData
 import org.cru.godtools.R
@@ -27,7 +26,12 @@ class ProfileActivity : BasePlatformActivity() {
         super.onCreate(savedInstanceState)
         binding = ProfileActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setBindingData()
+    }
+
+    override fun onContentChanged() {
+        super.onContentChanged()
+        setupDataBinding()
+        setupPages()
     }
 
     override fun onResume() {
@@ -39,16 +43,19 @@ class ProfileActivity : BasePlatformActivity() {
     // region Data Binding
     private lateinit var binding: ProfileActivityBinding
 
-    private fun setBindingData() {
-        val key = TheKey.getInstance(this)
-        key.getAttributesLiveData().observe(this) {
-            binding.accountName = "${it.firstName} ${it.lastName}"
-        }
-        binding.myProfileViewpager?.adapter = ProfilePageAdapter(supportFragmentManager, this)
+    private fun setupDataBinding() {
+        binding.lifecycleOwner = this
+        binding.keyAttributes = TheKey.getInstance(this).getAttributesLiveData()
+    }
+    // endregion Data Binding
+
+    // region Pages
+    private fun setupPages() {
+        binding.myProfileViewpager.adapter = ProfilePageAdapter(supportFragmentManager, this)
         binding.myProfileViewpager.currentItem = 1
         binding.myProfileTabLayout.setupWithViewPager(binding.myProfileViewpager)
     }
-    // endregion Data Binding
+    // endregion Pages
 }
 
 private class ProfilePageAdapter(

@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="accountName"
-            type="String" />
+        <import type="androidx.lifecycle.LiveData" />
 
         <variable
             name="accountDate"
             type="String" />
+        <variable name="keyAttributes" type="LiveData&lt;me.thekey.android.Attributes&gt;" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -46,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:gravity="center"
-                    android:text="@{accountName}"
+                    android:text="@{keyAttributes.firstName + ' ' + keyAttributes.lastName}"
                     android:textAppearance="@style/TextAppearance.GodTools.Large"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
