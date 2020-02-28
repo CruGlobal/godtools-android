@@ -23,11 +23,6 @@ class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActi
         binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
     }
 
-    override fun onResume() {
-        super.onResume()
-        syncData(false)
-    }
-
     override fun syncData(force: Boolean) {
         super.syncData(force)
         syncHelper.sync(syncGlobalAnalytics(requireContext(), force))
