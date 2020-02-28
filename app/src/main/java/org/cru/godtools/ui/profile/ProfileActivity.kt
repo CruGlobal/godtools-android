@@ -51,9 +51,9 @@ class ProfileActivity : BasePlatformActivity() {
 
     // region Pages
     private fun setupPages() {
-        binding.myProfileViewpager.adapter = ProfilePageAdapter(supportFragmentManager, this)
-        binding.myProfileViewpager.currentItem = 1
-        binding.myProfileTabLayout.setupWithViewPager(binding.myProfileViewpager)
+        binding.pages.adapter = ProfilePageAdapter(supportFragmentManager, this)
+        binding.pages.currentItem = 1
+        binding.tabs.setupWithViewPager(binding.pages)
     }
     // endregion Pages
 }
