@@ -9,7 +9,7 @@ import org.cru.godtools.R
 import org.cru.godtools.databinding.ProfilePageGlobalActivityFragmentBinding
 import org.cru.godtools.fragment.BaseBindingPlatformFragment
 import org.cru.godtools.model.GlobalActivityAnalytics
-import org.cru.godtools.sync.syncGlobalAnalytics
+import org.cru.godtools.sync.syncGlobalActivity
 import org.keynote.godtools.android.db.GodToolsDao
 
 class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActivityFragmentBinding>(
@@ -23,7 +23,7 @@ class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActi
 
     override fun syncData(force: Boolean) {
         super.syncData(force)
-        syncHelper.sync(syncGlobalAnalytics(requireContext(), force))
+        syncHelper.sync(requireContext().syncGlobalActivity(force))
     }
 }
 
