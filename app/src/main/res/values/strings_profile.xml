@@ -2,11 +2,13 @@
 <resources>
     <string name="profile_title">My Profile</string>
 
-    <string name="gt_gd_year_text">%s Global Activity</string>
-    <string name="gt_gd_unique_users_text">Unique Users</string>
-    <string name="gt_gd_gospel_presentation_text">Gospel Presentation</string>
-    <string name="gt_gd_sessions_text">Sessions</string>
-    <string name="gt_gd_countries_text">Countries</string>
-    <string name="gt_gd_activity_text">Activity</string>
+    <!-- Global Activity -->
+    <eat-comment />
+    <string name="profile_tab_activity">Activity</string>
+    <string name="profile_global_activity_heading">%s Global Activity</string>
+    <string name="profile_activity_unique_users">Unique Users</string>
+    <string name="profile_activity_gospel_presentations">Gospel Presentations</string>
+    <string name="profile_activity_sessions">Sessions</string>
+    <string name="profile_activity_countries">Countries</string>
     <string name="gt_gd_my_activity">My Activity</string>
 </resources>

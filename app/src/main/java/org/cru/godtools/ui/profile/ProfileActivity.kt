@@ -57,7 +57,7 @@ class ProfileActivity : BasePlatformActivity() {
         binding.pages.adapter = ProfilePageAdapter(this)
         TabLayoutMediator(binding.tabs, binding.pages) { tab: TabLayout.Tab, i: Int ->
             when (i) {
-                0 -> tab.setText(R.string.gt_gd_activity_text)
+                0 -> tab.setText(R.string.profile_tab_activity)
             }
         }.attach()
     }

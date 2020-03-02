@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@{@string/gt_gd_year_text(Calendar.getInstance().get(Calendar.YEAR))}"
+            android:text="@{@string/profile_global_activity_heading(Calendar.getInstance().get(Calendar.YEAR))}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/gospel_presentations"
@@ -50,7 +50,7 @@
             <include
                 layout="@layout/profile_page_global_activity_card"
                 app:count="@{globalActivity.users}"
-                app:label="@{@string/gt_gd_unique_users_text}" />
+                app:label="@{@string/profile_activity_unique_users}" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -67,7 +67,7 @@
             <include
                 layout="@layout/profile_page_global_activity_card"
                 app:count="@{globalActivity.gospelPresentation}"
-                app:label="@{@string/gt_gd_gospel_presentation_text}" />
+                app:label="@{@string/profile_activity_gospel_presentations}" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -83,7 +83,7 @@
             <include
                 layout="@layout/profile_page_global_activity_card"
                 app:count="@{globalActivity.launches}"
-                app:label="@{@string/gt_gd_sessions_text}" />
+                app:label="@{@string/profile_activity_sessions}" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -99,7 +99,7 @@
             <include
                 layout="@layout/profile_page_global_activity_card"
                 app:count="@{globalActivity.countries}"
-                app:label="@{@string/gt_gd_countries_text}" />
+                app:label="@{@string/profile_activity_countries}" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
