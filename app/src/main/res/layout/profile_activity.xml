@@ -60,12 +60,13 @@
                         tools:text="@string/gt_gd_activity_text" />
                 </com.google.android.material.tabs.TabLayout>
 
-                <org.ccci.gto.android.common.viewpager.view.ChildHeightAwareViewPager
+                <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/pages"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:background="@color/gray_E6"
+                    android:background="@color/gray_F2"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHeight_min="wrap"
                     app:layout_constraintTop_toBottomOf="@id/tabs" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
