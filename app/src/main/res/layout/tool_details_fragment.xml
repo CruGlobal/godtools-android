@@ -28,7 +28,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp">
 
                 <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
                     android:id="@+id/image_banner"
@@ -65,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="banner,video_banner" />
+                    app:constraint_referenced_ids="image_banner,video_banner" />
 
                 <ProgressBar
                     android:id="@+id/download_progress"
@@ -76,80 +78,77 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/banner"
                     tools:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/title"
+                    style="@style/Widget.GodTools.Tools.Details.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="@dimen/tool_details_margin_horizontal"
+                    android:text="@{ModelUtils.getTranslationName(primaryTranslation, tool, context)}"
+                    app:layout_constraintTop_toBottomOf="@id/banner"
+                    tools:text="Knowing God Personally" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/shares"
+                    style="@style/Widget.GodTools.Tools.Details.Shares"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="@dimen/tool_details_margin_horizontal"
+                    android:text="@{@plurals/label_tools_shares(tool.totalShares, tool.totalShares)}"
+                    app:layout_constraintTop_toBottomOf="@id/title"
+                    tools:text="45,876 Views" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_open"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="@dimen/tool_details_margin_horizontal"
+                    android:onClick="@{() -> fragment.openTool(tool, primaryTranslation, parallelTranslation)}"
+                    android:text="@string/action_tools_open"
+                    app:layout_constraintTop_toBottomOf="@id/shares"
+                    app:layout_goneMarginTop="16dp"
+                    app:visibleIf="@{tool.isAdded}" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
+                    android:layout_marginRight="@dimen/tool_details_margin_horizontal"
+                    android:onClick="@{() -> fragment.addTool(tool.code)}"
+                    android:text="@string/action_tools_download"
+                    android:theme="@style/ThemeOverlay.GodTools.Button.Green"
+                    app:layout_constraintTop_toBottomOf="@id/action_open"
+                    app:visibleIf="@{!tool.isAdded}" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_remove"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
+                    android:layout_marginRight="@dimen/tool_details_margin_horizontal"
+                    android:onClick="@{() -> fragment.removeTool(tool.code)}"
+                    android:text="@string/action_tools_remove"
+                    android:theme="@style/ThemeOverlay.GodTools.Button.Red"
+                    app:layout_constraintTop_toBottomOf="@id/action_add"
+                    app:visibleIf="@{tool.isAdded()}" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/action_remove"
+                    app:tabGravity="center" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/title"
-                style="@style/Widget.GodTools.Tools.Details.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
-                android:layout_marginTop="40dp"
-                android:layout_marginRight="@dimen/tool_details_margin_horizontal"
-                android:text="@{ModelUtils.getTranslationName(primaryTranslation, tool, context)}"
-                tools:text="Knowing God Personally" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/shares"
-                style="@style/Widget.GodTools.Tools.Details.Shares"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="@dimen/tool_details_margin_horizontal"
-                android:text="@{@plurals/label_tools_shares(tool.totalShares, tool.totalShares)}"
-                tools:text="45,876 Views" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/action_open"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="@dimen/tool_details_margin_horizontal"
-                android:layout_marginBottom="8dp"
-                android:onClick="@{() -> fragment.openTool(tool, primaryTranslation, parallelTranslation)}"
-                android:text="@string/action_tools_open"
-                app:visibleIf="@{tool.isAdded}" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/action_add"
-                android:theme="@style/ThemeOverlay.GodTools.Button.Green"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="@dimen/tool_details_margin_horizontal"
-                android:layout_marginBottom="8dp"
-                android:onClick="@{() -> fragment.addTool(tool.code)}"
-                android:text="@string/action_tools_download"
-                app:visibleIf="@{!tool.isAdded}" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/action_remove"
-                style="?attr/materialButtonOutlinedStyle"
-                android:theme="@style/ThemeOverlay.GodTools.Button.Red"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="@dimen/tool_details_margin_horizontal"
-                android:layout_marginBottom="32dp"
-                android:gravity="center"
-                android:onClick="@{() -> fragment.removeTool(tool.code)}"
-                android:text="@string/action_tools_remove"
-                app:visibleIf="@{tool.isAdded()}" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="4dp"
-                app:tabBackground="@color/action_bar_action_tint"
-                app:tabGravity="center" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pages"
