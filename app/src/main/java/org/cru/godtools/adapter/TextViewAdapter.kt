@@ -14,12 +14,15 @@ import org.greenrobot.eventbus.EventBus
 
 @BindingAdapter("webLinkText")
 fun TextView.setTextViewWebLinksForAnalytics(
-    changedText: String
+    changedText: CharSequence
 ) {
     val spannable = SpannableString(changedText)
     val matcher = Patterns.WEB_URL.matcher(spannable)
     while (matcher.find()) {
-        val url = spannable.toString().substring(matcher.start(), matcher.end())
+        var url = spannable.toString().substring(matcher.start(), matcher.end())
+        if (!url.startsWith("http")) {
+            url = "http://$url"
+        }
         val urlSpan = object : URLSpan(url) {
             override fun onClick(widget: View) {
                 val uri = Uri.parse(url)
