@@ -5,9 +5,9 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.Calendar" />
 
         <variable name="globalActivity" type="LiveData&lt;org.cru.godtools.model.GlobalActivityAnalytics&gt;" />
-        <variable name="year" type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@{@string/gt_gd_year_text(year)}"
+            android:text="@{@string/gt_gd_year_text(Calendar.getInstance().get(Calendar.YEAR))}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/gospel_presentations"

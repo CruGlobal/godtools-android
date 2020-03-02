@@ -11,7 +11,6 @@ import org.cru.godtools.fragment.BaseBindingPlatformFragment
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.sync.syncGlobalAnalytics
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Calendar
 
 class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActivityFragmentBinding>(
     R.layout.profile_page_global_activity_fragment
@@ -20,7 +19,6 @@ class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActi
 
     override fun onBindingCreated(binding: ProfilePageGlobalActivityFragmentBinding, savedInstanceState: Bundle?) {
         binding.globalActivity = viewModel.globalActivity
-        binding.year = "${Calendar.getInstance().get(Calendar.YEAR)}"
     }
 
     override fun syncData(force: Boolean) {
