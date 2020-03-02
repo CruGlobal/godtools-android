@@ -13,210 +13,93 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="700dp"
-        android:background="@color/gt_gd_activity_background">
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
         <TextView
-            android:id="@+id/global_activity_text"
+            android:id="@+id/global_activity_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_marginTop="32dp"
             android:text="@{@string/gt_gd_year_text(year)}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/gospel_presentations"
+            app:layout_constraintStart_toStartOf="@id/unique_users"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2020 Global Activity" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/unique_users_card"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="@dimen/card_elevation"
-            android:padding="10dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toStartOf="@+id/end_cards_barrier"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/global_activity_text">
+            android:id="@+id/unique_users"
+            style="@style/Widget.GodTools.Profile.GlobalActivity.CardView"
+            android:layout_width="@dimen/profile_globalactivity_card_width"
+            android:layout_height="@dimen/profile_globalactivity_card_height"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@id/sessions"
+            app:layout_constraintEnd_toStartOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/global_activity_label">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/unique_users_number_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:textAppearance="@style/TextAppearance.GodTools.Large"
-                    android:textColor="@color/gt_gd_text_color"
-                    android:textStyle="bold"
-                    app:number="@{globalActivity.users}"
-                    tools:text="750,520" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/gt_gd_unique_users_text"
-                    android:textColor="@color/gt_gd_text_color" />
-            </LinearLayout>
+            <include
+                layout="@layout/profile_page_global_activity_card"
+                app:count="@{globalActivity.users}"
+                app:label="@{@string/gt_gd_unique_users_text}" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/gospel_presentation_card"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:elevation="@dimen/card_elevation"
-            android:padding="10dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/start_cards_barrier"
-            app:layout_constraintTop_toBottomOf="@id/global_activity_text">
+            android:id="@+id/gospel_presentations"
+            style="@style/Widget.GodTools.Profile.GlobalActivity.CardView"
+            android:layout_width="@dimen/profile_globalactivity_card_width"
+            android:layout_height="@dimen/profile_globalactivity_card_height"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toTopOf="@id/countries"
+            app:layout_constraintStart_toEndOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/global_activity_label">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/gospel_presentation_number_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:textAppearance="@style/TextAppearance.GodTools.Large"
-                    android:textColor="@color/gt_gd_text_color"
-                    android:textStyle="bold"
-                    app:number="@{globalActivity.gospelPresentation}"
-                    tools:text="40,000" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/gt_gd_gospel_presentation_text"
-                    android:textColor="@color/gt_gd_text_color" />
-            </LinearLayout>
+            <include
+                layout="@layout/profile_page_global_activity_card"
+                app:count="@{globalActivity.gospelPresentation}"
+                app:label="@{@string/gt_gd_gospel_presentation_text}" />
         </androidx.cardview.widget.CardView>
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/first_card_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="gospel_presentation_card,unique_users_card" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/start_cards_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:constraint_referenced_ids="unique_users_card,sessions_card" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/end_cards_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="start"
-            app:constraint_referenced_ids="gospel_presentation_card,countries_card" />
-
         <androidx.cardview.widget.CardView
-            android:id="@+id/sessions_card"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="32dp"
+            android:id="@+id/sessions"
+            style="@style/Widget.GodTools.Profile.GlobalActivity.CardView"
+            android:layout_width="@dimen/profile_globalactivity_card_width"
+            android:layout_height="@dimen/profile_globalactivity_card_height"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:elevation="@dimen/card_elevation"
-            android:padding="10dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toStartOf="@id/end_cards_barrier"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/first_card_group">
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/unique_users">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/sessions_number_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:textAppearance="@style/TextAppearance.GodTools.Large"
-                    android:textColor="@color/gt_gd_text_color"
-                    android:textStyle="bold"
-                    app:number="@{globalActivity.launches}"
-                    tools:text="3,700" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/gt_gd_sessions_text"
-                    android:textColor="@color/gt_gd_text_color" />
-            </LinearLayout>
-
+            <include
+                layout="@layout/profile_page_global_activity_card"
+                app:count="@{globalActivity.launches}"
+                app:label="@{@string/gt_gd_sessions_text}" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/countries_card"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:id="@+id/countries"
+            style="@style/Widget.GodTools.Profile.GlobalActivity.CardView"
+            android:layout_width="@dimen/profile_globalactivity_card_width"
+            android:layout_height="@dimen/profile_globalactivity_card_height"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:elevation="@dimen/card_elevation"
-            android:padding="10dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/start_cards_barrier"
-            app:layout_constraintTop_toBottomOf="@id/first_card_group">
+            app:layout_constraintStart_toEndOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/gospel_presentations">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/countries_number_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:textAppearance="@style/TextAppearance.GodTools.Large"
-                    android:textColor="@color/gt_gd_text_color"
-                    android:textStyle="bold"
-                    app:number="@{globalActivity.countries}"
-                    tools:text="90" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/gt_gd_countries_text"
-                    android:textColor="@color/gt_gd_text_color" />
-            </LinearLayout>
+            <include
+                layout="@layout/profile_page_global_activity_card"
+                app:count="@{globalActivity.countries}"
+                app:label="@{@string/gt_gd_countries_text}" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

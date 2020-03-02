@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="profile_globalactivity_card_width">150dp</dimen>
+    <dimen name="profile_globalactivity_card_height">130dp</dimen>
+
+    <style name="Widget.GodTools.Profile.GlobalActivity.CardView" parent="Widget.GodTools.CardView">
+        <item name="cardCornerRadius">10dp</item>
+    </style>
+</resources>
