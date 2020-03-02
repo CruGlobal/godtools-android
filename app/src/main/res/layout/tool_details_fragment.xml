@@ -26,28 +26,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.percentlayout.widget.PercentRelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-                    android:id="@+id/banner"
+                    android:id="@+id/image_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:adjustViewBounds="true"
                     android:background="@color/gray_E6"
                     android:scaleType="centerCrop"
                     android:src="@{banner}"
-                    app:layout_aspectRatio="210%"
-                    app:layout_widthPercent="100%"
+                    app:layout_constraintDimensionRatio="21:10"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:visibleIf="@{TextUtils.isEmpty(tool.overviewVideo)}" />
 
                 <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                     android:id="@+id/video_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:adjustViewBounds="true"
                     android:background="@color/gray_E6"
                     android:scaleType="centerCrop"
                     android:soundEffectsEnabled="false"
-                    app:layout_aspectRatio="210%"
-                    app:layout_widthPercent="100%"
+                    app:layout_constraintDimensionRatio="21:10"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:showFullScreenButton="false"
                     app:showSeekBar="false"
                     app:showVideoCurrentTime="false"
@@ -56,16 +60,23 @@
                     app:videoId="@{tool.overviewVideo}"
                     app:visibleIf="@{!TextUtils.isEmpty(tool.overviewVideo)}" />
 
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="banner,video_banner" />
+
                 <ProgressBar
                     android:id="@+id/download_progress"
                     style="@style/Widget.GodTools.Tools.Download.ProgressBar"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:layout_alignBottom="@id/banner"
-                    android:visibility="gone"
                     android:progress="@{downloadProgress}"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/banner"
                     tools:visibility="visible" />
-            </androidx.percentlayout.widget.PercentRelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"

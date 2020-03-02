@@ -149,7 +149,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
-    implementation "androidx.percentlayout:percentlayout:${deps.androidX.percentLayout}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
