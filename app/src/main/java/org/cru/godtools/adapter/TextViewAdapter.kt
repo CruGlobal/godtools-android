@@ -1,6 +1,5 @@
 package org.cru.godtools.adapter
 
-import android.content.Intent
 import android.net.Uri
 import android.text.SpannableString
 import android.text.Spanned
@@ -21,11 +20,11 @@ fun TextView.setTextViewWebLinksForAnalytics(
     val matcher = Patterns.WEB_URL.matcher(spannable)
     while (matcher.find()) {
         val url = spannable.toString().substring(matcher.start(), matcher.end())
-        val urlSpan = object : URLSpan(changedText.toString()) {
+        val urlSpan = object : URLSpan(url) {
             override fun onClick(widget: View) {
                 val uri = Uri.parse(url)
                 EventBus.getDefault().post(ExitLinkActionEvent(uri))
-                context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                super.onClick(widget)
             }
         }
         spannable.setSpan(urlSpan, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
