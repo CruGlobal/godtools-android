@@ -6,15 +6,4 @@
     <dimen name="horiz_margin_modal">32dp</dimen>
 
     <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tool.AppBar" />
-
-    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.NoActionBar">
-        <item name="android:fitsSystemWindows">false</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-
-        <item name="buttonStyle">@style/Widget.GodTools.Button.Outline</item>
-    </style>
 </resources>

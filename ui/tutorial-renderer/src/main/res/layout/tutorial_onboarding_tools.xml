@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bkg_tutorial_onboarding"
+        android:clipToPadding="false"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
         <include layout="@layout/tutorial_onboarding_include_margins" />
@@ -68,9 +69,8 @@
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/headline" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/action_next"
-            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{() -> callbacks.nextPage()}"

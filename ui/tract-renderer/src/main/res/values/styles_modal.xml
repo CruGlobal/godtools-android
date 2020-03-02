@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.NoActionBar">
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+
+        <item name="buttonStyle">@style/Widget.GodTools.Tract.Modal.Button.Outline</item>
+    </style>
+
+    <style name="Widget.GodTools.Tract.Modal.Button.Outline" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/btn_outline</item>
+        <item name="backgroundTint">?attr/colorButtonNormal</item>
+    </style>
+</resources>

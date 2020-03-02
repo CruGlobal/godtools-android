@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bkg_tutorial_onboarding"
+        android:clipToPadding="false"
         android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
@@ -70,9 +71,8 @@
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/languages" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/action_onboarding_training"
-            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -82,9 +82,8 @@
             app:layout_constraintEnd_toStartOf="@id/action_onboarding_finish"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/action_onboarding_finish"
-            style="@style/Widget.GodTools.Tutorial.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{callbacks::onTutorialAction}"
