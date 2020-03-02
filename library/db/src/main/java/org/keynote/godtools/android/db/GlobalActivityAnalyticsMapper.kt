@@ -12,7 +12,7 @@ internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalyti
             GlobalActivityAnalyticsTable.COLUMN_USERS -> values.put(field, analytics.users)
             GlobalActivityAnalyticsTable.COLUMN_COUNTRIES -> values.put(field, analytics.countries)
             GlobalActivityAnalyticsTable.COLUMN_LAUNCHES -> values.put(field, analytics.launches)
-            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS -> values.put(field, analytics.gospelPresentation)
+            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS -> values.put(field, analytics.gospelPresentations)
             else -> super.mapField(values, field, analytics)
         }
     }
@@ -22,6 +22,6 @@ internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalyti
         users = c.getInt(GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
         countries = c.getInt(GlobalActivityAnalyticsTable.COLUMN_COUNTRIES, 0)
         launches = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        gospelPresentation = c.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
+        gospelPresentations = c.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
     }
 }

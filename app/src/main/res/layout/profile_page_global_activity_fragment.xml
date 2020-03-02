@@ -66,7 +66,7 @@
 
             <include
                 layout="@layout/profile_page_global_activity_card"
-                app:count="@{globalActivity.gospelPresentation}"
+                app:count="@{globalActivity.gospelPresentations}"
                 app:label="@{@string/profile_activity_gospel_presentations}" />
         </androidx.cardview.widget.CardView>
 

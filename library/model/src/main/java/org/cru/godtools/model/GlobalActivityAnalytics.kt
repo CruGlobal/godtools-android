@@ -8,7 +8,7 @@ private const val JSON_API_TYPE_GLOBAL_ANALYTICS = "global-activity-analytics"
 private const val JSON_USERS = "users"
 private const val JSON_COUNTRIES = "countries"
 private const val JSON_LAUNCHES = "launches"
-private const val JSON_GOSPEL_PRESENTATION = "gospel-presentations"
+private const val JSON_GOSPEL_PRESENTATIONS = "gospel-presentations"
 
 @JsonApiType(JSON_API_TYPE_GLOBAL_ANALYTICS)
 class GlobalActivityAnalytics : Base() {
@@ -18,6 +18,6 @@ class GlobalActivityAnalytics : Base() {
     var countries = 0
     @JsonApiAttribute(JSON_LAUNCHES)
     var launches = 0
-    @JsonApiAttribute(JSON_GOSPEL_PRESENTATION)
-    var gospelPresentation = 0
+    @JsonApiAttribute(JSON_GOSPEL_PRESENTATIONS)
+    var gospelPresentations = 0
 }
