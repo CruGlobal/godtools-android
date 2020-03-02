@@ -24,9 +24,9 @@ class GlobalActivitySyncTasks private constructor(context: Context) : BaseSyncTa
             val response = api.analytics.getGlobalActivity().execute()
             if (!response.isSuccessful) return false
 
-            dao.transaction { response.body()?.data?.forEach { dao.replace(it) } }
+            response.body()?.let { dao.replace(it) }
             dao.updateLastSyncTime(SYNC_TIME_GLOBAL_ACTIVITY)
+            return true
         }
-        return true
     }
 }
