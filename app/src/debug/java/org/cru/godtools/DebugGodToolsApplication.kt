@@ -5,8 +5,10 @@ import androidx.multidex.MultiDex
 import com.adobe.mobile.Config
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
 import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.inspector.database.DatabaseFilesProvider
@@ -55,7 +57,9 @@ class DebugGodToolsApplication : GodToolsApplication() {
         if (FlipperUtils.shouldEnableFlipper(this)) {
             SoLoader.init(this, false)
             AndroidFlipperClient.getInstance(this).also {
+                it.addPlugin(DatabasesFlipperPlugin(this))
                 it.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
+                it.addPlugin(SharedPreferencesFlipperPlugin(this))
             }.start()
         }
     }
