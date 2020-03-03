@@ -6,6 +6,7 @@ import com.adobe.mobile.Config
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+import com.facebook.flipper.plugins.databases.impl.SqliteDatabaseDriver
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
@@ -18,6 +19,8 @@ import com.facebook.stetho.inspector.database.SqliteDatabaseDriver
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.facebook.stetho.timber.StethoTree
 import leakcanary.LeakCanary
+import org.ccci.gto.android.common.facebook.flipper.plugins.databases.DefaultSqliteDatabaseProvider
+import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpenHelperDatabaseConnectionProvider
 import org.ccci.gto.android.common.leakcanary.CrashlyticsOnHeapAnalyzedListener
 import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider
@@ -31,9 +34,8 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     override fun onCreate() {
         configLeakCanary()
-        initFlipper()
-        initStetho()
         super.onCreate()
+        initFlipper()
         initTimber()
     }
 
@@ -58,13 +60,22 @@ class DebugGodToolsApplication : GodToolsApplication() {
     private fun initFlipper() {
         if (FlipperUtils.shouldEnableFlipper(this)) {
             SoLoader.init(this, false)
-            AndroidFlipperClient.getInstance(this).also {
-                it.addPlugin(DatabasesFlipperPlugin(this))
-                it.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
-                it.addPlugin(SharedPreferencesFlipperPlugin(this))
+            AndroidFlipperClient.getInstance(this).apply {
+                val context = this@DebugGodToolsApplication
+                addPlugin(
+                    DatabasesFlipperPlugin(
+                        SqliteDatabaseDriver(
+                            context,
+                            DefaultSqliteDatabaseProvider(context),
+                            SQLiteOpenHelperDatabaseConnectionProvider(context, dbs = *arrayOf(db))
+                        )
+                    )
+                )
+                addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
+                addPlugin(SharedPreferencesFlipperPlugin(context))
 
                 val networkPlugin = NetworkFlipperPlugin()
-                it.addPlugin(networkPlugin)
+                addPlugin(networkPlugin)
                 addGlobalNetworkInterceptor(FlipperOkhttpInterceptor(networkPlugin))
             }.start()
         }
