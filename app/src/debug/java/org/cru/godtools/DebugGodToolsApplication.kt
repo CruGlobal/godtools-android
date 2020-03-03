@@ -3,6 +3,11 @@ package org.cru.godtools
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.adobe.mobile.Config
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.inspector.database.DatabaseFilesProvider
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver
@@ -22,6 +27,7 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     override fun onCreate() {
         configLeakCanary()
+        initFlipper()
         initStetho()
         super.onCreate()
         initTimber()
@@ -43,6 +49,15 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
         // enable debug logging for various Analytics Services
         Config.setDebugLogging(true)
+    }
+
+    private fun initFlipper() {
+        if (FlipperUtils.shouldEnableFlipper(this)) {
+            SoLoader.init(this, false)
+            AndroidFlipperClient.getInstance(this).also {
+                it.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
+            }.start()
+        }
     }
 
     private fun initStetho() {

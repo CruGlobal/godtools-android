@@ -187,6 +187,8 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugImplementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
+    debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
+    debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-timber:${deps.facebookStetho}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
