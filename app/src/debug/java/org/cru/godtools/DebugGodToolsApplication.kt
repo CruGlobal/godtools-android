@@ -8,6 +8,8 @@ import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
 import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
@@ -60,6 +62,10 @@ class DebugGodToolsApplication : GodToolsApplication() {
                 it.addPlugin(DatabasesFlipperPlugin(this))
                 it.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()))
                 it.addPlugin(SharedPreferencesFlipperPlugin(this))
+
+                val networkPlugin = NetworkFlipperPlugin()
+                it.addPlugin(networkPlugin)
+                addGlobalNetworkInterceptor(FlipperOkhttpInterceptor(networkPlugin))
             }.start()
         }
     }
