@@ -13,7 +13,6 @@ buildscript {
                 crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
                 facebook           : '6.1.0',
-                facebookStetho     : '1.5.1',
                 facebookFlipper    : '0.32.2',
                 findbugs           : '3.0.2',
                 gtoSupport         : '3.4.0-SNAPSHOT',

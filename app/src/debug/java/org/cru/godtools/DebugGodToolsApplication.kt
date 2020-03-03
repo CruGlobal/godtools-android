@@ -13,21 +13,14 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
 import com.facebook.soloader.SoLoader
-import com.facebook.stetho.Stetho
-import com.facebook.stetho.inspector.database.DatabaseFilesProvider
-import com.facebook.stetho.inspector.database.SqliteDatabaseDriver
-import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.facebook.stetho.timber.StethoTree
 import leakcanary.LeakCanary
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.DefaultSqliteDatabaseProvider
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpenHelperDatabaseConnectionProvider
 import org.ccci.gto.android.common.leakcanary.CrashlyticsOnHeapAnalyzedListener
 import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
-import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider
 import org.cru.godtools.analytics.TimberAnalyticsService
 import org.keynote.godtools.android.db.GodToolsDatabase
 import timber.log.Timber
-import java.io.File
 
 class DebugGodToolsApplication : GodToolsApplication() {
     internal val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
@@ -81,31 +74,8 @@ class DebugGodToolsApplication : GodToolsApplication() {
         }
     }
 
-    private fun initStetho() {
-        Stetho.newInitializerBuilder(this)
-            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-            .enableWebKitInspector {
-                Stetho.DefaultInspectorModulesBuilder(this)
-                    .provideDatabaseDriver(SQLiteOpenHelperStethoDatabaseProvider(db).toDatabaseDriver(this))
-                    .provideDatabaseDriver(SqliteDatabaseDriver(this, GtDatabaseFilesProvider()))
-                    .finish()
-            }.run { Stetho.initialize(build()) }
-
-        Timber.plant(StethoTree())
-        addGlobalNetworkInterceptor(StethoInterceptor())
-    }
-
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
         TimberAnalyticsService.start()
-    }
-
-    internal inner class GtDatabaseFilesProvider : DatabaseFilesProvider {
-        override fun getDatabaseFiles(): List<File> {
-            return databaseList().asSequence()
-                .filterNot { it.startsWith(db.databaseName) }
-                .map { getDatabasePath(it) }
-                .toList()
-        }
     }
 }
