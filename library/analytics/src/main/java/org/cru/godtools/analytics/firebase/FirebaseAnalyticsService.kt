@@ -45,7 +45,7 @@ class FirebaseAnalyticsService @MainThread private constructor(app: Application)
         app.registerActivityLifecycleCallbacks(this)
     }
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) = Unit
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
     override fun onActivityStarted(activity: Activity) = Unit
 
     override fun onActivityResumed(activity: Activity) {
