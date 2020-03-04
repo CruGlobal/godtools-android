@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">My Profile</string>
+    <string name="menu_profile">My Activity</string>
+
+    <!-- Global Activity -->
+    <eat-comment />
+    <string name="profile_tab_activity">Activity</string>
+    <string name="profile_global_activity_heading">%s Global Activity</string>
+    <string name="profile_activity_unique_users">Unique Users</string>
+    <string name="profile_activity_gospel_presentations">Gospel Presentations</string>
+    <string name="profile_activity_sessions">Sessions</string>
+    <string name="profile_activity_countries">Countries</string>
+</resources>

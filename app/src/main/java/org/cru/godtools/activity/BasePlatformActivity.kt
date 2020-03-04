@@ -43,6 +43,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
+import org.cru.godtools.ui.profile.startProfileActivity
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
 
@@ -128,6 +129,10 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_about -> {
             startAboutActivity()
+            true
+        }
+        R.id.action_profile -> {
+            startProfileActivity()
             true
         }
         R.id.action_login -> {
@@ -236,10 +241,12 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
                     val loginItem = findItem(R.id.action_login)
                     val signupItem = findItem(R.id.action_signup)
                     val logoutItem = findItem(R.id.action_logout)
+                    val profileItem = findItem(R.id.action_profile)
                     theKey.defaultSessionGuidLiveData.observe(this@BasePlatformActivity) { guid ->
                         loginItem?.isVisible = guid == null
                         signupItem?.isVisible = guid == null
                         logoutItem?.isVisible = guid != null
+                        profileItem?.isVisible = guid != null
                     }
                 } else {
                     // hide all menu items if we aren't showing login items for this language

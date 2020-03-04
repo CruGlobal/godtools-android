@@ -113,6 +113,15 @@
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:label="@string/profile_title"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
+        </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

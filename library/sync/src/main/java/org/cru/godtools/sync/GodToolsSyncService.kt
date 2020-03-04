@@ -7,6 +7,7 @@ import android.os.Bundle
 import org.ccci.gto.android.sync.ThreadedSyncIntentService
 import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.FollowupSyncTasks
+import org.cru.godtools.sync.task.GlobalActivitySyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
@@ -21,6 +22,7 @@ private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_TOOLS = 3
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
+private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
 private fun Intent.toSyncTask(context: Context): ThreadedSyncIntentService.SyncTask {
     return ThreadedSyncIntentService.SyncTask(context, this)
@@ -52,10 +54,16 @@ fun syncToolShares(context: Context): ThreadedSyncIntentService.SyncTask {
             .toSyncTask(context)
 }
 
+fun Context.syncGlobalActivity(force: Boolean = false) = Intent(this, GodToolsSyncService::class.java)
+    .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ACTIVITY)
+    .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
+    .toSyncTask(this)
+
 class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
     private lateinit var mLanguagesSyncTasks: LanguagesSyncTasks
     private lateinit var mToolSyncTasks: ToolSyncTasks
     private lateinit var mFollowupSyncTasks: FollowupSyncTasks
+    private val globalActivitySyncTasks by lazy { GlobalActivitySyncTasks.getInstance(this) }
 
     // region Lifecycle Events
 
@@ -82,6 +90,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
                     val result = mToolSyncTasks.syncShares()
                     if (!result) scheduleSyncToolSharesWork()
                 }
+                SYNCTYPE_GLOBAL_ACTIVITY -> globalActivitySyncTasks.syncGlobalActivity(args)
             }
         } catch (ignored: IOException) {
         }
