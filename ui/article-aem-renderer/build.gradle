@@ -36,7 +36,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
-    implementation 'com.github.Karumi:WeakDelegate:1.0.1'
+    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"

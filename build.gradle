@@ -38,6 +38,7 @@ buildscript {
                 taptargetview      : '1.13.0',
                 thekey             : '4.0.0-SNAPSHOT',
                 timber             : '4.7.1',
+                weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
         ]
         deps.androidX = [
