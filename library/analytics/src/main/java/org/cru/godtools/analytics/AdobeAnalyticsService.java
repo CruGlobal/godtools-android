@@ -45,7 +45,7 @@ public final class AdobeAnalyticsService implements Application.ActivityLifecycl
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
-    public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
+    public static final String ADOBE_ATTR_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
     private static final String KEY_SITE_SECTION = "cru.sitesection";
     private static final String KEY_SITE_SUB_SECTION = "cru.sitesubsection";
 
