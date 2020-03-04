@@ -2,10 +2,7 @@ package org.cru.godtools.activity
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.net.Uri
-import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -34,8 +31,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
-import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
@@ -60,18 +55,9 @@ private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
 abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNavigationItemSelectedListener {
     protected val settings by lazy { Settings.getInstance(this) }
-    private val settingsChangeListener = OnSharedPreferenceChangeListener { prefs, k -> onSettingsUpdated(prefs, k) }
     protected val theKey by lazy { TheKey.getInstance(this) }
 
-    private var primaryLanguage = Settings.defaultLanguage
-    private var parallelLanguage: Locale? = null
-
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadLanguages(true)
-    }
-
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()
@@ -85,22 +71,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             mActionBar?.setHomeButtonEnabled(true)
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        startSettingsChangeListener()
-        loadLanguages(false)
-    }
-
-    @CallSuper
-    fun onSettingsUpdated(preferences: SharedPreferences?, key: String?) {
-        when (key) {
-            PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
-        }
-    }
-
-    protected fun onUpdatePrimaryLanguage() = Unit
-    protected fun onUpdateParallelLanguage() = Unit
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -198,7 +168,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     override fun onStop() {
         super.onStop()
         mEventBus.unregister(this)
-        stopSettingsChangeListener()
     }
     // endregion Lifecycle
 
@@ -269,25 +238,6 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
     // endregion Navigation Drawer
 
-    private fun loadLanguages(initial: Boolean) {
-        val oldPrimary = primaryLanguage
-        val oldParallel = parallelLanguage
-        primaryLanguage = settings.primaryLanguage
-        parallelLanguage = settings.parallelLanguage
-
-        // trigger lifecycle events
-        if (!initial) {
-            if (oldPrimary != primaryLanguage) onUpdatePrimaryLanguage()
-            if (oldParallel != parallelLanguage) onUpdateParallelLanguage()
-        }
-    }
-
-    private fun startSettingsChangeListener() =
-        settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
-
-    private fun stopSettingsChangeListener() =
-        settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
-
     // region Navigation Menu actions
     private fun openPlayStore() {
         try {
@@ -338,9 +288,9 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShare() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, primaryLanguage))
+        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
         val shareLink = URI_SHARE_BASE.buildUpon()
-            .appendPath(LocaleCompat.toLanguageTag(primaryLanguage).toLowerCase())
+            .appendPath(LocaleCompat.toLanguageTag(settings.primaryLanguage).toLowerCase(Locale.US))
             .appendPath("")
             .build().toString()
         val text = getString(R.string.share_general_message)
