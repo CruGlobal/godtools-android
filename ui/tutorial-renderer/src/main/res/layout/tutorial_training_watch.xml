@@ -57,13 +57,14 @@
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/subheadBottom"
+            app:lifecycleOwner="@{lifecycleOwner2}"
+            app:pauseVideoWhen="@{!isVisible}"
             app:showFullScreenButton="false"
             app:showSeekBar="false"
-            app:pauseVideoWhen="@{!isVisible}"
-            app:lifecycleOwner="@{lifecycleOwner2}"
             app:showVideoCurrentTime="false"
             app:showVideoDuration="false"
             app:showYouTubeButton="false"
+            app:useWebUi="true"
             app:videoId="Us2psJs8izU" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
