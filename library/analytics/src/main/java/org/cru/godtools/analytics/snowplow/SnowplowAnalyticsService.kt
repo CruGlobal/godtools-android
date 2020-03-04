@@ -93,7 +93,6 @@ class SnowplowAnalyticsService private constructor(context: Context) {
     @WorkerThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
         Structured.builder()
-            .category(event.category)
             .action(event.action)
             .apply { event.label?.let { label(it) } }
             .populate(event)
