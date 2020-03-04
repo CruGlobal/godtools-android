@@ -13,7 +13,7 @@ buildscript {
                 crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
                 facebook           : '6.1.0',
-                facebookStetho     : '1.5.1',
+                facebookFlipper    : '0.32.2',
                 findbugs           : '3.0.2',
                 gtoSupport         : '3.4.0-SNAPSHOT',
                 guava              : '28.2-android',
@@ -129,6 +129,7 @@ subprojects {
             force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
             force "androidx.loader:loader:${deps.androidX.loader}"
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
+            force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
             force "junit:junit:${deps.junit}"
             force "org.jetbrains:annotations:${deps.jetbrainsAnnotation}"
 
