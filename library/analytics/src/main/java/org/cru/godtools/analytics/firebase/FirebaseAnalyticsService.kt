@@ -23,7 +23,7 @@ private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
 class FirebaseAnalyticsService @MainThread private constructor(app: Application) :
     Application.ActivityLifecycleCallbacks {
-    companion object : SingletonHolder<FirebaseAnalyticsService, Application>(::FirebaseAnalyticsService);
+    companion object : SingletonHolder<FirebaseAnalyticsService, Application>(::FirebaseAnalyticsService)
 
     private val firebase = FirebaseAnalytics.getInstance(app)
     private val theKey = TheKey.getInstance(app)
