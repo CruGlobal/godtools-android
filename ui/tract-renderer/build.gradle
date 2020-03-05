@@ -25,6 +25,7 @@ dependencies {
 
     implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
+    api "androidx.lifecycle:lifecycle-common-java8:${deps.androidX.lifecycle}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
@@ -49,7 +50,6 @@ dependencies {
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
 
-    kapt "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

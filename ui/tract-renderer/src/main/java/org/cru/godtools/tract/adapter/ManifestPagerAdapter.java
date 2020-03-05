@@ -27,13 +27,13 @@ import java.util.List;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements LifecycleObserver {
+public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements
+        DefaultLifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
 
@@ -94,8 +94,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     // region Lifecycle Events
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    public void onStart() {
+    @Override
+    public void onStart(@NonNull final LifecycleOwner owner) {
         EventBus.getDefault().register(this);
         Optional.ofNullable(getPrimaryItem())
                 .ifPresent(RVPageViewHolder::markVisible);
@@ -148,8 +148,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         holder.onBind(null);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onStop() {
+    @Override
+    public void onStop(@NonNull final LifecycleOwner owner) {
         Optional.ofNullable(getPrimaryItem())
                 .ifPresent(RVPageViewHolder::markHidden);
         EventBus.getDefault().unregister(this);
