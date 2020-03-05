@@ -11,7 +11,6 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
-import timber.log.Timber;
 
 public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     private final ManifestManager mManifestManager;
@@ -39,12 +38,6 @@ public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     @Override
     @WorkerThread
     public Manifest loadInBackground() {
-        try {
-            return mManifestManager.getLatestPublishedManifest(mTool, mLocale).get();
-        } catch (final Exception e) {
-            Timber.tag("ManifestLoader")
-                    .d(e, "Error loading manifest");
-            return null;
-        }
+        return mManifestManager.getLatestPublishedManifest(mTool, mLocale);
     }
 }

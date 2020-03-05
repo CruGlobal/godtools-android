@@ -57,28 +57,25 @@ public class ManifestManager extends KotlinManifestManager {
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
     }
 
-    @NonNull
+    @Nullable
     @WorkerThread
-    public ListenableFuture<Manifest> getLatestPublishedManifest(@NonNull final String toolCode,
-                                                                 @NonNull final Locale locale) {
-        final SettableFuture<Translation> latestTranslation = SettableFuture.create();
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
-                dao.streamCompat(
-                        Query.select(Translation.class)
-                                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolCode, locale)
-                                               .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                                               .and(TranslationTable.SQL_WHERE_DOWNLOADED))
-                                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-                                .limit(1))
-                        .findFirst()
-                        // update the last accessed time
-                        .executeIfPresent(t -> {
-                            t.updateLastAccessed();
-                            dao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
-                        })
-                        .orElse(null)));
+    public Manifest getLatestPublishedManifest(@NonNull final String toolCode, @NonNull final Locale locale) {
+        final Translation translation = dao.getLatestTranslation(toolCode, locale, true, true).orElse(null);
+        if (translation == null) {
+            return null;
+        }
 
-        return Futures.transformAsync(latestTranslation, this::getManifest, directExecutor());
+        // update the last accessed time
+        translation.updateLastAccessed();
+        dao.update(translation, TranslationTable.COLUMN_LAST_ACCESSED);
+
+        // return the manifest for this translation
+        try {
+            return getManifest(translation).get();
+        } catch (Exception e) {
+            Timber.tag(TAG).d(e, "Error loading manifest");
+            return null;
+        }
     }
 
     @NonNull
