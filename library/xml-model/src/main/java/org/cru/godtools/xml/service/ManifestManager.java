@@ -101,7 +101,7 @@ public class ManifestManager extends KotlinManifestManager {
     }
 
     @NonNull
-    @AnyThread
+    @MainThread
     public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, @Nullable final String toolCode,
                                                   @NonNull final Locale locale) {
         return getManifest(manifestName, toolCode, locale, false);
