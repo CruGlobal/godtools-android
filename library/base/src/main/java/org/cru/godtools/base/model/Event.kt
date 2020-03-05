@@ -12,7 +12,7 @@ class Event internal constructor(builder: Builder) {
     val fields = builder.fields.toMap()
 
     @Immutable
-    class Id internal constructor(@JvmField val namespace: String, @JvmField val name: String) {
+    class Id internal constructor(val namespace: String, val name: String) {
         override fun equals(other: Any?) = other is Id &&
             namespace.equals(other.namespace, ignoreCase = true) &&
             name.equals(other.name, ignoreCase = true)
