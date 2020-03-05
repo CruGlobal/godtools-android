@@ -26,6 +26,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.AnyThread;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -68,8 +69,13 @@ public class ManifestManager {
         manifestParser = ManifestParser.Companion.getInstance(context);
     }
 
+    @MainThread
+    public void preloadLatestPublishedManifest(@NonNull final String toolCode, @NonNull final Locale locale) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> getLatestPublishedManifest(toolCode, locale));
+    }
+
     @NonNull
-    @AnyThread
+    @WorkerThread
     public ListenableFuture<Manifest> getLatestPublishedManifest(@NonNull final String toolCode,
                                                                  @NonNull final Locale locale) {
         final SettableFuture<Translation> latestTranslation = SettableFuture.create();

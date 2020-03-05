@@ -10,6 +10,7 @@ import org.cru.godtools.xml.service.ManifestManager;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 import timber.log.Timber;
 
 public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
@@ -36,6 +37,7 @@ public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     }
 
     @Override
+    @WorkerThread
     public Manifest loadInBackground() {
         try {
             return mManifestManager.getLatestPublishedManifest(mTool, mLocale).get();

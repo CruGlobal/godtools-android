@@ -12,7 +12,7 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
     when (type) {
         Type.TRACT -> {
             // start pre-loading the tract in the first language
-            ManifestManager.getInstance(this).getLatestPublishedManifest(code, languages[0])
+            ManifestManager.getInstance(this).preloadLatestPublishedManifest(code, languages[0])
             TractActivity.start(this, code, *languages)
         }
         Type.ARTICLE -> startCategoriesActivity(code, languages[0])
