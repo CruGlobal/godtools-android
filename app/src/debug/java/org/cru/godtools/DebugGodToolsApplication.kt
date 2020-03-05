@@ -76,6 +76,6 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
-        TimberAnalyticsService.start()
+        TimberAnalyticsService.getInstance(null)
     }
 }

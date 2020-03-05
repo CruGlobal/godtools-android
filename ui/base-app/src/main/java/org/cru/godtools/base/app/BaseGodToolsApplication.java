@@ -11,10 +11,10 @@ import org.ccci.gto.android.common.eventbus.TimberLogger;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
-import org.cru.godtools.analytics.SnowplowAnalyticsService;
 import org.cru.godtools.analytics.appsflyer.AppsFlyerAnalyticsService;
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService;
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService;
+import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusBuilder;
 
@@ -67,7 +67,7 @@ public class BaseGodToolsApplication extends Application {
         AppsFlyerAnalyticsService.Companion.getInstance(this);
         FacebookAnalyticsService.Companion.getInstance(null);
         FirebaseAnalyticsService.Companion.getInstance(this);
-        SnowplowAnalyticsService.getInstance(this);
+        SnowplowAnalyticsService.Companion.getInstance(this);
     }
 
     protected void configureApis() {}

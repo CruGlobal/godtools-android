@@ -39,7 +39,6 @@ dependencies {
     implementation "com.appsflyer:af-android-sdk:${deps.appsFlyer}"
     implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
-    implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
     implementation "me.thekey.android:thekey-api:${deps.thekey}"
