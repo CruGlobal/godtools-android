@@ -57,7 +57,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -304,17 +303,16 @@ public class AemArticleManger {
                 }
 
                 // add AEM imports extracted from the manifest to the AEM article cache
-                try {
-                    final Manifest manifest = mManifestManager.getManifest(translation).get();
+                final Manifest manifest = mManifestManager.getManifest(translation);
+                if (manifest != null) {
                     repository.addAemImports(translation, manifest.getAemImports());
                     enqueueSyncManifestAemImports(manifest, false);
-                } catch (final InterruptedException e) {
-                    // set interrupted and return immediately
-                    Thread.currentThread().interrupt();
+                }
+
+                // TODO: this can be refactored if we convert to kotlin coroutines
+                // return immediately if interrupted
+                if (Thread.currentThread().isInterrupted()) {
                     return;
-                } catch (final ExecutionException e) {
-                    Timber.tag(TAG)
-                            .d(e.getCause(), "Unable to add aem imports from manifest");
                 }
             }
 
