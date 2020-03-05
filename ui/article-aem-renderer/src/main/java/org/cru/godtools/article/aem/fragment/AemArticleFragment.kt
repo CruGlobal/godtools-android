@@ -15,10 +15,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.annotation.WorkerThread
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import butterknife.BindView
@@ -48,6 +48,11 @@ class AemArticleFragment() : BaseFragment() {
     private var articleUri: Uri by arg()
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupViewModel()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         inflater.inflate(R.layout.fragment_aem_article, container, false)
 
@@ -63,9 +68,10 @@ class AemArticleFragment() : BaseFragment() {
     // endregion Lifecycle
 
     // region ViewModel
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(AemArticleViewModel::class.java)
-            .also { it.articleUri.value = articleUri }
+    private val viewModel: AemArticleViewModel by viewModels()
+
+    private fun setupViewModel() {
+        viewModel.articleUri.value = articleUri
     }
     // endregion ViewModel
 
