@@ -11,12 +11,9 @@ import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
-import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import java.util.Locale;
@@ -169,12 +166,10 @@ public class ManifestManager extends KotlinManifestManager {
         return manifestTask;
     }
 
+    @Override
     @WorkerThread
-    private void brokenManifest(@NonNull final String manifestName) {
-        dao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_MANIFEST.eq(manifestName)))
-                .peek(t -> t.setDownloaded(false))
-                .forEach(t -> dao.update(t, TranslationTable.COLUMN_DOWNLOADED));
-        EventBus.getDefault().post(TranslationUpdateEvent.INSTANCE);
+    protected void brokenManifest(@NonNull final String manifestName) {
+        super.brokenManifest(manifestName);
 
         // remove the broken manifest from the cache
         synchronized (mCache) {
