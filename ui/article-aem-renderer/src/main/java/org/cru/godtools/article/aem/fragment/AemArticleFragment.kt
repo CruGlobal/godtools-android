@@ -35,7 +35,6 @@ import splitties.fragmentargs.arg
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 
@@ -185,17 +184,17 @@ private class ArticleWebViewClient(context: Context) : WebViewClient() {
         return resourceDao.find(this)
     }
 
-    private fun Resource.getData(context: Context): InputStream? {
+    private fun Resource.getData(context: Context) =
         try {
-            return getInputStream(context)
+            getInputStream(context)
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.
             Timber.tag(TAG).e(e, "Missing cached version of: %s", uri)
             resourceDao.updateLocalFile(uri, null, null, null)
+            null
         } catch (e: IOException) {
             Timber.tag(TAG).d(e, "Error opening local file")
+            null
         }
-        return null
-    }
 }
