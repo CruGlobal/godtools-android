@@ -8,8 +8,9 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static org.cru.godtools.base.model.Event.Id.FOLLOWUP_EVENT;
 import static org.cru.godtools.base.model.Event.Id.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.empty;
 
 public class EventIdTest {
     private static final Id ID1 = new Id("FOLLOWup", "SEnd");
@@ -29,5 +30,11 @@ public class EventIdTest {
     public void verifyParse() throws Exception {
         final Set<Id> ids = parse("kgp", "FollowUp:SeNd followup:SEND event1 blargh kgp:event1");
         assertThat(ids, containsInAnyOrder(FOLLOWUP_EVENT, new Id("kgp", "event1"), new Id("kgp", "blargh")));
+    }
+
+    @Test
+    public void verifyParseEmpty() {
+        final Set<Id> ids = parse("kgp", "");
+        assertThat(ids, empty());
     }
 }
