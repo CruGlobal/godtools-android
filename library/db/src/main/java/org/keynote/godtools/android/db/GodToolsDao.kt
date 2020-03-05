@@ -5,7 +5,6 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.annimon.stream.Optional
 import org.ccci.gto.android.common.db.AbstractDao
@@ -121,25 +120,37 @@ class GodToolsDao private constructor(context: Context) :
         }
     }
 
+    private fun getLatestTranslationQuery(code: String?, locale: Locale?, isPublished: Boolean, isDownloaded: Boolean) =
+        Query.select<Translation>()
+            .where(
+                TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
+                    .run { if (isPublished) and(TranslationTable.SQL_WHERE_PUBLISHED) else this }
+                    .run { if (isDownloaded) and(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
+            )
+            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+            .limit(1)
+
+    @JvmOverloads
     @WorkerThread
-    fun getLatestTranslation(code: String?, locale: Locale?): Optional<Translation> {
-        if (code == null || locale == null) return Optional.empty()
-        return streamCompat(
-            Query.select<Translation>()
-                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale))
-                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-                .limit(1)
-        ).findFirst()
+    fun getLatestTranslation(
+        code: String?,
+        locale: Locale?,
+        isPublished: Boolean = false,
+        isDownloaded: Boolean = false
+    ): Optional<Translation> = when {
+        code == null || locale == null -> Optional.empty()
+        else -> streamCompat(getLatestTranslationQuery(code, locale, isPublished, isDownloaded)).findFirst()
     }
 
     @MainThread
-    fun getLatestTranslationLiveData(code: String?, locale: Locale?): LiveData<Translation?> {
-        if (code == null || locale == null) return emptyLiveData()
-
-        return Query.select<Translation>()
-            .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale))
-            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-            .limit(1)
+    fun getLatestTranslationLiveData(
+        code: String?,
+        locale: Locale?,
+        isPublished: Boolean = true,
+        isDownloaded: Boolean = false
+    ) = when {
+        code == null || locale == null -> emptyLiveData()
+        else -> getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
             .getAsLiveData(this).map { it.firstOrNull() }
     }
 
