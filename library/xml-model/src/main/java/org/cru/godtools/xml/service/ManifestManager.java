@@ -18,7 +18,6 @@ import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
-import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,17 +34,13 @@ import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-public class ManifestManager {
+public class ManifestManager extends KotlinManifestManager {
     private static final String TAG = "ManifestManager";
 
     private static final int PARSING_CONCURRENCY = 6;
 
     private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(6);
 
-    @NonNull
-    private final Context mContext;
-    @NonNull
-    private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
     private final ManifestParser manifestParser;
 
@@ -62,8 +57,7 @@ public class ManifestManager {
     }
 
     private ManifestManager(@NonNull final Context context) {
-        mContext = context;
-        mDao = GodToolsDao.Companion.getInstance(mContext);
+        super(context);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
         manifestParser = ManifestParser.Companion.getInstance(context);
@@ -80,7 +74,7 @@ public class ManifestManager {
                                                                  @NonNull final Locale locale) {
         final SettableFuture<Translation> latestTranslation = SettableFuture.create();
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
-                mDao.streamCompat(
+                dao.streamCompat(
                         Query.select(Translation.class)
                                 .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolCode, locale)
                                                .and(TranslationTable.SQL_WHERE_PUBLISHED)
@@ -91,7 +85,7 @@ public class ManifestManager {
                         // update the last accessed time
                         .executeIfPresent(t -> {
                             t.updateLastAccessed();
-                            mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
+                            dao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
                         })
                         .orElse(null)));
 
@@ -177,9 +171,9 @@ public class ManifestManager {
 
     @WorkerThread
     private void brokenManifest(@NonNull final String manifestName) {
-        mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_MANIFEST.eq(manifestName)))
+        dao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_MANIFEST.eq(manifestName)))
                 .peek(t -> t.setDownloaded(false))
-                .forEach(t -> mDao.update(t, TranslationTable.COLUMN_DOWNLOADED));
+                .forEach(t -> dao.update(t, TranslationTable.COLUMN_DOWNLOADED));
         EventBus.getDefault().post(TranslationUpdateEvent.INSTANCE);
 
         // remove the broken manifest from the cache
