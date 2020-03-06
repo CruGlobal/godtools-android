@@ -29,6 +29,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_PR
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_GODTOOLS
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_STORY
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
+import org.cru.godtools.analytics.model.FirstToolOpened
+import org.cru.godtools.analytics.model.ToolOpened
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
@@ -39,6 +41,7 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
 
@@ -318,4 +321,14 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
     private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
     // endregion Navigation Menu actions
+
+    open fun trackOpenedTool() {
+        val eventBus = EventBus.getDefault()
+        if (settings.isFeatureDiscovered(Settings.FEATURE_FIRST_TOOL_OPENED)) {
+            eventBus.post(ToolOpened)
+        } else {
+            settings.setFeatureDiscovered(Settings.FEATURE_FIRST_TOOL_OPENED)
+            eventBus.post(FirstToolOpened)
+        }
+    }
 }

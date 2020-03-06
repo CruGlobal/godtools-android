@@ -53,6 +53,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
 
     override fun onToolAdded() = finish()
     override fun onToolRemoved() = finish()
+    override fun onToolOpened() = trackOpenedTool()
     // endregion Lifecycle
 
     /**
