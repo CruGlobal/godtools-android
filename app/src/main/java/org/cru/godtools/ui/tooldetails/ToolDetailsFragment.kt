@@ -148,7 +148,7 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
         // Setup the ViewPager
         pages.setHeightWrapContent()
         pages.offscreenPageLimit = 2
-        pages.adapter = ToolDetailsPagerAdapter(viewLifecycleOwner, dataModel)
+        pages.adapter = ToolDetailsPagerAdapter(viewLifecycleOwner, dataModel, this@ToolDetailsFragment)
 
         // Setup the TabLayout
         val mediator = TabLayoutMediator(tabs, pages) { tab: TabLayout.Tab, i: Int ->

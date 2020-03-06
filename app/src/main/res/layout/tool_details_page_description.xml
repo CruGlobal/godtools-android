@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.text.util.Linkify" />
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
+        <variable name="autoLinkListener" type="org.cru.godtools.ui.tooldetails.LinkClickedListener" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="translation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
     </data>
@@ -19,6 +21,8 @@
         android:paddingTop="@dimen/tool_details_page_padding_vertical"
         android:paddingRight="@dimen/tool_details_margin_horizontal"
         android:paddingBottom="@dimen/tool_details_page_padding_vertical"
-        app:webLinkText="@{ModelUtils.getTranslationDescription(translation, tool, context)}"
+        app:autoLinkMask="@{Linkify.WEB_URLS}"
+        app:autoLinkText="@{ModelUtils.getTranslationDescription(translation, tool, context)}"
+        app:onAutoLinkClicked="@{(v, url) -> autoLinkListener.onLinkClicked(url)}"
         tools:text="Classic gospel presentation of God's invitation to those who don't yet know him. \n\n Conversation starter: I have a summary of the Bible's message using four simple ideas. May I share it with you?\n\n All Bible references are from the New American Standard Bible unless otherwise stated." />
 </layout>
