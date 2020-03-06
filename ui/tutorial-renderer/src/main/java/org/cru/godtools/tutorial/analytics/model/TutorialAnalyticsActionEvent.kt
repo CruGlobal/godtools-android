@@ -11,7 +11,7 @@ private const val ADOBE_TUTORIAL_ONBOARDING_FINISH = "cru.onboarding_start"
 
 const val ADOBE_TUTORIAL_HOME_DISMISS = "cru.tutorial_home_dismiss"
 
-class TutorialAnalyticsActionEvent(action: String) : AnalyticsActionEvent(category = null, action = action) {
+class TutorialAnalyticsActionEvent(action: String) : AnalyticsActionEvent(action = action) {
     override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.ADOBE
 
     override val adobeSiteSection get() = ADOBE_SITE_SECTION_TUTORIAL

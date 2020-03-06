@@ -9,7 +9,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -124,7 +124,7 @@ class AemArticleActivity : BaseArticleActivity(false, false) {
     }
 
     private fun setupViewModel() {
-        val viewModel = ViewModelProviders.of(this).get(AemArticleViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(AemArticleViewModel::class.java)
 
         if (!viewModel.isArticleInitialized()) {
             viewModel.article = ArticleRoomDatabase.getInstance(this).articleDao().findLiveData(articleUri)

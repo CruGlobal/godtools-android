@@ -8,8 +8,6 @@ import okhttp3.MediaType
 import org.cru.godtools.article.aem.util.getFile
 import java.io.File
 import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
 import java.util.Date
 
 @Entity(tableName = TABLE_NAME_RESOURCE)
@@ -32,8 +30,5 @@ class Resource(@field:PrimaryKey val uri: Uri) {
         return getFile(context, localFileName)
     }
 
-    @Throws(IOException::class)
-    fun getInputStream(context: Context): InputStream? {
-        return getLocalFile(context)?.let { FileInputStream(it) }
-    }
+    fun getInputStream(context: Context) = getLocalFile(context)?.let { FileInputStream(it) }
 }
