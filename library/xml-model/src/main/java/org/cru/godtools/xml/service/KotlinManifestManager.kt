@@ -6,6 +6,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.observeOnce
 import org.cru.godtools.model.Translation
@@ -45,7 +47,14 @@ open class KotlinManifestManager(@JvmField protected val context: Context) {
         val manifestFileName = translation.manifestFileName ?: return emptyLiveData()
         val toolCode = translation.toolCode ?: return emptyLiveData()
         return liveData {
-            emit((manifestParser.parse(manifestFileName, toolCode, translation.languageCode) as? Result.Data)?.manifest)
+            when (val result = manifestParser.parse(manifestFileName, toolCode, translation.languageCode)) {
+                is Result.Error.Corrupted, is Result.Error.NotFound -> {
+                    withContext(Dispatchers.Default) { brokenManifest(manifestFileName) }
+                    emit(null)
+                }
+                is Result.Data -> emit(result.manifest)
+                else -> emit(null)
+            }
         }
     }
 
