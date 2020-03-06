@@ -1,12 +1,14 @@
 package org.cru.godtools.xml.service
 
 import android.content.Context
+import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.observeOnce
@@ -24,6 +26,14 @@ open class KotlinManifestManager(@JvmField protected val context: Context) {
 
     @JvmField
     protected val manifestParser = ManifestParser.getInstance(context)
+
+    @AnyThread
+    fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
+        GlobalScope.launch(Dispatchers.Default) {
+            val t = dao.getLatestTranslation(toolCode, locale, isPublished = true, isDownloaded = true).orElse(null)
+            if (t != null) getManifest(t)
+        }
+    }
 
     @MainThread
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =
@@ -43,18 +53,18 @@ open class KotlinManifestManager(@JvmField protected val context: Context) {
                 }
             }
 
-    fun getManifestLiveData(translation: Translation): LiveData<Manifest?> {
-        val manifestFileName = translation.manifestFileName ?: return emptyLiveData()
-        val toolCode = translation.toolCode ?: return emptyLiveData()
-        return liveData {
-            when (val result = manifestParser.parse(manifestFileName, toolCode, translation.languageCode)) {
-                is Result.Error.Corrupted, is Result.Error.NotFound -> {
-                    withContext(Dispatchers.Default) { brokenManifest(manifestFileName) }
-                    emit(null)
-                }
-                is Result.Data -> emit(result.manifest)
-                else -> emit(null)
+    fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
+
+    private suspend fun getManifest(translation: Translation): Manifest? {
+        val manifestFileName = translation.manifestFileName ?: return null
+        val toolCode = translation.toolCode ?: return null
+        return when (val result = manifestParser.parse(manifestFileName, toolCode, translation.languageCode)) {
+            is Result.Error.Corrupted, is Result.Error.NotFound -> {
+                withContext(Dispatchers.Default) { brokenManifest(manifestFileName) }
+                null
             }
+            is Result.Data -> result.manifest
+            else -> null
         }
     }
 

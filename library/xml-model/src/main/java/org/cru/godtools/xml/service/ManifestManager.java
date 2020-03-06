@@ -2,7 +2,6 @@ package org.cru.godtools.xml.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -56,11 +55,6 @@ public class ManifestManager extends KotlinManifestManager {
         super(context);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
-    }
-
-    @MainThread
-    public void preloadLatestPublishedManifest(@NonNull final String toolCode, @NonNull final Locale locale) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> getLatestPublishedManifest(toolCode, locale));
     }
 
     @NonNull
