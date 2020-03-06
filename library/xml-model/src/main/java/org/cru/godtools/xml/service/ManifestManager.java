@@ -3,10 +3,7 @@ package org.cru.godtools.xml.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Xml;
 
-import com.annimon.stream.Stream;
-import com.google.common.io.Closer;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -16,21 +13,13 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
-import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
-import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.xmlpull.v1.XmlPullParser;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -57,6 +46,7 @@ public class ManifestManager {
     @NonNull
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
+    private final ManifestParser manifestParser;
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
@@ -75,6 +65,7 @@ public class ManifestManager {
         mDao = GodToolsDao.Companion.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
+        manifestParser = ManifestParser.Companion.getInstance(context);
     }
 
     @NonNull
@@ -159,98 +150,23 @@ public class ManifestManager {
         final SettableFuture<Manifest> manifestTask = SettableFuture.create();
         mExecutor.execute(() -> {
             try {
-                // find the file on disk
-                final File file = FileUtils.getGodToolsFile(mContext, manifestName);
-
-                // parse the Manifest from the specified XML file
-                final Manifest manifest;
-                final Closer closer = Closer.create();
-                try {
-                    final InputStream in = closer.register(new BufferedInputStream(new FileInputStream(file)));
-                    final XmlPullParser parser = Xml.newPullParser();
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-                    parser.setInput(in, "UTF-8");
-                    parser.nextTag();
-                    manifest = Manifest.fromXml(parser, manifestName, toolCode, locale);
-                } catch (final FileNotFoundException e) {
+                final Result result = manifestParser.parseBlocking(manifestName, toolCode, locale);
+                if (result instanceof Result.Data) {
+                    manifestTask.set(((Result.Data) result).getManifest());
+                } else if (result instanceof Result.Error.NotFound || result instanceof Result.Error.Corrupted) {
                     brokenManifest(manifestName);
-                    throw closer.rethrow(e);
-                } catch (final Throwable t) {
-                    throw closer.rethrow(t);
-                } finally {
-                    closer.close();
+                    manifestTask.set(null);
+                } else {
+                    manifestTask.set(null);
                 }
-
-                // complete this task
-                manifestTask.set(manifest);
             } catch (final Throwable t) {
                 Timber.tag(TAG)
                         .e(t, "Error loading manifest xml for %s (%s)", toolCode, LocaleCompat.toLanguageTag(locale));
                 manifestTask.setException(t);
             }
         });
-
-        // post-process the manifest
-        final ListenableFuture<Manifest> finalManifestTask = Futures.transformAsync(manifestTask, manifest -> {
-            // short-circuit if we don't have a manifest
-            if (manifest == null) {
-                return Futures.immediateFuture(null);
-            }
-
-            // parse all the pages
-            final ListenableFuture<?> allPagesTask =
-                    Futures.allAsList(Stream.of(manifest.getPages()).map(this::parsePage).toList());
-
-            // return the manifest after all the pages have been parsed
-            return Futures.transform(allPagesTask, i -> manifest, directExecutor());
-        }, directExecutor());
-        Futures.addCallback(finalManifestTask, new ManifestLoadingErrorCallback(toolCode, locale), directExecutor());
-        return finalManifestTask;
-    }
-
-    @NonNull
-    @AnyThread
-    private ListenableFuture<Page> parsePage(@NonNull final Page page) {
-        // parse the page
-        final SettableFuture<Page> result = SettableFuture.create();
-        mExecutor.execute(() -> {
-            try {
-                // find the file on disk
-                final File file = FileUtils.getGodToolsFile(mContext, page.getLocalFileName());
-                if (file == null) {
-                    result.set(page);
-                    return;
-                }
-
-                // parse the page XML into the page object
-                final Closer closer = Closer.create();
-                try {
-                    final InputStream in = closer.register(new BufferedInputStream(new FileInputStream(file)));
-                    final XmlPullParser parser = Xml.newPullParser();
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-                    parser.setInput(in, "UTF-8");
-                    parser.nextTag();
-                    page.parsePageXml(parser);
-                } catch (final FileNotFoundException e) {
-                    brokenManifest(page.getManifest().getManifestName());
-                    throw closer.rethrow(e);
-                } catch (final Throwable t) {
-                    throw closer.rethrow(t);
-                } finally {
-                    closer.close();
-                }
-
-                // complete this task
-                result.set(page);
-            } catch (final Throwable t) {
-                final Manifest manifest = page.getManifest();
-                Timber.tag(TAG)
-                        .e(t, "Error parsing page xml %s-%d (%s)", manifest.getCode(), page.getPosition(),
-                           LocaleCompat.toLanguageTag(manifest.getLocale()));
-                result.setException(t);
-            }
-        });
-        return result;
+        Futures.addCallback(manifestTask, new ManifestLoadingErrorCallback(toolCode, locale), directExecutor());
+        return manifestTask;
     }
 
     @WorkerThread
