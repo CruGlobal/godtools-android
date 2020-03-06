@@ -4,18 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
+import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
-import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
@@ -24,7 +24,6 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private static final int LOADER_TRANSLATION = 101;
-    private static final int LOADER_MANIFEST = 102;
 
     private final boolean mRequireTool;
 
@@ -76,6 +75,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
             return;
         }
 
+        setupDataModel();
         startLoaders();
     }
 
@@ -160,7 +160,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
             final LoaderManager manager = LoaderManager.getInstance(this);
 
             manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
-            manager.initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+            mDataModel.getManifest().observe(this, this::setManifest);
         } else {
             setTranslation(null);
             setManifest(null);
@@ -183,6 +183,16 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     protected Manifest getActiveManifest() {
         return mManifest;
     }
+
+    // region Data Model
+    private LatestPublishedManifestDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
+        mDataModel.getToolCode().setValue(mTool);
+        mDataModel.getLocale().setValue(mLocale);
+    }
+    // region Data Model
 
     // region Up Navigation
 
@@ -222,29 +232,6 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         @Override
         public void onLoaderReset(@NonNull final Loader<Translation> loader) {
             // noop
-        }
-    }
-
-    class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {
-        @Nullable
-        @Override
-        public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_MANIFEST:
-                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
-                    return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            switch (loader.getId()) {
-                case LOADER_MANIFEST:
-                    setManifest(manifest);
-                    break;
-            }
         }
     }
 }
