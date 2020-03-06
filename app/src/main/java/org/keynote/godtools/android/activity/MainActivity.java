@@ -8,14 +8,6 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.MainThread;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.annimon.stream.Stream;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -36,6 +28,14 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import me.thekey.android.core.CodeGrantAsyncTask;
 
