@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
+import org.cru.godtools.analytics.LaunchTrackingViewModel;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
@@ -34,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.RESUMED;
@@ -240,6 +242,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
+    // region Analytics
     private void trackInAnalytics() {
         // only track analytics if this activity has been started
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
@@ -251,8 +254,15 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 default:
                     mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
             }
+
+            trackLaunch();
         }
     }
+
+    private void trackLaunch() {
+        (new ViewModelProvider(this)).get(LaunchTrackingViewModel.class).trackLaunch();
+    }
+    // endregion Analytics
 
     private void syncData() {
         GodToolsSyncServiceKt.syncFollowups(this).sync();

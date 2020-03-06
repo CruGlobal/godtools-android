@@ -10,6 +10,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.karumi.weak.weak
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.TheKeyEvent
+import org.cru.godtools.analytics.model.AnalyticsActionEvent
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.base.util.SingletonHolder
@@ -30,10 +32,17 @@ class FirebaseAnalyticsService @MainThread private constructor(app: Application)
     private var currentActivity: Activity? by weak()
 
     // region Tracking Events
+    init {
+        EventBus.getDefault().register(this)
+    }
+
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    fun onAnalyticsEvent(event: AnalyticsScreenEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE)) handleScreenEvent(event)
+    fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
+        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
+            is AnalyticsScreenEvent -> handleScreenEvent(event)
+            is AnalyticsActionEvent -> handleActionEvent(event)
+        }
     }
 
     @AnyThread
@@ -72,8 +81,12 @@ class FirebaseAnalyticsService @MainThread private constructor(app: Application)
         currentActivity?.let { firebase.setCurrentScreen(it, event.screen, null) }
     }
 
+    @MainThread
+    private fun handleActionEvent(event: AnalyticsActionEvent) {
+        firebase.logEvent(event.firebaseEventName, null)
+    }
+
     init {
-        EventBus.getDefault().register(this)
         updateUser()
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED

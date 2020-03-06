@@ -15,7 +15,9 @@ import java.util.Locale
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
+private const val PREF_LAUNCHES = "launches"
 private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
+private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 private const val VERSION_5_1_4 = 4033503
 
@@ -114,10 +116,16 @@ class Settings private constructor(private val context: Context) {
         prefs.edit { putBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), added) }
     // endregion Campaign Tracking
 
-    // region Version tracking
+    // region Launch tracking
     private var firstLaunchVersion
         get() = prefs.getInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE)
         set(value) = prefs.edit { putInt(PREF_VERSION_FIRST_LAUNCH, value) }
+    var lastLaunchVersion
+        get() = prefs.getInt(PREF_VERSION_LAST_LAUNCH, -1).takeUnless { it == -1 }
+        private set(value) = prefs.edit { putInt(PREF_VERSION_LAST_LAUNCH, value ?: BuildConfig.VERSION_CODE) }
+    var launches
+        get() = prefs.getInt(PREF_LAUNCHES, 0)
+        private set(value) = prefs.edit { putInt(PREF_LAUNCHES, value) }
 
     private fun trackFirstLaunchVersion() {
         if (prefs.contains(PREF_VERSION_FIRST_LAUNCH)) return
@@ -133,10 +141,15 @@ class Settings private constructor(private val context: Context) {
         firstLaunchVersion = BuildConfig.VERSION_CODE
     }
 
+    fun trackLaunch() {
+        lastLaunchVersion = BuildConfig.VERSION_CODE
+        launches++
+    }
+
     init {
         trackFirstLaunchVersion()
     }
-    // endregion Version tracking
+    // endregion Launch tracking
 
     fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
         prefs.registerOnSharedPreferenceChangeListener(listener)

@@ -14,7 +14,9 @@ open class AnalyticsActionEvent @JvmOverloads constructor(
 ) : AnalyticsBaseEvent(locale) {
     open val adobeAttributes: Map<String?, *>? get() = null
 
-    override val snowplowPageTitle = listOf(action, label).filterNot { it.isNullOrEmpty() }.joinToString(" : ")
+    open val firebaseEventName get() = action
+
+    override val snowplowPageTitle = listOfNotNull(action, label).joinToString(" : ")
     override val snowplowContentScoringUri: Uri.Builder = super.snowplowContentScoringUri
         .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
         .appendPath(action)
