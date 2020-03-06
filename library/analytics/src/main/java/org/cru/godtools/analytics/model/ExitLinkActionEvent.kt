@@ -1,8 +1,6 @@
-package org.cru.godtools.base.tool.analytics.model
+package org.cru.godtools.analytics.model
 
 import android.net.Uri
-import org.cru.godtools.analytics.model.AnalyticsActionEvent
-import org.cru.godtools.analytics.model.AnalyticsSystem
 
 private const val ACTION_EXIT_LINK = "Exit Link Engaged"
 private const val ADOBE_EXIT_LINK = "cru.mobileexitlink"

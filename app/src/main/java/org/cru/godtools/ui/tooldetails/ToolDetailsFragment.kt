@@ -14,7 +14,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapConte
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
-import org.cru.godtools.base.tool.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BaseBindingPlatformFragment
