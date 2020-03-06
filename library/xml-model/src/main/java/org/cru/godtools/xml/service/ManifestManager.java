@@ -39,7 +39,6 @@ public class ManifestManager extends KotlinManifestManager {
     private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(6);
 
     private final ThreadPoolExecutor mExecutor;
-    private final ManifestParser manifestParser;
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
@@ -57,7 +56,6 @@ public class ManifestManager extends KotlinManifestManager {
         super(context);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(ManifestManager.class.getSimpleName()));
-        manifestParser = ManifestParser.Companion.getInstance(context);
     }
 
     @MainThread
