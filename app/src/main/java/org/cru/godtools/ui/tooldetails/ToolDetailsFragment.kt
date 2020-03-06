@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,6 +14,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapConte
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
+import org.cru.godtools.base.tool.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BaseBindingPlatformFragment
@@ -21,10 +23,12 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
 import org.cru.godtools.util.openToolActivity
+import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 import java.util.Locale
 
-class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment) {
+class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
+    LinkClickedListener {
     constructor(toolCode: String) : this() {
         this.toolCode = toolCode
     }
@@ -63,6 +67,10 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_tool_details, menu)
         menu.setupPinShortcutAction()
+    }
+
+    override fun onLinkClicked(url: String) {
+        EventBus.getDefault().post(ExitLinkActionEvent(Uri.parse(url)))
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
