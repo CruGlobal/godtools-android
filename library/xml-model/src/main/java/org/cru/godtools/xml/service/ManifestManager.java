@@ -16,7 +16,6 @@ import org.cru.godtools.xml.model.Manifest;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -71,33 +70,13 @@ public class ManifestManager extends KotlinManifestManager {
         dao.update(translation, TranslationTable.COLUMN_LAST_ACCESSED);
 
         // return the manifest for this translation
-        return getManifest(translation);
-    }
-
-    @Nullable
-    @WorkerThread
-    public Manifest getManifest(@Nullable final Translation translation) {
-        // short-circuit if we don't have a downloaded translation
-        if (translation == null || !translation.isDownloaded()) {
-            return null;
-        }
-
-        // short-circuit if there isn't a manifest file name
-        final String manifestName = translation.getManifestFileName();
-        if (manifestName == null) {
-            return null;
-        }
-
-        // return the actual manifest
         try {
-            return getManifest(manifestName, translation.getToolCode(), translation.getLanguageCode(), false).get();
+            return getManifestBlocking(translation);
         } catch (InterruptedException e) {
             // set interrupted flag and return immediately
             Thread.currentThread().interrupt();
-        } catch (final ExecutionException e) {
-            Timber.tag(TAG).d(e.getCause(), "Error loading manifest");
+            return null;
         }
-        return null;
     }
 
     @NonNull

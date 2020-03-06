@@ -302,16 +302,16 @@ public class AemArticleManger {
                     continue;
                 }
 
-                // add AEM imports extracted from the manifest to the AEM article cache
-                final Manifest manifest = mManifestManager.getManifest(translation);
-                if (manifest != null) {
-                    repository.addAemImports(translation, manifest.getAemImports());
-                    enqueueSyncManifestAemImports(manifest, false);
-                }
-
-                // TODO: this can be refactored if we convert to kotlin coroutines
-                // return immediately if interrupted
-                if (Thread.currentThread().isInterrupted()) {
+                try {
+                    // add AEM imports extracted from the manifest to the AEM article cache
+                    final Manifest manifest = mManifestManager.getManifestBlocking(translation);
+                    if (manifest != null) {
+                        repository.addAemImports(translation, manifest.getAemImports());
+                        enqueueSyncManifestAemImports(manifest, false);
+                    }
+                } catch (InterruptedException e) {
+                    // return immediately if interrupted
+                    Thread.currentThread().interrupt();
                     return;
                 }
             }

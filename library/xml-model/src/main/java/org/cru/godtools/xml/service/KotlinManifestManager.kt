@@ -9,6 +9,7 @@ import androidx.lifecycle.switchMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.observeOnce
@@ -53,6 +54,9 @@ open class KotlinManifestManager(@JvmField protected val context: Context) {
                 }
             }
 
+    @WorkerThread
+    @Throws(InterruptedException::class)
+    fun getManifestBlocking(translation: Translation) = runBlocking { getManifest(translation) }
     fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
 
     private suspend fun getManifest(translation: Translation): Manifest? {
