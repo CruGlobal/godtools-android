@@ -129,7 +129,7 @@ public class AemArticleManger {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AemArticleManger.class.getSimpleName()));
-        mManifestManager = ManifestManager.getInstance(mContext);
+        mManifestManager = ManifestManager.Companion.getInstance(mContext);
 
         EventBus.getDefault().register(this);
 

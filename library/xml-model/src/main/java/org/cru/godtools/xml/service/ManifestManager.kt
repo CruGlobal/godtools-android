@@ -13,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.observeOnce
+import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.xml.model.Manifest
@@ -21,12 +22,11 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 
-open class KotlinManifestManager(@JvmField protected val context: Context) {
-    @JvmField
-    protected val dao = GodToolsDao.getInstance(context)
+class ManifestManager private constructor(context: Context) {
+    companion object : SingletonHolder<ManifestManager, Context>({ ManifestManager(it.applicationContext) })
 
-    @JvmField
-    protected val manifestParser = ManifestParser.getInstance(context)
+    private val dao = GodToolsDao.getInstance(context)
+    private val manifestParser = ManifestParser.getInstance(context)
 
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
@@ -73,7 +73,7 @@ open class KotlinManifestManager(@JvmField protected val context: Context) {
     }
 
     @WorkerThread
-    protected open fun brokenManifest(manifestName: String) {
+    private fun brokenManifest(manifestName: String) {
         dao.update(
             Translation().apply { isDownloaded = false },
             TranslationTable.FIELD_MANIFEST.eq(manifestName),

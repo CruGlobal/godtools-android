@@ -680,7 +680,7 @@ public class TractActivity extends BaseToolActivity
     private void startLoaders() {
         final LoaderManager manager = getSupportLoaderManager();
 
-        final ManifestManager manifestManager = ManifestManager.getInstance(this);
+        final ManifestManager manifestManager = ManifestManager.Companion.getInstance(this);
         final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
             final Locale language = mLanguages[i];
