@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.switchCombineWith
-import org.cru.godtools.xml.service.ManifestManager
+import org.cru.godtools.base.tool.service.ManifestManager
 import java.util.Locale
 
 class LatestPublishedManifestDataModel(application: Application) : AndroidViewModel(application) {

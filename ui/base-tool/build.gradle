@@ -18,7 +18,10 @@ dependencies {
 
     api project(':ui:base')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
     implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

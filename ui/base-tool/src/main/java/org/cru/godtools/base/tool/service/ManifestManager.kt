@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.service
+package org.cru.godtools.base.tool.service
 
 import android.content.Context
 import androidx.annotation.AnyThread
@@ -17,6 +17,8 @@ import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.service.ManifestParser
+import org.cru.godtools.xml.service.Result
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
