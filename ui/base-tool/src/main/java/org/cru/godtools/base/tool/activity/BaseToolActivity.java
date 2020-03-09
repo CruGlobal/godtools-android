@@ -309,7 +309,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // endregion DownloadProgress logic
 
-    protected final void trackToolView(@NonNull final String tool) {
+    protected final void trackToolOpen(@NonNull final String tool) {
         EventBus eventBus = EventBus.getDefault();
         eventBus.post(new ToolUsedEvent(tool));
 

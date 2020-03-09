@@ -179,7 +179,7 @@ public class TractActivity extends BaseToolActivity
 
         // track this view
         if (savedInstanceState == null) {
-            trackToolView(mTool);
+            trackToolOpen(mTool);
         }
 
         startLoaders();

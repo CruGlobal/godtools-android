@@ -31,7 +31,7 @@ class CategoriesActivity : BaseArticleActivity(false), CategoriesFragment.Callba
         super.onCreate(savedInstanceState)
         if (isFinishing) return
         setContentView(R.layout.activity_generic_tool_fragment)
-        if (savedInstanceState == null) trackToolView(tool)
+        if (savedInstanceState == null) trackToolOpen(tool)
     }
 
     override fun onStart() {
