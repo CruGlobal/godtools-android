@@ -32,7 +32,6 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
     interface Callbacks {
         fun onToolAdded()
         fun onToolRemoved()
-        fun onToolOpened()
     }
 
     private val downloadManager by lazy { GodToolsDownloadManager.getInstance(requireContext()) }
@@ -105,7 +104,6 @@ class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBin
 
     fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
         tool?.code?.let { code ->
-            findListener<Callbacks>()?.onToolOpened()
             val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
             val parallelLanguage = parallelTranslation?.languageCode
             if (parallelLanguage != null) {

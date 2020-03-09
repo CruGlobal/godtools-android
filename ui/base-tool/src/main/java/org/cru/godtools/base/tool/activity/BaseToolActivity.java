@@ -14,6 +14,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.util.WeakTask;
+import org.cru.godtools.analytics.model.FirstToolOpened;
+import org.cru.godtools.analytics.model.ToolOpened;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent;
@@ -307,7 +310,17 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     // endregion DownloadProgress logic
 
     protected final void trackToolView(@NonNull final String tool) {
-        EventBus.getDefault().post(new ToolUsedEvent(tool));
+        EventBus eventBus = EventBus.getDefault();
+        eventBus.post(new ToolUsedEvent(tool));
+
+        Settings settings = Settings.Companion.getInstance(this);
+
+        if (settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)) {
+            eventBus.post(ToolOpened.INSTANCE);
+        } else {
+            settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED);
+            eventBus.post(FirstToolOpened.INSTANCE);
+        }
 
         final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(tool, 1));

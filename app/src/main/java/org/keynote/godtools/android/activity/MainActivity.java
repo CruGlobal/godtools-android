@@ -36,7 +36,6 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-
 import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.RESUMED;
@@ -178,7 +177,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (languages == null || languages.length == 0) {
             return;
         }
-        trackOpenedTool();
         ActivityUtilsKt.openToolActivity(this, code, type, languages);
     }
 
