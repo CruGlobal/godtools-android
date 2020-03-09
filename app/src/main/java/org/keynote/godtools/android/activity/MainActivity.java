@@ -177,6 +177,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (languages == null || languages.length == 0) {
             return;
         }
+
         ActivityUtilsKt.openToolActivity(this, code, type, languages);
     }
 
