@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_title">My Profile</string>
-    <string name="menu_profile">My Activity</string>
+    <string name="menu_profile">Global Activity</string>
 
     <!-- Global Activity -->
     <eat-comment />
