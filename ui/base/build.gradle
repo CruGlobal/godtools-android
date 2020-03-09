@@ -24,7 +24,7 @@ dependencies {
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+    api "org.greenrobot:eventbus:${deps.eventbus}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
