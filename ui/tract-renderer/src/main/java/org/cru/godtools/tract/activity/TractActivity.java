@@ -313,7 +313,7 @@ public class TractActivity extends BaseToolActivity
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
             if (savedInstanceState == null) {
-                EventBus.getDefault().post(new AnalyticsDeepLinkEvent(data));
+                mEventBus.post(new AnalyticsDeepLinkEvent(data));
             }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
