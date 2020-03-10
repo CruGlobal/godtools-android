@@ -27,7 +27,7 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : Base(pa
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HEADER)
-        _backgroundColor = Utils.parseColor(parser, XML_BACKGROUND_COLOR, null)
+        _backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR)
 
         // process any child elements
         var number: Text? = null
