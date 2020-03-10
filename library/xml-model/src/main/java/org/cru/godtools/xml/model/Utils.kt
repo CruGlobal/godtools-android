@@ -10,9 +10,14 @@ import org.xmlpull.v1.XmlPullParser
 private val REGEX_COLOR =
     "^\\s*rgba\\(\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9.]+)\\s*\\)\\s*$".toRegex()
 
+@Deprecated("Use toBoolean extension method instead", ReplaceWith("raw?.toBoolean() ?: defaultValue"))
 fun parseBoolean(raw: String?, defaultValue: Boolean) = raw?.toBoolean() ?: defaultValue
 
 @ColorInt
+@Deprecated(
+    "Use getAttributeValueAsColorOrNull extension method instead",
+    ReplaceWith("getAttributeValueAsColorOrNull(name) ?: defValue")
+)
 fun XmlPullParser.parseColor(name: String, @ColorInt defValue: Int?) = getAttributeValueAsColorOrNull(name) ?: defValue
 
 @ColorInt
