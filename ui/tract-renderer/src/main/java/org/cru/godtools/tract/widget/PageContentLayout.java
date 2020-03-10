@@ -114,7 +114,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     };
 
     // region Initialization
-
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
     }
@@ -145,11 +144,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private void init() {
         mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
     }
+    // endregion Initialization
 
-    // endregion
-
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -234,11 +231,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super.onDetachedFromWindow();
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
+    // endregion Lifecycle
 
-    // endregion Lifecycle Events
-
-    // region NestedScrollingParent methods
-
+    // region NestedScrollingParent
     @Override
     public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
         // we return true so that we will get the onNestedFling calls from descendant NestedScrollingChild
@@ -277,8 +272,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public int getNestedScrollAxes() {
         return mParentHelper.getNestedScrollAxes();
     }
-
-    // endregion NestedScrollingParent methods
+    // endregion NestedScrollingParent
 
     public void addCard(@NonNull final View card, final int position) {
         addView(card, position + mCardPositionOffset);
@@ -433,7 +427,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     // region Card Bounce Animation
-
     @UiThread
     public void setBounceFirstCard(final boolean animate) {
         mBounceFirstCard = animate;
@@ -486,11 +479,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         animation.addListener(mBounceAnimationListener);
         return animation;
     }
-
     // endregion Card Bounce Animation
 
     // region View layout logic
-
     @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
@@ -759,7 +750,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
         }
     }
-
     // endregion View layout logic
 
     protected static class SavedState extends AbsSavedState {
