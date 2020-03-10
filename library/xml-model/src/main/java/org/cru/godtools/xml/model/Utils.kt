@@ -44,14 +44,12 @@ internal fun String.parseColorOrNull() = REGEX_COLOR.matchEntire(this)?.let {
 fun XmlPullParser.parseScaleType(attribute: String, defValue: ImageScaleType?) =
     getAttributeValueAsImageScaleTypeOrNull(attribute) ?: defValue
 
-fun parseUrl(parser: XmlPullParser, attribute: String, defValue: Uri?): Uri? {
-    return parseUrl(parser.getAttributeValue(null, attribute), defValue)
-}
+@Deprecated(
+    "Use getAttributeValueAsUriOrNull instead",
+    ReplaceWith("getAttributeValueAsUriOrNull(attribute) ?: defValue")
+)
+fun XmlPullParser.parseUrl(attribute: String, defValue: Uri?) = getAttributeValueAsUriOrNull(attribute) ?: defValue
 
-fun parseUrl(raw: String?, defValue: Uri?): Uri? {
-    if (raw != null) {
-        val uri = Uri.parse(raw)
-        return if (uri.isAbsolute) uri else Uri.parse("http://$raw")
-    }
-    return defValue
-}
+internal fun XmlPullParser.getAttributeValueAsUriOrNull(name: String) = getAttributeValue(null, name)?.toAbsoluteUri()
+internal fun String.toAbsoluteUri(defaultScheme: String = "http"): Uri =
+    Uri.parse(this).takeIf { it.isAbsolute } ?: Uri.parse("$defaultScheme://$this")

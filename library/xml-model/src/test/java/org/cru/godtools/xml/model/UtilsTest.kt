@@ -26,8 +26,8 @@ class UtilsTest {
 
     @Test
     fun verifyParseUrl() {
-        assertThat(parseUrl("https://example.com/path", null), equalTo(Uri.parse("https://example.com/path")))
-        assertThat(parseUrl("www.example.com/path", null), equalTo(Uri.parse("http://www.example.com/path")))
-        assertThat(parseUrl("mailto:someone@example.com", null), equalTo(Uri.parse("mailto:someone@example.com")))
+        assertThat("https://example.com/path".toAbsoluteUri(), equalTo(Uri.parse("https://example.com/path")))
+        assertThat("www.example.com/path".toAbsoluteUri("http"), equalTo(Uri.parse("http://www.example.com/path")))
+        assertThat("mailto:someone@example.com".toAbsoluteUri(), equalTo(Uri.parse("mailto:someone@example.com")))
     }
 }
