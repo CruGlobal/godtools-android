@@ -1,7 +1,7 @@
 package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
@@ -13,7 +13,7 @@ class Form internal constructor(parent: Base, parser: XmlPullParser) : Content(p
     override val content: List<Content>
 
     init {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_FORM)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_FORM)
 
         // process any child elements
         val contentList = mutableListOf<Content>()

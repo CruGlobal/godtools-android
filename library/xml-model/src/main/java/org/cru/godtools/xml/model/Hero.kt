@@ -2,8 +2,9 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.DimenRes
 import org.ccci.gto.android.common.util.XmlPullParserUtils
-import org.cru.godtools.xml.Constants
 import org.cru.godtools.xml.R
+import org.cru.godtools.xml.XMLNS_ANALYTICS
+import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
@@ -18,7 +19,7 @@ class Hero internal constructor(parent: Base, parser: XmlPullParser) : Base(pare
     override fun getTextSize() = R.dimen.text_size_hero
 
     init {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_TRACT, XML_HERO)
+        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HERO)
 
         // process any child elements
         var analyticsEvents: Collection<AnalyticsEvent> = emptyList()
@@ -28,15 +29,15 @@ class Hero internal constructor(parent: Base, parser: XmlPullParser) : Base(pare
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             when (parser.namespace) {
-                Constants.XMLNS_ANALYTICS -> when (parser.name) {
+                XMLNS_ANALYTICS -> when (parser.name) {
                     AnalyticsEvent.XML_EVENTS -> {
                         analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                         continue@parsingChildren
                     }
                 }
-                Constants.XMLNS_TRACT -> when (parser.name) {
+                XMLNS_TRACT -> when (parser.name) {
                     XML_HEADING -> {
-                        heading = Text.fromNestedXml(this, parser, Constants.XMLNS_TRACT, XML_HEADING)
+                        heading = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_HEADING)
                         continue@parsingChildren
                     }
                 }

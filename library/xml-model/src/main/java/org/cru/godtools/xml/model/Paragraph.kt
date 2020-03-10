@@ -1,7 +1,7 @@
 package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
@@ -11,7 +11,7 @@ class Paragraph : Content, Parent {
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_PARAGRAPH)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_PARAGRAPH)
 
         // process any child elements
         val contentList = mutableListOf<Content>()

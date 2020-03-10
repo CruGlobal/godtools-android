@@ -2,7 +2,8 @@ package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_ANALYTICS
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.cru.godtools.xml.model.Content.Companion.fromXml
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
@@ -20,7 +21,7 @@ class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullP
     override val content: List<Content>
 
     init {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_TAB)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TAB)
         listeners = parseEvents(parser, XML_LISTENERS)
 
         // process any child elements
@@ -31,15 +32,15 @@ class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullP
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             when (parser.namespace) {
-                Constants.XMLNS_ANALYTICS -> when (parser.name) {
+                XMLNS_ANALYTICS -> when (parser.name) {
                     AnalyticsEvent.XML_EVENTS -> {
                         analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                         continue@parsingChildren
                     }
                 }
-                Constants.XMLNS_CONTENT -> when (parser.name) {
+                XMLNS_CONTENT -> when (parser.name) {
                     XML_LABEL -> {
-                        label = Text.fromNestedXml(this, parser, Constants.XMLNS_CONTENT, XML_LABEL)
+                        label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
                         continue@parsingChildren
                     }
                 }

@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESOURCE = "resource"
@@ -12,7 +12,7 @@ private const val XML_RESOURCE = "resource"
 class Image : Content {
     @WorkerThread
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_IMAGE)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_IMAGE)
 
         resourceName = parser.getAttributeValue(null, XML_RESOURCE)
         events = parseEvents(parser, Base.XML_EVENTS)
