@@ -51,6 +51,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
+    private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
 
     private static final int BOUNCE_ANIMATION_BOUNCES = 4;
@@ -69,6 +70,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private float mBounceHeight;
     private final BounceInterpolator mBounceInterpolator =
             new BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY);
+
+    private int mDefaultGutterSize;
+    private int mGutterSize = 0;
 
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     private final Settings mSettings;
@@ -143,6 +147,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private void init() {
         mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
+        mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * getResources().getDisplayMetrics().density);
     }
     // endregion Initialization
 
@@ -588,6 +593,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
                              resolveSizeAndState(maxHeight, heightMeasureSpec,
                                                  childState << MEASURED_HEIGHT_STATE_SHIFT));
+
+        // update Gutter Size
+        final int measuredHeight = getMeasuredHeight();
+        final int maxGutterSize = measuredHeight / 10;
+        mGutterSize = Math.min(maxGutterSize, mDefaultGutterSize);
     }
 
     private boolean calculateCardOffsets(@NonNull final View child) {
