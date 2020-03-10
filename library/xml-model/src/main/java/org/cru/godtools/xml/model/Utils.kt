@@ -32,9 +32,12 @@ internal fun String.parseColorOrNull() = REGEX_COLOR.matchEntire(this)?.let {
     }
 }
 
-fun XmlPullParser.parseScaleType(attribute: String, defValue: ImageScaleType?): ImageScaleType? {
-    return ImageScaleType.parse(getAttributeValue(null, attribute), defValue)
-}
+@Deprecated(
+    "Use getAttributeValueAsImageScaleTypeOrNull extension method instead",
+    ReplaceWith("getAttributeValueAsImageScaleTypeOrNull(attribute) ?: defValue")
+)
+fun XmlPullParser.parseScaleType(attribute: String, defValue: ImageScaleType?) =
+    getAttributeValueAsImageScaleTypeOrNull(attribute) ?: defValue
 
 fun parseUrl(parser: XmlPullParser, attribute: String, defValue: Uri?): Uri? {
     return parseUrl(parser.getAttributeValue(null, attribute), defValue)
