@@ -33,6 +33,10 @@ public class AnalyticsEvent {
     private static final String XML_DELAY = "delay";
     private static final String XML_SYSTEM = "system";
     private static final String XML_SYSTEM_ADOBE = "adobe";
+    private static final String XML_SYSTEM_APPSFLYER = "appsflyer";
+    private static final String XML_SYSTEM_FACEBOOK = "facebook";
+    private static final String XML_SYSTEM_FIREBASE = "firebase";
+    private static final String XML_SYSTEM_SNOWPLOW = "snowplow";
     private static final String XML_TRIGGER = "trigger";
     private static final String XML_TRIGGER_SELECTED = "selected";
     private static final String XML_TRIGGER_VISIBLE = "visible";
@@ -187,6 +191,14 @@ public class AnalyticsEvent {
                             switch (Strings.nullToEmpty(system)) {
                                 case XML_SYSTEM_ADOBE:
                                     return AnalyticsSystem.ADOBE;
+                                case XML_SYSTEM_APPSFLYER:
+                                    return AnalyticsSystem.APPSFLYER;
+                                case XML_SYSTEM_FACEBOOK:
+                                    return AnalyticsSystem.FACEBOOK;
+                                case XML_SYSTEM_FIREBASE:
+                                    return AnalyticsSystem.FIREBASE;
+                                case XML_SYSTEM_SNOWPLOW:
+                                    return AnalyticsSystem.SNOWPLOW;
                                 default:
                                     return AnalyticsSystem.UNKNOWN;
                             }
