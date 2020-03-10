@@ -81,6 +81,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         @Override
         public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX,
                                final float velocityY) {
+            // ignore flings when the initial event is in the gutter
+            if (isEventInGutter(e1)) {
+                return false;
+            }
+
             return flingCard(velocityY);
         }
     };
@@ -208,6 +213,22 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @Override
+    protected Parcelable onSaveInstanceState() {
+        final SavedState state = new SavedState(super.onSaveInstanceState());
+        state.activeCardPosition = mActiveCardPosition;
+        state.bounceFirstCard = mBounceFirstCard;
+        return state;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    }
+    // endregion Lifecycle
+
+    // region Touch Events
+    @Override
     public boolean onInterceptTouchEvent(final MotionEvent ev) {
         return mGestureDetector.onTouchEvent(ev);
     }
@@ -223,20 +244,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return super.onTouchEvent(event);
     }
 
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        final SavedState state = new SavedState(super.onSaveInstanceState());
-        state.activeCardPosition = mActiveCardPosition;
-        state.bounceFirstCard = mBounceFirstCard;
-        return state;
+    private boolean isEventInGutter(@NonNull final MotionEvent event) {
+        return event.getY() > getHeight() - mGutterSize;
     }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        getViewTreeObserver().removeGlobalOnLayoutListener(this);
-    }
-    // endregion Lifecycle
+    // endregion Touch Events
 
     // region NestedScrollingParent
     @Override
