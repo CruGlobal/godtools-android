@@ -17,7 +17,7 @@ class ToggleLanguageAnalyticsActionEvent(tool: String?, locale: Locale) :
 
     override val adobeSiteSection = tool
     @OptIn(ExperimentalStdlibApi::class)
-    override val adobeAttributes = buildMap<String?, Any> {
+    override val adobeAttributes = buildMap<String, Any> {
         put(ADOBE_ATTR_TOGGLE_LANGUAGE, 1)
         put(ADOBE_ATTR_LANGUAGE_SECONDARY, toLanguageTag(locale))
     }
