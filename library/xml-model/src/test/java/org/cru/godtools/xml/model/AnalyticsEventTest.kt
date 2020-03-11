@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 class AnalyticsEventTest {
     @Test
     fun testParseAnalyticsEvent() {
-        val event = AnalyticsEvent.fromXml(getXmlParserForResource("analytics_event.xml"))
+        val event = AnalyticsEvent(getXmlParserForResource("analytics_event.xml"))
         assertThat(event.action, equalTo("test"))
         AnalyticsSystem.values().filterNot { it == AnalyticsSystem.ADOBE }.forEach {
             assertFalse(event.isForSystem(it))
