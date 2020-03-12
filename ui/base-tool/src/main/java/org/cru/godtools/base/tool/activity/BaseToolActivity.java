@@ -14,12 +14,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.util.WeakTask;
-import org.cru.godtools.base.tool.analytics.model.FirstToolOpened;
-import org.cru.godtools.base.tool.analytics.model.ToolOpened;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
+import org.cru.godtools.base.tool.analytics.model.FirstToolOpened;
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent;
+import org.cru.godtools.base.tool.analytics.model.ToolOpened;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
