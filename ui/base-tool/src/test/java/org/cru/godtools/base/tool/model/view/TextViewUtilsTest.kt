@@ -32,7 +32,7 @@ class TextViewUtilsTest {
     @Test
     fun verifyBindText() {
         val text = Text(Manifest(), "text", 2.0, Color.RED, Text.Align.CENTER)
-        TextViewUtils.bind(text, view)
+        text.bindTo(view)
         assertEquals("text", view.text)
         assertEquals(Color.RED, view.textColors.defaultColor)
         assertEquals(Text.Align.CENTER.mGravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
@@ -42,7 +42,7 @@ class TextViewUtilsTest {
     @Test
     fun verifyBindTextDefaults() {
         val text = Text(Manifest(), "text", 1.5, null, Text.Align.END)
-        TextViewUtils.bind(text, view, R.dimen.text_size_header, Color.GREEN)
+        text.bindTo(view, R.dimen.text_size_header, Color.GREEN)
         assertEquals("text", view.text)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
         assertEquals(Text.Align.END.mGravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
