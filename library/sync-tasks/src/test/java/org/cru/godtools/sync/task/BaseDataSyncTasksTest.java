@@ -22,10 +22,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.robolectric.annotation.Config.ALL_SDKS;
 
 @RunWith(AndroidJUnit4.class)
-@Config(sdk = ALL_SDKS)
+@Config(sdk = 28)
 public class BaseDataSyncTasksTest {
     private GodToolsDao mDao;
     private BaseDataSyncTasks mTasks;
