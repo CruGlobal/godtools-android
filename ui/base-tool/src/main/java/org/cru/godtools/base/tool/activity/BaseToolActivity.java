@@ -311,14 +311,10 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     protected final void trackToolOpen(@NonNull final String tool) {
         mEventBus.post(new ToolUsedEvent(tool));
 
-        Settings settings = Settings.Companion.getInstance(this);
-
-        if (settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)) {
-            mEventBus.post(ToolOpened.INSTANCE);
-        } else {
-            settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED);
-            mEventBus.post(FirstToolOpened.INSTANCE);
-        }
+        final Settings settings = Settings.Companion.getInstance(this);
+        mEventBus.post(settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) ? ToolOpened.INSTANCE :
+                               FirstToolOpened.INSTANCE);
+        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED);
 
         final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(tool, 1));
