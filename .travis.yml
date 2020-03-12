@@ -100,7 +100,7 @@ jobs:
     stage: compile
 
     install: skip
-    script: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
+    script: ./gradlew test jacocoTestReport --continue --stacktrace --parallel --max-workers 2
 
     after_success:
     - bash <(curl -s https://codecov.io/bash)
