@@ -3,7 +3,6 @@
 package org.cru.godtools.base.tool.model.view
 
 import android.content.Context
-import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
@@ -15,11 +14,16 @@ import org.cru.godtools.xml.model.Text
 @JvmName("bind")
 fun Text?.bindTo(view: TextView?, @DimenRes textSize: Int? = null, @ColorInt defaultTextColor: Int? = null) {
     if (view == null) return
+    bindTo(view, textSize?.let { view.context.resources.getDimension(it) }, defaultTextColor)
+}
+
+internal fun Text?.bindTo(view: TextView?, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
+    if (view == null) return
 
     view.text = Text.getText(this)
     view.typeface = this?.getTypeface(view.context)
-    val size = view.context.resources.getDimension(textSize ?: Text.textSize(this))
-    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, (size * Text.getTextScale(this)).toFloat())
+    val size = Text.getTextScale(this) * (textSize ?: view.context.resources.getDimension(Text.textSize(this)))
+    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
     val defColor = defaultTextColor ?: Text.defaultTextColor(this)
     if (this != null) {

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="org.cru.godtools.article.R" />
         <import type="org.cru.godtools.xml.model.Manifest" />
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.article.adapter.CategoriesAdapter.Callbacks" />
@@ -36,7 +35,7 @@
             android:ellipsize="end"
             android:lines="2"
             android:text="@{category.label}"
-            android:textSize="@{R.dimen.text_size_category}"
+            android:textSize="@{@dimen/text_size_category}"
             app:defaultTextColor="@{Manifest.getCategoryLabelColor(category.getManifest())}"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="About God"
