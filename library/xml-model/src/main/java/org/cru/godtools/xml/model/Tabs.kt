@@ -2,7 +2,7 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.XmlPullParserUtils
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 import java.util.Collections
 
@@ -19,7 +19,7 @@ class Tabs : Content {
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_TABS)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TABS)
 
         // process any child elements
         val tabs = mutableListOf<Tab>()
@@ -27,7 +27,7 @@ class Tabs : Content {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             when (parser.namespace) {
-                Constants.XMLNS_CONTENT -> when (parser.name) {
+                XMLNS_CONTENT -> when (parser.name) {
                     Tab.XML_TAB -> {
                         tabs.add(Tab(this, tabs.size, parser))
                         continue@parsingChildren

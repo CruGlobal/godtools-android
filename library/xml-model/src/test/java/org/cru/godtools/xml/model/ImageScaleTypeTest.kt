@@ -6,17 +6,12 @@ import org.junit.Test
 
 class ImageScaleTypeTest {
     @Test
-    fun testParseString() {
-        assertEquals(ImageScaleType.FIT, ImageScaleType.parse("fit", null))
-        assertEquals(ImageScaleType.FILL, ImageScaleType.parse("fill", null))
-        assertEquals(ImageScaleType.FILL_X, ImageScaleType.parse("fill-x", null))
-        assertEquals(ImageScaleType.FILL_Y, ImageScaleType.parse("fill-y", null))
-    }
-
-    @Test
-    fun testParseStringDefaultValue() {
-        assertNull(ImageScaleType.parse(null, null))
-        assertEquals(ImageScaleType.FIT, ImageScaleType.parse(null, ImageScaleType.FIT))
-        assertEquals(ImageScaleType.FIT, ImageScaleType.parse("ajklsdfjkaewr", ImageScaleType.FIT))
+    fun testParseOrNull() {
+        assertEquals(ImageScaleType.FIT, ImageScaleType.parseOrNull("fit"))
+        assertEquals(ImageScaleType.FILL, ImageScaleType.parseOrNull("fill"))
+        assertEquals(ImageScaleType.FILL_X, ImageScaleType.parseOrNull("fill-x"))
+        assertEquals(ImageScaleType.FILL_Y, ImageScaleType.parseOrNull("fill-y"))
+        assertNull(ImageScaleType.parseOrNull(null))
+        assertNull(ImageScaleType.parseOrNull("ajklsdfjkaewr"))
     }
 }

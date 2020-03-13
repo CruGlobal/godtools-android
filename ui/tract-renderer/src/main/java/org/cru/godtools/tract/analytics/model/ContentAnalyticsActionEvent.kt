@@ -7,5 +7,5 @@ import org.cru.godtools.xml.model.AnalyticsEvent
 class ContentAnalyticsActionEvent(private val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty()) {
     override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
-    override val adobeAttributes: Map<String?, *>? get() = event.attributes
+    override val adobeAttributes: Map<String, *>? get() = event.attributes
 }

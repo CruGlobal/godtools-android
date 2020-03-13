@@ -2,7 +2,8 @@ package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.Constants
+import org.cru.godtools.xml.XMLNS_ANALYTICS
+import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser) {
@@ -15,7 +16,7 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
     val text: Text?
 
     init {
-        parser.require(XmlPullParser.START_TAG, Constants.XMLNS_CONTENT, XML_LINK)
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_LINK)
         events = parseEvents(parser, XML_EVENTS)
 
         // process any child elements
@@ -25,13 +26,13 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             when (parser.namespace) {
-                Constants.XMLNS_ANALYTICS -> when (parser.name) {
+                XMLNS_ANALYTICS -> when (parser.name) {
                     AnalyticsEvent.XML_EVENTS -> {
                         analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                         continue@parsingChildren
                     }
                 }
-                Constants.XMLNS_CONTENT -> when (parser.name) {
+                XMLNS_CONTENT -> when (parser.name) {
                     Text.XML_TEXT -> {
                         text = Text.fromXml(this, parser)
                         continue@parsingChildren

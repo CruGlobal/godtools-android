@@ -8,5 +8,5 @@ private const val ADOBE_SHARE_CONTENT = "cru.shareiconengaged"
 
 object ShareActionEvent : AnalyticsActionEvent(action = ACTION_SHARE) {
     override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.ADOBE
-    override val adobeAttributes = mapOf<String?, Any>(ADOBE_SHARE_CONTENT to 1)
+    override val adobeAttributes = mapOf<String, Any>(ADOBE_SHARE_CONTENT to 1)
 }

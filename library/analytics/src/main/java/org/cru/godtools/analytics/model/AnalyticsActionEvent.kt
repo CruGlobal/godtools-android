@@ -12,7 +12,7 @@ open class AnalyticsActionEvent @JvmOverloads constructor(
     val label: String? = null,
     locale: Locale? = null
 ) : AnalyticsBaseEvent(locale) {
-    open val adobeAttributes: Map<String?, *>? get() = null
+    open val adobeAttributes: Map<String, *>? get() = null
 
     open val firebaseEventName get() = action
 
