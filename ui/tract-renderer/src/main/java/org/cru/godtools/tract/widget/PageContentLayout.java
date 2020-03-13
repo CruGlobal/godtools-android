@@ -51,6 +51,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
+    private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
 
     private static final int BOUNCE_ANIMATION_BOUNCES = 4;
@@ -70,6 +71,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private final BounceInterpolator mBounceInterpolator =
             new BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY);
 
+    private int mDefaultGutterSize;
+    private int mGutterSize = 0;
+
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     private final Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -77,6 +81,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         @Override
         public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX,
                                final float velocityY) {
+            // ignore flings when the initial event is in the gutter
+            if (isEventInGutter(e1)) {
+                return false;
+            }
+
             return flingCard(velocityY);
         }
     };
@@ -114,7 +123,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     };
 
     // region Initialization
-
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
     }
@@ -144,12 +152,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private void init() {
         mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
+        mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * getResources().getDisplayMetrics().density);
     }
+    // endregion Initialization
 
-    // endregion
-
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -206,6 +213,22 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @Override
+    protected Parcelable onSaveInstanceState() {
+        final SavedState state = new SavedState(super.onSaveInstanceState());
+        state.activeCardPosition = mActiveCardPosition;
+        state.bounceFirstCard = mBounceFirstCard;
+        return state;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    }
+    // endregion Lifecycle
+
+    // region Touch Events
+    @Override
     public boolean onInterceptTouchEvent(final MotionEvent ev) {
         return mGestureDetector.onTouchEvent(ev);
     }
@@ -221,24 +244,12 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return super.onTouchEvent(event);
     }
 
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        final SavedState state = new SavedState(super.onSaveInstanceState());
-        state.activeCardPosition = mActiveCardPosition;
-        state.bounceFirstCard = mBounceFirstCard;
-        return state;
+    private boolean isEventInGutter(@NonNull final MotionEvent event) {
+        return event.getY() > getHeight() - mGutterSize;
     }
+    // endregion Touch Events
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        getViewTreeObserver().removeGlobalOnLayoutListener(this);
-    }
-
-    // endregion Lifecycle Events
-
-    // region NestedScrollingParent methods
-
+    // region NestedScrollingParent
     @Override
     public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
         // we return true so that we will get the onNestedFling calls from descendant NestedScrollingChild
@@ -277,8 +288,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public int getNestedScrollAxes() {
         return mParentHelper.getNestedScrollAxes();
     }
-
-    // endregion NestedScrollingParent methods
+    // endregion NestedScrollingParent
 
     public void addCard(@NonNull final View card, final int position) {
         addView(card, position + mCardPositionOffset);
@@ -433,7 +443,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     // region Card Bounce Animation
-
     @UiThread
     public void setBounceFirstCard(final boolean animate) {
         mBounceFirstCard = animate;
@@ -486,11 +495,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         animation.addListener(mBounceAnimationListener);
         return animation;
     }
-
     // endregion Card Bounce Animation
 
     // region View layout logic
-
     @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
@@ -597,6 +604,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
                              resolveSizeAndState(maxHeight, heightMeasureSpec,
                                                  childState << MEASURED_HEIGHT_STATE_SHIFT));
+
+        // update Gutter Size
+        final int measuredHeight = getMeasuredHeight();
+        final int maxGutterSize = measuredHeight / 10;
+        mGutterSize = Math.min(maxGutterSize, mDefaultGutterSize);
     }
 
     private boolean calculateCardOffsets(@NonNull final View child) {
@@ -759,7 +771,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
         }
     }
-
     // endregion View layout logic
 
     protected static class SavedState extends AbsSavedState {
