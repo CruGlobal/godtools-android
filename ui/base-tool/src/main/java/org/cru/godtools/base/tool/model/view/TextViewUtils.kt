@@ -17,9 +17,7 @@ fun Text?.bindTo(view: TextView?, @DimenRes textSize: Int? = null, @ColorInt def
     bindTo(view, textSize?.let { view.context.resources.getDimension(it) }, defaultTextColor)
 }
 
-internal fun Text?.bindTo(view: TextView?, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
-    if (view == null) return
-
+internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
     view.text = Text.getText(this)
     view.typeface = this?.getTypeface(view.context)
     val size = Text.getTextScale(this) * (textSize ?: view.context.resources.getDimension(Text.textSize(this)))
