@@ -20,13 +20,13 @@ import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
+import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -39,7 +39,6 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
@@ -681,10 +680,12 @@ public class TractActivity extends BaseToolActivity
     private void startLoaders() {
         final LoaderManager manager = getSupportLoaderManager();
 
-        final ManifestLoaderCallbacks manifestCallbacks = new ManifestLoaderCallbacks();
+        final ManifestManager manifestManager = ManifestManager.Companion.getInstance(this);
         final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
-            manager.initLoader(LOADER_TYPE_MANIFEST + i, null, manifestCallbacks);
+            final Locale language = mLanguages[i];
+            manifestManager.getLatestPublishedManifestLiveData(mTool, language)
+                    .observe(this, m -> setManifest(language, m));
             manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
         }
     }
@@ -782,34 +783,6 @@ public class TractActivity extends BaseToolActivity
         @Override
         public void onLoaderReset(@NonNull final Loader<Translation> loader) {
             // noop
-        }
-    }
-
-    class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {
-        @Nullable
-        @Override
-        public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_MANIFEST:
-                    final int langId = id & LOADER_ID_MASK;
-                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new ManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            switch (loader.getId() & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_MANIFEST:
-                    if (loader instanceof ManifestLoader) {
-                        setManifest(((ManifestLoader) loader).getLocale(), manifest);
-                    }
-                    break;
-            }
         }
     }
 }

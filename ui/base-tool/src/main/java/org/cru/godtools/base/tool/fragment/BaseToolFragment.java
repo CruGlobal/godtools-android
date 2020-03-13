@@ -4,12 +4,11 @@ import android.os.Bundle;
 
 import com.google.common.base.Objects;
 
-import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
+import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel;
 import org.cru.godtools.base.ui.fragment.BaseFragment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.Locale;
@@ -17,14 +16,12 @@ import java.util.Locale;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProvider;
 
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public abstract class BaseToolFragment extends BaseFragment {
-    private static final int LOADER_MANIFEST = 101;
-
     @NonNull
     @SuppressWarnings("ConstantConditions")
     protected /*final*/ String mTool = Tool.INVALID_CODE;
@@ -55,6 +52,7 @@ public abstract class BaseToolFragment extends BaseFragment {
 
         validateStartState();
 
+        setupDataModel();
         startLoaders();
     }
 
@@ -72,34 +70,22 @@ public abstract class BaseToolFragment extends BaseFragment {
         }
     }
 
+    // region Data Model
+    private LatestPublishedManifestDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
+        mDataModel.getToolCode().setValue(mTool);
+        mDataModel.getLocale().setValue(mLocale);
+    }
+    // endregion Data Model
+
     private void startLoaders() {
-        getLoaderManager().initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+        mDataModel.getManifest().observe(this, this::setManifest);
     }
 
     void setManifest(@Nullable final Manifest manifest) {
         mManifest = manifest;
         onManifestUpdated();
-    }
-
-    class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {
-        @Nullable
-        @Override
-        public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_MANIFEST:
-                    return new ManifestLoader(requireContext(), mTool, mLocale);
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            switch (loader.getId()) {
-                case LOADER_MANIFEST:
-                    setManifest(manifest);
-                    break;
-            }
-        }
     }
 }

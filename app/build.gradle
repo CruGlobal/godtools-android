@@ -132,7 +132,6 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync')
-    implementation project(':library:xml-model')
 
     implementation project(':ui:account')
     implementation project(':ui:article-aem-renderer')

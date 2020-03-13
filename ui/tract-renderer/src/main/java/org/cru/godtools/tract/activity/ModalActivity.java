@@ -6,35 +6,30 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.annimon.stream.Optional;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.activity.ImmersiveActivity;
+import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.viewmodel.ModalViewHolder;
-import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
-import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
 
 import static androidx.core.app.ActivityOptionsCompat.makeCustomAnimation;
@@ -45,8 +40,6 @@ import static org.cru.godtools.tract.Constants.EXTRA_MODAL;
 import static org.cru.godtools.tract.Constants.EXTRA_PAGE;
 
 public class ModalActivity extends ImmersiveActivity {
-    private static final int LOADER_MANIFEST = 101;
-
     @Nullable
     @BindView(R2.id.modal_root)
     View mModalView;
@@ -109,7 +102,7 @@ public class ModalActivity extends ImmersiveActivity {
         }
 
         setContentView(R.layout.activity_modal);
-        checkForAlreadyLoadedManifest();
+        setupDataModel();
         startLoaders();
     }
 
@@ -144,22 +137,18 @@ public class ModalActivity extends ImmersiveActivity {
         return mTool != null;
     }
 
-    private void checkForAlreadyLoadedManifest() {
-        if (mManifestFileName != null) {
-            final ListenableFuture<Manifest> manifest =
-                    ManifestManager.getInstance(this).getManifest(mManifestFileName, mTool, mLocale);
-            if (manifest.isDone()) {
-                try {
-                    updateModal(Futures.getDone(manifest));
-                } catch (final ExecutionException e) {
-                    updateModal(null);
-                }
-            }
-        }
+    // region Data Model
+    private LatestPublishedManifestDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
+        mDataModel.getToolCode().setValue(mTool);
+        mDataModel.getLocale().setValue(mLocale);
     }
+    // endregion Data Model
 
     private void startLoaders() {
-        getSupportLoaderManager().initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
+        mDataModel.getManifest().observe(this, this::updateModal);
     }
 
     void updateModal(@Nullable final Manifest manifest) {
@@ -190,40 +179,6 @@ public class ModalActivity extends ImmersiveActivity {
         if (mModal != null) {
             if (mModal.getDismissListeners().contains(event.id)) {
                 finish();
-            }
-        }
-    }
-
-    class ManifestLoaderCallbacks implements LoaderManager.LoaderCallbacks<Manifest> {
-        @Nullable
-        @Override
-        public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_MANIFEST:
-                    if (mTool != null) {
-                        return new ManifestLoader(ModalActivity.this, mTool, mLocale);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            switch (loader.getId()) {
-                case LOADER_MANIFEST:
-                    updateModal(manifest);
-                    break;
-            }
-        }
-
-        @Override
-        public void onLoaderReset(final Loader<Manifest> loader) {
-            switch (loader.getId()) {
-                case LOADER_MANIFEST:
-                    // no-op
-                    break;
             }
         }
     }

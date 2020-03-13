@@ -30,12 +30,12 @@ import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
 import org.cru.godtools.article.aem.util.UriUtils;
+import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
-import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -57,7 +57,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -130,7 +129,7 @@ public class AemArticleManger {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AemArticleManger.class.getSimpleName()));
-        mManifestManager = ManifestManager.getInstance(mContext);
+        mManifestManager = ManifestManager.Companion.getInstance(mContext);
 
         EventBus.getDefault().register(this);
 
@@ -303,18 +302,17 @@ public class AemArticleManger {
                     continue;
                 }
 
-                // add AEM imports extracted from the manifest to the AEM article cache
                 try {
-                    final Manifest manifest = mManifestManager.getManifest(translation).get();
-                    repository.addAemImports(translation, manifest.getAemImports());
-                    enqueueSyncManifestAemImports(manifest, false);
-                } catch (final InterruptedException e) {
-                    // set interrupted and return immediately
+                    // add AEM imports extracted from the manifest to the AEM article cache
+                    final Manifest manifest = mManifestManager.getManifestBlocking(translation);
+                    if (manifest != null) {
+                        repository.addAemImports(translation, manifest.getAemImports());
+                        enqueueSyncManifestAemImports(manifest, false);
+                    }
+                } catch (InterruptedException e) {
+                    // return immediately if interrupted
                     Thread.currentThread().interrupt();
                     return;
-                } catch (final ExecutionException e) {
-                    Timber.tag(TAG)
-                            .d(e.getCause(), "Unable to add aem imports from manifest");
                 }
             }
 
