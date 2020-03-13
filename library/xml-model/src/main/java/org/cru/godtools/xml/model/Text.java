@@ -14,6 +14,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
@@ -72,6 +73,16 @@ public final class Text extends Content {
 
     private Text(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public Text(@NonNull final Base parent, @Nullable final String text, @Nullable final Double textScale,
+                @ColorInt @Nullable final Integer textColor, @Nullable final Align textAlign) {
+        this(parent);
+        mText = text;
+        mTextScale = textScale;
+        mTextColor = textColor;
+        mTextAlign = textAlign;
     }
 
     @NonNull
