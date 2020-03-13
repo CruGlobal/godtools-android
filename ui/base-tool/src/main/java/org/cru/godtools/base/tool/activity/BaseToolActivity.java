@@ -14,9 +14,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.util.WeakTask;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.R;
 import org.cru.godtools.base.tool.R2;
+import org.cru.godtools.base.tool.analytics.model.FirstToolOpened;
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent;
+import org.cru.godtools.base.tool.analytics.model.ToolOpened;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
@@ -24,7 +27,6 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.xml.model.Manifest;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
@@ -306,8 +308,13 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
     // endregion DownloadProgress logic
 
-    protected final void trackToolView(@NonNull final String tool) {
-        EventBus.getDefault().post(new ToolUsedEvent(tool));
+    protected final void trackToolOpen(@NonNull final String tool) {
+        mEventBus.post(new ToolUsedEvent(tool));
+
+        final Settings settings = Settings.Companion.getInstance(this);
+        mEventBus.post(settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) ? ToolOpened.INSTANCE :
+                               FirstToolOpened.INSTANCE);
+        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED);
 
         final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(tool, 1));

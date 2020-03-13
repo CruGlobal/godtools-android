@@ -6,6 +6,7 @@ import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import org.cru.godtools.analytics.BuildConfig
+import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.base.util.SingletonHolder
@@ -37,6 +38,13 @@ class AppsFlyerAnalyticsService private constructor(private val app: Application
     fun onAnalyticsScreenEvent(event: AnalyticsScreenEvent) {
         if (event.isForSystem(AnalyticsSystem.APPSFLYER))
             appsFlyer.trackEvent(app, event.screen, emptyMap())
+    }
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    fun onAnalyticsActionEvent(event: AnalyticsActionEvent) {
+        if (event.isForSystem(AnalyticsSystem.APPSFLYER))
+            appsFlyer.trackEvent(app, event.action, emptyMap())
     }
     // endregion Analytics Events
 }

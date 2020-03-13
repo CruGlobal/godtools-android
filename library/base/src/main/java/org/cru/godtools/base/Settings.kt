@@ -32,6 +32,7 @@ class Settings private constructor(private val context: Context) {
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
         const val FEATURE_LOGIN = "login"
+        const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped"
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_TRAINING = "tutorialTraining"
