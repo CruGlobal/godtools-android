@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
-import org.cru.godtools.xml.model.ImageGravity;
+import org.cru.godtools.xml.model.ImageGravityKt;
 import org.cru.godtools.xml.model.ImageScaleType;
 import org.cru.godtools.xml.model.Resource;
 
@@ -52,11 +52,11 @@ public class ResourceViewUtils {
         image.setScaleType(scale);
         final boolean rtl = Resource.getLayoutDirection(resource) == ViewCompat.LAYOUT_DIRECTION_RTL;
         image.setGravityHorizontal(
-                ImageGravity.isStart(gravity) ? (!rtl ? GravityHorizontal.LEFT : GravityHorizontal.RIGHT) :
-                        ImageGravity.isEnd(gravity) ? (!rtl ? GravityHorizontal.RIGHT : GravityHorizontal.LEFT) :
+                ImageGravityKt.isStart(gravity) ? (!rtl ? GravityHorizontal.LEFT : GravityHorizontal.RIGHT) :
+                        ImageGravityKt.isEnd(gravity) ? (!rtl ? GravityHorizontal.RIGHT : GravityHorizontal.LEFT) :
                                 GravityHorizontal.CENTER);
-        image.setGravityVertical(ImageGravity.isTop(gravity) ? GravityVertical.TOP :
-                                         ImageGravity.isBottom(gravity) ? GravityVertical.BOTTOM :
+        image.setGravityVertical(ImageGravityKt.isTop(gravity) ? GravityVertical.TOP :
+                                         ImageGravityKt.isBottom(gravity) ? GravityVertical.BOTTOM :
                                                  GravityVertical.CENTER);
 
         image.toggleBatchUpdates(false);
@@ -74,20 +74,20 @@ public class ResourceViewUtils {
             rlp.addRule(CENTER_VERTICAL, 0);
 
             // update gravity (X-Axis)
-            if (ImageGravity.isStart(gravity)) {
+            if (ImageGravityKt.isStart(gravity)) {
                 rlp.addRule(ALIGN_PARENT_START);
-            } else if (ImageGravity.isEnd(gravity)) {
+            } else if (ImageGravityKt.isEnd(gravity)) {
                 rlp.addRule(ALIGN_PARENT_END);
-            } else if (ImageGravity.isCenterX(gravity)) {
+            } else if (ImageGravityKt.isCenterX(gravity)) {
                 rlp.addRule(CENTER_HORIZONTAL);
             }
 
             // update gravity (Y-Axis)
-            if (ImageGravity.isTop(gravity)) {
+            if (ImageGravityKt.isTop(gravity)) {
                 rlp.addRule(ALIGN_PARENT_TOP);
-            } else if (ImageGravity.isBottom(gravity)) {
+            } else if (ImageGravityKt.isBottom(gravity)) {
                 rlp.addRule(ALIGN_PARENT_BOTTOM);
-            } else if (ImageGravity.isCenterY(gravity)) {
+            } else if (ImageGravityKt.isCenterY(gravity)) {
                 rlp.addRule(CENTER_VERTICAL);
             }
 
