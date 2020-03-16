@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
 
-public abstract class Base {
+public abstract class Base implements BaseModel {
     static final String XML_PRIMARY_COLOR = "primary-color";
     static final String XML_PRIMARY_TEXT_COLOR = "primary-text-color";
     static final String XML_TEXT_COLOR = "text-color";
@@ -73,7 +73,8 @@ public abstract class Base {
     }
 
     @Nullable
-    Styles getStylesParent() {
+    @Override
+    public final Styles getStylesParent() {
         if (mParent == this) {
             return null;
         } else if (mParent instanceof Styles) {
