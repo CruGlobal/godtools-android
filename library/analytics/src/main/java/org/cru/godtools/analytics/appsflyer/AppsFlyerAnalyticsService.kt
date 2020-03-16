@@ -2,9 +2,14 @@ package org.cru.godtools.analytics.appsflyer
 
 import android.app.Application
 import androidx.annotation.WorkerThread
+import com.adobe.mobile.Visitor
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -15,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
-private const val TAG = "AppsFlyerAnalyticsSrvc"
+private const val TAG = "AppsFlyerAnalytics"
 
 class AppsFlyerAnalyticsService private constructor(private val app: Application) {
     companion object : SingletonHolder<AppsFlyerAnalyticsService, Application>(::AppsFlyerAnalyticsService)
@@ -26,10 +31,16 @@ class AppsFlyerAnalyticsService private constructor(private val app: Application
         appsFlyer.apply {
             init(BuildConfig.APPSFLYER_DEV_KEY, GodToolsAppsFlyerConversionListener, app.applicationContext)
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
-            startTracking(app)
         }
 
-        EventBus.getDefault().register(this)
+        GlobalScope.launch(Dispatchers.Default) {
+            val mcId = Visitor.getMarketingCloudId()
+            withContext(Dispatchers.Main) {
+                appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId))
+                appsFlyer.startTracking(app)
+                EventBus.getDefault().register(this@AppsFlyerAnalyticsService)
+            }
+        }
     }
 
     // region Analytics Events

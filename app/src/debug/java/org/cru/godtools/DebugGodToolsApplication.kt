@@ -27,9 +27,9 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     override fun onCreate() {
         configLeakCanary()
+        initTimber()
         super.onCreate()
         initFlipper()
-        initTimber()
     }
 
     override fun attachBaseContext(base: Context) {
@@ -48,6 +48,7 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
         // enable debug logging for various Analytics Services
         Config.setDebugLogging(true)
+        TimberAnalyticsService.getInstance(null)
     }
 
     private fun initFlipper() {
@@ -76,6 +77,5 @@ class DebugGodToolsApplication : GodToolsApplication() {
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
-        TimberAnalyticsService.getInstance(null)
     }
 }
