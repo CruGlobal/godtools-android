@@ -9,6 +9,7 @@ import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.CallToAction;
+import org.cru.godtools.xml.model.CallToActionKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,7 +73,8 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
         final boolean visible = mModel == null || !mModel.getPage().isLastPage() || !mModel.getEvents().isEmpty();
         mArrowView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         mArrowView.setImageResource(R.drawable.ic_call_to_action);
-        mArrowView.setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), CallToAction.getControlColor(mModel)));
+        mArrowView
+                .setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), CallToActionKt.getControlColor(mModel)));
     }
 
     @Override

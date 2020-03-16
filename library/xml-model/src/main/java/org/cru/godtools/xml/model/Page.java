@@ -267,7 +267,7 @@ public final class Page extends Base implements Styles, Parent {
                             parseModalsXml(parser);
                             continue;
                         case XML_CALL_TO_ACTION:
-                            mCallToAction = CallToAction.fromXml(this, parser);
+                            mCallToAction = new CallToAction(this, parser);
                             continue;
                     }
                     break;

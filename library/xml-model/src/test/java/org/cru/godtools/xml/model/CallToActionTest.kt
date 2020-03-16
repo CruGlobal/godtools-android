@@ -27,7 +27,7 @@ class CallToActionTest {
         val events = Event.Id.parse(TOOL_CODE, "event1 ns:event2")
         page.parsePageXml(getXmlParserForResource("call_to_action.xml"))
         val callToAction = page.callToAction
-        assertEquals(Color.RED, CallToAction.getControlColor(callToAction))
+        assertEquals(Color.RED, callToAction.controlColor)
         assertThat(callToAction.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("Call To Action", callToAction.label!!.mText)
     }
