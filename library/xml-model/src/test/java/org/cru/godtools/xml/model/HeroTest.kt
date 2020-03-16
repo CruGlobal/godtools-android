@@ -16,7 +16,7 @@ class HeroTest {
     fun testParseHero() {
         val hero = Hero(Manifest(), getXmlParserForResource("hero.xml"))
         assertThat(hero.analyticsEvents, hasSize(1))
-        assertEquals("Heading", hero.heading!!.mText)
+        assertEquals("Heading", hero.heading!!.text)
         assertThat(
             hero.content,
             contains(instanceOf(Image::class.java), instanceOf(Paragraph::class.java), instanceOf(Tabs::class.java))

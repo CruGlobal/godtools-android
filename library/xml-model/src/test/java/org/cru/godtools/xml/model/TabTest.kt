@@ -25,7 +25,7 @@ class TabTest {
         val tab = Tab(tabs, 5, getXmlParserForResource("tab.xml"))
         assertEquals(5, tab.position)
         assertThat(tab.analyticsEvents, hasSize(1))
-        assertEquals("Tab 1", tab.label!!.mText)
+        assertEquals("Tab 1", tab.label!!.text)
         assertThat(
             tab.content,
             contains(instanceOf(Image::class.java), instanceOf(Paragraph::class.java), instanceOf(Tabs::class.java))

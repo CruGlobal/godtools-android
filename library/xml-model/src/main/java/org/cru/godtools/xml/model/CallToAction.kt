@@ -42,7 +42,7 @@ class CallToAction : Base {
             when (parser.namespace) {
                 XMLNS_CONTENT -> when (parser.name) {
                     Text.XML_TEXT -> {
-                        label = Text.fromXml(this, parser)
+                        label = Text(this, parser)
                         continue@parsingChildren
                     }
                 }

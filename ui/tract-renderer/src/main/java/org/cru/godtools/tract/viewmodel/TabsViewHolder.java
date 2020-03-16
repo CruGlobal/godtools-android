@@ -18,6 +18,7 @@ import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Tab;
 import org.cru.godtools.xml.model.Tabs;
 import org.cru.godtools.xml.model.Text;
+import org.cru.godtools.xml.model.TextKt;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -114,7 +115,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
             for (final Tab tab : mModel.getTabs()) {
                 final Text label = tab.getLabel();
                 final TabLayout.Tab tab2 = mTabs.newTab()
-                        .setText(Text.getText(label));
+                        .setText(TextKt.getText(label));
 
                 // set the tab background
                 TabLayoutUtils.setBackgroundTint(tab2, primaryColor);

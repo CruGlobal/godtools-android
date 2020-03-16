@@ -14,7 +14,6 @@ import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.article.fragment.newArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
-import org.cru.godtools.xml.model.Text
 import java.util.Locale
 
 fun Activity.startArticlesActivity(toolCode: String, language: Locale, category: String?) {
@@ -70,7 +69,7 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
         // try to use the Category Label for the title
         activeManifest
             ?.findCategory(category)?.orElse(null)
-            ?.label?.let { Text.getText(it) }
+            ?.label?.text
             ?.let {
                 title = it
                 return

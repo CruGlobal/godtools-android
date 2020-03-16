@@ -149,7 +149,7 @@ public final class Button extends Content implements Styles {
                 case XMLNS_CONTENT:
                     switch (parser.getName()) {
                         case XML_TEXT:
-                            mText = Text.fromXml(this, parser);
+                            mText = new Text(this, parser);
                             continue;
                     }
                     break;

@@ -171,7 +171,7 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public String getTitle() {
-        return Text.getText(mTitle);
+        return TextKt.getText(mTitle);
     }
 
     @NonNull

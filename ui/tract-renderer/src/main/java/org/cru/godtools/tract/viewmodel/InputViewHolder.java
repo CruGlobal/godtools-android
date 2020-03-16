@@ -21,6 +21,7 @@ import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.Text;
+import org.cru.godtools.xml.model.TextKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,7 +116,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     private void bindLabel() {
         final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
         if (mInputLayout != null) {
-            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, Text.getTextColor(labelStyles));
+            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, TextKt.getTextColor(labelStyles));
         }
     }
 
@@ -128,14 +129,14 @@ final class InputViewHolder extends BaseViewHolder<Input> {
 
         // set the hint on the layout or the actual input (based on what's available)
         if (mInputLayout != null) {
-            mInputLayout.setHint(Text.getText(hintText));
+            mInputLayout.setHint(TextKt.getText(hintText));
         } else if (mInputView != null) {
-            mInputView.setHint(Text.getText(hintText));
+            mInputView.setHint(TextKt.getText(hintText));
         }
 
         // update placeholder styles
         final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
-        final int hintColor = Text.getTextColor(hintStyles);
+        final int hintColor = TextKt.getTextColor(hintStyles);
         if (mInputLayout != null) {
             mInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(hintColor));
         } else if (mInputView != null) {

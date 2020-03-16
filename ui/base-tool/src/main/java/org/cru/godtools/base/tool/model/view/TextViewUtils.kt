@@ -9,6 +9,9 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.textAlign
+import org.cru.godtools.xml.model.textScale
+import org.cru.godtools.xml.model.textSize
 
 @JvmOverloads
 @JvmName("bind")
@@ -18,9 +21,9 @@ fun Text?.bindTo(view: TextView?, @DimenRes textSize: Int? = null, @ColorInt def
 }
 
 internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
-    view.text = Text.getText(this)
+    view.text = this?.text
     view.typeface = this?.getTypeface(view.context)
-    val size = Text.getTextScale(this) * (textSize ?: view.context.resources.getDimension(Text.textSize(this)))
+    val size = textScale * (textSize ?: view.context.resources.getDimension(this.textSize))
     view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
     val defColor = defaultTextColor ?: Text.defaultTextColor(this)
@@ -31,7 +34,7 @@ internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt def
     }
 
     // set the alignment for the text
-    view.gravity = (view.gravity and Gravity.VERTICAL_GRAVITY_MASK) or Text.getTextAlign(this).mGravity
+    view.gravity = (view.gravity and Gravity.VERTICAL_GRAVITY_MASK) or textAlign.gravity
 }
 
 private fun Text.getTypeface(context: Context) = ManifestViewUtils.getTypeface(manifest, context)

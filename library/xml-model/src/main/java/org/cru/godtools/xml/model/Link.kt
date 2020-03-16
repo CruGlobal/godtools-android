@@ -34,7 +34,7 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
                 }
                 XMLNS_CONTENT -> when (parser.name) {
                     Text.XML_TEXT -> {
-                        text = Text.fromXml(this, parser)
+                        text = Text(this, parser)
                         continue@parsingChildren
                     }
                 }
