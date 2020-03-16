@@ -11,8 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-private const val TOOL_CODE = "test"
-
 @RunWith(AndroidJUnit4::class)
 class ImageTest {
     private lateinit var manifest: Manifest
