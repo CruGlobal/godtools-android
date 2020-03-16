@@ -29,7 +29,7 @@ public final class Card extends Base implements Styles, Parent {
     private static final String XML_HIDDEN = "hidden";
 
     private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravityKt.CENTER;
 
     private final int mPosition;
 
@@ -150,7 +150,7 @@ public final class Card extends Base implements Styles, Parent {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageGravity = ImageGravityKt.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements

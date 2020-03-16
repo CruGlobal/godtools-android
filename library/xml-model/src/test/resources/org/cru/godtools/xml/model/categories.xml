@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<manifest xmlns:article="https://mobile-content-api.cru.org/xmlns/article"
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    xmlns="https://mobile-content-api.cru.org/xmlns/manifest">
+    <resources>
+        <resource filename="banner.jpg" src="bannersha1.jpg" />
+    </resources>
+
+    <categories>
+        <category banner="banner.jpg" id="testParseCategory">
+            <label>
+                <content:text>Category</content:text>
+            </label>
+            <article:aem-tag id="tag1" />
+            <article:aem-tag id="tag2" />
+        </category>
+    </categories>
+</manifest>

@@ -2,63 +2,65 @@ package org.cru.godtools.xml.model
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ImageGravityTest {
+    val none = ImageGravity(0)
+
     @Test
     fun verifyParse() {
-        ImageGravity.parse("start unrecognized center", null)!!.also { gravity ->
-            assertFalse(ImageGravity.isCenterX(gravity))
-            assertTrue(ImageGravity.isStart(gravity))
-            assertFalse(ImageGravity.isEnd(gravity))
-            assertTrue(ImageGravity.isCenterY(gravity))
-            assertFalse(ImageGravity.isTop(gravity))
-            assertFalse(ImageGravity.isBottom(gravity))
-            assertFalse(ImageGravity.isCenter(gravity))
+        ImageGravity.parse("start unrecognized center", ImageGravity.NONE)!!.also { gravity ->
+            assertFalse(gravity.isCenterX())
+            assertTrue(gravity.isStart())
+            assertFalse(gravity.isEnd())
+            assertTrue(gravity.isCenterY())
+            assertFalse(gravity.isTop())
+            assertFalse(gravity.isBottom())
+            assertFalse(gravity.isCenter())
         }
 
-        ImageGravity.parse("center end", null)!!.also { gravity ->
-            assertFalse(ImageGravity.isCenterX(gravity))
-            assertFalse(ImageGravity.isStart(gravity))
-            assertTrue(ImageGravity.isEnd(gravity))
-            assertTrue(ImageGravity.isCenterY(gravity))
-            assertFalse(ImageGravity.isTop(gravity))
-            assertFalse(ImageGravity.isBottom(gravity))
-            assertFalse(ImageGravity.isCenter(gravity))
+        ImageGravity.parse("center end", ImageGravity.NONE)!!.also { gravity ->
+            assertFalse(gravity.isCenterX())
+            assertFalse(gravity.isStart())
+            assertTrue(gravity.isEnd())
+            assertTrue(gravity.isCenterY())
+            assertFalse(gravity.isTop())
+            assertFalse(gravity.isBottom())
+            assertFalse(gravity.isCenter())
         }
 
-        ImageGravity.parse("center", null)!!.also { gravity ->
-            assertTrue(ImageGravity.isCenterX(gravity))
-            assertFalse(ImageGravity.isStart(gravity))
-            assertFalse(ImageGravity.isEnd(gravity))
-            assertTrue(ImageGravity.isCenterY(gravity))
-            assertFalse(ImageGravity.isTop(gravity))
-            assertFalse(ImageGravity.isBottom(gravity))
-            assertTrue(ImageGravity.isCenter(gravity))
+        ImageGravity.parse("center", ImageGravity.NONE)!!.also { gravity ->
+            assertTrue(gravity.isCenterX())
+            assertFalse(gravity.isStart())
+            assertFalse(gravity.isEnd())
+            assertTrue(gravity.isCenterY())
+            assertFalse(gravity.isTop())
+            assertFalse(gravity.isBottom())
+            assertTrue(gravity.isCenter())
         }
     }
 
     @Test
     fun verifyParseConflictingGravity() {
-        assertThat(ImageGravity.parse("start end", null), nullValue())
-        assertThat(ImageGravity.parse("start top end", null), nullValue())
-        assertThat(ImageGravity.parse("bottom top end", null), nullValue())
+        assertEquals(none, ImageGravity.parse("start end", none))
+        assertEquals(none, ImageGravity.parse("start top end", none))
+        assertEquals(none, ImageGravity.parse("bottom top end", none))
     }
 
     @Test
     fun verifyParseDefaultValue() {
-        for (align in intArrayOf(
-            ImageGravity.CENTER,
+        arrayOf(
             ImageGravity.START,
             ImageGravity.END,
             ImageGravity.TOP,
-            ImageGravity.BOTTOM
-        )) {
-            assertThat(ImageGravity.parse(null, align), equalTo(align))
-            assertThat(ImageGravity.parse("invalid-type", align), equalTo(align))
+            ImageGravity.BOTTOM,
+            ImageGravity.CENTER
+        ).forEach {
+            assertThat(ImageGravity.parse(null, it), equalTo(it))
+            assertThat(ImageGravity.parse("invalid-type", it), equalTo(it))
         }
     }
 }

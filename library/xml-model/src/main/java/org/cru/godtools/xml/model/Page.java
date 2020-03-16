@@ -43,7 +43,7 @@ public final class Page extends Base implements Styles, Parent {
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravityKt.CENTER;
 
     private final int mPosition;
 
@@ -241,7 +241,7 @@ public final class Page extends Base implements Styles, Parent {
         mCardTextColor = parseColor(parser, XML_CARD_TEXT_COLOR, mCardTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageGravity = ImageGravityKt.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
@@ -267,7 +267,7 @@ public final class Page extends Base implements Styles, Parent {
                             parseModalsXml(parser);
                             continue;
                         case XML_CALL_TO_ACTION:
-                            mCallToAction = CallToAction.fromXml(this, parser);
+                            mCallToAction = new CallToAction(this, parser);
                             continue;
                     }
                     break;

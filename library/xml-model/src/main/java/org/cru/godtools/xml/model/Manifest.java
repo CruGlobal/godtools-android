@@ -59,7 +59,7 @@ public final class Manifest extends Base implements Styles {
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
     private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL;
-    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravityKt.CENTER;
 
     public enum Type {
         TRACT, ARTICLE, UNKNOWN;
@@ -328,7 +328,7 @@ public final class Manifest extends Base implements Styles {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageGravity = ImageGravityKt.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
