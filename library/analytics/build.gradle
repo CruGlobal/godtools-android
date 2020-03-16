@@ -29,6 +29,8 @@ android {
 dependencies {
     api project(':library:base')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${deps.kotlinCoroutines}"
+
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
