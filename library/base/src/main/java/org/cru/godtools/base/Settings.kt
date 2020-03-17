@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.lifecycle.getStringLiveData
 import org.cru.godtools.base.util.SingletonHolder
-import org.cru.godtools.base.util.deviceLocale
 import java.util.Locale
 
 private const val PREFS_SETTINGS = "GodTools"
@@ -85,9 +84,7 @@ class Settings private constructor(private val context: Context) {
         if (!discovered) {
             var changed = false
             when (feature) {
-                FEATURE_TUTORIAL_ONBOARDING -> if (
-                    firstLaunchVersion <= VERSION_5_1_4 || context.deviceLocale.language != Locale.ENGLISH.language
-                ) {
+                FEATURE_TUTORIAL_ONBOARDING -> if (firstLaunchVersion <= VERSION_5_1_4) {
                     setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
                     changed = true
                 }
