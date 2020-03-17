@@ -27,8 +27,11 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "me.relex:circleindicator:${deps.circleindicator}"
+
+    testImplementation "pl.pragmatists:JUnitParams:${deps.junitParams}"
 }

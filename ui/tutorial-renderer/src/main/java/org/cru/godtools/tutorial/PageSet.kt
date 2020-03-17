@@ -1,10 +1,13 @@
 package org.cru.godtools.tutorial
 
+import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
+import java.util.Locale
 
 enum class PageSet(
     internal val feature: String? = null,
     internal val pages: List<Page>,
+    internal val supportedLocales: Set<Locale> = emptySet(),
     internal val menu: Int? = null,
     internal val showUpNavigation: Boolean = true,
     internal val analyticsBaseScreenName: String
@@ -20,7 +23,8 @@ enum class PageSet(
             Page.ONBOARDING_TOOLS,
             Page.ONBOARDING_READY,
             Page.ONBOARDING_FINAL
-        )
+        ),
+        supportedLocales = setOf(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE, Locale("es"))
     ),
     TRAINING(
         feature = Settings.FEATURE_TUTORIAL_TRAINING,
@@ -30,8 +34,11 @@ enum class PageSet(
             Page.TRAINING_PREPARE,
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL
-        )
+        ),
+        supportedLocales = setOf(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE, Locale("es"))
     );
+
+    fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }
 
     companion object {
         val DEFAULT = ONBOARDING
