@@ -22,6 +22,7 @@ buildscript {
                 jetbrainsAnnotation: '19.0.0',
                 jsoup              : '1.12.2',
                 junit              : '4.13',
+                junitParams        : '1.1.1',
                 kotlin             : '1.3.70',
                 kotlinCoroutines   : '1.3.4',
                 leakcanary         : '2.2',

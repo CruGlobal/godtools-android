@@ -18,6 +18,8 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.analytics.LaunchTrackingViewModel;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
@@ -209,7 +211,14 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     // region Onboarding
     private void triggerOnboardingIfNecessary() {
-        if (!getSettings().isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
+        // TODO: remove this once we support onboarding in all languages
+        // mark OnBoarding as discovered if this isn't a supported language
+        final Settings settings = getSettings();
+        if (!PageSet.ONBOARDING.supportsLocale(LocaleUtils.getDeviceLocale(this))) {
+            settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
+        }
+
+        if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
             TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
         }
     }

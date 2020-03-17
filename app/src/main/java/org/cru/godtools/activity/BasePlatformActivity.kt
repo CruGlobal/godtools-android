@@ -203,7 +203,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
             with(menu) {
                 // the tutorial menu item is currently only available in English
-                findItem(R.id.action_tutorial)?.isVisible = deviceLocale.language == Locale.ENGLISH.language
+                findItem(R.id.action_tutorial)?.isVisible = PageSet.TRAINING.supportsLocale(deviceLocale)
 
                 // login items visibility
                 if (showLoginItems) {
