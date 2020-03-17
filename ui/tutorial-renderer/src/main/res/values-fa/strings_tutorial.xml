@@ -6,6 +6,29 @@
     <string name="tutorial_onboarding_others_headline">اشتراک گذاری با دیگران</string>
     <string name="tutorial_onboarding_others_subhead">این برنامه برای کمک به اشتراک گذاری ایمان شما ساخته شده است.</string>
     <string name="tutorial_onboarding_tools_headline">انتخاب ابزار</string>
+    <string name="tutorial_onboarding_tools_subhead">God tools یاری دهنده شما برای آغاز و پایان یک گفتگوی روحانی می باشد.</string>
+    <string name="tutorial_onboarding_ready_headline">همیشه آماده</string>
+    <string name="tutorial_onboarding_ready_subhead">God tools هر زمان که شما آماده باشید، آماده برای کمک به شماست.</string>
+    <string name="tutorial_onboarding_final_prepare">برای هر گفتگویی آماده شوید.</string>
+    <string name="tutorial_onboarding_final_parallel_languages">دو زبان را کنار هم اجرا کنید.</string>
+    <string name="tutorial_onboarding_final_languages">از بین بیش از 80 زبان انتخاب کنید.</string>
+    <string name="tutorial_onboarding_final_action_show_more">بیشتر به من نشان بده</string>
+    <string name="tutorial_onboarding_final_action_start">شروع کنید</string>
+    <string name="tutorial_onboarding_action_begin">شروع</string>
+    <string name="tutorial_onboarding_action_continue">ادامه</string>
+    <string name="tutorial_onboarding_action_skip">پریدن</string>
     <!-- Onboarding Tutorial -->
+    <string name="tutorial_training_watch_headline">تماشا کردن</string>
+    <string name="tutorial_training_watch_subhead">دراین ویدبو آنچه را که این برنامه ارائه می دهد را ببینید.</string>
+    <string name="tutorial_training_prepare_headline">آماده کردن</string>
+    <string name="tutorial_training_prepare_subhead">با چند ابزار بیشتر آشنا شوید.این ابزارنقطه خوبی برای شروع است.</string>
+    <string name="tutorial_training_try_headline">تلاش كردن</string>
+    <string name="tutorial_training_try_subhead">همه به عنوان مبتدی شروع می کنند. با دیگران به اشتراک بگذارید و از تجربیات خود بیاموزید.</string>
+    <string name="tutorial_training_final_headline">این بخش آموزشی  برای مشاهده دوباره در منو موجود است.</string>
+    <string name="tutorial_training_action_continue">ادامه</string>
+    <string name="tutorial_training_action_start">استفاده از GodTools را شروع کنید</string>
     <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">نشان دادن آمورش</string>
+    <string name="tutorial_training_banner_action_open">باز کردن آموزش</string>
+    <string name="tutorial_training_banner_action_dismiss">رد کردن</string>
 </resources>

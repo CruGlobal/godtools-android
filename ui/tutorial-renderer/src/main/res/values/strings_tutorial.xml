@@ -12,7 +12,7 @@
     <string name="tutorial_onboarding_ready_subhead">GodTools is here to help and is ready when you are</string>
     <string name="tutorial_onboarding_final_prepare">Prepare for any conversation</string>
     <string name="tutorial_onboarding_final_gospel">Walk someone through the gospel</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Run two languages side by side</string>
+    <string name="tutorial_onboarding_final_parallel_languages">View two languages side by side</string>
     <string name="tutorial_onboarding_final_languages">Choose from over 80 languages</string>
     <string name="tutorial_onboarding_final_help_others">Help someone get started as a Christian</string>
     <string name="tutorial_onboarding_final_action_show_more">Show Me More</string>
@@ -24,9 +24,12 @@
     <!-- Training Tutorial -->
     <eat-comment />
     <string name="tutorial_training_watch_headline">Watch</string>
-    <string name="tutorial_training_watch_subhead">See what the app offers in our demo video</string>
+    <string name="tutorial_training_watch_subhead">See what the app offers in our demo video
+(Tap on the video to bring up settings for subtitles)</string>
     <string name="tutorial_training_prepare_headline">Prepare</string>
-    <string name="tutorial_training_prepare_subhead">Get more familiar with a couple of tools. This tool is a good place to start.</string>
+    <string name="tutorial_training_prepare_subhead">"Get familiar with some of your tools. The \"Teach Me to Share\" tool is a good place to start. 
+
+Press the information button on any tool for more info. "</string>
     <string name="tutorial_training_try_headline">Try</string>
     <string name="tutorial_training_try_subhead">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
     <string name="tutorial_training_final_headline">This tutorial is available to see again in the menu</string>
