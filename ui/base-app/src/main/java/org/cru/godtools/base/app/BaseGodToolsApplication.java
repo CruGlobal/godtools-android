@@ -9,8 +9,8 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
 import org.ccci.gto.android.common.eventbus.TimberLogger;
 import org.ccci.gto.android.common.util.LocaleUtils;
-import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
+import org.cru.godtools.analytics.adobe.AdobeAnalyticsService;
 import org.cru.godtools.analytics.appsflyer.AppsFlyerAnalyticsService;
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService;
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService;
@@ -63,7 +63,7 @@ public class BaseGodToolsApplication extends Application {
 
     @CallSuper
     protected void configureAnalyticsServices() {
-        AdobeAnalyticsService.getInstance(this);
+        AdobeAnalyticsService.Companion.getInstance(this);
         AppsFlyerAnalyticsService.Companion.getInstance(this);
         FacebookAnalyticsService.Companion.getInstance(null);
         FirebaseAnalyticsService.Companion.getInstance(this);
