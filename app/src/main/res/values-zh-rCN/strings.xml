@@ -10,8 +10,8 @@
     <string name="menu_help">常见问题</string>
     <string name="menu_contact_us">联系我们</string>
     <string name="menu_login">登录</string>
-    <string name="menu_signup">创建账户</string>
-    <string name="menu_logout">退出</string>
+    <string name="menu_signup">建立帳戶</string>
+    <string name="menu_logout">登出</string>
     <string name="menu_share_godtools">分享GodTools应用</string>
     <string name="menu_share_story">与我们分享故事</string>
     <string name="menu_rate">为GodTools评分</string>
