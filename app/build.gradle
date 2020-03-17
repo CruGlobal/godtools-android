@@ -169,6 +169,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+    implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
@@ -191,9 +192,6 @@ dependencies {
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
-
-    // enable firebase in app messaging in debug builds for Justin Sooter to test it out
-    debugImplementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
