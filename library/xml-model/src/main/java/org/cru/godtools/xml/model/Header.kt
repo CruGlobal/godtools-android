@@ -19,11 +19,11 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : Base(pa
     val number: Text?
     val title: Text?
 
-    @ColorInt
-    override fun getTextColor() = primaryTextColor
+    @get:ColorInt
+    override val textColor get() = primaryTextColor
 
-    @DimenRes
-    override fun getTextSize() = R.dimen.text_size_header
+    @get:DimenRes
+    override val textSize get() = R.dimen.text_size_header
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HEADER)

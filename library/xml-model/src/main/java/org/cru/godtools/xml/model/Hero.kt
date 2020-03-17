@@ -15,8 +15,8 @@ class Hero internal constructor(parent: Base, parser: XmlPullParser) : Base(pare
     val heading: Text?
     override val content: List<Content>
 
-    @DimenRes
-    override fun getTextSize() = R.dimen.text_size_hero
+    @get:DimenRes
+    override val textSize get() = R.dimen.text_size_hero
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HERO)

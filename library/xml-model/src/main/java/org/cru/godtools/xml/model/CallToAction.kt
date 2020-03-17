@@ -20,7 +20,7 @@ class CallToAction : Base {
     @ColorInt
     private val _controlColor: Int?
     @get:ColorInt
-    val controlColor get() = _controlColor ?: Styles.getPrimaryColor(page)
+    val controlColor get() = _controlColor ?: page.primaryColor
 
     internal constructor(parent: Base) : super(parent) {
         label = null
@@ -56,4 +56,4 @@ class CallToAction : Base {
 }
 
 @get:ColorInt
-val CallToAction?.controlColor: Int get() = this?.controlColor ?: Styles.getPrimaryColor(null)
+val CallToAction?.controlColor: Int get() = this?.controlColor ?: stylesParent.primaryColor

@@ -1,6 +1,6 @@
 package org.cru.godtools.xml.model
 
-internal interface BaseModel {
+interface BaseModel {
     val stylesParent: Styles?
 }
 

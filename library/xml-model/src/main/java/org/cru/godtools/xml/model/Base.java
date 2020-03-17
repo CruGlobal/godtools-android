@@ -1,13 +1,10 @@
 package org.cru.godtools.xml.model;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.xml.model.Text.Align;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.Set;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.TextUtilsCompat;
@@ -86,42 +83,8 @@ public abstract class Base implements BaseModel {
 
     @Nullable
     public static Styles getStylesParent(@Nullable final Base obj) {
-        return obj != null ? obj.getStylesParent() : null;
+        return BaseModelKt.getStylesParent(obj);
     }
-
-    /* BEGIN: Styles default methods */
-
-    @ColorInt
-    public int getPrimaryColor() {
-        return Styles.getPrimaryColor(getStylesParent());
-    }
-
-    @ColorInt
-    public int getPrimaryTextColor() {
-        return Styles.getPrimaryTextColor(getStylesParent());
-    }
-
-    @ColorInt
-    public int getTextColor() {
-        return Styles.getTextColor(getStylesParent());
-    }
-
-    @DimenRes
-    public int getTextSize() {
-        return Styles.getTextSize(getStylesParent());
-    }
-
-    @NonNull
-    public Align getTextAlign() {
-        return Styles.getTextAlign(getStylesParent());
-    }
-
-    @ColorInt
-    public int getButtonColor() {
-        return getPrimaryColor();
-    }
-
-    /* END: Styles default methods */
 
     @NonNull
     final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {

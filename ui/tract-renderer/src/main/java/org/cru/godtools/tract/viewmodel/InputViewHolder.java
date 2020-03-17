@@ -20,6 +20,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 import org.cru.godtools.xml.model.TextKt;
 
@@ -162,10 +163,10 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         // style the input view
         final Styles stylesParent = Base.getStylesParent(mModel);
         if (mInputLayout != null) {
-            mInputLayout.setBoxStrokeColor(Styles.getPrimaryColor(stylesParent));
+            mInputLayout.setBoxStrokeColor(StylesKt.getPrimaryColor(stylesParent));
         }
         if (mInputView != null) {
-            mInputView.setTextColor(Styles.getTextColor(stylesParent));
+            mInputView.setTextColor(StylesKt.getTextColor(stylesParent));
 
             // set the cursor color
             // TODO: add support for older versions of Android by creating compat methods in GTO-Support for modifying
@@ -173,7 +174,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 final Drawable cursor = mInputView.getTextCursorDrawable();
                 if (cursor != null) {
-                    cursor.setTint(Styles.getPrimaryColor(stylesParent));
+                    cursor.setTint(StylesKt.getPrimaryColor(stylesParent));
                 }
             }
         }

@@ -38,11 +38,11 @@ class Text : Content {
     val text: String?
 
     private val _textAlign: Align?
-    override fun getTextAlign() = _textAlign ?: Styles.getTextAlign(stylesParent)
+    val textAlign get() = _textAlign ?: stylesParent.textAlign
     @ColorInt
     private val _textColor: Int?
-    @ColorInt
-    override fun getTextColor() = _textColor ?: Styles.getTextColor(stylesParent)
+    @get:ColorInt
+    val textColor get() = _textColor ?: stylesParent.textColor
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
@@ -91,7 +91,7 @@ class Text : Content {
         }
 
         @ColorInt
-        fun defaultTextColor(text: Text?) = Styles.getTextColor(getStylesParent(text))
+        fun defaultTextColor(text: Text?) = getStylesParent(text).textColor
     }
 }
 
@@ -100,7 +100,7 @@ val Text?.text get() = this?.text
 
 val Text?.textAlign get() = this?.textAlign ?: Text.Align.DEFAULT
 @get:ColorInt
-val Text?.textColor get() = this?.textColor ?: Styles.getTextColor(null)
+val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
 val Text?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
 @get:DimenRes
-val Text?.textSize get() = Styles.getTextSize(this?.stylesParent)
+val Text?.textSize get() = stylesParent.textSize

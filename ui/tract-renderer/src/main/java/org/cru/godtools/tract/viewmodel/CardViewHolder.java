@@ -14,7 +14,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
-import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
@@ -124,8 +124,8 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     private void bindLabel() {
         final Text label = mModel != null ? mModel.getLabel() : null;
-        TextViewUtils.bind(label, mLabel, R.dimen.text_size_card_label, Styles.getPrimaryColor(mModel));
-        mDivider.setBackgroundColor(Styles.getTextColor(mModel));
+        TextViewUtils.bind(label, mLabel, R.dimen.text_size_card_label, StylesKt.getPrimaryColor(mModel));
+        mDivider.setBackgroundColor(StylesKt.getTextColor(mModel));
     }
 
     private void bindCardNavigation() {

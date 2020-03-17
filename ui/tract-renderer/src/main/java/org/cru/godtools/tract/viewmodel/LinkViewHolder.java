@@ -9,7 +9,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.Link;
-import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 
 import androidx.annotation.NonNull;
@@ -39,7 +39,7 @@ final class LinkViewHolder extends BaseViewHolder<Link> {
 
     private void bindText() {
         final Text text = mModel != null ? mModel.getText() : null;
-        TextViewUtils.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
+        TextViewUtils.bind(text, mLink, null, StylesKt.getPrimaryColor(Base.getStylesParent(mModel)));
     }
 
     @OnClick(R2.id.content_link)
