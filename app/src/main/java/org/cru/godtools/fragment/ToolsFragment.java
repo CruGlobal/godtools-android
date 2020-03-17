@@ -53,7 +53,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
-
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
@@ -235,7 +234,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     private void updateVisibleBanner() {
         if (mToolsHeaderAdapter != null) {
             if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TRAINING) && mMode == MODE_ADDED &&
-                    LocaleUtils.getDeviceLocale(requireContext()).getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+                    PageSet.TRAINING.supportsLocale(LocaleUtils.getDeviceLocale(requireContext()))) {
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
                 mToolsHeaderAdapter.setSecondaryCallback(b -> {
