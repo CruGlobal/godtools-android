@@ -128,19 +128,19 @@ public final class Page extends Base implements Styles, Parent {
     @ColorInt
     @Override
     public int getPrimaryColor() {
-        return mPrimaryColor != null ? mPrimaryColor : Styles.getPrimaryColor(getStylesParent());
+        return mPrimaryColor != null ? mPrimaryColor : StylesKt.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
     @Override
     public int getPrimaryTextColor() {
-        return mPrimaryTextColor != null ? mPrimaryTextColor : Styles.getPrimaryTextColor(getStylesParent());
+        return mPrimaryTextColor != null ? mPrimaryTextColor : StylesKt.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
     @Override
     public int getTextColor() {
-        return mTextColor != null ? mTextColor : Styles.getTextColor(getStylesParent());
+        return mTextColor != null ? mTextColor : StylesKt.getTextColor(getStylesParent());
     }
 
     @ColorInt

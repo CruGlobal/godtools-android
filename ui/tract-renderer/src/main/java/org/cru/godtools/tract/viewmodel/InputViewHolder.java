@@ -20,7 +20,9 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
+import org.cru.godtools.xml.model.TextKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,7 +117,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     private void bindLabel() {
         final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
         if (mInputLayout != null) {
-            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, Text.getTextColor(labelStyles));
+            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, TextKt.getTextColor(labelStyles));
         }
     }
 
@@ -128,14 +130,14 @@ final class InputViewHolder extends BaseViewHolder<Input> {
 
         // set the hint on the layout or the actual input (based on what's available)
         if (mInputLayout != null) {
-            mInputLayout.setHint(Text.getText(hintText));
+            mInputLayout.setHint(TextKt.getText(hintText));
         } else if (mInputView != null) {
-            mInputView.setHint(Text.getText(hintText));
+            mInputView.setHint(TextKt.getText(hintText));
         }
 
         // update placeholder styles
         final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
-        final int hintColor = Text.getTextColor(hintStyles);
+        final int hintColor = TextKt.getTextColor(hintStyles);
         if (mInputLayout != null) {
             mInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(hintColor));
         } else if (mInputView != null) {
@@ -161,10 +163,10 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         // style the input view
         final Styles stylesParent = Base.getStylesParent(mModel);
         if (mInputLayout != null) {
-            mInputLayout.setBoxStrokeColor(Styles.getPrimaryColor(stylesParent));
+            mInputLayout.setBoxStrokeColor(StylesKt.getPrimaryColor(stylesParent));
         }
         if (mInputView != null) {
-            mInputView.setTextColor(Styles.getTextColor(stylesParent));
+            mInputView.setTextColor(StylesKt.getTextColor(stylesParent));
 
             // set the cursor color
             // TODO: add support for older versions of Android by creating compat methods in GTO-Support for modifying
@@ -172,7 +174,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 final Drawable cursor = mInputView.getTextCursorDrawable();
                 if (cursor != null) {
-                    cursor.setTint(Styles.getPrimaryColor(stylesParent));
+                    cursor.setTint(StylesKt.getPrimaryColor(stylesParent));
                 }
             }
         }

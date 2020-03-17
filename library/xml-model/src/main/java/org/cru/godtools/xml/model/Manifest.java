@@ -171,7 +171,7 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public String getTitle() {
-        return Text.getText(mTitle);
+        return TextKt.getText(mTitle);
     }
 
     @NonNull
@@ -292,19 +292,19 @@ public final class Manifest extends Base implements Styles {
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
-                Styles.getPrimaryColor(manifest);
+                StylesKt.getPrimaryColor(manifest);
     }
 
     @ColorInt
     public static int getNavBarControlColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarControlColor != null ? manifest.mNavBarControlColor :
-                Styles.getPrimaryTextColor(manifest);
+                StylesKt.getPrimaryTextColor(manifest);
     }
 
     @ColorInt
     public static int getCategoryLabelColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mCategoryLabelColor != null ? manifest.mCategoryLabelColor :
-                Styles.getTextColor(manifest);
+                StylesKt.getTextColor(manifest);
     }
 
     @NonNull

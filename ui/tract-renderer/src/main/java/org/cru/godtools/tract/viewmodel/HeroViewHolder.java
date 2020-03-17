@@ -8,7 +8,7 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Hero;
-import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
@@ -65,7 +65,7 @@ public class HeroViewHolder extends ParentViewHolder<Hero> {
 
     private void bindHeading() {
         final Text heading = mModel != null ? mModel.getHeading() : null;
-        TextViewUtils.bind(heading, mHeading, R.dimen.text_size_hero_heading, Styles.getPrimaryColor(mModel));
+        TextViewUtils.bind(heading, mHeading, R.dimen.text_size_hero_heading, StylesKt.getPrimaryColor(mModel));
         mHeading.setVisibility(heading != null ? View.VISIBLE : View.GONE);
     }
 }

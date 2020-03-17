@@ -35,7 +35,7 @@ class TextViewUtilsTest {
         text.bindTo(view)
         assertEquals("text", view.text)
         assertEquals(Color.RED, view.textColors.defaultColor)
-        assertEquals(Text.Align.CENTER.mGravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
+        assertEquals(Text.Align.CENTER.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(2 * activity.resources.getDimension(R.dimen.text_size_base), view.textSize, 0.001f)
     }
 
@@ -45,7 +45,7 @@ class TextViewUtilsTest {
         text.bindTo(view, R.dimen.text_size_header, Color.GREEN)
         assertEquals("text", view.text)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
-        assertEquals(Text.Align.END.mGravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
+        assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(1.5f * activity.resources.getDimension(R.dimen.text_size_header), view.textSize, 0.001f)
     }
 }

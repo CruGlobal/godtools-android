@@ -21,6 +21,6 @@ class CategoryTest {
         assertEquals("bannersha1.jpg", banner.localName)
         assertThat(category.aemTags, containsInAnyOrder("tag1", "tag2"))
         val label = category.label!!
-        assertEquals("Category", label.mText)
+        assertEquals("Category", label.text)
     }
 }

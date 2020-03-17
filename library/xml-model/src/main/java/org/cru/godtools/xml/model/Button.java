@@ -76,12 +76,12 @@ public final class Button extends Content implements Styles {
 
     @ColorInt
     public int getButtonColor() {
-        return mColor != null ? mColor : Styles.getButtonColor(getStylesParent());
+        return mColor != null ? mColor : StylesKt.getButtonColor(getStylesParent());
     }
 
     @ColorInt
     public static int getButtonColor(@Nullable final Button button) {
-        return button != null ? button.getButtonColor() : Styles.getButtonColor(null);
+        return button != null ? button.getButtonColor() : StylesKt.getButtonColor(null);
     }
 
     @NonNull
@@ -149,7 +149,7 @@ public final class Button extends Content implements Styles {
                 case XMLNS_CONTENT:
                     switch (parser.getName()) {
                         case XML_TEXT:
-                            mText = Text.fromXml(this, parser);
+                            mText = new Text(this, parser);
                             continue;
                     }
                     break;

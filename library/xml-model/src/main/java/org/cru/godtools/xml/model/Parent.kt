@@ -1,5 +1,5 @@
 package org.cru.godtools.xml.model
 
-interface Parent {
+interface Parent : BaseModel {
     val content: List<Content>
 }
