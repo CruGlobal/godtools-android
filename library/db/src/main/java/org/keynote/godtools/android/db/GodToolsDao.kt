@@ -43,7 +43,7 @@ class GodToolsDao private constructor(context: Context) :
 
     init {
         registerType(
-            Followup::class.java, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, FollowupMapper(),
+            Followup::class.java, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, FollowupMapper,
             FollowupTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
