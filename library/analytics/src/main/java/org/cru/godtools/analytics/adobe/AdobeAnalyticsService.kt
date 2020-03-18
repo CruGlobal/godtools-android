@@ -72,7 +72,7 @@ class AdobeAnalyticsService private constructor(app: Application) : ActivityLife
     // region ActivityLifecycleCallbacks
     private var activeActivity: Activity? by weak()
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) = Unit
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
     override fun onActivityStarted(activity: Activity) = Unit
 
     @MainThread
