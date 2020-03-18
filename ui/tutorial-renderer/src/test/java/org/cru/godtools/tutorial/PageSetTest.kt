@@ -11,7 +11,7 @@ import java.util.Locale
 @RunWith(JUnitParamsRunner::class)
 class PageSetTest {
     @Test
-    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX")
+    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX", "zh-Hans-CN")
     fun testOnboardingSupportedLanguages(code: String) {
         assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag(code)))
     }
@@ -23,7 +23,7 @@ class PageSetTest {
     }
 
     @Test
-    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX")
+    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX", "zh-Hans-CN")
     fun testTrainingSupportedLanguages(code: String) {
         assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag(code)))
     }
