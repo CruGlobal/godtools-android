@@ -1,7 +1,7 @@
 package org.cru.godtools.tract.analytics.model
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
-import org.cru.godtools.analytics.AdobeAnalyticsService.ADOBE_ATTR_LANGUAGE_SECONDARY
+import org.cru.godtools.analytics.adobe.ADOBE_ATTR_LANGUAGE_SECONDARY
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import java.util.Locale
