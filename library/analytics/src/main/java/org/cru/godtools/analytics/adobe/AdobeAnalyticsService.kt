@@ -10,9 +10,11 @@ import androidx.annotation.WorkerThread
 import com.adobe.mobile.Analytics
 import com.adobe.mobile.Config
 import com.adobe.mobile.Visitor
+import com.adobe.mobile.VisitorID.VisitorIDAuthenticationState
 import com.karumi.weak.weak
 import me.thekey.android.Attributes
 import me.thekey.android.TheKey
+import me.thekey.android.eventbus.event.TheKeyEvent
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
@@ -42,6 +44,10 @@ private const val ADOBE_ATTR_SITE_SUB_SECTION = "cru.sitesubsection"
 private const val VALUE_GODTOOLS = "GodTools"
 private const val VALUE_LOGGED_IN = "logged in"
 private const val VALUE_NOT_LOGGED_IN = "not logged in"
+
+private const val VISITOR_ID_GUID = "ssoguid"
+private const val VISITOR_ID_MASTER_PERSON_ID = "grmpid"
+private const val VISITOR_ID_ECID = "ecid"
 
 @OptIn(ExperimentalStdlibApi::class)
 class AdobeAnalyticsService private constructor(app: Application) : ActivityLifecycleCallbacks {
@@ -148,4 +154,39 @@ class AdobeAnalyticsService private constructor(app: Application) : ActivityLife
         put(ADOBE_ATTR_SCREEN_NAME_PREVIOUS, previousScreenName)
         put(ADOBE_ATTR_SCREEN_NAME, event.screen)
     }
+
+    // region Visitor ids
+    init {
+        val guid = theKey.defaultSessionGuid
+        analyticsExecutor.execute {
+            Visitor.syncIdentifier(
+                VISITOR_ID_ECID,
+                Visitor.getMarketingCloudId(),
+                VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_UNKNOWN
+            )
+            updateVisitorIdIdentifiers(guid)
+        }
+    }
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    fun onTheKeyEvent(event: TheKeyEvent) {
+        val guid = theKey.defaultSessionGuid
+        analyticsExecutor.execute { updateVisitorIdIdentifiers(guid) }
+    }
+
+    @WorkerThread
+    private fun updateVisitorIdIdentifiers(guid: String?) {
+        Visitor.syncIdentifiers(
+            mutableMapOf(
+                VISITOR_ID_GUID to guid,
+                VISITOR_ID_MASTER_PERSON_ID to theKey.getAttributes(guid)
+                    .getAttribute(Attributes.ATTR_GR_MASTER_PERSON_ID)
+            ), when {
+                guid != null -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_AUTHENTICATED
+                else -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_LOGGED_OUT
+            }
+        )
+    }
+    // endregion Visitor ids
 }
