@@ -160,7 +160,9 @@ class AdobeAnalyticsService private constructor(app: Application) : ActivityLife
         val guid = theKey.defaultSessionGuid
         analyticsExecutor.execute {
             Visitor.syncIdentifier(
-                VISITOR_ID_ECID, null, VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_UNKNOWN
+                VISITOR_ID_ECID,
+                Visitor.getMarketingCloudId(),
+                VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_UNKNOWN
             )
             updateVisitorIdIdentifiers(guid)
         }
