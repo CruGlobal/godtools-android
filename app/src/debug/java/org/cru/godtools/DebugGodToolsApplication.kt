@@ -16,10 +16,12 @@ import com.facebook.soloader.SoLoader
 import leakcanary.LeakCanary
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.DefaultSqliteDatabaseProvider
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpenHelperDatabaseConnectionProvider
-import org.ccci.gto.android.common.leakcanary.CrashlyticsOnHeapAnalyzedListener
+import org.ccci.gto.android.common.leakcanary.crashlytics.CrashlyticsOnHeapAnalyzedListener
+import org.ccci.gto.android.common.leakcanary.timber.TimberSharkLog
 import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.cru.godtools.analytics.TimberAnalyticsService
 import org.keynote.godtools.android.db.GodToolsDatabase
+import shark.SharkLog
 import timber.log.Timber
 
 class DebugGodToolsApplication : GodToolsApplication() {
@@ -38,8 +40,9 @@ class DebugGodToolsApplication : GodToolsApplication() {
     }
 
     private fun configLeakCanary() {
+        SharkLog.logger = TimberSharkLog
         LeakCanary.config = LeakCanary.config.copy(
-            onHeapAnalyzedListener = CrashlyticsOnHeapAnalyzedListener()
+            onHeapAnalyzedListener = CrashlyticsOnHeapAnalyzedListener
         )
     }
 
