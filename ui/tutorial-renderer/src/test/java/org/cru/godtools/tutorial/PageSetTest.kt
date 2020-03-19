@@ -1,36 +1,56 @@
 package org.cru.godtools.tutorial
 
-import junitparams.JUnitParamsRunner
-import junitparams.Parameters
+import android.os.Build
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import java.util.Locale
 
-@RunWith(JUnitParamsRunner::class)
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [17, 21, 28])
 class PageSetTest {
     @Test
-    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX", "zh-Hans-CN")
-    fun testOnboardingSupportedLanguages(code: String) {
-        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag(code)))
+    fun testOnboardingSupportedLanguages() {
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("en")))
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("zh-CN")))
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("es-419")))
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("es-ES")))
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("es-MX")))
+        assertTrue(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("zh-Hans-CN")))
     }
 
     @Test
-    @Parameters("fr", "zh-TW")
-    fun testOnboardingUnsupportedLanguages(code: String) {
-        assertFalse(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag(code)))
+    fun testOnboardingUnsupportedLanguages() {
+        assertFalse(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("fr")))
+
+        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.LOLLIPOP))
+        assertFalse(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("zh-TW")))
+        assertFalse(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("zh")))
+        assertFalse(PageSet.ONBOARDING.supportsLocale(Locale.forLanguageTag("zh-Hant")))
     }
 
     @Test
-    @Parameters("en", "zh-CN", "es-419", "es-ES", "es-MX", "zh-Hans-CN")
-    fun testTrainingSupportedLanguages(code: String) {
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag(code)))
+    fun testTrainingSupportedLanguages() {
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("en")))
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-CN")))
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-419")))
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-ES")))
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-MX")))
+        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-Hans-CN")))
     }
 
     @Test
-    @Parameters("fr", "zh-TW")
-    fun testTrainingUnsupportedLanguages(code: String) {
-        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag(code)))
+    fun testTrainingUnsupportedLanguages() {
+        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("fr")))
+
+        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.LOLLIPOP))
+        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-TW")))
+        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh")))
+        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-Hant")))
     }
 }

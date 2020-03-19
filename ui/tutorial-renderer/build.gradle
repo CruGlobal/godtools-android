@@ -29,6 +29,4 @@ dependencies {
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "me.relex:circleindicator:${deps.circleindicator}"
-
-    testImplementation "pl.pragmatists:JUnitParams:${deps.junitParams}"
 }
