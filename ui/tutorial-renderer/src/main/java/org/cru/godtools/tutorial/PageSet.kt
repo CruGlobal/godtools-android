@@ -1,5 +1,6 @@
 package org.cru.godtools.tutorial
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
 import java.util.Locale
@@ -24,7 +25,12 @@ enum class PageSet(
             Page.ONBOARDING_READY,
             Page.ONBOARDING_FINAL
         ),
-        supportedLocales = setOf(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE, Locale("es"))
+        supportedLocales = setOf(
+            Locale.ENGLISH,
+            LocaleCompat.forLanguageTag("zh-Hans"),
+            Locale.SIMPLIFIED_CHINESE,
+            Locale("es")
+        )
     ),
     TRAINING(
         feature = Settings.FEATURE_TUTORIAL_TRAINING,
@@ -35,7 +41,12 @@ enum class PageSet(
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL
         ),
-        supportedLocales = setOf(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE, Locale("es"))
+        supportedLocales = setOf(
+            Locale.ENGLISH,
+            LocaleCompat.forLanguageTag("zh-Hans"),
+            Locale.SIMPLIFIED_CHINESE,
+            Locale("es")
+        )
     );
 
     fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }
