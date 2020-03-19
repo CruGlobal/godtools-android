@@ -25,7 +25,7 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
         .also { this.startActivity(it) }
 }
 
-class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks {
+class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
     // region Lifecycle Events

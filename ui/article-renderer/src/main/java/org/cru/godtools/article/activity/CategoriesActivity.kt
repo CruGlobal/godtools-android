@@ -25,7 +25,7 @@ fun Activity.startCategoriesActivity(toolCode: String, language: Locale) {
     startActivity(createCategoriesIntent(toolCode, language))
 }
 
-class CategoriesActivity : BaseArticleActivity(false), CategoriesFragment.Callbacks {
+class CategoriesActivity : BaseArticleActivity(), CategoriesFragment.Callbacks {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
