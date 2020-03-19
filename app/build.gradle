@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'io.fabric'
-
 apply plugin: 'com.google.firebase.appdistribution'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
+
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
@@ -168,7 +168,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
-    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+    implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
@@ -213,9 +213,6 @@ afterEvaluate {
 
         def appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
         appDistributionTask.dependsOn assembleTask
-
-        def crashlyticsTask = project.tasks.getByName("crashlyticsUploadDistribution${variant.name.capitalize()}")
-        crashlyticsTask.dependsOn assembleTask
     }
 }
 

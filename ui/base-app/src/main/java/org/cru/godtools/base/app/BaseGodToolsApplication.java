@@ -2,12 +2,12 @@ package org.cru.godtools.base.app;
 
 import android.app.Application;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.instantapps.InstantApps;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
-import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
 import org.ccci.gto.android.common.eventbus.TimberLogger;
+import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.cru.godtools.analytics.adobe.AdobeAnalyticsService;
@@ -23,8 +23,6 @@ import java.util.Locale;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
-import io.fabric.sdk.android.Fabric;
-import io.fabric.sdk.android.SilentLogger;
 import timber.log.Timber;
 
 public class BaseGodToolsApplication extends Application {
@@ -50,13 +48,10 @@ public class BaseGodToolsApplication extends Application {
     }
 
     private void initializeCrashlytics() {
-        Fabric.with(new Fabric.Builder(this)
-                            .logger(new SilentLogger())
-                            .kits(new Crashlytics())
-                            .build());
-        Crashlytics.setBool("InstantApp", InstantApps.isInstantApp(this));
-        Crashlytics.setString("SystemLanguageRaw", Locale.getDefault().toString());
-        Crashlytics.setString("SystemLanguage", LocaleCompat.toLanguageTag(Locale.getDefault()));
+        final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+        crashlytics.setCustomKey("InstantApp", InstantApps.isInstantApp(this));
+        crashlytics.setCustomKey("SystemLanguageRaw", Locale.getDefault().toString());
+        crashlytics.setCustomKey("SystemLanguage", LocaleCompat.toLanguageTag(Locale.getDefault()));
 
         Timber.plant(new CrashlyticsTree());
     }
