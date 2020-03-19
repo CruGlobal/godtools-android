@@ -33,7 +33,7 @@ class BannerHeaderAdapter : AbstractHeaderFooterWrapperAdapter<BannerViewHolder,
     override fun getHeaderItemCount() = 1
     override fun getHeaderItemId(localPosition: Int) = 1L
     override fun onCreateHeaderItemViewHolder(parent: ViewGroup, viewType: Int) =
-        BannerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.banner, parent, false))
+        BannerViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.widget_banner, parent, false))
 
     override fun onBindHeaderItemViewHolder(holder: BannerViewHolder, localPosition: Int) {
         holder.bannerView?.show(
