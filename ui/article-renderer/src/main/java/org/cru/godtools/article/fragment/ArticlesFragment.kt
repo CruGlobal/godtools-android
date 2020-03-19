@@ -17,7 +17,6 @@ import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
-import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.R2
 import org.cru.godtools.article.adapter.ArticlesAdapter
@@ -26,26 +25,22 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
+import splitties.fragmentargs.argOrNull
 import java.util.Locale
-
-fun newArticlesFragment(code: String, locale: Locale, category: String? = null): ArticlesFragment {
-    val args = Bundle(3).apply {
-        BaseToolFragment.populateArgs(this, code, locale)
-        putString(EXTRA_CATEGORY, category)
-    }
-    return ArticlesFragment().apply {
-        arguments = args
-    }
-}
 
 internal val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
-class ArticlesFragment : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
+class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
+    constructor(code: String, locale: Locale, category: String? = null) : this() {
+        arguments = Bundle(3).apply { populateArgs(this, code, locale) }
+        this.category = category
+    }
+
     interface Callbacks {
         fun onArticleSelected(article: Article?)
     }
 
-    private val category: String? by lazy { arguments?.getString(EXTRA_CATEGORY, null) }
+    private var category by argOrNull<String>()
 
     private var binding: FragmentArticlesBinding? = null
     @JvmField

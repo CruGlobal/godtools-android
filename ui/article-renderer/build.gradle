@@ -27,6 +27,7 @@ dependencies {
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
