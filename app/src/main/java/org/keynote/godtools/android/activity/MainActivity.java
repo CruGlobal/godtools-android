@@ -17,6 +17,7 @@ import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.analytics.LaunchTrackingViewModel;
+import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -42,6 +43,7 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.RESUMED;
 import static androidx.lifecycle.Lifecycle.State.STARTED;
+import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
@@ -262,6 +264,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 case STATE_MY_TOOLS:
                 default:
                     mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
+                    mEventBus.post(new FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS));
             }
 
             trackLaunch();
