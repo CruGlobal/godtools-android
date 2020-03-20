@@ -32,7 +32,7 @@ buildscript {
                 okhttp3            : '3.12.8',
                 picasso            : '2.71828',
                 picassoTransforms  : '2.2.1',
-                retrofit2          : '2.6.2',
+                retrofit2          : '2.7.2',
                 robolectric        : '4.3.1',
                 snowplow           : '1.4.0',
                 splitties          : '3.0.0-alpha06',
