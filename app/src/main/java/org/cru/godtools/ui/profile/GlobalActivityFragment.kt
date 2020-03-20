@@ -7,14 +7,13 @@ import androidx.lifecycle.AndroidViewModel
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
 import org.cru.godtools.databinding.ProfilePageGlobalActivityFragmentBinding
-import org.cru.godtools.fragment.BaseBindingPlatformFragment
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.sync.syncGlobalActivity
 import org.keynote.godtools.android.db.GodToolsDao
 
-class GlobalActivityFragment : BaseBindingPlatformFragment<ProfilePageGlobalActivityFragmentBinding>(
-    R.layout.profile_page_global_activity_fragment
-) {
+class GlobalActivityFragment :
+    BasePlatformFragment<ProfilePageGlobalActivityFragmentBinding>(R.layout.profile_page_global_activity_fragment) {
     private val viewModel: GlobalActivityFragmentViewModel by viewModels()
 
     override fun onBindingCreated(binding: ProfilePageGlobalActivityFragmentBinding, savedInstanceState: Bundle?) {

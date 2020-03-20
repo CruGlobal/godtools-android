@@ -17,7 +17,7 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.fragment.BaseBindingPlatformFragment
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 import java.util.Locale
 
-class ToolDetailsFragment() : BaseBindingPlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
+class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
     LinkClickedListener {
     constructor(toolCode: String) : this() {
         this.toolCode = toolCode
