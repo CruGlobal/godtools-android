@@ -20,7 +20,7 @@ buildscript {
                 hamcrest           : '2.2',
                 jacoco             : '0.8.5',
                 jetbrainsAnnotation: '19.0.0',
-                jsoup              : '1.12.2',
+                jsoup              : '1.13.1',
                 junit              : '4.13',
                 kotlin             : '1.3.70',
                 kotlinCoroutines   : '1.3.5',
