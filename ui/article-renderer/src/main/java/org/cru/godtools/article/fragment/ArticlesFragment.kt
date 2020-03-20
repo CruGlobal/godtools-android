@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -121,7 +122,7 @@ class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeR
     // region View Logic
     // region Data Binding
     private fun setupDataBinding(view: View) {
-        binding = FragmentArticlesBinding.bind(view)
+        binding = DataBindingUtil.bind(view)
         updateDataBindingManifest()
     }
 

@@ -31,6 +31,8 @@ class CategoriesFragment : BaseToolFragment(), CategoriesAdapter.Callbacks {
         fun onCategorySelected(category: Category?)
     }
 
+    override val hasDataBinding get() = false
+
     @JvmField
     @BindView(R2.id.categories)
     internal var categoriesView: RecyclerView? = null

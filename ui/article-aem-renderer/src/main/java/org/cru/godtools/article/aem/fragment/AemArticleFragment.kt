@@ -48,6 +48,8 @@ class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
 
     private var articleUri: Uri by arg()
 
+    override val hasDataBinding get() = false
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

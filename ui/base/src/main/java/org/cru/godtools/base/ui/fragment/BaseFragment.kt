@@ -40,12 +40,15 @@ abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@Layo
 
     // region Data Binding
     private var binding: B? = null
+    protected open val hasDataBinding get() = true
 
     private fun setupDataBinding(view: View, savedInstanceState: Bundle?) {
-        binding = DataBindingUtil.bind(view)
-        binding?.let {
-            it.lifecycleOwner = viewLifecycleOwner
-            onBindingCreated(it, savedInstanceState)
+        if (hasDataBinding) {
+            binding = DataBindingUtil.bind(view)
+            binding?.let {
+                it.lifecycleOwner = viewLifecycleOwner
+                onBindingCreated(it, savedInstanceState)
+            }
         }
     }
 
