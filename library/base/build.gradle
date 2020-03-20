@@ -13,19 +13,3 @@ dependencies {
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.hamcrest:hamcrest:${deps.hamcrest}"
 }
-
-apply plugin: 'com.google.gms.google-services'
-
-// HACK: the google-services plugin uses the applicationId for the library project and not the overall project.
-// HACK: To address this we manually set the packageName for the generated GoogleServices tasks.
-android.libraryVariants.all { variant ->
-    // determine the applicationId for this variant
-    def applicationId = rootProject.applicationId
-    if (variant.buildType.name != "release") {
-        applicationId = applicationId + '.debug'
-    }
-
-    // update the packageName in the google-services task
-    def googleServicesTask = project.tasks.getByName("process${variant.name.capitalize()}GoogleServices")
-    googleServicesTask.packageNameXOR1 = applicationId
-}

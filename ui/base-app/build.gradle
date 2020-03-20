@@ -13,13 +13,12 @@ dependencies {
     implementation project(":ui:base")
 
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-
-    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     api "org.greenrobot:eventbus:${deps.eventbus}"
 }
