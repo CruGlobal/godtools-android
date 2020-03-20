@@ -12,7 +12,7 @@ buildscript {
                 circleindicator    : '2.1.4',
                 crashlytics        : '2.10.1',
                 eventbus           : '3.1.1',
-                facebook           : '6.1.0',
+                facebook           : '6.2.0',
                 facebookFlipper    : '0.34.0',
                 findbugs           : '3.0.2',
                 gtoSupport         : '3.4.0-SNAPSHOT',
