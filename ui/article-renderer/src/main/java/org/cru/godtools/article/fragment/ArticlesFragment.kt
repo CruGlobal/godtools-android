@@ -31,7 +31,7 @@ import java.util.Locale
 
 internal val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
-class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
+class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
     constructor(code: String, locale: Locale, category: String? = null) : this() {
         arguments = Bundle(3).apply { populateArgs(this, code, locale) }
         this.category = category
@@ -43,7 +43,6 @@ class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeR
 
     private var category by argOrNull<String>()
 
-    private var binding: FragmentArticlesBinding? = null
     @JvmField
     @BindView(R2.id.article_swipe_container)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
@@ -61,9 +60,13 @@ class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeR
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupDataBinding(view)
         setupArticlesView()
         setupSwipeRefresh()
+    }
+
+    override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
+        super.onBindingCreated(binding, savedInstanceState)
+        binding.setupDataBinding()
     }
 
     override fun onManifestUpdated() {
@@ -121,8 +124,10 @@ class ArticlesFragment() : BaseToolFragment(), ArticlesAdapter.Callbacks, SwipeR
 
     // region View Logic
     // region Data Binding
-    private fun setupDataBinding(view: View) {
-        binding = DataBindingUtil.bind(view)
+    private var binding: FragmentArticlesBinding? = null
+
+    private fun FragmentArticlesBinding.setupDataBinding() {
+        binding = this
         updateDataBindingManifest()
     }
 

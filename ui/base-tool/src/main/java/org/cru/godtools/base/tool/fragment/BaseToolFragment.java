@@ -16,12 +16,13 @@ import java.util.Locale;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public abstract class BaseToolFragment extends BaseFragment {
+public abstract class BaseToolFragment<B extends ViewDataBinding> extends BaseFragment<B> {
     @NonNull
     @SuppressWarnings("ConstantConditions")
     protected /*final*/ String mTool = Tool.INVALID_CODE;

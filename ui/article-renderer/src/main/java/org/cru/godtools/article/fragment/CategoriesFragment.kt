@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -26,7 +27,7 @@ fun newCategoriesFragment(code: String, locale: Locale): Fragment {
     }
 }
 
-class CategoriesFragment : BaseToolFragment(), CategoriesAdapter.Callbacks {
+class CategoriesFragment : BaseToolFragment<ViewDataBinding>(), CategoriesAdapter.Callbacks {
     interface Callbacks {
         fun onCategorySelected(category: Category?)
     }
