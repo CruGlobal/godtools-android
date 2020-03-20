@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
@@ -18,16 +17,10 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
-fun newCategoriesFragment(code: String, locale: Locale): Fragment {
-    val args = Bundle(2).apply {
-        BaseToolFragment.populateArgs(this, code, locale)
-    }
-    return CategoriesFragment().apply {
-        arguments = args
-    }
-}
+class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.Callbacks {
+    constructor() : super()
+    constructor(code: String, locale: Locale) : super(null, code, locale)
 
-class CategoriesFragment : BaseToolFragment<ViewDataBinding>(), CategoriesAdapter.Callbacks {
     interface Callbacks {
         fun onCategorySelected(category: Category?)
     }
@@ -83,7 +76,7 @@ class CategoriesFragment : BaseToolFragment<ViewDataBinding>(), CategoriesAdapte
     }
 
     private fun updateCategoriesView() {
-        categoriesAdapter?.categories = mManifest?.categories
+        categoriesAdapter?.categories = manifest?.categories
     }
 
     private fun cleanupCategoriesView() {

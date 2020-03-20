@@ -8,7 +8,6 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.article.R
 import org.cru.godtools.article.fragment.CategoriesFragment
-import org.cru.godtools.article.fragment.newCategoriesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
@@ -53,7 +52,7 @@ class CategoriesActivity : BaseArticleActivity(), CategoriesFragment.Callbacks {
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = newCategoriesFragment(tool, locale)
+                val fragment = CategoriesFragment(tool, locale)
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

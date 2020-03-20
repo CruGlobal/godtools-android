@@ -24,7 +24,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
     implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
@@ -35,6 +36,7 @@ dependencies {
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 

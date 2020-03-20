@@ -30,9 +30,11 @@ import java.util.Locale
 
 internal val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
-class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), ArticlesAdapter.Callbacks, SwipeRefreshLayout.OnRefreshListener {
-    constructor(code: String, locale: Locale, category: String? = null) : this() {
-        arguments = Bundle(3).apply { populateArgs(this, code, locale) }
+class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks,
+    SwipeRefreshLayout.OnRefreshListener {
+    constructor() : super(R.layout.fragment_articles)
+    constructor(code: String, locale: Locale, category: String? = null) :
+        super(R.layout.fragment_articles, code, locale) {
         this.category = category
     }
 
@@ -53,10 +55,6 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
         updateDataModelTags()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_articles, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupArticlesView()
@@ -65,7 +63,7 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
 
     override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.manifest = mManifestDataModel.manifest
+        binding.manifest = toolDataModel.manifest
     }
 
     override fun onManifestUpdated() {
@@ -90,14 +88,14 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
     private val dataModel: ArticlesFragmentDataModel by viewModels()
 
     private fun setupDataModel() {
-        dataModel.tool.value = mTool
-        dataModel.locale.value = mLocale
+        dataModel.tool.value = tool
+        dataModel.locale.value = locale
     }
 
     private fun updateDataModelTags() {
         dataModel.tags.value = when {
             // lookup AEM tags from the manifest category
-            category != null -> mManifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
+            category != null -> manifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
             // no category, so show all articles for this tool
             else -> null
         }
@@ -106,7 +104,7 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
 
     private fun syncData(force: Boolean) {
         AemArticleManger.getInstance(requireContext())
-            .enqueueSyncManifestAemImports(mManifest, force)
+            .enqueueSyncManifestAemImports(manifest, force)
             .apply {
                 swipeRefreshLayout?.let {
                     addListener(WeakTask(it, resetRefreshLayoutTask), MainThreadExecutor())
@@ -121,7 +119,7 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
     internal var articlesView: RecyclerView? = null
 
     private val articlesAdapter: ArticlesAdapter by lazy {
-        ArticlesAdapter(this, mManifestDataModel.manifest).also {
+        ArticlesAdapter(this, toolDataModel.manifest).also {
             it.callbacks.set(this)
             dataModel.articles.observe(this, it)
         }
