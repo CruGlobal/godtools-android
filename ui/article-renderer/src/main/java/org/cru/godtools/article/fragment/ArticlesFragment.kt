@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -66,12 +65,11 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
 
     override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.setupDataBinding()
+        binding.manifest = mManifestDataModel.manifest
     }
 
     override fun onManifestUpdated() {
         super.onManifestUpdated()
-        updateDataBindingManifest()
         updateArticlesViewManifest()
         updateDataModelTags()
     }
@@ -86,11 +84,6 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
      */
     override fun onArticleSelected(article: Article?) {
         FragmentUtils.getListener(this, Callbacks::class.java)?.onArticleSelected(article)
-    }
-
-    override fun onDestroyView() {
-        cleanupDataBinding()
-        super.onDestroyView()
     }
     // endregion Lifecycle
 
@@ -123,23 +116,6 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
     }
 
     // region View Logic
-    // region Data Binding
-    private var binding: FragmentArticlesBinding? = null
-
-    private fun FragmentArticlesBinding.setupDataBinding() {
-        binding = this
-        updateDataBindingManifest()
-    }
-
-    private fun updateDataBindingManifest() {
-        binding?.manifest = mManifest
-    }
-
-    private fun cleanupDataBinding() {
-        binding = null
-    }
-    // endregion Data Binding
-
     // region ArticlesView
     @JvmField
     @BindView(R2.id.articles)

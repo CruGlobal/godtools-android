@@ -72,17 +72,17 @@ public abstract class BaseToolFragment<B extends ViewDataBinding> extends BaseFr
     }
 
     // region Data Model
-    private LatestPublishedManifestDataModel mDataModel;
+    protected LatestPublishedManifestDataModel mManifestDataModel;
 
     private void setupDataModel() {
-        mDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
-        mDataModel.getToolCode().setValue(mTool);
-        mDataModel.getLocale().setValue(mLocale);
+        mManifestDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
+        mManifestDataModel.getToolCode().setValue(mTool);
+        mManifestDataModel.getLocale().setValue(mLocale);
     }
     // endregion Data Model
 
     private void startLoaders() {
-        mDataModel.getManifest().observe(this, this::setManifest);
+        mManifestDataModel.getManifest().observe(this, this::setManifest);
     }
 
     void setManifest(@Nullable final Manifest manifest) {
