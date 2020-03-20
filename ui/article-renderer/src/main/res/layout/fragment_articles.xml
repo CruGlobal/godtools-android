@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.xml.model.Manifest" />
 
-        <variable name="manifest" type="org.cru.godtools.xml.model.Manifest" />
+        <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

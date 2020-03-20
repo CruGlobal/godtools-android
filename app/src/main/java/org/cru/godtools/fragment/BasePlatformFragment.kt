@@ -5,7 +5,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import org.ccci.gto.android.sync.event.SyncFinishedEvent
@@ -23,7 +25,7 @@ import java.util.Locale
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
-abstract class BasePlatformFragment : BaseFragment() {
+abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int? = null) : BaseFragment<B>(layoutId) {
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 

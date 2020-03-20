@@ -11,7 +11,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.article.fragment.ArticlesFragment
-import org.cru.godtools.article.fragment.newArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import java.util.Locale
@@ -25,7 +24,7 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
         .also { this.startActivity(it) }
 }
 
-class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks {
+class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
     // region Lifecycle Events
@@ -58,7 +57,7 @@ class ArticlesActivity : BaseArticleActivity(false), ArticlesFragment.Callbacks 
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = newArticlesFragment(tool, locale, category)
+                val fragment = ArticlesFragment(tool, locale, category)
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

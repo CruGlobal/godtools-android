@@ -4,6 +4,10 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

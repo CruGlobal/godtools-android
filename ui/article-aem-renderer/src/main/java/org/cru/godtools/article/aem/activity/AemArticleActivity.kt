@@ -38,7 +38,7 @@ fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articl
         .also { startActivity(it) }
 }
 
-class AemArticleActivity : BaseArticleActivity(false, false) {
+class AemArticleActivity : BaseArticleActivity(false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 

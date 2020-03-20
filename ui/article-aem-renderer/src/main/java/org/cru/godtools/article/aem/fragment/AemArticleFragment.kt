@@ -15,6 +15,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.annotation.WorkerThread
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -40,12 +41,14 @@ import java.util.concurrent.ExecutionException
 
 private const val TAG = "AemArticleFragment"
 
-class AemArticleFragment() : BaseFragment() {
+class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
     constructor(articleUri: Uri) : this() {
         this.articleUri = articleUri
     }
 
     private var articleUri: Uri by arg()
+
+    override val hasDataBinding get() = false
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

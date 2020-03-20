@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.cru.godtools.R
 import org.cru.godtools.databinding.LanguagesFragmentBinding
-import org.cru.godtools.fragment.BaseBindingPlatformFragment
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.syncLanguages
 import splitties.fragmentargs.argOrDefault
 import java.util.Locale
 
-class LanguagesFragment() : BaseBindingPlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
+class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
     LocaleSelectedListener {
     constructor(primary: Boolean) : this() {
         isPrimary = primary

@@ -8,7 +8,7 @@ import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.cru.godtools.base.tool.service.ManifestManager
 import java.util.Locale
 
-class LatestPublishedManifestDataModel(application: Application) : AndroidViewModel(application) {
+open class LatestPublishedManifestDataModel(application: Application) : AndroidViewModel(application) {
     private val manifestManager = ManifestManager.getInstance(application)
 
     val toolCode = MutableLiveData<String?>()
