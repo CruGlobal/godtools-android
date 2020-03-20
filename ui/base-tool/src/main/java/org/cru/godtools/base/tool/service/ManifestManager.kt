@@ -59,7 +59,7 @@ class ManifestManager private constructor(context: Context) {
     @WorkerThread
     @Throws(InterruptedException::class)
     fun getManifestBlocking(translation: Translation) = runBlocking { getManifest(translation) }
-    fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
+    private fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
 
     private suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null
