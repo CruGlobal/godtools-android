@@ -2,16 +2,13 @@ package org.cru.godtools.article.fragment
 
 import android.app.Application
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import org.ccci.gto.android.common.lifecycle.combineWith
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
@@ -25,6 +22,7 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
+import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 import java.util.Locale
 
@@ -52,23 +50,17 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataModel()
-        updateDataModelTags()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupArticlesView()
         setupSwipeRefresh()
     }
 
     override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.manifest = toolDataModel.manifest
-    }
-
-    override fun onManifestUpdated() {
-        super.onManifestUpdated()
-        updateDataModelTags()
+        binding.setupArticlesView()
     }
 
     override fun onRefresh() = syncData(true)
@@ -85,20 +77,10 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion Lifecycle
 
     // region Data Model
-    private val dataModel: ArticlesFragmentDataModel by viewModels()
+    override val toolDataModel: ArticlesFragmentDataModel by viewModels()
 
     private fun setupDataModel() {
-        dataModel.tool.value = tool
-        dataModel.locale.value = locale
-    }
-
-    private fun updateDataModelTags() {
-        dataModel.tags.value = when {
-            // lookup AEM tags from the manifest category
-            category != null -> manifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
-            // no category, so show all articles for this tool
-            else -> null
-        }
+        toolDataModel.category.value = category
     }
     // endregion Data Model
 
@@ -114,19 +96,15 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
 
     // region View Logic
     // region ArticlesView
-    @JvmField
-    @BindView(R2.id.articles)
-    internal var articlesView: RecyclerView? = null
-
-    private val articlesAdapter: ArticlesAdapter by lazy {
+    private val articlesAdapter by lazy {
         ArticlesAdapter(this, toolDataModel.manifest).also {
             it.callbacks.set(this)
-            dataModel.articles.observe(this, it)
+            toolDataModel.articles.observe(this, it)
         }
     }
 
-    private fun setupArticlesView() {
-        articlesView?.apply {
+    private fun FragmentArticlesBinding.setupArticlesView() {
+        articles.apply {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = articlesAdapter
         }
@@ -137,14 +115,20 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel(application: Application) : AndroidViewModel(application) {
+class ArticlesFragmentDataModel(application: Application) : LatestPublishedManifestDataModel(application) {
     private val aemDb = ArticleRoomDatabase.getInstance(application)
 
-    internal var tool = MutableLiveData<String>()
-    internal var locale = MutableLiveData<Locale>()
-    internal var tags = MutableLiveData<Set<String>?>(null)
+    internal val category = MutableLiveData<String?>()
 
-    internal val articles = tool.switchCombineWith(locale, tags) { tool, locale, tags ->
+    private val tags = manifest.combineWith(category) { manifest, category ->
+        when (category) {
+            null -> null
+            else -> manifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
+        }
+    }
+
+    internal val articles =
+        toolCode.switchCombineWith(locale, tags) { tool, locale, tags ->
         when {
             tool == null || locale == null -> emptyLiveData<List<Article>>()
             tags == null -> aemDb.articleDao().getArticles(tool, locale)
