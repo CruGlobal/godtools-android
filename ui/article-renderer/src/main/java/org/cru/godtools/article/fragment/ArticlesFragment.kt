@@ -11,9 +11,9 @@ import butterknife.BindView
 import org.ccci.gto.android.common.lifecycle.combineWith
 import org.ccci.gto.android.common.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.lifecycle.switchCombineWith
-import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
+import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.R2
 import org.cru.godtools.article.adapter.ArticlesAdapter
@@ -26,7 +26,7 @@ import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 import java.util.Locale
 
-internal val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
+private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
 class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks,
     SwipeRefreshLayout.OnRefreshListener {
@@ -72,7 +72,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
      * @param article the selected Article
      */
     override fun onArticleSelected(article: Article?) {
-        FragmentUtils.getListener(this, Callbacks::class.java)?.onArticleSelected(article)
+        findListener<Callbacks>()?.onArticleSelected(article)
     }
     // endregion Lifecycle
 
