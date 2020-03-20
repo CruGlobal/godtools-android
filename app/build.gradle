@@ -197,6 +197,8 @@ dependencies {
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 // jacoco config
 apply plugin: 'jacoco-android'
 jacoco {
