@@ -4,11 +4,12 @@
 
     <data>
         <import type="androidx.databinding.ObservableField" />
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.article.adapter.ArticlesAdapter.Callbacks" />
         <import type="org.cru.godtools.xml.model.Manifest" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
-        <variable name="manifest" type="ObservableField&lt;Manifest&gt;" />
+        <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="article" type="org.cru.godtools.article.aem.model.Article" />
     </data>
 

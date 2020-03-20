@@ -70,7 +70,6 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
 
     override fun onManifestUpdated() {
         super.onManifestUpdated()
-        updateArticlesViewManifest()
         updateDataModelTags()
     }
 
@@ -122,9 +121,10 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
     internal var articlesView: RecyclerView? = null
 
     private val articlesAdapter: ArticlesAdapter by lazy {
-        ArticlesAdapter()
-            .apply { setCallbacks(this@ArticlesFragment) }
-            .also { dataModel.articles.observe(this, it) }
+        ArticlesAdapter(this, mManifestDataModel.manifest).also {
+            it.callbacks.set(this)
+            dataModel.articles.observe(this, it)
+        }
     }
 
     private fun setupArticlesView() {
@@ -132,10 +132,7 @@ class ArticlesFragment() : BaseToolFragment<FragmentArticlesBinding>(), Articles
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = articlesAdapter
         }
-        updateArticlesViewManifest()
     }
-
-    private fun updateArticlesViewManifest() = articlesAdapter.setManifest(mManifest)
     // endregion ArticlesView
 
     private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)
