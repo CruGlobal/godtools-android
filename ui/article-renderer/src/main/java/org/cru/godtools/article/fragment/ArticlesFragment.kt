@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
-import org.ccci.gto.android.common.lifecycle.combineWith
-import org.ccci.gto.android.common.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.lifecycle.switchCombineWith
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
 import org.ccci.gto.android.common.util.findListener

@@ -8,9 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.ccci.gto.android.common.lifecycle.combineWith
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract

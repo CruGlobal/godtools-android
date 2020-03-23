@@ -151,6 +151,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
@@ -160,7 +161,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
