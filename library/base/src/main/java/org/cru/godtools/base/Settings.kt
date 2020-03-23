@@ -6,9 +6,9 @@ import androidx.core.content.edit
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import me.thekey.android.TheKey
+import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
-import org.ccci.gto.android.common.lifecycle.getStringLiveData
 import org.cru.godtools.base.util.SingletonHolder
 import java.util.Locale
 

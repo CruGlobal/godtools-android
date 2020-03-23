@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
+import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.ccci.gto.android.common.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.lifecycle.orEmpty
-import org.ccci.gto.android.common.lifecycle.switchCombineWith
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
