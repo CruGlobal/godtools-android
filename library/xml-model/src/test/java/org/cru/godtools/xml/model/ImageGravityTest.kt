@@ -12,7 +12,7 @@ class ImageGravityTest {
 
     @Test
     fun verifyParse() {
-        ImageGravity.parse("start unrecognized center", ImageGravity.NONE)!!.also { gravity ->
+        ImageGravity.parse("start unrecognized center", ImageGravity.NONE).also { gravity ->
             assertFalse(gravity.isCenterX())
             assertTrue(gravity.isStart())
             assertFalse(gravity.isEnd())
@@ -22,7 +22,7 @@ class ImageGravityTest {
             assertFalse(gravity.isCenter())
         }
 
-        ImageGravity.parse("center end", ImageGravity.NONE)!!.also { gravity ->
+        ImageGravity.parse("center end", ImageGravity.NONE).also { gravity ->
             assertFalse(gravity.isCenterX())
             assertFalse(gravity.isStart())
             assertTrue(gravity.isEnd())
@@ -32,7 +32,7 @@ class ImageGravityTest {
             assertFalse(gravity.isCenter())
         }
 
-        ImageGravity.parse("center", ImageGravity.NONE)!!.also { gravity ->
+        ImageGravity.parse("center", ImageGravity.NONE).also { gravity ->
             assertTrue(gravity.isCenterX())
             assertFalse(gravity.isStart())
             assertFalse(gravity.isEnd())
