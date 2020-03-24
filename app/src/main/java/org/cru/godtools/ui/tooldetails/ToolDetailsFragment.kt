@@ -128,8 +128,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     private fun Menu.setupPinShortcutAction() {
         pinShortcutObserver = findItem(R.id.action_pin_shortcut)?.let { action ->
-            Observer<PendingShortcut?> { action.isVisible = it != null }
-                .also { dataModel.shortcut.observe(this@ToolDetailsFragment, it) }
+            dataModel.shortcut.observe(this@ToolDetailsFragment) { action.isVisible = it != null }
         }
     }
 
