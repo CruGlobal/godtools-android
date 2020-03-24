@@ -29,8 +29,7 @@ class PriorityRunnableTest {
         )
     }
 
-    class TestPriorityRunnable(private val priority: Int) : PriorityRunnable {
+    class TestPriorityRunnable(override val priority: Int) : PriorityRunnable {
         override fun run() = Unit
-        override fun getPriority() = priority
     }
 }
