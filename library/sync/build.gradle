@@ -5,9 +5,6 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    // HACK: temporarily include the core dependency because sync doesn't correctly set the dependency as an api
-    //       transitive dependency
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"

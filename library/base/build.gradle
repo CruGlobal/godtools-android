@@ -9,7 +9,4 @@ dependencies {
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "me.thekey.android:thekey-api:${deps.thekey}"
-
-    testImplementation "junit:junit:${deps.junit}"
-    testImplementation "org.hamcrest:hamcrest:${deps.hamcrest}"
 }
