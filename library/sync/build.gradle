@@ -1,5 +1,4 @@
 dependencies {
-    implementation project(':library:base')
     implementation project(':library:sync-tasks')
 
     implementation "androidx.work:work-runtime-ktx:${deps.androidX.work}"
