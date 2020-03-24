@@ -160,7 +160,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
@@ -185,8 +184,8 @@ dependencies {
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
+    debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
-    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
