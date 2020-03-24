@@ -49,6 +49,7 @@ class LanguagesSyncTasks private constructor(context: Context) : BaseDataSyncTas
                             )
                             lang1
                         }
+                        .toMutableMap()
                     storeLanguages(events, json.data, existing)
                 }
 
