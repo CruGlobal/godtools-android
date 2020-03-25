@@ -1,6 +1,8 @@
 dependencies {
     implementation project(':library:sync-tasks')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
     implementation "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
