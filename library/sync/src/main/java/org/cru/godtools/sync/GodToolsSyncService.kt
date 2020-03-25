@@ -79,7 +79,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
             val args = intent.extras ?: Bundle.EMPTY
             when (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
                 SYNCTYPE_LANGUAGES -> mLanguagesSyncTasks.syncLanguages(args)
-                SYNCTYPE_TOOLS -> toolSyncTasks.syncTools(args)
+                SYNCTYPE_TOOLS -> toolSyncTasks.syncToolsBlocking(args)
                 SYNCTYPE_FOLLOWUPS -> try {
                     mFollowupSyncTasks.syncFollowups()
                 } catch (e: IOException) {

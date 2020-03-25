@@ -3,6 +3,11 @@ package org.cru.godtools.sync.task
 import android.content.Context
 import android.os.Bundle
 import androidx.collection.SimpleArrayMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
@@ -17,7 +22,6 @@ import java.io.IOException
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
-private val LOCK_SYNC_TOOLS = Any()
 private val LOCK_SYNC_SHARES = Any()
 
 private val API_GET_INCLUDES = arrayOf(
@@ -28,20 +32,22 @@ private val API_GET_INCLUDES = arrayOf(
 class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(context) {
     companion object : SingletonHolder<ToolSyncTasks, Context>(::ToolSyncTasks)
 
-    @Throws(IOException::class)
-    fun syncTools(args: Bundle): Boolean {
-        val events = SimpleArrayMap<Class<*>, Any>()
-        synchronized(LOCK_SYNC_TOOLS) {
+    private val toolsMutex = Mutex()
+
+    fun syncToolsBlocking(args: Bundle) = runBlocking { syncTools(args) }
+    suspend fun syncTools(args: Bundle) = withContext(Dispatchers.IO) {
+        toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
                 System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS
-            ) return true
+            ) return@withContext true
 
             // fetch tools from the API, short-circuit if this response is invalid
-            val json = api.tools.list(JsonApiParams().include(*API_GET_INCLUDES)).execute()
-                .takeIf { it.code() == 200 }?.body() ?: return false
+            val json = api.tools.list(JsonApiParams().include(*API_GET_INCLUDES))
+                .takeIf { it.code() == 200 }?.body() ?: return@withContext false
 
             // store fetched tools
+            val events = SimpleArrayMap<Class<*>, Any>()
             dao.transaction {
                 val existing = index(Query.select<Tool>().get(dao))
                 storeTools(events, json.data, existing, Includes(*API_GET_INCLUDES))
@@ -52,8 +58,8 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
 
             // update the sync time
             dao.updateLastSyncTime(SYNC_TIME_TOOLS)
+            true
         }
-        return true
     }
 
     /**
