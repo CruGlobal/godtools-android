@@ -10,8 +10,8 @@ import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.sync.event.SyncFinishedEvent
-import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
@@ -124,12 +124,12 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     }
 
     private fun setupRefreshView() {
-        syncHelper.setRefreshLayout(refreshLayout)
+        syncHelper.refreshLayout = refreshLayout
         refreshLayout?.setOnRefreshListener { syncData(true) }
     }
 
     private fun cleanupRefreshView() {
-        syncHelper.setRefreshLayout(null)
+        syncHelper.refreshLayout = null
         refreshLayout?.setOnRefreshListener(null)
     }
 
