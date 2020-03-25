@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.collection.SimpleArrayMap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -22,7 +24,6 @@ import java.io.IOException
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
-private val LOCK_SYNC_SHARES = Any()
 
 private val API_GET_INCLUDES = arrayOf(
     Tool.JSON_ATTACHMENTS,
@@ -33,6 +34,7 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
     companion object : SingletonHolder<ToolSyncTasks, Context>(::ToolSyncTasks)
 
     private val toolsMutex = Mutex()
+    private val sharesMutex = Mutex()
 
     fun syncToolsBlocking(args: Bundle) = runBlocking { syncTools(args) }
     suspend fun syncTools(args: Bundle) = withContext(Dispatchers.IO) {
@@ -65,22 +67,24 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.
      */
-    fun syncShares(): Boolean {
-        var successful = true
-        synchronized(LOCK_SYNC_SHARES) {
-            Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao).forEach {
-                val views = ToolViews(it)
-                try {
-                    if (api.views.submitViews(views).execute().isSuccessful) {
-                        dao.updateSharesDelta(views.toolCode, 0 - views.quantity)
-                    } else {
-                        successful = false
+    fun syncSharesBlocking() = runBlocking { syncShares() }
+    suspend fun syncShares() = withContext(Dispatchers.IO) {
+        sharesMutex.withLock {
+            coroutineScope {
+                Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
+                    .map {
+                        async {
+                            return@async try {
+                                val views = ToolViews(it)
+                                api.views.submitViews(views).isSuccessful
+                                    .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
+                            } catch (ignored: IOException) {
+                                false
+                            }
+                        }
                     }
-                } catch (ignored: IOException) {
-                    successful = false
-                }
+                    .all { it.await() }
             }
         }
-        return successful
     }
 }

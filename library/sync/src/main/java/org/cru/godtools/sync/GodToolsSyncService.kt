@@ -87,7 +87,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
                     throw e
                 }
                 SYNCTYPE_TOOL_SHARES -> {
-                    val result = toolSyncTasks.syncShares()
+                    val result = toolSyncTasks.syncSharesBlocking()
                     if (!result) scheduleSyncToolSharesWork()
                 }
                 SYNCTYPE_GLOBAL_ACTIVITY -> globalActivitySyncTasks.syncGlobalActivity(args)
