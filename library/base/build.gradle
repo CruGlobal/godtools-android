@@ -8,7 +8,4 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "me.thekey.android:thekey-api:${deps.thekey}"
-
-    testImplementation "junit:junit:${deps.junit}"
-    testImplementation "org.hamcrest:hamcrest:${deps.hamcrest}"
 }

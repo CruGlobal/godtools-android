@@ -1,16 +1,6 @@
-android {
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.sync.SyncEventBusIndex']
-            }
-        }
-    }
-}
-
 dependencies {
     implementation project(':library:api')
-    implementation project(':library:base')
+    api project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:model-events')
@@ -24,6 +14,4 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
