@@ -14,8 +14,8 @@ private const val SYNC_TIME_GLOBAL_ACTIVITY = "last_synced.global_activity"
 private const val STALE_DURATION_GLOBAL_ACTIVITY = TimeConstants.DAY_IN_MS
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-class GlobalActivitySyncTasks private constructor(context: Context) : BaseSyncTasks(context) {
-    companion object : SingletonHolder<GlobalActivitySyncTasks, Context>(::GlobalActivitySyncTasks)
+class AnalyticsSyncTasks private constructor(context: Context) : BaseSyncTasks(context) {
+    companion object : SingletonHolder<AnalyticsSyncTasks, Context>(::AnalyticsSyncTasks)
 
     private val globalActivityMutex = Mutex()
 
