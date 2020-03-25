@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import org.ccci.gto.android.common.sync.SyncTask
+import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.sync.ThreadedSyncIntentService
-import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.GlobalActivitySyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks

@@ -10,8 +10,8 @@ import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
