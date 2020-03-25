@@ -24,8 +24,5 @@ dependencies {
 
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
-    // transitive dependencies for ui:tract-renderer, needed to build this module
-    implementation "com.google.android.material:material:${deps.materialDesign}"
-
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
