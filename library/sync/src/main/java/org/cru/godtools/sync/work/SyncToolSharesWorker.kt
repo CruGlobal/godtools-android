@@ -15,7 +15,7 @@ internal fun Context.scheduleSyncToolSharesWork() = WorkManager.getInstance(this
 
 class SyncToolSharesWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork() = try {
-        ToolSyncTasks(applicationContext).syncShares()
+        ToolSyncTasks.getInstance(applicationContext).syncShares()
         Result.success()
     } catch (e: IOException) {
         Result.retry()

@@ -61,16 +61,15 @@ fun Context.syncGlobalActivity(force: Boolean = false) = Intent(this, GodToolsSy
 
 class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
     private lateinit var mLanguagesSyncTasks: LanguagesSyncTasks
-    private lateinit var mToolSyncTasks: ToolSyncTasks
     private lateinit var mFollowupSyncTasks: FollowupSyncTasks
     private val globalActivitySyncTasks by lazy { GlobalActivitySyncTasks.getInstance(this) }
+    private val toolSyncTasks by lazy { ToolSyncTasks.getInstance(this) }
 
     // region Lifecycle Events
 
     override fun onCreate() {
         super.onCreate()
         mLanguagesSyncTasks = LanguagesSyncTasks.getInstance(this)
-        mToolSyncTasks = ToolSyncTasks(this)
         mFollowupSyncTasks = FollowupSyncTasks.getInstance(this)
     }
 
@@ -79,7 +78,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
             val args = intent.extras ?: Bundle.EMPTY
             when (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
                 SYNCTYPE_LANGUAGES -> mLanguagesSyncTasks.syncLanguages(args)
-                SYNCTYPE_TOOLS -> mToolSyncTasks.syncTools(args)
+                SYNCTYPE_TOOLS -> toolSyncTasks.syncTools(args)
                 SYNCTYPE_FOLLOWUPS -> try {
                     mFollowupSyncTasks.syncFollowups()
                 } catch (e: IOException) {
@@ -87,7 +86,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
                     throw e
                 }
                 SYNCTYPE_TOOL_SHARES -> {
-                    val result = mToolSyncTasks.syncShares()
+                    val result = toolSyncTasks.syncShares()
                     if (!result) scheduleSyncToolSharesWork()
                 }
                 SYNCTYPE_GLOBAL_ACTIVITY -> globalActivitySyncTasks.syncGlobalActivity(args)

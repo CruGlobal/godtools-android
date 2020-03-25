@@ -16,6 +16,7 @@ dependencies {
     implementation project(':library:model-events')
 
     implementation "androidx.collection:collection:${deps.androidX.collection}"
+    implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"

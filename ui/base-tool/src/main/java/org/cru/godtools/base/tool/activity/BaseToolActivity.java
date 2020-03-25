@@ -338,7 +338,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         @Override
         public void run() {
             try {
-                new ToolSyncTasks(mContext).syncTools(Bundle.EMPTY);
+                ToolSyncTasks.Companion.getInstance(mContext).syncTools(Bundle.EMPTY);
             } catch (final IOException ignored) {
             }
             mPostSyncTask.run();
