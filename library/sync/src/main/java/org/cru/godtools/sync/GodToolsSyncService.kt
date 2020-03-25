@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.sync.ThreadedSyncIntentService
 import org.ccci.gto.android.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.FollowupSyncTasks
@@ -24,37 +25,37 @@ private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
-private fun Intent.toSyncTask(context: Context): ThreadedSyncIntentService.SyncTask {
+private fun Intent.toSyncTask(context: Context): SyncTask {
     return ThreadedSyncIntentService.SyncTask(context, this)
 }
 
-fun syncLanguages(context: Context, force: Boolean): ThreadedSyncIntentService.SyncTask {
+fun syncLanguages(context: Context, force: Boolean): SyncTask {
     return Intent(context, GodToolsSyncService::class.java)
             .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)
             .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
             .toSyncTask(context)
 }
 
-fun syncTools(context: Context, force: Boolean): ThreadedSyncIntentService.SyncTask {
+fun syncTools(context: Context, force: Boolean): SyncTask {
     return Intent(context, GodToolsSyncService::class.java)
             .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_TOOLS)
             .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
             .toSyncTask(context)
 }
 
-fun syncFollowups(context: Context): ThreadedSyncIntentService.SyncTask {
+fun syncFollowups(context: Context): SyncTask {
     return Intent(context, GodToolsSyncService::class.java)
             .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS)
             .toSyncTask(context)
 }
 
-fun syncToolShares(context: Context): ThreadedSyncIntentService.SyncTask {
+fun syncToolShares(context: Context): SyncTask {
     return Intent(context, GodToolsSyncService::class.java)
             .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES)
             .toSyncTask(context)
 }
 
-fun Context.syncGlobalActivity(force: Boolean = false) = Intent(this, GodToolsSyncService::class.java)
+fun Context.syncGlobalActivity(force: Boolean = false): SyncTask = Intent(this, GodToolsSyncService::class.java)
     .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ACTIVITY)
     .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
     .toSyncTask(this)
