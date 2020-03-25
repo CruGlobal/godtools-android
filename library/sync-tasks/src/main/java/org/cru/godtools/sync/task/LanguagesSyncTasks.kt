@@ -3,6 +3,10 @@ package org.cru.godtools.sync.task
 import android.content.Context
 import android.os.Bundle
 import androidx.collection.SimpleArrayMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Expression.constants
 import org.ccci.gto.android.common.db.Query
@@ -11,30 +15,25 @@ import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import timber.log.Timber
-import java.io.IOException
 
 private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS
-private val LOCK_SYNC_LANGUAGES = Any()
 
 class LanguagesSyncTasks private constructor(context: Context) : BaseDataSyncTasks(context) {
     companion object : SingletonHolder<LanguagesSyncTasks, Context>(::LanguagesSyncTasks)
 
-    @Throws(IOException::class)
-    fun syncLanguages(args: Bundle): Boolean {
-        synchronized(LOCK_SYNC_LANGUAGES) {
+    private val languagesMutex = Mutex()
+
+    suspend fun syncLanguages(args: Bundle) = withContext(Dispatchers.IO) {
+        languagesMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
                 System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
-            ) return true
+            ) return@withContext true
 
-            // fetch languages from the API, short-circuit if this response is invalid
-            val response = api.languages.list(JsonApiParams()).execute()
-            if (response.code() != 200) return false
-
-            // store languages
-            val events = SimpleArrayMap<Class<*>, Any>()
-            response.body()?.let { json ->
+            // fetch & store languages
+            api.languages.list(JsonApiParams()).takeIf { it.isSuccessful }?.body()?.let { json ->
+                val events = SimpleArrayMap<Class<*>, Any>()
                 dao.transaction {
                     val existing = dao.get(Query.select<Language>())
                         .groupingBy { it.code }
@@ -55,8 +54,8 @@ class LanguagesSyncTasks private constructor(context: Context) : BaseDataSyncTas
 
                 sendEvents(events)
                 dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
-            }
+            } ?: return@withContext false
         }
-        return true
+        return@withContext true
     }
 }

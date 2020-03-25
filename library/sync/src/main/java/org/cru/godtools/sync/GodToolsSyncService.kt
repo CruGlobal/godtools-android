@@ -1,6 +1,5 @@
 package org.cru.godtools.sync
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,18 +15,10 @@ import java.io.IOException
 // supported sync types
 internal const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
-private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_FOLLOWUPS = 4
 
 private fun Intent.toSyncTask(context: Context): SyncTask {
     return ThreadedSyncIntentService.SyncTask(context, this)
-}
-
-fun syncLanguages(context: Context, force: Boolean): SyncTask {
-    return Intent(context, GodToolsSyncService::class.java)
-            .putExtra(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)
-            .putExtra(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-            .toSyncTask(context)
 }
 
 fun syncFollowups(context: Context): SyncTask {
@@ -52,7 +43,6 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
         try {
             val args = intent.extras ?: Bundle.EMPTY
             when (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
-                SYNCTYPE_LANGUAGES -> mLanguagesSyncTasks.syncLanguages(args)
                 SYNCTYPE_FOLLOWUPS -> try {
                     mFollowupSyncTasks.syncFollowups()
                 } catch (e: IOException) {

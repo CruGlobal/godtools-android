@@ -114,7 +114,7 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     @CallSuper
     override fun syncData(force: Boolean) {
         super.syncData(force)
-        syncHelper.sync(syncLanguages(requireContext(), force))
+        syncHelper.sync(requireContext().syncLanguages(force))
     }
 
     // region Languages List
