@@ -36,7 +36,6 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 
-    fun syncToolsBlocking(args: Bundle) = runBlocking { syncTools(args) }
     suspend fun syncTools(args: Bundle) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
