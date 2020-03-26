@@ -67,14 +67,13 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.
      */
-    fun syncSharesBlocking() = runBlocking { syncShares() }
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
             coroutineScope {
                 Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
                     .map {
                         async {
-                            return@async try {
+                            try {
                                 val views = ToolViews(it)
                                 api.views.submitViews(views).isSuccessful
                                     .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
@@ -82,8 +81,7 @@ class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(co
                                 false
                             }
                         }
-                    }
-                    .all { it.await() }
+                    }.all { it.await() }
             }
         }
     }
