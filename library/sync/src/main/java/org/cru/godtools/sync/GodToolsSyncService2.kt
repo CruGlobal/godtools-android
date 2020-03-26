@@ -13,15 +13,19 @@ import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.sync.task.AnalyticsSyncTasks
+import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
+import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
 
+private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_TOOLS = 3
+private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
@@ -34,6 +38,7 @@ class GodToolsSyncService2 private constructor(private val context: Context) : C
     private val eventBus = EventBus.getDefault()
 
     private val analyticsSyncTasks by lazy { AnalyticsSyncTasks.getInstance(context) }
+    private val followupSyncTasks by lazy { FollowupSyncTasks.getInstance(context) }
     private val languageSyncTasks by lazy { LanguagesSyncTasks.getInstance(context) }
     private val toolSyncTasks by lazy { ToolSyncTasks.getInstance(context) }
 
@@ -47,6 +52,7 @@ class GodToolsSyncService2 private constructor(private val context: Context) : C
                     SYNCTYPE_LANGUAGES -> languageSyncTasks.syncLanguages(task.args)
                     SYNCTYPE_TOOLS -> toolSyncTasks.syncTools(task.args)
                     SYNCTYPE_TOOL_SHARES -> if (!toolSyncTasks.syncShares()) context.scheduleSyncToolSharesWork()
+                    SYNCTYPE_FOLLOWUPS -> if (!followupSyncTasks.syncFollowups()) context.scheduleSyncFollowupWork()
                     SYNCTYPE_GLOBAL_ACTIVITY -> analyticsSyncTasks.syncGlobalActivity(task.args)
                 }
             } catch (e: IOException) {
@@ -79,6 +85,10 @@ fun Context.syncTools(force: Boolean) = Bundle(2).apply {
 
 fun Context.syncToolShares() = Bundle(1).apply {
     putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES)
+}.toSyncTask(this)
+
+fun Context.syncFollowups() = Bundle(1).apply {
+    putInt(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS)
 }.toSyncTask(this)
 
 fun Context.syncGlobalActivity(force: Boolean = false): SyncTask = Bundle(2).apply {
