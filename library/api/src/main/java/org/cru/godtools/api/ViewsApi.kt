@@ -2,7 +2,6 @@ package org.cru.godtools.api
 
 import okhttp3.ResponseBody
 import org.cru.godtools.api.model.ToolViews
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
