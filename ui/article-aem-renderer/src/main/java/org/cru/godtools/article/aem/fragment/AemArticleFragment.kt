@@ -24,6 +24,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import butterknife.BindView
 import com.karumi.weak.weak
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.R2
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -137,7 +138,7 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     init {
-        article.observeForever { updateWebViewArticle(it) }
+        article.observe(this) { updateWebViewArticle(it) }
     }
     // endregion WebView Content
 }
