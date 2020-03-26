@@ -15,7 +15,7 @@ internal fun Context.scheduleSyncFollowupWork() = WorkManager.getInstance(this)
 
 class SyncFollowupWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork() = try {
-        FollowupSyncTasks.getInstance(applicationContext).syncFollowups()
+        FollowupSyncTasks.getInstance(applicationContext).syncFollowupsBlocking()
         Result.success()
     } catch (e: IOException) {
         Result.retry()

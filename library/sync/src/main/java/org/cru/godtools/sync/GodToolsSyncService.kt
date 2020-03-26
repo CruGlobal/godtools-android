@@ -44,7 +44,7 @@ class GodToolsSyncService : ThreadedSyncIntentService("GtSyncService") {
             val args = intent.extras ?: Bundle.EMPTY
             when (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
                 SYNCTYPE_FOLLOWUPS -> try {
-                    mFollowupSyncTasks.syncFollowups()
+                    mFollowupSyncTasks.syncFollowupsBlocking()
                 } catch (e: IOException) {
                     scheduleSyncFollowupWork()
                     throw e
