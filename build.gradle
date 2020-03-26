@@ -11,7 +11,7 @@ buildscript {
                 calligraphy        : '2.3.0',
                 circleindicator    : '2.1.4',
                 eventbus           : '3.1.1',
-                facebook           : '6.2.0',
+                facebook           : '6.3.0',
                 facebookFlipper    : '0.34.0',
                 findbugs           : '3.0.2',
                 gtoSupport         : '3.4.0',
