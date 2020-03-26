@@ -12,7 +12,7 @@ buildscript {
                 circleindicator    : '2.1.4',
                 eventbus           : '3.1.1',
                 facebook           : '6.3.0',
-                facebookFlipper    : '0.34.0',
+                facebookFlipper    : '0.35.0',
                 findbugs           : '3.0.2',
                 gtoSupport         : '3.4.0',
                 guava              : '28.2-android',
