@@ -32,7 +32,7 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
-import org.cru.godtools.sync.GodToolsSyncService2Kt;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
@@ -260,7 +260,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        getSyncHelper().sync(GodToolsSyncService2Kt.syncTools(requireContext(), force));
+        getSyncHelper().sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
     }
 
     private void startLoaders() {

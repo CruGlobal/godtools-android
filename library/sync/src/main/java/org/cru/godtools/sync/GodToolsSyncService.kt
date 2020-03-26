@@ -29,8 +29,8 @@ private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
-class GodToolsSyncService2 private constructor(private val context: Context) : CoroutineScope {
-    companion object : SingletonHolder<GodToolsSyncService2, Context>({ GodToolsSyncService2(it.applicationContext) })
+class GodToolsSyncService private constructor(private val context: Context) : CoroutineScope {
+    companion object : SingletonHolder<GodToolsSyncService, Context>({ GodToolsSyncService(it.applicationContext) })
 
     private val job = SupervisorJob()
     override val coroutineContext get() = Dispatchers.IO + job
@@ -71,7 +71,7 @@ class GodToolsSyncService2 private constructor(private val context: Context) : C
     }
 }
 
-private fun Bundle.toSyncTask(context: Context) = GodToolsSyncService2.getInstance(context).createSyncTask(this)
+private fun Bundle.toSyncTask(context: Context) = GodToolsSyncService.getInstance(context).createSyncTask(this)
 
 fun Context.syncLanguages(force: Boolean) = Bundle(2).apply {
     putInt(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)

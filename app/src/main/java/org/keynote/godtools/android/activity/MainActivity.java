@@ -23,7 +23,7 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.sync.GodToolsSyncService2Kt;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
@@ -277,8 +277,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     // endregion Analytics
 
     private void syncData() {
-        GodToolsSyncService2Kt.syncFollowups(this).sync();
-        GodToolsSyncService2Kt.syncToolShares(this).sync();
+        GodToolsSyncServiceKt.syncFollowups(this).sync();
+        GodToolsSyncServiceKt.syncToolShares(this).sync();
     }
 
     @Override
