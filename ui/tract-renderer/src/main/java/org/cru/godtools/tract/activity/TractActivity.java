@@ -32,7 +32,6 @@ import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -47,6 +46,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,8 +61,6 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Lifecycle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
@@ -79,12 +77,6 @@ public class TractActivity extends BaseToolActivity
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
-
-    private static final int LOADER_ID_BITS = 8;
-    private static final int LOADER_ID_MASK = (1 << LOADER_ID_BITS) - 1;
-    private static final int LOADER_TYPE_MASK = ~LOADER_ID_MASK;
-    private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
-    private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -678,15 +670,13 @@ public class TractActivity extends BaseToolActivity
     // endregion Tool Pager Methods
 
     private void startLoaders() {
-        final LoaderManager manager = getSupportLoaderManager();
-
+        final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         final ManifestManager manifestManager = ManifestManager.Companion.getInstance(this);
-        final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
-        for (int i = 0; i < mLanguages.length; i++) {
-            final Locale language = mLanguages[i];
+        for (final Locale language : mLanguages) {
             manifestManager.getLatestPublishedManifestLiveData(mTool, language)
                     .observe(this, m -> setManifest(language, m));
-            manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
+            dao.getLatestTranslationLiveData(mTool, language, true, false, true)
+                    .observe(this, t -> setTranslation(language, t));
         }
     }
 
@@ -748,41 +738,5 @@ public class TractActivity extends BaseToolActivity
         final Manifest manifest = page.getManifest();
         mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
                 card != null ? card.getPosition() : null));
-    }
-
-    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
-        @Nullable
-        @Override
-        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_TRANSLATION:
-                    final int langId = id & LOADER_ID_MASK;
-                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new LatestTranslationLoader(TractActivity.this, mTool, mLanguages[langId]);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
-            switch (loader.getId() & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_TRANSLATION:
-                    if (loader instanceof LatestTranslationLoader) {
-                        Locale locale = ((LatestTranslationLoader) loader).getLocale();
-                        if (locale != null) {
-                            setTranslation(locale, translation);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
-            // noop
-        }
     }
 }
