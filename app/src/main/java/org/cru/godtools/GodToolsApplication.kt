@@ -35,10 +35,10 @@ import javax.inject.Inject
 
 open class GodToolsApplication : DaggerApplication() {
     override fun onCreate() {
-        super.onCreate()
-
         // Enable application monitoring
         initializeCrashlytics()
+
+        super.onCreate()
 
         // configure components
         configureLanguageFallacks()
