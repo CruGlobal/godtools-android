@@ -20,6 +20,10 @@ android {
         targetSdkVersion targetSdk
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile 'proguard-rules.pro'
+        proguardFile 'proguard-rules-crashlytics.pro'
+        proguardFile 'proguard-rules-eventbus.pro'
+        proguardFile 'proguard-rules-guava.pro'
         proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true
@@ -158,6 +162,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
@@ -171,6 +176,7 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
