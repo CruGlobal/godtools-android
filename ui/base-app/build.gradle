@@ -1,14 +1,3 @@
-android {
-    defaultConfig {
-        consumerProguardFile 'proguard-rules.pro'
-        consumerProguardFile 'proguard-rules-crashlytics.pro'
-        consumerProguardFile 'proguard-rules-eventbus.pro'
-        consumerProguardFile 'proguard-rules-guava.pro'
-        consumerProguardFile 'proguard-rules-okhttp3.pro'
-        consumerProguardFile 'proguard-rules-picasso.pro'
-    }
-}
-
 dependencies {
     implementation project(':ui:base')
 }
