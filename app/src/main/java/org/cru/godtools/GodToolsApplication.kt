@@ -9,12 +9,11 @@ import dagger.android.DaggerApplication
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
-import org.ccci.gto.android.common.eventbus.TimberLogger
+import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.account.BuildConfig.ACCOUNT_TYPE
 import org.cru.godtools.account.BuildConfig.THEKEY_CLIENTID
-import org.cru.godtools.analytics.AnalyticsEventBusIndex
 import org.cru.godtools.analytics.adobe.AdobeAnalyticsService
 import org.cru.godtools.analytics.appsflyer.AppsFlyerAnalyticsService
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
@@ -25,19 +24,14 @@ import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
-import org.cru.godtools.download.manager.DownloadManagerEventBusIndex
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.init.content.task.InitialContentTasks
-import org.cru.godtools.model.event.ModelEventEventBusIndex
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.cru.godtools.shortcuts.ShortcutsEventBusIndex
-import org.cru.godtools.tract.TractEventBusIndex
 import org.cru.godtools.tract.service.FollowupService
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.EventBusBuilder
 import timber.log.Timber
 import java.util.Locale
+import javax.inject.Inject
 
 open class GodToolsApplication : DaggerApplication() {
     override fun onCreate() {
@@ -48,7 +42,6 @@ open class GodToolsApplication : DaggerApplication() {
 
         // configure components
         configureLanguageFallacks()
-        configureEventBus(EventBus.builder()).installDefaultEventBus()
         configureTheKey()
         configureAnalyticsServices()
         configureApis()
@@ -73,17 +66,6 @@ open class GodToolsApplication : DaggerApplication() {
     }
 
     private fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
-
-    private fun configureEventBus(builder: EventBusBuilder): EventBusBuilder {
-        return builder
-            .logger(TimberLogger())
-            .addIndex(AnalyticsEventBusIndex())
-            .addIndex(AppEventBusIndex())
-            .addIndex(DownloadManagerEventBusIndex())
-            .addIndex(ModelEventEventBusIndex())
-            .addIndex(ShortcutsEventBusIndex())
-            .addIndex(TractEventBusIndex())
-    }
 
     private fun configureLanguageFallacks() {
         // These fallbacks are used for JesusFilm
@@ -119,5 +101,8 @@ open class GodToolsApplication : DaggerApplication() {
     // region Dagger
     override fun applicationInjector() =
         DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+
+    @Inject
+    internal lateinit var eagerInitializer: EagerSingletonInitializer
     // endregion Dagger
 }
