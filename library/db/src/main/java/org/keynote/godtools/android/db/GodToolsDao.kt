@@ -5,6 +5,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.annimon.stream.Optional
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -147,10 +148,16 @@ class GodToolsDao private constructor(context: Context) :
         code: String?,
         locale: Locale?,
         isPublished: Boolean = true,
-        isDownloaded: Boolean = false
-    ) = when {
-        code == null || locale == null -> emptyLiveData()
-        else -> getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
+        isDownloaded: Boolean = false,
+        trackAccess: Boolean = false
+    ): LiveData<Translation?> {
+        if (code == null || locale == null) return emptyLiveData()
+        if (trackAccess) updateAsync(
+            Translation().apply { updateLastAccessed() },
+            TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale),
+            TranslationTable.COLUMN_LAST_ACCESSED
+        )
+        return getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
             .getAsLiveData(this).map { it.firstOrNull() }
     }
 

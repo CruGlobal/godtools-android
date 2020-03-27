@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
-import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.Locale;
@@ -16,15 +14,11 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public abstract class BaseSingleToolActivity extends BaseToolActivity {
-    private static final int LOADER_TRANSLATION = 101;
-
     private final boolean mRequireTool;
 
     @Nullable
@@ -157,9 +151,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private void startLoaders() {
         // only start loaders if we have a tool
         if (hasTool()) {
-            final LoaderManager manager = LoaderManager.getInstance(this);
-
-            manager.initLoader(LOADER_TRANSLATION, null, new TranslationLoaderCallbacks());
+            mDataModel.getTranslation().observe(this, this::setTranslation);
             mDataModel.getManifest().observe(this, this::setManifest);
         } else {
             setTranslation(null);
@@ -185,17 +177,16 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     }
 
     // region Data Model
-    private LatestPublishedManifestDataModel mDataModel;
+    private BaseSingleToolActivityDataModel mDataModel;
 
     private void setupDataModel() {
-        mDataModel = (new ViewModelProvider(this)).get(LatestPublishedManifestDataModel.class);
+        mDataModel = (new ViewModelProvider(this)).get(BaseSingleToolActivityDataModel.class);
         mDataModel.getToolCode().setValue(mTool);
         mDataModel.getLocale().setValue(mLocale);
     }
     // region Data Model
 
     // region Up Navigation
-
     @NonNull
     @Override
     protected Bundle buildParentIntentExtras() {
@@ -204,34 +195,5 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, mLocale);
         return extras;
     }
-
     // endregion Up Navigation
-
-    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
-        @Nullable
-        @Override
-        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_TRANSLATION:
-                    assert mTool != null : "onCreateLoader() only called when we have a tool and locale";
-                    return new LatestTranslationLoader(BaseSingleToolActivity.this, mTool, mLocale);
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
-            switch (loader.getId()) {
-                case LOADER_TRANSLATION:
-                    setTranslation(translation);
-                    break;
-            }
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
-            // noop
-        }
-    }
 }
