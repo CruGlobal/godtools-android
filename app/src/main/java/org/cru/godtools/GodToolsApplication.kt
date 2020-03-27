@@ -1,10 +1,11 @@
 package org.cru.godtools
 
-import android.app.Application
 import android.os.AsyncTask
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.instantapps.InstantApps
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.android.DaggerApplication
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
@@ -22,6 +23,8 @@ import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
 import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.article.aem.service.AemArticleManger
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
+import org.cru.godtools.dagger.ApplicationModule
+import org.cru.godtools.dagger.DaggerApplicationComponent
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.init.content.task.InitialContentTasks
@@ -36,7 +39,7 @@ import org.greenrobot.eventbus.EventBusBuilder
 import timber.log.Timber
 import java.util.Locale
 
-open class GodToolsApplication : Application() {
+open class GodToolsApplication : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
 
@@ -92,7 +95,7 @@ open class GodToolsApplication : Application() {
 
     private fun initializeCrashlytics() {
         val crashlytics = FirebaseCrashlytics.getInstance()
-        crashlytics.setCustomKey("InstantApp", com.google.android.instantapps.InstantApps.isInstantApp(this))
+        crashlytics.setCustomKey("InstantApp", InstantApps.isInstantApp(this))
         crashlytics.setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
         crashlytics.setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
         Timber.plant(CrashlyticsTree())
@@ -112,4 +115,9 @@ open class GodToolsApplication : Application() {
             .clientId(THEKEY_CLIENTID)
             .service(EventBusEventsManager())
     }
+
+    // region Dagger
+    override fun applicationInjector() =
+        DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+    // endregion Dagger
 }

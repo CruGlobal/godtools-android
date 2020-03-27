@@ -186,6 +186,7 @@ dependencies {
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
@@ -206,6 +207,8 @@ dependencies {
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
