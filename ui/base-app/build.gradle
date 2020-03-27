@@ -10,15 +10,5 @@ android {
 }
 
 dependencies {
-    implementation project(":ui:base")
-
-    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
-    implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
-
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-
-    api "org.greenrobot:eventbus:${deps.eventbus}"
+    implementation project(':ui:base')
 }
