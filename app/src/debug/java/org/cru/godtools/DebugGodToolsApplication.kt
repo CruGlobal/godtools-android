@@ -25,7 +25,7 @@ import shark.SharkLog
 import timber.log.Timber
 
 class DebugGodToolsApplication : GodToolsApplication() {
-    internal val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
+    private val db: GodToolsDatabase by lazy { GodToolsDatabase.getInstance(this) }
 
     override fun onCreate() {
         configLeakCanary()
