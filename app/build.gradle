@@ -130,7 +130,6 @@ dependencies {
     implementation project(':library:initial-content')
     implementation project(':library:model')
     implementation project(':library:model-events')
-    implementation project(':library:model-loader')
     implementation project(':library:sync')
 
     implementation project(':ui:account')

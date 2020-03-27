@@ -13,7 +13,6 @@ import org.cru.godtools.download.manager.DownloadManagerEventBusIndex
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.model.event.ModelEventEventBusIndex
-import org.cru.godtools.model.loader.ModelLoaderEventBusIndex
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.ShortcutsEventBusIndex
@@ -36,7 +35,6 @@ open class GodToolsApplication : BaseGodToolsApplication() {
             .addIndex(AppEventBusIndex())
             .addIndex(DownloadManagerEventBusIndex())
             .addIndex(ModelEventEventBusIndex())
-            .addIndex(ModelLoaderEventBusIndex())
             .addIndex(ShortcutsEventBusIndex())
             .addIndex(TractEventBusIndex())
     }

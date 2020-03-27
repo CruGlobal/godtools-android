@@ -15,7 +15,6 @@ dependencies {
     api project(':library:download-manager')
     implementation project(':library:model')
     implementation project(':library:model-events')
-    implementation project(':library:model-loader')
     implementation project(':library:sync-tasks')
     api project(':library:xml-model')
 

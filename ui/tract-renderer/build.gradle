@@ -17,7 +17,6 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:model-events')
-    implementation project(':library:model-loader')
     implementation project(':library:sync-tasks')
     implementation project(':library:xml-model')
 
