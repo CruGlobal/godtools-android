@@ -24,8 +24,6 @@ android {
         proguardFile 'proguard-rules-crashlytics.pro'
         proguardFile 'proguard-rules-eventbus.pro'
         proguardFile 'proguard-rules-guava.pro'
-        proguardFile 'proguard-rules-okhttp3.pro'
-        proguardFile 'proguard-rules-picasso.pro'
         proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true

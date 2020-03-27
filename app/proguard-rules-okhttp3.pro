@@ -1,1 +1,0 @@
--dontwarn okhttp3.internal.platform.ConscryptPlatform
