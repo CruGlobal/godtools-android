@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.analytics.adobe.AdobeAnalyticsService
 import org.cru.godtools.analytics.appsflyer.AppsFlyerAnalyticsService
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService
@@ -53,7 +52,6 @@ open class GodToolsApplication : DaggerApplication() {
 
     @CallSuper
     protected open fun configureAnalyticsServices() {
-        AdobeAnalyticsService.getInstance(this)
         AppsFlyerAnalyticsService.getInstance(this)
         FacebookAnalyticsService.getInstance(null)
         FirebaseAnalyticsService.getInstance(this)

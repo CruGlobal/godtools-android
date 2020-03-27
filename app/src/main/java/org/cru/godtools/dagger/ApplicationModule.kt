@@ -22,10 +22,10 @@ import org.cru.godtools.tract.TractEventBusIndex
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Singleton
 
-@Module(includes = [EagerModule::class])
-class ApplicationModule(private val app: Application) {
-    @Provides
-    fun context(): Context = app
+@Module(includes = [AnalyticsModule::class, EagerModule::class])
+class ApplicationModule(@get:Provides val app: Application) {
+    @get:Provides
+    val context: Context get() = app
 
     @Provides
     @Singleton
