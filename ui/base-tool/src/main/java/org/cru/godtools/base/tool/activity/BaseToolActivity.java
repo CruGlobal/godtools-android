@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.ProgressBar;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.util.WeakTask;
 import org.cru.godtools.base.Settings;
@@ -25,11 +23,9 @@ import org.cru.godtools.base.ui.util.DrawableUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.event.ToolUsedEvent;
-import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.xml.model.Manifest;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import androidx.annotation.CallSuper;
@@ -281,9 +277,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity
 
         // track sync tools state, combining previous state with current state
         if (mSyncToolsState == null || mSyncToolsState.isDone()) {
-            mSyncToolsState = task.mFuture;
+            mSyncToolsState = task.future;
         } else {
-            mSyncToolsState = Futures.successfulAsList(mSyncToolsState, task.mFuture);
+            mSyncToolsState = Futures.successfulAsList(mSyncToolsState, task.future);
         }
     }
 
@@ -323,26 +319,5 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     @Override
     public void setTitle(final CharSequence title) {
         super.setTitle(safeApplyTypefaceSpan(title, ManifestViewUtils.getTypeface(getActiveManifest(), this)));
-    }
-
-    static class SyncToolsRunnable implements Runnable {
-        private final Context mContext;
-        private final Runnable mPostSyncTask;
-        final SettableFuture<?> mFuture = SettableFuture.create();
-
-        SyncToolsRunnable(@NonNull final Context context, @NonNull final Runnable postSyncTask) {
-            mContext = context.getApplicationContext();
-            mPostSyncTask = postSyncTask;
-        }
-
-        @Override
-        public void run() {
-            try {
-                ToolSyncTasks.Companion.getInstance(mContext).syncTools(Bundle.EMPTY);
-            } catch (final IOException ignored) {
-            }
-            mPostSyncTask.run();
-            mFuture.set(null);
-        }
     }
 }

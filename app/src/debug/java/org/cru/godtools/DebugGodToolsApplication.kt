@@ -30,8 +30,8 @@ class DebugGodToolsApplication : GodToolsApplication() {
     override fun onCreate() {
         configLeakCanary()
         initTimber()
-        super.onCreate()
         initFlipper()
+        super.onCreate()
     }
 
     override fun attachBaseContext(base: Context) {

@@ -17,7 +17,7 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:model-events')
-    implementation project(':library:sync-tasks')
+    implementation project(':library:sync')
     implementation project(':library:xml-model')
 
     api project(':ui:base-tool')
