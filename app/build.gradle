@@ -54,6 +54,11 @@ android {
     dataBinding {
         enabled = true
     }
+    kapt {
+        javacOptions {
+            option("-Adagger.fastInit=enabled")
+        }
+    }
 
     flavorDimensions "env"
     productFlavors {
