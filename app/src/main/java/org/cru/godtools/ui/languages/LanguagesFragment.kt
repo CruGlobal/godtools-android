@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.languages
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,6 +10,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.android.support.AndroidSupportInjection
+import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.cru.godtools.R
 import org.cru.godtools.databinding.LanguagesFragmentBinding
@@ -16,6 +19,7 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.syncLanguages
 import splitties.fragmentargs.argOrDefault
 import java.util.Locale
+import javax.inject.Inject
 
 class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
     LocaleSelectedListener {
@@ -26,6 +30,11 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     private var isPrimary by argOrDefault(true)
 
     // region Lifecycle
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -56,6 +65,14 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
         super.onDestroyOptionsMenu()
     }
     // endregion Lifecycle
+
+    // region ViewModelProvider.Factory
+    @Inject
+    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
+    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
+
+    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
+    // endregion ViewModelProvider.Factory
 
     // region ViewModel
     private val viewModel: LanguagesFragmentViewModel by viewModels()
