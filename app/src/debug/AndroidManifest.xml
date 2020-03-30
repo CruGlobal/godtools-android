@@ -3,7 +3,8 @@
 
     <application
         android:name="org.cru.godtools.DebugGodToolsApplication"
-        tools:replace="name">
+        android:label="@string/app_name_debug"
+        tools:replace="name,label">
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />
