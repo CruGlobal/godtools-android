@@ -8,5 +8,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }

@@ -94,12 +94,6 @@ class GodToolsSyncService private constructor(private val context: Context) : Co
     // endregion Sync Tasks
 }
 
-@Deprecated(
-    "Use GodToolsSyncService directly",
-    ReplaceWith("GodToolsSyncService.getInstance(this).syncLanguages(force)")
-)
-fun Context.syncLanguages(force: Boolean) = GodToolsSyncService.getInstance(this).syncLanguages(force)
-
 @Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncTools(force)"))
 fun Context.syncTools(force: Boolean) = GodToolsSyncService.getInstance(this).syncTools(force)
 

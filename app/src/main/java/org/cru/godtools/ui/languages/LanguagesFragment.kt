@@ -14,7 +14,6 @@ import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSy
 import org.cru.godtools.R
 import org.cru.godtools.databinding.LanguagesFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
-import org.cru.godtools.sync.syncLanguages
 import splitties.fragmentargs.argOrDefault
 import java.util.Locale
 
@@ -47,7 +46,7 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     @CallSuper
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
-        helper.sync(requireContext().syncLanguages(force))
+        helper.sync(syncService.syncLanguages(force))
     }
 
     override fun onUpdatePrimaryLanguage() {

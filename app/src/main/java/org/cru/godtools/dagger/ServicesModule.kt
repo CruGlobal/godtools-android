@@ -16,6 +16,7 @@ import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.ShortcutModule
+import org.cru.godtools.sync.SyncModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton
@@ -28,6 +29,7 @@ import javax.inject.Singleton
         EagerModule::class,
         EventBusModule::class,
         ShortcutModule::class,
+        SyncModule::class,
         ViewModelModule::class
     ]
 )
