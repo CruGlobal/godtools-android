@@ -33,7 +33,7 @@ buildscript {
                 picassoTransforms  : '2.2.1',
                 retrofit2          : '2.6.4',
                 robolectric        : '4.3.1',
-                snowplow           : '1.4.0',
+                snowplow           : '1.4.1',
                 splitties          : '3.0.0-alpha06',
                 taptargetview      : '1.13.0',
                 thekey             : '4.0.0-SNAPSHOT',
