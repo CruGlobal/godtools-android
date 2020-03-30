@@ -13,7 +13,7 @@ import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.cru.godtools.account.BuildConfig
-import org.cru.godtools.analytics.dagger.AnalyticsModule
+import org.cru.godtools.analytics.AnalyticsModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton

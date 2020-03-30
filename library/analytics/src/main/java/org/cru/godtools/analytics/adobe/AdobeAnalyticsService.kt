@@ -16,6 +16,7 @@ import me.thekey.android.Attributes
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.TheKeyEvent
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -60,6 +61,7 @@ class AdobeAnalyticsService @Inject internal constructor(
     private val analyticsExecutor: Executor = Executors.newSingleThreadExecutor()
 
     init {
+        Config.setDebugLogging(BuildConfig.DEBUG)
         Config.setContext(app)
         eventBus.register(this)
         app.registerActivityLifecycleCallbacks(this)
