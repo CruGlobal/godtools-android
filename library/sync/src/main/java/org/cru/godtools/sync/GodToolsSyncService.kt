@@ -42,8 +42,6 @@ class GodToolsSyncService private constructor(private val context: Context) : Co
     private val languageSyncTasks by lazy { LanguagesSyncTasks.getInstance(context) }
     private val toolSyncTasks by lazy { ToolSyncTasks.getInstance(context) }
 
-    internal fun createSyncTask(args: Bundle): SyncTask = GtSyncTask(args)
-
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
         GlobalScope.launch {
@@ -66,32 +64,53 @@ class GodToolsSyncService private constructor(private val context: Context) : Co
         return syncId
     }
 
+    // region Sync Tasks
+    fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
+        putInt(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)
+        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
+    })
+
+    fun syncTools(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
+        putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOLS)
+        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
+    })
+
+    fun syncToolShares(): SyncTask = GtSyncTask(Bundle(1).apply {
+        putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES)
+    })
+
+    fun syncFollowups(): SyncTask = GtSyncTask(Bundle(1).apply {
+        putInt(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS)
+    })
+
+    fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(Bundle(2).apply {
+        putInt(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ACTIVITY)
+        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
+    })
+
     private inner class GtSyncTask(internal val args: Bundle) : SyncTask {
         override fun sync() = processSyncTask(this)
     }
+    // endregion Sync Tasks
 }
 
-private fun Bundle.toSyncTask(context: Context) = GodToolsSyncService.getInstance(context).createSyncTask(this)
+@Deprecated(
+    "Use GodToolsSyncService directly",
+    ReplaceWith("GodToolsSyncService.getInstance(this).syncLanguages(force)")
+)
+fun Context.syncLanguages(force: Boolean) = GodToolsSyncService.getInstance(this).syncLanguages(force)
 
-fun Context.syncLanguages(force: Boolean) = Bundle(2).apply {
-    putInt(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)
-    putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-}.toSyncTask(this)
+@Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncTools(force)"))
+fun Context.syncTools(force: Boolean) = GodToolsSyncService.getInstance(this).syncTools(force)
 
-fun Context.syncTools(force: Boolean) = Bundle(2).apply {
-    putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOLS)
-    putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-}.toSyncTask(this)
+@Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncToolShares()"))
+fun Context.syncToolShares() = GodToolsSyncService.getInstance(this).syncToolShares()
 
-fun Context.syncToolShares() = Bundle(1).apply {
-    putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES)
-}.toSyncTask(this)
+@Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncFollowups()"))
+fun Context.syncFollowups() = GodToolsSyncService.getInstance(this).syncFollowups()
 
-fun Context.syncFollowups() = Bundle(1).apply {
-    putInt(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS)
-}.toSyncTask(this)
-
-fun Context.syncGlobalActivity(force: Boolean = false): SyncTask = Bundle(2).apply {
-    putInt(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ACTIVITY)
-    putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-}.toSyncTask(this)
+@Deprecated(
+    "Use GodToolsSyncService directly",
+    ReplaceWith("GodToolsSyncService.getInstance(this).syncGlobalActivity(force)")
+)
+fun Context.syncGlobalActivity(force: Boolean = false) = GodToolsSyncService.getInstance(this).syncGlobalActivity(force)
