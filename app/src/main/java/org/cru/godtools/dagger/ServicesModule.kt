@@ -8,6 +8,7 @@ import dagger.multibindings.IntoSet
 import me.thekey.android.TheKey
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
+import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.ViewModelModule
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
@@ -22,7 +23,8 @@ import javax.inject.Singleton
         AnalyticsModule::class,
         DatabaseModule::class,
         EagerModule::class,
-        EventBusModule::class
+        EventBusModule::class,
+        ViewModelModule::class
     ]
 )
 abstract class ServicesModule {
