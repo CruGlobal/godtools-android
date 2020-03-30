@@ -247,6 +247,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
             testImplementation "junit:junit:${deps.junit}"
             testImplementation "org.robolectric:robolectric:${deps.robolectric}"
+
+            kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
         }
 
         // disable lint checks

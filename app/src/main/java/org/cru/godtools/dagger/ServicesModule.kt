@@ -8,13 +8,23 @@ import dagger.multibindings.IntoSet
 import me.thekey.android.TheKey
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
+import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.cru.godtools.account.BuildConfig
+import org.cru.godtools.analytics.dagger.AnalyticsModule
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton
 
-@Module(includes = [EventBusModule::class])
+@Module(
+    includes = [
+        AnalyticsModule::class,
+        DatabaseModule::class,
+        EagerModule::class,
+        EventBusModule::class
+    ]
+)
 abstract class ServicesModule {
     // TODO: TheKey doesn't need to be Eager once TheKey is only accessed via Dagger
     @Binds
