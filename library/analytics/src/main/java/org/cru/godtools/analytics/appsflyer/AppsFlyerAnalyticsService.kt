@@ -14,22 +14,22 @@ import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val TAG = "AppsFlyerAnalytics"
 
-class AppsFlyerAnalyticsService private constructor(private val app: Application) {
-    companion object : SingletonHolder<AppsFlyerAnalyticsService, Application>(::AppsFlyerAnalyticsService)
-
+@Singleton
+class AppsFlyerAnalyticsService @Inject internal constructor(private val app: Application, eventBus: EventBus) {
     private val appsFlyer: AppsFlyerLib = AppsFlyerLib.getInstance()
 
     init {
         appsFlyer.apply {
-            init(BuildConfig.APPSFLYER_DEV_KEY, GodToolsAppsFlyerConversionListener, app.applicationContext)
+            init(BuildConfig.APPSFLYER_DEV_KEY, GodToolsAppsFlyerConversionListener, app)
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
         }
 
@@ -38,7 +38,7 @@ class AppsFlyerAnalyticsService private constructor(private val app: Application
             withContext(Dispatchers.Main) {
                 appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId))
                 appsFlyer.startTracking(app)
-                EventBus.getDefault().register(this@AppsFlyerAnalyticsService)
+                eventBus.register(this@AppsFlyerAnalyticsService)
             }
         }
     }
