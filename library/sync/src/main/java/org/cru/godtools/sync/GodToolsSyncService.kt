@@ -102,9 +102,3 @@ fun Context.syncToolShares() = GodToolsSyncService.getInstance(this).syncToolSha
 
 @Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncFollowups()"))
 fun Context.syncFollowups() = GodToolsSyncService.getInstance(this).syncFollowups()
-
-@Deprecated(
-    "Use GodToolsSyncService directly",
-    ReplaceWith("GodToolsSyncService.getInstance(this).syncGlobalActivity(force)")
-)
-fun Context.syncGlobalActivity(force: Boolean = false) = GodToolsSyncService.getInstance(this).syncGlobalActivity(force)
