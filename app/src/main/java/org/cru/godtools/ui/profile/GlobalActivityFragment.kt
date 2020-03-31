@@ -1,11 +1,8 @@
 package org.cru.godtools.ui.profile
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import dagger.android.support.AndroidSupportInjection
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
 import org.cru.godtools.databinding.ProfilePageGlobalActivityFragmentBinding
@@ -17,15 +14,7 @@ import javax.inject.Inject
 
 class GlobalActivityFragment :
     BasePlatformFragment<ProfilePageGlobalActivityFragmentBinding>(R.layout.profile_page_global_activity_fragment) {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: GlobalActivityFragmentViewModel by viewModels { viewModelFactory }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+    private val viewModel: GlobalActivityFragmentViewModel by viewModels()
 
     override fun onBindingCreated(binding: ProfilePageGlobalActivityFragmentBinding, savedInstanceState: Bundle?) {
         binding.globalActivity = viewModel.globalActivity

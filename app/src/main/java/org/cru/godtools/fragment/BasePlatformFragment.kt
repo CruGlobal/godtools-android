@@ -10,6 +10,8 @@ import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import dagger.android.support.AndroidSupportInjection
+import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -22,6 +24,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
+import javax.inject.Inject
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
@@ -37,9 +40,9 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected var primaryLanguage = Settings.defaultLanguage
     protected var parallelLanguage: Locale? = null
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         settings = Settings.getInstance(context)
     }
@@ -92,8 +95,15 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         cleanupRefreshView()
         super.onDestroyView()
     }
+    // endregion Lifecycle
 
-    // endregion Lifecycle Events
+    // region ViewModelProvider.Factory
+    @Inject
+    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
+    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
+
+    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
+    // endregion ViewModelProvider.Factory
 
     @CallSuper
     protected open fun syncData(force: Boolean) {}
