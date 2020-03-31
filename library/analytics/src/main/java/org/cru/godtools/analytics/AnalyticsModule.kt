@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.analytics.adobe.AdobeAnalyticsService
+import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @AssistedModule
@@ -35,5 +36,10 @@ abstract class AnalyticsModule {
         @ElementsIntoSet
         @EagerSingleton(ThreadMode.MAIN)
         internal fun mainEagerSingletons(adobe: AdobeAnalyticsService) = setOf<Any>(adobe)
+
+        @Provides
+        @ElementsIntoSet
+        @EagerSingleton(ThreadMode.BACKGROUND)
+        internal fun backgroundEagerSingletons(facebook: FacebookAnalyticsService) = setOf<Any>(facebook)
     }
 }

@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.analytics.appsflyer.AppsFlyerAnalyticsService
-import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService
 import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
 import org.cru.godtools.api.GodToolsApi
@@ -53,7 +52,6 @@ open class GodToolsApplication : DaggerApplication() {
     @CallSuper
     protected open fun configureAnalyticsServices() {
         AppsFlyerAnalyticsService.getInstance(this)
-        FacebookAnalyticsService.getInstance(null)
         FirebaseAnalyticsService.getInstance(this)
         SnowplowAnalyticsService.getInstance(this)
     }
