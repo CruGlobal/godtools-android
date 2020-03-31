@@ -46,6 +46,8 @@ import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,8 +75,9 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
 
     private static final int LOADER_TOOLS = 101;
 
+    @Inject
     @Nullable
-    private GodToolsDao mDao;
+    GodToolsDao mDao;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -105,12 +108,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     }
 
     // region Lifecycle
-    @Override
-    public void onAttach(@NonNull final Context context) {
-        super.onAttach(context);
-        mDao = GodToolsDao.Companion.getInstance(context);
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
