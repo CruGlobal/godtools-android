@@ -51,6 +51,8 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
     androidTestImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+    // HACK: connectedCheck on SDK 17 complains about dagger.Reusable not being on the classpath
+    androidTestImplementation "com.google.dagger:dagger:${deps.dagger}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
