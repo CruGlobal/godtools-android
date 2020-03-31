@@ -13,6 +13,7 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
 import com.facebook.soloader.SoLoader
+import dagger.Binds
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,10 @@ import javax.inject.Singleton
 
 @Module
 abstract class FlipperModule {
+    @Binds
+    @IntoSet
+    abstract fun flipperPlugins(networkFlipperPlugin: NetworkFlipperPlugin): FlipperPlugin
+
     companion object {
         @Provides
         @Singleton
@@ -40,11 +45,7 @@ abstract class FlipperModule {
             return AndroidFlipperClient.getInstance(context).apply {
                 addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
                 addPlugin(SharedPreferencesFlipperPlugin(context))
-
                 plugins.get().forEach { addPlugin(it) }
-                val networkPlugin = NetworkFlipperPlugin()
-                addPlugin(networkPlugin)
-                addGlobalNetworkInterceptor(FlipperOkhttpInterceptor(networkPlugin))
                 start()
             }
         }
@@ -52,7 +53,7 @@ abstract class FlipperModule {
         @IntoSet
         @Provides
         @Singleton
-        internal fun flipperDatabasePlugin(context: Context, db: GodToolsDatabase): FlipperPlugin =
+        internal fun databasesFlipperPlugin(context: Context, db: GodToolsDatabase): FlipperPlugin =
             DatabasesFlipperPlugin(
                 SqliteDatabaseDriver(
                     context,
@@ -62,8 +63,21 @@ abstract class FlipperModule {
             )
 
         @Provides
+        @Singleton
+        internal fun networkFlipperPlugin() = NetworkFlipperPlugin()
+
+        @IntoSet
+        @Provides
+        @Singleton
+        @EagerSingleton(EagerSingleton.ThreadMode.MAIN)
+        internal fun flipperOkHttpInterceptor(networkFlipperPlugin: NetworkFlipperPlugin): Any =
+            FlipperOkhttpInterceptor(networkFlipperPlugin).also {
+                addGlobalNetworkInterceptor(it)
+            }
+
+        @Provides
         @ElementsIntoSet
-        @EagerSingleton(EagerSingleton.ThreadMode.MAIN_ASYNC)
+        @EagerSingleton(EagerSingleton.ThreadMode.BACKGROUND)
         internal fun flipperClientEagerSingleton(flipperClient: FlipperClient?) =
             listOfNotNull<Any>(flipperClient).toSet()
     }
