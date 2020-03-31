@@ -152,7 +152,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
-    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
@@ -177,6 +176,7 @@ dependencies {
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
