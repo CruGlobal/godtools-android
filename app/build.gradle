@@ -89,11 +89,20 @@ android {
             minifyEnabled false
             shrinkResources false
 
+            resValue "string", "app_name_debug", "GodTools (Dev)"
+
+            // QA build
+            // XXX: I would have used a new buildType, but it got complex including debug dependencies in both debug and QA buildTypes -DF
             if (project.hasProperty('firebaseAppDistributionBuild')) {
+                applicationIdSuffix ".qa"
+                versionNameSuffix "-qa"
+
+                resValue "string", "app_name_debug", "GodTools (QA)"
+
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
-                    appId = '1:71275134527:android:3f5f59861a4a0730'
+                    appId = '1:71275134527:android:e6af54d704ba9adac5028a'
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
                     groups = 'android-testers'

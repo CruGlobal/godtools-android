@@ -32,24 +32,24 @@
           "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
         },
         {
-          "current_key": "AIzaSyAuld0dB3rSs1AJ4lqqb688Y05z4RgEMyQ"
+          "current_key": "AIzaSyC0F3GlyiX2LYZDhTlkKYf-gSwvCkr4mg4"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cru.godtools.beta"
+              }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
@@ -62,6 +62,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "71275134527-92dqujp3jcvp7hqd9rtjjutn7s9f4piu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.keynote.godtools.android.debug",
+            "certificate_hash": "fe255d5171453b47b0e045e45ef214d230aface6"
+          }
+        },
+        {
+          "client_id": "71275134527-n80linrnorcbc7nmk7c3uocr77puc0he.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.keynote.godtools.android.debug",
+            "certificate_hash": "5a863ad7021d70e6cac9d3f47d297c2261222424"
+          }
+        },
+        {
           "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -71,19 +87,71 @@
           "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
         },
         {
-          "current_key": "AIzaSyAuld0dB3rSs1AJ4lqqb688Y05z4RgEMyQ"
+          "current_key": "AIzaSyC0F3GlyiX2LYZDhTlkKYf-gSwvCkr4mg4"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cru.godtools.beta"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71275134527:android:e6af54d704ba9adac5028a",
+        "android_client_info": {
+          "package_name": "org.keynote.godtools.android.qa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71275134527-jdnh5ufkvj7r8a2g0bs1rbnm80qrhht5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.keynote.godtools.android.qa",
+            "certificate_hash": "fe255d5171453b47b0e045e45ef214d230aface6"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyC0F3GlyiX2LYZDhTlkKYf-gSwvCkr4mg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cru.godtools.beta"
+              }
+            }
+          ]
         }
       }
     }
