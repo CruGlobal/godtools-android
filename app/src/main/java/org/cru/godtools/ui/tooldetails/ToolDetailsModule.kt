@@ -6,5 +6,8 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ToolDetailsModule {
     @ContributesAndroidInjector
+    internal abstract fun toolDetailsActivityInjector(): ToolDetailsActivity
+
+    @ContributesAndroidInjector
     internal abstract fun toolDetailsFragmentInjector(): ToolDetailsFragment
 }
