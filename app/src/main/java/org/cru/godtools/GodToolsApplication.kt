@@ -79,7 +79,7 @@ open class GodToolsApplication : DaggerApplication() {
         GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
         AemArticleManger.getInstance(this)
-        FollowupService.start(this)
+        FollowupService.getInstance(this)
     }
 
     // region Dagger
