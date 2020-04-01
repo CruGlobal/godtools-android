@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.GodToolsApi
-import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
@@ -63,7 +62,6 @@ open class GodToolsApplication : DaggerApplication() {
         GodToolsDownloadManager.getInstance(this)
         GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
-        AemArticleManager.getInstance(this)
     }
 
     // region Dagger
