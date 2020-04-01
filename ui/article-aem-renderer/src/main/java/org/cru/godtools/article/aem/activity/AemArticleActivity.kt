@@ -137,7 +137,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
         if (!pendingAnalyticsEvent) return
 
         article?.let {
-            mEventBus.post(ArticleAnalyticsScreenEvent(it, mTool, mLocale))
+            eventBus.post(ArticleAnalyticsScreenEvent(it, mTool, mLocale))
             pendingAnalyticsEvent = false
         }
     }

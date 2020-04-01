@@ -188,8 +188,8 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onSetupActionBar() {
         super.onSetupActionBar();
-        if (mToolbar != null && InstantApps.isInstantApp(this)) {
-            mToolbar.setNavigationIcon(R.drawable.ic_close);
+        if (toolbar != null && InstantApps.isInstantApp(this)) {
+            toolbar.setNavigationIcon(R.drawable.ic_close);
         }
         setupLanguageToggle();
         updateLanguageToggle();
@@ -250,7 +250,7 @@ public class TractActivity extends BaseToolActivity
         final Locale locale = (Locale) tab.getTag();
         if (locale != null) {
             updateActiveLanguage(locale);
-            mEventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
+            eventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
         }
     }
 
@@ -305,7 +305,7 @@ public class TractActivity extends BaseToolActivity
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
             if (savedInstanceState == null) {
-                mEventBus.post(new AnalyticsDeepLinkEvent(data));
+                eventBus.post(new AnalyticsDeepLinkEvent(data));
             }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
@@ -607,8 +607,8 @@ public class TractActivity extends BaseToolActivity
         }
 
         // show or hide the title based on how many visible tabs we have
-        if (mActionBar != null) {
-            mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
         }
     }
 
@@ -736,7 +736,7 @@ public class TractActivity extends BaseToolActivity
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
         final Manifest manifest = page.getManifest();
-        mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                card != null ? card.getPosition() : null));
+        eventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
+                                                        card != null ? card.getPosition() : null));
     }
 }

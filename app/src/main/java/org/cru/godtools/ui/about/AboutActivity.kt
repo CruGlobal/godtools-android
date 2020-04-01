@@ -29,7 +29,7 @@ class AboutActivity : BasePlatformActivity() {
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
 

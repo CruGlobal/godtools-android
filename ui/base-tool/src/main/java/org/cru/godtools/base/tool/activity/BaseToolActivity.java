@@ -159,17 +159,17 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     // region Toolbar update logic
 
     private void updateToolbar() {
-        if (mToolbar != null) {
+        if (toolbar != null) {
             final Manifest manifest = getActiveManifest();
 
             // set toolbar background color
-            mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
+            toolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
 
             // set text & controls color
             final int controlColor = Manifest.getNavBarControlColor(manifest);
-            mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
-            mToolbar.setTitleTextColor(controlColor);
-            mToolbar.setSubtitleTextColor(controlColor);
+            toolbar.setNavigationIcon(DrawableUtils.tint(toolbar.getNavigationIcon(), controlColor));
+            toolbar.setTitleTextColor(controlColor);
+            toolbar.setSubtitleTextColor(controlColor);
         }
 
         updateToolbarTitle();
@@ -189,8 +189,8 @@ public abstract class BaseToolActivity extends ImmersiveActivity
                 final MenuItem item = mToolbarMenu.getItem(i);
                 item.setIcon(DrawableUtils.tint(item.getIcon(), controlColor));
             }
-            if (mToolbar != null) {
-                mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
+            if (toolbar != null) {
+                toolbar.setOverflowIcon(DrawableUtils.tint(toolbar.getOverflowIcon(), controlColor));
             }
         }
         updateShareMenuItem();
@@ -214,7 +214,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity
         }
 
         // track the share action
-        mEventBus.post(ShareActionEvent.INSTANCE);
+        eventBus.post(ShareActionEvent.INSTANCE);
 
         // start the share activity chooser with our share link
         final String title = getShareLinkTitle();
@@ -305,10 +305,10 @@ public abstract class BaseToolActivity extends ImmersiveActivity
     // endregion DownloadProgress logic
 
     protected final void trackToolOpen(@NonNull final String tool) {
-        mEventBus.post(new ToolUsedEvent(tool));
+        eventBus.post(new ToolUsedEvent(tool));
 
         final Settings settings = Settings.Companion.getInstance(this);
-        mEventBus.post(settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) ? ToolOpened.INSTANCE :
+        eventBus.post(settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) ? ToolOpened.INSTANCE :
                                FirstToolOpened.INSTANCE);
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED);
 
