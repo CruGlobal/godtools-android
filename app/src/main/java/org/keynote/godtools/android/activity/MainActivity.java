@@ -242,14 +242,14 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void setupNavigationTabs() {
         super.setupNavigationTabs();
-        if (mNavigationTabs != null) {
+        if (navigationTabs != null) {
             // This logic is brittle, so throw an error on debug builds if something changes.
-            if (BuildConfig.DEBUG && mNavigationTabs.getTabCount() != 2) {
+            if (BuildConfig.DEBUG && navigationTabs.getTabCount() != 2) {
                 throw new IllegalStateException("The navigation tabs changed!!! Logic needs to be updated!!!");
             }
 
-            mMyToolsTab = mNavigationTabs.getTabAt(0);
-            mFindToolsTab = mNavigationTabs.getTabAt(1);
+            mMyToolsTab = navigationTabs.getTabAt(0);
+            mFindToolsTab = navigationTabs.getTabAt(1);
         }
     }
 
