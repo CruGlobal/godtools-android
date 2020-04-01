@@ -8,7 +8,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
@@ -20,11 +23,14 @@ import java.util.Locale
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
-class LanguagesFragmentViewModel(
+class LanguagesFragmentViewModel @AssistedInject constructor(
     application: Application,
-    private val savedState: SavedStateHandle
+    dao: GodToolsDao,
+    @Assisted private val savedState: SavedStateHandle
 ) : AndroidViewModel(application) {
-    private val dao = GodToolsDao.getInstance(application)
+    @AssistedInject.Factory
+    interface Factory : AssistedSavedStateViewModelFactory<LanguagesFragmentViewModel>
+
     private val settings = Settings.getInstance(application)
 
     val isPrimary = MutableLiveData<Boolean>(true)

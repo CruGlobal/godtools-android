@@ -20,12 +20,13 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /* Property Keys */
 private const val ADOBE_ATTR_APP_NAME = "cru.appname"
@@ -49,16 +50,18 @@ private const val VISITOR_ID_GUID = "ssoguid"
 private const val VISITOR_ID_MASTER_PERSON_ID = "grmpid"
 private const val VISITOR_ID_ECID = "ecid"
 
+@Singleton
 @OptIn(ExperimentalStdlibApi::class)
-class AdobeAnalyticsService private constructor(app: Application) : ActivityLifecycleCallbacks {
-    companion object : SingletonHolder<AdobeAnalyticsService, Application>(::AdobeAnalyticsService)
-
+class AdobeAnalyticsService @Inject internal constructor(
+    app: Application,
+    eventBus: EventBus,
+    private val theKey: TheKey
+) : ActivityLifecycleCallbacks {
     private val analyticsExecutor: Executor = Executors.newSingleThreadExecutor()
-    private val theKey = TheKey.getInstance(app)
 
     init {
         Config.setContext(app)
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
         app.registerActivityLifecycleCallbacks(this)
     }
 

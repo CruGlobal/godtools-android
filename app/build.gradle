@@ -54,6 +54,11 @@ android {
     dataBinding {
         enabled = true
     }
+    kapt {
+        javacOptions {
+            option("-Adagger.fastInit=enabled")
+        }
+    }
 
     flavorDimensions "env"
     productFlavors {
@@ -168,6 +173,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
@@ -186,6 +192,8 @@ dependencies {
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
@@ -197,6 +205,8 @@ dependencies {
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
+
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
@@ -206,7 +216,12 @@ dependencies {
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    // TODO: switch to official release once https://github.com/square/AssistedInject/pull/121 is merged
+    kapt 'com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6'
+//    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
