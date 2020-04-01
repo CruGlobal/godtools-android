@@ -127,7 +127,7 @@ class SnowplowAnalyticsService private constructor(context: Context) {
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
-        put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId())
+        Visitor.getMarketingCloudId()?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
         theKey.defaultSessionGuid?.let { guid ->
             put(CONTEXT_ATTR_ID_GUID, guid)
