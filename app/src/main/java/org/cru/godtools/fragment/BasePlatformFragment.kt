@@ -28,6 +28,8 @@ import javax.inject.Inject
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
 abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int? = null) : BaseFragment<B>(layoutId) {
+    @Inject
+    protected lateinit var eventBus: EventBus
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 
@@ -64,7 +66,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
         startSettingsChangeListener()
         loadLanguages(false)
         syncHelper.updateState()
@@ -81,7 +83,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     override fun onStop() {
         super.onStop()
         stopSettingsChangeListener()
-        EventBus.getDefault().unregister(this)
+        eventBus.unregister(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
