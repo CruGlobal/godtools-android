@@ -10,7 +10,6 @@ import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
-import dagger.android.support.AndroidSupportInjection
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -42,7 +41,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     // region Lifecycle
     override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         settings = Settings.getInstance(context)
     }

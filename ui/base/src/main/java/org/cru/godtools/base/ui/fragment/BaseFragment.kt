@@ -1,5 +1,6 @@
 package org.cru.godtools.base.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -8,10 +9,16 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import dagger.android.support.AndroidSupportInjection
 
 abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@LayoutRes layoutId: Int? = null) :
     Fragment(layoutId ?: 0) {
     // region Lifecycle
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding(view, savedInstanceState)
