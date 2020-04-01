@@ -4,19 +4,19 @@ import androidx.annotation.MainThread
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val TAG = "AnalyticsService"
 
-class TimberAnalyticsService private constructor() {
-    companion object : SingletonHolder<TimberAnalyticsService, Any?>({ TimberAnalyticsService() })
-
+@Singleton
+class TimberAnalyticsService @Inject internal constructor(eventBus: EventBus) {
     init {
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     @MainThread

@@ -1,4 +1,4 @@
-package org.cru.godtools.analytics.dagger
+package org.cru.godtools.analytics
 
 import dagger.Module
 import dagger.Provides
@@ -7,7 +7,6 @@ import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
-import org.cru.godtools.analytics.AnalyticsEventBusIndex
 import org.cru.godtools.analytics.adobe.AdobeAnalyticsService
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
