@@ -38,12 +38,11 @@ abstract class BaseActivity : AppCompatActivity() {
         setupActionBar()
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
 
         // update the Launching Component extra
-        getIntent()
-            .putExtra(EXTRA_LAUNCHING_COMPONENT, intent.getParcelableExtra(EXTRA_LAUNCHING_COMPONENT) as Parcelable)
+        intent.putExtra(EXTRA_LAUNCHING_COMPONENT, newIntent.getParcelableExtra<Parcelable>(EXTRA_LAUNCHING_COMPONENT))
     }
 
     @CallSuper
