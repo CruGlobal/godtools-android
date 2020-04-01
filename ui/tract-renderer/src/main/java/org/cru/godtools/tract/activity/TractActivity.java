@@ -37,6 +37,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
+import org.cru.godtools.tract.service.FollowupService;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
@@ -51,6 +52,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
@@ -76,6 +79,10 @@ public class TractActivity extends BaseToolActivity
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
+
+    // Inject the FollowupService to ensure it is running to capture any followup forms
+    @Inject
+    FollowupService mFollowupService;
 
     @Nullable
     @BindView(R2.id.language_toggle)

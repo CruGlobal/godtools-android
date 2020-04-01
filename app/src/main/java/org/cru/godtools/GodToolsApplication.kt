@@ -18,7 +18,6 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.cru.godtools.tract.service.FollowupService
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
@@ -65,7 +64,6 @@ open class GodToolsApplication : DaggerApplication() {
         GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
         AemArticleManager.getInstance(this)
-        FollowupService.getInstance(this)
     }
 
     // region Dagger

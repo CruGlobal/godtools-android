@@ -3,26 +3,29 @@ package org.cru.godtools.tract.service
 import android.content.Context
 import android.os.AsyncTask
 import androidx.annotation.WorkerThread
+import dagger.Lazy
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Followup
 import org.cru.godtools.sync.syncFollowups
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val FIELD_NAME = "name"
 private const val FIELD_EMAIL = "email"
 private const val FIELD_DESTINATION = "destination_id"
 
-class FollowupService private constructor(private val context: Context) {
-    companion object : SingletonHolder<FollowupService, Context>({ FollowupService(it.applicationContext) })
-
-    private val dao by lazy { GodToolsDao.getInstance(context) }
-
+@Singleton
+class FollowupService @Inject internal constructor(
+    private val context: Context,
+    eventBus: EventBus,
+    private val dao: Lazy<GodToolsDao>
+) {
     init {
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
 
         // sync any currently pending followups
         AsyncTask.THREAD_POOL_EXECUTOR.execute { syncPendingFollowups() }
@@ -41,7 +44,7 @@ class FollowupService private constructor(private val context: Context) {
 
             // only store this followup if it's valid
             if (followup.isValid) {
-                dao.insertNew(followup)
+                dao.get().insertNew(followup)
                 syncPendingFollowups()
             }
         }
