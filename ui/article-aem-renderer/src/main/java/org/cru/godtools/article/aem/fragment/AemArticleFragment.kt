@@ -39,6 +39,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
+import javax.inject.Inject
 
 private const val TAG = "AemArticleFragment"
 
@@ -90,7 +91,10 @@ class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
     // endregion WebView content
 }
 
-class AemArticleViewModel(application: Application) : AndroidViewModel(application) {
+internal class AemArticleViewModel @Inject constructor(
+    application: Application,
+    private val webViewClient: ArticleWebViewClient
+) : AndroidViewModel(application) {
     private val db = ArticleRoomDatabase.getInstance(application)
 
     val articleUri = MutableLiveData<Uri?>()
@@ -99,7 +103,6 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
 
     // region WebView
     private var webView: WebView? = null
-    private val webViewClient: ArticleWebViewClient = ArticleWebViewClient(application)
 
     fun getWebView(activity: Activity): WebView {
         webViewClient.activity = activity
@@ -143,7 +146,7 @@ class AemArticleViewModel(application: Application) : AndroidViewModel(applicati
     // endregion WebView Content
 }
 
-private class ArticleWebViewClient(context: Context) : WebViewClient() {
+internal class ArticleWebViewClient @Inject constructor(context: Context) : WebViewClient() {
     var activity: Activity? by weak()
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
