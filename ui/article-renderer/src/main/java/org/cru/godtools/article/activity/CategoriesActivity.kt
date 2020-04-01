@@ -40,7 +40,7 @@ class CategoriesActivity : BaseArticleActivity(), CategoriesFragment.Callbacks {
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(ToolAnalyticsScreenEvent(SCREEN_CATEGORIES, tool, locale))
+        eventBus.post(ToolAnalyticsScreenEvent(SCREEN_CATEGORIES, tool, locale))
     }
 
     override fun onCategorySelected(category: Category?) = startArticlesActivity(tool, locale, category?.id)

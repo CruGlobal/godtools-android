@@ -82,7 +82,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     // endregion Lifecycle
 
     private fun setupAppBar() {
-        mActionBar?.apply {
+        supportActionBar?.apply {
             setDisplayShowHomeEnabled(false)
             setDisplayHomeAsUpEnabled(pageSet.showUpNavigation)
             setDisplayShowTitleEnabled(false)
@@ -124,7 +124,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
-        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
+        if (page != null) eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
     }
     // endregion Analytics
 
@@ -154,12 +154,12 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     override fun onTutorialAction(view: View) {
         when (view.id) {
             R.id.action_onboarding_training -> {
-                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
                 startTutorialActivity(PageSet.TRAINING)
                 finish()
             }
             R.id.action_onboarding_finish -> {
-                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
             R.id.action_training_finish -> finish()

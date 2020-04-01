@@ -38,7 +38,7 @@ class ProfileActivity : BasePlatformActivity() {
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD))
     }
     // endregion Lifecycle
 

@@ -48,7 +48,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(ToolDetailsScreenEvent(tool))
+        eventBus.post(ToolDetailsScreenEvent(tool))
     }
 
     override fun onToolAdded() = finish()

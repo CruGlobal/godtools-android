@@ -68,7 +68,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         if (drawerLayout != null) {
-            mActionBar?.setHomeButtonEnabled(true)
+            supportActionBar?.setHomeButtonEnabled(true)
         }
     }
 
@@ -118,7 +118,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_help -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
             openUrl(URI_HELP)
             true
         }
@@ -143,17 +143,17 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_terms_of_use -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
             openUrl(URI_TERMS_OF_USE)
             true
         }
         R.id.action_privacy_policy -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
             openUrl(URI_PRIVACY)
             true
         }
         R.id.action_copyright -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
             openUrl(URI_COPYRIGHT)
             true
         }
@@ -167,7 +167,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
     override fun onStop() {
         super.onStop()
-        mEventBus.unregister(this)
+        eventBus.unregister(this)
     }
     // endregion Lifecycle
 
@@ -279,7 +279,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchContactUs() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
         } catch (e: ActivityNotFoundException) {
@@ -288,7 +288,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShare() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
         val shareLink = URI_SHARE_BASE.buildUpon()
             .appendPath(LocaleCompat.toLanguageTag(settings.primaryLanguage).toLowerCase(Locale.US))
             .appendPath("")
@@ -305,7 +305,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShareStory() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
         try {
             startActivity(
                 Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)

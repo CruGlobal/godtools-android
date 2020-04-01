@@ -45,7 +45,7 @@ class LanguageSelectionActivity : BasePlatformActivity(), LocaleSelectedListener
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION))
     }
 
     override fun onLocaleSelected(locale: Locale?) {

@@ -259,12 +259,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
+                    eventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
                     break;
                 case STATE_MY_TOOLS:
                 default:
-                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
-                    mEventBus.post(new FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS));
+                    eventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
+                    eventBus.post(new FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS));
             }
 
             trackLaunch();
@@ -336,7 +336,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return mToolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
+                return toolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
         }
 
         // assume we can show it if we don't have any specific rules about it
@@ -377,14 +377,14 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         // dispatch specific feature discovery
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                assert mToolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
-                if (mToolbar.findViewById(R.id.action_switch_language) != null) {
+                assert toolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
+                if (toolbar.findViewById(R.id.action_switch_language) != null) {
                     // purge any pending feature discovery triggers since we are showing feature discovery now
                     purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS);
 
                     // show language settings feature discovery
                     final TapTarget target = TapTarget.forToolbarMenuItem(
-                            mToolbar, R.id.action_switch_language,
+                            toolbar, R.id.action_switch_language,
                             getString(R.string.feature_discovery_title_language_settings),
                             getString(R.string.feature_discovery_desc_language_settings));
                     mFeatureDiscovery =

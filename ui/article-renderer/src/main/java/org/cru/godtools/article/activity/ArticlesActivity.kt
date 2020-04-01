@@ -82,6 +82,6 @@ class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
         when {
             category != null -> category?.let { ArticlesCategoryAnalyticsScreenEvent(tool, locale, it) }
             else -> ArticlesAnalyticsScreenEvent(tool, locale)
-        }?.let { mEventBus.post(it) }
+        }?.let { eventBus.post(it) }
     }
 }

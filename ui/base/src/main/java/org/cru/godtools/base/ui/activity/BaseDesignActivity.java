@@ -66,8 +66,8 @@ public abstract class BaseDesignActivity extends BaseActivity implements TabLayo
             mNavigationTabs.addOnTabSelectedListener(this);
 
             // disable the action bar title since we have navigation tabs
-            if (mActionBar != null) {
-                mActionBar.setDisplayShowTitleEnabled(false);
+            if (actionBar != null) {
+                actionBar.setDisplayShowTitleEnabled(false);
             }
         }
     }
