@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.MenuItem
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,6 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
+import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.content.ComponentNameUtils
@@ -53,7 +55,8 @@ private const val SHARE_LINK = "{{share_link}}"
 
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
-abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNavigationItemSelectedListener {
+abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
+    BaseDesignActivity(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected val settings by lazy { Settings.getInstance(this) }
     protected val theKey by lazy { TheKey.getInstance(this) }
 

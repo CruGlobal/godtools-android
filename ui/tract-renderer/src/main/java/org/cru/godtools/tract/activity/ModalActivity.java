@@ -76,7 +76,7 @@ public class ModalActivity extends ImmersiveActivity {
     }
 
     public ModalActivity() {
-        super(true);
+        super(true, R.layout.activity_modal);
     }
 
     /* BEGIN lifecycle */
@@ -101,7 +101,6 @@ public class ModalActivity extends ImmersiveActivity {
             return;
         }
 
-        setContentView(R.layout.activity_modal);
         setupDataModel();
         startLoaders();
     }

@@ -2,7 +2,6 @@ package org.cru.godtools.ui.languages
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
@@ -19,11 +18,10 @@ fun Activity.startLanguageSettingsActivity() {
         .also { startActivity(it) }
 }
 
-class LanguageSettingsActivity : BasePlatformActivity() {
+class LanguageSettingsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_generic_fragment_with_nav_drawer)
+    override fun onContentChanged() {
+        super.onContentChanged()
         loadPrimaryFragmentIfNeeded()
     }
 

@@ -6,18 +6,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.common.base.Objects
+import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
     protected lateinit var eventBus: EventBus
 
     // region Lifecycle

@@ -2,7 +2,6 @@ package org.cru.godtools.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
@@ -24,15 +23,10 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
-class LanguageSelectionActivity : BasePlatformActivity(), LocaleSelectedListener {
+class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic_fragment), LocaleSelectedListener {
     private val primary: Boolean by lazy { intent?.getBooleanExtra(EXTRA_PRIMARY, true) ?: true }
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_generic_fragment)
-    }
-
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         setTitle(if (primary) R.string.title_language_primary else R.string.title_language_parallel)
