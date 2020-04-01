@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import dagger.android.support.AndroidSupportInjection
+import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
+import javax.inject.Inject
 
 abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@LayoutRes layoutId: Int? = null) :
     Fragment(layoutId ?: 0) {
@@ -31,6 +33,14 @@ abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@Layo
         super.onDestroyView()
     }
     // endregion Lifecycle
+
+    // region ViewModelProvider.Factory
+    @Inject
+    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
+    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
+
+    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
+    // endregion ViewModelProvider.Factory
 
     // region ButterKnife
     private var butterKnife: Unbinder? = null

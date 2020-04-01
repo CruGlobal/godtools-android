@@ -10,7 +10,6 @@ import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
-import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -96,14 +95,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         super.onDestroyView()
     }
     // endregion Lifecycle
-
-    // region ViewModelProvider.Factory
-    @Inject
-    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
-    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
-
-    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
-    // endregion ViewModelProvider.Factory
 
     @CallSuper
     protected open fun syncData(force: Boolean) {}
