@@ -24,6 +24,7 @@ dependencies {
     implementation "androidx.browser:browser:${deps.androidX.browser}"
     api "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
