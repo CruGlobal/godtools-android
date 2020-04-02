@@ -8,9 +8,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import org.ccci.gto.android.common.room.converter.DateConverter
-import org.ccci.gto.android.common.room.converter.LocaleConverter
-import org.ccci.gto.android.common.room.converter.UriConverter
+import org.ccci.gto.android.common.androidx.room.converter.DateConverter
+import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
+import org.ccci.gto.android.common.androidx.room.converter.UriConverter
 import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
