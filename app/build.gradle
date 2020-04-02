@@ -180,7 +180,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"

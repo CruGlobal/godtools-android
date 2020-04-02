@@ -89,7 +89,7 @@ public class TractActivity extends BaseToolActivity
     @BindView(R2.id.pages)
     ViewPager mPager;
     @Nullable
-    ManifestPagerAdapter mPagerAdapter;
+    private ManifestPagerAdapter mPagerAdapter;
 
     @Nullable
     /*final*/ String mTool = Tool.INVALID_CODE;
