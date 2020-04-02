@@ -26,12 +26,11 @@ private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 class LanguagesFragmentViewModel @AssistedInject constructor(
     context: Context,
     dao: GodToolsDao,
+    settings: Settings,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
     interface Factory : AssistedSavedStateViewModelFactory<LanguagesFragmentViewModel>
-
-    private val settings = Settings.getInstance(context)
 
     val isPrimary = MutableLiveData<Boolean>(true)
 
