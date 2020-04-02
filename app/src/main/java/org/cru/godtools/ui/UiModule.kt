@@ -3,6 +3,8 @@ package org.cru.godtools.ui
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.cru.godtools.article.ArticleRendererModule
+import org.cru.godtools.tract.TractRendererModule
+import org.cru.godtools.tutorial.TutorialRendererModule
 import org.cru.godtools.ui.about.AboutModule
 import org.cru.godtools.ui.languages.LanguagesModule
 import org.cru.godtools.ui.profile.ProfileModule
@@ -17,7 +19,9 @@ import org.keynote.godtools.android.activity.MainActivity
         LanguagesModule::class,
         ProfileModule::class,
         ToolsModule::class,
-        ToolDetailsModule::class
+        ToolDetailsModule::class,
+        TutorialRendererModule::class,
+        TractRendererModule::class
     ]
 )
 abstract class UiModule {
