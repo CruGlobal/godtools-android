@@ -68,6 +68,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     var toolbar: Toolbar? = null
 
     @JvmField
+    @Deprecated("Use supportActionBar instead", ReplaceWith("supportActionBar"))
     protected var actionBar: ActionBar? = null
 
     private fun setupActionBar() {
