@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.AndroidSupportInjection
-import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
+import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.cru.godtools.R
 import org.cru.godtools.databinding.LanguagesFragmentBinding
