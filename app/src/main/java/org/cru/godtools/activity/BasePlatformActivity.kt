@@ -3,7 +3,6 @@ package org.cru.godtools.activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
@@ -14,7 +13,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
-import dagger.android.AndroidInjection
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
@@ -66,11 +64,6 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
     protected lateinit var theKey: TheKey
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()

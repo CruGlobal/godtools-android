@@ -6,6 +6,7 @@ import androidx.annotation.LayoutRes
 import butterknife.BindView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.cru.godtools.base.ui.R2
@@ -15,6 +16,11 @@ private const val EXTRA_NAV_TAB_ACTIVE = "org.cru.godtools.base.ui.activity.Base
 abstract class BaseDesignActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : BaseActivity(contentLayoutId),
     OnTabSelectedListener {
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     @CallSuper
     override fun onContentChanged() {
         // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
