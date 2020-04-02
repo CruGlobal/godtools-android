@@ -173,15 +173,12 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
@@ -210,6 +207,7 @@ dependencies {
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
+    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
