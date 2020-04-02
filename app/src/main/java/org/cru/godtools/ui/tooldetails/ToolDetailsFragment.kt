@@ -23,7 +23,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
 import org.cru.godtools.util.openToolActivity
-import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 import java.util.Locale
 
@@ -70,7 +69,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     }
 
     override fun onLinkClicked(url: String) {
-        EventBus.getDefault().post(ExitLinkActionEvent(Uri.parse(url)))
+        eventBus.post(ExitLinkActionEvent(Uri.parse(url)))
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

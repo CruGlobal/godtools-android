@@ -13,6 +13,9 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 @Module(includes = [AssistedInject_LanguagesModule::class])
 abstract class LanguagesModule {
     @ContributesAndroidInjector
+    internal abstract fun languageSettingsFragmentInjector(): LanguageSettingsFragment
+
+    @ContributesAndroidInjector
     internal abstract fun languagesFragmentInjector(): LanguagesFragment
 
     @Binds

@@ -22,10 +22,13 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
+import javax.inject.Inject
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
 abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int? = null) : BaseFragment<B>(layoutId) {
+    @Inject
+    protected lateinit var eventBus: EventBus
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 
@@ -37,8 +40,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected var primaryLanguage = Settings.defaultLanguage
     protected var parallelLanguage: Locale? = null
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onAttach(context: Context) {
         super.onAttach(context)
         settings = Settings.getInstance(context)
@@ -63,7 +65,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
         startSettingsChangeListener()
         loadLanguages(false)
         syncHelper.updateState()
@@ -80,7 +82,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     override fun onStop() {
         super.onStop()
         stopSettingsChangeListener()
-        EventBus.getDefault().unregister(this)
+        eventBus.unregister(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -92,8 +94,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         cleanupRefreshView()
         super.onDestroyView()
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     @CallSuper
     protected open fun syncData(force: Boolean) {}

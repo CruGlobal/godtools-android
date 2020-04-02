@@ -38,13 +38,14 @@ import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
 import org.cru.godtools.widget.BannerType;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -73,8 +74,9 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
 
     private static final int LOADER_TOOLS = 101;
 
+    @Inject
     @Nullable
-    private GodToolsDao mDao;
+    GodToolsDao mDao;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -105,12 +107,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     }
 
     // region Lifecycle
-    @Override
-    public void onAttach(@NonNull final Context context) {
-        super.onAttach(context);
-        mDao = GodToolsDao.Companion.getInstance(context);
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,7 +194,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
         if (mDao != null) {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
                 mDao.updateToolOrder(ids);
-                EventBus.getDefault().post(ToolUpdateEvent.INSTANCE);
+                eventBus.post(ToolUpdateEvent.INSTANCE);
             });
         }
     }
@@ -238,7 +234,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
                 mToolsHeaderAdapter.setBanner(BannerType.TUTORIAL_TRAINING);
                 mToolsHeaderAdapter.setPrimaryCallback(b -> openTrainingTutorial());
                 mToolsHeaderAdapter.setSecondaryCallback(b -> {
-                    EventBus.getDefault().post(new TutorialAnalyticsActionEvent(
+                    eventBus.post(new TutorialAnalyticsActionEvent(
                             TutorialAnalyticsActionEventKt.ADOBE_TUTORIAL_HOME_DISMISS)
                     );
                     settings.setFeatureDiscovered(FEATURE_TUTORIAL_TRAINING);
