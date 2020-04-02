@@ -146,7 +146,10 @@ internal class AemArticleViewModel @Inject constructor(
     // endregion WebView Content
 }
 
-internal class ArticleWebViewClient @Inject constructor(context: Context) : WebViewClient() {
+internal class ArticleWebViewClient @Inject constructor(
+    context: Context,
+    private val aemArticleManager: AemArticleManager
+) : WebViewClient() {
     var activity: Activity? by weak()
     private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
@@ -168,7 +171,7 @@ internal class ArticleWebViewClient @Inject constructor(context: Context) : WebV
 
     @WorkerThread
     private fun Uri.getResponseFromFile(context: Context): WebResourceResponse? {
-        val resource = getResource(context) ?: return null
+        val resource = getResource() ?: return null
         val type = resource.contentType
         val data = resource.getData(context) ?: return null
         return WebResourceResponse(
@@ -177,14 +180,14 @@ internal class ArticleWebViewClient @Inject constructor(context: Context) : WebV
         )
     }
 
-    private fun Uri.getResource(context: Context): Resource? {
+    private fun Uri.getResource(): Resource? {
         val resource = resourceDao.find(this) ?: return null
         if (resource.isDownloaded) return resource
 
         // attempt to download the file if we haven't downloaded it already
         try {
             // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-            AemArticleManager.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
+            aemArticleManager.enqueueDownloadResource(resource.uri, false).get()
         } catch (e: InterruptedException) {
             // propagate thread interruption
             Thread.currentThread().interrupt()
