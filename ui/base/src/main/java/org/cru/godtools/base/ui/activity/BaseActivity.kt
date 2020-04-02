@@ -17,17 +17,18 @@ import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
+import javax.inject.Inject
 
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
 
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
+    @Inject
     protected lateinit var eventBus: EventBus
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        eventBus = EventBus.getDefault()
     }
 
     @CallSuper
