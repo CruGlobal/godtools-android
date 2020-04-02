@@ -30,11 +30,11 @@ dependencies {
     api "androidx.room:room-runtime:${deps.androidX.room}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-room:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"

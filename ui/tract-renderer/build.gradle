@@ -35,7 +35,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'

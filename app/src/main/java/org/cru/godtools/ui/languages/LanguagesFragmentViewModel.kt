@@ -11,7 +11,7 @@ import androidx.lifecycle.switchMap
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.AssistedSavedStateViewModelFactory
+import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings

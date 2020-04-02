@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
-import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.ViewModelKey
+import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 
 @Module
 abstract class ProfileModule {

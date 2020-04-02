@@ -8,10 +8,10 @@ import dagger.multibindings.IntoSet
 import me.thekey.android.TheKey
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
-import org.ccci.gto.android.common.androidx.lifecycle.dagger.viewmodel.ViewModelModule
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
+import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.analytics.AnalyticsModule
 import org.greenrobot.eventbus.EventBus
