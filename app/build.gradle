@@ -163,8 +163,8 @@ dependencies {
 
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
