@@ -15,7 +15,7 @@ import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService
 import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
 import org.cru.godtools.api.GodToolsApi
-import org.cru.godtools.article.aem.service.AemArticleManger
+import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
@@ -78,7 +78,7 @@ open class GodToolsApplication : DaggerApplication() {
         GodToolsDownloadManager.getInstance(this)
         GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
-        AemArticleManger.getInstance(this)
+        AemArticleManager.getInstance(this)
         FollowupService.getInstance(this)
     }
 

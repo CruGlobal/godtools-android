@@ -20,7 +20,7 @@ import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
-import org.cru.godtools.article.aem.service.AemArticleManger
+import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
@@ -150,7 +150,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
     }
 
     private fun syncData() {
-        AemArticleManger.getInstance(this).let { manager ->
+        AemArticleManager.getInstance(this).let { manager ->
             syncTask = when {
                 isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
                 else -> manager.downloadArticle(articleUri, false)

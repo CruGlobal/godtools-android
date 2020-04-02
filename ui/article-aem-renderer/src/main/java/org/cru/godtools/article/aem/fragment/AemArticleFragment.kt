@@ -30,7 +30,7 @@ import org.cru.godtools.article.aem.R2
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
-import org.cru.godtools.article.aem.service.AemArticleManger
+import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.base.ui.util.openUrl
 import splitties.fragmentargs.arg
@@ -181,7 +181,7 @@ private class ArticleWebViewClient(context: Context) : WebViewClient() {
         // attempt to download the file if we haven't downloaded it already
         try {
             // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-            AemArticleManger.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
+            AemArticleManager.getInstance(context).enqueueDownloadResource(resource.uri, false).get()
         } catch (e: InterruptedException) {
             // propagate thread interruption
             Thread.currentThread().interrupt()
