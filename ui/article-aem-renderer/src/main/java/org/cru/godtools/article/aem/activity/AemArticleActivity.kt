@@ -1,15 +1,18 @@
 package org.cru.godtools.article.aem.activity
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.switchMap
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -26,6 +29,7 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
+import javax.inject.Inject
 
 private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
@@ -123,14 +127,11 @@ class AemArticleActivity : BaseArticleActivity(false) {
                 } == true
     }
 
+    private val dataModel: AemArticleActivityDataModel by viewModels()
+
     private fun setupViewModel() {
-        val viewModel = ViewModelProvider(this).get(AemArticleViewModel::class.java)
-
-        if (!viewModel.isArticleInitialized()) {
-            viewModel.article = ArticleRoomDatabase.getInstance(this).articleDao().findLiveData(articleUri)
-        }
-
-        viewModel.article.observe(this, Observer { onUpdateArticle(it) })
+        dataModel.articleUri.value = articleUri
+        dataModel.article.observe(this, Observer { onUpdateArticle(it) })
     }
 
     private fun sendAnalyticsEventIfNeededAndPossible() {
@@ -188,10 +189,12 @@ class AemArticleActivity : BaseArticleActivity(false) {
             .replace(R.id.frame, AemArticleFragment(articleUri), TAG_MAIN_FRAGMENT)
             .commit()
     }
+}
 
-    class AemArticleViewModel : ViewModel() {
-        internal lateinit var article: LiveData<Article?>
+class AemArticleActivityDataModel @Inject internal constructor(app: Application) : ViewModel() {
+    private val articleDao = ArticleRoomDatabase.getInstance(app).articleDao()
 
-        internal fun isArticleInitialized() = ::article.isInitialized
-    }
+    internal val articleUri = MutableLiveData<Uri>()
+
+    internal val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 }
