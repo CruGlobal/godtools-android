@@ -30,5 +30,7 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

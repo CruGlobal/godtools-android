@@ -13,4 +13,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
+
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

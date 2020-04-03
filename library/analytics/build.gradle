@@ -51,5 +51,6 @@ dependencies {
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
 
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
