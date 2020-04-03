@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.download.manager.DownloadManagerModule
+import org.cru.godtools.shortcuts.ShortcutModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton
@@ -26,6 +27,7 @@ import javax.inject.Singleton
         DownloadManagerModule::class,
         EagerModule::class,
         EventBusModule::class,
+        ShortcutModule::class,
         ViewModelModule::class
     ]
 )
