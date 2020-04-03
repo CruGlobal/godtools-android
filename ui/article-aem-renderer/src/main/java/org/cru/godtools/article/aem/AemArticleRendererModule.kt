@@ -1,10 +1,8 @@
 package org.cru.godtools.article.aem
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
@@ -38,10 +36,4 @@ abstract class AemArticleRendererModule {
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.BACKGROUND)
     internal abstract fun aemArticleMangerEagerSingleton(aemArticleManger: AemArticleManager): Any
-
-    companion object {
-        // TODO: convert this to a standalone singleton
-        @Provides
-        internal fun aemArticleManager(context: Context) = AemArticleManager.getInstance(context)
-    }
 }

@@ -65,6 +65,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import androidx.annotation.AnyThread;
 import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
@@ -86,6 +89,7 @@ import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
  */
+@Singleton
 public class AemArticleManager {
     private static final String TAG = "AEMDownloadManager";
 
@@ -120,18 +124,19 @@ public class AemArticleManager {
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
-    private AemArticleManager(@NonNull final Context context) {
+    @Inject
+    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao) {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.Companion.getInstance(mContext);
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
-        mDao = GodToolsDao.Companion.getInstance(mContext);
+        mDao = dao;
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AemArticleManager.class.getSimpleName()));
         mManifestManager = ManifestManager.Companion.getInstance(mContext);
 
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
 
         // trigger some base sync tasks
         // TODO: maybe these sync tasks should be triggered elsewhere?
@@ -142,26 +147,13 @@ public class AemArticleManager {
         enqueueCleanOrphanedFiles();
     }
 
-    @Nullable
-    private static AemArticleManager sInstance;
-
-    @NonNull
-    public static synchronized AemArticleManager getInstance(@NonNull final Context context) {
-        if (sInstance == null) {
-            sInstance = new AemArticleManager(context);
-        }
-        return sInstance;
-    }
-
-    // region Lifecycle Events
-
+    // region Lifecycle
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         enqueueExtractAemImportsFromManifests();
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     // region Task Scheduling Methods
 
