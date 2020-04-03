@@ -40,7 +40,8 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
-    private val shortcutManager by lazy { GodToolsShortcutManager.getInstance(requireContext()) }
+    @Inject
+    internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private var toolCode: String by arg()
 

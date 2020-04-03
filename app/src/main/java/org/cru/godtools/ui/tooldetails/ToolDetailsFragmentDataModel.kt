@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.tooldetails
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,13 +23,11 @@ import org.keynote.godtools.android.db.GodToolsDao
 import javax.inject.Inject
 
 class ToolDetailsFragmentDataModel @Inject constructor(
-    application: Application,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
-    settings: Settings
+    settings: Settings,
+    private val shortcutManager: GodToolsShortcutManager
 ) : ViewModel() {
-    private val shortcutManager = GodToolsShortcutManager.getInstance(application)
-
     val toolCode = MutableLiveData<String>()
     private val distinctToolCode: LiveData<String> = toolCode.distinctUntilChanged()
 

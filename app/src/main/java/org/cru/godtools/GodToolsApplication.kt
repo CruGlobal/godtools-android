@@ -15,7 +15,6 @@ import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
 import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.service.AccountListRegistrationService
-import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
@@ -58,7 +57,6 @@ open class GodToolsApplication : DaggerApplication() {
     }
 
     private fun startServices() {
-        GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
     }
 
