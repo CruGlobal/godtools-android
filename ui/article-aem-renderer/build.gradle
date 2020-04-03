@@ -61,5 +61,7 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

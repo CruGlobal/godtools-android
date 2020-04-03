@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.google.common.base.Objects
 import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
@@ -69,6 +68,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     var toolbar: Toolbar? = null
 
     @JvmField
+    @Deprecated("Use supportActionBar instead", ReplaceWith("supportActionBar"))
     protected var actionBar: ActionBar? = null
 
     private fun setupActionBar() {
@@ -84,7 +84,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     // region Up Navigation
     override fun supportNavigateUpTo(upIntent: Intent) {
         // if the upIntent already points to the original launching activity, just finish this activity
-        if (Objects.equal(intent.getParcelableExtra(EXTRA_LAUNCHING_COMPONENT), upIntent.component)) {
+        if (upIntent.component == intent.getParcelableExtra(EXTRA_LAUNCHING_COMPONENT)) {
             finish()
             return
         }
