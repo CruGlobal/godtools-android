@@ -1,10 +1,10 @@
 package org.cru.godtools.ui.languages
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -24,14 +24,14 @@ private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
 class LanguagesFragmentViewModel @AssistedInject constructor(
-    application: Application,
+    context: Context,
     dao: GodToolsDao,
     @Assisted private val savedState: SavedStateHandle
-) : AndroidViewModel(application) {
+) : ViewModel() {
     @AssistedInject.Factory
     interface Factory : AssistedSavedStateViewModelFactory<LanguagesFragmentViewModel>
 
-    private val settings = Settings.getInstance(application)
+    private val settings = Settings.getInstance(context)
 
     val isPrimary = MutableLiveData<Boolean>(true)
 
@@ -57,7 +57,7 @@ class LanguagesFragmentViewModel @AssistedInject constructor(
         .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
         .getAsLiveData(dao)
     private val sortedLanguages: LiveData<Map<String, Language>> = rawLanguages
-        .map { it.associateBy { lang -> lang.getDisplayName(application) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
+        .map { it.associateBy { lang -> lang.getDisplayName(context) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
             query.isNullOrEmpty() -> languages?.values?.toList()
