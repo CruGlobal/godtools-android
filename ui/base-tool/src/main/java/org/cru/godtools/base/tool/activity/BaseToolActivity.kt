@@ -39,7 +39,8 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 ) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
     @Inject
     internal lateinit var dao: GodToolsDao
-    protected val downloadManager by lazy { GodToolsDownloadManager.getInstance(this) }
+    @Inject
+    protected lateinit var downloadManager: GodToolsDownloadManager
 
     // region Lifecycle
     @CallSuper

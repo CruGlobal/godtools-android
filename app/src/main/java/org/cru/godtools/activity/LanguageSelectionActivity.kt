@@ -13,6 +13,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.ui.languages.LanguagesFragment
 import org.cru.godtools.ui.languages.LocaleSelectedListener
 import java.util.Locale
+import javax.inject.Inject
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.activity.LanguageSelectionActivity.PRIMARY"
 
@@ -24,6 +25,9 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
 }
 
 class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic_fragment), LocaleSelectedListener {
+    @Inject
+    internal lateinit var downloadManager: GodToolsDownloadManager
+
     private val primary: Boolean by lazy { intent?.getBooleanExtra(EXTRA_PRIMARY, true) ?: true }
 
     // region Lifecycle
@@ -43,7 +47,7 @@ class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic
     }
 
     override fun onLocaleSelected(locale: Locale?) {
-        GodToolsDownloadManager.getInstance(this).addLanguage(locale)
+        downloadManager.addLanguage(locale)
         storeLocale(locale)
         finish()
     }

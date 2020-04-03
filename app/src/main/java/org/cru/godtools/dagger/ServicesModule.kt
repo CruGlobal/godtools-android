@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.analytics.AnalyticsModule
+import org.cru.godtools.download.manager.DownloadManagerModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton
@@ -22,6 +23,7 @@ import javax.inject.Singleton
     includes = [
         AnalyticsModule::class,
         DatabaseModule::class,
+        DownloadManagerModule::class,
         EagerModule::class,
         EventBusModule::class,
         ViewModelModule::class

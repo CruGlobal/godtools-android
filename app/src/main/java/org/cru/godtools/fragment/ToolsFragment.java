@@ -75,8 +75,9 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     private static final int LOADER_TOOLS = 101;
 
     @Inject
-    @Nullable
     GodToolsDao mDao;
+    @Inject
+    GodToolsDownloadManager mDownloadManager;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -185,7 +186,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
     @Override
     public void onToolAdd(@Nullable final String code) {
         if (code != null) {
-            GodToolsDownloadManager.getInstance(requireContext()).addTool(code);
+            mDownloadManager.addTool(code);
         }
     }
 

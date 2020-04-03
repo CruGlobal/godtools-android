@@ -13,7 +13,6 @@ import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
-import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
@@ -59,7 +58,6 @@ open class GodToolsApplication : DaggerApplication() {
     }
 
     private fun startServices() {
-        GodToolsDownloadManager.getInstance(this)
         GodToolsShortcutManager.getInstance(this)
         AccountListRegistrationService.getInstance(this)
     }
