@@ -49,8 +49,11 @@ dependencies {
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
+
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
