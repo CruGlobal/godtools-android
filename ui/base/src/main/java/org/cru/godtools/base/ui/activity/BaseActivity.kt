@@ -13,19 +13,23 @@ import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.common.base.Objects
+import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
+import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
+import javax.inject.Inject
 
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
 
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
+    @Inject
     protected lateinit var eventBus: EventBus
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        eventBus = EventBus.getDefault()
     }
 
     @CallSuper
@@ -50,6 +54,14 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     @CallSuper
     protected open fun onSetupActionBar() = Unit
     // endregion Lifecycle
+
+    // region ViewModelProvider.Factory
+    @Inject
+    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
+    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, intent.extras) }
+
+    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
+    // endregion ViewModelProvider.Factory
 
     // region ActionBar
     @JvmField

@@ -43,6 +43,7 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
+import javax.inject.Inject
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
@@ -58,7 +59,9 @@ private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
     BaseDesignActivity(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected val settings by lazy { Settings.getInstance(this) }
-    protected val theKey by lazy { TheKey.getInstance(this) }
+
+    @Inject
+    protected lateinit var theKey: TheKey
 
     // region Lifecycle
     @CallSuper

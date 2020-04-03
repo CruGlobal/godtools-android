@@ -42,7 +42,6 @@ import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.model.Page;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
@@ -211,7 +210,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
         startDownloadProgressListener();
     }
 
@@ -277,7 +276,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
         stopDownloadProgressListener();
     }
 
