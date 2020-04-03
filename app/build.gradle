@@ -215,9 +215,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    // TODO: switch to official release once https://github.com/square/AssistedInject/pull/121 is merged
-    kapt 'com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6'
-//    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
