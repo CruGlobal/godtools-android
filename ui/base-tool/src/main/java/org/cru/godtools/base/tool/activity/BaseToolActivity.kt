@@ -158,6 +158,7 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 
         // track the share action
         eventBus.post(ShareActionEvent)
+        Settings.getInstance(this).setFeatureDiscovered(Settings.FEATURE_TOOL_SHARE)
 
         // start the share activity chooser with our share link
         val title = shareLinkTitle
