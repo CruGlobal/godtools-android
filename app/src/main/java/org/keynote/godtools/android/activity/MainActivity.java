@@ -3,8 +3,6 @@ package org.keynote.godtools.android.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -51,18 +49,11 @@ import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
-    private static final String EXTRA_FEATURE = MainActivity.class.getName() + ".FEATURE";
-    private static final String EXTRA_FORCE = MainActivity.class.getName() + ".FORCE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    private static final int TASK_FEATURE_DISCOVERY = 1;
-
     private static final int STATE_MY_TOOLS = 0;
     private static final int STATE_FIND_TOOLS = 1;
-
-    @NonNull
-    /*final*/ Handler mTaskHandler;
 
     @Nullable
     private TabLayout.Tab mMyToolsTab;
@@ -80,7 +71,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         triggerOnboardingIfNecessary();
-        mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
         processIntent(getIntent());
@@ -126,15 +116,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         } else {
             showNextFeatureDiscovery();
         }
-    }
-
-    boolean onHandleMessage(@NonNull final Message message) {
-        switch (message.what) {
-            case TASK_FEATURE_DISCOVERY:
-                showFeatureDiscovery(message);
-                return true;
-        }
-        return false;
     }
 
     @Override
@@ -201,12 +182,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         super.onSaveInstanceState(outState);
         outState.putInt(EXTRA_ACTIVE_STATE, mActiveState);
         outState.putString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
-    }
-
-    @Override
-    protected void onDestroy() {
-        mTaskHandler.removeCallbacksAndMessages(null);
-        super.onDestroy();
     }
     // endregion Lifecycle
 
@@ -341,14 +316,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
-    private void showFeatureDiscovery(final Message message) {
-        final Bundle data = message.getData();
-        final String feature = data.getString(EXTRA_FEATURE);
-        if (feature != null) {
-            showFeatureDiscovery(feature, data.getBoolean(EXTRA_FORCE, false));
-        }
-    }
-
     protected void onShowFeatureDiscovery(@NonNull final String feature, final boolean force) {
         // dispatch specific feature discovery
         switch (feature) {
@@ -384,19 +351,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected boolean isFeatureDiscoveryVisible() {
         return super.isFeatureDiscoveryVisible() || mFeatureDiscovery != null;
-    }
-
-    private void dispatchDelayedFeatureDiscovery(@NonNull final String feature, final boolean force, final long delay) {
-        final Message msg = mTaskHandler.obtainMessage(TASK_FEATURE_DISCOVERY, feature);
-        final Bundle data = new Bundle();
-        data.putString(EXTRA_FEATURE, feature);
-        data.putBoolean(EXTRA_FORCE, force);
-        msg.setData(data);
-        mTaskHandler.sendMessageDelayed(msg, delay);
-    }
-
-    private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
-        mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
     // endregion Feature Discovery logic
 

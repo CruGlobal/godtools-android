@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.os.Parcelable
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
@@ -21,7 +23,11 @@ import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
+private const val EXTRA_FEATURE: String = "org.cru.godtools.BaseActivity.FEATURE"
+private const val EXTRA_FORCE: String = "org.cru.godtools.BaseActivity.FORCE"
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
+
+private const val MSG_FEATURE_DISCOVERY = 1
 
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
     @Inject
@@ -56,6 +62,11 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     @CallSuper
     protected open fun onSetupActionBar() = Unit
+
+    override fun onDestroy() {
+        featureDiscoveryHandler.removeCallbacksAndMessages(null)
+        super.onDestroy()
+    }
     // endregion Lifecycle
 
     // region ViewModelProvider.Factory
@@ -122,6 +133,34 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     @CallSuper
     protected open fun isFeatureDiscoveryVisible() = false
+
+    // region Delayed Dispatch
+    private val featureDiscoveryHandler by lazy {
+        Handler(mainLooper, Handler.Callback { m -> showFeatureDiscovery(m) })
+    }
+
+    protected fun dispatchDelayedFeatureDiscovery(feature: String, force: Boolean, delay: Long) {
+        featureDiscoveryHandler.sendMessageDelayed(
+            featureDiscoveryHandler.obtainMessage(MSG_FEATURE_DISCOVERY, feature).apply {
+                data = Bundle().apply {
+                    putString(EXTRA_FEATURE, feature)
+                    putBoolean(EXTRA_FORCE, force)
+                }
+            }, delay
+        )
+    }
+
+    private fun showFeatureDiscovery(message: Message): Boolean {
+        message.data.getString(EXTRA_FEATURE)?.let {
+            showFeatureDiscovery(it, message.data.getBoolean(EXTRA_FORCE, false))
+        }
+        return true
+    }
+
+    protected fun purgeQueuedFeatureDiscovery(feature: String) {
+        featureDiscoveryHandler.removeMessages(MSG_FEATURE_DISCOVERY, feature)
+    }
+    // endregion Delayed Dispatch
     // endregion Feature Discovery
 
     // region Up Navigation
