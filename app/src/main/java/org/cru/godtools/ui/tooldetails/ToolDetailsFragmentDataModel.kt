@@ -23,10 +23,12 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import javax.inject.Inject
 
-class ToolDetailsFragmentDataModel @Inject constructor(application: Application, private val dao: GodToolsDao) :
-    ViewModel() {
+class ToolDetailsFragmentDataModel @Inject constructor(
+    application: Application,
+    private val dao: GodToolsDao,
+    settings: Settings
+) : ViewModel() {
     private val downloadManager = GodToolsDownloadManager.getInstance(application)
-    private val settings = Settings.getInstance(application)
     private val shortcutManager = GodToolsShortcutManager.getInstance(application)
 
     val toolCode = MutableLiveData<String>()

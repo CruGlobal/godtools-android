@@ -238,7 +238,6 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))
 
-        val settings = Settings.getInstance(this)
         eventBus.post(if (settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)) ToolOpened else FirstToolOpened)
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
 
