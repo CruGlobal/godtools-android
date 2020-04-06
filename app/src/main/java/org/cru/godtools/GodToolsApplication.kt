@@ -14,7 +14,6 @@ import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
 import org.cru.godtools.init.content.task.InitialContentTasks
-import org.cru.godtools.service.AccountListRegistrationService
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
@@ -29,9 +28,6 @@ open class GodToolsApplication : DaggerApplication() {
         // configure components
         configureLanguageFallacks()
         configureApis()
-
-        // start various services
-        startServices()
 
         // enable compat vector images
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -54,10 +50,6 @@ open class GodToolsApplication : DaggerApplication() {
         crashlytics.setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
         crashlytics.setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
         Timber.plant(CrashlyticsTree())
-    }
-
-    private fun startServices() {
-        AccountListRegistrationService.getInstance(this)
     }
 
     // region Dagger
