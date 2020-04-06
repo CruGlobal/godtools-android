@@ -47,7 +47,6 @@ import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
-    private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -63,8 +62,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     TapTargetView mFeatureDiscovery;
 
     private int mActiveState = STATE_MY_TOOLS;
-    @Nullable
-    String mFeatureDiscoveryActive;
 
     // region Lifecycle
     @Override
@@ -77,7 +74,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         if (savedInstanceState != null) {
             mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
-            mFeatureDiscoveryActive = savedInstanceState.getString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
         }
 
         // sync any pending updates
@@ -106,16 +102,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onResume() {
         super.onResume();
         trackInAnalytics();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (mFeatureDiscoveryActive != null) {
-            showFeatureDiscovery(mFeatureDiscoveryActive, true);
-        } else {
-            showNextFeatureDiscovery();
-        }
     }
 
     @Override
@@ -181,7 +167,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(EXTRA_ACTIVE_STATE, mActiveState);
-        outState.putString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
     }
     // endregion Lifecycle
 
@@ -332,7 +317,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                             getString(R.string.feature_discovery_desc_language_settings));
                     mFeatureDiscovery =
                             TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
-                    mFeatureDiscoveryActive = feature;
+                    setFeatureDiscoveryActive(feature);
                 } else {
                     // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
                     // TODO: the menu item just hasn't been drawn yet.
@@ -371,7 +356,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             super.onTargetDismissed(view, userInitiated);
             if (userInitiated) {
                 getSettings().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
-                mFeatureDiscoveryActive = null;
+                setFeatureDiscoveryActive(null);
                 showNextFeatureDiscovery();
             }
 

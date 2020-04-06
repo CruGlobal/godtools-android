@@ -23,8 +23,9 @@ import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-private const val EXTRA_FEATURE: String = "org.cru.godtools.BaseActivity.FEATURE"
-private const val EXTRA_FORCE: String = "org.cru.godtools.BaseActivity.FORCE"
+private const val EXTRA_FEATURE_DISCOVERY = "org.cru.godtools.BaseActivity.FEATURE_DISCOVERY"
+private const val EXTRA_FEATURE = "org.cru.godtools.BaseActivity.FEATURE"
+private const val EXTRA_FORCE = "org.cru.godtools.BaseActivity.FORCE"
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
 
 private const val MSG_FEATURE_DISCOVERY = 1
@@ -39,6 +40,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        savedInstanceState?.restoreFeatureDiscoveryState()
     }
 
     @CallSuper
@@ -62,6 +64,16 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     @CallSuper
     protected open fun onSetupActionBar() = Unit
+
+    override fun onPostResume() {
+        super.onPostResume()
+        triggerFeatureDiscovery()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.saveFeatureDiscoveryState()
+    }
 
     override fun onDestroy() {
         featureDiscoveryHandler.removeCallbacksAndMessages(null)
@@ -97,7 +109,14 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     // endregion ActionBar
 
     // region Feature Discovery
-    private val settings by lazy { Settings.getInstance(this) }
+    protected var featureDiscoveryActive: String? = null
+
+    private fun triggerFeatureDiscovery() {
+        when (val feature = featureDiscoveryActive) {
+            null -> showNextFeatureDiscovery()
+            else -> showFeatureDiscovery(feature, true)
+        }
+    }
 
     protected open fun showNextFeatureDiscovery() = Unit
 
@@ -133,6 +152,14 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     @CallSuper
     protected open fun isFeatureDiscoveryVisible() = false
+
+    private fun Bundle.saveFeatureDiscoveryState() {
+        putString(EXTRA_FEATURE_DISCOVERY, featureDiscoveryActive)
+    }
+
+    private fun Bundle.restoreFeatureDiscoveryState() {
+        featureDiscoveryActive = getString(EXTRA_FEATURE_DISCOVERY, featureDiscoveryActive)
+    }
 
     // region Delayed Dispatch
     private val featureDiscoveryHandler by lazy {
