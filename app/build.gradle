@@ -95,15 +95,18 @@ android {
             shrinkResources false
 
             resValue "string", "app_name_debug", "GodTools (Dev)"
+        }
+        qa {
+            initWith debug
+            applicationIdSuffix ".qa"
+            versionNameSuffix "-qa"
 
-            // QA build
-            // XXX: I would have used a new buildType, but it got complex including debug dependencies in both debug and QA buildTypes -DF
+            resValue "string", "app_name_debug", "GodTools (QA)"
+
+            matchingFallbacks = ['debug']
+
+            // Firebase App Distribution build
             if (project.hasProperty('firebaseAppDistributionBuild')) {
-                applicationIdSuffix ".qa"
-                versionNameSuffix "-qa"
-
-                resValue "string", "app_name_debug", "GodTools (QA)"
-
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
@@ -122,6 +125,11 @@ android {
             }
         }
     }
+    sourceSets {
+        qa {
+            setRoot 'src/debug'
+        }
+    }
 
     variantFilter { variant ->
         // stage product flavors
@@ -137,6 +145,10 @@ kapt {
     arguments {
         arg('eventBusIndex', 'org.cru.godtools.AppEventBusIndex')
     }
+}
+
+configurations {
+    qaImplementation.extendsFrom debugImplementation
 }
 
 dependencies {
