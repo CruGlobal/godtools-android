@@ -41,7 +41,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
-import static androidx.lifecycle.Lifecycle.State.RESUMED;
 import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
@@ -323,24 +322,23 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     // region Feature Discovery logic
-    void showNextFeatureDiscovery() {
+    protected void showNextFeatureDiscovery() {
         if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
+            return;
         }
+
+        super.showNextFeatureDiscovery();
     }
 
-    /**
-     * Returns if the activity is in a state that it can actually show the specified feature discovery.
-     */
-    private boolean canShowFeatureDiscovery(@NonNull final String feature) {
+    protected boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
                 return toolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
+            default:
+                return super.canShowFeatureDiscovery(feature);
         }
-
-        // assume we can show it if we don't have any specific rules about it
-        return true;
     }
 
     private void showFeatureDiscovery(final Message message) {
@@ -351,29 +349,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
-    private void showFeatureDiscovery(@NonNull final String feature, final boolean force) {
-        // short-circuit if this activity is not started
-        if (!getLifecycle().getCurrentState().isAtLeast(RESUMED)) {
-            return;
-        }
-
-        // short-circuit if feature discovery is already visible
-        if (mFeatureDiscovery != null) {
-            return;
-        }
-
-        // short-circuit if this feature was discovered and we aren't forcing it
-        if (getSettings().isFeatureDiscovered(feature) && !force) {
-            return;
-        }
-
-        // short-circuit if we can't show this feature discovery right now,
-        // and try to show the next feature discovery that can be shown.
-        if (!canShowFeatureDiscovery(feature)) {
-            showNextFeatureDiscovery();
-            return;
-        }
-
+    protected void onShowFeatureDiscovery(@NonNull final String feature, final boolean force) {
         // dispatch specific feature discovery
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
@@ -399,7 +375,15 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                     dispatchDelayedFeatureDiscovery(feature, force, 17);
                 }
                 break;
+            default:
+                super.onShowFeatureDiscovery(feature, force);
+                break;
         }
+    }
+
+    @Override
+    protected boolean isFeatureDiscoveryVisible() {
+        return super.isFeatureDiscoveryVisible() || mFeatureDiscovery != null;
     }
 
     private void dispatchDelayedFeatureDiscovery(@NonNull final String feature, final boolean force, final long delay) {

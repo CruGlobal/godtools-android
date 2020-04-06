@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.AndroidInjection
@@ -83,6 +84,45 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
         onSetupActionBar()
     }
     // endregion ActionBar
+
+    // region Feature Discovery
+    private val settings by lazy { Settings.getInstance(this) }
+
+    protected open fun showNextFeatureDiscovery() = Unit
+
+    protected fun showFeatureDiscovery(feature: String, force: Boolean = false) {
+        // short-circuit if this activity is not started
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
+
+        // short-circuit if feature discovery is already visible
+        if (isFeatureDiscoveryVisible()) return
+
+        // short-circuit if this feature was discovered and we aren't forcing it
+        if (settings.isFeatureDiscovered(feature) && !force) return
+
+        // short-circuit if we can't show this feature discovery right now,
+        // and try to show the next feature discovery that can be shown.
+        if (!canShowFeatureDiscovery(feature)) {
+            showNextFeatureDiscovery()
+            return
+        }
+
+        // actually show the feature
+        onShowFeatureDiscovery(feature, force)
+    }
+
+    @CallSuper
+    protected open fun onShowFeatureDiscovery(feature: String, force: Boolean) = Unit
+
+    /**
+     * @return true if the activity is in a state that it can actually show the specified feature discovery.
+     */
+    @CallSuper
+    protected open fun canShowFeatureDiscovery(feature: String) = true
+
+    @CallSuper
+    protected open fun isFeatureDiscoveryVisible() = false
+    // endregion Feature Discovery
 
     // region Up Navigation
     override fun supportNavigateUpTo(upIntent: Intent) {
