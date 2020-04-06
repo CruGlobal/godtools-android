@@ -4,8 +4,10 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @Module
 abstract class DownloadManagerModule {
@@ -18,5 +20,10 @@ abstract class DownloadManagerModule {
         // TODO: make GodToolsDownloadManager a standalone singleton
         @Provides
         fun downloadManager(context: Context) = GodToolsDownloadManager.getInstance(context)
+
+        @IntoSet
+        @Provides
+        @Reusable
+        fun downloadManagerEventBusIndex(): SubscriberInfoIndex = DownloadManagerEventBusIndex()
     }
 }
