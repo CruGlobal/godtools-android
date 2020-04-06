@@ -25,6 +25,7 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 import java.util.Locale
+import javax.inject.Inject
 
 private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
@@ -115,7 +116,8 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel(application: Application) : LatestPublishedManifestDataModel(application) {
+class ArticlesFragmentDataModel @Inject constructor(application: Application) :
+    LatestPublishedManifestDataModel(application) {
     private val aemDb = ArticleRoomDatabase.getInstance(application)
 
     internal val category = MutableLiveData<String?>()

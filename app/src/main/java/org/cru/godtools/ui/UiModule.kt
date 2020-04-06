@@ -3,6 +3,7 @@ package org.cru.godtools.ui
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.cru.godtools.article.ArticleRendererModule
+import org.cru.godtools.base.tool.BaseToolRendererModule
 import org.cru.godtools.tract.TractRendererModule
 import org.cru.godtools.tutorial.TutorialRendererModule
 import org.cru.godtools.ui.about.AboutModule
@@ -16,6 +17,7 @@ import org.keynote.godtools.android.activity.MainActivity
     includes = [
         AboutModule::class,
         ArticleRendererModule::class,
+        BaseToolRendererModule::class,
         LanguagesModule::class,
         ProfileModule::class,
         ToolsModule::class,
