@@ -33,7 +33,7 @@ abstract class EventBusModule {
         @Provides
         @Singleton
         fun eventBus(indexes: Set<@JvmSuppressWildcards SubscriberInfoIndex>): EventBus = EventBus.builder()
-            .logger(TimberLogger())
+            .logger(TimberLogger)
             .apply { indexes.forEach { addIndex(it) } }
             .addIndex(DownloadManagerEventBusIndex())
             .addIndex(ModelEventEventBusIndex())

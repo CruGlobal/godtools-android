@@ -138,6 +138,9 @@ subprojects {
             dependencySubstitution {
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
+
+                // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
+                substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6')
             }
         }
     }
