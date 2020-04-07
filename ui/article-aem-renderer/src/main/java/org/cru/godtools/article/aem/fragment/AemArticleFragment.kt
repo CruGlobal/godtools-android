@@ -18,7 +18,6 @@ import androidx.annotation.WorkerThread
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
@@ -27,6 +26,7 @@ import com.karumi.weak.weak
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.R2
+import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
@@ -93,13 +93,11 @@ class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
 
 internal class AemArticleViewModel @Inject constructor(
     application: Application,
+    private val articleDao: ArticleDao,
     private val webViewClient: ArticleWebViewClient
 ) : AndroidViewModel(application) {
-    private val db = ArticleRoomDatabase.getInstance(application)
-
     val articleUri = MutableLiveData<Uri?>()
-    private val article: LiveData<Article?> =
-        articleUri.distinctUntilChanged().switchMap { db.articleDao().findLiveData(it) }
+    private val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 
     // region WebView
     private var webView: WebView? = null

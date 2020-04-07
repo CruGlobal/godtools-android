@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
@@ -45,5 +46,9 @@ abstract class AemArticleRendererModule {
         @Provides
         @Singleton
         fun articleRoomDatabase(context: Context) = ArticleRoomDatabase.getInstance(context)
+
+        @Reusable
+        @Provides
+        fun articleDao(db: ArticleRoomDatabase) = db.articleDao()
     }
 }

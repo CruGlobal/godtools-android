@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem.activity
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,7 +19,7 @@ import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
-import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -190,9 +189,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
     }
 }
 
-class AemArticleActivityDataModel @Inject internal constructor(app: Application) : ViewModel() {
-    private val articleDao = ArticleRoomDatabase.getInstance(app).articleDao()
-
+class AemArticleActivityDataModel @Inject internal constructor(private val articleDao: ArticleDao) : ViewModel() {
     internal val articleUri = MutableLiveData<Uri>()
 
     internal val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
