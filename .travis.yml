@@ -105,7 +105,7 @@ jobs:
     after_success:
     - bash <(curl -s https://codecov.io/bash)
 
-  - name: "Release Beta"
+  - name: "Release QA Build to Firebase App Distribution"
     stage: deploy
 
     install:
@@ -115,7 +115,7 @@ jobs:
     - echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     - echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     script:
-    - ./gradlew clean :app:assembleProductionDebug -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
+    - ./gradlew clean :app:assembleProductionQa -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
 
     before_deploy:
     # Configure Firebase App Distribution
@@ -123,7 +123,7 @@ jobs:
     deploy:
     - provider: script
       skip_cleanup: true
-      script: ./gradlew appDistributionUploadProductionDebug -PfirebaseAppDistributionBuild --parallel
+      script: ./gradlew appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --parallel
       on:
         repo: CruGlobal/godtools-android
         branch: develop
