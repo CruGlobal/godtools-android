@@ -7,10 +7,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
 import butterknife.BindView
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import org.ccci.gto.android.common.base.Constants
 import org.ccci.gto.android.common.util.WeakTask
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.R
@@ -31,7 +33,10 @@ import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 import javax.inject.Inject
 
-abstract class BaseToolActivity(immersive: Boolean) : ImmersiveActivity(immersive), OnDownloadProgressUpdateListener {
+abstract class BaseToolActivity @JvmOverloads constructor(
+    immersive: Boolean,
+    @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
+) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
     @Inject
     internal lateinit var dao: GodToolsDao
     protected val downloadManager by lazy { GodToolsDownloadManager.getInstance(this) }
