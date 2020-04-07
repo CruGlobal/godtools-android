@@ -149,6 +149,7 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 
     protected fun updateShareMenuItem() {
         shareMenuItem?.isVisible = hasShareLinkUri()
+        showNextFeatureDiscovery()
     }
 
     protected open fun hasShareLinkUri() = shareLinkUri != null
@@ -253,7 +254,7 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     }
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_TOOL_SHARE -> toolbar != null && shareMenuItem != null && hasShareLinkUri()
+        FEATURE_TOOL_SHARE -> toolbar != null && shareMenuItem?.isVisible == true && hasShareLinkUri()
         else -> super.canShowFeatureDiscovery(feature)
     }
 
