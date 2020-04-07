@@ -98,12 +98,12 @@ android {
         }
         qa {
             initWith debug
+            matchingFallbacks = ['debug']
+
             applicationIdSuffix ".qa"
             versionNameSuffix "-qa"
 
             resValue "string", "app_name_debug", "GodTools (QA)"
-
-            matchingFallbacks = ['debug']
 
             // Firebase App Distribution build
             if (project.hasProperty('firebaseAppDistributionBuild')) {
