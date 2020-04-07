@@ -1,9 +1,7 @@
 package org.cru.godtools.article.aem.db
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
@@ -16,10 +14,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.room.converter.MediaTypeConverter
-import org.cru.godtools.base.util.SingletonHolder
-
-@VisibleForTesting
-internal const val DATABASE_NAME = "aem_article_cache.db"
 
 @Database(
     entities = [
@@ -31,6 +25,10 @@ internal const val DATABASE_NAME = "aem_article_cache.db"
 )
 @TypeConverters(DateConverter::class, LocaleConverter::class, MediaTypeConverter::class, UriConverter::class)
 abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
+    companion object {
+        internal const val DATABASE_NAME = "aem_article_cache.db"
+    }
+
     // region DAOs
     abstract fun aemImportDao(): AemImportDao
     abstract fun articleDao(): ArticleDao
@@ -44,15 +42,6 @@ abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
     abstract fun resourceRepository(): ResourceRepository
     abstract fun translationRepository(): TranslationRepository
     // endregion Repositories
-
-    companion object : SingletonHolder<ArticleRoomDatabase, Context>({
-        Room.databaseBuilder(it.applicationContext, ArticleRoomDatabase::class.java, DATABASE_NAME)
-            .addMigrations(MIGRATION_8_9)
-            .addMigrations(MIGRATION_9_10)
-            .addMigrations(MIGRATION_10_11)
-            .fallbackToDestructiveMigration()
-            .build()
-    })
 }
 
 // region Migrations
@@ -85,4 +74,9 @@ internal val MIGRATION_10_11: Migration = object : Migration(10, 11) {
         database.execSQL("UPDATE articles SET canonicalUri = null, shareUri = null")
     }
 }
+
+internal fun RoomDatabase.Builder<ArticleRoomDatabase>.enableMigrations() = addMigrations(MIGRATION_8_9)
+    .addMigrations(MIGRATION_9_10)
+    .addMigrations(MIGRATION_10_11)
+    .fallbackToDestructiveMigration()
 // endregion Migrations

@@ -2,6 +2,7 @@ package org.cru.godtools.article.aem
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,7 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.aem.activity.AemArticleActivity
 import org.cru.godtools.article.aem.activity.AemArticleActivityDataModel
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.fragment.AemArticleViewModel
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -45,7 +47,10 @@ abstract class AemArticleRendererModule {
     companion object {
         @Provides
         @Singleton
-        fun articleRoomDatabase(context: Context) = ArticleRoomDatabase.getInstance(context)
+        fun articleRoomDatabase(context: Context) =
+            Room.databaseBuilder(context, ArticleRoomDatabase::class.java, ArticleRoomDatabase.DATABASE_NAME)
+                .enableMigrations()
+                .build()
 
         @Reusable
         @Provides
