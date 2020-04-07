@@ -32,27 +32,17 @@ internal const val DATABASE_NAME = "aem_article_cache.db"
 @TypeConverters(DateConverter::class, LocaleConverter::class, MediaTypeConverter::class, UriConverter::class)
 abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
     // region DAOs
-
-    abstract fun translationDao(): TranslationDao
-
     abstract fun aemImportDao(): AemImportDao
-
     abstract fun articleDao(): ArticleDao
-
     abstract fun resourceDao(): ResourceDao
-
+    abstract fun translationDao(): TranslationDao
     // endregion DAOs
 
     // region Repositories
-
-    abstract fun translationRepository(): TranslationRepository
-
     abstract fun aemImportRepository(): AemImportRepository
-
     abstract fun articleRepository(): ArticleRepository
-
     abstract fun resourceRepository(): ResourceRepository
-
+    abstract fun translationRepository(): TranslationRepository
     // endregion Repositories
 
     companion object : SingletonHolder<ArticleRoomDatabase, Context>({
@@ -66,7 +56,6 @@ abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
 }
 
 // region Migrations
-
 /*
  * Version history
  *
@@ -94,5 +83,4 @@ internal val MIGRATION_10_11: Migration = object : Migration(10, 11) {
         database.execSQL("UPDATE articles SET canonicalUri = null, shareUri = null")
     }
 }
-
 // endregion Migrations
