@@ -10,11 +10,14 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
 import butterknife.BindView
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.base.Constants
 import org.ccci.gto.android.common.util.WeakTask
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.R2
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
@@ -146,6 +149,7 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 
     protected fun updateShareMenuItem() {
         shareMenuItem?.isVisible = hasShareLinkUri()
+        showNextFeatureDiscovery()
     }
 
     protected open fun hasShareLinkUri() = shareLinkUri != null
@@ -158,6 +162,7 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 
         // track the share action
         eventBus.post(ShareActionEvent)
+        settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
         // start the share activity chooser with our share link
         val title = shareLinkTitle
@@ -235,6 +240,74 @@ abstract class BaseToolActivity @JvmOverloads constructor(
         downloadManager.removeOnDownloadProgressUpdateListener(this)
     }
     // endregion DownloadProgress logic
+
+    // region Feature Discovery
+    private var featureDiscovery: TapTargetView? = null
+
+    override fun showNextFeatureDiscovery() {
+        if (!settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) && canShowFeatureDiscovery(FEATURE_TOOL_SHARE)) {
+            dispatchDelayedFeatureDiscovery(FEATURE_TOOL_SHARE, false, 2000)
+            return
+        }
+
+        super.showNextFeatureDiscovery()
+    }
+
+    override fun canShowFeatureDiscovery(feature: String) = when (feature) {
+        FEATURE_TOOL_SHARE -> toolbar != null && shareMenuItem?.isVisible == true && hasShareLinkUri()
+        else -> super.canShowFeatureDiscovery(feature)
+    }
+
+    override fun onShowFeatureDiscovery(feature: String, force: Boolean) {
+        // dispatch specific feature discovery
+        when (feature) {
+            FEATURE_TOOL_SHARE -> {
+                if (toolbar?.findViewById<View?>(R.id.action_share) != null) {
+                    // purge any pending feature discovery triggers since we are showing feature discovery now
+                    purgeQueuedFeatureDiscovery(FEATURE_TOOL_SHARE)
+
+                    // show language settings feature discovery
+                    val target = TapTarget.forToolbarMenuItem(
+                        toolbar, R.id.action_share,
+                        getString(R.string.feature_discovery_title_share_tool),
+                        getString(R.string.feature_discovery_desc_share_tool)
+                    )
+                    featureDiscovery = TapTargetView.showFor(this, target, ShareToolFeatureDiscoveryListener())
+                    featureDiscoveryActive = feature
+                } else {
+                    // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
+                    // TODO: the menu item just hasn't been drawn yet.
+
+                    // the toolbar action isn't available yet.
+                    // re-attempt this feature discovery on the next frame iteration.
+                    dispatchDelayedFeatureDiscovery(feature, force, 17)
+                }
+            }
+            else -> super.onShowFeatureDiscovery(feature, force)
+        }
+    }
+
+    override fun isFeatureDiscoveryVisible() = featureDiscovery != null || super.isFeatureDiscoveryVisible()
+
+    internal inner class ShareToolFeatureDiscoveryListener : TapTargetView.Listener() {
+        override fun onTargetClick(view: TapTargetView) {
+            super.onTargetClick(view)
+            shareCurrentTool()
+        }
+
+        override fun onOuterCircleClick(view: TapTargetView) = onTargetCancel(view)
+        override fun onTargetDismissed(view: TapTargetView, userInitiated: Boolean) {
+            super.onTargetDismissed(view, userInitiated)
+            featureDiscovery = featureDiscovery?.takeUnless { it === view }
+
+            if (userInitiated) {
+                settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
+                featureDiscoveryActive = null
+                showNextFeatureDiscovery()
+            }
+        }
+    }
+    // endregion Feature Discovery
 
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))

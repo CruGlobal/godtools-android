@@ -89,6 +89,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
         updateShareMenuItem()
         updateVisibilityState()
         sendAnalyticsEventIfNeededAndPossible()
+        showNextFeatureDiscovery()
     }
 
     override fun onPause() {

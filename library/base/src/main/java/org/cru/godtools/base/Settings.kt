@@ -19,6 +19,7 @@ private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 private const val VERSION_5_1_4 = 4033503
+private const val VERSION_5_2_0 = 4035089
 
 class Settings private constructor(private val context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
@@ -32,6 +33,7 @@ class Settings private constructor(private val context: Context) {
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
         const val FEATURE_LOGIN = "login"
         const val FEATURE_TOOL_OPENED = "toolOpened"
+        const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped"
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_TRAINING = "tutorialTraining"
@@ -94,6 +96,10 @@ class Settings private constructor(private val context: Context) {
                 }
                 FEATURE_LOGIN -> if (TheKey.getInstance(context).defaultSessionGuid != null) {
                     setFeatureDiscovered(FEATURE_LOGIN)
+                    changed = true
+                }
+                FEATURE_TOOL_SHARE -> if (firstLaunchVersion <= VERSION_5_2_0) {
+                    setFeatureDiscovered(FEATURE_TOOL_SHARE)
                     changed = true
                 }
             }

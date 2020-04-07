@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.os.Parcelable
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.AndroidInjection
@@ -20,7 +23,12 @@ import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
+private const val EXTRA_FEATURE_DISCOVERY = "org.cru.godtools.BaseActivity.FEATURE_DISCOVERY"
+private const val EXTRA_FEATURE = "org.cru.godtools.BaseActivity.FEATURE"
+private const val EXTRA_FORCE = "org.cru.godtools.BaseActivity.FORCE"
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
+
+private const val MSG_FEATURE_DISCOVERY = 1
 
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
     @Inject
@@ -32,6 +40,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        savedInstanceState?.restoreFeatureDiscoveryState()
     }
 
     @CallSuper
@@ -55,6 +64,21 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     @CallSuper
     protected open fun onSetupActionBar() = Unit
+
+    override fun onPostResume() {
+        super.onPostResume()
+        triggerFeatureDiscovery()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.saveFeatureDiscoveryState()
+    }
+
+    override fun onDestroy() {
+        featureDiscoveryHandler.removeCallbacksAndMessages(null)
+        super.onDestroy()
+    }
     // endregion Lifecycle
 
     // region ViewModelProvider.Factory
@@ -83,6 +107,88 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
         onSetupActionBar()
     }
     // endregion ActionBar
+
+    // region Feature Discovery
+    protected var featureDiscoveryActive: String? = null
+
+    private fun triggerFeatureDiscovery() {
+        when (val feature = featureDiscoveryActive) {
+            null -> showNextFeatureDiscovery()
+            else -> showFeatureDiscovery(feature, true)
+        }
+    }
+
+    protected open fun showNextFeatureDiscovery() = Unit
+
+    protected fun showFeatureDiscovery(feature: String, force: Boolean = false) {
+        // short-circuit if this activity is not started
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
+
+        // short-circuit if feature discovery is already visible
+        if (isFeatureDiscoveryVisible()) return
+
+        // short-circuit if this feature was discovered and we aren't forcing it
+        if (settings.isFeatureDiscovered(feature) && !force) return
+
+        // short-circuit if we can't show this feature discovery right now,
+        // and try to show the next feature discovery that can be shown.
+        if (!canShowFeatureDiscovery(feature)) {
+            showNextFeatureDiscovery()
+            return
+        }
+
+        // actually show the feature
+        onShowFeatureDiscovery(feature, force)
+    }
+
+    @CallSuper
+    protected open fun onShowFeatureDiscovery(feature: String, force: Boolean) = Unit
+
+    /**
+     * @return true if the activity is in a state that it can actually show the specified feature discovery.
+     */
+    @CallSuper
+    protected open fun canShowFeatureDiscovery(feature: String) = true
+
+    @CallSuper
+    protected open fun isFeatureDiscoveryVisible() = false
+
+    private fun Bundle.saveFeatureDiscoveryState() {
+        putString(EXTRA_FEATURE_DISCOVERY, featureDiscoveryActive)
+    }
+
+    private fun Bundle.restoreFeatureDiscoveryState() {
+        featureDiscoveryActive = getString(EXTRA_FEATURE_DISCOVERY, featureDiscoveryActive)
+    }
+
+    // region Delayed Dispatch
+    private val featureDiscoveryHandler by lazy {
+        Handler(mainLooper, Handler.Callback { m -> showFeatureDiscovery(m) })
+    }
+
+    protected fun dispatchDelayedFeatureDiscovery(feature: String, force: Boolean, delay: Long) {
+        featureDiscoveryHandler.sendMessageDelayed(
+            featureDiscoveryHandler.obtainMessage(MSG_FEATURE_DISCOVERY, feature).apply {
+                data = Bundle().apply {
+                    putString(EXTRA_FEATURE, feature)
+                    putBoolean(EXTRA_FORCE, force)
+                }
+            }, delay
+        )
+    }
+
+    private fun showFeatureDiscovery(message: Message): Boolean {
+        message.data.getString(EXTRA_FEATURE)?.let {
+            showFeatureDiscovery(it, message.data.getBoolean(EXTRA_FORCE, false))
+        }
+        return true
+    }
+
+    protected fun purgeQueuedFeatureDiscovery(feature: String) {
+        featureDiscoveryHandler.removeMessages(MSG_FEATURE_DISCOVERY, feature)
+    }
+    // endregion Delayed Dispatch
+    // endregion Feature Discovery
 
     // region Up Navigation
     override fun supportNavigateUpTo(upIntent: Intent) {
