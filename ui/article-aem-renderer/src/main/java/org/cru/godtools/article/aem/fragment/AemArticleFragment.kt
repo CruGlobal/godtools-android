@@ -27,7 +27,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.R2
 import org.cru.godtools.article.aem.db.ArticleDao
-import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -145,11 +145,10 @@ internal class AemArticleViewModel @Inject constructor(
 }
 
 internal class ArticleWebViewClient @Inject constructor(
-    context: Context,
-    private val aemArticleManager: AemArticleManager
+    private val aemArticleManager: AemArticleManager,
+    private val resourceDao: ResourceDao
 ) : WebViewClient() {
     var activity: Activity? by weak()
-    private val resourceDao = ArticleRoomDatabase.getInstance(context).resourceDao()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         activity?.openUrl(Uri.parse(url))

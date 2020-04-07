@@ -50,5 +50,9 @@ abstract class AemArticleRendererModule {
         @Reusable
         @Provides
         fun articleDao(db: ArticleRoomDatabase) = db.articleDao()
+
+        @Reusable
+        @Provides
+        fun resourceDao(db: ArticleRoomDatabase) = db.resourceDao()
     }
 }
