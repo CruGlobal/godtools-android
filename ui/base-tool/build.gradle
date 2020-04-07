@@ -23,6 +23,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
     implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
+    implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
 

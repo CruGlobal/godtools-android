@@ -384,9 +384,9 @@ public class TractActivity extends BaseToolActivity
 
     @Override
     protected void cacheTools() {
-        if (mDownloadManager != null && mTool != null) {
+        if (mTool != null) {
             for (final Locale language : mLanguages) {
-                mDownloadManager.cacheTranslation(mTool, language);
+                getDownloadManager().cacheTranslation(mTool, language);
             }
         }
     }

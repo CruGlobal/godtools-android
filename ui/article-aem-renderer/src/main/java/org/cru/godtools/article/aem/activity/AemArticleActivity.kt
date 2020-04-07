@@ -27,7 +27,6 @@ import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
-import org.cru.godtools.base.tool.activity.BaseToolActivity
 import java.util.Locale
 import javax.inject.Inject
 
@@ -161,21 +160,17 @@ class AemArticleActivity : BaseArticleActivity(false) {
     }
 
     // region Share Link logic
-
-    override fun hasShareLinkUri(): Boolean = article?.canonicalUri != null
-
-    override fun getShareLinkTitle(): String? = article?.title ?: super.getShareLinkTitle()
-
-    override fun getShareLinkUri(): String? = article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
-
+    override fun hasShareLinkUri() = article?.canonicalUri != null
+    override val shareLinkTitle get() = article?.title ?: super.shareLinkTitle
+    override val shareLinkUri get() = article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
     // endregion Share Link logic
 
     override fun determineActiveToolState(): Int {
         return when {
-            article?.content != null -> BaseToolActivity.STATE_LOADED
-            !this::syncTask.isInitialized -> BaseToolActivity.STATE_LOADING
-            !syncTask.isDone -> BaseToolActivity.STATE_LOADING
-            else -> BaseToolActivity.STATE_NOT_FOUND
+            article?.content != null -> STATE_LOADED
+            !this::syncTask.isInitialized -> STATE_LOADING
+            !syncTask.isDone -> STATE_LOADING
+            else -> STATE_NOT_FOUND
         }
     }
 
