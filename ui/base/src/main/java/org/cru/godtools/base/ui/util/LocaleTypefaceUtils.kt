@@ -5,9 +5,11 @@ package org.cru.godtools.base.ui.util
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
 import androidx.core.content.res.ResourcesCompat
 import org.cru.godtools.base.ui.R
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils
 import java.util.Locale
 
 @OptIn(ExperimentalStdlibApi::class)
@@ -30,10 +32,12 @@ private val typefaces = buildMap<Locale, Int> {
 
 fun Context.getTypeface(locale: Locale?) = typefaces[locale]?.let { ResourcesCompat.getFont(this, it) }
 
-// TODO: make CharSequence receiver non-null
-@JvmName("safeApplyTypefaceSpan")
-fun CharSequence?.applyTypefaceSpan(typeface: Typeface?) = when {
-    // workaround a crash caused by setting a null Typeface span within Calligraphy.
-    typeface != null -> CalligraphyUtils.applyTypefaceSpan(this, typeface)
-    else -> this
+fun CharSequence.applyTypefaceSpan(typeface: Typeface?) = when {
+    typeface == null -> this
+    length == 0 -> this
+    else -> {
+        (this as? Spannable ?: SpannableString(this)).apply {
+            setSpan(TypefaceSpan(typeface), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+    }
 }
