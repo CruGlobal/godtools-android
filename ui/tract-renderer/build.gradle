@@ -44,7 +44,6 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
-    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
