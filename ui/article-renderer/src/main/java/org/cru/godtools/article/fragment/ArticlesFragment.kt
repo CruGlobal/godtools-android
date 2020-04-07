@@ -85,9 +85,11 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     }
     // endregion Data Model
 
+    @Inject
+    internal lateinit var aemArticleManager: AemArticleManager
+
     private fun syncData(force: Boolean) {
-        AemArticleManager.getInstance(requireContext())
-            .enqueueSyncManifestAemImports(manifest, force)
+        aemArticleManager.enqueueSyncManifestAemImports(manifest, force)
             .apply {
                 swipeRefreshLayout?.let {
                     addListener(WeakTask(it, resetRefreshLayoutTask), MainThreadExecutor())

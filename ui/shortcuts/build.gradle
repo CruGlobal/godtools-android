@@ -20,9 +20,13 @@ dependencies {
     implementation project(':ui:tract-renderer')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

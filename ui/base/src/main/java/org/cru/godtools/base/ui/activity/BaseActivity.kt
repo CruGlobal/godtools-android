@@ -15,6 +15,7 @@ import butterknife.ButterKnife
 import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -24,6 +25,8 @@ private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.lau
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
     @Inject
     protected lateinit var eventBus: EventBus
+    @Inject
+    protected lateinit var settings: Settings
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -25,6 +25,7 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 import java.util.Locale
+import javax.inject.Inject
 
 class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
     LinkClickedListener {
@@ -37,8 +38,10 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         fun onToolRemoved()
     }
 
-    private val downloadManager by lazy { GodToolsDownloadManager.getInstance(requireContext()) }
-    private val shortcutManager by lazy { GodToolsShortcutManager.getInstance(requireContext()) }
+    @Inject
+    internal lateinit var downloadManager: GodToolsDownloadManager
+    @Inject
+    internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private var toolCode: String by arg()
 

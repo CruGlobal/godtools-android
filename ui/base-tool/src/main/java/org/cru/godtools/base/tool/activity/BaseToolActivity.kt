@@ -39,7 +39,8 @@ abstract class BaseToolActivity @JvmOverloads constructor(
 ) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
     @Inject
     internal lateinit var dao: GodToolsDao
-    protected val downloadManager by lazy { GodToolsDownloadManager.getInstance(this) }
+    @Inject
+    protected lateinit var downloadManager: GodToolsDownloadManager
 
     // region Lifecycle
     @CallSuper
@@ -238,7 +239,6 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))
 
-        val settings = Settings.getInstance(this)
         eventBus.post(if (settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)) ToolOpened else FirstToolOpened)
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
 

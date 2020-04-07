@@ -45,7 +45,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
-    private lateinit var syncTask: ListenableFuture<Boolean>
     private var article: Article? = null
 
     private var pendingAnalyticsEvent = false
@@ -149,15 +148,19 @@ class AemArticleActivity : BaseArticleActivity(false) {
         }
     }
 
+    // region Sync logic
+    @Inject
+    internal lateinit var aemArticleManager: AemArticleManager
+    private lateinit var syncTask: ListenableFuture<Boolean>
+
     private fun syncData() {
-        AemArticleManager.getInstance(this).let { manager ->
-            syncTask = when {
-                isValidDeepLink() -> manager.downloadDeeplinkedArticle(articleUri)
-                else -> manager.downloadArticle(articleUri, false)
-            }
-            syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
+        syncTask = when {
+            isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
+            else -> aemArticleManager.downloadArticle(articleUri, false)
         }
+        syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
     }
+    // endregion Sync logic
 
     // region Share Link logic
     override fun hasShareLinkUri() = article?.canonicalUri != null

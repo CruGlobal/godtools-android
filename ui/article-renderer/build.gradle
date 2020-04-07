@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation project(':library:base')
 
-    implementation project(':ui:article-aem-renderer')
+    api project(':ui:article-aem-renderer')
     implementation project(':ui:base-tool')
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"

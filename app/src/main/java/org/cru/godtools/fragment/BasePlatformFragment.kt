@@ -1,6 +1,5 @@
 package org.cru.godtools.fragment
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -29,6 +28,7 @@ private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFra
 abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int? = null) : BaseFragment<B>(layoutId) {
     @Inject
     protected lateinit var eventBus: EventBus
+    @Inject
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 
@@ -41,11 +41,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected var parallelLanguage: Locale? = null
 
     // region Lifecycle
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        settings = Settings.getInstance(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

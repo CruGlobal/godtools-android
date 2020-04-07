@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
@@ -59,7 +58,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     override fun onStart() {
         super.onStart()
-        pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
+        pageSet.feature?.let { settings.setFeatureDiscovered(it) }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {

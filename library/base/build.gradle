@@ -7,5 +7,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "me.thekey.android:thekey-api:${deps.thekey}"
+
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

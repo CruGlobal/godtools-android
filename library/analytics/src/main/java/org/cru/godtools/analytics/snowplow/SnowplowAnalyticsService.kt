@@ -24,10 +24,11 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val SNOWPLOW_NAMESPACE = "godtools-android"
 
@@ -39,13 +40,13 @@ private const val CONTEXT_ATTR_ID_GUID = "sso_guid"
 private const val CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id"
 private const val CONTEXT_ATTR_SCORING_URI = "uri"
 
-class SnowplowAnalyticsService private constructor(context: Context) {
-    companion object : SingletonHolder<SnowplowAnalyticsService, Context>({
-        SnowplowAnalyticsService(it.applicationContext)
-    })
-
+@Singleton
+class SnowplowAnalyticsService @Inject internal constructor(
+    context: Context,
+    eventBus: EventBus,
+    private val theKey: TheKey
+) {
     private val snowplowTracker: Tracker
-    private val theKey by lazy { TheKey.getInstance(context) }
 
     init {
         Executor.setThreadCount(1)
@@ -68,7 +69,7 @@ class SnowplowAnalyticsService private constructor(context: Context) {
 
     // region Tracking Events
     init {
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     @WorkerThread
