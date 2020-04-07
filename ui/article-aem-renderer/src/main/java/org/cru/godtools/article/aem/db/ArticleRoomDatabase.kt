@@ -62,6 +62,8 @@ abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
  * v5.0.18
  * 9: 2018-10-30
  * 10: 2018-11-06
+ * 11: 2019-01-10
+ * v5.1.1
  */
 
 @VisibleForTesting
