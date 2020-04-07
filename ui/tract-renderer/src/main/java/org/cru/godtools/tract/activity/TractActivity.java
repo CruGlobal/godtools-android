@@ -140,8 +140,7 @@ public class TractActivity extends BaseToolActivity
         mManifests = manifests;
     }
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -288,8 +287,7 @@ public class TractActivity extends BaseToolActivity
         }
         outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     // region Creation Methods
 
@@ -618,7 +616,6 @@ public class TractActivity extends BaseToolActivity
     }
 
     // region Tool Pager Methods
-
     private void setupPager() {
         if (mPager != null) {
             mPagerAdapter = new ManifestPagerAdapter();
@@ -665,7 +662,6 @@ public class TractActivity extends BaseToolActivity
             }
         }
     }
-
     // endregion Tool Pager Methods
 
     private void startLoaders() {
@@ -695,7 +691,6 @@ public class TractActivity extends BaseToolActivity
     }
 
     // region Share Link logic
-
     @Override
     protected boolean hasShareLinkUri() {
         return getActiveManifest() != null;
@@ -722,7 +717,6 @@ public class TractActivity extends BaseToolActivity
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
     }
-
     // endregion Share Link logic
 
     @Override

@@ -4,24 +4,27 @@ import android.content.ContentValues
 import android.database.Cursor
 import org.ccci.gto.android.common.util.database.getInt
 import org.cru.godtools.model.GlobalActivityAnalytics
-import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable.COLUMN_COUNTRIES
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable.COLUMN_LAUNCHES
+import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable.COLUMN_USERS
 
 internal object GlobalActivityAnalyticsMapper : BaseMapper<GlobalActivityAnalytics>() {
-    override fun mapField(values: ContentValues, field: String, analytics: GlobalActivityAnalytics) {
+    override fun mapField(values: ContentValues, field: String, obj: GlobalActivityAnalytics) {
         when (field) {
-            GlobalActivityAnalyticsTable.COLUMN_USERS -> values.put(field, analytics.users)
-            GlobalActivityAnalyticsTable.COLUMN_COUNTRIES -> values.put(field, analytics.countries)
-            GlobalActivityAnalyticsTable.COLUMN_LAUNCHES -> values.put(field, analytics.launches)
-            GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS -> values.put(field, analytics.gospelPresentations)
-            else -> super.mapField(values, field, analytics)
+            COLUMN_USERS -> values.put(field, obj.users)
+            COLUMN_COUNTRIES -> values.put(field, obj.countries)
+            COLUMN_LAUNCHES -> values.put(field, obj.launches)
+            COLUMN_GOSPEL_PRESENTATIONS -> values.put(field, obj.gospelPresentations)
+            else -> super.mapField(values, field, obj)
         }
     }
 
     override fun newObject(c: Cursor) = GlobalActivityAnalytics()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        users = c.getInt(GlobalActivityAnalyticsTable.COLUMN_USERS, 0)
-        countries = c.getInt(GlobalActivityAnalyticsTable.COLUMN_COUNTRIES, 0)
-        launches = c.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0)
-        gospelPresentations = c.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0)
+        users = c.getInt(COLUMN_USERS, 0)
+        countries = c.getInt(COLUMN_COUNTRIES, 0)
+        launches = c.getInt(COLUMN_LAUNCHES, 0)
+        gospelPresentations = c.getInt(COLUMN_GOSPEL_PRESENTATIONS, 0)
     }
 }
