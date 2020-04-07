@@ -121,8 +121,8 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
 
     @Override
     protected void cacheTools() {
-        if (mDownloadManager != null && mTool != null) {
-            mDownloadManager.cacheTranslation(mTool, mLocale);
+        if (mTool != null) {
+            getDownloadManager().cacheTranslation(mTool, mLocale);
         }
     }
 
