@@ -226,6 +226,7 @@ public class TractActivity extends BaseToolActivity
         super.onUpdateActiveManifest();
         updateBackground();
         updatePager();
+        showNextFeatureDiscovery();
     }
 
     @Override
