@@ -3,6 +3,7 @@ package org.keynote.godtools.android.db
 import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
+import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -11,6 +12,7 @@ import com.annimon.stream.Optional
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.AsyncDao
+import org.ccci.gto.android.common.db.AsyncDao.Companion.runAsync
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
@@ -181,5 +183,8 @@ class GodToolsDao private constructor(context: Context) :
             invalidateClass(Tool::class.java)
         }
     }
+
+    @AnyThread
+    fun updateSharesDeltaAsync(toolCode: String?, shares: Int) = runAsync { updateSharesDelta(toolCode, shares) }
     // endregion Custom DAO methods
 }
