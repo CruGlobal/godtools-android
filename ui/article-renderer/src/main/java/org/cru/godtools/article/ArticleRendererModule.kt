@@ -7,11 +7,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.activity.ArticlesActivity
-import org.cru.godtools.article.activity.CategoriesActivity
 import org.cru.godtools.article.aem.AemArticleRendererModule
 import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.article.fragment.ArticlesFragmentDataModel
-import org.cru.godtools.article.fragment.CategoriesFragment
+import org.cru.godtools.article.ui.categories.CategoriesActivity
+import org.cru.godtools.article.ui.categories.CategoriesFragment
 
 @Module(includes = [AemArticleRendererModule::class])
 abstract class ArticleRendererModule {

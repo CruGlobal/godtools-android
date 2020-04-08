@@ -6,7 +6,7 @@
     <data>
         <import type="org.cru.godtools.xml.model.Manifest" />
         <import type="androidx.databinding.ObservableField" />
-        <import type="org.cru.godtools.article.adapter.CategoriesAdapter.Callbacks" />
+        <import type="org.cru.godtools.article.ui.categories.CategoriesAdapter.Callbacks" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="category" type="org.cru.godtools.xml.model.Category" />

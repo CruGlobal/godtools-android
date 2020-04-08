@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
-import org.cru.godtools.article.activity.CategoriesActivityKt;
+import org.cru.godtools.article.ui.categories.CategoriesActivityKt;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.base.util.FileUtils;

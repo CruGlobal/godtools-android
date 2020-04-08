@@ -1,4 +1,4 @@
-package org.cru.godtools.article.activity
+package org.cru.godtools.article.ui.categories
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,8 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.article.R
-import org.cru.godtools.article.fragment.CategoriesFragment
+import org.cru.godtools.article.activity.startArticlesActivity
+import org.cru.godtools.article.ui.categories.CategoriesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
