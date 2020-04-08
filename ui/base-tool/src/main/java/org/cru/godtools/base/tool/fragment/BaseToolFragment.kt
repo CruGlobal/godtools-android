@@ -12,9 +12,9 @@ import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
 import java.util.Locale
 
-abstract class BaseToolFragment<B : ViewDataBinding> : BaseFragment<B> {
-    constructor(@LayoutRes layoutId: Int? = null) : super(layoutId)
-    constructor(@LayoutRes layoutId: Int? = null, tool: String, locale: Locale) : super(layoutId) {
+abstract class BaseToolFragment<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+    BaseFragment<B>(contentLayoutId) {
+    constructor(@LayoutRes contentLayoutId: Int, tool: String, locale: Locale) : this(contentLayoutId) {
         this.tool = tool
         this.locale = locale
     }
