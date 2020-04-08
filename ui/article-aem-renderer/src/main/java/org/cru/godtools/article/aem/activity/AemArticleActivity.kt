@@ -47,13 +47,10 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
     private var pendingAnalyticsEvent = false
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (isFinishing) {
-            return
-        }
+        if (isFinishing) return
 
         // finish now if we couldn't process the intent
         if (!processIntent()) {
@@ -94,8 +91,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
         super.onPause()
         pendingAnalyticsEvent = false
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     /**
      * @return true if the intent was successfully processed, otherwise return false
