@@ -2,8 +2,8 @@ package org.cru.godtools.article.ui.categories
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.CallSuper
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.map
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
@@ -15,8 +15,8 @@ import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
 class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.Callbacks {
-    constructor() : super(R.layout.fragment_categories)
-    constructor(code: String, locale: Locale) : super(R.layout.fragment_categories, code, locale)
+    constructor() : super(R.layout.article_categories_fragment)
+    constructor(code: String, locale: Locale) : super(R.layout.article_categories_fragment, code, locale)
 
     interface Callbacks {
         fun onCategorySelected(category: Category?)
@@ -27,7 +27,6 @@ class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.
     @JvmField
     @BindView(R2.id.categories)
     internal var categoriesView: RecyclerView? = null
-    private var categoriesAdapter: CategoriesAdapter? = null
 
     // region Lifecycle
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,45 +34,26 @@ class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.
         setupCategoriesView()
     }
 
-    @CallSuper
-    override fun onManifestUpdated() {
-        super.onManifestUpdated()
-        updateCategoriesView()
-    }
-
     override fun onCategorySelected(category: Category?) {
         FragmentUtils.getListener(this, Callbacks::class.java)
             ?.onCategorySelected(category)
     }
-
-    override fun onDestroyView() {
-        cleanupCategoriesView()
-        super.onDestroyView()
-    }
     // endregion Lifecycle
 
     // region Categories View
+    private val categoriesAdapter by lazy {
+        CategoriesAdapter(this).also {
+            it.setCallbacks(this)
+            toolDataModel.manifest.map { it?.categories }.observe(this, it)
+        }
+    }
 
     private fun setupCategoriesView() {
         categoriesView?.apply {
             setHasFixedSize(true)
             addItemDecoration(VerticalSpaceItemDecoration(R.dimen.categories_list_gap))
-
-            categoriesAdapter = CategoriesAdapter()
-                .apply { setCallbacks(this@CategoriesFragment) }
             adapter = categoriesAdapter
-            updateCategoriesView()
         }
     }
-
-    private fun updateCategoriesView() {
-        categoriesAdapter?.categories = manifest?.categories
-    }
-
-    private fun cleanupCategoriesView() {
-        categoriesAdapter?.setCallbacks(null)
-        categoriesAdapter = null
-    }
-
     // endregion Categories View
 }

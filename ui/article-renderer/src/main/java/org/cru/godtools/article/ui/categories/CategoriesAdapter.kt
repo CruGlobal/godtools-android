@@ -3,13 +3,16 @@ package org.cru.godtools.article.ui.categories
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.cru.godtools.article.databinding.ListItemCategoryBinding
 import org.cru.godtools.xml.model.Category
 
-class CategoriesAdapter : SimpleDataBindingAdapter<ListItemCategoryBinding>() {
+class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
+    SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner), Observer<List<Category>?> {
     interface Callbacks {
         fun onCategorySelected(category: Category?)
     }
@@ -36,6 +39,9 @@ class CategoriesAdapter : SimpleDataBindingAdapter<ListItemCategoryBinding>() {
     fun setCallbacks(callbacks: Callbacks?) = this.callbacks.set(callbacks)
 
     // region Lifecycle Events
+    override fun onChanged(t: List<Category>?) {
+        categories = t
+    }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ListItemCategoryBinding {
         return ListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)

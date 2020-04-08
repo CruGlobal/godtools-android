@@ -14,6 +14,7 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
