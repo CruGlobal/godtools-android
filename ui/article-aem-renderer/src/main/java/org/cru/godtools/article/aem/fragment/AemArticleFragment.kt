@@ -1,35 +1,24 @@
 package org.cru.godtools.article.aem.fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import butterknife.BindView
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.R2
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import org.cru.godtools.base.ui.fragment.BaseFragment
-import splitties.fragmentargs.arg
 
-class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
-    constructor(articleUri: Uri) : this() {
-        this.articleUri = articleUri
-    }
-
-    private var articleUri: Uri by arg()
+class AemArticleFragment : BaseFragment<ViewDataBinding>() {
+    private val viewModel: AemArticleViewModel by activityViewModels()
 
     override val hasDataBinding get() = false
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupViewModel()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         inflater.inflate(R.layout.fragment_aem_article, container, false)
 
@@ -43,14 +32,6 @@ class AemArticleFragment() : BaseFragment<ViewDataBinding>() {
         super.onDestroyView()
     }
     // endregion Lifecycle
-
-    // region ViewModel
-    private val viewModel: AemArticleViewModel by viewModels()
-
-    private fun setupViewModel() {
-        viewModel.articleUri.value = articleUri
-    }
-    // endregion ViewModel
 
     // region WebView content
     @JvmField

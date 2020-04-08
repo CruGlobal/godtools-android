@@ -22,7 +22,7 @@ internal class AemArticleViewModel @Inject constructor(
     private val webViewClient: ArticleWebViewClient
 ) : AndroidViewModel(application) {
     val articleUri = MutableLiveData<Uri>()
-    private val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
+    val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 
     // region WebView
     private lateinit var webView: WebView

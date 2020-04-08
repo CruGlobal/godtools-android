@@ -8,11 +8,7 @@ import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.net.toUri
 import androidx.fragment.app.commit
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
-import androidx.lifecycle.switchMap
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -20,7 +16,6 @@ import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
-import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -119,7 +114,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
                 } == true
     }
 
-    private val dataModel: AemArticleActivityDataModel by viewModels()
+    private val dataModel: AemArticleViewModel by viewModels()
 
     private fun setupDataModel() {
         dataModel.articleUri.value = articleUri
@@ -177,16 +172,10 @@ class AemArticleActivity : BaseArticleActivity(false) {
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = AemArticleFragment(articleUri)
+                val fragment = AemArticleFragment()
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
         }
     }
-}
-
-class AemArticleActivityDataModel @Inject internal constructor(private val articleDao: ArticleDao) : ViewModel() {
-    internal val articleUri = MutableLiveData<Uri>()
-
-    internal val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 }

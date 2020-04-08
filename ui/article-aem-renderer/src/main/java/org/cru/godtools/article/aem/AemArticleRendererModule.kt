@@ -17,7 +17,6 @@ import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.ui.AemArticleActivity
-import org.cru.godtools.article.aem.ui.AemArticleActivityDataModel
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import javax.inject.Singleton
 
@@ -25,11 +24,6 @@ import javax.inject.Singleton
 abstract class AemArticleRendererModule {
     @ContributesAndroidInjector
     internal abstract fun aemArticleActivityInjector(): AemArticleActivity
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(AemArticleActivityDataModel::class)
-    internal abstract fun aemArticleActivityDataModel(dataModel: AemArticleActivityDataModel): ViewModel
 
     @ContributesAndroidInjector
     internal abstract fun aemArticleFragmentInjector(): AemArticleFragment
