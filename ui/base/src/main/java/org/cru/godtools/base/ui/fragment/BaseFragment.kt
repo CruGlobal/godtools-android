@@ -7,13 +7,14 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import dagger.android.support.AndroidSupportInjection
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import javax.inject.Inject
 
-abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@LayoutRes layoutId: Int? = null) :
+abstract class BaseFragment<B : ViewBinding> @JvmOverloads constructor(@LayoutRes layoutId: Int? = null) :
     Fragment(layoutId ?: 0) {
     // region Lifecycle
     override fun onAttach(context: Context) {
@@ -55,17 +56,17 @@ abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@Layo
     }
     // endregion ButterKnife
 
-    // region Data Binding
+    // region View & Data Binding
     private var binding: B? = null
     protected open val hasDataBinding get() = true
+    @Suppress("UNCHECKED_CAST")
+    protected open val View.viewBinding: B?
+        get() = if (hasDataBinding) DataBindingUtil.bind<ViewDataBinding>(this) as? B else null
 
     private fun setupDataBinding(view: View, savedInstanceState: Bundle?) {
-        if (hasDataBinding) {
-            binding = DataBindingUtil.bind(view)
-            binding?.let {
-                it.lifecycleOwner = viewLifecycleOwner
-                onBindingCreated(it, savedInstanceState)
-            }
+        binding = view.viewBinding?.also {
+            if (it is ViewDataBinding) it.lifecycleOwner = viewLifecycleOwner
+            onBindingCreated(it, savedInstanceState)
         }
     }
 
@@ -76,5 +77,5 @@ abstract class BaseFragment<B : ViewDataBinding> @JvmOverloads constructor(@Layo
 
     open fun onBindingCreated(binding: B, savedInstanceState: Bundle?) = Unit
     open fun onDestroyBinding(binding: B) = Unit
-    // endregion Data Binding
+    // endregion View & Data Binding
 }
