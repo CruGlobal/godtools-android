@@ -2,7 +2,6 @@ package org.cru.godtools.analytics.snowplow
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import com.adobe.mobile.Visitor
 import com.snowplowanalytics.snowplow.tracker.Emitter.EmitterBuilder
 import com.snowplowanalytics.snowplow.tracker.Executor
 import com.snowplowanalytics.snowplow.tracker.Subject
@@ -20,6 +19,7 @@ import me.thekey.android.TheKey
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.cru.godtools.analytics.BuildConfig
+import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -128,7 +128,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
-        Visitor.getMarketingCloudId()?.let { put(CONTEXT_ATTR_ID_MCID, it) }
+        adobeMarketingCloudId?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
         theKey.defaultSessionGuid?.let { guid ->
             put(CONTEXT_ATTR_ID_GUID, guid)

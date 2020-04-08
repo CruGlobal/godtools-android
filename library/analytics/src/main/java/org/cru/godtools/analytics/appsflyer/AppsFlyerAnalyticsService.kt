@@ -2,7 +2,6 @@ package org.cru.godtools.analytics.appsflyer
 
 import android.app.Application
 import androidx.annotation.WorkerThread
-import com.adobe.mobile.Visitor
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
@@ -11,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cru.godtools.analytics.BuildConfig
+import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
@@ -34,7 +34,7 @@ class AppsFlyerAnalyticsService @Inject internal constructor(private val app: Ap
         }
 
         GlobalScope.launch(Dispatchers.Default) {
-            val mcId = Visitor.getMarketingCloudId()
+            val mcId = adobeMarketingCloudId
             withContext(Dispatchers.Main) {
                 appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId))
                 appsFlyer.startTracking(app)
