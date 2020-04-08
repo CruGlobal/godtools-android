@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="org.cru.godtools.xml.model.Manifest" />
         <import type="androidx.databinding.ObservableField" />
-        <import type="org.cru.godtools.article.ui.categories.CategoriesAdapter.Callbacks" />
+        <import type="org.cru.godtools.article.ui.categories.CategorySelectedListener" />
+        <import type="org.cru.godtools.xml.model.Manifest" />
 
-        <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
+        <variable name="callbacks" type="ObservableField&lt;CategorySelectedListener&gt;" />
         <variable name="category" type="org.cru.godtools.xml.model.Category" />
     </data>
 

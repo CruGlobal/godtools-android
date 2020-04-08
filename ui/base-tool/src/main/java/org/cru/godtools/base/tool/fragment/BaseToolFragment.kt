@@ -3,16 +3,16 @@ package org.cru.godtools.base.tool.fragment
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.viewbinding.ViewBinding
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
 import java.util.Locale
 
-abstract class BaseToolFragment<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int) :
     BaseFragment<B>(contentLayoutId) {
     constructor(@LayoutRes contentLayoutId: Int, tool: String, locale: Locale) : this(contentLayoutId) {
         this.tool = tool

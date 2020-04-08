@@ -13,22 +13,16 @@ import org.cru.godtools.xml.model.Category
 
 internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
     SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner), Observer<List<Category>?> {
-    interface Callbacks {
-        fun onCategorySelected(category: Category?)
-    }
-
     init {
         setHasStableIds(true)
     }
 
+    val callbacks = ObservableField<CategorySelectedListener>()
     var categories: List<Category>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    private val callbacks = ObservableField<Callbacks>()
-    fun setCallbacks(callbacks: Callbacks?) = this.callbacks.set(callbacks)
 
     override fun getItemCount() = categories?.size ?: 0
     private fun getItem(position: Int) = categories?.get(position)
