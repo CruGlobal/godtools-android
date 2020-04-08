@@ -1,9 +1,7 @@
 package org.cru.godtools.article.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +16,8 @@ import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
 class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.Callbacks {
-    constructor() : super()
-    constructor(code: String, locale: Locale) : super(null, code, locale)
+    constructor() : super(R.layout.fragment_categories)
+    constructor(code: String, locale: Locale) : super(R.layout.fragment_categories, code, locale)
 
     interface Callbacks {
         fun onCategorySelected(category: Category?)
@@ -32,12 +30,7 @@ class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.
     internal var categoriesView: RecyclerView? = null
     private var categoriesAdapter: CategoriesAdapter? = null
 
-    // region Lifecycle Events
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_categories, container, false)
-    }
-
+    // region Lifecycle
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupCategoriesView()
@@ -58,8 +51,7 @@ class CategoriesFragment : BaseToolFragment<ViewDataBinding>, CategoriesAdapter.
         cleanupCategoriesView()
         super.onDestroyView()
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     // region Categories View
 
