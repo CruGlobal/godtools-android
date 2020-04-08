@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.net.toUri
+import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -28,8 +29,6 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import java.util.Locale
 import javax.inject.Inject
-
-private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
 fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
     val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
@@ -179,13 +178,15 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
     @MainThread
     private fun loadFragmentIfNeeded() {
-        // The fragment is already present
-        if (supportFragmentManager.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) return
+        with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return
 
-        // load the fragment
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, AemArticleFragment(articleUri), TAG_MAIN_FRAGMENT)
-            .commit()
+            commit {
+                val fragment = AemArticleFragment(articleUri)
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
+            }
+        }
     }
 }
 
