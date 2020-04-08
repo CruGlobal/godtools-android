@@ -166,7 +166,7 @@ class AdobeAnalyticsService @Inject internal constructor(
         analyticsExecutor.execute {
             Visitor.syncIdentifier(
                 VISITOR_ID_ECID,
-                Visitor.getMarketingCloudId(),
+                adobeMarketingCloudId,
                 VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_UNKNOWN
             )
             updateVisitorIdIdentifiers(guid)
