@@ -9,7 +9,6 @@ import androidx.annotation.MainThread
 import androidx.core.net.toUri
 import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
@@ -148,14 +147,13 @@ class AemArticleActivity : BaseArticleActivity(false) {
     // region Sync logic
     @Inject
     internal lateinit var aemArticleManager: AemArticleManager
-    private lateinit var syncTask: ListenableFuture<Boolean>
+    private var syncTask: ListenableFuture<Boolean>? = null
 
     private fun syncData() {
         syncTask = when {
             isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
             else -> aemArticleManager.downloadArticle(articleUri, false)
-        }
-        syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
+        }.also { it.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor()) }
     }
     // endregion Sync logic
 
@@ -168,8 +166,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
     override fun determineActiveToolState(): Int {
         return when {
             article?.content != null -> STATE_LOADED
-            !this::syncTask.isInitialized -> STATE_LOADING
-            !syncTask.isDone -> STATE_LOADING
+            syncTask?.isDone != true -> STATE_LOADING
             else -> STATE_NOT_FOUND
         }
     }
