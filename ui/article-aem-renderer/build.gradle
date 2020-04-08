@@ -45,7 +45,6 @@ dependencies {
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
@@ -66,5 +65,4 @@ dependencies {
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
