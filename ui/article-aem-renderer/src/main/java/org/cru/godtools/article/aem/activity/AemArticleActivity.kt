@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.observe
 import androidx.lifecycle.switchMap
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
@@ -60,7 +61,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
         syncData()
         setContentView(R.layout.activity_generic_tool_fragment)
-        setupViewModel()
+        setupDataModel()
     }
 
     override fun onStart() {
@@ -81,7 +82,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
-        updateShareMenuItem()
         updateVisibilityState()
         sendAnalyticsEventIfNeededAndPossible()
         showNextFeatureDiscovery()
@@ -122,9 +122,11 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
     private val dataModel: AemArticleActivityDataModel by viewModels()
 
-    private fun setupViewModel() {
+    private fun setupDataModel() {
         dataModel.articleUri.value = articleUri
-        dataModel.article.observe(this, Observer { onUpdateArticle(it) })
+
+        dataModel.article.observe(this) { updateShareMenuItem() }
+        dataModel.article.observe(this) { onUpdateArticle(it) }
     }
 
     private fun sendAnalyticsEventIfNeededAndPossible() {
@@ -158,9 +160,9 @@ class AemArticleActivity : BaseArticleActivity(false) {
     // endregion Sync logic
 
     // region Share Link logic
-    override fun hasShareLinkUri() = article?.canonicalUri != null
-    override val shareLinkTitle get() = article?.title ?: super.shareLinkTitle
-    override val shareLinkUri get() = article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
+    override fun hasShareLinkUri() = dataModel.article.value?.canonicalUri != null
+    override val shareLinkTitle get() = dataModel.article.value?.title ?: super.shareLinkTitle
+    override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
     // endregion Share Link logic
 
     override fun determineActiveToolState(): Int {
