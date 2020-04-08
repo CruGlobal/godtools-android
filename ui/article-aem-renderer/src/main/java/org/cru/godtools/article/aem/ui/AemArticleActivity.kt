@@ -1,4 +1,4 @@
-package org.cru.godtools.article.aem.activity
+package org.cru.godtools.article.aem.ui
 
 import android.app.Activity
 import android.content.Intent

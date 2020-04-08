@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.fragment.app.commit
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
-import org.cru.godtools.article.aem.activity.startAemArticleActivity
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.article.fragment.ArticlesFragment

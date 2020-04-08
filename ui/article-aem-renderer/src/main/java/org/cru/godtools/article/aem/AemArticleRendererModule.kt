@@ -12,13 +12,13 @@ import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
-import org.cru.godtools.article.aem.activity.AemArticleActivity
-import org.cru.godtools.article.aem.activity.AemArticleActivityDataModel
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.fragment.AemArticleViewModel
 import org.cru.godtools.article.aem.service.AemArticleManager
+import org.cru.godtools.article.aem.ui.AemArticleActivity
+import org.cru.godtools.article.aem.ui.AemArticleActivityDataModel
 import javax.inject.Singleton
 
 @Module
