@@ -15,10 +15,10 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
-import org.cru.godtools.article.aem.fragment.AemArticleViewModel
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.ui.AemArticleActivity
 import org.cru.godtools.article.aem.ui.AemArticleActivityDataModel
+import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import javax.inject.Singleton
 
 @Module
