@@ -17,7 +17,7 @@ import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.R2
 import org.cru.godtools.article.adapter.ArticlesAdapter
-import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
@@ -118,10 +118,8 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel @Inject constructor(application: Application) :
+class ArticlesFragmentDataModel @Inject constructor(application: Application, private val articleDao: ArticleDao) :
     LatestPublishedManifestDataModel(application) {
-    private val aemDb = ArticleRoomDatabase.getInstance(application)
-
     internal val category = MutableLiveData<String?>()
 
     private val tags = manifest.combineWith(category) { manifest, category ->
@@ -135,8 +133,8 @@ class ArticlesFragmentDataModel @Inject constructor(application: Application) :
         toolCode.switchCombineWith(locale, tags) { tool, locale, tags ->
         when {
             tool == null || locale == null -> emptyLiveData<List<Article>>()
-            tags == null -> aemDb.articleDao().getArticles(tool, locale)
-            else -> aemDb.articleDao().getArticles(tool, locale, tags.toList())
+            tags == null -> articleDao.getArticles(tool, locale)
+            else -> articleDao.getArticles(tool, locale, tags.toList())
         }
     }
 }

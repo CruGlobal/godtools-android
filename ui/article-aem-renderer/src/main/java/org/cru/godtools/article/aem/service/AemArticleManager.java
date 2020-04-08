@@ -91,7 +91,7 @@ import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
  */
 @Singleton
 public class AemArticleManager {
-    private static final String TAG = "AEMDownloadManager";
+    private static final String TAG = "AemArticleManager";
 
     private static final int MSG_CLEAN = 1;
 
@@ -125,10 +125,11 @@ public class AemArticleManager {
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     @Inject
-    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao) {
+    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao,
+                      final ArticleRoomDatabase aemDb) {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
-        mAemDb = ArticleRoomDatabase.Companion.getInstance(mContext);
+        mAemDb = aemDb;
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = dao;
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,

@@ -1,9 +1,7 @@
 package org.cru.godtools.article.aem.db
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
@@ -16,10 +14,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.room.converter.MediaTypeConverter
-import org.cru.godtools.base.util.SingletonHolder
-
-@VisibleForTesting
-internal const val DATABASE_NAME = "aem_article_cache.db"
 
 @Database(
     entities = [
@@ -31,48 +25,34 @@ internal const val DATABASE_NAME = "aem_article_cache.db"
 )
 @TypeConverters(DateConverter::class, LocaleConverter::class, MediaTypeConverter::class, UriConverter::class)
 abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
+    companion object {
+        internal const val DATABASE_NAME = "aem_article_cache.db"
+    }
+
     // region DAOs
-
-    abstract fun translationDao(): TranslationDao
-
     abstract fun aemImportDao(): AemImportDao
-
     abstract fun articleDao(): ArticleDao
-
     abstract fun resourceDao(): ResourceDao
-
+    abstract fun translationDao(): TranslationDao
     // endregion DAOs
 
     // region Repositories
-
-    abstract fun translationRepository(): TranslationRepository
-
     abstract fun aemImportRepository(): AemImportRepository
-
     abstract fun articleRepository(): ArticleRepository
-
     abstract fun resourceRepository(): ResourceRepository
-
+    abstract fun translationRepository(): TranslationRepository
     // endregion Repositories
-
-    companion object : SingletonHolder<ArticleRoomDatabase, Context>({
-        Room.databaseBuilder(it.applicationContext, ArticleRoomDatabase::class.java, DATABASE_NAME)
-            .addMigrations(MIGRATION_8_9)
-            .addMigrations(MIGRATION_9_10)
-            .addMigrations(MIGRATION_10_11)
-            .fallbackToDestructiveMigration()
-            .build()
-    })
 }
 
 // region Migrations
-
 /*
  * Version history
  *
  * v5.0.18
  * 9: 2018-10-30
  * 10: 2018-11-06
+ * 11: 2019-01-10
+ * v5.1.1
  */
 
 @VisibleForTesting
@@ -95,4 +75,8 @@ internal val MIGRATION_10_11: Migration = object : Migration(10, 11) {
     }
 }
 
+internal fun RoomDatabase.Builder<ArticleRoomDatabase>.enableMigrations() = addMigrations(MIGRATION_8_9)
+    .addMigrations(MIGRATION_9_10)
+    .addMigrations(MIGRATION_10_11)
+    .fallbackToDestructiveMigration()
 // endregion Migrations

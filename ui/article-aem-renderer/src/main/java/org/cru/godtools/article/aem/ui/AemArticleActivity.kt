@@ -1,18 +1,14 @@
-package org.cru.godtools.article.aem.activity
+package org.cru.godtools.article.aem.ui
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.switchMap
+import androidx.fragment.app.commit
+import androidx.lifecycle.observe
 import com.google.common.util.concurrent.ListenableFuture
 import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
@@ -20,7 +16,6 @@ import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
-import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -29,8 +24,6 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import java.util.Locale
 import javax.inject.Inject
-
-private const val TAG_MAIN_FRAGMENT = "mainFragment"
 
 fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
     val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
@@ -49,13 +42,10 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
     private var pendingAnalyticsEvent = false
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (isFinishing) {
-            return
-        }
+        if (isFinishing) return
 
         // finish now if we couldn't process the intent
         if (!processIntent()) {
@@ -65,7 +55,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
 
         syncData()
         setContentView(R.layout.activity_generic_tool_fragment)
-        setupViewModel()
+        setupDataModel()
     }
 
     override fun onStart() {
@@ -86,7 +76,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
-        updateShareMenuItem()
         updateVisibilityState()
         sendAnalyticsEventIfNeededAndPossible()
         showNextFeatureDiscovery()
@@ -96,8 +85,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
         super.onPause()
         pendingAnalyticsEvent = false
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     /**
      * @return true if the intent was successfully processed, otherwise return false
@@ -126,11 +114,13 @@ class AemArticleActivity : BaseArticleActivity(false) {
                 } == true
     }
 
-    private val dataModel: AemArticleActivityDataModel by viewModels()
+    private val dataModel: AemArticleViewModel by viewModels()
 
-    private fun setupViewModel() {
+    private fun setupDataModel() {
         dataModel.articleUri.value = articleUri
-        dataModel.article.observe(this, Observer { onUpdateArticle(it) })
+
+        dataModel.article.observe(this) { updateShareMenuItem() }
+        dataModel.article.observe(this) { onUpdateArticle(it) }
     }
 
     private fun sendAnalyticsEventIfNeededAndPossible() {
@@ -152,48 +142,40 @@ class AemArticleActivity : BaseArticleActivity(false) {
     // region Sync logic
     @Inject
     internal lateinit var aemArticleManager: AemArticleManager
-    private lateinit var syncTask: ListenableFuture<Boolean>
+    private var syncTask: ListenableFuture<Boolean>? = null
 
     private fun syncData() {
         syncTask = when {
             isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
             else -> aemArticleManager.downloadArticle(articleUri, false)
-        }
-        syncTask.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor())
+        }.also { it.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor()) }
     }
     // endregion Sync logic
 
     // region Share Link logic
-    override fun hasShareLinkUri() = article?.canonicalUri != null
-    override val shareLinkTitle get() = article?.title ?: super.shareLinkTitle
-    override val shareLinkUri get() = article?.shareUri?.toString() ?: article?.canonicalUri?.toString()
+    override fun hasShareLinkUri() = dataModel.article.value?.canonicalUri != null
+    override val shareLinkTitle get() = dataModel.article.value?.title ?: super.shareLinkTitle
+    override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
     // endregion Share Link logic
 
     override fun determineActiveToolState(): Int {
         return when {
             article?.content != null -> STATE_LOADED
-            !this::syncTask.isInitialized -> STATE_LOADING
-            !syncTask.isDone -> STATE_LOADING
+            syncTask?.isDone != true -> STATE_LOADING
             else -> STATE_NOT_FOUND
         }
     }
 
     @MainThread
     private fun loadFragmentIfNeeded() {
-        // The fragment is already present
-        if (supportFragmentManager.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) return
+        with(supportFragmentManager) {
+            if (primaryNavigationFragment != null) return
 
-        // load the fragment
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, AemArticleFragment(articleUri), TAG_MAIN_FRAGMENT)
-            .commit()
+            commit {
+                val fragment = AemArticleFragment()
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
+            }
+        }
     }
-}
-
-class AemArticleActivityDataModel @Inject internal constructor(app: Application) : ViewModel() {
-    private val articleDao = ArticleRoomDatabase.getInstance(app).articleDao()
-
-    internal val articleUri = MutableLiveData<Uri>()
-
-    internal val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 }
