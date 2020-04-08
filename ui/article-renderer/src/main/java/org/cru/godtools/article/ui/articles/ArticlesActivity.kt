@@ -1,4 +1,4 @@
-package org.cru.godtools.article.activity
+package org.cru.godtools.article.ui.articles
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
-import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import java.util.Locale

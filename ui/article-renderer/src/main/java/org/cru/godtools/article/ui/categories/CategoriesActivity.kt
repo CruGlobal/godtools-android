@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.article.R
-import org.cru.godtools.article.activity.startArticlesActivity
+import org.cru.godtools.article.ui.articles.startArticlesActivity
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES

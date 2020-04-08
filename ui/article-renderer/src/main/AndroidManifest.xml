@@ -12,7 +12,7 @@
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ArticlesActivity"
+            android:name=".ui.articles.ArticlesActivity"
             android:parentActivityName=".ui.categories.CategoriesActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool.AppBar">

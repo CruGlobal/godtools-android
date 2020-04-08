@@ -1,4 +1,4 @@
-package org.cru.godtools.article.fragment
+package org.cru.godtools.article.ui.articles
 
 import android.app.Application
 import android.os.Bundle
@@ -16,7 +16,6 @@ import org.ccci.gto.android.common.util.WeakTask
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.R2
-import org.cru.godtools.article.adapter.ArticlesAdapter
 import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
