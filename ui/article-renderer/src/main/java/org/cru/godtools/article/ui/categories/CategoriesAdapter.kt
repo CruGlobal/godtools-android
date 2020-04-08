@@ -11,7 +11,7 @@ import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.cru.godtools.article.databinding.ListItemCategoryBinding
 import org.cru.godtools.xml.model.Category
 
-class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
+internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
     SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner), Observer<List<Category>?> {
     interface Callbacks {
         fun onCategorySelected(category: Category?)
@@ -21,41 +21,35 @@ class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
         setHasStableIds(true)
     }
 
-    private val callbacks = ObservableField<Callbacks>()
     var categories: List<Category>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    override fun getItemCount(): Int {
-        return categories?.size ?: 0
-    }
-
-    override fun getItemId(position: Int): Long {
-        return categories?.get(position)?.id?.let { IdUtils.convertId(it) } ?: NO_ID
-    }
-
+    private val callbacks = ObservableField<Callbacks>()
     fun setCallbacks(callbacks: Callbacks?) = this.callbacks.set(callbacks)
 
-    // region Lifecycle Events
+    override fun getItemCount() = categories?.size ?: 0
+    private fun getItem(position: Int) = categories?.get(position)
+    override fun getItemId(position: Int) = getItem(position)?.id?.let { IdUtils.convertId(it) } ?: NO_ID
+
+    // region Lifecycle
     override fun onChanged(t: List<Category>?) {
         categories = t
     }
 
-    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ListItemCategoryBinding {
-        return ListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
+        ListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             .also { it.callbacks = callbacks }
-    }
 
     override fun onBindViewDataBinding(binding: ListItemCategoryBinding, position: Int) {
-        binding.category = categories?.get(position)
+        binding.category = getItem(position)
     }
 
     override fun onViewDataBindingRecycled(binding: ListItemCategoryBinding) {
         super.onViewDataBindingRecycled(binding)
         binding.category = null
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 }
