@@ -1,4 +1,4 @@
-package org.cru.godtools.article.activity
+package org.cru.godtools.article.ui.articles
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,6 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
-import org.cru.godtools.article.fragment.ArticlesFragment
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import java.util.Locale
@@ -27,8 +26,7 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
 class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
@@ -49,8 +47,7 @@ class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     override fun onArticleSelected(article: Article?) {
         article?.let { startAemArticleActivity(tool, locale, it.uri) }
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     private fun loadPrimaryFragmentIfNeeded() {
         with(supportFragmentManager) {

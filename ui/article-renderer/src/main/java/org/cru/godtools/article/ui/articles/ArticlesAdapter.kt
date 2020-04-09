@@ -1,4 +1,4 @@
-package org.cru.godtools.article.adapter
+package org.cru.godtools.article.ui.articles
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
