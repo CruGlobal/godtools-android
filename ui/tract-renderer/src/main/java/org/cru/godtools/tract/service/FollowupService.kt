@@ -1,12 +1,11 @@
 package org.cru.godtools.tract.service
 
-import android.content.Context
 import android.os.AsyncTask
 import androidx.annotation.WorkerThread
 import dagger.Lazy
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.model.Followup
-import org.cru.godtools.sync.syncFollowups
+import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -20,9 +19,9 @@ private const val FIELD_DESTINATION = "destination_id"
 
 @Singleton
 class FollowupService @Inject internal constructor(
-    private val context: Context,
     eventBus: EventBus,
-    private val dao: Lazy<GodToolsDao>
+    private val dao: Lazy<GodToolsDao>,
+    private val syncService: Lazy<GodToolsSyncService>
 ) {
     init {
         eventBus.register(this)
@@ -51,5 +50,5 @@ class FollowupService @Inject internal constructor(
     }
 
     @WorkerThread
-    private fun syncPendingFollowups() = context.syncFollowups().sync()
+    private fun syncPendingFollowups() = syncService.get().syncFollowups().sync()
 }
