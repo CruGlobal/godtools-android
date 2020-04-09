@@ -41,7 +41,6 @@ class GodToolsSyncService @Inject internal constructor(
     override val coroutineContext get() = Dispatchers.IO + job
 
     private val followupSyncTasks by lazy { FollowupSyncTasks.getInstance(context) }
-    private val languageSyncTasks by lazy { LanguagesSyncTasks.getInstance(context) }
     private val toolSyncTasks by lazy { ToolSyncTasks.getInstance(context) }
 
     private fun processSyncTask(task: GtSyncTask): Int {
@@ -49,7 +48,7 @@ class GodToolsSyncService @Inject internal constructor(
         launch {
             try {
                 when (task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
-                    SYNCTYPE_LANGUAGES -> languageSyncTasks.syncLanguages(task.args)
+                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> { syncLanguages(task.args) }
                     SYNCTYPE_TOOLS -> toolSyncTasks.syncTools(task.args)
                     SYNCTYPE_TOOL_SHARES -> if (!toolSyncTasks.syncShares()) context.scheduleSyncToolSharesWork()
                     SYNCTYPE_FOLLOWUPS -> if (!followupSyncTasks.syncFollowups()) context.scheduleSyncFollowupWork()
