@@ -5,13 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncRegistry
 import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.sync.task.AnalyticsSyncTasks
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
@@ -20,6 +18,8 @@ import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
@@ -29,13 +29,11 @@ private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
-class GodToolsSyncService private constructor(private val context: Context) : CoroutineScope {
-    companion object : SingletonHolder<GodToolsSyncService, Context>({ GodToolsSyncService(it.applicationContext) })
-
+@Singleton
+class GodToolsSyncService @Inject internal constructor(private val context: Context, private val eventBus: EventBus) :
+    CoroutineScope {
     private val job = SupervisorJob()
     override val coroutineContext get() = Dispatchers.IO + job
-
-    private val eventBus = EventBus.getDefault()
 
     private val analyticsSyncTasks by lazy { AnalyticsSyncTasks.getInstance(context) }
     private val followupSyncTasks by lazy { FollowupSyncTasks.getInstance(context) }
@@ -44,7 +42,7 @@ class GodToolsSyncService private constructor(private val context: Context) : Co
 
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
-        GlobalScope.launch {
+        launch {
             try {
                 when (task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
                     SYNCTYPE_LANGUAGES -> languageSyncTasks.syncLanguages(task.args)
