@@ -22,7 +22,6 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
@@ -105,8 +104,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onSyncData(@NonNull final SwipeRefreshSyncHelper syncHelper, final boolean force) {
         super.onSyncData(syncHelper, force);
-        GodToolsSyncServiceKt.syncFollowups(this).sync();
-        GodToolsSyncServiceKt.syncToolShares(this).sync();
+        getSyncService().syncFollowups().sync();
+        getSyncService().syncToolShares().sync();
     }
 
     @Override
