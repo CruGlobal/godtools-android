@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':library:sync-tasks')
+    api project(':library:sync-tasks')
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 

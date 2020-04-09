@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.sync.SyncRegistry
 import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.AnalyticsSyncTasks
+import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
@@ -19,6 +20,7 @@ import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
@@ -30,12 +32,14 @@ private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
 @Singleton
-class GodToolsSyncService @Inject internal constructor(private val context: Context, private val eventBus: EventBus) :
-    CoroutineScope {
+class GodToolsSyncService @Inject internal constructor(
+    private val context: Context,
+    private val eventBus: EventBus,
+    private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
+) : CoroutineScope {
     private val job = SupervisorJob()
     override val coroutineContext get() = Dispatchers.IO + job
 
-    private val analyticsSyncTasks by lazy { AnalyticsSyncTasks.getInstance(context) }
     private val followupSyncTasks by lazy { FollowupSyncTasks.getInstance(context) }
     private val languageSyncTasks by lazy { LanguagesSyncTasks.getInstance(context) }
     private val toolSyncTasks by lazy { ToolSyncTasks.getInstance(context) }
@@ -49,7 +53,7 @@ class GodToolsSyncService @Inject internal constructor(private val context: Cont
                     SYNCTYPE_TOOLS -> toolSyncTasks.syncTools(task.args)
                     SYNCTYPE_TOOL_SHARES -> if (!toolSyncTasks.syncShares()) context.scheduleSyncToolSharesWork()
                     SYNCTYPE_FOLLOWUPS -> if (!followupSyncTasks.syncFollowups()) context.scheduleSyncFollowupWork()
-                    SYNCTYPE_GLOBAL_ACTIVITY -> analyticsSyncTasks.syncGlobalActivity(task.args)
+                    SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
                 }
             } catch (e: IOException) {
                 // TODO: should we queue up work tasks here because of the IOException?
@@ -61,6 +65,10 @@ class GodToolsSyncService @Inject internal constructor(private val context: Cont
 
         return syncId
     }
+
+    private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) =
+        ((syncTasks[T::class.java] ?: throw IllegalStateException("${T::class.java.simpleName} not injected")).get()
+            as T).block()
 
     // region Sync Tasks
     fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
