@@ -93,9 +93,3 @@ class GodToolsSyncService private constructor(private val context: Context) : Co
     }
     // endregion Sync Tasks
 }
-
-@Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncToolShares()"))
-fun Context.syncToolShares() = GodToolsSyncService.getInstance(this).syncToolShares()
-
-@Deprecated("Use GodToolsSyncService directly", ReplaceWith("GodToolsSyncService.getInstance(this).syncFollowups()"))
-fun Context.syncFollowups() = GodToolsSyncService.getInstance(this).syncFollowups()
