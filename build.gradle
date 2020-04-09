@@ -9,7 +9,6 @@ buildscript {
                 appsFlyer          : '5.0.0',
                 assistedInject     : '0.5.2',
                 butterknife        : '10.2.1',
-                calligraphy        : '2.3.0',
                 circleindicator    : '2.1.4',
                 dagger             : '2.27',
                 eventbus           : '3.1.1',
