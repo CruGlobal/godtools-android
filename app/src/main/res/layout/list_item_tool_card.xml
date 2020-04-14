@@ -35,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_alignBottom="@id/banner"
+                android:progress="@{viewModel.downloadProgress}"
                 android:visibility="gone"
                 tools:max="12"
                 tools:progress="5"

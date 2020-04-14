@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
@@ -20,8 +19,6 @@ import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.databinding.ListItemToolCardBinding;
-import org.cru.godtools.download.manager.DownloadProgress;
-import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -41,7 +38,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
-import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBinding, ToolsAdapter.ToolViewHolder>
@@ -126,11 +122,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     }
 
     @Override
-    public void onViewAttachedToWindow(final ToolViewHolder holder) {
-        holder.startDownloadProgressListener();
-    }
-
-    @Override
     public boolean onCheckCanStartDrag(final ToolViewHolder holder, final int position, final int x, final int y) {
         return true;
     }
@@ -160,11 +151,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     @Override
     public boolean onCheckCanDrop(final int draggingPosition, final int dropPosition) {
         return true;
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(final ToolViewHolder holder) {
-        holder.stopDownloadProgressListener();
     }
 
     @Override
@@ -233,8 +219,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         }
     }
 
-    class ToolViewHolder extends BaseViewHolder<ListItemToolCardBinding>
-            implements GodToolsDownloadManager.OnDownloadProgressUpdateListener, DraggableItemViewHolder {
+    class ToolViewHolder extends BaseViewHolder<ListItemToolCardBinding> implements DraggableItemViewHolder {
         @Nullable
         @BindView(R.id.title)
         TextView mTitleView;
@@ -248,9 +233,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Nullable
         @BindView(R.id.language_parallel)
         TextView mParallelLanguageView;
-        @Nullable
-        @BindView(R.id.download_progress)
-        ProgressBar mDownloadProgressBar;
 
         long mId;
         @Nullable
@@ -272,8 +254,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Nullable
         Locale mDefaultLanguage;
         int mShares = 0;
-        @Nullable
-        private DownloadProgress mDownloadProgress;
 
         private final DraggableItemState mDragState = new DraggableItemState();
 
@@ -353,27 +333,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @DraggableItemStateFlags
         public int getDragStateFlags() {
             return mDragState.getFlags();
-        }
-
-        void startDownloadProgressListener() {
-            // start listening for new state
-            if (mCode != null && mPrimaryLanguage != null) {
-                final GodToolsDownloadManager downloadManager =
-                        GodToolsDownloadManager.getInstance(itemView.getContext());
-                downloadManager.addOnDownloadProgressUpdateListener(mCode, mPrimaryLanguage, this);
-                onDownloadProgressUpdated(downloadManager.getDownloadProgress(mCode, mPrimaryLanguage));
-            }
-        }
-
-        void stopDownloadProgressListener() {
-            GodToolsDownloadManager.getInstance(itemView.getContext()).removeOnDownloadProgressUpdateListener(this);
-            mDownloadProgress = null;
-        }
-
-        @Override
-        public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
-            mDownloadProgress = progress;
-            bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
         }
 
         @Optional
