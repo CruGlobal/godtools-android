@@ -9,6 +9,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -17,6 +18,9 @@ import javax.inject.Inject
 class ToolsAdapterToolViewModel @Inject constructor(private val dao: GodToolsDao) : ViewModel() {
     val toolCode = MutableLiveData<String?>()
     private val distinctToolCode = toolCode.distinctUntilChanged()
+
+    @Deprecated("This is temporary until ToolsAdapter stops using a Cursor")
+    val tool by lazy { distinctToolCode.switchMap { it?.let { dao.findLiveData<Tool>(it) }.orEmpty() } }
 
     val banner = distinctToolCode.switchMap {
         it?.let {

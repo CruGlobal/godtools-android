@@ -26,7 +26,6 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 
-import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.MainThread;
@@ -38,10 +37,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.OnClick;
 import butterknife.Optional;
-import butterknife.ViewCollections;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
@@ -254,12 +251,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Nullable
         @BindView(R.id.download_progress)
         ProgressBar mDownloadProgressBar;
-        @Nullable
-        @BindView(R.id.action_add)
-        View mActionAdd;
-        @Nullable
-        @BindViews({R.id.action_add, R.id.divider_download})
-        List<View> mAddViews;
 
         long mId;
         @Nullable
@@ -281,7 +272,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Nullable
         Locale mDefaultLanguage;
         int mShares = 0;
-        boolean mAdded = false;
         @Nullable
         private DownloadProgress mDownloadProgress;
 
@@ -307,7 +297,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
                 mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
-                mAdded = CursorUtils.getBool(cursor, ToolTable.COLUMN_ADDED, false);
                 mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0) +
                         CursorUtils.getInt(cursor, ToolTable.COLUMN_PENDING_SHARES, 0);
             } else {
@@ -322,7 +311,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mDefaultLanguage = null;
                 mParallelLanguage = null;
                 mShares = 0;
-                mAdded = false;
             }
 
             // update any bound views
@@ -347,12 +335,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                     mParallelLanguageView.setVisibility(View.GONE);
                     mParallelLanguageView.setText(null);
                 }
-            }
-            if (mActionAdd != null) {
-                mActionAdd.setEnabled(!mAdded);
-            }
-            if (mAddViews != null) {
-                ViewCollections.run(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
             }
         }
 
