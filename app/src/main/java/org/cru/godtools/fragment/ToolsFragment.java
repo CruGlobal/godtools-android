@@ -52,6 +52,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -285,7 +286,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
             mToolsView.setHasFixedSize(false);
 
             // create base tools adapter
-            mToolsAdapter = new ToolsAdapter();
+            mToolsAdapter = new ToolsAdapter(this, new ViewModelProvider(this));
             mToolsAdapter.setCallbacks(this);
             RecyclerView.Adapter adapter = mToolsAdapter;
 

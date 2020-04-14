@@ -24,6 +24,7 @@ import org.cru.godtools.databinding.ListItemToolCardBinding;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 
 import java.util.List;
@@ -34,6 +35,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -57,6 +60,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
     public static final String COL_DEFAULT_LANGUAGE = "default_language";
 
+    private static final String VIEW_MODEL_KEY_PREFIX = ToolsAdapter.class.getCanonicalName() + ":" +
+            ToolsAdapterToolViewModel.class.getCanonicalName() + ":";
+
     public interface Callbacks {
         void onToolInfo(@Nullable String code);
 
@@ -67,6 +73,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         void onToolsReordered(long... ids);
     }
 
+    @NonNull
+    private final ViewModelProvider mViewModelProvider;
+
     @Nullable
     private RecyclerView mRecyclerView;
 
@@ -75,6 +84,11 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
 
     @Nullable
     Callbacks mCallbacks;
+
+    public ToolsAdapter(@NonNull final LifecycleOwner lifecycleOwner, @NonNull final ViewModelProvider provider) {
+        super(lifecycleOwner);
+        mViewModelProvider = provider;
+    }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
@@ -109,6 +123,12 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     @Override
     protected void onBindViewDataBinding(@NonNull final ListItemToolCardBinding binding, @Nullable final Cursor cursor,
                                          final int position) {
+        final String code = cursor != null ? CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE) :
+                Tool.INVALID_CODE;
+        final ToolsAdapterToolViewModel viewModel =
+                mViewModelProvider.get(VIEW_MODEL_KEY_PREFIX + code, ToolsAdapterToolViewModel.class);
+        viewModel.getToolCode().setValue(code);
+        binding.setViewModel(viewModel);
     }
 
     @Override
