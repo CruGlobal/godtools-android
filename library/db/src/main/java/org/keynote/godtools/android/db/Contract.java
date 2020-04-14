@@ -121,9 +121,6 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
-        public static final Join<Tool, Attachment> SQL_JOIN_BANNER =
-                TABLE.join(AttachmentTable.TABLE).on(FIELD_BANNER.eq(AttachmentTable.FIELD_ID));
-
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0);
 

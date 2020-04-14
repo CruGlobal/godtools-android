@@ -26,7 +26,8 @@
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
                 android:background="@color/gray_E6"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@{viewModel.banner}" />
 
             <ProgressBar
                 android:id="@+id/download_progress"

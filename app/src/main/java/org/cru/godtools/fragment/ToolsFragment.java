@@ -38,7 +38,6 @@ import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
 import org.cru.godtools.widget.BannerType;
-import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -453,13 +452,8 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
                 TRANS_ALIAS[TRANS_PARA] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
                         ToolsAdapter.COL_PARALLEL_LANGUAGE,
                 TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
-                        ToolsAdapter.COL_DEFAULT_LANGUAGE,
-                AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " +
-                        ToolsAdapter.COL_BANNER
+                        ToolsAdapter.COL_DEFAULT_LANGUAGE
         };
-
-        static final Join TOOLS_JOIN_BANNER =
-                ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED);
 
         private final int mMode;
 
@@ -470,7 +464,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.
             setProjection(TOOLS_PROJECTION);
             //noinspection unchecked
             setJoins(
-                    TOOLS_JOIN_BANNER,
                     TRANS_JOIN[TRANS_PRIM].andOn(TRANS_FIELD_LANG[TRANS_PRIM].eq(primaryLanguage)),
                     TRANS_JOIN[TRANS_PARA].andOn(TRANS_FIELD_LANG[TRANS_PARA]
                                                          .eq(parallelLanguage != null ? parallelLanguage :

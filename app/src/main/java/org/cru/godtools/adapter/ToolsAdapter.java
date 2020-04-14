@@ -16,7 +16,6 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableI
 
 import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
-import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -46,7 +45,6 @@ import butterknife.ViewCollections;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
-import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
 import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBinding, ToolsAdapter.ToolViewHolder>
@@ -55,7 +53,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     public static final String COL_TITLE_LANGUAGE = "title_lang";
     public static final String COL_TAGLINE = "tagline";
     public static final String COL_TAGLINE_LANGUAGE = "tagline_lang";
-    public static final String COL_BANNER = "banner";
     public static final String COL_PRIMARY_LANGUAGE = "primary_language";
     public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
     public static final String COL_DEFAULT_LANGUAGE = "default_language";
@@ -242,9 +239,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     class ToolViewHolder extends BaseViewHolder<ListItemToolCardBinding>
             implements GodToolsDownloadManager.OnDownloadProgressUpdateListener, DraggableItemViewHolder {
         @Nullable
-        @BindView(R.id.banner)
-        PicassoImageView mBanner;
-        @Nullable
         @BindView(R.id.title)
         TextView mTitleView;
         int mTitleTextStyle = Typeface.NORMAL;
@@ -281,8 +275,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Nullable
         Locale mTaglineLanguage;
         @Nullable
-        String mBannerFile;
-        @Nullable
         Locale mPrimaryLanguage;
         @Nullable
         Locale mParallelLanguage;
@@ -312,7 +304,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mTitleLanguage = CursorUtils.getLocale(cursor, COL_TITLE_LANGUAGE, null);
                 mTagline = CursorUtils.getString(cursor, COL_TAGLINE, null);
                 mTaglineLanguage = CursorUtils.getLocale(cursor, COL_TAGLINE_LANGUAGE, null);
-                mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
                 mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
@@ -327,7 +318,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mTitleLanguage = null;
                 mTagline = null;
                 mTaglineLanguage = null;
-                mBannerFile = null;
                 mPrimaryLanguage = null;
                 mDefaultLanguage = null;
                 mParallelLanguage = null;
@@ -337,7 +327,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
 
             // update any bound views
             ViewCompat.setLayoutDirection(itemView, TextUtilsCompat.getLayoutDirectionFromLocale(mPrimaryLanguage));
-            bindLocalImage(mBanner, mBannerFile);
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
                 mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage),
