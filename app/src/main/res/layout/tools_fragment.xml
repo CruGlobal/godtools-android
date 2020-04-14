@@ -34,7 +34,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/list_item_tool_card" />
+                tools:listitem="@layout/tools_list_item_tool" />
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

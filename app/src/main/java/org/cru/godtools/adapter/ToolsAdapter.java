@@ -18,7 +18,7 @@ import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.databinding.ListItemToolCardBinding;
+import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -40,7 +40,7 @@ import butterknife.Optional;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 
-public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBinding, ToolsAdapter.ToolViewHolder>
+public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBinding, ToolsAdapter.ToolViewHolder>
         implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_TITLE = "title";
     public static final String COL_TITLE_LANGUAGE = "title_lang";
@@ -93,16 +93,16 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
 
     @NonNull
     @Override
-    protected ListItemToolCardBinding onCreateViewDataBinding(@NonNull final ViewGroup parent, final int viewType) {
-        final ListItemToolCardBinding binding =
-                ListItemToolCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    protected ToolsListItemToolBinding onCreateViewDataBinding(@NonNull final ViewGroup parent, final int viewType) {
+        final ToolsListItemToolBinding binding =
+                ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         binding.setCallbacks(mCallbacks);
         return binding;
     }
 
     @NonNull
     @Override
-    protected ToolViewHolder onCreateViewHolder(@NonNull final ListItemToolCardBinding binding, final int viewType) {
+    protected ToolViewHolder onCreateViewHolder(@NonNull final ToolsListItemToolBinding binding, final int viewType) {
         return new ToolViewHolder(binding);
     }
 
@@ -114,7 +114,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     }
 
     @Override
-    protected void onBindViewDataBinding(@NonNull final ListItemToolCardBinding binding, @Nullable final Cursor cursor,
+    protected void onBindViewDataBinding(@NonNull final ToolsListItemToolBinding binding, @Nullable final Cursor cursor,
                                          final int position) {
         final String code = cursor != null ? CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE) :
                 Tool.INVALID_CODE;
@@ -223,7 +223,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         }
     }
 
-    class ToolViewHolder extends BaseViewHolder<ListItemToolCardBinding> implements DraggableItemViewHolder {
+    class ToolViewHolder extends BaseViewHolder<ToolsListItemToolBinding> implements DraggableItemViewHolder {
         @Nullable
         @BindView(R.id.title)
         TextView mTitleView;
@@ -257,7 +257,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
 
         private final DraggableItemState mDragState = new DraggableItemState();
 
-        ToolViewHolder(@NonNull final ListItemToolCardBinding binding) {
+        ToolViewHolder(@NonNull final ToolsListItemToolBinding binding) {
             super(binding);
             if (mTitleView != null) {
                 mTitleTextStyle = TextViewCompat.getTypefaceStyle(mTitleView);
