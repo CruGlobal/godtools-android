@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,8 +72,8 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     @NonNull
     private int[] mTmpPositions = new int[0];
 
-    @Nullable
-    Callbacks mCallbacks;
+    @NonNull
+    final ObservableField<Callbacks> mCallbacks = new ObservableField<>();
 
     public ToolsAdapter(@NonNull final LifecycleOwner lifecycleOwner, @NonNull final ViewModelProvider provider) {
         super(lifecycleOwner);
@@ -80,7 +81,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
-        mCallbacks = callbacks;
+        mCallbacks.set(callbacks);
     }
 
     // region Lifecycle
@@ -93,7 +94,10 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
     @NonNull
     @Override
     protected ListItemToolCardBinding onCreateViewDataBinding(@NonNull final ViewGroup parent, final int viewType) {
-        return ListItemToolCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        final ListItemToolCardBinding binding =
+                ListItemToolCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        binding.setCallbacks(mCallbacks);
+        return binding;
     }
 
     @NonNull
@@ -207,14 +211,15 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
 
     @MainThread
     private void triggerToolOrderUpdate() {
-        if (mCallbacks != null) {
+        final Callbacks callbacks = mCallbacks.get();
+        if (callbacks != null) {
             final int count = getItemCount();
             final long[] ids = new long[count];
             for (int i = 0; i < count; i++) {
                 ids[i] = getItemId(i);
             }
 
-            mCallbacks.onToolsReordered(ids);
+            callbacks.onToolsReordered(ids);
         }
     }
 
@@ -329,30 +334,15 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @Optional
         @OnClick(R.id.root)
         void select() {
-            if (mCallbacks != null) {
+            final Callbacks callbacks = mCallbacks.get();
+            if (callbacks != null) {
                 if (mPrimaryLanguage != null) {
-                    mCallbacks.onToolSelect(mCode, mType, mPrimaryLanguage, mParallelLanguage);
+                    callbacks.onToolSelect(mCode, mType, mPrimaryLanguage, mParallelLanguage);
                 } else if (mDefaultLanguage != null) {
-                    mCallbacks.onToolSelect(mCode, mType, mDefaultLanguage, mParallelLanguage);
+                    callbacks.onToolSelect(mCode, mType, mDefaultLanguage, mParallelLanguage);
                 } else if (mParallelLanguage != null) {
-                    mCallbacks.onToolSelect(mCode, mType, mParallelLanguage);
+                    callbacks.onToolSelect(mCode, mType, mParallelLanguage);
                 }
-            }
-        }
-
-        @Optional
-        @OnClick(R.id.action_add)
-        void add() {
-            if (mCallbacks != null) {
-                mCallbacks.onToolAdd(mCode);
-            }
-        }
-
-        @Optional
-        @OnClick(R.id.action_info)
-        void info() {
-            if (mCallbacks != null) {
-                mCallbacks.onToolInfo(mCode);
             }
         }
     }
