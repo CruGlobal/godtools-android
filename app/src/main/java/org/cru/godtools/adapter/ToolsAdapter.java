@@ -38,7 +38,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
-import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
 public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBinding, ToolsAdapter.ToolViewHolder>
         implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
@@ -228,9 +227,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         @BindView(R.id.tagline)
         TextView mTaglineView;
         @Nullable
-        @BindView(R.id.shares)
-        TextView mSharesView;
-        @Nullable
         @BindView(R.id.language_parallel)
         TextView mParallelLanguageView;
 
@@ -253,7 +249,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
         Locale mParallelLanguage;
         @Nullable
         Locale mDefaultLanguage;
-        int mShares = 0;
 
         private final DraggableItemState mDragState = new DraggableItemState();
 
@@ -277,8 +272,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
                 mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
-                mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0) +
-                        CursorUtils.getInt(cursor, ToolTable.COLUMN_PENDING_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
                 mCode = Tool.INVALID_CODE;
@@ -290,7 +283,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mPrimaryLanguage = null;
                 mDefaultLanguage = null;
                 mParallelLanguage = null;
-                mShares = 0;
             }
 
             // update any bound views
@@ -304,7 +296,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBindi
                 mTaglineView.setText(mTagline);
                 mTaglineView.setTypeface(LocaleTypefaceUtils.getTypeface(mTaglineView.getContext(), mTaglineLanguage));
             }
-            bindShares(mSharesView, mShares);
             if (mParallelLanguageView != null) {
                 if (mParallelLanguage != null && (mPrimaryLanguage != null || mDefaultLanguage != mParallelLanguage)) {
                     mParallelLanguageView.setVisibility(View.VISIBLE);
