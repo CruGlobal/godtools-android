@@ -15,7 +15,7 @@
         android:background="@color/white"
         android:clipToPadding="false">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -23,102 +23,106 @@
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
                 android:background="@color/gray_E6"
                 android:scaleType="centerCrop"
-                android:src="@{viewModel.banner}" />
+                android:src="@{viewModel.banner}"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
                 android:id="@+id/download_progress"
                 style="@style/Widget.GodTools.Tools.Download.ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_alignBottom="@id/banner"
                 android:progress="@{viewModel.downloadProgress}"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/banner"
                 tools:max="12"
                 tools:progress="5"
                 tools:visibility="visible" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/action_add"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:enabled="@{!viewModel.tool.added}"
+                android:padding="8dp"
+                android:tint="@color/gt_green"
+                app:goneIf="@{viewModel.tool.added}"
+                app:layout_constraintBottom_toBottomOf="@id/tagline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                app:srcCompat="@drawable/ic_download"
+                tools:visibility="gone" />
+
+            <View
+                android:id="@+id/divider_download"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:layout_toEndOf="@id/action_add"
+                android:background="@color/gray_E6"
+                app:goneIf="@{viewModel.tool.added}"
+                app:layout_constraintBottom_toBottomOf="@id/tagline"
+                app:layout_constraintStart_toEndOf="@id/action_add"
+                app:layout_constraintTop_toTopOf="@id/title"
+                tools:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/banner"
-                android:layout_margin="4dp">
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
+                app:layout_constraintEnd_toStartOf="@id/language_parallel"
+                app:layout_constraintStart_toEndOf="@id/divider_download"
+                app:layout_constraintTop_toBottomOf="@id/banner"
+                app:layout_goneMarginEnd="12dp"
+                app:layout_goneMarginStart="12dp"
+                tools:text="Knowing God Personally (Extra Long Title)" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/action_add"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:enabled="@{!viewModel.tool.added}"
-                    android:padding="8dp"
-                    android:tint="@color/gt_green"
-                    app:goneIf="@{viewModel.tool.added}"
-                    app:srcCompat="@drawable/ic_download" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tagline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:ellipsize="end"
+                android:lines="2"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_info"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
 
-                <View
-                    android:id="@+id/divider_download"
-                    android:layout_width="2dp"
-                    android:layout_height="48sp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/action_add"
-                    android:background="@color/gray_E6"
-                    app:goneIf="@{viewModel.tool.added}" />
+            <TextView
+                android:id="@+id/language_parallel"
+                style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="end"
+                android:maxWidth="72dp"
+                app:layout_constraintBaseline_toBaselineOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/title"
+                tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
-                <TextView
-                    android:id="@+id/language_parallel"
-                    style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/title"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="end"
-                    android:maxWidth="72dp"
-                    tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toStartOf="@id/language_parallel"
-                    android:layout_toEndOf="@id/divider_download"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
-                    tools:text="Knowing God Personally (Extra Long Title)" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tagline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_toEndOf="@id/divider_download"
-                    android:ellipsize="end"
-                    android:lines="2"
-                    android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
-                    tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/action_info"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignBottom="@id/tagline"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="-8dp"
-                    android:padding="8dp"
-                    android:tint="@color/gt_blue"
-                    app:srcCompat="@drawable/ic_info" />
-            </RelativeLayout>
-        </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/action_info"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:padding="8dp"
+                android:tint="@color/gt_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
