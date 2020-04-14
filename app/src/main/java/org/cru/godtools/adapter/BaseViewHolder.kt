@@ -1,12 +1,12 @@
 package org.cru.godtools.adapter
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
 import butterknife.ButterKnife
+import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder
 
-internal abstract class BaseViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
+internal abstract class BaseViewHolder<B : ViewDataBinding>(binding: B) : DataBindingViewHolder<B>(binding) {
     init {
-        ButterKnife.bind(this, rootView)
+        ButterKnife.bind(this, binding.root)
     }
 
     protected open fun bind(position: Int) = Unit

@@ -17,10 +17,10 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableI
 import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
-import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.base.util.LocaleUtils;
+import org.cru.godtools.databinding.ListItemToolCardBinding;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -46,7 +46,7 @@ import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgr
 import static org.cru.godtools.util.ViewUtilsKt.bindLocalImage;
 import static org.cru.godtools.util.ViewUtilsKt.bindShares;
 
-public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
+public class ToolsAdapter extends CursorDataBindingAdapter<ListItemToolCardBinding, ToolsAdapter.ToolViewHolder>
         implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_TITLE = "title";
     public static final String COL_TITLE_LANGUAGE = "title_lang";
@@ -87,16 +87,28 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         mRecyclerView = recyclerView;
     }
 
+    @NonNull
     @Override
-    public ToolViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        return new ToolViewHolder(LayoutInflater.from(parent.getContext())
-                                          .inflate(R.layout.list_item_tool_card, parent, false));
+    protected ListItemToolCardBinding onCreateViewDataBinding(@NonNull final ViewGroup parent, final int viewType) {
+        return ListItemToolCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    }
+
+    @NonNull
+    @Override
+    protected ToolViewHolder onCreateViewHolder(@NonNull final ListItemToolCardBinding binding, final int viewType) {
+        return new ToolViewHolder(binding);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull final ToolViewHolder holder, @Nullable final Cursor cursor,
                                     final int position) {
         holder.bind(cursor);
+        super.onBindViewHolder(holder, cursor, position);
+    }
+
+    @Override
+    protected void onBindViewDataBinding(@NonNull final ListItemToolCardBinding binding, @Nullable final Cursor cursor,
+                                         final int position) {
     }
 
     @Override
@@ -207,7 +219,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
         }
     }
 
-    class ToolViewHolder extends BaseViewHolder
+    class ToolViewHolder extends BaseViewHolder<ListItemToolCardBinding>
             implements GodToolsDownloadManager.OnDownloadProgressUpdateListener, DraggableItemViewHolder {
         @Nullable
         @BindView(R.id.banner)
@@ -263,8 +275,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
 
         private final DraggableItemState mDragState = new DraggableItemState();
 
-        ToolViewHolder(@NonNull final View view) {
-            super(view);
+        ToolViewHolder(@NonNull final ListItemToolCardBinding binding) {
+            super(binding);
             if (mTitleView != null) {
                 mTitleTextStyle = TextViewCompat.getTypefaceStyle(mTitleView);
             }
