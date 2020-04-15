@@ -13,6 +13,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.adapter.ToolsAdapter
 import org.cru.godtools.databinding.ToolsListItemToolBinding
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.junit.Assert.assertEquals
@@ -89,6 +90,37 @@ class ToolsListItemToolBindingTest {
     private fun View.isLayoutDirectionInherit() = !canResolveLayoutDirection()
     // endregion Layout Direction
 
+    // region Parallel Language Label
+    @Test
+    fun verifyParallelLanguageLabel() {
+        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData(language(Locale.FRENCH)))
+        binding.invalidateAll()
+        binding.executePendingBindings()
+
+        assertEquals(View.VISIBLE, binding.languageParallel.visibility)
+        assertEquals("French", binding.languageParallel.text)
+    }
+
+    @Test
+    fun verifyParallelLanguageLabelHiddenIfNoParallelLanguage() {
+        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData<Language>(null))
+        binding.invalidateAll()
+        binding.executePendingBindings()
+
+        assertEquals(View.GONE, binding.languageParallel.visibility)
+    }
+
+    @Test
+    fun verifyParallelLanguageLabelHiddenIfFirstLanguageIsTheSameAsParallelLanguage() {
+        whenever(viewModel.firstLanguage).thenReturn(MutableLiveData<Language>(language(Locale("es"))))
+        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData<Language>(language(Locale("es"))))
+        binding.invalidateAll()
+        binding.executePendingBindings()
+
+        assertEquals(View.GONE, binding.languageParallel.visibility)
+    }
+    // endregion Parallel Language Label
+
     // region Add Action
     @Test
     fun verifyActionAddIsVisibleAndEnabledWhenToolHasntBeenAdded() {
@@ -126,4 +158,6 @@ class ToolsListItemToolBindingTest {
         binding.actionInfo.performClick()
         verify(callbacks).onToolInfo(eq("test"))
     }
+
+    private fun language(code: Locale) = Language().apply { this.code = code }
 }

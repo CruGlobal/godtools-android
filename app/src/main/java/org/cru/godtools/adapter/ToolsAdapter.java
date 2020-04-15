@@ -3,7 +3,6 @@ package org.cru.godtools.adapter;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
@@ -297,17 +295,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
             if (mTaglineView != null) {
                 mTaglineView.setText(mTagline);
                 mTaglineView.setTypeface(LocaleTypefaceUtils.getTypeface(mTaglineView.getContext(), mTaglineLanguage));
-            }
-            if (mParallelLanguageView != null) {
-                if (mParallelLanguage != null && (mPrimaryLanguage != null || mDefaultLanguage != mParallelLanguage)) {
-                    mParallelLanguageView.setVisibility(View.VISIBLE);
-                    mParallelLanguageView.setText(
-                            LocaleUtils.getDisplayName(mParallelLanguage, mParallelLanguageView.getContext(), null,
-                                                       null));
-                } else {
-                    mParallelLanguageView.setVisibility(View.GONE);
-                    mParallelLanguageView.setText(null);
-                }
             }
         }
 
