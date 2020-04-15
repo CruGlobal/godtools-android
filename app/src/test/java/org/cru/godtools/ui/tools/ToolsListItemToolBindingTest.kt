@@ -95,31 +95,34 @@ class ToolsListItemToolBindingTest {
     private fun View.isLayoutDirectionInherit() = !canResolveLayoutDirection()
     // endregion Layout Direction
 
-    // region Title
+    // region Title & Tagline
     @Test
-    fun verifyTitleFromPrimaryTranslation() {
+    fun verifyTitleAndTaglineFromPrimaryTranslation() {
         binding.executePendingBindings()
 
         assertEquals("primaryName", binding.title.text)
+        assertEquals("primaryTagline", binding.tagline.text)
     }
 
     @Test
-    fun verifyTitleFromParallelTranslation() {
+    fun verifyTitleAndTaglineFromParallelTranslation() {
         binding.primaryTranslation = MutableLiveData(null)
         binding.executePendingBindings()
 
         assertEquals("parallelName", binding.title.text)
+        assertEquals("parallelTagline", binding.tagline.text)
     }
 
     @Test
-    fun verifyTitleFromTool() {
+    fun verifyTitleAndTaglineFromTool() {
         binding.primaryTranslation = MutableLiveData(null)
         binding.parallelTranslation = MutableLiveData(null)
         binding.executePendingBindings()
 
         assertEquals("toolName", binding.title.text)
+        assertEquals("toolDescription", binding.tagline.text)
     }
-    // endregion Title
+    // endregion Title & Tagline
 
     // region Parallel Language Label
     @Test

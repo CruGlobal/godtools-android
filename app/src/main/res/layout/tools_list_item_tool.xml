@@ -107,6 +107,7 @@
                 android:layout_marginBottom="12dp"
                 android:ellipsize="end"
                 android:lines="2"
+                android:text="@{ModelUtils.getTranslationTagline(primaryTranslation ?? parallelTranslation, tool, context)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/action_info"

@@ -291,12 +291,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
                 mDefaultLanguage = null;
                 mParallelLanguage = null;
             }
-
-            // update any bound views
-            if (mTaglineView != null) {
-                mTaglineView.setText(mTagline);
-                mTaglineView.setTypeface(LocaleTypefaceUtils.getTypeface(mTaglineView.getContext(), mTaglineLanguage));
-            }
         }
 
         @NonNull
