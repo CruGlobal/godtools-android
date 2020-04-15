@@ -1,10 +1,8 @@
 package org.cru.godtools.adapter;
 
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
@@ -12,10 +10,8 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHold
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 
-import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.cru.godtools.R;
-import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
@@ -30,7 +26,6 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
@@ -227,29 +222,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
 
     class ToolViewHolder extends BaseViewHolder<ToolsListItemToolBinding> implements DraggableItemViewHolder {
         @Nullable
-        @BindView(R.id.title)
-        TextView mTitleView;
-        int mTitleTextStyle = Typeface.NORMAL;
-        @Nullable
-        @BindView(R.id.tagline)
-        TextView mTaglineView;
-        @Nullable
-        @BindView(R.id.language_parallel)
-        TextView mParallelLanguageView;
-
-        long mId;
-        @Nullable
         String mCode;
         @NonNull
         Tool.Type mType = Tool.Type.DEFAULT;
-        @Nullable
-        String mTitle;
-        @Nullable
-        Locale mTitleLanguage;
-        @Nullable
-        String mTagline;
-        @Nullable
-        Locale mTaglineLanguage;
         @Nullable
         Locale mPrimaryLanguage;
         @Nullable
@@ -261,32 +236,19 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
 
         ToolViewHolder(@NonNull final ToolsListItemToolBinding binding) {
             super(binding);
-            if (mTitleView != null) {
-                mTitleTextStyle = TextViewCompat.getTypefaceStyle(mTitleView);
-            }
         }
 
         void bind(@Nullable final Cursor cursor) {
             // update data from Cursor
             if (cursor != null) {
-                mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
                 mCode = CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE);
                 mType = CursorUtils.getEnum(cursor, ToolTable.COLUMN_TYPE, Tool.Type.class, Tool.Type.DEFAULT);
-                mTitle = CursorUtils.getString(cursor, COL_TITLE, null);
-                mTitleLanguage = CursorUtils.getLocale(cursor, COL_TITLE_LANGUAGE, null);
-                mTagline = CursorUtils.getString(cursor, COL_TAGLINE, null);
-                mTaglineLanguage = CursorUtils.getLocale(cursor, COL_TAGLINE_LANGUAGE, null);
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
                 mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
             } else {
-                mId = Tool.INVALID_ID;
                 mCode = Tool.INVALID_CODE;
                 mType = Tool.Type.DEFAULT;
-                mTitle = null;
-                mTitleLanguage = null;
-                mTagline = null;
-                mTaglineLanguage = null;
                 mPrimaryLanguage = null;
                 mDefaultLanguage = null;
                 mParallelLanguage = null;
