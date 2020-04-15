@@ -53,13 +53,12 @@ class ToolsAdapterToolViewModel @Inject constructor(
     private val primaryTranslation = distinctToolCode.switchCombineWith(settings.primaryLanguageLiveData) { c, l ->
         dao.getLatestTranslationLiveData(c, l)
     }
-    private val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { c, l ->
-        dao.getLatestTranslationLiveData(c, l)
-    }
     private val defaultTranslation =
         distinctToolCode.switchMap { dao.getLatestTranslationLiveData(it, Settings.defaultLanguage) }
-
     val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
+    val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { c, l ->
+        dao.getLatestTranslationLiveData(c, l)
+    }
 
     val firstLanguage = firstTranslation.languageLiveData
     val parallelLanguage = parallelTranslation.languageLiveData

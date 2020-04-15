@@ -7,6 +7,7 @@
         <import type="android.text.TextUtils" />
         <import type="android.view.View" />
         <import type="androidx.databinding.ObservableField" />
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.adapter.ToolsAdapter.Callbacks&gt;" />
         <variable name="viewModel" type="org.cru.godtools.ui.tools.ToolsAdapterToolViewModel" />
@@ -84,6 +85,7 @@
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
                 android:lines="1"
+                android:text="@{ModelUtils.getTranslationName(viewModel.firstTranslation ?? viewModel.parallelTranslation, viewModel.tool, context)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 app:layout_constraintEnd_toStartOf="@id/language_parallel"
                 app:layout_constraintStart_toEndOf="@id/divider_download"

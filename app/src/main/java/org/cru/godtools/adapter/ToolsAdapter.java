@@ -287,11 +287,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
             }
 
             // update any bound views
-            if (mTitleView != null) {
-                mTitleView.setText(mTitle);
-                mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage),
-                                       mTitleTextStyle);
-            }
             if (mTaglineView != null) {
                 mTaglineView.setText(mTagline);
                 mTaglineView.setTypeface(LocaleTypefaceUtils.getTypeface(mTaglineView.getContext(), mTaglineLanguage));
