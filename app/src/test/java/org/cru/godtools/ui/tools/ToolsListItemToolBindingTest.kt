@@ -33,15 +33,18 @@ class ToolsListItemToolBindingTest {
     private lateinit var callbacks: ToolsAdapter.Callbacks
     private lateinit var viewModel: ToolsAdapterToolViewModel
     private val tool = Tool().apply {
+        setType(Tool.Type.TRACT)
         code = "test"
         name = "toolName"
         description = "toolDescription"
     }
     private val primaryTranslation = Translation().apply {
+        languageCode = Locale("en")
         name = "primaryName"
         tagline = "primaryTagline"
     }
     private val parallelTranslation = Translation().apply {
+        languageCode = Locale("fr")
         name = "parallelName"
         tagline = "parallelTagline"
     }
@@ -189,6 +192,44 @@ class ToolsListItemToolBindingTest {
         binding.actionInfo.performClick()
         verify(callbacks).onToolInfo(eq("test"))
     }
+
+    // region Select Action
+    @Test
+    fun verifyClickTriggersSelectCallbackWithBothTranslations() {
+        reset(callbacks)
+
+        binding.root.performClick()
+        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(Locale.ENGLISH), eq(Locale.FRENCH))
+    }
+
+    @Test
+    fun verifyClickTriggersSelectCallbackWithOnlyPrimaryTranslation() {
+        binding.parallelTranslation = MutableLiveData(null)
+        reset(callbacks)
+
+        binding.root.performClick()
+        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(Locale.ENGLISH), eq(null))
+    }
+
+    @Test
+    fun verifyClickTriggersSelectCallbackWithOnlyParallelTranslation() {
+        binding.primaryTranslation = MutableLiveData(null)
+        reset(callbacks)
+
+        binding.root.performClick()
+        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(null), eq(Locale.FRENCH))
+    }
+
+    @Test
+    fun verifyClickTriggersSelectCallbackWithNoTranslations() {
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.parallelTranslation = MutableLiveData(null)
+        reset(callbacks)
+
+        binding.root.performClick()
+        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(null), eq(null))
+    }
+    // endregion Select Action
 
     private fun language(code: Locale) = Language().apply { this.code = code }
 }

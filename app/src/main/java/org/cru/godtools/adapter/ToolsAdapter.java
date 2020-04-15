@@ -11,7 +11,6 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 
 import org.ccci.gto.android.common.db.util.CursorUtils;
-import org.cru.godtools.R;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
@@ -26,8 +25,6 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.OnClick;
-import butterknife.Optional;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 
@@ -270,21 +267,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
         @DraggableItemStateFlags
         public int getDragStateFlags() {
             return mDragState.getFlags();
-        }
-
-        @Optional
-        @OnClick(R.id.root)
-        void select() {
-            final Callbacks callbacks = mCallbacks.get();
-            if (callbacks != null) {
-                if (mPrimaryLanguage != null) {
-                    callbacks.onToolSelect(mCode, mType, mPrimaryLanguage, mParallelLanguage);
-                } else if (mDefaultLanguage != null) {
-                    callbacks.onToolSelect(mCode, mType, mDefaultLanguage, mParallelLanguage);
-                } else if (mParallelLanguage != null) {
-                    callbacks.onToolSelect(mCode, mType, mParallelLanguage);
-                }
-            }
         }
     }
 }

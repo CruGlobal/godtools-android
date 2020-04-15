@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:onClick="@{() -> callbacks.onToolSelect(tool.code, tool.type, primaryTranslation == null ? null : primaryTranslation.languageCode, parallelTranslation == null ? null : parallelTranslation.languageCode)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
