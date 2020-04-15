@@ -34,6 +34,16 @@ class ToolsListItemToolBindingTest {
     private lateinit var viewModel: ToolsAdapterToolViewModel
     private val tool = Tool().apply {
         code = "test"
+        name = "toolName"
+        description = "toolDescription"
+    }
+    private val primaryTranslation = Translation().apply {
+        name = "primaryName"
+        tagline = "primaryTagline"
+    }
+    private val parallelTranslation = Translation().apply {
+        name = "parallelName"
+        tagline = "parallelTagline"
     }
 
     @Before
@@ -46,6 +56,8 @@ class ToolsListItemToolBindingTest {
         binding.lifecycleOwner = activityController.get()
         binding.callbacks = ObservableField(callbacks)
         binding.tool = MutableLiveData(tool)
+        binding.primaryTranslation = MutableLiveData(primaryTranslation)
+        binding.parallelTranslation = MutableLiveData(parallelTranslation)
         binding.executePendingBindings()
     }
 
@@ -53,6 +65,8 @@ class ToolsListItemToolBindingTest {
     @Test
     fun verifyLayoutDirectionWithoutTranslation() {
         binding.primaryTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+
         assertTrue(binding.content.isLayoutDirectionInherit())
     }
 
@@ -84,35 +98,26 @@ class ToolsListItemToolBindingTest {
     // region Title
     @Test
     fun verifyTitleFromPrimaryTranslation() {
-        tool.name = "invalid"
-        binding.tool = MutableLiveData(tool)
-        binding.primaryTranslation = MutableLiveData(Translation().apply { name = "valid" })
-        binding.parallelTranslation = MutableLiveData(Translation().apply { name = "invalid" })
         binding.executePendingBindings()
 
-        assertEquals("valid", binding.title.text)
+        assertEquals("primaryName", binding.title.text)
     }
 
     @Test
     fun verifyTitleFromParallelTranslation() {
-        tool.name = "invalid"
-        binding.tool = MutableLiveData(tool)
         binding.primaryTranslation = MutableLiveData(null)
-        binding.parallelTranslation = MutableLiveData(Translation().apply { name = "valid" })
         binding.executePendingBindings()
 
-        assertEquals("valid", binding.title.text)
+        assertEquals("parallelName", binding.title.text)
     }
 
     @Test
     fun verifyTitleFromTool() {
-        tool.name = "valid"
-        binding.tool = MutableLiveData(tool)
         binding.primaryTranslation = MutableLiveData(null)
         binding.parallelTranslation = MutableLiveData(null)
         binding.executePendingBindings()
 
-        assertEquals("valid", binding.title.text)
+        assertEquals("toolName", binding.title.text)
     }
     // endregion Title
 
