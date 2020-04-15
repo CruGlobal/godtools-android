@@ -11,11 +11,12 @@
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.adapter.ToolsAdapter.Callbacks&gt;" />
-        <variable name="viewModel" type="org.cru.godtools.ui.tools.ToolsAdapterToolViewModel" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
+        <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />
         <variable name="primaryTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="parallelTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
+        <variable name="parallelLanguage" type="LiveData&lt;org.cru.godtools.model.Language&gt;" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -47,7 +48,7 @@
                 style="@style/Widget.GodTools.Tools.Download.ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:progress="@{viewModel.downloadProgress}"
+                android:progress="@{downloadProgress}"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/banner"
                 tools:max="12"
@@ -122,11 +123,11 @@
                 android:layout_marginEnd="12dp"
                 android:gravity="end"
                 android:maxWidth="72dp"
-                android:text="@{viewModel.parallelLanguage.getDisplayName(context)}"
+                android:text="@{parallelLanguage.getDisplayName(context)}"
                 app:layout_constraintBaseline_toBaselineOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{viewModel.parallelLanguage != null &amp;&amp; !viewModel.firstLanguage.code.equals(viewModel.parallelLanguage.code)}"
+                app:visibleIf="@{parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
             <androidx.appcompat.widget.AppCompatImageView

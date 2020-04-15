@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.adapter.ToolsAdapter
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Language
@@ -46,7 +45,6 @@ class ToolsListItemToolBindingTest {
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()
         binding.callbacks = ObservableField(callbacks)
-        binding.viewModel = viewModel
         binding.tool = MutableLiveData(tool)
         binding.executePendingBindings()
     }
@@ -86,8 +84,7 @@ class ToolsListItemToolBindingTest {
     // region Parallel Language Label
     @Test
     fun verifyParallelLanguageLabel() {
-        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData(language(Locale.FRENCH)))
-        binding.invalidateAll()
+        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
         binding.executePendingBindings()
 
         assertEquals(View.VISIBLE, binding.languageParallel.visibility)
@@ -96,18 +93,16 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyParallelLanguageLabelHiddenIfNoParallelLanguage() {
-        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData<Language>(null))
-        binding.invalidateAll()
+        binding.parallelLanguage = MutableLiveData(null)
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
     }
 
     @Test
-    fun verifyParallelLanguageLabelHiddenIfFirstLanguageIsTheSameAsParallelLanguage() {
-        whenever(viewModel.firstLanguage).thenReturn(MutableLiveData<Language>(language(Locale("es"))))
-        whenever(viewModel.parallelLanguage).thenReturn(MutableLiveData<Language>(language(Locale("es"))))
-        binding.invalidateAll()
+    fun verifyParallelLanguageLabelHiddenIfPrimaryTranslationIsTheSameAsParallelLanguage() {
+        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale("es") })
+        binding.parallelLanguage = MutableLiveData(language(Locale("es")))
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
