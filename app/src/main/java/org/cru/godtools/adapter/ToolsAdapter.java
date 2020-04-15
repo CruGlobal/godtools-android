@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 
 import org.ccci.gto.android.common.db.util.CursorUtils;
-import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder;
+import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
@@ -29,8 +26,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 
-public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBinding, ToolsAdapter.ToolViewHolder>
-        implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
+public class ToolsAdapter extends
+        CursorDataBindingAdapter<ToolsListItemToolBinding, DataBindingDraggableItemViewHolder<ToolsListItemToolBinding>>
+        implements DraggableItemAdapter<DataBindingDraggableItemViewHolder<ToolsListItemToolBinding>> {
     public static final String COL_TITLE = "title";
     public static final String COL_TITLE_LANGUAGE = "title_lang";
     public static final String COL_TAGLINE = "tagline";
@@ -91,8 +89,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
 
     @NonNull
     @Override
-    protected ToolViewHolder onCreateViewHolder(@NonNull final ToolsListItemToolBinding binding, final int viewType) {
-        return new ToolViewHolder(binding);
+    protected DataBindingDraggableItemViewHolder<ToolsListItemToolBinding> onCreateViewHolder(
+            @NonNull final ToolsListItemToolBinding binding, final int viewType) {
+        return new DataBindingDraggableItemViewHolder<>(binding);
     }
 
     @Override
@@ -113,7 +112,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
     }
 
     @Override
-    public boolean onCheckCanStartDrag(final ToolViewHolder holder, final int position, final int x, final int y) {
+    public boolean onCheckCanStartDrag(
+            @NonNull final DataBindingDraggableItemViewHolder<ToolsListItemToolBinding> holder, final int position,
+            final int x, final int y) {
         return true;
     }
 
@@ -129,7 +130,8 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
     public void onItemDragFinished(final int fromPosition, final int toPosition, final boolean result) {}
 
     @Override
-    public ItemDraggableRange onGetItemDraggableRange(final ToolViewHolder holder, final int position) {
+    public ItemDraggableRange onGetItemDraggableRange(
+            @NonNull final DataBindingDraggableItemViewHolder<ToolsListItemToolBinding> holder, final int position) {
         return null;
     }
 
@@ -142,10 +144,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
     @Override
     public boolean onCheckCanDrop(final int draggingPosition, final int dropPosition) {
         return true;
-    }
-
-    @Override
-    public void onViewRecycled(final ToolViewHolder holder) {
     }
 
     @Override
@@ -207,32 +205,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
             }
 
             callbacks.onToolsReordered(ids);
-        }
-    }
-
-    static class ToolViewHolder extends DataBindingViewHolder<ToolsListItemToolBinding>
-            implements DraggableItemViewHolder {
-        private final DraggableItemState mDragState = new DraggableItemState();
-
-        ToolViewHolder(@NonNull final ToolsListItemToolBinding binding) {
-            super(binding);
-        }
-
-        @NonNull
-        @Override
-        public DraggableItemState getDragState() {
-            return mDragState;
-        }
-
-        @Override
-        public void setDragStateFlags(@DraggableItemStateFlags final int flags) {
-            mDragState.setFlags(flags);
-        }
-
-        @Override
-        @DraggableItemStateFlags
-        public int getDragStateFlags() {
-            return mDragState.getFlags();
         }
     }
 }

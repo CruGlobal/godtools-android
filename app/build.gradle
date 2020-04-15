@@ -204,6 +204,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
