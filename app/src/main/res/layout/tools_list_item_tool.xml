@@ -10,7 +10,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
-        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.adapter.ToolsAdapter.Callbacks&gt;" />
+        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
         <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />

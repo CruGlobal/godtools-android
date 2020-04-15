@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
-import org.cru.godtools.adapter.ToolsAdapter
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -30,7 +29,7 @@ import java.util.Locale
 @Config(application = Application::class, sdk = [28])
 class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
-    private lateinit var callbacks: ToolsAdapter.Callbacks
+    private lateinit var callbacks: ToolsAdapterCallbacks
     private lateinit var viewModel: ToolsAdapterToolViewModel
     private val tool = Tool().apply {
         setType(Tool.Type.TRACT)

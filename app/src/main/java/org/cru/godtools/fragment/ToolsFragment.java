@@ -37,6 +37,7 @@ import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks;
 import org.cru.godtools.widget.BannerType;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
@@ -58,7 +59,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
-public class ToolsFragment extends BasePlatformFragment implements ToolsAdapter.Callbacks {
+public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {

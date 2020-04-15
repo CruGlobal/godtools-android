@@ -11,10 +11,9 @@ import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-
-import java.util.Locale;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -40,16 +39,6 @@ public class ToolsAdapter extends
     private static final String VIEW_MODEL_KEY_PREFIX = ToolsAdapter.class.getCanonicalName() + ":" +
             ToolsAdapterToolViewModel.class.getCanonicalName() + ":";
 
-    public interface Callbacks {
-        void onToolInfo(@Nullable String code);
-
-        void onToolSelect(@Nullable String code, @NonNull Tool.Type type, Locale... languages);
-
-        void onToolAdd(@Nullable String code);
-
-        void onToolsReordered(long... ids);
-    }
-
     @NonNull
     private final ViewModelProvider mViewModelProvider;
 
@@ -60,14 +49,14 @@ public class ToolsAdapter extends
     private int[] mTmpPositions = new int[0];
 
     @NonNull
-    final ObservableField<Callbacks> mCallbacks = new ObservableField<>();
+    final ObservableField<ToolsAdapterCallbacks> mCallbacks = new ObservableField<>();
 
     public ToolsAdapter(@NonNull final LifecycleOwner lifecycleOwner, @NonNull final ViewModelProvider provider) {
         super(lifecycleOwner);
         mViewModelProvider = provider;
     }
 
-    public void setCallbacks(@Nullable final Callbacks callbacks) {
+    public void setCallbacks(@Nullable final ToolsAdapterCallbacks callbacks) {
         mCallbacks.set(callbacks);
     }
 
@@ -196,7 +185,7 @@ public class ToolsAdapter extends
 
     @MainThread
     private void triggerToolOrderUpdate() {
-        final Callbacks callbacks = mCallbacks.get();
+        final ToolsAdapterCallbacks callbacks = mCallbacks.get();
         if (callbacks != null) {
             final int count = getItemCount();
             final long[] ids = new long[count];
