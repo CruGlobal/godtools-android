@@ -81,6 +81,41 @@ class ToolsListItemToolBindingTest {
     private fun View.isLayoutDirectionInherit() = !canResolveLayoutDirection()
     // endregion Layout Direction
 
+    // region Title
+    @Test
+    fun verifyTitleFromPrimaryTranslation() {
+        tool.name = "invalid"
+        binding.tool = MutableLiveData(tool)
+        binding.primaryTranslation = MutableLiveData(Translation().apply { name = "valid" })
+        binding.parallelTranslation = MutableLiveData(Translation().apply { name = "invalid" })
+        binding.executePendingBindings()
+
+        assertEquals("valid", binding.title.text)
+    }
+
+    @Test
+    fun verifyTitleFromParallelTranslation() {
+        tool.name = "invalid"
+        binding.tool = MutableLiveData(tool)
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.parallelTranslation = MutableLiveData(Translation().apply { name = "valid" })
+        binding.executePendingBindings()
+
+        assertEquals("valid", binding.title.text)
+    }
+
+    @Test
+    fun verifyTitleFromTool() {
+        tool.name = "valid"
+        binding.tool = MutableLiveData(tool)
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.parallelTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+
+        assertEquals("valid", binding.title.text)
+    }
+    // endregion Title
+
     // region Parallel Language Label
     @Test
     fun verifyParallelLanguageLabel() {
