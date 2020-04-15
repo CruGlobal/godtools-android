@@ -7,9 +7,11 @@
         <import type="android.text.TextUtils" />
         <import type="android.view.View" />
         <import type="androidx.databinding.ObservableField" />
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.adapter.ToolsAdapter.Callbacks&gt;" />
+        <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
         <variable name="viewModel" type="org.cru.godtools.ui.tools.ToolsAdapterToolViewModel" />
     </data>
 
@@ -54,11 +56,11 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="4dp"
-                android:enabled="@{!viewModel.tool.added}"
-                android:onClick="@{() -> callbacks.onToolAdd(viewModel.tool.code)}"
+                android:enabled="@{!tool.added}"
+                android:onClick="@{() -> callbacks.onToolAdd(tool.code)}"
                 android:padding="8dp"
                 android:tint="@color/gt_green"
-                app:goneIf="@{viewModel.tool.added}"
+                app:goneIf="@{tool.added}"
                 app:layout_constraintBottom_toBottomOf="@id/tagline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/title"
@@ -71,7 +73,7 @@
                 android:layout_height="0dp"
                 android:layout_toEndOf="@id/action_add"
                 android:background="@color/gray_E6"
-                app:goneIf="@{viewModel.tool.added}"
+                app:goneIf="@{tool.added}"
                 app:layout_constraintBottom_toBottomOf="@id/tagline"
                 app:layout_constraintStart_toEndOf="@id/action_add"
                 app:layout_constraintTop_toTopOf="@id/title"
@@ -85,7 +87,7 @@
                 android:layout_marginTop="12dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="@{ModelUtils.getTranslationName(viewModel.firstTranslation ?? viewModel.parallelTranslation, viewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(viewModel.firstTranslation ?? viewModel.parallelTranslation, tool, context)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 app:layout_constraintEnd_toStartOf="@id/language_parallel"
                 app:layout_constraintStart_toEndOf="@id/divider_download"
@@ -130,7 +132,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                android:onClick="@{() -> callbacks.onToolInfo(viewModel.tool.code)}"
+                android:onClick="@{() -> callbacks.onToolInfo(tool.code)}"
                 android:padding="8dp"
                 android:tint="@color/gt_blue"
                 app:layout_constraintBottom_toBottomOf="parent"

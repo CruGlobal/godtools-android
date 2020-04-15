@@ -117,6 +117,7 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
         final ToolsAdapterToolViewModel viewModel =
                 mViewModelProvider.get(VIEW_MODEL_KEY_PREFIX + code, ToolsAdapterToolViewModel.class);
         viewModel.getToolCode().setValue(code);
+        binding.setTool(viewModel.getTool());
         binding.setViewModel(viewModel);
     }
 

@@ -42,12 +42,12 @@ class ToolsListItemToolBindingTest {
         val activityController = Robolectric.buildActivity(MainActivity::class.java)
         callbacks = mock()
         viewModel = mock()
-        whenever(viewModel.tool).thenReturn(MutableLiveData(tool))
 
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()
         binding.callbacks = ObservableField(callbacks)
         binding.viewModel = viewModel
+        binding.tool = MutableLiveData(tool)
         binding.executePendingBindings()
     }
 
