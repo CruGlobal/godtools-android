@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -53,6 +54,8 @@ class ToolsAdapterToolViewModel @Inject constructor(
     }
     private val defaultTranslation =
         distinctToolCode.switchMap { dao.getLatestTranslationLiveData(it, Settings.defaultLanguage) }
+
+    val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
 
     val downloadProgress = distinctToolCode.switchCombineWith(
         primaryTranslation, defaultTranslation, parallelTranslation

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.text.TextUtils" />
+        <import type="android.view.View" />
         <import type="androidx.databinding.ObservableField" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.adapter.ToolsAdapter.Callbacks&gt;" />
@@ -19,8 +21,10 @@
         android:clipToPadding="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layoutDirection="@{viewModel.firstTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(viewModel.firstTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
 
             <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
                 android:id="@+id/banner"

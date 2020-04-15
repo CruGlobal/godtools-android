@@ -28,8 +28,6 @@ import java.util.Locale;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.text.TextUtilsCompat;
-import androidx.core.view.ViewCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -291,7 +289,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
             }
 
             // update any bound views
-            ViewCompat.setLayoutDirection(itemView, TextUtilsCompat.getLayoutDirectionFromLocale(mPrimaryLanguage));
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
                 mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage),

@@ -14,6 +14,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.adapter.ToolsAdapter
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -23,6 +24,7 @@ import org.junit.runner.RunWith
 import org.keynote.godtools.android.activity.MainActivity
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
+import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class, sdk = [28])
@@ -47,6 +49,45 @@ class ToolsListItemToolBindingTest {
         binding.viewModel = viewModel
         binding.executePendingBindings()
     }
+
+    // region Layout Direction
+    @Test
+    fun verifyLayoutDirectionWithoutTranslation() {
+        assertTrue(binding.content.isLayoutDirectionInherit())
+    }
+
+    @Test
+    fun verifyLayoutDirectionWithLtrTranslation() {
+        val translation = Translation().apply {
+            languageCode = Locale.ENGLISH
+        }
+        whenever(viewModel.firstTranslation).thenReturn(MutableLiveData(translation))
+        binding.invalidateAll()
+        binding.executePendingBindings()
+
+        assertFalse(binding.content.isLayoutDirectionInherit())
+        assertEquals(View.LAYOUT_DIRECTION_LTR, binding.content.layoutDirection)
+    }
+
+    @Test
+    fun verifyLayoutDirectionWithRtlTranslation() {
+        val translation = Translation().apply {
+            languageCode = Locale("ar")
+        }
+        whenever(viewModel.firstTranslation).thenReturn(MutableLiveData(translation))
+        binding.invalidateAll()
+        binding.executePendingBindings()
+
+        assertFalse(binding.content.isLayoutDirectionInherit())
+        assertEquals(View.LAYOUT_DIRECTION_RTL, binding.content.layoutDirection)
+    }
+
+    /**
+     * This indirectly tests layoutDirection = 'inherit'.
+     * canResolveLayoutDirection() returns 'false' only if this view and all ancestor views specify inherit.
+     */
+    private fun View.isLayoutDirectionInherit() = !canResolveLayoutDirection()
+    // endregion Layout Direction
 
     // region Add Action
     @Test
