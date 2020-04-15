@@ -11,6 +11,7 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 
 import org.ccci.gto.android.common.db.util.CursorUtils;
+import org.ccci.gto.android.common.recyclerview.adapter.DataBindingViewHolder;
 import org.cru.godtools.databinding.ToolsListItemToolBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel;
@@ -95,13 +96,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final ToolViewHolder holder, @Nullable final Cursor cursor,
-                                    final int position) {
-        holder.bind(cursor);
-        super.onBindViewHolder(holder, cursor, position);
-    }
-
-    @Override
     protected void onBindViewDataBinding(@NonNull final ToolsListItemToolBinding binding, @Nullable final Cursor cursor,
                                          final int position) {
         final String code = cursor != null ? CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE) :
@@ -152,7 +146,6 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
 
     @Override
     public void onViewRecycled(final ToolViewHolder holder) {
-        holder.bind(null);
     }
 
     @Override
@@ -217,39 +210,12 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
         }
     }
 
-    class ToolViewHolder extends BaseViewHolder<ToolsListItemToolBinding> implements DraggableItemViewHolder {
-        @Nullable
-        String mCode;
-        @NonNull
-        Tool.Type mType = Tool.Type.DEFAULT;
-        @Nullable
-        Locale mPrimaryLanguage;
-        @Nullable
-        Locale mParallelLanguage;
-        @Nullable
-        Locale mDefaultLanguage;
-
+    static class ToolViewHolder extends DataBindingViewHolder<ToolsListItemToolBinding>
+            implements DraggableItemViewHolder {
         private final DraggableItemState mDragState = new DraggableItemState();
 
         ToolViewHolder(@NonNull final ToolsListItemToolBinding binding) {
             super(binding);
-        }
-
-        void bind(@Nullable final Cursor cursor) {
-            // update data from Cursor
-            if (cursor != null) {
-                mCode = CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE);
-                mType = CursorUtils.getEnum(cursor, ToolTable.COLUMN_TYPE, Tool.Type.class, Tool.Type.DEFAULT);
-                mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
-                mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
-                mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
-            } else {
-                mCode = Tool.INVALID_CODE;
-                mType = Tool.Type.DEFAULT;
-                mPrimaryLanguage = null;
-                mDefaultLanguage = null;
-                mParallelLanguage = null;
-            }
         }
 
         @NonNull
