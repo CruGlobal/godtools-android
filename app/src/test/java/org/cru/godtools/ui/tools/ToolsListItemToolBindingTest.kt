@@ -54,16 +54,13 @@ class ToolsListItemToolBindingTest {
     // region Layout Direction
     @Test
     fun verifyLayoutDirectionWithoutTranslation() {
+        binding.primaryTranslation = MutableLiveData(null)
         assertTrue(binding.content.isLayoutDirectionInherit())
     }
 
     @Test
     fun verifyLayoutDirectionWithLtrTranslation() {
-        val translation = Translation().apply {
-            languageCode = Locale.ENGLISH
-        }
-        whenever(viewModel.firstTranslation).thenReturn(MutableLiveData(translation))
-        binding.invalidateAll()
+        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale.ENGLISH })
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())
@@ -72,11 +69,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyLayoutDirectionWithRtlTranslation() {
-        val translation = Translation().apply {
-            languageCode = Locale("ar")
-        }
-        whenever(viewModel.firstTranslation).thenReturn(MutableLiveData(translation))
-        binding.invalidateAll()
+        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale("ar") })
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())

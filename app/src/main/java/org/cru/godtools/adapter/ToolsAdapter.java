@@ -118,6 +118,9 @@ public class ToolsAdapter extends CursorDataBindingAdapter<ToolsListItemToolBind
                 mViewModelProvider.get(VIEW_MODEL_KEY_PREFIX + code, ToolsAdapterToolViewModel.class);
         viewModel.getToolCode().setValue(code);
         binding.setTool(viewModel.getTool());
+        binding.setBanner(viewModel.getBanner());
+        binding.setPrimaryTranslation(viewModel.getFirstTranslation());
+        binding.setParallelTranslation(viewModel.getParallelTranslation());
         binding.setViewModel(viewModel);
     }
 
