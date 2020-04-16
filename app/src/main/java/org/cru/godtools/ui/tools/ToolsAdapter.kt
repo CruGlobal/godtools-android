@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -59,7 +58,7 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val viewModelProvider
         val viewModel = viewModelProvider.get("$VIEW_MODEL_KEY_PREFIX:$code", ToolsAdapterToolViewModel::class.java)
             .also { it.toolCode.value = code }
 
-        binding.tool = MutableLiveData(tool)
+        binding.tool = tool
         binding.setDownloadProgress(viewModel.downloadProgress)
         binding.setBanner(viewModel.banner)
         binding.primaryTranslation = viewModel.firstTranslation
