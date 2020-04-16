@@ -129,8 +129,11 @@ subprojects {
             force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
             force "androidx.loader:loader:${deps.androidX.loader}"
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
-            force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
             force "junit:junit:${deps.junit}"
+
+            // XXX: Force okhttp3 to older version to support older versions of Android.
+            // XXX: This can go away once we bump minimum android version to API-21+
+            force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
 
             dependencySubstitution {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
