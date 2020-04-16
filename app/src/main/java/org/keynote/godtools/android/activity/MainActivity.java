@@ -11,6 +11,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.tabs.TabLayout;
 
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
@@ -75,9 +76,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (savedInstanceState != null) {
             mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
         }
-
-        // sync any pending updates
-        syncData();
     }
 
     @Override
@@ -102,6 +100,13 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onResume() {
         super.onResume();
         trackInAnalytics();
+    }
+
+    @Override
+    protected void onSyncData(@NonNull final SwipeRefreshSyncHelper syncHelper, final boolean force) {
+        super.onSyncData(syncHelper, force);
+        GodToolsSyncServiceKt.syncFollowups(this).sync();
+        GodToolsSyncServiceKt.syncToolShares(this).sync();
     }
 
     @Override
@@ -234,11 +239,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         (new ViewModelProvider(this)).get(LaunchTrackingViewModel.class).trackLaunch();
     }
     // endregion Analytics
-
-    private void syncData() {
-        GodToolsSyncServiceKt.syncFollowups(this).sync();
-        GodToolsSyncServiceKt.syncToolShares(this).sync();
-    }
 
     @Override
     protected boolean isShowNavigationDrawerIndicator() {
