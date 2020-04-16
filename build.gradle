@@ -149,7 +149,7 @@ subprojects {
     }
 }
 
-// base app config
+// base app plugins
 configure(subprojects.findAll { it.path == ":app" }) {
     apply plugin: 'com.android.application'
     apply plugin: 'kotlin-android'
@@ -157,7 +157,7 @@ configure(subprojects.findAll { it.path == ":app" }) {
     apply plugin: 'jacoco-android'
 }
 
-// base library config
+// base library plugins
 configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
     apply plugin: 'com.android.library'
     apply plugin: 'kotlin-android'
@@ -170,6 +170,17 @@ subprojects {
     beforeEvaluate { project ->
         if (project.hasProperty('android')) {
             android {
+                compileSdkVersion compileSdk
+
+                defaultConfig {
+                    versionCode rootProject.versionCode
+
+                    minSdkVersion minSdk
+                    targetSdkVersion targetSdk
+
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                }
+
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_1_8
                     targetCompatibility JavaVersion.VERSION_1_8
@@ -177,6 +188,9 @@ subprojects {
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_1_8.toString()
                     freeCompilerArgs += '-Xjvm-default=enable'
+                }
+                lintOptions {
+                    lintConfig rootProject.file("analysis/lint/lint.xml")
                 }
             }
 
@@ -252,21 +266,10 @@ subprojects {
 configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
     beforeEvaluate {
         android {
-            compileSdkVersion compileSdk
-
             defaultConfig {
-                versionCode rootProject.versionCode
-
-                minSdkVersion minSdk
-                targetSdkVersion targetSdk
-
-                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                 multiDexKeepProguard rootProject.file('multidex-keep.pro')
             }
 
-            lintOptions {
-                lintConfig rootProject.file("analysis/lint/lint.xml")
-            }
             testOptions {
                 unitTests {
                     includeAndroidResources = true

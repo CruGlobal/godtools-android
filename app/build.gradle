@@ -9,15 +9,9 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
-    compileSdkVersion compileSdk
-
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
-        versionCode rootProject.versionCode
-
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-rules.pro'
@@ -27,15 +21,12 @@ android {
         proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
     lintOptions {
-        lintConfig rootProject.file("analysis/lint/lint.xml")
         checkDependencies true
     }
     packagingOptions {
