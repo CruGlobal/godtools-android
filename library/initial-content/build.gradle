@@ -31,6 +31,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }
 
 apply from: 'download_initial_content.gradle'
