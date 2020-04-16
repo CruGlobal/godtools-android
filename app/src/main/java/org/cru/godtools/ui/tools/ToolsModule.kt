@@ -15,6 +15,11 @@ abstract class ToolsModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(ToolsFragmentDataModel::class)
+    internal abstract fun toolsFragmentDataModel(dataModel: ToolsFragmentDataModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(ToolsAdapterToolViewModel::class)
     internal abstract fun toolsAdapterToolViewModel(dataModel: ToolsAdapterToolViewModel): ViewModel
 }

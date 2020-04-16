@@ -38,6 +38,7 @@ import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEventKt;
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks;
+import org.cru.godtools.ui.tools.ToolsFragmentDataModel;
 import org.cru.godtools.widget.BannerType;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
@@ -118,6 +119,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
             mMode = args.getInt(EXTRA_MODE, mMode);
         }
 
+        setupDataModel();
         startLoaders();
     }
 
@@ -254,6 +256,15 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         }
     }
     // endregion Banners
+
+    // region Data Model
+    private ToolsFragmentDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = new ViewModelProvider(this).get(ToolsFragmentDataModel.class);
+        mDataModel.getMode().setValue(mMode);
+    }
+    // endregion Data Model
 
     @CallSuper
     protected void syncData(final boolean force) {
