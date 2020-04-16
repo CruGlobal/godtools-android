@@ -136,7 +136,6 @@ dependencies {
     implementation project(':library:download-manager')
     implementation project(':library:initial-content')
     implementation project(':library:model')
-    implementation project(':library:model-events')
     implementation project(':library:sync')
 
     implementation project(':ui:account')
