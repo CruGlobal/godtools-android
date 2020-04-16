@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.tools
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
@@ -17,10 +16,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import javax.inject.Inject
@@ -30,11 +26,8 @@ class ToolsAdapterToolViewModel @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     settings: Settings
 ) : ViewModel() {
-    val toolCode = MutableLiveData<String?>()
+    internal val toolCode = MutableLiveData<String?>()
     private val distinctToolCode = toolCode.distinctUntilChanged()
-
-    @Deprecated("This is temporary until ToolsAdapter stops using a Cursor")
-    val tool by lazy { distinctToolCode.switchMap { it?.let { dao.findLiveData<Tool>(it) }.orEmpty() } }
 
     val banner = distinctToolCode.switchMap {
         it?.let {
@@ -55,15 +48,16 @@ class ToolsAdapterToolViewModel @Inject constructor(
     }
     private val defaultTranslation =
         distinctToolCode.switchMap { dao.getLatestTranslationLiveData(it, Settings.defaultLanguage) }
-    val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
-    val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { c, l ->
+    internal val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
+    internal val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { c, l ->
         dao.getLatestTranslationLiveData(c, l)
     }
 
-    val firstLanguage = firstTranslation.languageLiveData
-    val parallelLanguage = parallelTranslation.languageLiveData
+    internal val parallelLanguage = parallelTranslation.switchMap { t ->
+        t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
+    }
 
-    val downloadProgress = distinctToolCode.switchCombineWith(
+    internal val downloadProgress = distinctToolCode.switchCombineWith(
         primaryTranslation, defaultTranslation, parallelTranslation
     ) { code, primary, default, parallel ->
         when {
@@ -74,11 +68,4 @@ class ToolsAdapterToolViewModel @Inject constructor(
             else -> emptyLiveData()
         }
     }
-
-    private val LiveData<Translation?>.languageLiveData
-        get() = switchMap { t ->
-            t?.languageCode
-                ?.let { Query.select<Language>().where(LanguageTable.FIELD_CODE.eq(it)).getAsLiveData(dao) }
-                .orEmpty()
-        }.map { it?.firstOrNull() }
 }
