@@ -31,13 +31,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
@@ -184,8 +177,6 @@ dependencies {
     implementation project(':ui:tract-renderer')
     implementation project(':ui:tutorial-renderer')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
-
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
@@ -219,7 +210,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
@@ -239,11 +229,8 @@ dependencies {
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
-    testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
-    testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-inline:${deps.mockito}"
-    testImplementation "org.robolectric:robolectric:${deps.robolectric}"
 
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

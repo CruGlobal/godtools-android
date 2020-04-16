@@ -165,6 +165,37 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'jacoco-android'
 }
 
+// common config
+subprojects {
+    beforeEvaluate { project ->
+        if (project.hasProperty('android')) {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+                kotlinOptions {
+                    jvmTarget = JavaVersion.VERSION_1_8.toString()
+                    freeCompilerArgs += '-Xjvm-default=enable'
+                }
+            }
+
+            dependencies {
+                compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
+                compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
+
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
+                implementation "com.jakewharton.timber:timber:${deps.timber}"
+
+                testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+                testImplementation "junit:junit:${deps.junit}"
+                testImplementation "org.robolectric:robolectric:${deps.robolectric}"
+            }
+        }
+    }
+}
+
 def checkTasks = ['checkProductionRelease', 'checkProductionDebug', 'checkStageDebug', 'checkRelease', 'checkDebug', 'check']
 
 // configure checkstyle
@@ -233,14 +264,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
                 multiDexKeepProguard rootProject.file('multidex-keep.pro')
             }
 
-            compileOptions {
-                sourceCompatibility JavaVersion.VERSION_1_8
-                targetCompatibility JavaVersion.VERSION_1_8
-            }
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
-                freeCompilerArgs += '-Xjvm-default=enable'
-            }
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
@@ -266,19 +289,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
                     multiDexEnabled true
                 }
             }
-        }
-
-        dependencies {
-            compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
-            compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
-
-            implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
-
-            implementation "com.jakewharton.timber:timber:${deps.timber}"
-
-            testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
-            testImplementation "junit:junit:${deps.junit}"
-            testImplementation "org.robolectric:robolectric:${deps.robolectric}"
         }
 
         // disable lint checks
