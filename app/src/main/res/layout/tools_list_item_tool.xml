@@ -9,6 +9,7 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="org.cru.godtools.model.Tool.Type" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
         <variable name="tool" type="LiveData&lt;org.cru.godtools.model.Tool&gt;" />
@@ -129,7 +130,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                app:visibleIf="@{tool.type.equals(Type.TRACT) &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
             <androidx.appcompat.widget.AppCompatImageView

@@ -152,6 +152,16 @@ class ToolsListItemToolBindingTest {
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
     }
+
+    @Test
+    fun verifyParallelLanguageLabelHiddenIfArticleToolType() {
+        tool.setType(Tool.Type.ARTICLE)
+        binding.tool = MutableLiveData(tool)
+        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
+        binding.executePendingBindings()
+
+        assertEquals(View.GONE, binding.languageParallel.visibility)
+    }
     // endregion Parallel Language Label
 
     // region Add Action
