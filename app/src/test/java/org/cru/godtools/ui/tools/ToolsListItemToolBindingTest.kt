@@ -26,7 +26,7 @@ import org.robolectric.annotation.Config
 import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class, sdk = [28])
+@Config(application = Application::class)
 class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
     private lateinit var callbacks: ToolsAdapterCallbacks
