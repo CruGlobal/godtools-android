@@ -120,13 +120,13 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         }
 
         setupDataModel();
-        startLoaders();
     }
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
         mBinding = ToolsFragmentBinding.inflate(inflater, container, false);
+        mBinding.setLifecycleOwner(getViewLifecycleOwner());
         inflateEmptyListUi(inflater, savedInstanceState);
         return mBinding.getRoot();
     }
@@ -134,7 +134,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateBindingTools();
+        setupDataBinding();
         setupToolsList();
     }
 
@@ -146,7 +146,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
 
     void onLoadResources(@Nullable final Cursor cursor) {
         mResources = cursor;
-        updateBindingTools();
         updateToolsList();
     }
 
@@ -280,9 +279,9 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
-    private void updateBindingTools() {
+    private void setupDataBinding() {
         if (mBinding != null) {
-            mBinding.setTools(mResources);
+            mBinding.setTools(mDataModel.getTools());
         }
     }
 
