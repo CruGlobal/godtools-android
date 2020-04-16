@@ -14,4 +14,8 @@ fun Translation?.getName(tool: Tool?, context: Context?) =
 fun Translation?.getDescription(tool: Tool?, context: Context?) =
     this?.let { description?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
 
+@JvmName("getTranslationTagline")
+fun Translation?.getTagline(tool: Tool?, context: Context?) =
+    this?.let { (tagline ?: description)?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
+
 private fun Translation.getTypeface(context: Context?) = context?.getTypeface(languageCode)

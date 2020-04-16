@@ -50,6 +50,20 @@ android {
         //      If we ever start utilizing kotlin reflection this will need to be removed.
         exclude '**/*.kotlin_*'
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+
+            all {
+                // increase unit tests max heap size
+                jvmArgs "-Xmx2g"
+
+                // enable only SDKs we actually support in robolectric
+                // TODO: SDK >= 29 requires Java 9 which we don't currently support
+                systemProperty 'robolectric.enabledSdks', (minSdk..28).join(" ")
+            }
+        }
+    }
 
     dataBinding {
         enabled = true
@@ -190,6 +204,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
@@ -197,6 +212,7 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
@@ -222,6 +238,12 @@ dependencies {
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
+
+    testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
+    testImplementation "junit:junit:${deps.junit}"
+    testImplementation "org.mockito:mockito-inline:${deps.mockito}"
+    testImplementation "org.robolectric:robolectric:${deps.robolectric}"
 
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
