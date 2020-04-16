@@ -192,6 +192,20 @@ subprojects {
                 lintOptions {
                     lintConfig rootProject.file("analysis/lint/lint.xml")
                 }
+                testOptions {
+                    unitTests {
+                        includeAndroidResources = true
+
+                        all {
+                            // increase unit tests max heap size
+                            jvmArgs "-Xmx2g"
+
+                            // enable only SDKs we actually support in robolectric
+                            // TODO: SDK >= 29 requires Java 9 which we don't currently support
+                            systemProperty 'robolectric.enabledSdks', (minSdk..28).join(" ")
+                        }
+                    }
+                }
             }
 
             dependencies {
@@ -268,21 +282,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
         android {
             defaultConfig {
                 multiDexKeepProguard rootProject.file('multidex-keep.pro')
-            }
-
-            testOptions {
-                unitTests {
-                    includeAndroidResources = true
-
-                    all {
-                        // increase unit tests max heap size
-                        jvmArgs "-Xmx2g"
-
-                        // enable only SDKs we actually support in robolectric
-                        // TODO: SDK >= 29 requires Java 9 which we don't currently support
-                        systemProperty 'robolectric.enabledSdks', (minSdk..28).join(" ")
-                    }
-                }
             }
 
             buildTypes {

@@ -1,7 +1,3 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -33,20 +29,6 @@ android {
         // XXX: Exclude Kotlin metadata to reduce the size of the APK.
         //      If we ever start utilizing kotlin reflection this will need to be removed.
         exclude '**/*.kotlin_*'
-    }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-
-            all {
-                // increase unit tests max heap size
-                jvmArgs "-Xmx2g"
-
-                // enable only SDKs we actually support in robolectric
-                // TODO: SDK >= 29 requires Java 9 which we don't currently support
-                systemProperty 'robolectric.enabledSdks', (minSdk..28).join(" ")
-            }
-        }
     }
 
     dataBinding {
