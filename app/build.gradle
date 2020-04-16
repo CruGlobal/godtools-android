@@ -19,9 +19,6 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    dexOptions {
-        preDexLibraries !project.hasProperty('disablePreDex')
-    }
     lintOptions {
         checkDependencies true
     }
