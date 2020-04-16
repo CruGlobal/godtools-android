@@ -254,15 +254,6 @@ dependencies {
 
 apply plugin: 'com.google.gms.google-services'
 
-// jacoco config
-apply plugin: 'jacoco-android'
-jacoco {
-    toolVersion = deps.jacoco
-}
-android.testOptions.unitTests.all {
-    jacoco.includeNoLocationClasses = true
-}
-
 // make crashlytics upload task dependent on the assemble task for all build variants
 afterEvaluate {
     android.applicationVariants.all { variant ->

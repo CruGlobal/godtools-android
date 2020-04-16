@@ -149,6 +149,22 @@ subprojects {
     }
 }
 
+// base app config
+configure(subprojects.findAll { it.path == ":app" }) {
+    apply plugin: 'com.android.application'
+    apply plugin: 'kotlin-android'
+    apply plugin: 'kotlin-kapt'
+    apply plugin: 'jacoco-android'
+}
+
+// base library config
+configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
+    apply plugin: 'com.android.library'
+    apply plugin: 'kotlin-android'
+    apply plugin: 'kotlin-kapt'
+    apply plugin: 'jacoco-android'
+}
+
 def checkTasks = ['checkProductionRelease', 'checkProductionDebug', 'checkStageDebug', 'checkRelease', 'checkDebug', 'check']
 
 // configure checkstyle
@@ -186,13 +202,23 @@ subprojects {
     }
 }
 
+// jacoco config
+subprojects {
+    beforeEvaluate { project ->
+        if (project.hasProperty('jacoco')) {
+            jacoco.toolVersion = deps.jacoco
+
+            if (project.hasProperty('android')) {
+                android.testOptions.unitTests.all {
+                    jacoco.includeNoLocationClasses = true
+                }
+            }
+        }
+    }
+}
+
 // base library config
 configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
-    apply plugin: 'com.android.library'
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-    apply plugin: 'jacoco-android'
-
     beforeEvaluate {
         android {
             compileSdkVersion compileSdk
@@ -257,14 +283,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
         // disable lint checks
         tasks.lint.enabled = false
-
-        // jacoco config
-        jacoco {
-            toolVersion = deps.jacoco
-        }
-        android.testOptions.unitTests.all {
-            jacoco.includeNoLocationClasses = true
-        }
     }
 }
 
