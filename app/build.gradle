@@ -212,6 +212,7 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
