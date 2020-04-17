@@ -11,7 +11,7 @@ buildscript {
                 butterknife        : '10.2.1',
                 circleindicator    : '2.1.4',
                 dagger             : '2.27',
-                eventbus           : '3.1.1',
+                eventbus           : '3.2.0',
                 facebook           : '6.3.0',
                 facebookFlipper    : '0.37.0',
                 findbugs           : '3.0.2',
