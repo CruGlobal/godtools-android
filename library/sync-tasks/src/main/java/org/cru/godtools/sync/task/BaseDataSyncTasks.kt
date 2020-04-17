@@ -73,7 +73,6 @@ abstract class BaseDataSyncTasks internal constructor(context: Context) : BaseSy
         if (includes.include(Tool.JSON_ATTACHMENTS)) tool.attachments?.let { attachments ->
             storeAttachments(
                 events, attachments,
-                includes = includes.descendant(Tool.JSON_ATTACHMENTS),
                 existing = index(Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(tool.id)).get(dao))
             )
         }
@@ -158,11 +157,10 @@ abstract class BaseDataSyncTasks internal constructor(context: Context) : BaseSy
     private fun storeAttachments(
         events: SimpleArrayMap<Class<*>, Any>,
         attachments: List<Attachment>,
-        existing: LongSparseArray<Attachment>?,
-        includes: Includes
+        existing: LongSparseArray<Attachment>?
     ) {
         attachments.forEach {
-            storeAttachment(events, it, includes)
+            storeAttachment(events, it)
             existing?.remove(it.id)
         }
 
@@ -173,7 +171,7 @@ abstract class BaseDataSyncTasks internal constructor(context: Context) : BaseSy
         }
     }
 
-    private fun storeAttachment(events: SimpleArrayMap<Class<*>, Any>, attachment: Attachment, includes: Includes) {
+    private fun storeAttachment(events: SimpleArrayMap<Class<*>, Any>, attachment: Attachment) {
         dao.updateOrInsert(
             attachment,
             AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
