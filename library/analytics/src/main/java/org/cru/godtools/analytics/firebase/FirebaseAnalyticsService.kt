@@ -48,7 +48,7 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
 
     @AnyThread
     @Subscribe
-    fun onTheKeyEvent(event: TheKeyEvent) = updateUser()
+    fun onTheKeyEvent(@Suppress("UNUSED_PARAMETER") event: TheKeyEvent) = updateUser()
 
     // region ActivityLifecycleCallbacks
     init {
