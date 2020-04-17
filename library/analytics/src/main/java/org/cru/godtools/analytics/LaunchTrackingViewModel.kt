@@ -1,6 +1,5 @@
 package org.cru.godtools.analytics
 
-import android.app.Application
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.squareup.inject.assisted.Assisted
@@ -11,14 +10,12 @@ import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 
 class LaunchTrackingViewModel @AssistedInject constructor(
-    app: Application,
     private val eventBus: EventBus,
+    private val settings: Settings,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
     interface Factory : AssistedSavedStateViewModelFactory<LaunchTrackingViewModel>
-
-    private val settings = Settings.getInstance(app)
 
     private var launchTracked: Boolean
         get() = state.get<Boolean>("launchTracked") ?: false

@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.ccci.gto.android.common.eventbus.TimberLogger
 import org.cru.godtools.AppEventBusIndex
-import org.cru.godtools.model.event.ModelEventEventBusIndex
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 import javax.inject.Singleton
@@ -32,7 +31,6 @@ abstract class EventBusModule {
         fun eventBus(indexes: Set<@JvmSuppressWildcards SubscriberInfoIndex>): EventBus = EventBus.builder()
             .logger(TimberLogger)
             .apply { indexes.forEach { addIndex(it) } }
-            .addIndex(ModelEventEventBusIndex())
             .installDefaultEventBus()
 
         @IntoSet

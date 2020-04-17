@@ -57,7 +57,7 @@ class ToolsListItemToolBindingTest {
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()
         binding.callbacks = ObservableField(callbacks)
-        binding.tool = MutableLiveData(tool)
+        binding.tool = tool
         binding.primaryTranslation = MutableLiveData(primaryTranslation)
         binding.parallelTranslation = MutableLiveData(parallelTranslation)
         binding.executePendingBindings()

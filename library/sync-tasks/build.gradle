@@ -3,7 +3,6 @@ dependencies {
     api project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
-    implementation project(':library:model-events')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 

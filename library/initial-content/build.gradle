@@ -25,12 +25,13 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:download-manager')
     implementation project(':library:model')
-    implementation project(':library:model-events')
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }
 
 apply from: 'download_initial_content.gradle'
