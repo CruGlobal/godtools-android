@@ -221,6 +221,11 @@ subprojects {
                 testImplementation "org.robolectric:robolectric:${deps.robolectric}"
             }
         }
+
+        if (project.hasProperty('kapt')) {
+            // don't include the compile classpath when looking for annotation processors
+            kapt.includeCompileClasspath = false
+        }
     }
 }
 
