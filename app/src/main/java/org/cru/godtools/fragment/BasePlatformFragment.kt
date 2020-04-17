@@ -32,11 +32,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 
-    @JvmField
-    @BindView(R.id.refresh)
-    internal var refreshLayout: SwipeRefreshLayout? = null
-    protected val syncHelper = SwipeRefreshSyncHelper()
-
     protected var primaryLanguage = Settings.defaultLanguage
     protected var parallelLanguage: Locale? = null
 
@@ -50,7 +45,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         }
 
         loadLanguages(true)
-        syncData(false)
+        triggerInitialSync()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,6 +60,9 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         loadLanguages(false)
         syncHelper.updateState()
     }
+
+    @CallSuper
+    protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
 
     protected open fun onUpdatePrimaryLanguage() = Unit
     protected open fun onUpdateParallelLanguage() = Unit
@@ -91,8 +89,32 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     }
     // endregion Lifecycle
 
-    @CallSuper
-    protected open fun syncData(force: Boolean) {}
+    // region Sync Logic
+    @JvmField
+    @BindView(R.id.refresh)
+    internal var refreshLayout: SwipeRefreshLayout? = null
+
+    private val syncHelper = SwipeRefreshSyncHelper()
+
+    private fun triggerInitialSync() {
+        syncHelper.triggerSync()
+    }
+
+    internal fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
+        onSyncData(this, force)
+        updateState()
+    }
+
+    private fun setupRefreshView() {
+        syncHelper.refreshLayout = refreshLayout
+        refreshLayout?.setOnRefreshListener { syncHelper.triggerSync(true) }
+    }
+
+    private fun cleanupRefreshView() {
+        syncHelper.refreshLayout = null
+        refreshLayout?.setOnRefreshListener(null)
+    }
+    // endregion Sync Logic
 
     internal fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
@@ -117,16 +139,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     private fun stopSettingsChangeListener() {
         settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
-    }
-
-    private fun setupRefreshView() {
-        syncHelper.refreshLayout = refreshLayout
-        refreshLayout?.setOnRefreshListener { syncData(true) }
-    }
-
-    private fun cleanupRefreshView() {
-        syncHelper.refreshLayout = null
-        refreshLayout?.setOnRefreshListener(null)
     }
 
     internal inner class ChangeListener : SharedPreferences.OnSharedPreferenceChangeListener {
