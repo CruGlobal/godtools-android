@@ -156,7 +156,7 @@ class ToolsListItemToolBindingTest {
     @Test
     fun verifyParallelLanguageLabelHiddenIfArticleToolType() {
         tool.setType(Tool.Type.ARTICLE)
-        binding.tool = MutableLiveData(tool)
+        binding.tool = tool
         binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
         binding.executePendingBindings()
 
