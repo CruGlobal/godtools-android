@@ -74,7 +74,6 @@ script:
 #  --stacktrace    : output stacktraces for failures to aid in debugging
 #  --max-workers   : limit the number of workers gradle will spawn
 #  --no-daemon     : disable the background gradle build daemon
-#  -PdisablePreDex : disable library pre-dex to improve build server performance
 jobs:
   fast_finish: true
   include:
