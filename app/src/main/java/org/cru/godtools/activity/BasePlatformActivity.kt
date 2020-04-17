@@ -40,6 +40,7 @@ import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
@@ -360,11 +361,14 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
 
     // region Sync Logic
     protected open val swipeRefreshLayout: SwipeRefreshLayout? get() = null
+    open val handleChildrenSyncs get() = swipeRefreshLayout != null
 
     private val syncHelper = SwipeRefreshSyncHelper()
 
     private fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
         onSyncData(this, force)
+        if (handleChildrenSyncs) supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
+            .forEach { with(it) { triggerSync(force) } }
         updateState()
     }
 

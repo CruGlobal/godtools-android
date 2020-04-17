@@ -12,6 +12,7 @@ import butterknife.BindView
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
@@ -97,7 +98,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     private val syncHelper = SwipeRefreshSyncHelper()
 
     private fun triggerInitialSync() {
-        syncHelper.triggerSync()
+        if ((activity as? BasePlatformActivity)?.handleChildrenSyncs != true) syncHelper.triggerSync()
     }
 
     internal fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
