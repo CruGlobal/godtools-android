@@ -7,9 +7,9 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
-import org.cru.godtools.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
     startActivity(

@@ -20,7 +20,6 @@ import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.Locale
 import javax.inject.Inject
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
@@ -38,7 +37,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected val syncHelper = SwipeRefreshSyncHelper()
 
     protected var primaryLanguage = Settings.defaultLanguage
-    protected var parallelLanguage: Locale? = null
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +65,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     }
 
     protected open fun onUpdatePrimaryLanguage() = Unit
-    protected open fun onUpdateParallelLanguage() = Unit
     protected open fun onUpdateFeatureDiscovery(feature: String) = Unit
 
     @MainThread
@@ -97,16 +94,11 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     internal fun loadLanguages(initial: Boolean) {
         val oldPrimary = primaryLanguage
         primaryLanguage = settings.primaryLanguage
-        val oldParallel = parallelLanguage
-        parallelLanguage = settings.parallelLanguage
 
         // trigger lifecycle events
         if (!initial) {
             if (oldPrimary != primaryLanguage) {
                 onUpdatePrimaryLanguage()
-            }
-            if (oldParallel != parallelLanguage) {
-                onUpdateParallelLanguage()
             }
         }
     }

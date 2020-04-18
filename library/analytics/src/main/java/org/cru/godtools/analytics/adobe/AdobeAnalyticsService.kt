@@ -175,7 +175,7 @@ class AdobeAnalyticsService @Inject internal constructor(
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onTheKeyEvent(event: TheKeyEvent) {
+    fun onTheKeyEvent(@Suppress("UNUSED_PARAMETER") event: TheKeyEvent) {
         val guid = theKey.defaultSessionGuid
         analyticsExecutor.execute { updateVisitorIdIdentifiers(guid) }
     }
