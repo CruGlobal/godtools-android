@@ -7,7 +7,8 @@ import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 
 class LanguageSettingsFragment :
-    BasePlatformFragment<LanguageSettingsFragmentBinding>(R.layout.language_settings_fragment) {
+    BasePlatformFragment<LanguageSettingsFragmentBinding>(R.layout.language_settings_fragment),
+    LanguageSettingsFragmentBindingCallbacks {
     // region Lifecycle
     override fun onBindingCreated(binding: LanguageSettingsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
@@ -17,6 +18,11 @@ class LanguageSettingsFragment :
     }
     // endregion Lifecycle
 
-    fun editPrimaryLanguage() = requireActivity().startLanguageSelectionActivity(true)
-    fun editParallelLanguage() = requireActivity().startLanguageSelectionActivity(false)
+    override fun editPrimaryLanguage() = requireActivity().startLanguageSelectionActivity(true)
+    override fun editParallelLanguage() = requireActivity().startLanguageSelectionActivity(false)
+}
+
+interface LanguageSettingsFragmentBindingCallbacks {
+    fun editPrimaryLanguage()
+    fun editParallelLanguage()
 }

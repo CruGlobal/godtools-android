@@ -7,7 +7,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.util.LocaleUtils" />
 
-        <variable name="callbacks" type="org.cru.godtools.ui.languages.LanguageSettingsFragment" />
+        <variable name="callbacks" type="org.cru.godtools.ui.languages.LanguageSettingsFragmentBindingCallbacks" />
         <variable name="primaryLanguage" type="LiveData&lt;java.util.Locale&gt;" />
         <variable name="parallelLanguage" type="LiveData&lt;java.util.Locale&gt;" />
     </data>
