@@ -13,8 +13,8 @@ class LanguageSettingsFragment :
     override fun onBindingCreated(binding: LanguageSettingsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.callbacks = this
-        binding.primaryLanguage = settings.primaryLanguageLiveData
-        binding.parallelLanguage = settings.parallelLanguageLiveData
+        binding.primaryLocale = settings.primaryLanguageLiveData
+        binding.parallelLocale = settings.parallelLanguageLiveData
     }
     // endregion Lifecycle
 
