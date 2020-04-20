@@ -26,6 +26,7 @@
     <string name="menu_switch_language">言語の切り替え</string>
     <string name="title_add_new_tools">新規ツールを追加</string>
     <string name="action_tools_download">ダウンロード</string>
+    <string name="action_tools_open">ツールを開く</string>
     <string name="action_tools_remove">削除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">表示回数 %1$,d 回</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">利用可能なツールをすべてダウンロードしました。</string>
     <string name="menu_add_to_home">ホーム画面に追加</string>
-    <string name="action_tools_open">ツールを開く</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80種類以上の言語</string>
     <string name="menu_language_settings">言語設定</string>

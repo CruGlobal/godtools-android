@@ -25,11 +25,15 @@
     <string name="menu_switch_language">Skipta um tungumál</string>
     <string name="title_add_new_tools">Bæta við nýjum tólum</string>
     <string name="action_tools_download">Niðurhala</string>
+    <string name="action_tools_open">Opna tól</string>
     <string name="action_tools_remove">Fjarlægja</string>
     <string name="label_tools_about">Um</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Tungumál</item>
+        <item quantity="other">%1$,d Tungumál</item>
+    </plurals>
     <string name="text_tools_all_installed">Þú hefur niðurhalað öllum tiltækum tólum.</string>
     <string name="menu_add_to_home">Bæta við á heimaskjá</string>
-    <string name="action_tools_open">Opna tól</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ tungumál</string>
     <string name="menu_language_settings">Tungumálastillingar</string>

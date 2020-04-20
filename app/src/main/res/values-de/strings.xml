@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Sprache wechseln</string>
     <string name="title_add_new_tools">Neue Tools hinzufügen</string>
     <string name="action_tools_download">Download</string>
+    <string name="action_tools_open">Tool öffnen</string>
     <string name="action_tools_remove">Entfernen</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Aufruf</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Es wurden bereits alle verfügbaren Tools heruntergeladen.</string>
     <string name="menu_add_to_home">Zum Homescreen hinzufügen</string>
-    <string name="action_tools_open">Tool öffnen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Über 80 Sprachen</string>
     <string name="menu_language_settings">Spracheinstellungen</string>

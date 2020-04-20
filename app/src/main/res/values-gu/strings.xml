@@ -25,6 +25,7 @@
     <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
     <string name="title_add_new_tools">નવા સાધનો/ટુલ્સ ઉમેરો</string>
     <string name="action_tools_download">ડાઉનલોડ</string>
+    <string name="action_tools_open">ખુલ્લું સાધન</string>
     <string name="action_tools_remove">દૂર કરો</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d દર્શક</item>
@@ -37,7 +38,6 @@
     </plurals>
     <string name="text_tools_all_installed">પ્રાપ્ય બધાં જ સાધનો/ટુલ્સ તમે ડાઉનલોડ કરી લીધાં છે.</string>
     <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
-    <string name="action_tools_open">ખુલ્લું સાધન</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સુયોજન</string>

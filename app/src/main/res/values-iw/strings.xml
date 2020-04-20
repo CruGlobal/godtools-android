@@ -26,6 +26,7 @@
     <string name="menu_switch_language">שנה שפה</string>
     <string name="title_add_new_tools">הוסף כלים חדשים</string>
     <string name="action_tools_download">הורד</string>
+    <string name="action_tools_open">פתח כלי</string>
     <string name="action_tools_remove">הסר</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d צפייה</item>
@@ -42,7 +43,6 @@
     </plurals>
     <string name="text_tools_all_installed">הורדתם את כל הכלים הזמינים.</string>
     <string name="menu_add_to_home">הוסף למסך הבית</string>
-    <string name="action_tools_open">פתח כלי</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ שפות</string>
     <string name="menu_language_settings">הגדרות שפה</string>

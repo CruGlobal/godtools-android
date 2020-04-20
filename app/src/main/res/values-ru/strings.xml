@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Изменить язык</string>
     <string name="title_add_new_tools">Добавить инструменты</string>
     <string name="action_tools_download">Загрузить</string>
+    <string name="action_tools_open">Открыть инструмент</string>
     <string name="action_tools_remove">Удалить</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d просмотр</item>
@@ -42,7 +43,6 @@
     </plurals>
     <string name="text_tools_all_installed">Вы загрузили все доступные инструменты.</string>
     <string name="menu_add_to_home">Добавить на главный экран</string>
-    <string name="action_tools_open">Открыть инструмент</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 80 языков</string>
     <string name="menu_language_settings">Настройки языка</string>

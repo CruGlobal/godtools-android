@@ -25,13 +25,14 @@
     <eat-comment />
     <string name="tutorial_training_watch_headline">Watch</string>
     <string name="tutorial_training_watch_subhead">See what the app offers in our demo video
+
 (Tap on the video to bring up settings for subtitles)</string>
     <string name="tutorial_training_prepare_headline">Prepare</string>
-    <string name="tutorial_training_prepare_subhead">"Get familiar with some of your tools. The \"Teach Me to Share\" tool is a good place to start. 
+    <string name="tutorial_training_prepare_subhead">Get familiar with some of your tools. The \"Teach Me to Share\" tool is a good place to start. 
 
-Press the information button on any tool for more info. "</string>
+Press the information button on any tool for more info.</string>
     <string name="tutorial_training_try_headline">Try</string>
-    <string name="tutorial_training_try_subhead">Everyone starts as a beginner. Try sharing with someone and learn from your experience.</string>
+    <string name="tutorial_training_try_subhead">Everyone starts as a beginner. Try using a tool in a conversation and see what you learn.</string>
     <string name="tutorial_training_final_headline">This tutorial is available to see again in the menu</string>
     <string name="tutorial_training_action_continue">Continue</string>
     <string name="tutorial_training_action_start">Start Using GodTools</string>

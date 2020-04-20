@@ -9,6 +9,7 @@
     <string name="menu_about">Acerca de</string>
     <string name="menu_help">Preguntas frecuentes</string>
     <string name="menu_contact_us">Contáctanos</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Iniciar</string>
     <string name="menu_signup">Crear cuenta</string>
     <string name="menu_logout">Cerrar sesión</string>
@@ -26,6 +27,7 @@
     <string name="menu_switch_language">Cambiar idioma</string>
     <string name="title_add_new_tools">Agrega nuevas herramientas</string>
     <string name="action_tools_download">Descargar</string>
+    <string name="action_tools_open">Abrir herramienta</string>
     <string name="action_tools_remove">Quitar</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d vista</item>
@@ -38,7 +40,6 @@
     </plurals>
     <string name="text_tools_all_installed">Has descargado todas las herramientas disponibles.</string>
     <string name="menu_add_to_home">Añadir a pantalla de inicio</string>
-    <string name="action_tools_open">Abrir herramienta</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Más de 80 idiomas</string>
     <string name="menu_language_settings">Ajustes de idioma</string>

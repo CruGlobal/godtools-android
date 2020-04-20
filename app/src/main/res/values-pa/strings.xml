@@ -26,6 +26,7 @@
     <string name="menu_switch_language">ਭਾਸ਼ਾ ਨੂੰ ਬਦਲੋ</string>
     <string name="title_add_new_tools">ਨਵੇਂ ਟੂਲ ਜੋੜੋ</string>
     <string name="action_tools_download">ਡਾਊਨਲੋਡ ਕਰੋ</string>
+    <string name="action_tools_open">ਟੂਲ ਖੋਲ੍ਹੋ</string>
     <string name="action_tools_remove">ਹਟਾਓ</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ਨੇ ਵੇਖਿਆ</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">ਤੁਸੀਂ ਸਾਰੇ ਉਪਲਬਧ ਟੂਲਸ ਡਾਉਨਲੋਡ ਕੀਤੇ ਹਨ।</string>
     <string name="menu_add_to_home">ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ</string>
-    <string name="action_tools_open">ਟੂਲ ਖੋਲ੍ਹੋ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ਭਾਸ਼ਾਵਾਂ</string>
     <string name="menu_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>

@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Bytt språk</string>
     <string name="title_add_new_tools">Legg til nye verktøy</string>
     <string name="action_tools_download">Last ned</string>
+    <string name="action_tools_open">Åpne verktøy</string>
     <string name="action_tools_remove">Fjern</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d visning</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Du har lastet ned alle tilgjengelige verktøy.</string>
     <string name="menu_add_to_home">Legg til å hjemskjermen</string>
-    <string name="action_tools_open">Åpne verktøy</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 80 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>

@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Schimbă limba</string>
     <string name="title_add_new_tools">Adaugă instrumente noi</string>
     <string name="action_tools_download">Descarcă</string>
+    <string name="action_tools_open">Deschide instrumentul</string>
     <string name="action_tools_remove">Elimină</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d vizualizare</item>
@@ -40,7 +41,6 @@
     </plurals>
     <string name="text_tools_all_installed">Ai descărcat toate instrumentele disponibile.</string>
     <string name="menu_add_to_home">Adaugă la ecranul de pornire</string>
-    <string name="action_tools_open">Deschide instrumentul</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 80 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>

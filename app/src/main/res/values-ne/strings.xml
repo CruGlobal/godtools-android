@@ -26,6 +26,7 @@
     <string name="menu_switch_language">"भाषा बदल्नु होस् "</string>
     <string name="title_add_new_tools">"नयाँ टुल्सलाई जोड्नुहोस् "</string>
     <string name="action_tools_download">डाउनलोड</string>
+    <string name="action_tools_open">खोल्नुहोस्</string>
     <string name="action_tools_remove">"हटाउनुहोस् "</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ले हेर्यो</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">"आफ्नो सबै उपलब्ध टुल्स डाउनलोड गर्नु भयो। "</string>
     <string name="menu_add_to_home">"मुख्य पृष्ठमा जोड दिनुहोस "</string>
-    <string name="action_tools_open">खोल्नुहोस्</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">"70+ भाषाहरु "</string>
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>

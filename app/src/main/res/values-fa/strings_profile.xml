@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">پروفایل من</string>
+    <string name="menu_profile">فعالیت جهانی</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">"فعالیت "</string>
+    <string name="profile_global_activity_heading">%sفعالیت جهانی</string>
+    <string name="profile_activity_unique_users">کاربران بی نظیر</string>
+    <string name="profile_activity_gospel_presentations">ارائه انجیل</string>
+    <string name="profile_activity_sessions">جلسات</string>
+    <string name="profile_activity_countries">کشورها</string>
+</resources>

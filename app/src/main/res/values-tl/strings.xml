@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Magpalit ng Wika</string>
     <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
     <string name="action_tools_download">I-download</string>
+    <string name="action_tools_open">Buksan ang Tool</string>
     <string name="action_tools_remove">Alisin</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Pagtingin</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Na-download mo ang lahat ng available na tool.</string>
     <string name="menu_add_to_home">Idagdag sa Home screen</string>
-    <string name="action_tools_open">Buksan ang Tool</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ na Wika</string>
     <string name="menu_language_settings">Mga Setting ng Wika</string>

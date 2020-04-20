@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Prepnúť jazyk</string>
     <string name="title_add_new_tools">Pridať nové nástroje</string>
     <string name="action_tools_download">Stiahnuť</string>
+    <string name="action_tools_open">Otvoriť nástroj</string>
     <string name="action_tools_remove">Odstrániť</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d zobrazenie</item>
@@ -42,7 +43,6 @@
     </plurals>
     <string name="text_tools_all_installed">Stiahli ste si všetky dostupné nástroje</string>
     <string name="menu_add_to_home">Pridať na domovskú obrazovku</string>
-    <string name="action_tools_open">Otvoriť nástroj</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Vyše 80 jazykov</string>
     <string name="menu_language_settings">Nastavenia jazyka</string>
