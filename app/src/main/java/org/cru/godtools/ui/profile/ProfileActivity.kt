@@ -50,6 +50,8 @@ class ProfileActivity : BasePlatformActivity() {
     }
     // endregion Data Binding
 
+    override val swipeRefreshLayout get() = binding.refresh
+
     // region Pages
     private fun setupPages() {
         binding.pages.setHeightWrapContent()

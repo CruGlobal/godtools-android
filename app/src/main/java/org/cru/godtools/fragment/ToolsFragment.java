@@ -13,6 +13,7 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropM
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.BannerHeaderAdapter;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -123,6 +124,12 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         updateVisibleBanner();
     }
 
+    @CallSuper
+    public void onSyncData(@NonNull final SwipeRefreshSyncHelper helper, final boolean force) {
+        super.onSyncData(helper, force);
+        helper.sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
+    }
+
     @Override
     protected void onUpdateFeatureDiscovery(@NonNull final String feature) {
         super.onUpdateFeatureDiscovery(feature);
@@ -222,12 +229,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         mDataModel.getMode().setValue(mMode);
     }
     // endregion Data Model
-
-    @CallSuper
-    protected void syncData(final boolean force) {
-        super.syncData(force);
-        getSyncHelper().sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
-    }
 
     private void setupDataBinding() {
         if (mBinding != null) {

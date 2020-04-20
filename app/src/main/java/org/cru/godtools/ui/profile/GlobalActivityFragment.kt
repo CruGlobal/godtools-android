@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.databinding.ProfilePageGlobalActivityFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -20,9 +21,9 @@ class GlobalActivityFragment :
         binding.globalActivity = viewModel.globalActivity
     }
 
-    override fun syncData(force: Boolean) {
-        super.syncData(force)
-        syncHelper.sync(requireContext().syncGlobalActivity(force))
+    override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
+        super.onSyncData(helper, force)
+        helper.sync(requireContext().syncGlobalActivity(force))
     }
 }
 

@@ -3,14 +3,17 @@ package org.cru.godtools.activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import me.thekey.android.TheKey
@@ -19,6 +22,8 @@ import me.thekey.android.view.dialog.LoginDialogFragment
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.content.ComponentNameUtils
 import org.ccci.gto.android.common.util.view.MenuUtils
 import org.cru.godtools.BuildConfig
@@ -35,11 +40,14 @@ import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
 import javax.inject.Inject
@@ -55,16 +63,32 @@ private const val SHARE_LINK = "{{share_link}}"
 
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
+private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
+
 abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
     BaseDesignActivity(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     @Inject
     protected lateinit var theKey: TheKey
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // restore any saved state
+        savedInstanceState?.restoreSyncState()
+    }
+
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()
         setupNavigationDrawer()
+        setupSyncUi()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        eventBus.register(this)
+        syncHelper.triggerSync()
     }
 
     @CallSuper
@@ -74,6 +98,9 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
             supportActionBar?.setHomeButtonEnabled(true)
         }
     }
+
+    @CallSuper
+    protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -168,9 +195,19 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
         else -> super.onBackPressed()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.saveSyncState()
+    }
+
     override fun onStop() {
         super.onStop()
         eventBus.unregister(this)
+    }
+
+    override fun onDestroy() {
+        cleanupSyncUi()
+        super.onDestroy()
     }
     // endregion Lifecycle
 
@@ -321,4 +358,40 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
 
     private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
     // endregion Navigation Menu actions
+
+    // region Sync Logic
+    protected open val swipeRefreshLayout: SwipeRefreshLayout? get() = null
+    open val handleChildrenSyncs get() = swipeRefreshLayout != null
+
+    private val syncHelper = SwipeRefreshSyncHelper()
+
+    private fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
+        onSyncData(this, force)
+        if (handleChildrenSyncs) supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
+            .forEach { with(it) { triggerSync(force) } }
+        updateState()
+    }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    internal fun syncCompleted(event: SyncFinishedEvent) = syncHelper.updateState()
+
+    private fun Bundle.restoreSyncState() {
+        syncHelper.onRestoreInstanceState(getBundle(EXTRA_SYNC_HELPER))
+    }
+
+    private fun setupSyncUi() {
+        syncHelper.refreshLayout = swipeRefreshLayout
+        swipeRefreshLayout?.setOnRefreshListener { syncHelper.triggerSync(true) }
+    }
+
+    private fun cleanupSyncUi() {
+        swipeRefreshLayout?.setOnRefreshListener(null)
+        syncHelper.refreshLayout = null
+    }
+
+    private fun Bundle.saveSyncState() {
+        putBundle(EXTRA_SYNC_HELPER, syncHelper.onSaveInstanceState())
+    }
+    // endregion Sync Logic
 }

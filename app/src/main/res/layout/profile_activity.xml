@@ -24,58 +24,64 @@
                 android:theme="@style/ThemeOverlay.GodTools.Toolbar.AppBar" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
-                <TextView
-                    android:id="@+id/name"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:gravity="center"
-                    android:paddingTop="32dp"
-                    android:text="@{(keyAttributes.firstName ?? ``) + ` ` + (keyAttributes.lastName ?? ``)}"
-                    android:textAppearance="@style/TextAppearance.GodTools.Large"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="John Smith" />
+                    android:orientation="vertical">
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="32dp"
-                    app:layout_constraintTop_toBottomOf="@id/name">
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="@string/profile_tab_activity" />
-                </com.google.android.material.tabs.TabLayout>
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:paddingTop="32dp"
+                        android:text="@{(keyAttributes.firstName ?? ``) + ` ` + (keyAttributes.lastName ?? ``)}"
+                        android:textAppearance="@style/TextAppearance.GodTools.Large"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="John Smith" />
 
-                <androidx.constraintlayout.widget.Group
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="4dp"
-                    app:constraint_referenced_ids="name, tabs" />
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/name">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/pages"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@color/gray_F2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHeight_min="wrap"
-                    app:layout_constraintTop_toBottomOf="@id/tabs" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            tools:text="@string/profile_tab_activity" />
+                    </com.google.android.material.tabs.TabLayout>
+
+                    <androidx.constraintlayout.widget.Group
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="4dp"
+                        app:constraint_referenced_ids="name, tabs" />
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/pages"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@color/gray_F2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHeight_min="wrap"
+                        app:layout_constraintTop_toBottomOf="@id/tabs" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

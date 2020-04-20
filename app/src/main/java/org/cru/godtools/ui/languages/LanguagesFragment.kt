@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.databinding.LanguagesFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -41,6 +42,12 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     override fun onBindingCreated(binding: LanguagesFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.setupLanguagesList()
+    }
+
+    @CallSuper
+    override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
+        super.onSyncData(helper, force)
+        helper.sync(requireContext().syncLanguages(force))
     }
 
     override fun onUpdatePrimaryLanguage() {
@@ -110,12 +117,6 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
         searchItem = null
     }
     // endregion Search Action Item
-
-    @CallSuper
-    override fun syncData(force: Boolean) {
-        super.syncData(force)
-        syncHelper.sync(requireContext().syncLanguages(force))
-    }
 
     // region Languages List
     private val languagesAdapter by lazy {
