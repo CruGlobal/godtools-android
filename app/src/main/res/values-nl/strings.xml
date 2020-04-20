@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Veranderen van Taal</string>
     <string name="title_add_new_tools">Voeg nieuwe hulpmiddelen toe</string>
     <string name="action_tools_download">Download</string>
+    <string name="action_tools_open">Tool openen</string>
     <string name="action_tools_remove">Verwijderen</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Je hebt alle beschikbare tools gedownload.</string>
     <string name="menu_add_to_home">Toevoegen aan startscherm</string>
-    <string name="action_tools_open">Tool openen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ talen</string>
     <string name="menu_language_settings">Taal Instellingen</string>

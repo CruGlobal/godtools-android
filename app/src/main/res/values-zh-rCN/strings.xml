@@ -9,6 +9,7 @@
     <string name="menu_about">关于</string>
     <string name="menu_help">常见问题</string>
     <string name="menu_contact_us">联系我们</string>
+    <string name="menu_tutorial">教程</string>
     <string name="menu_login">登录</string>
     <string name="menu_signup">建立帳戶</string>
     <string name="menu_logout">登出</string>
@@ -26,6 +27,7 @@
     <string name="menu_switch_language">切换语言</string>
     <string name="title_add_new_tools">添加新工具</string>
     <string name="action_tools_download">下载</string>
+    <string name="action_tools_open">打开工具</string>
     <string name="action_tools_remove">删除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 次浏览</item>
@@ -36,7 +38,6 @@
     </plurals>
     <string name="text_tools_all_installed">您已下载所有可用工具。</string>
     <string name="menu_add_to_home">添加到主屏幕</string>
-    <string name="action_tools_open">打开工具</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80多种语言</string>
     <string name="menu_language_settings">语言设置</string>

@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Zmień język</string>
     <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
     <string name="action_tools_download">Pobierz</string>
+    <string name="action_tools_open">Otwórz narzędzie</string>
     <string name="action_tools_remove">Usuń</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d odsłona</item>
@@ -42,7 +43,6 @@
     </plurals>
     <string name="text_tools_all_installed">Pobrałeś(aś) wszystkie dostępne prezentacje.</string>
     <string name="menu_add_to_home">Dodaj do ekranu głównego</string>
-    <string name="action_tools_open">Otwórz narzędzie</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ języków</string>
     <string name="menu_language_settings">Ustawienia języka</string>

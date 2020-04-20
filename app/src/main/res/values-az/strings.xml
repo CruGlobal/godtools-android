@@ -25,6 +25,7 @@
     <string name="menu_switch_language">Dili dəyiş</string>
     <string name="title_add_new_tools">Yeni alətlər əlavə edin</string>
     <string name="action_tools_download">Yüklə</string>
+    <string name="action_tools_open">Aləti aç</string>
     <string name="action_tools_remove">Sil</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Baxış</item>
@@ -37,7 +38,6 @@
     </plurals>
     <string name="text_tools_all_installed">Bütün mövcud alətləri yükləmisiniz.</string>
     <string name="menu_add_to_home">Ana səhifəyə əlavə et</string>
-    <string name="action_tools_open">Aləti aç</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ dil</string>
     <string name="menu_language_settings">Dil parametrləri</string>

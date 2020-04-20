@@ -17,9 +17,9 @@
     <string name="nav_find_tools">Најди алатки</string>
     <string name="nav_my_tools">Мои алатки</string>
     <string name="action_tools_download">Преземи</string>
+    <string name="action_tools_open">Отворено</string>
     <string name="action_tools_remove">Отстрани</string>
     <string name="label_tools_about">3a</string>
-    <string name="action_tools_open">Отворено</string>
     <!-- Language Selection UI -->
     <string name="menu_language_settings">Јазични поставки</string>
     <string name="title_language_settings">Јазични поставки</string>

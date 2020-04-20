@@ -26,6 +26,7 @@
     <string name="menu_switch_language">เปลี่ยนภาษา</string>
     <string name="title_add_new_tools">เพิ่มเครื่องมือใหม่</string>
     <string name="action_tools_download">ดาวน์โหลด</string>
+    <string name="action_tools_open">เปิดเครื่องมือ</string>
     <string name="action_tools_remove">ลบออก</string>
     <plurals name="label_tools_shares">
         <item quantity="other">ดู %1$,d ครั้ง</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">คุณดาวน์โหลดเครื่องมือทั้งหมดแล้ว</string>
     <string name="menu_add_to_home">เพิ่มไปยังหน้าหลัก</string>
-    <string name="action_tools_open">เปิดเครื่องมือ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">กว่า 80 ภาษา</string>
     <string name="menu_language_settings">การตั้งค่าภาษา</string>

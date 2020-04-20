@@ -26,6 +26,7 @@
     <string name="menu_switch_language">切換語言</string>
     <string name="title_add_new_tools">添加新工具</string>
     <string name="action_tools_download">下載</string>
+    <string name="action_tools_open">開啟工具</string>
     <string name="action_tools_remove">移除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 個瀏覽次數</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">您已經下載所有可用工具了。</string>
     <string name="menu_add_to_home">加到主頁</string>
-    <string name="action_tools_open">開啟工具</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">超過 80 種語言</string>
     <string name="menu_language_settings">語言選項</string>

@@ -25,6 +25,7 @@
     <string name="menu_switch_language">Mainīt valodu</string>
     <string name="title_add_new_tools">Pievienot jaunus rīkus</string>
     <string name="action_tools_download">Lejupielādēt</string>
+    <string name="action_tools_open">Atvērt rīku</string>
     <string name="action_tools_remove">Noņemt</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d skatījums</item>
@@ -39,7 +40,6 @@
     </plurals>
     <string name="text_tools_all_installed">Jūs lejupielādējāt visus pieejamos rīkus.</string>
     <string name="menu_add_to_home">Pievienot sākuma ekrānam</string>
-    <string name="action_tools_open">Atvērt rīku</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ valodas</string>
     <string name="menu_language_settings">Valodas iestatījumi</string>

@@ -4,28 +4,31 @@
     <string name="share_prompt">نحوه اشتراک‌گذاری مورد نظر خود را انتخاب کنید</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">عمومی</string>
+    <string name="menu_heading_account">حساب کاربری</string>
     <string name="menu_heading_share">اشتراک‌گذاری</string>
     <string name="menu_heading_legal">قانونی</string>
     <string name="menu_about">درباره</string>
     <string name="menu_help">سؤالات متداول</string>
     <string name="menu_contact_us">تماس با ما</string>
+    <string name="menu_tutorial">آموزش</string>
     <string name="menu_login">ورود</string>
-    <string name="menu_signup">ایجاد حساب</string>
+    <string name="menu_signup">ایجاد حساب کاربری</string>
     <string name="menu_logout">خروج</string>
-    <string name="menu_share_godtools">اشتراگ‌گذاری برنامه GodTools</string>
+    <string name="menu_share_godtools">"اشتراگ‌گذاری برنامه GodTools "</string>
     <string name="menu_share_story">یک داستان با ما به اشتراک بگذارید</string>
     <string name="menu_rate">امتیازدهی به GodTools</string>
     <string name="menu_terms_of_use">شرایط استفاده</string>
     <string name="menu_privacy_policy">خط‌مشی حریم خصوصی</string>
     <string name="menu_copyright">حق نسخه‌برداری</string>
     <!-- Share a story -->
-    <string name="share_story_subject">صدای حرکت خداوند را بشنوید!</string>
+    <string name="share_story_subject">صدای کارخداوند را بشنوید!</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">یافتن ابزار</string>
     <string name="nav_my_tools">ابزار من</string>
     <string name="menu_switch_language">تغییر زبان</string>
     <string name="title_add_new_tools">افزودن ابزارهای جدید</string>
     <string name="action_tools_download">دانلود</string>
+    <string name="action_tools_open">باز کردن ابزار</string>
     <string name="action_tools_remove">حذف</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d مشاهده</item>
@@ -38,7 +41,6 @@
     </plurals>
     <string name="text_tools_all_installed">همه ابزارهای موجود را دانلود کرده‌اید.</string>
     <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
-    <string name="action_tools_open">باز کردن ابزار</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+80 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>

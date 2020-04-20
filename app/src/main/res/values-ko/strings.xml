@@ -26,6 +26,7 @@
     <string name="menu_switch_language">언어 변경</string>
     <string name="title_add_new_tools">새 툴 추가</string>
     <string name="action_tools_download">다운로드</string>
+    <string name="action_tools_open">툴 열기</string>
     <string name="action_tools_remove">제거</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 뷰</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">모든 이용 가능한 도구를 다운로드했습니다.</string>
     <string name="menu_add_to_home">홈 스크린에 추가</string>
-    <string name="action_tools_open">툴 열기</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>

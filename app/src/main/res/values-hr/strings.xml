@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Promijeni jezik</string>
     <string name="title_add_new_tools">Dodajte nove alate</string>
     <string name="action_tools_download">Preuzmi</string>
+    <string name="action_tools_open">Otvori alat</string>
     <string name="action_tools_remove">Ukloni</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d pregled</item>
@@ -40,7 +41,6 @@
     </plurals>
     <string name="text_tools_all_installed">Preuzeli ste sve raspoložive alate.</string>
     <string name="menu_add_to_home">Dodaj na početni zaslon</string>
-    <string name="action_tools_open">Otvori alat</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Više od 80 jezika</string>
     <string name="menu_language_settings">Postavke jezika</string>

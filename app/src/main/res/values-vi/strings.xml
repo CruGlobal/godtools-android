@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
     <string name="action_tools_download">Tải về</string>
+    <string name="action_tools_open">Mở Công cụ</string>
     <string name="action_tools_remove">Loại bỏ</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Lượt xem</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">Bạn đã tải về tất cả các công cụ sẵn có.</string>
     <string name="menu_add_to_home">Thêm vào màn hình Trang chủ</string>
-    <string name="action_tools_open">Mở Công cụ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Hơn 80 Ngôn ngữ</string>
     <string name="menu_language_settings">Các thiết lập Ngôn ngữ</string>

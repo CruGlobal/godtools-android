@@ -25,6 +25,7 @@
     <string name="menu_switch_language">زبان سوئچ کریں</string>
     <string name="title_add_new_tools">نئے ٹُولز ایڈ کریں</string>
     <string name="action_tools_download">ڈاون لوڈ</string>
+    <string name="action_tools_open">ٹول کھولیں</string>
     <string name="action_tools_remove">ہٹا دیں</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d وِیُو</item>
@@ -37,7 +38,6 @@
     </plurals>
     <string name="text_tools_all_installed">آپ نے تمام دستیاب ٹُولز ڈاونلوڈ کر لیے ہیں۔</string>
     <string name="menu_add_to_home">ہوم اسکرین میں شامل کریں</string>
-    <string name="action_tools_open">ٹول کھولیں</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ زبانیں</string>
     <string name="menu_language_settings">زبان سیٹِنگز</string>

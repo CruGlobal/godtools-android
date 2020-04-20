@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Tukar Bahasa</string>
     <string name="title_add_new_tools">Tambah Alat Baharu</string>
     <string name="action_tools_download">Muat Turun</string>
+    <string name="action_tools_open">Buka Alat</string>
     <string name="action_tools_remove">Alih Keluar</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Melihat</item>
@@ -36,7 +37,6 @@
     </plurals>
     <string name="text_tools_all_installed">Anda telah memuat turun semua alat yang tersedia.</string>
     <string name="menu_add_to_home">Tambah ke skrin Laman Utama</string>
-    <string name="action_tools_open">Buka Alat</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Bahasa</string>
     <string name="menu_language_settings">Tetapan Bahasa</string>
