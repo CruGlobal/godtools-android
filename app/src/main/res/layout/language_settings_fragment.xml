@@ -5,11 +5,15 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.Locale" />
         <import type="org.cru.godtools.base.util.LocaleUtils" />
+        <import type="org.cru.godtools.model.Language" />
 
         <variable name="callbacks" type="org.cru.godtools.ui.languages.LanguageSettingsFragmentBindingCallbacks" />
-        <variable name="primaryLocale" type="LiveData&lt;java.util.Locale&gt;" />
-        <variable name="parallelLocale" type="LiveData&lt;java.util.Locale&gt;" />
+        <variable name="primaryLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="primaryLanguage" type="LiveData&lt;Language&gt;" />
+        <variable name="parallelLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="parallelLanguage" type="LiveData&lt;Language&gt;" />
     </data>
 
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
@@ -46,7 +50,7 @@
                 android:id="@+id/primary_language_button"
                 style="@style/Widget.GodTools.Settings.Language.Button"
                 android:onClick="@{() -> callbacks.editPrimaryLanguage()}"
-                android:text="@{primaryLocale != null ? LocaleUtils.getDisplayName(primaryLocale, context) : null}"
+                android:text="@{primaryLanguage.getDisplayName(context) ?? primaryLocale != null ? LocaleUtils.getDisplayName(primaryLocale, context) : null}"
                 tools:text="Czech" />
 
             <View style="@style/Widget.GodTools.Settings.Language.Spacer" />
@@ -71,7 +75,7 @@
                 android:id="@+id/parallel_language_button"
                 style="@style/Widget.GodTools.Settings.Language.Button"
                 android:onClick="@{() -> callbacks.editParallelLanguage()}"
-                android:text="@{parallelLocale != null ? LocaleUtils.getDisplayName(parallelLocale, context) : @string/action_language_parallel_select}" />
+                android:text="@{parallelLanguage.getDisplayName(context) ?? parallelLocale != null ?  LocaleUtils.getDisplayName(parallelLocale, context) : @string/action_language_parallel_select}" />
 
             <View style="@style/Widget.GodTools.Settings.Language.Spacer" />
 
