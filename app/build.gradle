@@ -198,9 +198,6 @@ dependencies {
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
-    testImplementation "org.mockito:mockito-inline:${deps.mockito}"
-
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"

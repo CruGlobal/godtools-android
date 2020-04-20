@@ -230,7 +230,9 @@ subprojects {
                 implementation "com.jakewharton.timber:timber:${deps.timber}"
 
                 testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+                testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
                 testImplementation "junit:junit:${deps.junit}"
+                testImplementation "org.mockito:mockito-inline:${deps.mockito}"
                 testImplementation "org.robolectric:robolectric:${deps.robolectric}"
             }
         }
