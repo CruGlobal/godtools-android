@@ -4,12 +4,14 @@ package org.cru.godtools.base.util
 
 import android.content.Context
 import android.content.res.Configuration
+import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import timber.log.Timber
 import java.util.Locale
 
-private const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"
+@VisibleForTesting
+internal const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"
 
 val Context.deviceLocale: Locale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
 

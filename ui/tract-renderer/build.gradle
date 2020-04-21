@@ -44,9 +44,6 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
-    testImplementation "junit:junit:${deps.junit}"
-    testImplementation "org.mockito:mockito-core:${deps.mockito}"
-
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"

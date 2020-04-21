@@ -61,8 +61,6 @@ dependencies {
     androidTestImplementation "com.google.dagger:dagger:${deps.dagger}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
-    testImplementation "org.mockito:mockito-core:${deps.mockito}"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"

@@ -22,6 +22,11 @@ abstract class LanguagesModule {
     @ContributesAndroidInjector
     internal abstract fun languageSettingsFragmentInjector(): LanguageSettingsFragment
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(LanguageSettingsFragmentDataModel::class)
+    internal abstract fun languageSettingsFragmentDataModel(dataModel: LanguageSettingsFragmentDataModel): ViewModel
+
     @ContributesAndroidInjector
     internal abstract fun languagesFragmentInjector(): LanguagesFragment
 
