@@ -9,6 +9,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
@@ -149,6 +150,17 @@ public class PageViewHolder extends ParentViewHolder<Page>
         super.onContentEvent(event);
         checkForCardEvent(event);
         propagateEventToChildren(event);
+    }
+
+    public void onBroadcastEvent(@NonNull final NavigationEvent event) {
+        if (mModel != null && Integer.valueOf(mModel.getPosition()).equals(event.getPage())) {
+            final Card card = event.getCard() != null ? mModel.getCards().get(event.getCard()) : null;
+            if (card != null) {
+                displayCard(card);
+            } else {
+                mPageContentLayout.changeActiveCard(null, true);
+            }
+        }
     }
 
     @Override
