@@ -37,18 +37,18 @@ abstract class AnalyticsModule {
 
         @Provides
         @ElementsIntoSet
-        @EagerSingleton(ThreadMode.MAIN)
+        @EagerSingleton(threadMode = ThreadMode.MAIN)
         internal fun mainEagerSingletons(adobe: AdobeAnalyticsService, appsFlyer: AppsFlyerAnalyticsService) =
             setOf<Any>(adobe, appsFlyer)
 
         @Provides
         @ElementsIntoSet
-        @EagerSingleton(ThreadMode.MAIN_ASYNC)
+        @EagerSingleton(threadMode = ThreadMode.MAIN_ASYNC)
         internal fun mainAsyncEagerSingletons(firebase: FirebaseAnalyticsService) = setOf<Any>(firebase)
 
         @Provides
         @ElementsIntoSet
-        @EagerSingleton(ThreadMode.BACKGROUND)
+        @EagerSingleton(threadMode = ThreadMode.ASYNC)
         internal fun backgroundEagerSingletons(facebook: FacebookAnalyticsService, snowplow: SnowplowAnalyticsService) =
             setOf<Any>(facebook, snowplow)
     }

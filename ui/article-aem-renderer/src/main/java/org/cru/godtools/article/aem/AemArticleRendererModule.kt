@@ -35,7 +35,7 @@ abstract class AemArticleRendererModule {
 
     @Binds
     @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.BACKGROUND)
+    @EagerSingleton(on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED, threadMode = EagerSingleton.ThreadMode.ASYNC)
     internal abstract fun aemArticleMangerEagerSingleton(aemArticleManger: AemArticleManager): Any
 
     companion object {
