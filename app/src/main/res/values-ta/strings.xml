@@ -18,9 +18,9 @@
     <string name="nav_find_tools">உபகரணங்களை தேடு</string>
     <string name="nav_my_tools">என் உபகரணங்கள்</string>
     <string name="action_tools_download">பதிவிறக்கம் செய்க</string>
+    <string name="action_tools_open">திறந்த</string>
     <string name="action_tools_remove">அகற்று</string>
     <string name="label_tools_about">பற்றி</string>
-    <string name="action_tools_open">திறந்த</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ மொழிகளை</string>
     <string name="menu_language_settings">மொழி அமைப்புகள்</string>

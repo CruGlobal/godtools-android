@@ -14,26 +14,27 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
-class FirebaseAnalyticsService @MainThread private constructor(app: Application) :
-    Application.ActivityLifecycleCallbacks {
-    companion object : SingletonHolder<FirebaseAnalyticsService, Application>(::FirebaseAnalyticsService)
-
+@Singleton
+class FirebaseAnalyticsService @MainThread @Inject internal constructor(
+    app: Application,
+    eventBus: EventBus,
+    private val theKey: TheKey
+) : Application.ActivityLifecycleCallbacks {
     private val firebase = FirebaseAnalytics.getInstance(app)
-    private val theKey = TheKey.getInstance(app)
-    private var currentActivity: Activity? by weak()
 
     // region Tracking Events
     init {
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     @MainThread
@@ -47,15 +48,14 @@ class FirebaseAnalyticsService @MainThread private constructor(app: Application)
 
     @AnyThread
     @Subscribe
-    fun onTheKeyEvent(event: TheKeyEvent) = updateUser()
+    fun onTheKeyEvent(@Suppress("UNUSED_PARAMETER") event: TheKeyEvent) = updateUser()
 
     // region ActivityLifecycleCallbacks
     init {
         app.registerActivityLifecycleCallbacks(this)
     }
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
-    override fun onActivityStarted(activity: Activity) = Unit
+    private var currentActivity: Activity? by weak()
 
     override fun onActivityResumed(activity: Activity) {
         currentActivity = activity
@@ -65,6 +65,8 @@ class FirebaseAnalyticsService @MainThread private constructor(app: Application)
         currentActivity = currentActivity?.takeUnless { it === activity }
     }
 
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+    override fun onActivityStarted(activity: Activity) = Unit
     override fun onActivityStopped(activity: Activity) = Unit
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
     override fun onActivityDestroyed(activity: Activity) = Unit

@@ -21,7 +21,9 @@
     <string name="tutorial_onboarding_action_skip">跳过</string>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_training_watch_headline">观看</string>
-    <string name="tutorial_training_watch_subhead">在我们的演示视频中观看GodTools可以发挥的作用</string>
+    <string name="tutorial_training_watch_subhead">在我们的演示视频中观看GodTools可以发挥的作用
+
+(点击视频，设置字幕)</string>
     <string name="tutorial_training_prepare_headline">准备</string>
     <string name="tutorial_training_prepare_subhead">熟悉一些工具。“教我分享”工具是很好的起点。</string>
     <string name="tutorial_training_try_headline">尝试</string>

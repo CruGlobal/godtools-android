@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Променете езика</string>
     <string name="title_add_new_tools">Добавете нови инструменти</string>
     <string name="action_tools_download">Изтегляне</string>
+    <string name="action_tools_open">Отворете инструмента</string>
     <string name="action_tools_remove">Отстраняване</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Преглед</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Вие изтеглихте всички налични инструменти.</string>
     <string name="menu_add_to_home">Добавяне към началния екран</string>
-    <string name="action_tools_open">Отворете инструмента</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Езика</string>
     <string name="menu_language_settings">Езикови настройки</string>

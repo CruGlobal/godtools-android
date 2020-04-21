@@ -16,27 +16,27 @@ class ArticleRoomDatabaseMigrationIT {
     @Test
     fun migrate8To9() {
         // create v8 database
-        helper.createDatabase(DATABASE_NAME, 8)
+        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 8)
                 .close()
 
         // run migration
-        helper.runMigrationsAndValidate(DATABASE_NAME, 9, true, MIGRATION_8_9)
+        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 9, true, MIGRATION_8_9)
     }
 
     @Test
     fun migrate9To10() {
         // create v9 database
-        helper.createDatabase(DATABASE_NAME, 9)
+        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 9)
             .close()
 
         // run migration
-        helper.runMigrationsAndValidate(DATABASE_NAME, 10, true, MIGRATION_9_10)
+        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 10, true, MIGRATION_9_10)
     }
 
     @Test
     fun migrate10To11() {
         // create v10 database
-        helper.createDatabase(DATABASE_NAME, 10).apply {
+        helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 10).apply {
             execSQL("""
                 INSERT INTO articles (uri, uuid, title, canonicalUri, shareUri, date_created, date_updated)
                 VALUES (?, ?, ?, ?, ?, ?, ?)""",
@@ -46,7 +46,7 @@ class ArticleRoomDatabaseMigrationIT {
         }
 
         // run migration & validate
-        helper.runMigrationsAndValidate(DATABASE_NAME, 11, true, MIGRATION_10_11)
+        helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 11, true, MIGRATION_10_11)
             .apply {
                 query("SELECT canonicalUri, shareUri FROM articles").apply {
                     assertEquals(1, count)

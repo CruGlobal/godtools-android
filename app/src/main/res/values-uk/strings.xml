@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Змінити мову</string>
     <string name="title_add_new_tools">Додати інструменти</string>
     <string name="action_tools_download">Завантажити</string>
+    <string name="action_tools_open">Відкрити інструмент</string>
     <string name="action_tools_remove">Видалити</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d перегляд</item>
@@ -42,7 +43,6 @@
     </plurals>
     <string name="text_tools_all_installed">Ви завантажили усі доступні інструменти.</string>
     <string name="menu_add_to_home">Додати до головного екрану</string>
-    <string name="action_tools_open">Відкрити інструмент</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Понад 80 мов</string>
     <string name="menu_language_settings">Налаштування мови</string>

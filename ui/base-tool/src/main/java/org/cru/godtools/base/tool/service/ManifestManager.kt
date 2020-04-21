@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
@@ -40,15 +39,7 @@ class ManifestManager private constructor(context: Context) {
 
     @MainThread
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =
-        dao.getLatestTranslationLiveData(toolCode, locale, isDownloaded = true)
-            .apply {
-                observeOnce {
-                    if (it != null) {
-                        it.updateLastAccessed()
-                        dao.update(it, TranslationTable.COLUMN_LAST_ACCESSED)
-                    }
-                }
-            }
+        dao.getLatestTranslationLiveData(toolCode, locale, isDownloaded = true, trackAccess = true)
             .switchMap {
                 when (it) {
                     null -> emptyLiveData()
@@ -59,7 +50,7 @@ class ManifestManager private constructor(context: Context) {
     @WorkerThread
     @Throws(InterruptedException::class)
     fun getManifestBlocking(translation: Translation) = runBlocking { getManifest(translation) }
-    fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
+    private fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
 
     private suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null

@@ -7,9 +7,9 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
-import org.cru.godtools.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
     startActivity(
@@ -19,7 +19,8 @@ fun Activity.startToolDetailsActivity(toolCode: String) {
     )
 }
 
-class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callbacks {
+class ToolDetailsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer),
+    ToolDetailsFragment.Callbacks {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
 
@@ -28,12 +29,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
         super.onCreate(savedInstanceState)
 
         // finish now if we couldn't process the intent
-        if (!processIntent()) {
-            finish()
-            return
-        }
-
-        setContentView(R.layout.activity_generic_fragment_with_nav_drawer)
+        if (!processIntent()) finish()
     }
 
     override fun onSetupActionBar() {
@@ -48,7 +44,7 @@ class ToolDetailsActivity : BasePlatformActivity(), ToolDetailsFragment.Callback
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(ToolDetailsScreenEvent(tool))
+        eventBus.post(ToolDetailsScreenEvent(tool))
     }
 
     override fun onToolAdded() = finish()

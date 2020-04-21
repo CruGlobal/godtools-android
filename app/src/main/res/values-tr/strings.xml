@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Dil Değiştir</string>
     <string name="title_add_new_tools">Yeni Araçlar Ekle</string>
     <string name="action_tools_download">İndir</string>
+    <string name="action_tools_open">Aracı Aç</string>
     <string name="action_tools_remove">Kaldır</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Görüntüleme</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Kullanılabilir tüm araçları indirdin.</string>
     <string name="menu_add_to_home">Ana Ekrana Ekle</string>
-    <string name="action_tools_open">Aracı Aç</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80\'i Aşkın Dil</string>
     <string name="menu_language_settings">Dil Ayarları</string>

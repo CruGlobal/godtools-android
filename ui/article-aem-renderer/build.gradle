@@ -4,9 +4,15 @@ android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/room-schemas".toString()]
+                arguments = [
+                        "room.schemaLocation": "$projectDir/room-schemas".toString(),
+                        "room.incremental"   : "true"
+                ]
             }
         }
+    }
+    viewBinding {
+        enabled = true
     }
 
     sourceSets {
@@ -18,7 +24,6 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
-    implementation project(':library:model-events')
     implementation project(':library:xml-model')
 
     implementation project(':ui:base-tool')
@@ -29,17 +34,19 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-room:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
@@ -50,11 +57,14 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
     androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
     androidTestImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+    // HACK: connectedCheck on SDK 17 complains about dagger.Reusable not being on the classpath
+    androidTestImplementation "com.google.dagger:dagger:${deps.dagger}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
-    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

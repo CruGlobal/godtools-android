@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Пребаците језик</string>
     <string name="title_add_new_tools">Додај нове алатке</string>
     <string name="action_tools_download">Преузми</string>
+    <string name="action_tools_open">Отворени алат</string>
     <string name="action_tools_remove">Уклони</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d преглед</item>
@@ -40,7 +41,6 @@
     </plurals>
     <string name="text_tools_all_installed">Преузели сте све доступне алатке.</string>
     <string name="menu_add_to_home">Додај на почетни екран</string>
-    <string name="action_tools_open">Отворени алат</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">преко 80 језика</string>
     <string name="menu_language_settings">Подешавање језика</string>

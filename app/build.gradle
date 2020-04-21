@@ -1,7 +1,3 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -9,36 +5,21 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
-    compileSdkVersion compileSdk
-
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
-        versionCode rootProject.versionCode
-
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile 'proguard-rules.pro'
+        proguardFile 'proguard-rules-crashlytics.pro'
+        proguardFile 'proguard-rules-eventbus.pro'
+        proguardFile 'proguard-rules-guava.pro'
         proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    dexOptions {
-        preDexLibraries !project.hasProperty('disablePreDex')
-    }
     lintOptions {
-        lintConfig rootProject.file("analysis/lint/lint.xml")
         checkDependencies true
     }
     packagingOptions {
@@ -49,6 +30,11 @@ android {
 
     dataBinding {
         enabled = true
+    }
+    kapt {
+        javacOptions {
+            option("-Adagger.fastInit=enabled")
+        }
     }
 
     flavorDimensions "env"
@@ -85,11 +71,23 @@ android {
             minifyEnabled false
             shrinkResources false
 
+            resValue "string", "app_name_debug", "GodTools (Dev)"
+        }
+        qa {
+            initWith debug
+            matchingFallbacks = ['debug']
+
+            applicationIdSuffix ".qa"
+            versionNameSuffix "-qa"
+
+            resValue "string", "app_name_debug", "GodTools (QA)"
+
+            // Firebase App Distribution build
             if (project.hasProperty('firebaseAppDistributionBuild')) {
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
-                    appId = '1:71275134527:android:3f5f59861a4a0730'
+                    appId = '1:71275134527:android:e6af54d704ba9adac5028a'
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
                     groups = 'android-testers'
@@ -102,6 +100,11 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
+        }
+    }
+    sourceSets {
+        qa {
+            setRoot 'src/debug'
         }
     }
 
@@ -121,6 +124,10 @@ kapt {
     }
 }
 
+configurations {
+    qaImplementation.extendsFrom debugImplementation
+}
+
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')
@@ -129,12 +136,9 @@ dependencies {
     implementation project(':library:download-manager')
     implementation project(':library:initial-content')
     implementation project(':library:model')
-    implementation project(':library:model-events')
-    implementation project(':library:model-loader')
     implementation project(':library:sync')
 
     implementation project(':ui:account')
-    implementation project(':ui:article-aem-renderer')
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
@@ -142,39 +146,39 @@ dependencies {
     implementation project(':ui:tract-renderer')
     implementation project(':ui:tutorial-renderer')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
-
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
-    implementation "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-databinding:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
+    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
@@ -183,29 +187,28 @@ dependencies {
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
+
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
-    debugImplementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
+    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
+    testImplementation "org.mockito:mockito-inline:${deps.mockito}"
+
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-// jacoco config
-apply plugin: 'jacoco-android'
-jacoco {
-    toolVersion = deps.jacoco
-}
-android.testOptions.unitTests.all {
-    jacoco.includeNoLocationClasses = true
-}
 
 // make crashlytics upload task dependent on the assemble task for all build variants
 afterEvaluate {

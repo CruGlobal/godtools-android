@@ -2,7 +2,6 @@ package org.cru.godtools.analytics.snowplow
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import com.adobe.mobile.Visitor
 import com.snowplowanalytics.snowplow.tracker.Emitter.EmitterBuilder
 import com.snowplowanalytics.snowplow.tracker.Executor
 import com.snowplowanalytics.snowplow.tracker.Subject
@@ -20,14 +19,16 @@ import me.thekey.android.TheKey
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.cru.godtools.analytics.BuildConfig
+import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.util.SingletonHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val SNOWPLOW_NAMESPACE = "godtools-android"
 
@@ -39,13 +40,13 @@ private const val CONTEXT_ATTR_ID_GUID = "sso_guid"
 private const val CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id"
 private const val CONTEXT_ATTR_SCORING_URI = "uri"
 
-class SnowplowAnalyticsService private constructor(context: Context) {
-    companion object : SingletonHolder<SnowplowAnalyticsService, Context>({
-        SnowplowAnalyticsService(it.applicationContext)
-    })
-
+@Singleton
+class SnowplowAnalyticsService @Inject internal constructor(
+    context: Context,
+    eventBus: EventBus,
+    private val theKey: TheKey
+) {
     private val snowplowTracker: Tracker
-    private val theKey by lazy { TheKey.getInstance(context) }
 
     init {
         Executor.setThreadCount(1)
@@ -68,7 +69,7 @@ class SnowplowAnalyticsService private constructor(context: Context) {
 
     // region Tracking Events
     init {
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     @WorkerThread
@@ -127,7 +128,7 @@ class SnowplowAnalyticsService private constructor(context: Context) {
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
-        put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId())
+        adobeMarketingCloudId?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
         theKey.defaultSessionGuid?.let { guid ->
             put(CONTEXT_ATTR_ID_GUID, guid)

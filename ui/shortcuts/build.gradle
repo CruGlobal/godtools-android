@@ -12,7 +12,6 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
-    implementation project(':library:model-events')
 
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
@@ -20,12 +19,13 @@ dependencies {
     implementation project(':ui:tract-renderer')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
-    // transitive dependencies for ui:tract-renderer, needed to build this module
-    implementation "com.google.android.material:material:${deps.materialDesign}"
-
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

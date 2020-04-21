@@ -7,6 +7,11 @@ android {
         debug {
             resValue "string", "account_deeplink_host", "stage.godtoolsapp.com"
         }
+        qa {
+            matchingFallbacks = ['debug']
+
+            resValue "string", "account_deeplink_host", "godtoolsapp.com"
+        }
         release {
             resValue "string", "account_deeplink_host", "godtoolsapp.com"
         }

@@ -18,7 +18,6 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.viewmodel.ModalViewHolder;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -76,7 +75,7 @@ public class ModalActivity extends ImmersiveActivity {
     }
 
     public ModalActivity() {
-        super(true);
+        super(true, R.layout.activity_modal);
     }
 
     /* BEGIN lifecycle */
@@ -101,7 +100,6 @@ public class ModalActivity extends ImmersiveActivity {
             return;
         }
 
-        setContentView(R.layout.activity_modal);
         setupDataModel();
         startLoaders();
     }
@@ -116,7 +114,7 @@ public class ModalActivity extends ImmersiveActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
     }
 
     @MainThread
@@ -128,7 +126,7 @@ public class ModalActivity extends ImmersiveActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
     }
 
     /* END lifecycle */

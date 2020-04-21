@@ -5,8 +5,10 @@
 
     <data>
         <import type="android.view.ViewGroup.LayoutParams" />
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.List" />
 
-        <variable name="tools" type="android.database.Cursor" />
+        <variable name="tools" type="LiveData&lt;List&lt;org.cru.godtools.model.Tool&gt;&gt;" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,18 +25,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
-                app:visibleIf="@{tools != null &amp;&amp; tools.count == 0}" />
+                app:visibleIf="@{tools == null || tools.empty}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tools"
                 android:layout_width="match_parent"
-                android:layout_height="@{tools.count == 0 ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT, default=match_parent}"
+                android:layout_height="@{tools == null || tools.empty ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT, default=match_parent}"
                 android:layout_gravity="top"
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/list_item_tool_card" />
+                tools:listitem="@layout/tools_list_item_tool" />
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

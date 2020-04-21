@@ -55,7 +55,7 @@ private fun JSONObject.parseAemArticle(url: Uri): Article {
     return Article(url).also { article ->
         optJSONObject(TAG_CONTENT)?.apply {
             article.uuid = optString(TAG_UUID, article.uuid)
-            article.canonicalUri = optString(TAG_CANONICAL_URL, null)?.let { Uri.parse(it) }
+            article.canonicalUri = optString(TAG_CANONICAL_URL).takeUnless { it.isBlank() }?.let { Uri.parse(it) }
             article.title = optString(TAG_TITLE, article.title)
             article.tags = optJSONArray(TAG_TAGS)?.run {
                 IntRange(0, length() - 1).asSequence()

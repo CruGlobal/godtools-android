@@ -2,7 +2,7 @@ dependencies {
     api project(':library:base')
     implementation project(':library:model')
 
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.fragment}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
@@ -11,4 +11,8 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-livedata:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

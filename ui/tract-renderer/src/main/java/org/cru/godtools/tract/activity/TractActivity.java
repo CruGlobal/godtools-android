@@ -32,26 +32,28 @@ import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
+import org.cru.godtools.tract.service.FollowupService;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.model.Page;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
@@ -61,8 +63,6 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Lifecycle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
@@ -80,11 +80,9 @@ public class TractActivity extends BaseToolActivity
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
 
-    private static final int LOADER_ID_BITS = 8;
-    private static final int LOADER_ID_MASK = (1 << LOADER_ID_BITS) - 1;
-    private static final int LOADER_TYPE_MASK = ~LOADER_ID_MASK;
-    private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
-    private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
+    // Inject the FollowupService to ensure it is running to capture any followup forms
+    @Inject
+    FollowupService mFollowupService;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -97,7 +95,7 @@ public class TractActivity extends BaseToolActivity
     @BindView(R2.id.pages)
     ViewPager mPager;
     @Nullable
-    ManifestPagerAdapter mPagerAdapter;
+    private ManifestPagerAdapter mPagerAdapter;
 
     @Nullable
     /*final*/ String mTool = Tool.INVALID_CODE;
@@ -149,8 +147,7 @@ public class TractActivity extends BaseToolActivity
         mManifests = manifests;
     }
 
-    // region Lifecycle Events
-
+    // region Lifecycle
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,8 +193,8 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onSetupActionBar() {
         super.onSetupActionBar();
-        if (mToolbar != null && InstantApps.isInstantApp(this)) {
-            mToolbar.setNavigationIcon(R.drawable.ic_close);
+        if (toolbar != null && InstantApps.isInstantApp(this)) {
+            toolbar.setNavigationIcon(R.drawable.ic_close);
         }
         setupLanguageToggle();
         updateLanguageToggle();
@@ -219,7 +216,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
         startDownloadProgressListener();
     }
 
@@ -229,6 +226,7 @@ public class TractActivity extends BaseToolActivity
         super.onUpdateActiveManifest();
         updateBackground();
         updatePager();
+        showNextFeatureDiscovery();
     }
 
     @Override
@@ -258,7 +256,7 @@ public class TractActivity extends BaseToolActivity
         final Locale locale = (Locale) tab.getTag();
         if (locale != null) {
             updateActiveLanguage(locale);
-            mEventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
+            eventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
         }
     }
 
@@ -285,7 +283,7 @@ public class TractActivity extends BaseToolActivity
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
         stopDownloadProgressListener();
     }
 
@@ -297,8 +295,7 @@ public class TractActivity extends BaseToolActivity
         }
         outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     // region Creation Methods
 
@@ -313,7 +310,7 @@ public class TractActivity extends BaseToolActivity
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
             if (savedInstanceState == null) {
-                mEventBus.post(new AnalyticsDeepLinkEvent(data));
+                eventBus.post(new AnalyticsDeepLinkEvent(data));
             }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
@@ -393,9 +390,9 @@ public class TractActivity extends BaseToolActivity
 
     @Override
     protected void cacheTools() {
-        if (mDownloadManager != null && mTool != null) {
+        if (mTool != null) {
             for (final Locale language : mLanguages) {
-                mDownloadManager.cacheTranslation(mTool, language);
+                getDownloadManager().cacheTranslation(mTool, language);
             }
         }
     }
@@ -615,8 +612,8 @@ public class TractActivity extends BaseToolActivity
         }
 
         // show or hide the title based on how many visible tabs we have
-        if (mActionBar != null) {
-            mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
         }
     }
 
@@ -627,7 +624,6 @@ public class TractActivity extends BaseToolActivity
     }
 
     // region Tool Pager Methods
-
     private void setupPager() {
         if (mPager != null) {
             mPagerAdapter = new ManifestPagerAdapter();
@@ -674,19 +670,16 @@ public class TractActivity extends BaseToolActivity
             }
         }
     }
-
     // endregion Tool Pager Methods
 
     private void startLoaders() {
-        final LoaderManager manager = getSupportLoaderManager();
-
+        final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         final ManifestManager manifestManager = ManifestManager.Companion.getInstance(this);
-        final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
-        for (int i = 0; i < mLanguages.length; i++) {
-            final Locale language = mLanguages[i];
+        for (final Locale language : mLanguages) {
             manifestManager.getLatestPublishedManifestLiveData(mTool, language)
                     .observe(this, m -> setManifest(language, m));
-            manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
+            dao.getLatestTranslationLiveData(mTool, language, true, false, true)
+                    .observe(this, t -> setTranslation(language, t));
         }
     }
 
@@ -706,7 +699,6 @@ public class TractActivity extends BaseToolActivity
     }
 
     // region Share Link logic
-
     @Override
     protected boolean hasShareLinkUri() {
         return getActiveManifest() != null;
@@ -733,7 +725,6 @@ public class TractActivity extends BaseToolActivity
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
     }
-
     // endregion Share Link logic
 
     @Override
@@ -746,43 +737,7 @@ public class TractActivity extends BaseToolActivity
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
         final Manifest manifest = page.getManifest();
-        mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                card != null ? card.getPosition() : null));
-    }
-
-    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
-        @Nullable
-        @Override
-        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_TRANSLATION:
-                    final int langId = id & LOADER_ID_MASK;
-                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new LatestTranslationLoader(TractActivity.this, mTool, mLanguages[langId]);
-                    }
-                    break;
-            }
-
-            return null;
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
-            switch (loader.getId() & LOADER_TYPE_MASK) {
-                case LOADER_TYPE_TRANSLATION:
-                    if (loader instanceof LatestTranslationLoader) {
-                        Locale locale = ((LatestTranslationLoader) loader).getLocale();
-                        if (locale != null) {
-                            setTranslation(locale, translation);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
-            // noop
-        }
+        eventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
+                                                        card != null ? card.getPosition() : null));
     }
 }

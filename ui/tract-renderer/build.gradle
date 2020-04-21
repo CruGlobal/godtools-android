@@ -16,9 +16,7 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
-    implementation project(':library:model-events')
-    implementation project(':library:model-loader')
-    implementation project(':library:sync-tasks')
+    implementation project(':library:sync')
     implementation project(':library:xml-model')
 
     api project(':ui:base-tool')
@@ -32,22 +30,25 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
+    implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
-    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
 
+    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

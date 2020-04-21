@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.TextUtils" />
+        <import type="android.view.View" />
+        <import type="androidx.databinding.ObservableField" />
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="org.cru.godtools.model.Tool.Type" />
+
+        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
+        <variable name="tool" type="org.cru.godtools.model.Tool" />
+        <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
+        <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />
+        <variable name="primaryTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
+        <variable name="parallelTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
+        <variable name="parallelLanguage" type="LiveData&lt;org.cru.godtools.model.Language&gt;" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/root"
+        style="@style/Widget.GodTools.Tools.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:onClick="@{() -> callbacks.onToolSelect(tool.code, tool.type, primaryTranslation == null ? null : primaryTranslation.languageCode, parallelTranslation == null ? null : parallelTranslation.languageCode)}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+
+            <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray_E6"
+                android:scaleType="centerCrop"
+                android:src="@{banner}"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/download_progress"
+                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:progress="@{downloadProgress}"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/banner"
+                tools:max="12"
+                tools:progress="5"
+                tools:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/action_add"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:enabled="@{!tool.added}"
+                android:onClick="@{() -> callbacks.onToolAdd(tool.code)}"
+                android:padding="8dp"
+                android:tint="@color/gt_green"
+                app:goneIf="@{tool.added}"
+                app:layout_constraintBottom_toBottomOf="@id/tagline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                app:srcCompat="@drawable/ic_download"
+                tools:visibility="gone" />
+
+            <View
+                android:id="@+id/divider_download"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:layout_toEndOf="@id/action_add"
+                android:background="@color/gray_E6"
+                app:goneIf="@{tool.added}"
+                app:layout_constraintBottom_toBottomOf="@id/tagline"
+                app:layout_constraintStart_toEndOf="@id/action_add"
+                app:layout_constraintTop_toTopOf="@id/title"
+                tools:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@{ModelUtils.getTranslationName(primaryTranslation ?? parallelTranslation, tool, context)}"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
+                app:layout_constraintEnd_toStartOf="@id/language_parallel"
+                app:layout_constraintStart_toEndOf="@id/divider_download"
+                app:layout_constraintTop_toBottomOf="@id/banner"
+                app:layout_goneMarginEnd="12dp"
+                app:layout_goneMarginStart="12dp"
+                tools:text="Knowing God Personally (Extra Long Title)" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tagline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="@{ModelUtils.getTranslationTagline(primaryTranslation ?? parallelTranslation, tool, context)}"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_info"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
+
+            <TextView
+                android:id="@+id/language_parallel"
+                style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="end"
+                android:maxWidth="72dp"
+                android:text="@{parallelLanguage.getDisplayName(context)}"
+                app:layout_constraintBaseline_toBaselineOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:visibleIf="@{tool.type.equals(Type.TRACT) &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/action_info"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:onClick="@{() -> callbacks.onToolInfo(tool.code)}"
+                android:padding="8dp"
+                android:tint="@color/gt_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

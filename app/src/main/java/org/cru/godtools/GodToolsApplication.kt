@@ -1,61 +1,62 @@
 package org.cru.godtools
 
 import android.os.AsyncTask
-import me.thekey.android.core.TheKeyImpl
-import me.thekey.android.eventbus.EventBusEventsManager
-import org.cru.godtools.account.BuildConfig.ACCOUNT_TYPE
-import org.cru.godtools.account.BuildConfig.THEKEY_CLIENTID
+import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.instantapps.InstantApps
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.android.DaggerApplication
+import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
+import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
+import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
+import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.GodToolsApi
-import org.cru.godtools.article.aem.service.AemArticleManger
-import org.cru.godtools.base.app.BaseGodToolsApplication
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
-import org.cru.godtools.download.manager.DownloadManagerEventBusIndex
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.dagger.ApplicationModule
+import org.cru.godtools.dagger.DaggerApplicationComponent
 import org.cru.godtools.init.content.task.InitialContentTasks
-import org.cru.godtools.model.event.ModelEventEventBusIndex
-import org.cru.godtools.model.loader.ModelLoaderEventBusIndex
-import org.cru.godtools.service.AccountListRegistrationService
-import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.cru.godtools.shortcuts.ShortcutsEventBusIndex
-import org.cru.godtools.tract.TractEventBusIndex
-import org.cru.godtools.tract.service.FollowupService
-import org.greenrobot.eventbus.EventBusBuilder
+import timber.log.Timber
+import java.util.Locale
+import javax.inject.Inject
 
-open class GodToolsApplication : BaseGodToolsApplication() {
+open class GodToolsApplication : DaggerApplication() {
     override fun onCreate() {
+        // Enable application monitoring
+        initializeCrashlytics()
+
         super.onCreate()
+
+        // configure components
+        configureLanguageFallacks()
+        configureApis()
+
+        // enable compat vector images
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         // install any missing initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(InitialContentTasks(this))
     }
 
-    override fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
+    private fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
 
-    override fun configureEventBus(builder: EventBusBuilder): EventBusBuilder {
-        return super.configureEventBus(builder)
-            .addIndex(AppEventBusIndex())
-            .addIndex(DownloadManagerEventBusIndex())
-            .addIndex(ModelEventEventBusIndex())
-            .addIndex(ModelLoaderEventBusIndex())
-            .addIndex(ShortcutsEventBusIndex())
-            .addIndex(TractEventBusIndex())
+    private fun configureLanguageFallacks() {
+        // These fallbacks are used for JesusFilm
+        LocaleUtils.addFallback("abs", "ms")
+        LocaleUtils.addFallback("pmy", "ms")
     }
 
-    override fun configureTheKey() = TheKeyImpl.configure(theKeyConfiguration())
-
-    override fun startServices() {
-        super.startServices()
-        GodToolsDownloadManager.getInstance(this)
-        GodToolsShortcutManager.getInstance(this)
-        AccountListRegistrationService.getInstance(this)
-        AemArticleManger.getInstance(this)
-        FollowupService.start(this)
+    private fun initializeCrashlytics() {
+        val crashlytics = FirebaseCrashlytics.getInstance()
+        crashlytics.setCustomKey("InstantApp", InstantApps.isInstantApp(this))
+        crashlytics.setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
+        crashlytics.setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
+        Timber.plant(CrashlyticsTree())
     }
 
-    private fun theKeyConfiguration(): TheKeyImpl.Configuration {
-        return TheKeyImpl.Configuration.base()
-            .accountType(ACCOUNT_TYPE)
-            .clientId(THEKEY_CLIENTID)
-            .service(EventBusEventsManager())
-    }
+    // region Dagger
+    override fun applicationInjector() =
+        DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+
+    @Inject
+    internal lateinit var eagerInitializer: EagerSingletonInitializer
+    // endregion Dagger
 }

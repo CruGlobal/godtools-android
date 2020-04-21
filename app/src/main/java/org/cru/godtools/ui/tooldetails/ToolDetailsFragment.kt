@@ -23,9 +23,9 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
 import org.cru.godtools.util.openToolActivity
-import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 import java.util.Locale
+import javax.inject.Inject
 
 class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
     LinkClickedListener {
@@ -38,8 +38,10 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         fun onToolRemoved()
     }
 
-    private val downloadManager by lazy { GodToolsDownloadManager.getInstance(requireContext()) }
-    private val shortcutManager by lazy { GodToolsShortcutManager.getInstance(requireContext()) }
+    @Inject
+    internal lateinit var downloadManager: GodToolsDownloadManager
+    @Inject
+    internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private var toolCode: String by arg()
 
@@ -70,7 +72,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     }
 
     override fun onLinkClicked(url: String) {
-        EventBus.getDefault().post(ExitLinkActionEvent(Uri.parse(url)))
+        eventBus.post(ExitLinkActionEvent(Uri.parse(url)))
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -128,8 +130,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     private fun Menu.setupPinShortcutAction() {
         pinShortcutObserver = findItem(R.id.action_pin_shortcut)?.let { action ->
-            Observer<PendingShortcut?> { action.isVisible = it != null }
-                .also { dataModel.shortcut.observe(this@ToolDetailsFragment, it) }
+            dataModel.shortcut.observe(this@ToolDetailsFragment) { action.isVisible = it != null }
         }
     }
 

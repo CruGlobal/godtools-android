@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
@@ -59,7 +58,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     override fun onStart() {
         super.onStart()
-        pageSet.feature?.let { Settings.getInstance(this).setFeatureDiscovered(it) }
+        pageSet.feature?.let { settings.setFeatureDiscovered(it) }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -82,7 +81,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     // endregion Lifecycle
 
     private fun setupAppBar() {
-        mActionBar?.apply {
+        supportActionBar?.apply {
             setDisplayShowHomeEnabled(false)
             setDisplayHomeAsUpEnabled(pageSet.showUpNavigation)
             setDisplayShowTitleEnabled(false)
@@ -124,7 +123,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
-        if (page != null) mEventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
+        if (page != null) eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
     }
     // endregion Analytics
 
@@ -154,12 +153,12 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     override fun onTutorialAction(view: View) {
         when (view.id) {
             R.id.action_onboarding_training -> {
-                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
                 startTutorialActivity(PageSet.TRAINING)
                 finish()
             }
             R.id.action_onboarding_finish -> {
-                mEventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
             R.id.action_training_finish -> finish()

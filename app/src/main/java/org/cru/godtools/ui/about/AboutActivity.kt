@@ -2,7 +2,6 @@ package org.cru.godtools.ui.about
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
@@ -19,17 +18,16 @@ fun Activity.startAboutActivity() {
         .also { startActivity(it) }
 }
 
-class AboutActivity : BasePlatformActivity() {
+class AboutActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_generic_fragment_with_nav_drawer)
+    override fun onContentChanged() {
+        super.onContentChanged()
         loadPrimaryFragmentIfNeeded()
     }
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
 

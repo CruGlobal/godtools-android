@@ -3,8 +3,8 @@
 
     <application>
         <activity
-            android:name="org.cru.godtools.article.aem.activity.AemArticleActivity"
-            android:parentActivityName="org.cru.godtools.article.activity.ArticlesActivity"
+            android:name=".ui.AemArticleActivity"
+            android:parentActivityName="org.cru.godtools.article.ui.articles.ArticlesActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <intent-filter android:autoVerify="true">
@@ -20,7 +20,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cru.godtools.article.activity.ArticlesActivity" />
+                android:value="org.cru.godtools.article.ui.articles.ArticlesActivity" />
         </activity>
     </application>
 </manifest>

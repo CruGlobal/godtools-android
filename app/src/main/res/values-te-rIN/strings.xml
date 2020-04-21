@@ -26,6 +26,7 @@
     <string name="menu_switch_language">భాషను మార్చండి</string>
     <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
     <string name="action_tools_download">డౌన్‌లోడ్</string>
+    <string name="action_tools_open">పరికరం తెరవండి</string>
     <string name="action_tools_remove">తొలగించు</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d వీక్షణ</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">అందుబాటులో ఉన్న అన్ని పరికరాలను మీరు డౌన్‌లోడ్ చేశారు.</string>
     <string name="menu_add_to_home">హోమ్ స్క్రీన్‌కు జోడించండి</string>
-    <string name="action_tools_open">పరికరం తెరవండి</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ భాషలు</string>
     <string name="menu_language_settings">భాష సెట్టింగ్స్</string>

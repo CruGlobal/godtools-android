@@ -24,12 +24,14 @@ dependencies {
     implementation "androidx.browser:browser:${deps.androidX.browser}"
     api "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
-    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

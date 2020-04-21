@@ -3,20 +3,27 @@ package org.cru.godtools.activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
+import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
+import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.content.ComponentNameUtils
 import org.ccci.gto.android.common.util.view.MenuUtils
 import org.cru.godtools.BuildConfig
@@ -30,17 +37,20 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_STORY
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
 import java.util.Locale
+import javax.inject.Inject
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
@@ -53,24 +63,44 @@ private const val SHARE_LINK = "{{share_link}}"
 
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
-abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNavigationItemSelectedListener {
-    protected val settings by lazy { Settings.getInstance(this) }
-    protected val theKey by lazy { TheKey.getInstance(this) }
+private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
+
+abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
+    BaseDesignActivity(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
+    @Inject
+    protected lateinit var theKey: TheKey
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // restore any saved state
+        savedInstanceState?.restoreSyncState()
+    }
+
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()
         setupNavigationDrawer()
+        setupSyncUi()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        eventBus.register(this)
+        syncHelper.triggerSync()
     }
 
     @CallSuper
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         if (drawerLayout != null) {
-            mActionBar?.setHomeButtonEnabled(true)
+            supportActionBar?.setHomeButtonEnabled(true)
         }
     }
+
+    @CallSuper
+    protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -118,7 +148,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_help -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
             openUrl(URI_HELP)
             true
         }
@@ -143,17 +173,17 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
             true
         }
         R.id.action_terms_of_use -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
             openUrl(URI_TERMS_OF_USE)
             true
         }
         R.id.action_privacy_policy -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
             openUrl(URI_PRIVACY)
             true
         }
         R.id.action_copyright -> {
-            mEventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
             openUrl(URI_COPYRIGHT)
             true
         }
@@ -165,9 +195,19 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
         else -> super.onBackPressed()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.saveSyncState()
+    }
+
     override fun onStop() {
         super.onStop()
-        mEventBus.unregister(this)
+        eventBus.unregister(this)
+    }
+
+    override fun onDestroy() {
+        cleanupSyncUi()
+        super.onDestroy()
     }
     // endregion Lifecycle
 
@@ -279,7 +319,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchContactUs() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
         } catch (e: ActivityNotFoundException) {
@@ -288,7 +328,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShare() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
         val shareLink = URI_SHARE_BASE.buildUpon()
             .appendPath(LocaleCompat.toLanguageTag(settings.primaryLanguage).toLowerCase(Locale.US))
             .appendPath("")
@@ -305,7 +345,7 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
     }
 
     private fun launchShareStory() {
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
         try {
             startActivity(
                 Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
@@ -318,4 +358,40 @@ abstract class BasePlatformActivity : BaseDesignActivity(), NavigationView.OnNav
 
     private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
     // endregion Navigation Menu actions
+
+    // region Sync Logic
+    protected open val swipeRefreshLayout: SwipeRefreshLayout? get() = null
+    open val handleChildrenSyncs get() = swipeRefreshLayout != null
+
+    private val syncHelper = SwipeRefreshSyncHelper()
+
+    private fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
+        onSyncData(this, force)
+        if (handleChildrenSyncs) supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
+            .forEach { with(it) { triggerSync(force) } }
+        updateState()
+    }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    internal fun syncCompleted(event: SyncFinishedEvent) = syncHelper.updateState()
+
+    private fun Bundle.restoreSyncState() {
+        syncHelper.onRestoreInstanceState(getBundle(EXTRA_SYNC_HELPER))
+    }
+
+    private fun setupSyncUi() {
+        syncHelper.refreshLayout = swipeRefreshLayout
+        swipeRefreshLayout?.setOnRefreshListener { syncHelper.triggerSync(true) }
+    }
+
+    private fun cleanupSyncUi() {
+        swipeRefreshLayout?.setOnRefreshListener(null)
+        syncHelper.refreshLayout = null
+    }
+
+    private fun Bundle.saveSyncState() {
+        putBundle(EXTRA_SYNC_HELPER, syncHelper.onSaveInstanceState())
+    }
+    // endregion Sync Logic
 }

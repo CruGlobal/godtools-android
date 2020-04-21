@@ -26,6 +26,7 @@
     <string name="menu_switch_language">Alterar idioma</string>
     <string name="title_add_new_tools">Adicionar novas ferramentas</string>
     <string name="action_tools_download">Transferir</string>
+    <string name="action_tools_open">Abrir ferramenta</string>
     <string name="action_tools_remove">Remover</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d visualização</item>
@@ -38,7 +39,6 @@
     </plurals>
     <string name="text_tools_all_installed">Transferiu todas as ferramentas disponíveis.</string>
     <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
-    <string name="action_tools_open">Abrir ferramenta</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Mais de 80 idiomas</string>
     <string name="menu_language_settings">Definições de idioma</string>

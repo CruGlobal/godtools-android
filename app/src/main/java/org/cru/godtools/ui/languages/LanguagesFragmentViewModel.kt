@@ -1,14 +1,17 @@
 package org.cru.godtools.ui.languages
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
@@ -20,12 +23,14 @@ import java.util.Locale
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
-class LanguagesFragmentViewModel(
-    application: Application,
-    private val savedState: SavedStateHandle
-) : AndroidViewModel(application) {
-    private val dao = GodToolsDao.getInstance(application)
-    private val settings = Settings.getInstance(application)
+class LanguagesFragmentViewModel @AssistedInject constructor(
+    context: Context,
+    dao: GodToolsDao,
+    settings: Settings,
+    @Assisted private val savedState: SavedStateHandle
+) : ViewModel() {
+    @AssistedInject.Factory
+    interface Factory : AssistedSavedStateViewModelFactory<LanguagesFragmentViewModel>
 
     val isPrimary = MutableLiveData<Boolean>(true)
 
@@ -51,7 +56,7 @@ class LanguagesFragmentViewModel(
         .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
         .getAsLiveData(dao)
     private val sortedLanguages: LiveData<Map<String, Language>> = rawLanguages
-        .map { it.associateBy { lang -> lang.getDisplayName(application) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
+        .map { it.associateBy { lang -> lang.getDisplayName(context) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
             query.isNullOrEmpty() -> languages?.values?.toList()

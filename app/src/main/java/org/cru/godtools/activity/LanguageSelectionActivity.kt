@@ -2,7 +2,6 @@ package org.cru.godtools.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
@@ -14,6 +13,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.ui.languages.LanguagesFragment
 import org.cru.godtools.ui.languages.LocaleSelectedListener
 import java.util.Locale
+import javax.inject.Inject
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.activity.LanguageSelectionActivity.PRIMARY"
 
@@ -24,15 +24,13 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
-class LanguageSelectionActivity : BasePlatformActivity(), LocaleSelectedListener {
+class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic_fragment), LocaleSelectedListener {
+    @Inject
+    internal lateinit var downloadManager: GodToolsDownloadManager
+
     private val primary: Boolean by lazy { intent?.getBooleanExtra(EXTRA_PRIMARY, true) ?: true }
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_generic_fragment)
-    }
-
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         setTitle(if (primary) R.string.title_language_primary else R.string.title_language_parallel)
@@ -45,11 +43,11 @@ class LanguageSelectionActivity : BasePlatformActivity(), LocaleSelectedListener
 
     override fun onResume() {
         super.onResume()
-        mEventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION))
+        eventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION))
     }
 
     override fun onLocaleSelected(locale: Locale?) {
-        GodToolsDownloadManager.getInstance(this).addLanguage(locale)
+        downloadManager.addLanguage(locale)
         storeLocale(locale)
         finish()
     }
