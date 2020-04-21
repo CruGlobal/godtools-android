@@ -69,7 +69,7 @@ abstract class FlipperModule {
         @IntoSet
         @Provides
         @Singleton
-        @EagerSingleton(EagerSingleton.ThreadMode.MAIN)
+        @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
         internal fun flipperOkHttpInterceptor(networkFlipperPlugin: NetworkFlipperPlugin): Any =
             FlipperOkhttpInterceptor(networkFlipperPlugin).also {
                 addGlobalNetworkInterceptor(it)
@@ -77,7 +77,7 @@ abstract class FlipperModule {
 
         @Provides
         @ElementsIntoSet
-        @EagerSingleton(EagerSingleton.ThreadMode.BACKGROUND)
+        @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
         internal fun flipperClientEagerSingleton(flipperClient: FlipperClient?) =
             listOfNotNull<Any>(flipperClient).toSet()
     }

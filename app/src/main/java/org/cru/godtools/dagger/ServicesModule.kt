@@ -35,12 +35,12 @@ abstract class ServicesModule {
     // TODO: TheKey doesn't need to be Eager once TheKey is only accessed via Dagger
     @Binds
     @IntoSet
-    @EagerSingleton(EagerSingleton.ThreadMode.MAIN)
+    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
     abstract fun eagerTheKey(theKey: TheKey): Any
 
     @Binds
     @IntoSet
-    @EagerSingleton(EagerSingleton.ThreadMode.BACKGROUND)
+    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
     abstract fun eagerAccountListRegistrationService(service: AccountListRegistrationService): Any
 
     companion object {

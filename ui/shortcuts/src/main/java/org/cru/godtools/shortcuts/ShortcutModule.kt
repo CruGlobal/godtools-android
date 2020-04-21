@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 abstract class ShortcutModule {
     @Binds
     @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.BACKGROUND)
+    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
     abstract fun shortcutManagerEagerSingleton(shortcutManager: GodToolsShortcutManager): Any
 
     @ContributesAndroidInjector

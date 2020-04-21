@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 abstract class DownloadManagerModule {
     @Binds
     @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.BACKGROUND)
+    @EagerSingleton(on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED, threadMode = EagerSingleton.ThreadMode.ASYNC)
     abstract fun downloadManagerEagerSingleton(downloadManager: GodToolsDownloadManager): Any
 
     companion object {

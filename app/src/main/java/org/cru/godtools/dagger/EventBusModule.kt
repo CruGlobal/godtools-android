@@ -22,7 +22,7 @@ abstract class EventBusModule {
     // TODO: EventBus doesn't need to be Eager once EventBus is only accessed via Dagger
     @Binds
     @IntoSet
-    @EagerSingleton(ThreadMode.MAIN)
+    @EagerSingleton(threadMode = ThreadMode.MAIN)
     abstract fun eagerEventBus(eventBus: EventBus): Any
 
     companion object {
