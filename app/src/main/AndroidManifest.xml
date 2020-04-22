@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools">
 
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
@@ -126,6 +127,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
+
+        <!-- Disable the built-in WorkManagerInitializer -->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
+            tools:node="remove" />
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -151,10 +151,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
+    implementation "androidx.work:work-runtime:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-work:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
