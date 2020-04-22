@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
@@ -28,11 +27,8 @@ import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseDataSyncTasks internal constructor(
-    context: Context,
-    protected val dao: GodToolsDao = GodToolsDao.getInstance(context),
-    eventBus: EventBus = EventBus.getDefault()
-) : BaseSyncTasks(eventBus) {
+abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao, eventBus: EventBus) :
+    BaseSyncTasks(eventBus) {
     // region Tools
     protected fun storeTools(
         events: SimpleArrayMap<Class<*>, Any>,

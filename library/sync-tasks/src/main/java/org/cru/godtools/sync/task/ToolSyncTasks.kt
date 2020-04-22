@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.content.Context
 import android.os.Bundle
 import androidx.collection.SimpleArrayMap
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +14,11 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.api.model.ToolViews
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +32,8 @@ private val API_GET_INCLUDES = arrayOf(
 )
 
 @Singleton
-class ToolSyncTasks @Inject internal constructor(context: Context) : BaseDataSyncTasks(context) {
+class ToolSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus: EventBus) :
+    BaseDataSyncTasks(dao, eventBus) {
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 

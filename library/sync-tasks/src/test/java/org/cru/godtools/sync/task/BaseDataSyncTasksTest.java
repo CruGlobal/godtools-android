@@ -36,7 +36,7 @@ public class BaseDataSyncTasksTest {
         final Context context = ApplicationProvider.getApplicationContext();
         GodToolsApi.configure("https://mobile-content-api-stage.cru.org/");
         mDao = GodToolsDao.Companion.getInstance(context);
-        mTasks = new BaseDataSyncTasks(context, mDao, EventBus.getDefault()) {};
+        mTasks = new BaseDataSyncTasks(mDao, EventBus.getDefault()) {};
     }
 
     @Test
