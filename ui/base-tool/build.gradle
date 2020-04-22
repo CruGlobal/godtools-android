@@ -14,7 +14,7 @@ dependencies {
     implementation project(':library:db')
     api project(':library:download-manager')
     implementation project(':library:model')
-    implementation project(':library:sync-tasks')
+    api project(':library:sync-tasks')
     api project(':library:xml-model')
 
     api project(':ui:base')

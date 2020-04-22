@@ -27,4 +27,9 @@ abstract class SyncTaskModule {
     @IntoMap
     @SyncTaskKey(LanguagesSyncTasks::class)
     abstract fun languagesSyncTasks(tasks: LanguagesSyncTasks): BaseSyncTasks
+
+    @Binds
+    @IntoMap
+    @SyncTaskKey(ToolSyncTasks::class)
+    abstract fun toolSyncTasks(tasks: ToolSyncTasks): BaseSyncTasks
 }

@@ -17,11 +17,11 @@ internal fun Context.scheduleSyncToolSharesWork() = WorkManager.getInstance(this
 
 class SyncToolSharesWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters
+    @Assisted workerParams: WorkerParameters,
+    private val toolSyncTasks: ToolSyncTasks
 ) : CoroutineWorker(context, workerParams) {
     @AssistedInject.Factory
     interface Factory : AssistedWorkerFactory
 
-    override suspend fun doWork() =
-        if (ToolSyncTasks.getInstance(applicationContext).syncShares()) Result.success() else Result.retry()
+    override suspend fun doWork() = if (toolSyncTasks.syncShares()) Result.success() else Result.retry()
 }

@@ -31,6 +31,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager.OnDownloadProgressUpdateListener
 import org.cru.godtools.download.manager.databinding.bindProgress
 import org.cru.godtools.model.event.ToolUsedEvent
+import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
@@ -203,10 +204,12 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     // region Tool sync/download logic
     private var syncToolsState: ListenableFuture<*>? = null
     protected val isSyncToolsDone get() = syncToolsState?.isDone == true
+    @Inject
+    internal lateinit var toolSyncTasks: ToolSyncTasks
 
     private fun syncTools() {
         cacheTools()
-        val task = SyncToolsRunnable(this, WeakTask(this, TASK_CACHE_TOOLS))
+        val task = SyncToolsRunnable(toolSyncTasks, WeakTask(this, TASK_CACHE_TOOLS))
             .also { AsyncTask.THREAD_POOL_EXECUTOR.execute(it) }
 
         // track sync tools state, combining previous state with current state

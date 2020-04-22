@@ -20,6 +20,8 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.ToolTable
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
@@ -29,9 +31,8 @@ private val API_GET_INCLUDES = arrayOf(
     "${Tool.JSON_LATEST_TRANSLATIONS}.${Translation.JSON_LANGUAGE}"
 )
 
-class ToolSyncTasks private constructor(context: Context) : BaseDataSyncTasks(context) {
-    companion object : SingletonHolder<ToolSyncTasks, Context>(::ToolSyncTasks)
-
+@Singleton
+class ToolSyncTasks @Inject internal constructor(context: Context) : BaseDataSyncTasks(context) {
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 
