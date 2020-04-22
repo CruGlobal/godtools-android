@@ -19,14 +19,20 @@ import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
+import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseDataSyncTasks internal constructor(context: Context) : BaseSyncTasks(context) {
+abstract class BaseDataSyncTasks internal constructor(
+    context: Context,
+    protected val dao: GodToolsDao = GodToolsDao.getInstance(context),
+    eventBus: EventBus = EventBus.getDefault()
+) : BaseSyncTasks(eventBus) {
     // region Tools
     protected fun storeTools(
         events: SimpleArrayMap<Class<*>, Any>,
