@@ -17,11 +17,11 @@ internal fun Context.scheduleSyncFollowupWork() = WorkManager.getInstance(this)
 
 class SyncFollowupWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters
+    @Assisted workerParams: WorkerParameters,
+    private val followupSyncTasks: FollowupSyncTasks
 ) : CoroutineWorker(context, workerParams) {
     @AssistedInject.Factory
     interface Factory : AssistedWorkerFactory
 
-    override suspend fun doWork() =
-        if (FollowupSyncTasks.getInstance(applicationContext).syncFollowups()) Result.success() else Result.retry()
+    override suspend fun doWork() = if (followupSyncTasks.syncFollowups()) Result.success() else Result.retry()
 }

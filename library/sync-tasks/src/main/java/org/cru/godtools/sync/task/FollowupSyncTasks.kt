@@ -14,14 +14,13 @@ import org.ccci.gto.android.common.db.find
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Followup
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-class FollowupSyncTasks private constructor(context: Context) : BaseSyncTasks(context) {
-    companion object : SingletonHolder<FollowupSyncTasks, Context>(::FollowupSyncTasks)
-
+@Singleton
+class FollowupSyncTasks @Inject internal constructor(context: Context) : BaseSyncTasks(context) {
     private val followupMutex = Mutex()
 
-    fun syncFollowupsBlocking() = runBlocking { syncFollowups() }
     suspend fun syncFollowups() = withContext(Dispatchers.IO) {
         followupMutex.withLock {
             coroutineScope {

@@ -20,6 +20,11 @@ abstract class SyncTaskModule {
 
     @Binds
     @IntoMap
+    @SyncTaskKey(FollowupSyncTasks::class)
+    abstract fun followupSyncTasks(tasks: FollowupSyncTasks): BaseSyncTasks
+
+    @Binds
+    @IntoMap
     @SyncTaskKey(LanguagesSyncTasks::class)
     abstract fun languagesSyncTasks(tasks: LanguagesSyncTasks): BaseSyncTasks
 }
