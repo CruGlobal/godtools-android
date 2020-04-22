@@ -1,6 +1,7 @@
 package org.cru.godtools.dagger
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import dagger.Binds
@@ -10,6 +11,7 @@ import dagger.multibindings.IntoSet
 import me.thekey.android.TheKey
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
+import org.ccci.gto.android.common.androidx.work.TimberLogger
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
@@ -72,6 +74,7 @@ abstract class ServicesModule {
         @Singleton
         fun workManager(context: Context, workerFactory: DaggerWorkerFactory): WorkManager {
             WorkManager.initialize(context, Configuration.Builder().setWorkerFactory(workerFactory).build())
+            TimberLogger(Log.ERROR).install()
             return WorkManager.getInstance(context)
         }
     }
