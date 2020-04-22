@@ -1,8 +1,8 @@
 package org.cru.godtools.sync
 
 import android.content.ContentResolver
-import android.content.Context
 import android.os.Bundle
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -33,8 +33,8 @@ private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
 @Singleton
 class GodToolsSyncService @Inject internal constructor(
-    private val context: Context,
     private val eventBus: EventBus,
+    private val workManager: WorkManager,
     private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
 ) : CoroutineScope {
     private val job = SupervisorJob()
@@ -48,10 +48,10 @@ class GodToolsSyncService @Inject internal constructor(
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> { syncLanguages(task.args) }
                     SYNCTYPE_TOOLS -> with<ToolSyncTasks> { syncTools(task.args) }
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
-                        if (!syncShares()) context.scheduleSyncToolSharesWork()
+                        if (!syncShares()) workManager.scheduleSyncToolSharesWork()
                     }
                     SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
-                        if (!syncFollowups()) context.scheduleSyncFollowupWork()
+                        if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
                     }
                     SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
                 }

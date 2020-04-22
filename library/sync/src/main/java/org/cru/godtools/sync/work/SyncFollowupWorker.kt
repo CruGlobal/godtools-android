@@ -12,8 +12,8 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 
 private const val WORK_NAME = "SyncFollowup"
 
-internal fun Context.scheduleSyncFollowupWork() = WorkManager.getInstance(this)
-    .enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, SyncWorkRequestBuilder<SyncFollowupWorker>().build())
+internal fun WorkManager.scheduleSyncFollowupWork() =
+    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, SyncWorkRequestBuilder<SyncFollowupWorker>().build())
 
 class SyncFollowupWorker @AssistedInject constructor(
     @Assisted context: Context,

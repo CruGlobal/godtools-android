@@ -12,8 +12,8 @@ import org.cru.godtools.sync.task.ToolSyncTasks
 
 private const val WORK_NAME = "SyncToolShares"
 
-internal fun Context.scheduleSyncToolSharesWork() = WorkManager.getInstance(this)
-    .enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, SyncWorkRequestBuilder<SyncToolSharesWorker>().build())
+internal fun WorkManager.scheduleSyncToolSharesWork() =
+    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.REPLACE, SyncWorkRequestBuilder<SyncToolSharesWorker>().build())
 
 class SyncToolSharesWorker @AssistedInject constructor(
     @Assisted context: Context,
