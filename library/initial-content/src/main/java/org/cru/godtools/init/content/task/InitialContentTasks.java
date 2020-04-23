@@ -23,7 +23,6 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
-import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.model.jsonapi.ToolTypeConverter;
@@ -50,7 +49,6 @@ public class InitialContentTasks implements Runnable {
 
     private final AssetManager mAssets;
     private final Settings mSettings;
-    private final Context mContext;
     private final GodToolsDao mDao;
     private final GodToolsDownloadManager mDownloadManager;
     private final EventBus mEventBus;
@@ -59,7 +57,6 @@ public class InitialContentTasks implements Runnable {
     private JsonApiConverter mJsonApiConverter;
 
     public InitialContentTasks(@NonNull final Context context) {
-        mContext = context.getApplicationContext();
         mDao = GodToolsDao.Companion.getInstance(context);
         mAssets = context.getAssets();
         mSettings = Settings.Companion.getInstance(context);
@@ -71,7 +68,6 @@ public class InitialContentTasks implements Runnable {
     @WorkerThread
     public void run() {
         // languages init
-        loadBundledLanguages();
         initSystemLanguages();
 
         // tools init
@@ -92,46 +88,6 @@ public class InitialContentTasks implements Runnable {
                     .build();
         }
         return mJsonApiConverter;
-    }
-
-    private void loadBundledLanguages() {
-        // short-circuit if we already have any languages loaded
-        if (!mDao.get(Query.select(Language.class).limit(1)).isEmpty()) {
-            return;
-        }
-
-        try {
-            // read in raw languages json
-            final Closer closer = Closer.create();
-            final String raw;
-            try {
-                final InputStream in = closer.register(mAssets.open("languages.json"));
-                raw = IOUtils.readString(in);
-            } catch (final IOException e) {
-                throw closer.rethrow(e);
-            } finally {
-                closer.close();
-            }
-
-            // convert to a usable object
-            final JsonApiObject<Language> languages = getJsonApiConverter().fromJson(raw, Language.class);
-
-            // store languages in the database
-            final long changed = mDao.inTransaction(() -> {
-                return Stream.of(languages.getData())
-                        .mapToLong(l -> mDao.insert(l, CONFLICT_IGNORE))
-                        .sum();
-            });
-
-            // send a broadcast if we inserted any languages
-            if (changed > 0) {
-                mEventBus.post(LanguageUpdateEvent.INSTANCE);
-            }
-        } catch (final Exception e) {
-            // log exception, but it shouldn't be fatal (for now)
-            Timber.tag("InitialContentTasks")
-                    .e(e, "Error loading bundled languages");
-        }
     }
 
     private void initSystemLanguages() {
