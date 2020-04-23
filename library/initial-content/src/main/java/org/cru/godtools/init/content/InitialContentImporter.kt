@@ -15,6 +15,7 @@ class InitialContentImporter @Inject internal constructor(context: Context, task
         GlobalScope.launch(Dispatchers.IO) {
             // languages init
             tasks.loadBundledLanguages()
+            tasks.initSystemLanguages()
 
             InitialContentTasks(context).run()
         }

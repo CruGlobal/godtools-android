@@ -4,9 +4,16 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
+import org.ccci.gto.android.common.util.LocaleUtils
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.init.content.BuildConfig
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -14,8 +21,10 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 private const val TAG = "InitialContentTasks"
@@ -23,6 +32,8 @@ private const val TAG = "InitialContentTasks"
 internal class Tasks @Inject constructor(
     private val context: Context,
     private val dao: GodToolsDao,
+    private val downloadManager: GodToolsDownloadManager,
+    private val settings: Settings,
     private val eventBus: EventBus
 ) {
     private val jsonApiConverter by lazy {
@@ -34,15 +45,14 @@ internal class Tasks @Inject constructor(
             .build()
     }
 
-    suspend fun loadBundledLanguages() {
+    // region Language Initial Content Tasks
+    suspend fun loadBundledLanguages() =  withContext(Dispatchers.IO) {
         // short-circuit if we already have any languages loaded
-        if (dao.get(Query.select<Language>().limit(1)).isNotEmpty()) return
+        if (dao.get(Query.select<Language>().limit(1)).isNotEmpty()) return@withContext
 
         try {
-            val languages = withContext(Dispatchers.IO) {
-                context.assets.open("languages.json").reader().use { it.readText() }
-                    .let { jsonApiConverter.fromJson(it, Language::class.java) }
-            }
+            val languages = context.assets.open("languages.json").reader().use { it.readText() }
+                .let { jsonApiConverter.fromJson(it, Language::class.java) }
 
             dao.transaction { languages.data.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) } }
 
@@ -51,4 +61,21 @@ internal class Tasks @Inject constructor(
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
     }
+
+    fun initSystemLanguages() {
+        // add device languages if we haven't added languages before
+        if (dao.get(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
+            LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
+                // add all device languages and fallbacks
+                .onEach { downloadManager.addLanguage(it) }
+                .asSequence()
+                // set the first available language as the primary language
+                .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
+        }
+
+        // always add english and bundled languages
+        downloadManager.addLanguage(Locale.ENGLISH)
+        BuildConfig.BUNDLED_LANGUAGES.forEach { downloadManager.addLanguage(LocaleCompat.forLanguageTag(it)) }
+    }
+    // endregion Language Initial Content Tasks
 }
