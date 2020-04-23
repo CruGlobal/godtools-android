@@ -1,6 +1,5 @@
 package org.cru.godtools
 
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.instantapps.InstantApps
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -13,7 +12,6 @@ import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
-import org.cru.godtools.init.content.task.InitialContentTasks
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
@@ -23,17 +21,14 @@ open class GodToolsApplication : DaggerApplication() {
         // Enable application monitoring
         initializeCrashlytics()
 
-        super.onCreate()
-
         // configure components
         configureLanguageFallacks()
         configureApis()
 
+        super.onCreate()
+
         // enable compat vector images
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-
-        // install any missing initial content
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(InitialContentTasks(this))
     }
 
     private fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
