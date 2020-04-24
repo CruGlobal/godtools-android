@@ -51,12 +51,4 @@ class GodToolsApi internal constructor(mobileContentApiUrl: String, okhttp: OkHt
     @JvmField
     val views: ViewsApi = mobileContentRetrofit.create()
     val analytics: AnalyticsApi = mobileContentRetrofit.create()
-
-    // Adobe Campaign Forms API
-    val campaignForms by lazy {
-        Retrofit.Builder().baseUrl(BuildConfig.CAMPAIGN_FORMS_API)
-            .addConverterFactory(JSONObjectConverterFactory())
-            .callFactory(okhttp)
-            .build().create<CampaignFormsApi>()
-    }
 }
