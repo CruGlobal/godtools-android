@@ -5,4 +5,6 @@
     <string name="share_tool_title">Κοινοποίηση “%1$s” που χρησιμοποιούν</string>
     <string name="tool_not_found">Το εργαλείο που ζητήσατε δεν μπορεί να βρεθεί</string>
     <string name="tool_loading">Το εργαλείο που ζητήσατε φορτώνει…</string>
+    <string name="feature_discovery_title_share_tool">Μοιραστείτε έναν σύνδεσμο</string>
+    <string name="feature_discovery_desc_share_tool">Στείλτε αυτό το εργαλείο σε έναν φίλο πατώντας πάνω στο εικονίδιο</string>
 </resources>

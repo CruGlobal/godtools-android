@@ -5,4 +5,6 @@
     <string name="share_tool_title">İstifadə etməklə \"%1$s\" paylaş</string>
     <string name="tool_not_found">Sorğuladığınız alət tapılmır</string>
     <string name="tool_loading">Sorğuladığınız alət yüklənir…</string>
+    <string name="feature_discovery_title_share_tool">Linki paylaş</string>
+    <string name="feature_discovery_desc_share_tool">Bu ikonanı klikləyərək bu aləti dostuna göndər</string>
 </resources>

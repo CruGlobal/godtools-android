@@ -5,4 +5,6 @@
     <string name="share_tool_title">ແບ່ງປັນ “%1$s” ໃຊ້ງານ</string>
     <string name="tool_not_found">ບໍ່ພົບເຄື່ອງມືທີ່ທ່ານຂໍ</string>
     <string name="tool_loading">ເຄື່ອງມືທີ່ທ່ານຂໍກຳລັງໂຫຼດ…</string>
+    <string name="feature_discovery_title_share_tool">ແບ່ງປັນລິ້ງ</string>
+    <string name="feature_discovery_desc_share_tool">ສົ່ງເຄື່ອງມືນີ້ໄປໃຫ້ໝູ່ໂດຍການຄລິກໄອຄອນນີ້</string>
 </resources>

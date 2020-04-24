@@ -5,4 +5,6 @@
     <string name="share_tool_title">Zdieľať „%1$s“ pomocou</string>
     <string name="tool_not_found">Nástroj, o ktorý ste požiadali, sa nepodarilo nájsť</string>
     <string name="tool_loading">Nástroj, o ktorý ste požiadali, sa načítava…</string>
+    <string name="feature_discovery_title_share_tool">Zdieľajte odkaz</string>
+    <string name="feature_discovery_desc_share_tool">Kliknite na túto ikonu a pošlite tento nástroj priateľovi</string>
 </resources>

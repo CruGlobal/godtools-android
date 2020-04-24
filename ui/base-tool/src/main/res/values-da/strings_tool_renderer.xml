@@ -5,4 +5,6 @@
     <string name="share_tool_title">Del “%1$s” med</string>
     <string name="tool_not_found">Det værktøj, du anmodede om, blev ikke fundet</string>
     <string name="tool_loading">Det værktøj, du anmodede om, indlæses…</string>
+    <string name="feature_discovery_title_share_tool">Del et link</string>
+    <string name="feature_discovery_desc_share_tool">Send dette værktøj til en ven ved at klikke på dette ikon</string>
 </resources>

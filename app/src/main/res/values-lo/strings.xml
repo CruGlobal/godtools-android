@@ -9,6 +9,9 @@
     <string name="menu_about">ກ່ຽວກັບ</string>
     <string name="menu_help">ຊ່ອຍເຫຼືອ</string>
     <string name="menu_contact_us">ຕິດຕໍ່ພວກເຮົາ</string>
+    <string name="menu_login">ເຂົ້າສູ່ລະບົບ</string>
+    <string name="menu_signup">ສ້າງບັນຊີ</string>
+    <string name="menu_logout">ອອກຈາກລະບົບ</string>
     <string name="menu_share_godtools">ແບ່ງປັນ GodTools</string>
     <string name="menu_share_story">ແບ່ງປັນເລື່ອງລາວກັບພວກເຮົາ</string>
     <string name="menu_rate">ໃຫ້ຄະແນນ GodTools</string>
@@ -23,6 +26,7 @@
     <string name="menu_switch_language">ປ່ຽນພາສາ</string>
     <string name="title_add_new_tools">ເພິ່ມເຄື່ອງມືໃໝ່</string>
     <string name="action_tools_download">ດາວໂຫຼດ</string>
+    <string name="action_tools_open">ເປີດເຄື່ອງມື</string>
     <string name="action_tools_remove">ນຳອອກໄປ</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d ຮັບຊົມ</item>
@@ -31,8 +35,10 @@
     <plurals name="label_tools_languages">
         <item quantity="other">" %1$,d ພາສາ"</item>
     </plurals>
+    <string name="text_tools_all_installed">ທ່ານໄດ້ດາວໂຫຼດເຄື່ອງມືທີ່ມີທັງໝົດ</string>
+    <string name="menu_add_to_home">ເພີ່ມໃສ່ ໜ້າ ຈໍເຮືອນ</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ ພາສາ</string>
+    <string name="feature_discovery_title_language_settings">80+ ພາສາ</string>
     <string name="menu_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_primary">ພາສາຫຼັກ</string>
@@ -41,13 +47,9 @@
     <string name="text_language_parallel_description">ແບ່ງປັນ GodTools ກັບຄົນອື່ນໃນພາສາທ້ອງຖິ່ນຂອງເຂົາ.</string>
     <string name="text_language_warning">ບໍ່ມີເຄື່ອງມືໃດໆໃຫ້ບໍລິການໃນທຸກໆພາສາ.</string>
     <string name="label_language_none">ບໍ່ເລີຍ</string>
+    <string name="label_language_search">ການກັ່ນຕອງພາສາ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ນີ້ຄືລິ້ງສຳຫຼັບດາວໂຫຼດ ແອັບ ທີ່ພວກເຮົາກຳລັງຊອກຫາ:
-http://godtoolsapp.com \n\n
+    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາເບິ່ງນໍາກັນຄັ້ງຫຼ້າສຸດໃນມື້ນີ້: %@. ມາລົມກັນຕື່ມ!
 
-
-ນີ້ຄືລິ້ງສຳຫຼັບເວັບໄຊ້ຂອງ ແອັບ ນີ້
-{{share_link}} \n\n
-
-ທ່ານສາມາດມາໂອ້ລັມກັບພວກເຮົາໄດ້!</string>
+ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ {{share_link}} https://godtoolsapp.com</string>
 </resources>

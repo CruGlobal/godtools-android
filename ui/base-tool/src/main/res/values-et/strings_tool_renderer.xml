@@ -2,8 +2,9 @@
 <resources>
     <string name="menu_install">Installi</string>
     <string name="menu_share_tool">Jagamine</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Jaga “%1$s” jagamist</string>
     <string name="tool_not_found">Soovitud tööriista ei leitud</string>
     <string name="tool_loading">Soovitud tööriista laadimine ...</string>
+    <string name="feature_discovery_title_share_tool">Jaga linki</string>
+    <string name="feature_discovery_desc_share_tool">Saada tööriist sõbrale, klõpsates sellele ikoonile</string>
 </resources>

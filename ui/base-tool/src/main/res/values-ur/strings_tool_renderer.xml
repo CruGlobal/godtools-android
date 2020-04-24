@@ -5,4 +5,6 @@
     <string name="share_tool_title">شیئر کرو “%1$s”  استعمال کرتے ہوئے</string>
     <string name="tool_not_found">جس اوزار کی آپ نے درخواست کی وہ نہیں مل سکتا۔</string>
     <string name="tool_loading">جس ازار کی آپ نے درخواست کی ہے وہ لوڈ ہو رہاہے۔</string>
+    <string name="feature_discovery_title_share_tool">ایک لنک شیئر کریں</string>
+    <string name="feature_discovery_desc_share_tool">اس آئکن پر کلک کر کے یہ ٹول کسی دوست کو بھیجیں</string>
 </resources>

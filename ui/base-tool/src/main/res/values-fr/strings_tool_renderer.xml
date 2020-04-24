@@ -5,4 +5,6 @@
     <string name="share_tool_title">Partager « %1$s » via</string>
     <string name="tool_not_found">L\'outil demandé est introuvable</string>
     <string name="tool_loading">L\'outil demandé est en cours de chargement…</string>
+    <string name="feature_discovery_title_share_tool">Partager un lien</string>
+    <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
 </resources>
