@@ -18,7 +18,10 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.LanguageUpdateEvent
+import org.cru.godtools.model.event.ToolUpdateEvent
+import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.LanguageTable
@@ -78,4 +81,33 @@ internal class Tasks @Inject constructor(
         BuildConfig.BUNDLED_LANGUAGES.forEach { downloadManager.addLanguage(LocaleCompat.forLanguageTag(it)) }
     }
     // endregion Language Initial Content Tasks
+
+    // region Tool Initial Content Tasks
+    suspend fun loadBundledTools() = withContext(Dispatchers.IO) {
+        // short-circuit if we already have any tools loaded
+        if (dao.get(Query.select<Tool>().limit(1)).isNotEmpty()) return@withContext
+
+        try {
+            val tools = context.assets.open("tools.json").reader().use { it.readText() }
+                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
+
+            dao.transaction {
+                tools.data.forEach { tool ->
+                    // if (dao.refresh(tool) != null) return@forEach
+                    if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
+                    tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+                    tool.attachments?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+                }
+            }
+
+            // send a broadcast for updated objects
+            eventBus.post(ToolUpdateEvent)
+            eventBus.post(TranslationUpdateEvent)
+            eventBus.post(AttachmentUpdateEvent)
+        } catch (e: java.lang.Exception) {
+            // log exception, but it shouldn't be fatal (for now)
+            Timber.tag(TAG).e(e, "Error loading bundled tools")
+        }
+    }
+    // endregion Tool Initial Content Tasks
 }

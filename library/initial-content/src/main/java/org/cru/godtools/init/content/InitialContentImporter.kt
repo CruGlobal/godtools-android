@@ -3,6 +3,7 @@ package org.cru.godtools.init.content
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.cru.godtools.init.content.task.InitialContentTasks
 import org.cru.godtools.init.content.task.Tasks
@@ -14,9 +15,14 @@ class InitialContentImporter @Inject internal constructor(context: Context, task
     init {
         GlobalScope.launch(Dispatchers.IO) {
             // languages init
-            tasks.loadBundledLanguages()
-            tasks.initSystemLanguages()
+            val languages = async {
+                tasks.loadBundledLanguages()
+                tasks.initSystemLanguages()
+            }
 
+            // tools init
+            tasks.loadBundledTools()
+            languages.await()
             InitialContentTasks(context).run()
         }
     }

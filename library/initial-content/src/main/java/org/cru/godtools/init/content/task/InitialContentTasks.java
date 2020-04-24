@@ -3,41 +3,27 @@ package org.cru.godtools.init.content.task;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
-import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
-import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
-import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.init.content.BuildConfig;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.event.AttachmentUpdateEvent;
-import org.cru.godtools.model.event.ToolUpdateEvent;
-import org.cru.godtools.model.event.TranslationUpdateEvent;
-import org.cru.godtools.model.jsonapi.ToolTypeConverter;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import timber.log.Timber;
-
-import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
 public class InitialContentTasks implements Runnable {
     private static final String SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools";
@@ -45,115 +31,20 @@ public class InitialContentTasks implements Runnable {
     private final AssetManager mAssets;
     private final GodToolsDao mDao;
     private final GodToolsDownloadManager mDownloadManager;
-    private final EventBus mEventBus;
-
-    @Nullable
-    private JsonApiConverter mJsonApiConverter;
 
     public InitialContentTasks(@NonNull final Context context) {
         mDao = GodToolsDao.Companion.getInstance(context);
         mAssets = context.getAssets();
         mDownloadManager = GodToolsDownloadManager.getInstance(context);
-        mEventBus = EventBus.getDefault();
     }
 
     @Override
     @WorkerThread
     public void run() {
         // tools init
-        loadBundledTools();
         initDefaultTools();
         importBundledTranslations();
         importBundledAttachments();
-    }
-
-    @NonNull
-    private JsonApiConverter getJsonApiConverter() {
-        if (mJsonApiConverter == null) {
-            mJsonApiConverter = new JsonApiConverter.Builder()
-                    .addClasses(Language.class)
-                    .addClasses(Tool.class, Translation.class, Attachment.class)
-                    .addConverters(ToolTypeConverter.INSTANCE)
-                    .addConverters(new LocaleTypeConverter())
-                    .build();
-        }
-        return mJsonApiConverter;
-    }
-
-    private void loadBundledTools() {
-        // short-circuit if we already have any tools loaded
-        if (!mDao.get(Query.select(Tool.class).limit(1)).isEmpty()) {
-            return;
-        }
-
-        try {
-            // read in raw tools json
-            final Closer closer = Closer.create();
-            final String raw;
-            try {
-                final InputStream in = closer.register(mAssets.open("tools.json"));
-                raw = IOUtils.readString(in);
-            } catch (final IOException e) {
-                throw closer.rethrow(e);
-            } finally {
-                closer.close();
-            }
-
-            // convert to a usable object
-            final JsonApiObject<Tool> tools = getJsonApiConverter().fromJson(raw, Tool.class);
-
-            // add any tools that we don't already have
-            final AtomicBoolean toolsChanged = new AtomicBoolean(false);
-            final AtomicBoolean translationsChanged = new AtomicBoolean(false);
-            final AtomicBoolean attachmentsChanged = new AtomicBoolean(false);
-            mDao.inTransaction(() -> {
-                for (final Tool tool : tools.getData()) {
-                    if (mDao.refresh(tool) == null) {
-                        if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
-                            toolsChanged.set(true);
-
-                            // import all bundled translations
-                            final List<Translation> translations = tool.getLatestTranslations();
-                            if (translations != null) {
-                                final long changes = Stream.of(tool.getLatestTranslations())
-                                        .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                                        .sum();
-                                if (changes > 0) {
-                                    translationsChanged.set(true);
-                                }
-                            }
-
-                            // import all bundled attachments
-                            final List<Attachment> attachments = tool.getAttachments();
-                            if (attachments != null) {
-                                final long changes = Stream.of(tool.getAttachments())
-                                        .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
-                                        .sum();
-                                if (changes > 0) {
-                                    attachmentsChanged.set(true);
-                                }
-                            }
-                        }
-                    }
-                }
-                return true;
-            });
-
-            // send a broadcast if we inserted any tools, translations, or attachments
-            if (toolsChanged.get()) {
-                mEventBus.post(ToolUpdateEvent.INSTANCE);
-            }
-            if (translationsChanged.get()) {
-                mEventBus.post(TranslationUpdateEvent.INSTANCE);
-            }
-            if (attachmentsChanged.get()) {
-                mEventBus.post(AttachmentUpdateEvent.INSTANCE);
-            }
-        } catch (final Exception e) {
-            // log exception, but it shouldn't be fatal (for now)
-            Timber.tag("InitialContentTasks")
-                    .e(e, "Error loading bundled tools");
-        }
     }
 
     @WorkerThread
