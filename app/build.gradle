@@ -41,9 +41,13 @@ android {
     productFlavors {
         stage {
             dimension "env"
+
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.stage}\""
         }
         production {
             dimension "env"
+
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.production}\""
         }
     }
 
@@ -131,7 +135,6 @@ configurations {
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')
-    implementation project(':library:config')
     implementation project(':library:db')
     implementation project(':library:download-manager')
     implementation project(':library:initial-content')
