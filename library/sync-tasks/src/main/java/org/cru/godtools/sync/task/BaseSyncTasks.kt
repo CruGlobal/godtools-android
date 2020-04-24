@@ -1,7 +1,6 @@
 package org.cru.godtools.sync.task
 
 import android.content.ContentResolver
-import android.content.Context
 import android.os.Bundle
 import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
@@ -10,14 +9,11 @@ import androidx.collection.SimpleArrayMap
 import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.model.Base
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.GodToolsDao
 
 @WorkerThread
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseSyncTasks internal constructor(context: Context) {
-    protected val api = GodToolsApi.getInstance()
-    protected val dao = GodToolsDao.getInstance(context)
-    private val eventBus: EventBus = EventBus.getDefault()
+abstract class BaseSyncTasks internal constructor(private val eventBus: EventBus) {
+    protected val api: GodToolsApi = GodToolsApi.getInstance()
 
     fun sendEvents(events: SimpleArrayMap<Class<*>, Any>) {
         for (i in 0 until events.size()) eventBus.post(events.valueAt(i))

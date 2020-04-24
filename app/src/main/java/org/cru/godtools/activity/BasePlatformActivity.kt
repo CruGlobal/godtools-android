@@ -16,6 +16,7 @@ import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
+import dagger.Lazy
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
@@ -41,6 +42,7 @@ import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.fragment.BasePlatformFragment
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
@@ -362,6 +364,10 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
     // region Sync Logic
     protected open val swipeRefreshLayout: SwipeRefreshLayout? get() = null
     open val handleChildrenSyncs get() = swipeRefreshLayout != null
+
+    @Inject
+    internal lateinit var lazySyncService: Lazy<GodToolsSyncService>
+    protected val syncService: GodToolsSyncService get() = lazySyncService.get()
 
     private val syncHelper = SwipeRefreshSyncHelper()
 

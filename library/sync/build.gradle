@@ -1,12 +1,17 @@
 dependencies {
-    implementation project(':library:sync-tasks')
+    api project(':library:sync-tasks')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
-    implementation "androidx.work:work-runtime-ktx:${deps.androidX.work}"
+    api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
+    implementation "com.google.dagger:dagger:${deps.dagger}"
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
+
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
 }

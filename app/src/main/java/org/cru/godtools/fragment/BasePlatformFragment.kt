@@ -18,6 +18,7 @@ import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.fragment.BaseFragment
+import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -91,6 +92,9 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     @JvmField
     @BindView(R.id.refresh)
     internal var refreshLayout: SwipeRefreshLayout? = null
+
+    @Inject
+    protected lateinit var syncService: GodToolsSyncService
 
     private val syncHelper = SwipeRefreshSyncHelper()
 

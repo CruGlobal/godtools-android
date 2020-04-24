@@ -21,7 +21,6 @@ import org.cru.godtools.databinding.ToolsFragmentBinding;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.ToolUpdateEvent;
-import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent;
@@ -127,7 +126,7 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     @CallSuper
     public void onSyncData(@NonNull final SwipeRefreshSyncHelper helper, final boolean force) {
         super.onSyncData(helper, force);
-        helper.sync(GodToolsSyncServiceKt.syncTools(requireContext(), force));
+        helper.sync(getSyncService().syncTools(force));
     }
 
     @Override
