@@ -2,6 +2,7 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import dagger.Reusable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ private const val TAG = "InitialContentTasks"
 
 private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
 
+@Reusable
 internal class Tasks @Inject constructor(
     private val context: Context,
     private val dao: GodToolsDao,
@@ -147,6 +149,44 @@ internal class Tasks @Inject constructor(
                 }
         } catch (e: IOException) {
             Timber.tag(TAG).e(e, "Error importing bundled attachments")
+        }
+    }
+
+    suspend fun importBundledTranslations() = withContext(Dispatchers.IO) {
+        try {
+            context.assets.list("translations")?.forEach { file ->
+                launch {
+                    // load the translation unless it's downloaded already
+                    val id = file.substring(0, file.lastIndexOf('.'))
+                    val translation = dao.find<Translation>(id)?.takeUnless { it.isDownloaded } ?: return@launch
+
+                    // ensure the tool and language are added to this device
+                    val toolCode = translation.toolCode ?: return@launch
+                    val tool = dao.find<Tool>(toolCode)?.takeIf { it.isAdded } ?: return@launch
+                    val languageCode = translation.languageCode
+                    val language = dao.find<Language>(languageCode)?.takeIf { it.isAdded } ?: return@launch
+
+                    // short-circuit if a newer translation is already downloaded
+                    val latestTranslation =
+                        dao.getLatestTranslation(toolCode, languageCode, isPublished = true, isDownloaded = true)
+                            .orElse(null)
+                    if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
+
+                    withContext(Dispatchers.IO) {
+                        try {
+                            context.assets.open("translations/$file")
+                                .use { downloadManager.storeTranslation(translation, it, -1) }
+                        } catch (e: IOException) {
+                            Timber.tag(TAG).e(
+                                e, "Error importing bundled translation %s-%s-%d (%s)", tool.code, language.code,
+                                translation.version, file
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Error importing bundled translations")
         }
     }
 }
