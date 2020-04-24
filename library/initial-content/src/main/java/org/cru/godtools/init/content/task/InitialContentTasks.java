@@ -5,11 +5,9 @@ import android.content.res.AssetManager;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
-import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.init.content.BuildConfig;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
@@ -26,7 +24,6 @@ import androidx.annotation.WorkerThread;
 import timber.log.Timber;
 
 public class InitialContentTasks implements Runnable {
-    private static final String SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools";
 
     private final AssetManager mAssets;
     private final GodToolsDao mDao;
@@ -42,25 +39,8 @@ public class InitialContentTasks implements Runnable {
     @WorkerThread
     public void run() {
         // tools init
-        initDefaultTools();
         importBundledTranslations();
         importBundledAttachments();
-    }
-
-    @WorkerThread
-    private void initDefaultTools() {
-        // check to see if we have initialized the default tools before
-        if (mDao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) {
-            return;
-        }
-
-        // add any bundled tools as the default tools
-        for (final String code : BuildConfig.BUNDLED_TOOLS) {
-            Futures.getUnchecked(mDownloadManager.addTool(code));
-        }
-
-        // update the last sync time
-        mDao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS);
     }
 
     private void importBundledTranslations() {

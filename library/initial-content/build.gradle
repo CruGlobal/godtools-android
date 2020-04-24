@@ -27,6 +27,7 @@ dependencies {
     implementation project(':library:model')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:${deps.kotlinCoroutines}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

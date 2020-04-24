@@ -21,8 +21,14 @@ class InitialContentImporter @Inject internal constructor(context: Context, task
             }
 
             // tools init
-            tasks.loadBundledTools()
+            val tools = async {
+                tasks.loadBundledTools()
+                tasks.initDefaultTools()
+            }
+
+            tools.await()
             languages.await()
+
             InitialContentTasks(context).run()
         }
     }

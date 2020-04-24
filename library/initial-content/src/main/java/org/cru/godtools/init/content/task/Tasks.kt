@@ -3,6 +3,7 @@ package org.cru.godtools.init.content.task
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
@@ -31,6 +32,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 private const val TAG = "InitialContentTasks"
+
+private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
 
 internal class Tasks @Inject constructor(
     private val context: Context,
@@ -110,6 +113,18 @@ internal class Tasks @Inject constructor(
             // log exception, but it shouldn't be fatal (for now)
             Timber.tag(TAG).e(e, "Error loading bundled tools")
         }
+    }
+
+    suspend fun initDefaultTools() {
+        // check to see if we have initialized the default tools before
+        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+
+        // add any bundled tools as the default tools
+        BuildConfig.BUNDLED_TOOLS
+            .map { downloadManager.addTool(it) }
+            .forEach { it.await() }
+
+        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
     // endregion Tool Initial Content Tasks
 }
