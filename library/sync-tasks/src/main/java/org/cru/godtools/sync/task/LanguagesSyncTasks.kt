@@ -10,6 +10,7 @@ import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Expression.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
+import org.cru.godtools.api.LanguagesApi
 import org.cru.godtools.model.Language
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.LanguageTable
@@ -22,8 +23,11 @@ private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS
 
 @Singleton
-class LanguagesSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus: EventBus) :
-    BaseDataSyncTasks(dao, eventBus) {
+class LanguagesSyncTasks @Inject internal constructor(
+    dao: GodToolsDao,
+    private val languagesApi: LanguagesApi,
+    eventBus: EventBus
+) : BaseDataSyncTasks(dao, eventBus) {
     private val languagesMutex = Mutex()
 
     suspend fun syncLanguages(args: Bundle) = withContext(Dispatchers.IO) {
@@ -34,7 +38,7 @@ class LanguagesSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus
             ) return@withContext true
 
             // fetch & store languages
-            api.languages.list(JsonApiParams()).takeIf { it.isSuccessful }?.body()?.let { json ->
+            languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body()?.let { json ->
                 val events = SimpleArrayMap<Class<*>, Any>()
                 dao.transaction {
                     val existing = dao.get(Query.select<Language>())

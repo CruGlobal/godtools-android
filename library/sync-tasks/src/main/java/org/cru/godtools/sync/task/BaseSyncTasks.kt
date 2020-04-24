@@ -13,8 +13,6 @@ import org.greenrobot.eventbus.EventBus
 @WorkerThread
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 abstract class BaseSyncTasks internal constructor(private val eventBus: EventBus) {
-    protected val api: GodToolsApi = GodToolsApi.getInstance()
-
     fun sendEvents(events: SimpleArrayMap<Class<*>, Any>) {
         for (i in 0 until events.size()) eventBus.post(events.valueAt(i))
         events.clear()
