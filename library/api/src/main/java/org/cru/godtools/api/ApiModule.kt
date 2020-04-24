@@ -5,11 +5,20 @@ import dagger.Provides
 import dagger.Reusable
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
+import org.ccci.gto.android.common.jsonapi.JsonApiConverter
+import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
+import org.cru.godtools.api.model.ToolViews
+import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Followup
+import org.cru.godtools.model.GlobalActivityAnalytics
+import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
+import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -26,8 +35,16 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun godToolsApi(okhttp: OkHttpClient, @Named(MOBILE_CONTENT_API_BASE_URI) baseUri: String) =
-        GodToolsApi(baseUri, okhttp)
+    fun jsonApiConverter() = JsonApiConverter.Builder()
+        .addClasses(Language::class.java)
+        .addClasses(Tool::class.java, ToolViews::class.java)
+        .addClasses(Attachment::class.java)
+        .addClasses(Translation::class.java)
+        .addClasses(Followup::class.java)
+        .addClasses(GlobalActivityAnalytics::class.java)
+        .addConverters(ToolTypeConverter)
+        .addConverters(LocaleTypeConverter())
+        .build()
 
     // region mobile-content-api APIs
     @Provides

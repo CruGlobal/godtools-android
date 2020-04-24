@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
@@ -25,7 +24,6 @@ import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
@@ -44,18 +42,10 @@ internal class Tasks @Inject constructor(
     private val context: Context,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
+    private val jsonApiConverter: JsonApiConverter,
     private val settings: Settings,
     private val eventBus: EventBus
 ) {
-    private val jsonApiConverter by lazy {
-        JsonApiConverter.Builder()
-            .addClasses(Language::class.java)
-            .addClasses(Tool::class.java, Translation::class.java, Attachment::class.java)
-            .addConverters(ToolTypeConverter)
-            .addConverters(LocaleTypeConverter())
-            .build()
-    }
-
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
         // short-circuit if we already have any languages loaded
