@@ -67,7 +67,7 @@ buildscript {
                 core          : '17.3.0',
                 crashlytics   : '17.0.0-beta04',
                 inAppMessaging: '19.0.6',
-                perf          : '19.0.6',
+                perf          : '19.0.7',
         ]
         uris = [
                 mobileContentApi: [
