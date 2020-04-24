@@ -23,15 +23,12 @@ open class GodToolsApplication : DaggerApplication() {
 
         // configure components
         configureLanguageFallacks()
-        configureApis()
 
         super.onCreate()
 
         // enable compat vector images
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
-
-    private fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
 
     private fun configureLanguageFallacks() {
         // These fallbacks are used for JesusFilm

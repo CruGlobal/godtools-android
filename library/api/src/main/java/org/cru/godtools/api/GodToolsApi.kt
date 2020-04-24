@@ -19,7 +19,7 @@ import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
-class GodToolsApi private constructor(mobileContentApiUrl: String) {
+class GodToolsApi internal constructor(mobileContentApiUrl: String) {
     private val jsonApiConverter: JsonApiConverter by lazy {
         JsonApiConverter.Builder()
             .addClasses(Language::class.java)
@@ -67,23 +67,5 @@ class GodToolsApi private constructor(mobileContentApiUrl: String) {
             .addConverterFactory(JSONObjectConverterFactory())
             .callFactory(okhttp)
             .build().create<CampaignFormsApi>()
-    }
-
-    companion object {
-        private lateinit var INSTANCE: GodToolsApi
-
-        @JvmStatic
-        @Synchronized
-        fun configure(apiUri: String) {
-            check(!::INSTANCE.isInitialized) { "Attempted to configure GodToolsApi multiple times" }
-            INSTANCE = GodToolsApi(apiUri)
-        }
-
-        @JvmStatic
-        @Synchronized
-        fun getInstance(): GodToolsApi {
-            check(::INSTANCE.isInitialized) { "Attempted to use GodTools API before it was configured" }
-            return INSTANCE
-        }
     }
 }
