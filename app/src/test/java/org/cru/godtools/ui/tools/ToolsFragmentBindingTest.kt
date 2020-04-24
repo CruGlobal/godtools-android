@@ -30,30 +30,30 @@ class ToolsFragmentBindingTest {
     }
 
     @Test
+    fun verifyEmptyListUiHideBeforeToolsSet() {
+        binding.setTools(null)
+        binding.executePendingBindings()
+
+        // we don't want the empty list UI visible before the list of tools has a chance to load
+        assertEquals(View.GONE, binding.emptyListUi.visibility)
+    }
+
+    @Test
+    fun verifyEmptyListUiHideBeforeToolsLoaded() {
+        binding.setTools(MutableLiveData(null))
+        binding.executePendingBindings()
+
+        // we don't want the empty list UI visible before the list of tools has a chance to load
+        assertEquals(View.GONE, binding.emptyListUi.visibility)
+    }
+
+    @Test
     fun verifyUiWithTools() {
         binding.setTools(MutableLiveData(listOf(Tool())))
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.emptyListUi.visibility)
         assertEquals(ViewGroup.LayoutParams.MATCH_PARENT, binding.tools.layoutParams.height)
-    }
-
-    @Test
-    fun verifyUiWithoutTools() {
-        binding.setTools(null)
-        binding.executePendingBindings()
-
-        assertEquals(View.VISIBLE, binding.emptyListUi.visibility)
-        assertEquals(ViewGroup.LayoutParams.WRAP_CONTENT, binding.tools.layoutParams.height)
-    }
-
-    @Test
-    fun verifyUiWithNullToolsList() {
-        binding.setTools(MutableLiveData(null))
-        binding.executePendingBindings()
-
-        assertEquals(View.VISIBLE, binding.emptyListUi.visibility)
-        assertEquals(ViewGroup.LayoutParams.WRAP_CONTENT, binding.tools.layoutParams.height)
     }
 
     @Test
