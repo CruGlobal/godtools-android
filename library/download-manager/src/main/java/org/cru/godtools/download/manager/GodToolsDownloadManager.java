@@ -1,6 +1,5 @@
 package org.cru.godtools.download.manager;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -68,6 +67,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.annotation.concurrent.GuardedBy;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
@@ -90,6 +91,7 @@ import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
+@Singleton
 public final class GodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
@@ -112,13 +114,15 @@ public final class GodToolsDownloadManager {
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
-    private GodToolsDownloadManager(@NonNull final Context context) {
+    @Inject
+    GodToolsDownloadManager(@NonNull final Context context, @NonNull final GodToolsDao dao,
+                            @NonNull final EventBus eventBus, @NonNull final Settings settings) {
         mContext = context;
         mApi = GodToolsApi.getInstance();
-        mDao = GodToolsDao.Companion.getInstance(mContext);
-        mEventBus = EventBus.getDefault();
+        mDao = dao;
+        mEventBus = eventBus;
         mHandler = new Handler(Looper.getMainLooper());
-        mPrefs = Settings.Companion.getInstance(mContext);
+        mPrefs = settings;
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(GodToolsDownloadManager.class.getSimpleName()));
@@ -128,22 +132,6 @@ public final class GodToolsDownloadManager {
 
         // enqueue an initial clean filesystem task
         enqueueCleanFilesystem();
-    }
-
-    @Nullable
-    @SuppressLint("StaticFieldLeak")
-    private static GodToolsDownloadManager sInstance;
-
-    @NonNull
-    @MainThread
-    public static GodToolsDownloadManager getInstance(@NonNull final Context context) {
-        synchronized (GodToolsDownloadManager.class) {
-            if (sInstance == null) {
-                sInstance = new GodToolsDownloadManager(context.getApplicationContext());
-            }
-        }
-
-        return sInstance;
     }
 
     // region Lifecycle Events
@@ -182,7 +170,7 @@ public final class GodToolsDownloadManager {
             language.setCode(locale);
             language.setAdded(true);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
+            update.addListener(new EventBusDelayedPost(mEventBus, LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -201,7 +189,7 @@ public final class GodToolsDownloadManager {
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(this::pruneStaleTranslations, directExecutor());
-            update.addListener(new EventBusDelayedPost(EventBus.getDefault(), LanguageUpdateEvent.INSTANCE),
+            update.addListener(new EventBusDelayedPost(mEventBus, LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
     }
@@ -213,7 +201,7 @@ public final class GodToolsDownloadManager {
         tool.setCode(code);
         tool.setAdded(true);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
+        update.addListener(new EventBusDelayedPost(mEventBus, ToolUpdateEvent.INSTANCE), directExecutor());
         return update;
     }
 
@@ -224,7 +212,7 @@ public final class GodToolsDownloadManager {
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(this::pruneStaleTranslations, directExecutor());
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), ToolUpdateEvent.INSTANCE), directExecutor());
+        update.addListener(new EventBusDelayedPost(mEventBus, ToolUpdateEvent.INSTANCE), directExecutor());
     }
 
     @AnyThread
@@ -281,9 +269,8 @@ public final class GodToolsDownloadManager {
                     .count();
 
             // if any translations were updated, send a broadcast
-            final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
-                eventBus.post(TranslationUpdateEvent.INSTANCE);
+                mEventBus.post(TranslationUpdateEvent.INSTANCE);
                 enqueueCleanFilesystem();
             }
 
