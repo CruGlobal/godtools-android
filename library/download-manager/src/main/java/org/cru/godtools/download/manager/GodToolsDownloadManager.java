@@ -20,7 +20,8 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
-import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.api.AttachmentsApi;
+import org.cru.godtools.api.TranslationsApi;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -105,7 +106,8 @@ public final class GodToolsDownloadManager {
     private static final ArrayMap<String, Object> LOCKS_FILES = new ArrayMap<>();
 
     private final Context mContext;
-    private final GodToolsApi mApi;
+    private final AttachmentsApi mAttachmentsApi;
+    private final TranslationsApi mTranslationsApi;
     private final GodToolsDao mDao;
     private final EventBus mEventBus;
     final Settings mPrefs;
@@ -115,11 +117,12 @@ public final class GodToolsDownloadManager {
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
     @Inject
-    GodToolsDownloadManager(@NonNull final Context context, @NonNull final GodToolsApi api,
-                            @NonNull final GodToolsDao dao, @NonNull final EventBus eventBus,
-                            @NonNull final Settings settings) {
+    GodToolsDownloadManager(@NonNull final Context context, @NonNull final AttachmentsApi attachmentsApi,
+                            @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
+                            @NonNull final EventBus eventBus, @NonNull final Settings settings) {
         mContext = context;
-        mApi = api;
+        mAttachmentsApi = attachmentsApi;
+        mTranslationsApi = translationsApi;
         mDao = dao;
         mEventBus = eventBus;
         mHandler = new Handler(Looper.getMainLooper());
@@ -319,7 +322,7 @@ public final class GodToolsDownloadManager {
 
                         try {
                             // download attachment
-                            final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
+                            final Response<ResponseBody> response = mAttachmentsApi.download(attachmentId).execute();
                             if (response.isSuccessful()) {
                                 final ResponseBody body = response.body();
                                 if (body != null) {
@@ -441,7 +444,7 @@ public final class GodToolsDownloadManager {
                 startProgress(key);
 
                 try {
-                    final Response<ResponseBody> response = mApi.translations.download(translation.getId()).execute();
+                    final Response<ResponseBody> response = mTranslationsApi.download(translation.getId()).execute();
                     if (response.isSuccessful()) {
                         final ResponseBody body = response.body();
                         if (body != null) {

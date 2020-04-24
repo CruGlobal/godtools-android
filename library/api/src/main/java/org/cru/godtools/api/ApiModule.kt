@@ -71,6 +71,10 @@ object ApiModule {
 
     @Provides
     @Reusable
+    fun attachmentsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AttachmentsApi = retrofit.create()
+
+    @Provides
+    @Reusable
     fun followupApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): FollowupApi = retrofit.create()
 
     @Provides
@@ -80,6 +84,10 @@ object ApiModule {
     @Provides
     @Reusable
     fun toolsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ToolsApi = retrofit.create()
+
+    @Provides
+    @Reusable
+    fun translationsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): TranslationsApi = retrofit.create()
 
     @Provides
     @Reusable
