@@ -17,4 +17,8 @@ dependencies {
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
 
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
+
+    implementation "com.google.dagger:dagger:${deps.dagger}"
+
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

@@ -115,10 +115,11 @@ public final class GodToolsDownloadManager {
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
     @Inject
-    GodToolsDownloadManager(@NonNull final Context context, @NonNull final GodToolsDao dao,
-                            @NonNull final EventBus eventBus, @NonNull final Settings settings) {
+    GodToolsDownloadManager(@NonNull final Context context, @NonNull final GodToolsApi api,
+                            @NonNull final GodToolsDao dao, @NonNull final EventBus eventBus,
+                            @NonNull final Settings settings) {
         mContext = context;
-        mApi = GodToolsApi.getInstance();
+        mApi = api;
         mDao = dao;
         mEventBus = eventBus;
         mHandler = new Handler(Looper.getMainLooper());

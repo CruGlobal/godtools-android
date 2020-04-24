@@ -19,10 +19,9 @@ import javax.inject.Singleton
 class AccountListRegistrationService @Inject internal constructor(
     eventBus: EventBus,
     private val settings: Settings,
-    private val theKey: TheKey
+    private val theKey: TheKey,
+    private val api: GodToolsApi
 ) {
-    private val api = GodToolsApi.getInstance()
-
     init {
         eventBus.register(this)
 
