@@ -9,6 +9,6 @@ import javax.inject.Named
 @Module
 class ConfigModule {
     @get:Provides
-    @get:Named(ApiModule.MOBILE_CONTENT_API_BASE_URI)
-    val mobileContentApiBaseUri = BuildConfig.MOBILE_CONTENT_API
+    @get:Named(ApiModule.MOBILE_CONTENT_API_URL)
+    val mobileContentApiBaseUrl = BuildConfig.MOBILE_CONTENT_API
 }

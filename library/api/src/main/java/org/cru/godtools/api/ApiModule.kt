@@ -5,8 +5,10 @@ import dagger.Provides
 import dagger.Reusable
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
+import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
+import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
 import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Attachment
@@ -19,12 +21,11 @@ import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 object ApiModule {
-    const val MOBILE_CONTENT_API_BASE_URI = "MOBILE_CONTENT_API_BASE_URI"
-
     @Provides
     @Singleton
     fun okhttp() = OkHttpClient.Builder()
@@ -47,9 +48,26 @@ object ApiModule {
         .build()
 
     // region mobile-content-api APIs
+    const val MOBILE_CONTENT_API_URL = "MOBILE_CONTENT_API_BASE_URL"
+    private const val MOBILE_CONTENT_API = "MOBILE_CONTENT_API"
+
     @Provides
     @Reusable
-    fun analyticsApi(godToolsApi: GodToolsApi) = godToolsApi.analytics
+    @Named(MOBILE_CONTENT_API)
+    fun mobileContentApiRetrofit(
+        @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
+        jsonApiConverter: JsonApiConverter,
+        okhttp: OkHttpClient
+    ) = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(LocaleConverterFactory())
+        .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter))
+        .callFactory(okhttp)
+        .build()
+
+    @Provides
+    @Reusable
+    fun analyticsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AnalyticsApi = retrofit.create()
 
     @Provides
     @Reusable
