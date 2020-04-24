@@ -57,7 +57,7 @@ internal class Tasks @Inject constructor(
     }
 
     // region Language Initial Content Tasks
-    suspend fun loadBundledLanguages() =  withContext(Dispatchers.IO) {
+    suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
         // short-circuit if we already have any languages loaded
         if (dao.getCursor(Language::class.java).count > 0) return@withContext
 
