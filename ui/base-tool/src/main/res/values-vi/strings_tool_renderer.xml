@@ -2,8 +2,9 @@
 <resources>
     <string name="menu_install">Cài đặt</string>
     <string name="menu_share_tool">Chia sẻ</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Chia sẻ “%1$s” sử dụng</string>
     <string name="tool_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
     <string name="tool_loading">Công cụ bạn yêu cầu đang tải...</string>
+    <string name="feature_discovery_title_share_tool">Chia sẻ một liên kết</string>
+    <string name="feature_discovery_desc_share_tool">Gửi công cụ này tới một người bạn bằng cách nhấp vào biểu tượng này</string>
 </resources>

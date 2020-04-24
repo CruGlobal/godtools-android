@@ -5,4 +5,6 @@
     <string name="share_tool_title">Koplietot “%1$s” izmantošanu</string>
     <string name="tool_not_found">Pieprasīto rīku neizdevās atrast</string>
     <string name="tool_loading">Jūsu pieprasītais rīks tiek ielādēts…</string>
+    <string name="feature_discovery_title_share_tool">Kopīgojiet saiti</string>
+    <string name="feature_discovery_desc_share_tool">Nosūtiet šo rīku draugam, noklikšķinot uz ikonas</string>
 </resources>

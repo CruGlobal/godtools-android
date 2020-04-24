@@ -5,4 +5,6 @@
     <string name="share_tool_title">%1$sကိုအသုံးပြု၍ ဝေငှပါ။</string>
     <string name="tool_not_found">ရှာဖွေသော tool  ကိုရှာ၍ မရပါ။</string>
     <string name="tool_loading">သင်တောင်းဆိုထားသော tool သည် လုတ်ဒင်း ဖြစ်လျက်ရှိသည်။</string>
+    <string name="feature_discovery_title_share_tool">လင့်ခ်တစ်ခုကို မျှဝေပါ</string>
+    <string name="feature_discovery_desc_share_tool">ဤအိုင်ကွန်ကို နှိပ်ခြင်းဖြင့် ဤကိရိယာကို မိတ်ဆွေတစ်ဦးထံ ပေးပို့ပါ</string>
 </resources>

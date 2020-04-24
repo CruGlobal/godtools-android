@@ -2,8 +2,9 @@
 <resources>
     <string name="menu_install">Pasang</string>
     <string name="menu_share_tool">Kongsi</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Kongsikan “%1$s” menggunakan</string>
     <string name="tool_not_found">Alat yang anda minta tidak ditemui</string>
     <string name="tool_loading">Alat yang anda minta sedang dimuatkan...</string>
+    <string name="feature_discovery_title_share_tool">Kongsi pautan</string>
+    <string name="feature_discovery_desc_share_tool">Hantar alat ini kepada rakan dengan mengklik ikon ini</string>
 </resources>

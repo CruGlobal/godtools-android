@@ -5,4 +5,6 @@
     <string name="share_tool_title">Deel \"%1$s\" deur gebruik te maak van</string>
     <string name="tool_not_found">Die hulpmiddel wat jy gevra het kannie gevind word nie</string>
     <string name="tool_loading">Die hulpmiddel wat jy aangevra het is besig om te laai…</string>
+    <string name="feature_discovery_title_share_tool">Deel \'n skakel</string>
+    <string name="feature_discovery_desc_share_tool">Stuur hierdie gereedskap na \'n vriend deur op hierdie ikoon te klik.</string>
 </resources>

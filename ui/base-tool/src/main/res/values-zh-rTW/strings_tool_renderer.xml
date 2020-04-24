@@ -5,4 +5,6 @@
     <string name="share_tool_title">使用以下管道分享「%1$s」：</string>
     <string name="tool_not_found">找不到您要求的工具</string>
     <string name="tool_loading">工具正在載入中⋯⋯</string>
+    <string name="feature_discovery_title_share_tool">分享連結</string>
+    <string name="feature_discovery_desc_share_tool">點選此圖示即可將此工具傳送給好友</string>
 </resources>

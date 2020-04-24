@@ -5,4 +5,6 @@
     <string name="share_tool_title">“%1$s” को उपयोग करते हुए साझा करें</string>
     <string name="tool_not_found">अनुरोधित टूल नहीं मिला</string>
     <string name="tool_loading">अनुरोधित टूल लोड हो रहा है ...</string>
+    <string name="feature_discovery_title_share_tool">लिंक साझा करें</string>
+    <string name="feature_discovery_desc_share_tool">इस चिन्ह को क्लिक करके यह टूल एक दोस्त को भेजें</string>
 </resources>

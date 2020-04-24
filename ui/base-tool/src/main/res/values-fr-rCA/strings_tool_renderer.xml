@@ -2,8 +2,9 @@
 <resources>
     <string name="menu_install">Installer</string>
     <string name="menu_share_tool">Partager</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Partager « %1$s » utilisant</string>
     <string name="tool_not_found">Impossible de trouver l\'outil que vous avez demandé</string>
     <string name="tool_loading">Chargement de l\'outil que vous avez demandé...</string>
+    <string name="feature_discovery_title_share_tool">Partagez un lien</string>
+    <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
 </resources>

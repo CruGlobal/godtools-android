@@ -5,4 +5,6 @@
     <string name="share_tool_title">Jaa “%1$s”</string>
     <string name="tool_not_found">Haluamaasi työkalua ei löydy</string>
     <string name="tool_loading">Haluamaasi työkalua ladataan…</string>
+    <string name="feature_discovery_title_share_tool">Jaa linkki</string>
+    <string name="feature_discovery_desc_share_tool">Lähetä tämä työkalu ystävälle tätä kuvaketta napsauttamalla</string>
 </resources>

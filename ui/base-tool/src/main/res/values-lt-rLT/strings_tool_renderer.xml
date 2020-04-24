@@ -5,4 +5,6 @@
     <string name="share_tool_title">Dalytis „%1$s“ naudojant</string>
     <string name="tool_not_found">Jūsų prašomas įrankis nerastas</string>
     <string name="tool_loading">Jūsų prašomas įrankis įkeliamas…</string>
+    <string name="feature_discovery_title_share_tool">Bendrinti nuorodą</string>
+    <string name="feature_discovery_desc_share_tool">Siųsti šį įrankį draugui paspaudus šią piktogramą</string>
 </resources>

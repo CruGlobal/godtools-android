@@ -5,4 +5,6 @@
     <string name="share_tool_title">“%1$s” 사용 공유</string>
     <string name="tool_not_found">귀하가 요청한 툴을 찾을 수 없습니다</string>
     <string name="tool_loading">귀하가 요청한 툴을 로딩 중입니다...</string>
+    <string name="feature_discovery_title_share_tool">링크 공유하기</string>
+    <string name="feature_discovery_desc_share_tool">이 아이콘을 클릭하면 이 툴을 친구에게 보냅니다</string>
 </resources>

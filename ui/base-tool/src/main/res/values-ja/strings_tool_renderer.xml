@@ -5,4 +5,6 @@
     <string name="share_tool_title">次を使って “%1$s” をシェア</string>
     <string name="tool_not_found">リクエストしたツールが見つかりません</string>
     <string name="tool_loading">リクエストしたツールを読み込み中…</string>
+    <string name="feature_discovery_title_share_tool">リンクをシェア</string>
+    <string name="feature_discovery_desc_share_tool">このアイコンをクリックして、このツールを友達に送りましょう</string>
 </resources>

@@ -2,8 +2,9 @@
 <resources>
     <string name="menu_install">Pasang</string>
     <string name="menu_share_tool">Berbagi</string>
-    <string name="share_tool_subject">%1$s</string>
     <string name="share_tool_title">Berbagi \"%1$s\" menggunakan</string>
     <string name="tool_not_found">Alat yang Anda minta tidak tersedia</string>
     <string name="tool_loading">Alat yang Anda minta sedang dimuat....</string>
+    <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
+    <string name="feature_discovery_desc_share_tool">Kirim alat ini ke teman dengan mengklik ikon ini</string>
 </resources>
