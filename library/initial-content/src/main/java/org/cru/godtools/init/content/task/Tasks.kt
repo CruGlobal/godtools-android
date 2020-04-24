@@ -51,7 +51,7 @@ internal class Tasks @Inject constructor(
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() =  withContext(Dispatchers.IO) {
         // short-circuit if we already have any languages loaded
-        if (dao.get(Query.select<Language>().limit(1)).isNotEmpty()) return@withContext
+        if (dao.getCursor(Language::class.java).count > 0) return@withContext
 
         try {
             val languages = context.assets.open("languages.json").reader().use { it.readText() }
@@ -66,6 +66,8 @@ internal class Tasks @Inject constructor(
     }
 
     fun initSystemLanguages() {
+        if (dao.getCursor(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED)).count > 0) return
+
         // add device languages if we haven't added languages before
         if (dao.get(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
             LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
@@ -74,18 +76,18 @@ internal class Tasks @Inject constructor(
                 .asSequence()
                 // set the first available language as the primary language
                 .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
-        }
 
-        // always add english and bundled languages
-        downloadManager.addLanguage(Locale.ENGLISH)
-        BuildConfig.BUNDLED_LANGUAGES.forEach { downloadManager.addLanguage(LocaleCompat.forLanguageTag(it)) }
+            // always add english and bundled languages
+            downloadManager.addLanguage(Locale.ENGLISH)
+            BuildConfig.BUNDLED_LANGUAGES.forEach { downloadManager.addLanguage(LocaleCompat.forLanguageTag(it)) }
+        }
     }
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
     suspend fun loadBundledTools() = withContext(Dispatchers.IO) {
         // short-circuit if we already have any tools loaded
-        if (dao.get(Query.select<Tool>().limit(1)).isNotEmpty()) return@withContext
+        if (dao.getCursor(Tool::class.java).count > 0) return@withContext
 
         try {
             val tools = context.assets.open("tools.json").reader().use { it.readText() }
