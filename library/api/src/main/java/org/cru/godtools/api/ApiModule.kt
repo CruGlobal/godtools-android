@@ -3,15 +3,28 @@ package org.cru.godtools.api
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 object ApiModule {
     const val MOBILE_CONTENT_API_BASE_URI = "MOBILE_CONTENT_API_BASE_URI"
 
     @Provides
+    @Singleton
+    fun okhttp() = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .attachGlobalInterceptors()
+        .build()
+
+    @Provides
     @Reusable
-    fun godToolsApi(@Named(MOBILE_CONTENT_API_BASE_URI) baseUri: String) = GodToolsApi(baseUri)
+    fun godToolsApi(okhttp: OkHttpClient, @Named(MOBILE_CONTENT_API_BASE_URI) baseUri: String) =
+        GodToolsApi(baseUri, okhttp)
 
     @Provides
     @Reusable

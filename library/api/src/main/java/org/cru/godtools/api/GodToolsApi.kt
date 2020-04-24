@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactor
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
-import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Followup
@@ -17,9 +16,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
-import java.util.concurrent.TimeUnit
 
-class GodToolsApi internal constructor(mobileContentApiUrl: String) {
+class GodToolsApi internal constructor(mobileContentApiUrl: String, okhttp: OkHttpClient) {
     private val jsonApiConverter: JsonApiConverter by lazy {
         JsonApiConverter.Builder()
             .addClasses(Language::class.java)
@@ -32,13 +30,6 @@ class GodToolsApi internal constructor(mobileContentApiUrl: String) {
             .addConverters(LocaleTypeConverter())
             .build()
     }
-
-    private val okhttp: OkHttpClient =
-        OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .attachGlobalInterceptors()
-            .build()
 
     private val mobileContentRetrofit: Retrofit =
         Retrofit.Builder()

@@ -17,7 +17,6 @@ import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
 import me.thekey.android.Attributes
 import me.thekey.android.TheKey
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -44,6 +43,7 @@ private const val CONTEXT_ATTR_SCORING_URI = "uri"
 class SnowplowAnalyticsService @Inject internal constructor(
     context: Context,
     eventBus: EventBus,
+    okhttp: OkHttpClient,
     private val theKey: TheKey
 ) {
     private val snowplowTracker: Tracker
@@ -53,7 +53,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
         Tracker.close()
         val emitter = EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
             .security(RequestSecurity.HTTPS)
-            .client(OkHttpClient.Builder().attachGlobalInterceptors().build())
+            .client(okhttp)
             .build()
         snowplowTracker = TrackerBuilder(emitter,
             SNOWPLOW_NAMESPACE,
