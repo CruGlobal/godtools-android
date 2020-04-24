@@ -14,21 +14,16 @@ import javax.inject.Singleton
 class InitialContentImporter @Inject internal constructor(context: Context, tasks: Tasks) {
     init {
         GlobalScope.launch(Dispatchers.IO) {
-            // languages init
             val languages = async {
                 tasks.loadBundledLanguages()
                 tasks.initSystemLanguages()
             }
 
-            // tools init
-            val tools = async {
-                tasks.loadBundledTools()
-                tasks.initDefaultTools()
-            }
+            tasks.loadBundledTools()
+            launch { tasks.importBundledAttachments() }
+            tasks.initDefaultTools()
 
-            tools.await()
             languages.await()
-
             InitialContentTasks(context).run()
         }
     }

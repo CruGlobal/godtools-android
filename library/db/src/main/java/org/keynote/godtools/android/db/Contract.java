@@ -277,6 +277,7 @@ public final class Contract extends BaseContract {
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true);
+        public static final Expression SQL_WHERE_NOT_DOWNLOADED = FIELD_DOWNLOADED.eq(false);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_FILENAME, SQL_COLUMN_SHA256,

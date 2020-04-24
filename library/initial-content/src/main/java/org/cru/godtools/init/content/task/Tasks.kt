@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
@@ -25,9 +26,11 @@ import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
+import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 
@@ -127,4 +130,23 @@ internal class Tasks @Inject constructor(
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
     // endregion Tool Initial Content Tasks
+
+    suspend fun importBundledAttachments() = withContext(Dispatchers.IO) {
+        try {
+            val files = context.assets.list("attachments")?.toSet().orEmpty()
+
+            // find any attachments that aren't downloaded, but came bundled with the resource for
+            dao.get(Query.select<Attachment>().where(AttachmentTable.SQL_WHERE_NOT_DOWNLOADED))
+                .filter { files.contains(it.localFileName) }
+                .forEach { attachment ->
+                    launch(Dispatchers.IO) {
+                        context.assets.open("attachments/${attachment.localFileName}").use {
+                            downloadManager.importAttachment(attachment, it)
+                        }
+                    }
+                }
+        } catch (e: IOException) {
+            Timber.tag(TAG).e(e, "Error importing bundled attachments")
+        }
+    }
 }

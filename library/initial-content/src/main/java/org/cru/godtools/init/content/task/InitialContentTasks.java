@@ -3,12 +3,9 @@ package org.cru.godtools.init.content.task;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
-import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -16,15 +13,12 @@ import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import timber.log.Timber;
 
 public class InitialContentTasks implements Runnable {
-
     private final AssetManager mAssets;
     private final GodToolsDao mDao;
     private final GodToolsDownloadManager mDownloadManager;
@@ -38,9 +32,7 @@ public class InitialContentTasks implements Runnable {
     @Override
     @WorkerThread
     public void run() {
-        // tools init
         importBundledTranslations();
-        importBundledAttachments();
     }
 
     private void importBundledTranslations() {
@@ -93,36 +85,6 @@ public class InitialContentTasks implements Runnable {
         } catch (final Exception e) {
             Timber.tag("InitialContentTasks")
                     .e(e, "Error importing bundled translations");
-        }
-    }
-
-    private void importBundledAttachments() {
-        try {
-            // bundled attachments
-            final Set<String> files = ImmutableSet.copyOf(mAssets.list("attachments"));
-
-            // find any attachments that aren't download, but we came bundled with the resource for
-            final List<Attachment> attachments = mDao.streamCompat(Query.select(Attachment.class))
-                    .filterNot(Attachment::isDownloaded)
-                    .filter(a -> files.contains(a.getLocalFileName()))
-                    .toList();
-
-            for (final Attachment attachment : attachments) {
-                final Closer closer = Closer.create();
-                try {
-                    final InputStream in =
-                            closer.register(mAssets.open("attachments/" + attachment.getLocalFileName()));
-
-                    mDownloadManager.importAttachment(attachment, in);
-                } catch (final Throwable t) {
-                    throw closer.rethrow(t);
-                } finally {
-                    closer.close();
-                }
-            }
-        } catch (final Exception e) {
-            Timber.tag("InitialContentTasks")
-                    .e(e, "Error importing bundled attachments");
         }
     }
 }
