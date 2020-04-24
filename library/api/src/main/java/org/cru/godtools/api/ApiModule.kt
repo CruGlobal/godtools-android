@@ -58,7 +58,7 @@ object ApiModule {
         @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
         jsonApiConverter: JsonApiConverter,
         okhttp: OkHttpClient
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(LocaleConverterFactory())
         .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter))
@@ -71,19 +71,19 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun followupApi(godToolsApi: GodToolsApi) = godToolsApi.followups
+    fun followupApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): FollowupApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun languagesApi(godToolsApi: GodToolsApi) = godToolsApi.languages
+    fun languagesApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): LanguagesApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun toolsApi(godToolsApi: GodToolsApi) = godToolsApi.tools
+    fun toolsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ToolsApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun viewsApi(godToolsApi: GodToolsApi) = godToolsApi.views
+    fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
     // region mobile-content-api APIs
 
     // region Adobe APIs
