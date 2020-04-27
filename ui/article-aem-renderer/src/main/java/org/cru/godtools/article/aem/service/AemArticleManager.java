@@ -125,9 +125,9 @@ public class AemArticleManager {
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     @Inject
-    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao,
+    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao, final AemApi api,
                       final ArticleRoomDatabase aemDb) {
-        mApi = AemApi.buildInstance("https://www.example.com");
+        mApi = api;
         mContext = context.getApplicationContext();
         mAemDb = aemDb;
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
