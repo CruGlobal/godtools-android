@@ -1,15 +1,19 @@
 package org.cru.godtools.api
 
+import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import okhttp3.OkHttpClient
+import okhttp3.TlsVersion
+import okhttp3.internal.Util
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
 import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
+import org.ccci.gto.android.common.util.DynamicSSLSocketFactory
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Followup
@@ -20,6 +24,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -31,6 +36,20 @@ object ApiModule {
     fun okhttp() = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
+        .apply {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                try {
+                    // customize the SSLSocketFactory for OkHttpClient
+                    val factory = DynamicSSLSocketFactory.create()
+                        // enable TLS 1.1 and TLS 1.2 for older versions of android that support it but don't enable it
+                        .addEnabledProtocols(TlsVersion.TLS_1_1.javaName(), TlsVersion.TLS_1_2.javaName())
+                        .build()
+                    sslSocketFactory(factory, Util.platformTrustManager())
+                } catch (e: Exception) {
+                    Timber.tag("ApiModule").e(e, "Error creating the DynamicSSLSocketFactory for OkHttp")
+                }
+            }
+        }
         .attachGlobalInterceptors()
         .build()
 
