@@ -4,15 +4,18 @@ import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
 import okhttp3.internal.Util
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory
+import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
+import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_INTERCEPTOR
+import org.ccci.gto.android.common.dagger.okhttp3.OkHttp3Module
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
-import org.ccci.gto.android.common.okhttp3.util.attachGlobalInterceptors
 import org.ccci.gto.android.common.util.DynamicSSLSocketFactory
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Attachment
@@ -29,11 +32,13 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [OkHttp3Module::class])
 object ApiModule {
     @Provides
     @Singleton
-    fun okhttp() = OkHttpClient.Builder()
+    fun okhttp(
+        @InterceptorType(NETWORK_INTERCEPTOR) networkInterceptors: Set<@JvmSuppressWildcards Interceptor>
+    ) = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .apply {
@@ -50,7 +55,7 @@ object ApiModule {
                 }
             }
         }
-        .attachGlobalInterceptors()
+        .apply { networkInterceptors.forEach { addNetworkInterceptor(it) } }
         .build()
 
     @Provides

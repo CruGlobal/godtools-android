@@ -19,10 +19,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
+import okhttp3.Interceptor
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
+import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_INTERCEPTOR
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.DefaultSqliteDatabaseProvider
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpenHelperDatabaseConnectionProvider
-import org.ccci.gto.android.common.okhttp3.util.addGlobalNetworkInterceptor
 import org.keynote.godtools.android.db.GodToolsDatabase
 import javax.inject.Singleton
 
@@ -69,11 +71,9 @@ abstract class FlipperModule {
         @IntoSet
         @Provides
         @Singleton
-        @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
-        internal fun flipperOkHttpInterceptor(networkFlipperPlugin: NetworkFlipperPlugin): Any =
-            FlipperOkhttpInterceptor(networkFlipperPlugin).also {
-                addGlobalNetworkInterceptor(it)
-            }
+        @InterceptorType(NETWORK_INTERCEPTOR)
+        fun flipperOkHttpInterceptor(networkFlipperPlugin: NetworkFlipperPlugin): Interceptor =
+            FlipperOkhttpInterceptor(networkFlipperPlugin)
 
         @Provides
         @ElementsIntoSet
