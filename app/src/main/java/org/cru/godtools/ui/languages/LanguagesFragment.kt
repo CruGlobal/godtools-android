@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
@@ -47,10 +48,6 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
         helper.sync(syncService.syncLanguages(force))
-    }
-
-    override fun onUpdatePrimaryLanguage() {
-        updateLanguagesList()
     }
 
     override fun onLocaleSelected(locale: Locale?) {
@@ -119,9 +116,10 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
 
     // region Languages List
     private val languagesAdapter by lazy {
-        LanguagesAdapter(this, viewModel.selectedLanguage).also {
-            it.callbacks = this
-            viewModel.languages.observe(this, it)
+        LanguagesAdapter(this, viewModel.selectedLanguage).also { adapter ->
+            adapter.callbacks = this
+            viewModel.languages.observe(this, adapter)
+            if (!isPrimary) settings.primaryLanguageLiveData.observe(this) { adapter.setDisabled(it) }
         }
     }
 
@@ -132,11 +130,6 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
                 addItemDecoration(DividerItemDecoration(context, it.orientation))
             }
         }
-        updateLanguagesList()
-    }
-
-    private fun updateLanguagesList() {
-        languagesAdapter.setDisabled(*(if (isPrimary) emptyArray() else arrayOf(primaryLanguage)))
     }
     // endregion Languages List
 }
