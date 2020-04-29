@@ -88,7 +88,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     internal lateinit var aemArticleManager: AemArticleManager
 
     private fun syncData(force: Boolean) {
-        aemArticleManager.enqueueSyncManifestAemImports(manifest, force)
+        aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force)
             .apply {
                 swipeRefreshLayout?.let {
                     addListener(WeakTask(it, resetRefreshLayoutTask), MainThreadExecutor())
