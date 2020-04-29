@@ -7,7 +7,6 @@ import androidx.lifecycle.switchMap
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
-import org.cru.godtools.activity.startLanguageSelectionActivity
 import org.cru.godtools.base.Settings
 import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
