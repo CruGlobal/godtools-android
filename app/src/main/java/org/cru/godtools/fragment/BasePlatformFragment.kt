@@ -15,8 +15,6 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
-import org.cru.godtools.base.Settings.Companion.PREF_PARALLEL_LANGUAGE
-import org.cru.godtools.base.Settings.Companion.PREF_PRIMARY_LANGUAGE
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
@@ -33,8 +31,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected lateinit var settings: Settings
     private val settingsChangeListener = ChangeListener()
 
-    protected var primaryLanguage = Settings.defaultLanguage
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
             syncHelper.onRestoreInstanceState(it.getBundle(EXTRA_SYNC_HELPER))
         }
 
-        loadLanguages(true)
         triggerInitialSync()
     }
 
@@ -57,14 +52,12 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         super.onStart()
         eventBus.register(this)
         startSettingsChangeListener()
-        loadLanguages(false)
         syncHelper.updateState()
     }
 
     @CallSuper
     protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
 
-    protected open fun onUpdatePrimaryLanguage() = Unit
     protected open fun onUpdateFeatureDiscovery(feature: String) = Unit
 
     @MainThread
@@ -118,18 +111,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     }
     // endregion Sync Logic
 
-    internal fun loadLanguages(initial: Boolean) {
-        val oldPrimary = primaryLanguage
-        primaryLanguage = settings.primaryLanguage
-
-        // trigger lifecycle events
-        if (!initial) {
-            if (oldPrimary != primaryLanguage) {
-                onUpdatePrimaryLanguage()
-            }
-        }
-    }
-
     private fun startSettingsChangeListener() {
         settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
     }
@@ -140,9 +121,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     internal inner class ChangeListener : SharedPreferences.OnSharedPreferenceChangeListener {
         override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
-            when (key) {
-                PREF_PRIMARY_LANGUAGE, PREF_PARALLEL_LANGUAGE -> loadLanguages(false)
-            }
             if (key?.startsWith(PREF_FEATURE_DISCOVERED) == true) {
                 onUpdateFeatureDiscovery(key.removePrefix(PREF_FEATURE_DISCOVERED))
             }
