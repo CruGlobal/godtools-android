@@ -197,7 +197,7 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
-    debugImplementation 'com.facebook.soloader:soloader:0.8.2'
+    debugImplementation 'com.facebook.soloader:soloader:0.9.0'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
