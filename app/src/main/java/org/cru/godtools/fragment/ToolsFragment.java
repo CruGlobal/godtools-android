@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
@@ -46,7 +45,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
-public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterCallbacks {
+public class ToolsFragment extends BasePlatformFragment<ToolsFragmentBinding> implements ToolsAdapterCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -69,9 +68,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     /*final*/ int mMode = MODE_ADDED;
 
     @Nullable
-    private ToolsFragmentBinding mBinding;
-
-    @Nullable
     private RecyclerViewDragDropManager mToolsDragDropManager;
     @Nullable
     private RecyclerView.Adapter mToolsDragDropAdapter;
@@ -88,6 +84,10 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         return fragment;
     }
 
+    public ToolsFragment() {
+        super(R.layout.tools_fragment);
+    }
+
     // region Lifecycle
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -102,19 +102,17 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
-                             @Nullable final Bundle savedInstanceState) {
-        mBinding = ToolsFragmentBinding.inflate(inflater, container, false);
-        mBinding.setLifecycleOwner(getViewLifecycleOwner());
-        inflateEmptyListUi(inflater, savedInstanceState);
-        return mBinding.getRoot();
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupToolsList();
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupDataBinding();
-        setupToolsList();
+    public void onBindingCreated(@NonNull final ToolsFragmentBinding binding,
+                                 @Nullable final Bundle savedInstanceState) {
+        super.onBindingCreated(binding, savedInstanceState);
+        binding.setTools(mDataModel.getTools());
+        inflateEmptyListUi(binding);
     }
 
     @Override
@@ -189,7 +187,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     public void onDestroyView() {
         cleanupToolsList();
         super.onDestroyView();
-        mBinding = null;
     }
     // endregion Lifecycle
 
@@ -228,12 +225,6 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
         mDataModel.getMode().setValue(mMode);
     }
     // endregion Data Model
-
-    private void setupDataBinding() {
-        if (mBinding != null) {
-            mBinding.setTools(mDataModel.getTools());
-        }
-    }
 
     // region Tools List
     @Nullable
@@ -300,16 +291,14 @@ public class ToolsFragment extends BasePlatformFragment implements ToolsAdapterC
     // endregion Tools List
 
     // region Empty List UI
-    private void inflateEmptyListUi(@NonNull final LayoutInflater inflater, @Nullable final Bundle savedInstanceState) {
-        if (mBinding != null) {
-            final int layout = mMode == MODE_ADDED ? R.layout.tools_added_empty_ui : R.layout.tools_available_empty_ui;
-            final View emptyUi = inflater.inflate(layout, mBinding.emptyListUi);
+    private void inflateEmptyListUi(@NonNull final ToolsFragmentBinding binding) {
+        final int layout = mMode == MODE_ADDED ? R.layout.tools_added_empty_ui : R.layout.tools_available_empty_ui;
+        final View emptyUi = LayoutInflater.from(binding.emptyListUi.getContext()).inflate(layout, binding.emptyListUi);
 
-            // HACK: quick and dirty way to attach an OnClickListener
-            final View button = emptyUi.findViewById(R.id.action);
-            if (button != null) {
-                button.setOnClickListener(v -> onEmptyActionClick());
-            }
+        // HACK: quick and dirty way to attach an OnClickListener
+        final View button = emptyUi.findViewById(R.id.action);
+        if (button != null) {
+            button.setOnClickListener(v -> onEmptyActionClick());
         }
     }
     // endregion Empty List UI
