@@ -6,8 +6,6 @@ env:
     - GRADLE_OPTS="-Xmx3072m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
-    # FABRIC_BUILD_SECRET={Build Secret}
-    - secure: nfuUV6H+kpR21OxyyFMGzjyItoE/bQIzxeWLKSFiisuVc4uG9unyk7XPHnKYV1u6d0FJ9ieV7bmri39igYANmGtzEzO2KbZhW4/xGQwcEbc0cxtPfwkXRP1bwoBMSqEYEHYwyLImFrtHNpP9rSVbR0L09f/kfWKUUOr9J/hRkNQ=
     # BETA_KEYSTORE_PASSWORD={password}
     - secure: jBb7ri2he+o7e17rtiNt6tnPb5gKpjP6Wuh5wTHi6ftdAC5cAGKPqSTGuCnyK/bSZqLdKDoLzgjXEwxY3L4qetrILcAJZKQWY4sb+OVk51/FY8VQx32LpwGtxtZn7XGdHNxTYxGFsDc/BW+Eo7vdRbvUBh2nCJisVYCWSlHdVB4=
     # FIREBASE_API_KEY_IV={iv}
@@ -47,9 +45,6 @@ before_install:
   - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
   - echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
-
-  # set Fabric apiSecret so fabric is correctly configured in the build
-  - echo apiSecret=$FABRIC_BUILD_SECRET >> app/fabric.properties
 
 install:
   # Install the rest of tools (e.g., avdmanager)

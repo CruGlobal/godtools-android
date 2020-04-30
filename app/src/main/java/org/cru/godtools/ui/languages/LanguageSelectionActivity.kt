@@ -1,21 +1,20 @@
-package org.cru.godtools.activity
+package org.cru.godtools.ui.languages
 
 import android.app.Activity
 import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import org.cru.godtools.R
+import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SELECTION
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.ui.languages.LanguagesFragment
-import org.cru.godtools.ui.languages.LocaleSelectedListener
 import java.util.Locale
 import javax.inject.Inject
 
-private const val EXTRA_PRIMARY = "org.cru.godtools.activity.LanguageSelectionActivity.PRIMARY"
+private const val EXTRA_PRIMARY = "org.cru.godtools.ui.languages.LanguageSelectionActivity.PRIMARY"
 
 fun Activity.startLanguageSelectionActivity(primary: Boolean) {
     Intent(this, LanguageSelectionActivity::class.java)

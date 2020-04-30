@@ -95,7 +95,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LanguageSelectionActivity"
+            android:name=".ui.languages.LanguageSelectionActivity"
             android:parentActivityName=".ui.languages.LanguageSettingsActivity"
             android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
