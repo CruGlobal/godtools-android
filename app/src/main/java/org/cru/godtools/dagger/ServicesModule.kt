@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.download.manager.DownloadManagerModule
+import org.cru.godtools.init.content.InitialContentModule
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.ShortcutModule
 import org.cru.godtools.sync.SyncModule
@@ -34,6 +35,7 @@ import javax.inject.Singleton
         DownloadManagerModule::class,
         EagerModule::class,
         EventBusModule::class,
+        InitialContentModule::class,
         ShortcutModule::class,
         SyncModule::class,
         ViewModelModule::class,
