@@ -18,8 +18,7 @@ branches:
 stages:
 - compile
 - test
-- name: deploy
-  if: type = push AND branch = develop
+- deploy
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -76,6 +75,7 @@ jobs:
 
   - name: "Release QA Build to Firebase App Distribution"
     stage: deploy
+    if: type = push AND branch = develop
 
     install:
     # Fetch the entire git history to correctly generate version codes
