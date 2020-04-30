@@ -41,7 +41,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_TRAINING;
 
@@ -102,17 +101,12 @@ public class ToolsFragment extends BasePlatformFragment<ToolsFragmentBinding> im
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupToolsList();
-    }
-
-    @Override
     public void onBindingCreated(@NonNull final ToolsFragmentBinding binding,
                                  @Nullable final Bundle savedInstanceState) {
         super.onBindingCreated(binding, savedInstanceState);
         binding.setTools(mDataModel.getTools());
         inflateEmptyListUi(binding);
+        setupToolsList(binding);
     }
 
     @Override
@@ -184,9 +178,9 @@ public class ToolsFragment extends BasePlatformFragment<ToolsFragmentBinding> im
     }
 
     @Override
-    public void onDestroyView() {
-        cleanupToolsList();
-        super.onDestroyView();
+    public void onDestroyBinding(@NonNull final ToolsFragmentBinding binding) {
+        cleanupToolsList(binding);
+        super.onDestroyBinding(binding);
     }
     // endregion Lifecycle
 
@@ -227,57 +221,49 @@ public class ToolsFragment extends BasePlatformFragment<ToolsFragmentBinding> im
     // endregion Data Model
 
     // region Tools List
-    @Nullable
-    @BindView(R.id.tools)
-    RecyclerView mToolsView;
-
     @SuppressWarnings("unchecked")
-    private void setupToolsList() {
-        if (mToolsView != null) {
-            mToolsView.setHasFixedSize(false);
+    private void setupToolsList(@NonNull final ToolsFragmentBinding binding) {
+        binding.tools.setHasFixedSize(false);
 
-            // create base tools adapter
-            mToolsAdapter = new ToolsAdapter(this, new ViewModelProvider(this));
-            mToolsAdapter.getCallbacks().set(this);
-            mDataModel.getTools().observe(getViewLifecycleOwner(), mToolsAdapter);
-            RecyclerView.Adapter adapter = mToolsAdapter;
+        // create base tools adapter
+        mToolsAdapter = new ToolsAdapter(this, new ViewModelProvider(this));
+        mToolsAdapter.getCallbacks().set(this);
+        mDataModel.getTools().observe(getViewLifecycleOwner(), mToolsAdapter);
+        RecyclerView.Adapter adapter = mToolsAdapter;
 
-            // configure the DragDrop RecyclerView components (Only for Added tools)
-            if (mMode == MODE_ADDED) {
-                mToolsView.setItemAnimator(new DraggableItemAnimator());
-                mToolsDragDropManager = new RecyclerViewDragDropManager();
-                mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
-                        .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
-                mToolsDragDropManager.setInitiateOnLongPress(true);
-                mToolsDragDropManager.setInitiateOnMove(false);
-                mToolsDragDropAdapter = mToolsDragDropManager.createWrappedAdapter(adapter);
-                adapter = mToolsDragDropAdapter;
-            }
-
-            // configure banner view if required for the current mode
-            if (mMode == MODE_ADDED) {
-                mToolsHeaderAdapter = new BannerHeaderAdapter();
-                mToolsHeaderAdapter.setAdapter(adapter);
-                adapter = mToolsHeaderAdapter;
-            }
-
-            // attach the correct adapter to the tools RecyclerView
-            mToolsView.setAdapter(adapter);
-
-            // handle some post-adapter configuration
-            if (mToolsDragDropManager != null) {
-                mToolsDragDropManager.attachRecyclerView(mToolsView);
-            }
-
-            updateVisibleBanner();
+        // configure the DragDrop RecyclerView components (Only for Added tools)
+        if (mMode == MODE_ADDED) {
+            binding.tools.setItemAnimator(new DraggableItemAnimator());
+            mToolsDragDropManager = new RecyclerViewDragDropManager();
+            mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
+                    .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
+            mToolsDragDropManager.setInitiateOnLongPress(true);
+            mToolsDragDropManager.setInitiateOnMove(false);
+            mToolsDragDropAdapter = mToolsDragDropManager.createWrappedAdapter(adapter);
+            adapter = mToolsDragDropAdapter;
         }
+
+        // configure banner view if required for the current mode
+        if (mMode == MODE_ADDED) {
+            mToolsHeaderAdapter = new BannerHeaderAdapter();
+            mToolsHeaderAdapter.setAdapter(adapter);
+            adapter = mToolsHeaderAdapter;
+        }
+
+        // attach the correct adapter to the tools RecyclerView
+        binding.tools.setAdapter(adapter);
+
+        // handle some post-adapter configuration
+        if (mToolsDragDropManager != null) {
+            mToolsDragDropManager.attachRecyclerView(binding.tools);
+        }
+
+        updateVisibleBanner();
     }
 
-    private void cleanupToolsList() {
-        if (mToolsView != null) {
-            mToolsView.setItemAnimator(null);
-            mToolsView.setAdapter(null);
-        }
+    private void cleanupToolsList(@NonNull final ToolsFragmentBinding binding) {
+        binding.tools.setItemAnimator(null);
+        binding.tools.setAdapter(null);
         if (mToolsDragDropManager != null) {
             mToolsDragDropManager.release();
         }
