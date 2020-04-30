@@ -98,5 +98,18 @@ jobs:
         branch: develop
         jdk: oraclejdk8
 
+  - name: "Release Internal Test Build to Play Store"
+    stage: deploy
+    if: type = push AND branch = fastlane
+
+    install:
+    # Fetch the entire git history to correctly generate version codes
+    - git fetch --unshallow
+    - gem install bundler
+    - bundler install
+    script:
+#    - fastlane android beta
+    - fastlane android cru_build_app
+
 notifications:
   email: false
