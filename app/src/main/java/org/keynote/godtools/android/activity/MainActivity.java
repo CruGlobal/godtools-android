@@ -261,7 +261,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void showAddTools() {
         // update the displayed fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
                 .commit();
 
         selectNavigationTabIfNecessary(mFindToolsTab);
@@ -272,7 +272,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private void showMyTools() {
         // update the displayed fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newInstance(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
                 .commit();
 
         selectNavigationTabIfNecessary(mMyToolsTab);
