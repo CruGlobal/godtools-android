@@ -19,8 +19,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) {
     )
 }
 
-class ToolDetailsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer),
-    ToolDetailsFragment.Callbacks {
+class ToolDetailsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
 
@@ -46,9 +45,6 @@ class ToolDetailsActivity : BasePlatformActivity(R.layout.activity_generic_fragm
         super.onResume()
         eventBus.post(ToolDetailsScreenEvent(tool))
     }
-
-    override fun onToolAdded() = finish()
-    override fun onToolRemoved() = finish()
     // endregion Lifecycle
 
     /**

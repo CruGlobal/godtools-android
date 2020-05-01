@@ -12,7 +12,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.ccci.gto.android.common.material.tabs.notifyChanged
-import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
@@ -31,11 +30,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     LinkClickedListener {
     constructor(toolCode: String) : this() {
         this.toolCode = toolCode
-    }
-
-    interface Callbacks {
-        fun onToolAdded()
-        fun onToolRemoved()
     }
 
     @Inject
@@ -99,17 +93,11 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     // region Data Binding
     fun addTool(toolCode: String?) {
-        if (toolCode != null) {
-            downloadManager.addTool(toolCode)
-            findListener<Callbacks>()?.onToolAdded()
-        }
+        if (toolCode != null) downloadManager.addTool(toolCode)
     }
 
     fun removeTool(toolCode: String?) {
-        if (toolCode != null) {
-            downloadManager.removeTool(toolCode)
-            findListener<Callbacks>()?.onToolRemoved()
-        }
+        if (toolCode != null) downloadManager.removeTool(toolCode)
     }
 
     fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
