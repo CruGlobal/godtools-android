@@ -20,12 +20,12 @@ import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
+import org.cru.godtools.ui.tools.ToolsFragment;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;

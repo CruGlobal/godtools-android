@@ -1,4 +1,4 @@
-package org.cru.godtools.fragment
+package org.cru.godtools.ui.tools
 
 import android.graphics.drawable.NinePatchDrawable
 import android.os.AsyncTask
@@ -23,15 +23,13 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.ADOBE_TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.ui.tools.ToolsAdapter
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.ToolsFragmentDataModel
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.argOrDefault
