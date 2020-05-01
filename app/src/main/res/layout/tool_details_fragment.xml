@@ -113,19 +113,17 @@
                     android:layout_marginRight="@dimen/tool_details_margin_horizontal"
                     android:onClick="@{() -> fragment.openTool(tool, primaryTranslation, parallelTranslation)}"
                     android:text="@string/action_tools_open"
-                    app:layout_constraintTop_toBottomOf="@id/shares"
-                    app:layout_goneMarginTop="16dp"
-                    app:visibleIf="@{tool.isAdded}" />
+                    app:layout_constraintTop_toBottomOf="@id/shares" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/action_add"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
                     android:layout_marginRight="@dimen/tool_details_margin_horizontal"
                     android:onClick="@{() -> fragment.addTool(tool.code)}"
-                    android:text="@string/action_tools_download"
-                    android:theme="@style/ThemeOverlay.GodTools.Button.Green"
+                    android:text="@string/action_tools_add_favorite"
                     app:layout_constraintTop_toBottomOf="@id/action_open"
                     app:visibleIf="@{!tool.isAdded}" />
 
@@ -137,7 +135,7 @@
                     android:layout_marginLeft="@dimen/tool_details_margin_horizontal"
                     android:layout_marginRight="@dimen/tool_details_margin_horizontal"
                     android:onClick="@{() -> fragment.removeTool(tool.code)}"
-                    android:text="@string/action_tools_remove"
+                    android:text="@string/action_tools_remove_favorite"
                     android:theme="@style/ThemeOverlay.GodTools.Button.Red"
                     app:layout_constraintTop_toBottomOf="@id/action_add"
                     app:visibleIf="@{tool.isAdded()}" />

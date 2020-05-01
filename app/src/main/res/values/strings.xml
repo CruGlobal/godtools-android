@@ -34,9 +34,9 @@
     <string name="nav_my_tools">My Tools</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="title_add_new_tools">Add New Tools</string>
-    <string name="action_tools_download">Download</string>
     <string name="action_tools_open">Open Tool</string>
-    <string name="action_tools_remove">Remove</string>
+    <string name="action_tools_add_favorite">Add to Favorites</string>
+    <string name="action_tools_remove_favorite">Remove from Favorites</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d View</item>
         <item quantity="other">%1$,d Views</item>
