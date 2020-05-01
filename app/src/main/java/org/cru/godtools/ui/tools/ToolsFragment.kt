@@ -40,6 +40,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     companion object {
         const val MODE_ADDED = 1
         const val MODE_AVAILABLE = 2
+        const val MODE_ALL = 3
     }
 
     interface Callbacks {
