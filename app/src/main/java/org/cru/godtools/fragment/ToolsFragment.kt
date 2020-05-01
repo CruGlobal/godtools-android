@@ -14,6 +14,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
+import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
@@ -184,6 +185,19 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
                 toolsDragDropAdapter = createWrappedAdapter(adapter)
                     .also { adapter = it }
+
+                // HACK: Because the RecyclerView isn't the direct child of the SwipeRefreshLayout,
+                //       reordering items in the RecyclerView doesn't cooperate correctly with the SwipeRefreshLayout.
+                //       We work around this problem by disabling the SwipeRefreshLayout when we are dragging an item.
+                onItemDragEventListener = object : SimpleOnItemDragEventListener() {
+                    override fun onItemDragStarted(position: Int) {
+                        binding.refresh.isEnabled = binding.refresh.isRefreshing
+                    }
+
+                    override fun onItemDragFinished(fromPosition: Int, toPosition: Int, result: Boolean) {
+                        binding.refresh.isEnabled = true
+                    }
+                }
             }
             binding.tools.itemAnimator = DraggableItemAnimator()
         }
