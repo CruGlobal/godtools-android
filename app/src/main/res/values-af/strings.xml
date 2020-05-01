@@ -24,9 +24,7 @@
     <string name="nav_my_tools">My hulpmiddels</string>
     <string name="menu_switch_language">Verander taal</string>
     <string name="title_add_new_tools">Voeg nuwe Hulpmiddels by</string>
-    <string name="action_tools_download">Laai af</string>
     <string name="action_tools_open">Maak hulpmiddel oop</string>
-    <string name="action_tools_remove">Verwyder</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Besigtiging</item>
         <item quantity="other">%1$,d Besigtiginge</item>

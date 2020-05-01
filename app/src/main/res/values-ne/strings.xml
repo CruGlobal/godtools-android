@@ -25,9 +25,7 @@
     <string name="nav_my_tools">"मेरो टुल्स "</string>
     <string name="menu_switch_language">"भाषा बदल्नु होस् "</string>
     <string name="title_add_new_tools">"नयाँ टुल्सलाई जोड्नुहोस् "</string>
-    <string name="action_tools_download">डाउनलोड</string>
     <string name="action_tools_open">खोल्नुहोस्</string>
-    <string name="action_tools_remove">"हटाउनुहोस् "</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ले हेर्यो</item>
         <item quantity="other">"%1$,d ले हेर्यो "</item>

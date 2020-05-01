@@ -24,9 +24,7 @@
     <string name="nav_my_tools">എന്റെ ടൂളുകൾ</string>
     <string name="menu_switch_language">ഭാഷ മാറ്റുക</string>
     <string name="title_add_new_tools">പുതിയ ടൂളുകൾ കൂട്ടി ചേർക്കുക</string>
-    <string name="action_tools_download">ഡൗൺലോഡ്</string>
     <string name="action_tools_open">തുറക്കുക</string>
-    <string name="action_tools_remove">നീക്കുക</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d വീക്ഷണം</item>
         <item quantity="other">%1$,d വീക്ഷണങ്ങൾ</item>

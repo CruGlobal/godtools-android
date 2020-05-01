@@ -25,9 +25,7 @@
     <string name="nav_my_tools">أدواتي</string>
     <string name="menu_switch_language">تبديل اللغة</string>
     <string name="title_add_new_tools">إضافة مزيد من الأدوات</string>
-    <string name="action_tools_download">تحميل</string>
     <string name="action_tools_open">فتح أداة</string>
-    <string name="action_tools_remove">إزالة</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d مشاهدة</item>
         <item quantity="other">%1$,d مشاهدات</item>

@@ -24,9 +24,7 @@
     <string name="nav_my_tools">Mano įrankiai</string>
     <string name="menu_switch_language">Pakeisti kalbą</string>
     <string name="title_add_new_tools">Pridėti naujus įrankius</string>
-    <string name="action_tools_download">Parsisiųsti</string>
     <string name="action_tools_open">Atidaryti įrankį</string>
-    <string name="action_tools_remove">Pašalinti</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d peržiūra</item>
         <item quantity="other">%1$,d peržiūros</item>

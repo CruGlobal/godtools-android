@@ -24,9 +24,7 @@
     <string name="nav_my_tools">Mənim alətlərim</string>
     <string name="menu_switch_language">Dili dəyiş</string>
     <string name="title_add_new_tools">Yeni alətlər əlavə edin</string>
-    <string name="action_tools_download">Yüklə</string>
     <string name="action_tools_open">Aləti aç</string>
-    <string name="action_tools_remove">Sil</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Baxış</item>
         <item quantity="other">%1$,d Baxışlar</item>

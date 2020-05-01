@@ -25,9 +25,7 @@
     <string name="nav_my_tools">Moji alati</string>
     <string name="menu_switch_language">Promijeni jezik</string>
     <string name="title_add_new_tools">Dodajte nove alate</string>
-    <string name="action_tools_download">Preuzmi</string>
     <string name="action_tools_open">Otvori alat</string>
-    <string name="action_tools_remove">Ukloni</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d pregled</item>
         <item quantity="other">%1$,d pregleda</item>

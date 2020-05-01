@@ -25,9 +25,7 @@
     <string name="nav_my_tools">我的工具</string>
     <string name="menu_switch_language">切換語言</string>
     <string name="title_add_new_tools">添加新工具</string>
-    <string name="action_tools_download">下載</string>
     <string name="action_tools_open">開啟工具</string>
-    <string name="action_tools_remove">移除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 個瀏覽次數</item>
     </plurals>

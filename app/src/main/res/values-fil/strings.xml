@@ -25,9 +25,7 @@
     <string name="nav_my_tools">Mga Tool Ko</string>
     <string name="menu_switch_language">Magpalit ng Wika</string>
     <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
-    <string name="action_tools_download">I-download</string>
     <string name="action_tools_open">Buksan ang Tool</string>
-    <string name="action_tools_remove">Alisin</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Pagtingin</item>
         <item quantity="other">%1$,d (na) Pagtingin</item>

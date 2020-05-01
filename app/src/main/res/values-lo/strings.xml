@@ -25,9 +25,7 @@
     <string name="nav_my_tools">ເຄື່ອງມືຂອງຂ້ອຍ</string>
     <string name="menu_switch_language">ປ່ຽນພາສາ</string>
     <string name="title_add_new_tools">ເພິ່ມເຄື່ອງມືໃໝ່</string>
-    <string name="action_tools_download">ດາວໂຫຼດ</string>
     <string name="action_tools_open">ເປີດເຄື່ອງມື</string>
-    <string name="action_tools_remove">ນຳອອກໄປ</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d ຮັບຊົມ</item>
     </plurals>

@@ -24,9 +24,7 @@
     <string name="nav_my_tools">Mín tól</string>
     <string name="menu_switch_language">Skipta um tungumál</string>
     <string name="title_add_new_tools">Bæta við nýjum tólum</string>
-    <string name="action_tools_download">Niðurhala</string>
     <string name="action_tools_open">Opna tól</string>
-    <string name="action_tools_remove">Fjarlægja</string>
     <string name="label_tools_about">Um</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d Tungumál</item>
