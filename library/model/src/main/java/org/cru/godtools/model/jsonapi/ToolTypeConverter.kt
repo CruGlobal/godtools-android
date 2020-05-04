@@ -5,6 +5,6 @@ import org.cru.godtools.model.Tool
 
 object ToolTypeConverter : TypeConverter<Tool.Type> {
     override fun supports(clazz: Class<*>) = Tool.Type::class.java == clazz
-    override fun toString(value: Tool.Type?) = value?.toJson()
+    override fun toString(value: Tool.Type?) = value?.json
     override fun fromString(value: String?) = Tool.Type.fromJson(value)
 }

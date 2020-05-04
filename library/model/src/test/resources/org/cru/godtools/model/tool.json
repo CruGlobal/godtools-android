@@ -1,0 +1,46 @@
+{
+  "data": {
+    "id": "1",
+    "type": "resource",
+    "attributes": {
+      "name": "Know God Personally",
+      "abbreviation": "kgp-us",
+      "description": "Gospel presentation",
+      "total-views": 12345,
+      "resource-type": "tract",
+      "attr-banner": "1",
+      "attr-banner-about": "2",
+      "attr-default-order": "10"
+    },
+    "relationships": {
+      "latest-translations": {
+        "data": [
+          {
+            "id": "1",
+            "type": "translation"
+          },
+          {
+            "id": "2",
+            "type": "translation"
+          }
+        ]
+      },
+      "attachments": {
+        "data": [
+          {
+            "id": "1",
+            "type": "attachment"
+          },
+          {
+            "id": "2",
+            "type": "attachment"
+          },
+          {
+            "id": "3",
+            "type": "attachment"
+          }
+        ]
+      }
+    }
+  }
+}

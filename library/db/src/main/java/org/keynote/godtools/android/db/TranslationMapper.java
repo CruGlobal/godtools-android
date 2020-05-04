@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.cru.godtools.model.Language;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 
 import androidx.annotation.NonNull;
@@ -75,7 +74,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
     public Translation toObject(@NonNull final Cursor c) {
         final Translation translation = super.toObject(c);
 
-        translation.setToolCode(getString(c, COLUMN_TOOL, Tool.INVALID_CODE));
+        translation.setToolCode(getString(c, COLUMN_TOOL));
         translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
         translation.setName(getString(c, COLUMN_NAME, null));

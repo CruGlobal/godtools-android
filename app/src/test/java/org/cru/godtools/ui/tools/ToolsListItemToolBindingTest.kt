@@ -32,7 +32,7 @@ class ToolsListItemToolBindingTest {
     private lateinit var callbacks: ToolsAdapterCallbacks
     private lateinit var viewModel: ToolsAdapterToolViewModel
     private val tool = Tool().apply {
-        setType(Tool.Type.TRACT)
+        type = Tool.Type.TRACT
         code = "test"
         name = "toolName"
         description = "toolDescription"
@@ -155,7 +155,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyParallelLanguageLabelHiddenIfArticleToolType() {
-        tool.setType(Tool.Type.ARTICLE)
+        tool.type = Tool.Type.ARTICLE
         binding.tool = tool
         binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
         binding.executePendingBindings()

@@ -90,7 +90,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_BANNER = "banner";
         public static final String COLUMN_DETAILS_BANNER = "banner_details";
         public static final String COLUMN_OVERVIEW_VIDEO = "overview_video";
-        public static final String COLUMN_COPYRIGHT = "copyright";
+        private static final String COLUMN_COPYRIGHT = "copyright";
         public static final String COLUMN_ORDER = "ordering";
         public static final String COLUMN_ADDED = "added";
 

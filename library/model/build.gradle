@@ -2,4 +2,6 @@ dependencies {
     implementation project(':library:base')
 
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
+
+    testImplementation 'org.json:json:20190722'
 }
