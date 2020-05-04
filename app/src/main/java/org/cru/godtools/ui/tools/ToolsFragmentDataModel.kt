@@ -24,7 +24,12 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao) :
                     else -> it
                 }
             })
-            .orderBy(if (mode == MODE_ADDED) ToolTable.COLUMN_ORDER else null)
+            .orderBy(
+                when (mode) {
+                    MODE_ADDED -> "${ToolTable.COLUMN_ORDER},${ToolTable.COLUMN_DEFAULT_ORDER}"
+                    else -> ToolTable.COLUMN_DEFAULT_ORDER
+                }
+            )
             .getAsLiveData(dao)
     }
 }
