@@ -31,7 +31,7 @@ class Translation : Base() {
     @JsonApiIgnore
     private var _toolCode: String? = null
     var toolCode: String?
-        get() = _toolCode ?: tool?.code ?: Tool.INVALID_CODE
+        get() = _toolCode ?: tool?.code
         set(code) {
             _toolCode = code
         }

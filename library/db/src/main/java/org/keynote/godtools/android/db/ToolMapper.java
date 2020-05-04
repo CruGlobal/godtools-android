@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE;
-import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_COPYRIGHT;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
@@ -54,9 +53,6 @@ final class ToolMapper extends BaseMapper<Tool> {
             case COLUMN_OVERVIEW_VIDEO:
                 values.put(field, tool.getOverviewVideo());
                 break;
-            case COLUMN_COPYRIGHT:
-                values.put(field, tool.getCopyright());
-                break;
             case COLUMN_ORDER:
                 values.put(field, tool.getOrder());
                 break;
@@ -80,7 +76,7 @@ final class ToolMapper extends BaseMapper<Tool> {
     public Tool toObject(@NonNull final Cursor c) {
         final Tool tool = super.toObject(c);
 
-        tool.setCode(getString(c, COLUMN_CODE, Tool.INVALID_CODE));
+        tool.setCode(getString(c, COLUMN_CODE));
         tool.setType(getEnum(c, COLUMN_TYPE, Type.class, null));
         tool.setName(getString(c, COLUMN_NAME, null));
         tool.setDescription(getString(c, COLUMN_DESCRIPTION, null));
@@ -89,7 +85,6 @@ final class ToolMapper extends BaseMapper<Tool> {
         tool.setBannerId(getLong(c, COLUMN_BANNER, Attachment.INVALID_ID));
         tool.setDetailsBannerId(getLong(c, COLUMN_DETAILS_BANNER, Attachment.INVALID_ID));
         tool.setOverviewVideo(getString(c, COLUMN_OVERVIEW_VIDEO, null));
-        tool.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
         tool.setOrder(getInt(c, COLUMN_ORDER, Integer.MAX_VALUE));
         tool.setAdded(getBool(c, COLUMN_ADDED, false));
 

@@ -24,7 +24,7 @@ class ToolJsonApiTest {
         assertEquals("Gospel presentation", tool.description)
         assertEquals(12345, tool.shares)
         assertEquals(Tool.Type.TRACT, tool.type)
-        assertEquals(1, tool.bannerId)
+        assertEquals(1L, tool.bannerId)
         assertEquals(2, tool.detailsBannerId)
         assertThat(tool.attachments, hasSize(3))
         assertThat(tool.latestTranslations, hasSize(2))

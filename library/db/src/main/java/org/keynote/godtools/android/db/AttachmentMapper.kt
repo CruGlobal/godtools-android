@@ -5,7 +5,6 @@ import android.database.Cursor
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.AttachmentTable.COLUMN_DOWNLOADED
 import org.keynote.godtools.android.db.Contract.AttachmentTable.COLUMN_FILENAME
 import org.keynote.godtools.android.db.Contract.AttachmentTable.COLUMN_LOCALFILENAME
@@ -31,7 +30,7 @@ internal object AttachmentMapper : BaseMapper<Attachment>() {
 
     override fun newObject(c: Cursor) = Attachment()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        setToolId(c.getLong(COLUMN_TOOL, Tool.INVALID_ID))
+        setToolId(c.getLong(COLUMN_TOOL))
         fileName = c.getString(COLUMN_FILENAME)
         sha256 = c.getString(COLUMN_SHA256)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
