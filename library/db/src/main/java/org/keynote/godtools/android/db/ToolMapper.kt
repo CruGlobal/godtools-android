@@ -10,6 +10,7 @@ import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE
+import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DEFAULT_ORDER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME
@@ -31,6 +32,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
             COLUMN_BANNER -> values.put(field, obj.bannerId)
             COLUMN_DETAILS_BANNER -> values.put(field, obj.detailsBannerId)
             COLUMN_OVERVIEW_VIDEO -> values.put(field, obj.overviewVideo)
+            COLUMN_DEFAULT_ORDER -> values.put(field, obj.defaultOrder)
             COLUMN_ORDER -> values.put(field, obj.order)
             COLUMN_ADDED -> values.put(field, obj.isAdded)
             else -> super.mapField(values, field, obj)
@@ -48,6 +50,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
         bannerId = c.getLong(COLUMN_BANNER)
         detailsBannerId = c.getLong(COLUMN_DETAILS_BANNER, Attachment.INVALID_ID)
         overviewVideo = c.getString(COLUMN_OVERVIEW_VIDEO)
+        defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0)
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE)
         isAdded = getBool(c, COLUMN_ADDED, false)
     }
