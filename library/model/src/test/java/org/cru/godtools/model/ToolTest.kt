@@ -25,6 +25,7 @@ class ToolTest {
         assertEquals(Tool.Type.TRACT, tool.type)
         assertEquals(1L, tool.bannerId)
         assertEquals(2, tool.detailsBannerId)
+        assertEquals(10, tool.defaultOrder)
         assertThat(tool.attachments, hasSize(3))
         assertThat(tool.latestTranslations, hasSize(2))
     }
