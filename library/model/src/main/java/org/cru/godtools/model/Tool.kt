@@ -31,7 +31,7 @@ class Tool : Base() {
         TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), UNKNOWN(null);
 
         companion object {
-            internal val DEFAULT = UNKNOWN
+            val DEFAULT = UNKNOWN
 
             fun fromJson(json: String?) = when (json) {
                 null -> null

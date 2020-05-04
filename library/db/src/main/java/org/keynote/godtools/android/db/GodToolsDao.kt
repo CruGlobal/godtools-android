@@ -54,7 +54,7 @@ class GodToolsDao private constructor(context: Context) :
             LanguageTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            Tool::class.java, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, ToolMapper(),
+            Tool::class.java, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, ToolMapper,
             ToolTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
