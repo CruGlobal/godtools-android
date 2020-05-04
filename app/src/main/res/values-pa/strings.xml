@@ -25,9 +25,7 @@
     <string name="nav_my_tools">ਮੇਰੇ ਟੂਲ</string>
     <string name="menu_switch_language">ਭਾਸ਼ਾ ਨੂੰ ਬਦਲੋ</string>
     <string name="title_add_new_tools">ਨਵੇਂ ਟੂਲ ਜੋੜੋ</string>
-    <string name="action_tools_download">ਡਾਊਨਲੋਡ ਕਰੋ</string>
     <string name="action_tools_open">ਟੂਲ ਖੋਲ੍ਹੋ</string>
-    <string name="action_tools_remove">ਹਟਾਓ</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ਨੇ ਵੇਖਿਆ</item>
         <item quantity="other">%1$,d ਨੇ ਵੇਖਿਆ</item>

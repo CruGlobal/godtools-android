@@ -24,9 +24,7 @@
     <string name="nav_my_tools">ကျွန်ုပ်၏ Tools များ</string>
     <string name="menu_switch_language">ဘာသာ စကားကို ပြောင်းရန်</string>
     <string name="title_add_new_tools">Tools သစ် ကို ထပ်ထည့်ရန်</string>
-    <string name="action_tools_download">ဒေါင်းလုပ် ဆွဲရန်</string>
     <string name="action_tools_open">Tool ဖွင့်ရန်</string>
-    <string name="action_tools_remove">ပယ်ဖျက်ရန်</string>
     <plurals name="label_tools_shares">
         <item quantity="other">" %1$,d toolကိုကြည့်ရှုသူများ"</item>
     </plurals>

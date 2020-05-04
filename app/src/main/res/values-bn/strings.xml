@@ -24,9 +24,7 @@
     <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
     <string name="menu_switch_language">ভাষা বদলান</string>
     <string name="title_add_new_tools">নতুন সরঞ্জাম যোগ করুন</string>
-    <string name="action_tools_download">ডাউনলোড</string>
     <string name="action_tools_open">খোলা</string>
-    <string name="action_tools_remove">অপসারণ করুন</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d মতামত</item>
         <item quantity="other">%1$,d মতামত</item>

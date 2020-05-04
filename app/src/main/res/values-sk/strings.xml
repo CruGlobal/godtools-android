@@ -25,9 +25,7 @@
     <string name="nav_my_tools">Moje nástroje</string>
     <string name="menu_switch_language">Prepnúť jazyk</string>
     <string name="title_add_new_tools">Pridať nové nástroje</string>
-    <string name="action_tools_download">Stiahnuť</string>
     <string name="action_tools_open">Otvoriť nástroj</string>
-    <string name="action_tools_remove">Odstrániť</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d zobrazenie</item>
         <item quantity="other">%1$,d zobrazení</item>

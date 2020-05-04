@@ -20,8 +20,6 @@
     <string name="nav_my_tools">Ireo Fitaovana</string>
     <string name="menu_switch_language">Hanova Fitenenana</string>
     <string name="title_add_new_tools">Hanampy Fitaovana Hafa</string>
-    <string name="action_tools_download">Alaivo</string>
-    <string name="action_tools_remove">Esorina</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Hita</item>
         <item quantity="other">%1$,d Hita</item>

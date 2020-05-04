@@ -21,9 +21,7 @@
     <string name="nav_find_tools">Другие</string>
     <string name="nav_my_tools">Мои инструменты</string>
     <string name="menu_switch_language">Изменить язык</string>
-    <string name="action_tools_download">Загрузить</string>
     <string name="action_tools_open">Открыть инструмент</string>
-    <string name="action_tools_remove">Удалить</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d просмотр</item>
         <item quantity="other">%1$,d просмотров</item>

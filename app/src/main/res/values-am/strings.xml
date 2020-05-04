@@ -24,9 +24,7 @@
     <string name="nav_my_tools">የኔ መሳሪያዎች</string>
     <string name="menu_switch_language">ቋንቋ ይቀይሩ</string>
     <string name="title_add_new_tools">አዲስ መሳሪያን ይጨምሩ</string>
-    <string name="action_tools_download">ያዉርዱ</string>
     <string name="action_tools_open">ክፈት</string>
-    <string name="action_tools_remove">"ያጥፉ "</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ታይቷል</item>
         <item quantity="other">%1$,d ታይቷል</item>
