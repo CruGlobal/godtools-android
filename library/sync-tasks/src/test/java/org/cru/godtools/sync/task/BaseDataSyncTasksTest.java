@@ -3,7 +3,6 @@ package org.cru.godtools.sync.task;
 import android.content.Context;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
-import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.model.Language;
 import org.greenrobot.eventbus.EventBus;
 import org.junit.Before;
@@ -34,7 +33,6 @@ public class BaseDataSyncTasksTest {
     @Before
     public void setup() {
         final Context context = ApplicationProvider.getApplicationContext();
-        GodToolsApi.configure("https://mobile-content-api-stage.cru.org/");
         mDao = GodToolsDao.Companion.getInstance(context);
         mTasks = new BaseDataSyncTasks(mDao, EventBus.getDefault()) {};
     }

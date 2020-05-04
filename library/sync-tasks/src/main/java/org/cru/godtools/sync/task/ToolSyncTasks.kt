@@ -13,6 +13,8 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
+import org.cru.godtools.api.ToolsApi
+import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -32,8 +34,12 @@ private val API_GET_INCLUDES = arrayOf(
 )
 
 @Singleton
-class ToolSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus: EventBus) :
-    BaseDataSyncTasks(dao, eventBus) {
+class ToolSyncTasks @Inject internal constructor(
+    dao: GodToolsDao,
+    private val toolsApi: ToolsApi,
+    private val viewsApi: ViewsApi,
+    eventBus: EventBus
+) : BaseDataSyncTasks(dao, eventBus) {
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 
@@ -45,7 +51,7 @@ class ToolSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus: Eve
             ) return@withContext true
 
             // fetch tools from the API, short-circuit if this response is invalid
-            val json = api.tools.list(JsonApiParams().include(*API_GET_INCLUDES))
+            val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
                 .takeIf { it.code() == 200 }?.body() ?: return@withContext false
 
             // store fetched tools
@@ -75,7 +81,7 @@ class ToolSyncTasks @Inject internal constructor(dao: GodToolsDao, eventBus: Eve
                         async {
                             try {
                                 val views = ToolViews(it)
-                                api.views.submitViews(views).isSuccessful
+                                viewsApi.submitViews(views).isSuccessful
                                     .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
                             } catch (ignored: IOException) {
                                 false

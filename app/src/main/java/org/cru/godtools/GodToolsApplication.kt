@@ -8,8 +8,6 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.api.GodToolsApi
-import org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API
 import org.cru.godtools.dagger.ApplicationModule
 import org.cru.godtools.dagger.DaggerApplicationComponent
 import timber.log.Timber
@@ -23,15 +21,12 @@ open class GodToolsApplication : DaggerApplication() {
 
         // configure components
         configureLanguageFallacks()
-        configureApis()
 
         super.onCreate()
 
         // enable compat vector images
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
-
-    private fun configureApis() = GodToolsApi.configure(MOBILE_CONTENT_API)
 
     private fun configureLanguageFallacks() {
         // These fallbacks are used for JesusFilm

@@ -8,6 +8,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
+import org.cru.godtools.api.FollowupApi
 import org.cru.godtools.model.Followup
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
@@ -16,8 +17,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FollowupSyncTasks @Inject internal constructor(private val dao: GodToolsDao, eventBus: EventBus) :
-    BaseSyncTasks(eventBus) {
+class FollowupSyncTasks @Inject internal constructor(
+    private val dao: GodToolsDao,
+    private val followupApi: FollowupApi,
+    eventBus: EventBus
+) : BaseSyncTasks(eventBus) {
     private val followupMutex = Mutex()
 
     suspend fun syncFollowups() = withContext(Dispatchers.IO) {
@@ -29,7 +33,7 @@ class FollowupSyncTasks @Inject internal constructor(private val dao: GodToolsDa
                             try {
                                 followup.languageCode?.let { followup.setLanguage(dao.find(it)) }
                                 followup.stashId()
-                                api.followups.subscribe(followup).isSuccessful
+                                followupApi.subscribe(followup).isSuccessful
                                     .also {
                                         if (it) {
                                             followup.restoreId()

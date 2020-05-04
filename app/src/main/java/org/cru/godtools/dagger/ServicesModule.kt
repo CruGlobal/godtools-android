@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.dagger.workmanager.DaggerWorkerFactory
 import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.analytics.AnalyticsModule
+import org.cru.godtools.api.ApiModule
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.init.content.InitialContentModule
 import org.cru.godtools.service.AccountListRegistrationService
@@ -31,6 +32,7 @@ import javax.inject.Singleton
 @Module(
     includes = [
         AnalyticsModule::class,
+        ApiModule::class,
         DatabaseModule::class,
         DownloadManagerModule::class,
         EagerModule::class,

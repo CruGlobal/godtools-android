@@ -1,6 +1,5 @@
 package org.cru.godtools.download.manager
 
-import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -17,10 +16,6 @@ abstract class DownloadManagerModule {
     abstract fun downloadManagerEagerSingleton(downloadManager: GodToolsDownloadManager): Any
 
     companion object {
-        // TODO: make GodToolsDownloadManager a standalone singleton
-        @Provides
-        fun downloadManager(context: Context) = GodToolsDownloadManager.getInstance(context)
-
         @IntoSet
         @Provides
         @Reusable

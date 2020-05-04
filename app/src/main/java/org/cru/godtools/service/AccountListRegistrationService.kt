@@ -2,10 +2,11 @@ package org.cru.godtools.service
 
 import android.os.AsyncTask
 import androidx.annotation.WorkerThread
+import dagger.Lazy
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.LoginEvent
 import org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_ID
-import org.cru.godtools.api.GodToolsApi
+import org.cru.godtools.api.CampaignFormsApi
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -19,10 +20,9 @@ import javax.inject.Singleton
 class AccountListRegistrationService @Inject internal constructor(
     eventBus: EventBus,
     private val settings: Settings,
-    private val theKey: TheKey
+    private val theKey: TheKey,
+    private val campaignFormsApi: Lazy<CampaignFormsApi>
 ) {
-    private val api = GodToolsApi.getInstance()
-
     init {
         eventBus.register(this)
 
@@ -42,7 +42,7 @@ class AccountListRegistrationService @Inject internal constructor(
 
         // trigger the signup
         try {
-            val response = api.campaignForms
+            val response = campaignFormsApi.get()
                 .signup(CAMPAIGN_FORMS_ID, attrs.email, attrs.firstName, attrs.lastName)
                 .execute()
             if (response.isSuccessful) {

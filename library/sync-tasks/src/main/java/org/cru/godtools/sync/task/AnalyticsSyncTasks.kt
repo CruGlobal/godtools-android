@@ -7,6 +7,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
+import org.cru.godtools.api.AnalyticsApi
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import javax.inject.Inject
@@ -17,8 +18,11 @@ private const val STALE_DURATION_GLOBAL_ACTIVITY = TimeConstants.DAY_IN_MS
 
 @Singleton
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
-class AnalyticsSyncTasks @Inject internal constructor(private val dao: GodToolsDao, eventBus: EventBus) :
-    BaseSyncTasks(eventBus) {
+class AnalyticsSyncTasks @Inject internal constructor(
+    private val dao: GodToolsDao,
+    private val analyticsApi: AnalyticsApi,
+    eventBus: EventBus
+) : BaseSyncTasks(eventBus) {
     private val globalActivityMutex = Mutex()
 
     suspend fun syncGlobalActivity(args: Bundle) = withContext(Dispatchers.IO) {
@@ -28,7 +32,7 @@ class AnalyticsSyncTasks @Inject internal constructor(private val dao: GodToolsD
                 dao.getLastSyncTime(SYNC_TIME_GLOBAL_ACTIVITY) < STALE_DURATION_GLOBAL_ACTIVITY
             ) return@withContext
 
-            api.analytics.getGlobalActivity().takeIf { it.isSuccessful }?.body()?.let {
+            analyticsApi.getGlobalActivity().takeIf { it.isSuccessful }?.body()?.let {
                 dao.replace(it)
                 dao.updateLastSyncTime(SYNC_TIME_GLOBAL_ACTIVITY)
             }

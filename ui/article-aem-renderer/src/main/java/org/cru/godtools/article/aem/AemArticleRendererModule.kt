@@ -10,14 +10,20 @@ import dagger.Reusable
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
+import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
+import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.ui.AemArticleActivity
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -53,5 +59,14 @@ abstract class AemArticleRendererModule {
         @Reusable
         @Provides
         fun resourceDao(db: ArticleRoomDatabase) = db.resourceDao()
+
+        @Reusable
+        @Provides
+        fun aemApi(okhttp: OkHttpClient): AemApi = Retrofit.Builder()
+            .baseUrl("https://unused.example.com")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(JSONObjectConverterFactory())
+            .callFactory(okhttp)
+            .build().create()
     }
 }

@@ -6,15 +6,12 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import androidx.collection.LongSparseArray
 import androidx.collection.SimpleArrayMap
-import org.cru.godtools.api.GodToolsApi
 import org.cru.godtools.model.Base
 import org.greenrobot.eventbus.EventBus
 
 @WorkerThread
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 abstract class BaseSyncTasks internal constructor(private val eventBus: EventBus) {
-    protected val api: GodToolsApi = GodToolsApi.getInstance()
-
     fun sendEvents(events: SimpleArrayMap<Class<*>, Any>) {
         for (i in 0 until events.size()) eventBus.post(events.valueAt(i))
         events.clear()
