@@ -16,6 +16,7 @@ private const val JSON_TOTAL_VIEWS = "total-views"
 private const val JSON_BANNER = "attr-banner"
 private const val JSON_BANNER_DETAILS = "attr-banner-about"
 private const val JSON_OVERVIEW_VIDEO = "attr-about-overview-video-youtube"
+private const val JSON_DEFAULT_ORDER = "attr-default-order"
 
 @JsonApiType(JSON_API_TYPE)
 class Tool : Base() {
@@ -70,6 +71,8 @@ class Tool : Base() {
     @JsonApiAttribute(JSON_OVERVIEW_VIDEO)
     var overviewVideo: String? = null
 
+    @JsonApiAttribute(JSON_DEFAULT_ORDER)
+    var defaultOrder: Int? = 0
     @JsonApiIgnore
     var order = Int.MAX_VALUE
 
