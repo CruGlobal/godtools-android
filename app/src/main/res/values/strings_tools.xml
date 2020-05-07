@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <eat-comment />
+    <string name="nav_find_tools">Find Tools</string>
+    <string name="nav_my_tools">My Tools</string>
+    <string name="nav_favorite_tools">Favorites</string>
+    <string name="nav_all_tools">All Tools</string>
+    <string name="title_add_new_tools">Add New Tools</string>
+    <string name="text_tools_all_installed">You have downloaded all available tools.</string>
+
+    <!-- Tool Details UI -->
+    <eat-comment />
+    <string name="menu_add_to_home">Add to Home screen</string>
+    <string name="action_tools_open">Open Tool</string>
+    <string name="action_tools_add_favorite">Add to Favorites</string>
+    <string name="action_tools_remove_favorite">Remove from Favorites</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d View</item>
+        <item quantity="other">%1$,d Views</item>
+    </plurals>
+    <string name="label_tools_about">About</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Language</item>
+        <item quantity="other">%1$,d Languages</item>
+    </plurals>
+</resources>
