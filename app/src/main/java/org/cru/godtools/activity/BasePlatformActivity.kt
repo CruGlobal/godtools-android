@@ -11,6 +11,8 @@ import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -90,7 +92,7 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
     override fun onStart() {
         super.onStart()
         eventBus.register(this)
-        syncHelper.triggerSync()
+        startSyncFramework()
     }
 
     @CallSuper
@@ -205,6 +207,7 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
     override fun onStop() {
         super.onStop()
         eventBus.unregister(this)
+        stopSyncFramework()
     }
 
     override fun onDestroy() {
@@ -370,12 +373,26 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
     protected val syncService: GodToolsSyncService get() = lazySyncService.get()
 
     private val syncHelper = SwipeRefreshSyncHelper()
+    private val syncFragmentCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
+            if (f is BasePlatformFragment<*> && handleChildrenSyncs) with(f) { syncHelper.triggerSync() }
+        }
+    }
+
+    private fun startSyncFramework() {
+        supportFragmentManager.registerFragmentLifecycleCallbacks(syncFragmentCallbacks, false)
+        syncHelper.triggerSync()
+    }
 
     private fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
         onSyncData(this, force)
         if (handleChildrenSyncs) supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
             .forEach { with(it) { triggerSync(force) } }
         updateState()
+    }
+
+    private fun stopSyncFramework() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(syncFragmentCallbacks)
     }
 
     @MainThread
