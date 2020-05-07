@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Моите инструменти</string>
     <string name="menu_switch_language">Променете езика</string>
     <string name="title_add_new_tools">Добавете нови инструменти</string>
-    <string name="action_tools_open">Отворете инструмента</string>
+    <string name="action_tools_open_tool">Отворете инструмента</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Преглед</item>
         <item quantity="other">%1$,d Прегледи</item>

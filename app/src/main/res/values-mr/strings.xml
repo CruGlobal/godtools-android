@@ -25,7 +25,7 @@
     <string name="nav_my_tools">माझे साधने</string>
     <string name="menu_switch_language">भाषा बदला</string>
     <string name="title_add_new_tools">नवीन साधने जोडा</string>
-    <string name="action_tools_open">साधन उघडा</string>
+    <string name="action_tools_open_tool">साधन उघडा</string>
     <plurals name="label_tools_shares">
         <item quantity="one">" %1$,d मत "</item>
         <item quantity="other">%1$,d

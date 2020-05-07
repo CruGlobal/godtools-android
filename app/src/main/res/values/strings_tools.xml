@@ -12,7 +12,7 @@
     <!-- Tool Details UI -->
     <eat-comment />
     <string name="menu_add_to_home">Add to Home screen</string>
-    <string name="action_tools_open">Open Tool</string>
+    <string name="action_tools_open_tool">Open Tool</string>
     <string name="action_tools_add_favorite">Add to Favorites</string>
     <string name="action_tools_remove_favorite">Remove from Favorites</string>
     <plurals name="label_tools_shares">

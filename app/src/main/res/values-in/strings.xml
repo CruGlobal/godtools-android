@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Alat Saya</string>
     <string name="menu_switch_language">Ganti Bahasa</string>
     <string name="title_add_new_tools">Tambah Alat Baru</string>
-    <string name="action_tools_open">Buka Alat</string>
+    <string name="action_tools_open_tool">Buka Alat</string>
     <plurals name="label_tools_shares">
         <item quantity="other">Dilihat %1$,d kali</item>
     </plurals>

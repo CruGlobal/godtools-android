@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Mine værktøjer</string>
     <string name="menu_switch_language">Skift sprog</string>
     <string name="title_add_new_tools">Tilføj nye værktøjer</string>
-    <string name="action_tools_open">Åbn værktøj</string>
+    <string name="action_tools_open_tool">Åbn værktøj</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Visning</item>
         <item quantity="other">%1$,d Visninger</item>

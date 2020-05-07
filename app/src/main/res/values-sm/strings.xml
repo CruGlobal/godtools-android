@@ -4,7 +4,7 @@
     <!-- Navigation Menu -->
     <!-- Share a story -->
     <!-- Tools UI -->
-    <string name="action_tools_open">Tatala</string>
+    <string name="action_tools_open_tool">Tatala</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
 </resources>

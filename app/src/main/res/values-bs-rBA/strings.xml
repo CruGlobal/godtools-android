@@ -4,7 +4,7 @@
     <!-- Navigation Menu -->
     <!-- Share a story -->
     <!-- Tools UI -->
-    <string name="action_tools_open">Otvori</string>
+    <string name="action_tools_open_tool">Otvori</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
 </resources>

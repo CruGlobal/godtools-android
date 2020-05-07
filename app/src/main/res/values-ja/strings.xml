@@ -25,7 +25,7 @@
     <string name="nav_my_tools">マイツール</string>
     <string name="menu_switch_language">言語の切り替え</string>
     <string name="title_add_new_tools">新規ツールを追加</string>
-    <string name="action_tools_open">ツールを開く</string>
+    <string name="action_tools_open_tool">ツールを開く</string>
     <plurals name="label_tools_shares">
         <item quantity="other">表示回数 %1$,d 回</item>
     </plurals>

@@ -25,7 +25,7 @@
     <string name="nav_my_tools">I miei strumenti</string>
     <string name="menu_switch_language">Cambia lingua</string>
     <string name="title_add_new_tools">Aggiungi nuovi strumenti</string>
-    <string name="action_tools_open">Apri Strumento</string>
+    <string name="action_tools_open_tool">Apri Strumento</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d visualizzazione</item>
         <item quantity="other">%1$,d visualizzazioni</item>

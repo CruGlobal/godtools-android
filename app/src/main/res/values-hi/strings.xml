@@ -25,7 +25,7 @@
     <string name="nav_my_tools">मेरे टूल्स</string>
     <string name="menu_switch_language">भाषा बदलें</string>
     <string name="title_add_new_tools">नए टूल जोड़ें</string>
-    <string name="action_tools_open">टूल खोलें</string>
+    <string name="action_tools_open_tool">टूल खोलें</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d दृश्य</item>
         <item quantity="other">%1$,d दृश्य</item>

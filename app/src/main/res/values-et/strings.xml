@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Leia tööriistu</string>
     <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_add_new_tools">Lisa uusi tööriistu</string>
-    <string name="action_tools_open">Ava tööriist</string>
+    <string name="action_tools_open_tool">Ava tööriist</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d külastus</item>
         <item quantity="other">%1$,d külastust</item>

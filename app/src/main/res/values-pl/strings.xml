@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Moje Prezentacje</string>
     <string name="menu_switch_language">Zmień język</string>
     <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
-    <string name="action_tools_open">Otwórz narzędzie</string>
+    <string name="action_tools_open_tool">Otwórz narzędzie</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d odsłona</item>
         <item quantity="other">%1$,d odsłon</item>

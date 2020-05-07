@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Meine Tools</string>
     <string name="menu_switch_language">Sprache wechseln</string>
     <string name="title_add_new_tools">Neue Tools hinzufügen</string>
-    <string name="action_tools_open">Tool öffnen</string>
+    <string name="action_tools_open_tool">Tool öffnen</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Aufruf</item>
         <item quantity="other">%1$,d Aufrufe</item>

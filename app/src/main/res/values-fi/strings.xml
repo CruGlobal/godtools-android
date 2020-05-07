@@ -24,7 +24,7 @@
     <string name="nav_my_tools">Omat työkalut</string>
     <string name="menu_switch_language">Vaihda kieltä</string>
     <string name="title_add_new_tools">Lisää uusia työkaluja</string>
-    <string name="action_tools_open">Avaa työkalu</string>
+    <string name="action_tools_open_tool">Avaa työkalu</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d tarkastelu</item>
         <item quantity="other">%1$,d tarkastelua</item>

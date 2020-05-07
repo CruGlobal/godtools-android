@@ -27,7 +27,7 @@
     <string name="nav_my_tools">ابزار من</string>
     <string name="menu_switch_language">تغییر زبان</string>
     <string name="title_add_new_tools">افزودن ابزارهای جدید</string>
-    <string name="action_tools_open">باز کردن ابزار</string>
+    <string name="action_tools_open_tool">باز کردن ابزار</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d مشاهده</item>
         <item quantity="other">%1$,d مشاهده</item>

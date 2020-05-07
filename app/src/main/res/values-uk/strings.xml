@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Інструменти</string>
     <string name="menu_switch_language">Змінити мову</string>
     <string name="title_add_new_tools">Додати інструменти</string>
-    <string name="action_tools_open">Відкрити інструмент</string>
+    <string name="action_tools_open_tool">Відкрити інструмент</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d перегляд</item>
         <item quantity="other">%1$,d переглядів</item>

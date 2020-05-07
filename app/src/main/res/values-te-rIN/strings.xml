@@ -25,7 +25,7 @@
     <string name="nav_my_tools">నా సాధనాలు</string>
     <string name="menu_switch_language">భాషను మార్చండి</string>
     <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
-    <string name="action_tools_open">పరికరం తెరవండి</string>
+    <string name="action_tools_open_tool">పరికరం తెరవండి</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d వీక్షణ</item>
         <item quantity="other">%1$,d వీక్షణలు</item>
