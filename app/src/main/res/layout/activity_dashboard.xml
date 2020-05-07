@@ -28,9 +28,9 @@
                     android:layout_height="@dimen/appbar_tabs_height">
 
                     <com.google.android.material.tabs.TabItem
-                        android:text="@string/nav_my_tools" />
+                        android:text="@string/nav_favorite_tools" />
                     <com.google.android.material.tabs.TabItem
-                        android:text="@string/nav_find_tools" />
+                        android:text="@string/nav_all_tools" />
                 </androidx.appcompat.widget.AppCompatTabLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>

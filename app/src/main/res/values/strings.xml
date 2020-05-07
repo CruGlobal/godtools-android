@@ -32,6 +32,8 @@
     <eat-comment />
     <string name="nav_find_tools">Find Tools</string>
     <string name="nav_my_tools">My Tools</string>
+    <string name="nav_favorite_tools">Favorites</string>
+    <string name="nav_all_tools">All Tools</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="title_add_new_tools">Add New Tools</string>
     <string name="action_tools_open">Open Tool</string>

@@ -55,9 +55,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private static final int STATE_FIND_TOOLS = 1;
 
     @Nullable
-    private TabLayout.Tab mMyToolsTab;
+    private TabLayout.Tab mFavoriteToolsTab;
     @Nullable
-    private TabLayout.Tab mFindToolsTab;
+    private TabLayout.Tab mAllToolsTab;
     @Nullable
     TapTargetView mFeatureDiscovery;
 
@@ -112,7 +112,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                showAddTools();
+                showAllTools();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -120,10 +120,10 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     @Override
     public void onTabSelected(final TabLayout.Tab tab) {
-        if (tab == mMyToolsTab) {
-            showMyTools();
-        } else if (tab == mFindToolsTab) {
-            showAddTools();
+        if (tab == mFavoriteToolsTab) {
+            showFavoriteTools();
+        } else if (tab == mAllToolsTab) {
+            showAllTools();
         } else if (BuildConfig.DEBUG) {
             // The tab selection logic is brittle, so throw an error in unrecognized scenarios
             throw new IllegalArgumentException("Unrecognized tab!! something changed with the navigation tabs");
@@ -164,7 +164,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     @Override
     public void onNoToolsAvailableAction() {
-        showAddTools();
+        showAllTools();
     }
 
     @Override
@@ -211,8 +211,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 throw new IllegalStateException("The navigation tabs changed!!! Logic needs to be updated!!!");
             }
 
-            mMyToolsTab = navigationTabs.getTabAt(0);
-            mFindToolsTab = navigationTabs.getTabAt(1);
+            mFavoriteToolsTab = navigationTabs.getTabAt(0);
+            mAllToolsTab = navigationTabs.getTabAt(1);
         }
     }
 
@@ -255,27 +255,27 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
 
         // default to My Tools
-        showMyTools();
+        showFavoriteTools();
     }
 
-    private void showAddTools() {
+    private void showAllTools() {
         // update the displayed fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_AVAILABLE), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ALL), TAG_MAIN_FRAGMENT)
                 .commit();
 
-        selectNavigationTabIfNecessary(mFindToolsTab);
+        selectNavigationTabIfNecessary(mAllToolsTab);
         mActiveState = STATE_FIND_TOOLS;
         trackInAnalytics();
     }
 
-    private void showMyTools() {
+    private void showFavoriteTools() {
         // update the displayed fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
                 .commit();
 
-        selectNavigationTabIfNecessary(mMyToolsTab);
+        selectNavigationTabIfNecessary(mFavoriteToolsTab);
         mActiveState = STATE_MY_TOOLS;
         trackInAnalytics();
     }
