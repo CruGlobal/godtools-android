@@ -138,12 +138,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             return;
         }
 
-        // trigger tool details if we are in the find tools UI
-        if (mActiveState == STATE_FIND_TOOLS) {
-            ToolDetailsActivityKt.startToolDetailsActivity(this, code);
-            return;
-        }
-
         // sanitize the languages list, and short-circuit if we don't have any languages
         if (languages != null) {
             languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
