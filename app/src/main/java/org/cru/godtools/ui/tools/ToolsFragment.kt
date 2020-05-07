@@ -25,6 +25,7 @@ import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
@@ -89,16 +90,8 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         if (Settings.FEATURE_TUTORIAL_TRAINING == feature) updateVisibleBanner()
     }
 
-    override fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale?) {
-        findListener<Callbacks>()?.onToolSelect(code, type, *languages)
-    }
-
     override fun onToolInfo(code: String?) {
         findListener<Callbacks>()?.onToolInfo(code)
-    }
-
-    override fun onToolAdd(code: String?) {
-        code?.let { downloadManager.addTool(it) }
     }
 
     override fun onToolsReordered(vararg ids: Long) {
@@ -153,6 +146,21 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         dataModel.mode.value = mode
     }
     // endregion Data Model
+
+    // region ToolsAdapterCallbacks
+    override fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
+        if (tool != null) findListener<Callbacks>()
+            ?.onToolSelect(tool.code, tool.type, primaryTranslation?.languageCode, parallelTranslation?.languageCode)
+    }
+
+    override fun addTool(code: String?) {
+        code?.let { downloadManager.addTool(it) }
+    }
+
+    override fun removeTool(code: String?) {
+        code?.let { downloadManager.removeTool(it) }
+    }
+    // endregion ToolsAdapterCallbacks
 
     // region Tools List
     private val toolsAdapter: ToolsAdapter by lazy {
