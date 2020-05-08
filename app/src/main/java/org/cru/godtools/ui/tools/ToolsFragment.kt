@@ -19,6 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
+import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.findListener
@@ -179,9 +180,10 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
     // region Tools List
     private val toolsAdapter: ToolsAdapter by lazy {
-        ToolsAdapter(this, ViewModelProvider(this)).also {
-            it.callbacks.set(this)
-            dataModel.tools.observe(this, it)
+        ToolsAdapter(this, ViewModelProvider(this)).also { adapter ->
+            adapter.callbacks.set(this)
+            lifecycle.onDestroy { adapter.callbacks.set(null) }
+            dataModel.tools.observe(this, adapter)
         }
     }
 
