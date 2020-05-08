@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Công cụ của Tôi</string>
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
-    <string name="action_tools_open">Mở Công cụ</string>
+    <string name="action_tools_open_tool">Mở Công cụ</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Lượt xem</item>
     </plurals>

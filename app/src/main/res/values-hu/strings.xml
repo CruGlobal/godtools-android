@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Saját eszközeim</string>
     <string name="menu_switch_language">Nyelv váltása</string>
     <string name="title_add_new_tools">Új eszközök hozzáadása</string>
-    <string name="action_tools_open">Eszköz megnyitása</string>
+    <string name="action_tools_open_tool">Eszköz megnyitása</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d megtekintés</item>
         <item quantity="other">%1$,d megtekintés</item>

@@ -6,9 +6,9 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.fragment.ToolsFragment.Companion.MODE_ADDED
-import org.cru.godtools.fragment.ToolsFragment.Companion.MODE_AVAILABLE
 import org.cru.godtools.model.Tool
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_AVAILABLE
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import javax.inject.Inject

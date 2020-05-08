@@ -24,7 +24,7 @@
     <string name="nav_my_tools">મારા સાધનો/ટુલ્સ</string>
     <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
     <string name="title_add_new_tools">નવા સાધનો/ટુલ્સ ઉમેરો</string>
-    <string name="action_tools_open">ખુલ્લું સાધન</string>
+    <string name="action_tools_open_tool">ખુલ્લું સાધન</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d દર્શક</item>
         <item quantity="other">%1$,d દર્શકો</item>

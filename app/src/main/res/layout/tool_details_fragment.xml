@@ -112,7 +112,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="@dimen/tool_details_margin_horizontal"
                     android:onClick="@{() -> fragment.openTool(tool, primaryTranslation, parallelTranslation)}"
-                    android:text="@string/action_tools_open"
+                    android:text="@string/action_tools_open_tool"
                     app:layout_constraintTop_toBottomOf="@id/shares" />
 
                 <com.google.android.material.button.MaterialButton

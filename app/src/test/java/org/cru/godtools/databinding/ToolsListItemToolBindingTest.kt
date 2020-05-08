@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.tools
+package org.cru.godtools.databinding
 
 import android.app.Application
 import android.view.LayoutInflater
@@ -6,14 +6,17 @@ import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
-import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -164,41 +167,79 @@ class ToolsListItemToolBindingTest {
     }
     // endregion Parallel Language Label
 
-    // region Add Action
+    // region Favorite Action
     @Test
-    fun verifyActionAddIsVisibleAndEnabledWhenToolHasntBeenAdded() {
+    fun verifyActionFavoriteToolNotAdded() {
         tool.isAdded = false
-        binding.invalidateAll()
+        binding.tool = tool
         binding.executePendingBindings()
-
-        assertTrue(binding.actionAdd.isEnabled)
-        assertEquals(View.VISIBLE, binding.actionAdd.visibility)
-    }
-
-    @Test
-    fun verifyActionAddIsGoneWhenToolHasBeenAdded() {
-        tool.isAdded = true
-        binding.invalidateAll()
-        binding.executePendingBindings()
-
-        assertEquals(View.GONE, binding.actionAdd.visibility)
-        assertFalse(binding.actionAdd.isEnabled)
-    }
-
-    @Test
-    fun verifyActionAddTriggersOnToolAddCallback() {
         reset(callbacks)
 
-        binding.actionAdd.performClick()
-        verify(callbacks).onToolAdd(eq("test"))
+        assertFalse(binding.actionFavorite.isSelected)
+        binding.actionFavorite.performClick()
+        verify(callbacks).addTool(eq("test"))
+        verify(callbacks, never()).removeTool(any(), any())
     }
-    // endregion Add Action
+
+    @Test
+    fun verifyActionFavoriteToolAdded() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        assertTrue(binding.actionFavorite.isSelected)
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoritePrimaryTranslationOnly() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.parallelTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoriteParallelTranslationOnly() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(parallelTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoriteNoTranslations() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.parallelTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(null))
+    }
+    // endregion Favorite Action
 
     @Test
     fun verifyActionInfoTriggersOnToolInfoCallback() {
         reset(callbacks)
 
-        binding.actionInfo.performClick()
+        binding.actionDetails.performClick()
         verify(callbacks).onToolInfo(eq("test"))
     }
 
@@ -208,7 +249,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(Locale.ENGLISH), eq(Locale.FRENCH))
+        verify(callbacks).openTool(tool, primaryTranslation, parallelTranslation)
     }
 
     @Test
@@ -217,7 +258,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(Locale.ENGLISH), eq(null))
+        verify(callbacks).openTool(tool, primaryTranslation, null)
     }
 
     @Test
@@ -226,7 +267,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(null), eq(Locale.FRENCH))
+        verify(callbacks).openTool(tool, null, parallelTranslation)
     }
 
     @Test
@@ -236,7 +277,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolSelect(eq("test"), eq(Tool.Type.TRACT), eq(null), eq(null))
+        verify(callbacks).openTool(tool, null, null)
     }
     // endregion Select Action
 

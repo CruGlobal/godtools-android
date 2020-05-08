@@ -6,7 +6,7 @@
     <!-- Tools UI -->
     <string name="nav_find_tools">Шинэ хайлт</string>
     <string name="nav_my_tools">Миний багаж</string>
-    <string name="action_tools_open">Нээлттэй</string>
+    <string name="action_tools_open_tool">Нээлттэй</string>
     <!-- Language Selection UI -->
     <!-- Sharing -->
 </resources>

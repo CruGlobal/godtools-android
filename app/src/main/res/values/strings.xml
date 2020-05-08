@@ -28,32 +28,12 @@
     <eat-comment />
     <string name="share_story_subject">Hear how God is moving!</string>
 
-    <!-- Tools UI -->
-    <eat-comment />
-    <string name="nav_find_tools">Find Tools</string>
-    <string name="nav_my_tools">My Tools</string>
-    <string name="menu_switch_language">Switch Language</string>
-    <string name="title_add_new_tools">Add New Tools</string>
-    <string name="action_tools_open">Open Tool</string>
-    <string name="action_tools_add_favorite">Add to Favorites</string>
-    <string name="action_tools_remove_favorite">Remove from Favorites</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d View</item>
-        <item quantity="other">%1$,d Views</item>
-    </plurals>
-    <string name="label_tools_about">About</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Language</item>
-        <item quantity="other">%1$,d Languages</item>
-    </plurals>
-    <string name="text_tools_all_installed">You have downloaded all available tools.</string>
-    <string name="menu_add_to_home">Add to Home screen</string>
-
     <!-- Language Selection UI -->
     <eat-comment />
     <string name="feature_discovery_title_language_settings">80+ Languages</string>
     <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
     <string name="menu_language_settings">Language Settings</string>
+    <string name="menu_switch_language">Switch Language</string>
     <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>

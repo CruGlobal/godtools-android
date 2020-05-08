@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Zana Zangu</string>
     <string name="menu_switch_language">Badilisha lugha</string>
     <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
-    <string name="action_tools_open">Kifaa Wazi</string>
+    <string name="action_tools_open_tool">Kifaa Wazi</string>
     <plurals name="label_tools_shares">
         <item quantity="one">Maoni %1$,d</item>
         <item quantity="other">Maoni %1$,d</item>

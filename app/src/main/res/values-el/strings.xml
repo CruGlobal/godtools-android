@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Τα Εργαλεία μου</string>
     <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
     <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
-    <string name="action_tools_open">Άνοιγμα Εργαλείου</string>
+    <string name="action_tools_open_tool">Άνοιγμα Εργαλείου</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Προβολή</item>
         <item quantity="other">%1$,d Προβολές</item>

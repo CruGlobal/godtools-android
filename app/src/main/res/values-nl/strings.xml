@@ -25,7 +25,7 @@
     <string name="nav_my_tools">Mijn tools</string>
     <string name="menu_switch_language">Veranderen van Taal</string>
     <string name="title_add_new_tools">Voeg nieuwe hulpmiddelen toe</string>
-    <string name="action_tools_open">Tool openen</string>
+    <string name="action_tools_open_tool">Tool openen</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d</item>
         <item quantity="other">%1$,d weergaven</item>
