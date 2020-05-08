@@ -6,6 +6,7 @@ import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -176,7 +177,7 @@ class ToolsListItemToolBindingTest {
         assertFalse(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
         verify(callbacks).addTool(eq("test"))
-        verify(callbacks, never()).removeTool(eq("test"))
+        verify(callbacks, never()).removeTool(any(), any())
     }
 
     @Test
@@ -188,8 +189,48 @@ class ToolsListItemToolBindingTest {
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(eq("test"))
-        verify(callbacks).removeTool(eq("test"))
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoritePrimaryTranslationOnly() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.parallelTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoriteParallelTranslationOnly() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(parallelTranslation))
+    }
+
+    @Test
+    fun verifyActionFavoriteRemoveFavoriteNoTranslations() {
+        tool.isAdded = true
+        binding.tool = tool
+        binding.primaryTranslation = MutableLiveData(null)
+        binding.parallelTranslation = MutableLiveData(null)
+        binding.executePendingBindings()
+        reset(callbacks)
+
+        binding.actionFavorite.performClick()
+        verify(callbacks, never()).addTool(any())
+        verify(callbacks).removeTool(eq(tool), eq(null))
     }
     // endregion Favorite Action
 

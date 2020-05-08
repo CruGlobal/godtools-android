@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tools
 
+import android.app.Dialog
 import android.graphics.drawable.NinePatchDrawable
 import android.os.AsyncTask
 import android.os.Bundle
@@ -7,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
@@ -20,6 +23,7 @@ import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerHeaderAdapter
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -33,6 +37,7 @@ import org.cru.godtools.tutorial.analytics.model.ADOBE_TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
+import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrDefault
 import java.util.Locale
 import javax.inject.Inject
@@ -157,10 +162,24 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         code?.let { downloadManager.addTool(it) }
     }
 
-    override fun removeTool(code: String?) {
-        code?.let { downloadManager.removeTool(it) }
+    override fun removeTool(tool: Tool?, translation: Translation?) {
+        when (mode) {
+            MODE_ADDED -> showRemoveFavoriteConfirmationDialog(tool, translation)
+            else -> removeFavorite(tool?.code)
+        }
     }
     // endregion ToolsAdapterCallbacks
+
+    // region Remove Favorite
+    private fun showRemoveFavoriteConfirmationDialog(tool: Tool?, translation: Translation?) {
+        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, null).toString())
+            .show(childFragmentManager, null)
+    }
+
+    internal fun removeFavorite(code: String?) {
+        code?.let { downloadManager.removeTool(it) }
+    }
+    // endregion Remove Favorite
 
     // region Tools List
     private val toolsAdapter: ToolsAdapter by lazy {
@@ -251,4 +270,24 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         emptyUi.findViewById<View>(R.id.action)?.setOnClickListener { _ -> onEmptyActionClick() }
     }
     // endregion Empty List UI
+}
+
+class RemoveFavoriteConfirmationDialogFragment() : DialogFragment() {
+    constructor(code: String, name: String) : this() {
+        this.code = code
+        this.name = name
+    }
+
+    private var code: String by arg()
+    private var name: String by arg()
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.tools_list_remove_favorite_dialog_title, name))
+            .setPositiveButton(R.string.tools_list_remove_favorite_dialog_confirm) { _, _ ->
+                findListener<ToolsFragment>()?.removeFavorite(code)
+            }
+            .setNegativeButton(R.string.tools_list_remove_favorite_dialog_dismiss, null)
+            .create()
+    }
 }
