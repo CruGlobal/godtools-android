@@ -8,6 +8,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="java.util.List" />
 
+        <variable name="fragment" type="org.cru.godtools.ui.tools.ToolsFragment" />
         <variable name="tools" type="LiveData&lt;List&lt;org.cru.godtools.model.Tool&gt;&gt;" />
     </data>
 
@@ -20,12 +21,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emptyListUi"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="32dp"
                 android:visibility="gone"
-                app:visibleIf="@{tools.empty}" />
+                app:visibleIf="@{tools.empty}"
+                tools:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/icon"
+                    style="@style/Widget.GodTools.Static.Icon.Large"
+                    app:layout_constraintBottom_toTopOf="@id/action"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:srcCompat="@drawable/ic_find_tools" />
+
+                <Button
+                    android:id="@+id/action"
+                    style="@style/Widget.GodTools.Static.Action"
+                    android:layout_width="144dp"
+                    android:onClick="@{() -> fragment.onEmptyActionClick()}"
+                    android:text="@string/nav_all_tools"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/icon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tools"
@@ -36,7 +62,8 @@
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/tools_list_item_tool" />
+                tools:listitem="@layout/tools_list_item_tool"
+                tools:visibility="visible" />
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
