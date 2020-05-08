@@ -68,7 +68,7 @@ object ApiModule {
         .addClasses(Followup::class.java)
         .addClasses(GlobalActivityAnalytics::class.java)
         .addConverters(ToolTypeConverter)
-        .addConverters(LocaleTypeConverter())
+        .addConverters(LocaleTypeConverter)
         .build()
 
     // region mobile-content-api APIs
