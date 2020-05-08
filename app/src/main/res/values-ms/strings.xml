@@ -33,7 +33,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Bahasa</item>
     </plurals>
-    <string name="text_tools_all_installed">Anda telah memuat turun semua alat yang tersedia.</string>
     <string name="menu_add_to_home">Tambah ke skrin Laman Utama</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Bahasa</string>

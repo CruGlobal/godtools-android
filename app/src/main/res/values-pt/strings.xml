@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d idioma</item>
         <item quantity="other">%1$,d idiomas</item>
     </plurals>
-    <string name="text_tools_all_installed">Transferiu todas as ferramentas disponíveis.</string>
     <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Mais de 80 idiomas</string>

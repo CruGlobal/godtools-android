@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d език</item>
         <item quantity="other">%1$,d езици</item>
     </plurals>
-    <string name="text_tools_all_installed">Вие изтеглихте всички налични инструменти.</string>
     <string name="menu_add_to_home">Добавяне към началния екран</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Езика</string>

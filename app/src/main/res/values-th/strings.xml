@@ -33,7 +33,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d ภาษา</item>
     </plurals>
-    <string name="text_tools_all_installed">คุณดาวน์โหลดเครื่องมือทั้งหมดแล้ว</string>
     <string name="menu_add_to_home">เพิ่มไปยังหน้าหลัก</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">กว่า 80 ภาษา</string>

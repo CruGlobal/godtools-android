@@ -37,7 +37,6 @@
         <item quantity="other">%1$,d limbi</item>
         <item quantity="few">%1$,d limbi</item>
     </plurals>
-    <string name="text_tools_all_installed">Ai descărcat toate instrumentele disponibile.</string>
     <string name="menu_add_to_home">Adaugă la ecranul de pornire</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 80 de limbi</string>

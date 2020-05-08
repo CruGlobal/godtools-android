@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d భాష</item>
         <item quantity="other">%1$,d భాషలు</item>
     </plurals>
-    <string name="text_tools_all_installed">అందుబాటులో ఉన్న అన్ని పరికరాలను మీరు డౌన్‌లోడ్ చేశారు.</string>
     <string name="menu_add_to_home">హోమ్ స్క్రీన్‌కు జోడించండి</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ భాషలు</string>

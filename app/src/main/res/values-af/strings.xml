@@ -34,7 +34,6 @@
         <item quantity="one">%1$,d Taal</item>
         <item quantity="other">%1$,d Tale</item>
     </plurals>
-    <string name="text_tools_all_installed">Jy het alle beskikbare nutsmiddele afgelaai.</string>
     <string name="menu_add_to_home">Voeg by tuisskerm</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+Tale</string>

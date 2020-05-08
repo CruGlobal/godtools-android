@@ -34,7 +34,6 @@
         <item quantity="one">%1$,d kieli</item>
         <item quantity="other">%1$,d kieltä</item>
     </plurals>
-    <string name="text_tools_all_installed">Olet jo ladannut kaikki käytettävissä olevat työkalut.</string>
     <string name="menu_add_to_home">Lisää aloitusnäyttöön</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kieltä</string>

@@ -39,7 +39,6 @@
         <item quantity="few">%1$,d jazyků</item>
         <item quantity="many">%1$,d jazyků</item>
     </plurals>
-    <string name="text_tools_all_installed">Máte staženy všechny dostupné nástroje.</string>
     <string name="menu_add_to_home">Přidat na úvodní obrazovku</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ jazyků</string>

@@ -30,7 +30,6 @@
         <item quantity="one">%1$,d Tungumál</item>
         <item quantity="other">%1$,d Tungumál</item>
     </plurals>
-    <string name="text_tools_all_installed">Þú hefur niðurhalað öllum tiltækum tólum.</string>
     <string name="menu_add_to_home">Bæta við á heimaskjá</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ tungumál</string>

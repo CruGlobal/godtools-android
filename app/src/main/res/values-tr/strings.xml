@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d Dil</item>
         <item quantity="other">%1$,d Dil</item>
     </plurals>
-    <string name="text_tools_all_installed">Kullanılabilir tüm araçları indirdin.</string>
     <string name="menu_add_to_home">Ana Ekrana Ekle</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80\'i Aşkın Dil</string>

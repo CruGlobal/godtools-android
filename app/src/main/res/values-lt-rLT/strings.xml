@@ -38,7 +38,6 @@
         <item quantity="few">%1$,d kalbos</item>
         <item quantity="many">%1$,d kalbų</item>
     </plurals>
-    <string name="text_tools_all_installed">Parsisiuntėte visus siūlomus įrankius.</string>
     <string name="menu_add_to_home">Pridėti į pagrindinį puslapį</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kalbų</string>

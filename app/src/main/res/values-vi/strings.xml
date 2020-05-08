@@ -33,7 +33,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Ngôn ngữ</item>
     </plurals>
-    <string name="text_tools_all_installed">Bạn đã tải về tất cả các công cụ sẵn có.</string>
     <string name="menu_add_to_home">Thêm vào màn hình Trang chủ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Hơn 80 Ngôn ngữ</string>

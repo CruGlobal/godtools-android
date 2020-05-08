@@ -39,7 +39,6 @@
         <item quantity="few">%1$,d языка</item>
         <item quantity="many">%1$,d языков</item>
     </plurals>
-    <string name="text_tools_all_installed">Вы загрузили все доступные инструменты.</string>
     <string name="menu_add_to_home">Добавить на главный экран</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 80 языков</string>

@@ -34,7 +34,6 @@
         <item quantity="one">%1$,d Dil</item>
         <item quantity="other">%1$,d Dillər</item>
     </plurals>
-    <string name="text_tools_all_installed">Bütün mövcud alətləri yükləmisiniz.</string>
     <string name="menu_add_to_home">Ana səhifəyə əlavə et</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ dil</string>

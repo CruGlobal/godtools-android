@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d språk</item>
         <item quantity="other">%1$,d språk</item>
     </plurals>
-    <string name="text_tools_all_installed">Du har lastet ned alle tilgjengelige verktøy.</string>
     <string name="menu_add_to_home">Legg til å hjemskjermen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 80 språk</string>

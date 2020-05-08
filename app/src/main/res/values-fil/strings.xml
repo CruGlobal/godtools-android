@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d Wika</item>
         <item quantity="other">%1$,d (na) Wika</item>
     </plurals>
-    <string name="text_tools_all_installed">Na-download mo ang lahat ng available na tool.</string>
     <string name="menu_add_to_home">Idagdag sa Home screen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ na Wika</string>

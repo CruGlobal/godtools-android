@@ -37,7 +37,6 @@
         <item quantity="other">%1$,d језика</item>
         <item quantity="few">%1$,d језика</item>
     </plurals>
-    <string name="text_tools_all_installed">Преузели сте све доступне алатке.</string>
     <string name="menu_add_to_home">Додај на почетни екран</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">преко 80 језика</string>
