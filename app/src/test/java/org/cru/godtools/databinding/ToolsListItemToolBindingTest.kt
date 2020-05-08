@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.tools
+package org.cru.godtools.databinding
 
 import android.app.Application
 import android.view.LayoutInflater
@@ -12,10 +12,11 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
-import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
