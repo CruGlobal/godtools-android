@@ -3,9 +3,11 @@ package org.cru.godtools.base
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import me.thekey.android.TheKey
+import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
@@ -107,6 +109,12 @@ class Settings private constructor(private val context: Context) {
         }
 
         return discovered
+    }
+
+    fun isFeatureDiscoveredLiveData(feature: String): LiveData<Boolean> {
+        // perform a simple lookup to initialize the feature when necessary
+        isFeatureDiscovered(feature)
+        return prefs.getBooleanLiveData("$PREF_FEATURE_DISCOVERED$feature", false).distinctUntilChanged()
     }
 
     private fun isFeatureDiscoveredInt(feature: String) = prefs.getBoolean("$PREF_FEATURE_DISCOVERED$feature", false)

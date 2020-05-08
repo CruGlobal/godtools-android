@@ -10,7 +10,9 @@ import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
@@ -24,7 +26,6 @@ import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerHeaderAdapter
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.util.getName
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -79,20 +80,10 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         setupToolsList(binding)
     }
 
-    override fun onStart() {
-        super.onStart()
-        updateVisibleBanner()
-    }
-
     @CallSuper
     public override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
         helper.sync(syncService.syncTools(force))
-    }
-
-    override fun onUpdateFeatureDiscovery(feature: String) {
-        super.onUpdateFeatureDiscovery(feature)
-        if (Settings.FEATURE_TUTORIAL_TRAINING == feature) updateVisibleBanner()
     }
 
     override fun onToolInfo(code: String?) {
@@ -122,20 +113,25 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     // endregion Lifecycle
 
     // region Banners
-    private fun updateVisibleBanner() {
-        if (toolsHeaderAdapter != null) {
-            if (!settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING) && mode == MODE_ADDED &&
-                PageSet.TRAINING.supportsLocale(requireContext().deviceLocale)
-            ) {
-                toolsHeaderAdapter!!.banner = BannerType.TUTORIAL_TRAINING
-                toolsHeaderAdapter!!.primaryCallback =
-                    BannerInterface.OnClickListener { openTrainingTutorial() }
-                toolsHeaderAdapter!!.secondaryCallback = BannerInterface.OnClickListener {
-                    eventBus.post(TutorialAnalyticsActionEvent(ADOBE_TUTORIAL_HOME_DISMISS))
-                    settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING)
-                }
-            } else {
-                toolsHeaderAdapter!!.banner = null
+    private fun createBannerWrappedAdapter(adapter: RecyclerView.Adapter<*>, lifecycleOwner: LifecycleOwner) =
+        BannerHeaderAdapter().apply {
+            setAdapter(adapter)
+            dataModel.banner.observe(lifecycleOwner) { banner = it }
+            primaryCallback = BannerInterface.OnClickListener { bannerPrimaryCallback() }
+            secondaryCallback = BannerInterface.OnClickListener { bannerSecondaryCallback() }
+        }
+
+    private fun bannerPrimaryCallback() {
+        when (dataModel.banner.value) {
+            BannerType.TUTORIAL_TRAINING -> openTrainingTutorial()
+        }
+    }
+
+    private fun bannerSecondaryCallback() {
+        when (dataModel.banner.value) {
+            BannerType.TUTORIAL_TRAINING -> {
+                eventBus.post(TutorialAnalyticsActionEvent(ADOBE_TUTORIAL_HOME_DISMISS))
+                settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING)
             }
         }
     }
@@ -189,8 +185,6 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         }
     }
 
-    private var toolsHeaderAdapter: BannerHeaderAdapter? = null
-
     private var toolsDragDropManager: RecyclerViewDragDropManager? = null
     private var toolsDragDropAdapter: RecyclerView.Adapter<*>? = null
 
@@ -228,21 +222,14 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
             binding.tools.itemAnimator = DraggableItemAnimator()
         }
 
-        // configure banner view if required for the current mode
-        if (mode == MODE_ADDED) {
-            toolsHeaderAdapter = BannerHeaderAdapter().apply {
-                setAdapter(adapter)
-                adapter = this
-            }
-        }
+        // add banner header adapter
+        adapter = createBannerWrappedAdapter(adapter, viewLifecycleOwner)
 
         // attach the correct adapter to the tools RecyclerView
         binding.tools.adapter = adapter
 
         // handle some post-adapter configuration
         toolsDragDropManager?.attachRecyclerView(binding.tools)
-
-        updateVisibleBanner()
     }
 
     private fun cleanupToolsList(binding: ToolsFragmentBinding) {
@@ -253,8 +240,6 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         toolsDragDropManager = null
         WrapperAdapterUtils.releaseAll(toolsDragDropAdapter)
         toolsDragDropAdapter = null
-
-        toolsHeaderAdapter = null
     }
     // endregion Tools List
 
