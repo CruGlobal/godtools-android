@@ -21,12 +21,15 @@ dependencies {
 
     api project(':ui:base-tool')
 
+    implementation "androidx.activity:activity-ktx:${deps.androidX.activity}"
     implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     api "androidx.lifecycle:lifecycle-common-java8:${deps.androidX.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

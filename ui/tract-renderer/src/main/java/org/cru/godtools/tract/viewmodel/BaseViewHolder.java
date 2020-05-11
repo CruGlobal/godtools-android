@@ -26,10 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.core.view.ViewCompat;
+import androidx.lifecycle.Observer;
 import butterknife.ButterKnife;
 
 @UiThread
-abstract class BaseViewHolder<T extends Base> {
+abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     private final Handler mHandler;
 
     @Nullable
@@ -77,7 +78,11 @@ abstract class BaseViewHolder<T extends Base> {
         return null;
     }
 
-    // region Lifecycle Events
+    // region Lifecycle
+    @Override
+    public final void onChanged(final T t) {
+        bind(t);
+    }
 
     @CallSuper
     void onBind() {
@@ -99,8 +104,7 @@ abstract class BaseViewHolder<T extends Base> {
 
     @CallSuper
     void onHidden() {}
-
-    // endregion Lifecycle Events
+    // endregion Lifecycle
 
     @Nullable
     public final T getModel() {
