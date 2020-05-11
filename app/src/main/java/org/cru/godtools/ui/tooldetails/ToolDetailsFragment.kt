@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
@@ -129,7 +132,19 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     // endregion Pin Shortcut
 
     // region Overview Video
-    private fun ToolDetailsFragmentBinding.setupOverviewVideo() = viewLifecycleOwner.lifecycle.addObserver(videoBanner)
+    private fun ToolDetailsFragmentBinding.setupOverviewVideo() {
+        viewLifecycleOwner.lifecycle.addObserver(videoBanner)
+        videoBanner.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            private lateinit var videoId: String
+            override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                this.videoId = videoId
+            }
+
+            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                if (state == PlayerConstants.PlayerState.ENDED) youTubePlayer.cueVideo(videoId, 0f)
+            }
+        })
+    }
     // endregion Overview Video
 
     // region Pages
