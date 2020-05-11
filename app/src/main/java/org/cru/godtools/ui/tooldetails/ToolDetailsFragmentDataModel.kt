@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
@@ -49,10 +48,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     }
 
     val downloadProgress = distinctToolCode.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
-        when {
-            tool != null && locale != null -> downloadManager.getDownloadProgressLiveData(tool, locale)
-            else -> emptyLiveData()
-        }
+        downloadManager.getDownloadProgressLiveData(tool, locale)
     }
 
     val availableLanguages = distinctToolCode

@@ -41,7 +41,7 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
 
     val banner = mode.combineWith(settings.isFeatureDiscoveredLiveData(FEATURE_TUTORIAL_TRAINING)) { mode, training ->
         when {
-            mode == MODE_ADDED && training == false && PageSet.TRAINING.supportsLocale(Locale.getDefault()) ->
+            mode == MODE_ADDED && !training && PageSet.TRAINING.supportsLocale(Locale.getDefault()) ->
                 BannerType.TUTORIAL_TRAINING
             else -> null
         }
