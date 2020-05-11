@@ -26,7 +26,6 @@ import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.R2
 import org.cru.godtools.tract.viewmodel.ModalViewHolder
-import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
@@ -48,15 +47,11 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
     @BindView(R2.id.modal_root)
     var mModalView: View? = null
 
-    private var mModal: Modal? = null
-    private var mModalViewHolder: ModalViewHolder? = null
-
     private val dataModel: ModalActivityDataModel by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         intent?.extras?.let { extras ->
             dataModel.toolCode.value = extras.getString(EXTRA_TOOL)
             dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE)
@@ -64,12 +59,12 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
             dataModel.modalId.value = extras.getString(EXTRA_MODAL)
         }
 
-        // finish now if this activity is in an invalid state
+        // finish if this activity is in an invalid state
         if (!validStartState()) {
             finish()
             return
         }
-        startLoaders()
+        dataModel.modal.observe(this) { if (it == null) finish() }
     }
 
     @CallSuper
@@ -97,29 +92,12 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
 
     private fun validStartState() = dataModel.toolCode.value != null
 
-    private fun startLoaders() {
-        dataModel.modal.observe(this) { updateModal(it) }
-    }
-
-    fun updateModal(modal: Modal?) {
-        mModal = modal
-        if (mModal == null) finish()
-        updateModalViewHolder()
-    }
-
     private fun setupModalViewHolder() {
-        if (mModalView != null) {
-            mModalViewHolder = ModalViewHolder.forView(mModalView!!)
-            updateModalViewHolder()
-        }
-    }
-
-    private fun updateModalViewHolder() {
-        mModalViewHolder?.bind(mModal)
+        mModalView?.let { dataModel.modal.observe(this, ModalViewHolder.forView(it)) }
     }
 
     private fun checkForDismissEvent(event: Event) {
-        if (mModal?.dismissListeners?.contains(event.id) == true) finish()
+        if (dataModel.modal.value?.dismissListeners?.contains(event.id) == true) finish()
     }
 }
 
