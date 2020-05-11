@@ -7,7 +7,6 @@ public final class Constants {
     public static final String PARAM_PARALLEL_LANGUAGE = "parallelLanguage";
 
     // common extras
-    public static final String EXTRA_MANIFEST_FILE_NAME = "manifest_file";
     public static final String EXTRA_PAGE = "page";
     public static final String EXTRA_MODAL = "modal";
 }
