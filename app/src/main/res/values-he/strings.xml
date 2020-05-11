@@ -39,7 +39,6 @@
         <item quantity="many">%1$,d שפות</item>
         <item quantity="two">%1$,d שפות</item>
     </plurals>
-    <string name="text_tools_all_installed">הורדתם את כל הכלים הזמינים.</string>
     <string name="menu_add_to_home">הוסף למסך הבית</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ שפות</string>

@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d भाषा</item>
         <item quantity="other">%1$,d भाषा</item>
     </plurals>
-    <string name="text_tools_all_installed">"आफ्नो सबै उपलब्ध टुल्स डाउनलोड गर्नु भयो। "</string>
     <string name="menu_add_to_home">"मुख्य पृष्ठमा जोड दिनुहोस "</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">"70+ भाषाहरु "</string>

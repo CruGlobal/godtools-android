@@ -37,7 +37,6 @@
         <item quantity="one">%1$,d زبان</item>
         <item quantity="other">%1$,d زبان</item>
     </plurals>
-    <string name="text_tools_all_installed">همه ابزارهای موجود را دانلود کرده‌اید.</string>
     <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+80 زبان</string>

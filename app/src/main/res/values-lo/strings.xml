@@ -33,7 +33,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">" %1$,d ພາສາ"</item>
     </plurals>
-    <string name="text_tools_all_installed">ທ່ານໄດ້ດາວໂຫຼດເຄື່ອງມືທີ່ມີທັງໝົດ</string>
     <string name="menu_add_to_home">ເພີ່ມໃສ່ ໜ້າ ຈໍເຮືອນ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ພາສາ</string>

@@ -35,7 +35,6 @@
         <item quantity="one">Lugha %1$,d</item>
         <item quantity="other">Lugha %1$,d</item>
     </plurals>
-    <string name="text_tools_all_installed">Umepakua zana zote zilizopo.</string>
     <string name="menu_add_to_home">Weka kwenye Skrini ya Jumla</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Lugha Themanini na Zaidi</string>

@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d nyelv</item>
         <item quantity="other">%1$,d nyelv</item>
     </plurals>
-    <string name="text_tools_all_installed">Az összes elérhető eszközt letöltötted.</string>
     <string name="menu_add_to_home">Hozzáadás kezdőképernyőhöz</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ nyelv</string>

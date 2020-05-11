@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d ਭਾਸ਼ਾਵਾ</item>
         <item quantity="other">%1$,d ਭਾਸ਼ਾਵਾ</item>
     </plurals>
-    <string name="text_tools_all_installed">ਤੁਸੀਂ ਸਾਰੇ ਉਪਲਬਧ ਟੂਲਸ ਡਾਉਨਲੋਡ ਕੀਤੇ ਹਨ।</string>
     <string name="menu_add_to_home">ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ਭਾਸ਼ਾਵਾਂ</string>

@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d भाषा</item>
         <item quantity="other">%1$,d भाषाएं</item>
     </plurals>
-    <string name="text_tools_all_installed">आपने सभी उपलब्ध टूल्स डाउनलोड कर लिए हैं।</string>
     <string name="menu_add_to_home">होम स्क्रीन में जोड़ें</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ भाषाएँ</string>

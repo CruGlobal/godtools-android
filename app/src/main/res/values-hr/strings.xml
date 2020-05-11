@@ -37,7 +37,6 @@
         <item quantity="other">%1$,d jezika</item>
         <item quantity="few">%1$,d jezika</item>
     </plurals>
-    <string name="text_tools_all_installed">Preuzeli ste sve raspoložive alate.</string>
     <string name="menu_add_to_home">Dodaj na početni zaslon</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Više od 80 jezika</string>

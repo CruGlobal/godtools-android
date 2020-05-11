@@ -39,7 +39,6 @@
         <item quantity="few">%1$,d мови</item>
         <item quantity="many">%1$,d мов</item>
     </plurals>
-    <string name="text_tools_all_installed">Ви завантажили усі доступні інструменти.</string>
     <string name="menu_add_to_home">Додати до головного екрану</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Понад 80 мов</string>

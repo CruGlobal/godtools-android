@@ -34,7 +34,6 @@
         <item quantity="one">%1$,d ભાષા</item>
         <item quantity="other">%1$,d ભાષાઓ</item>
     </plurals>
-    <string name="text_tools_all_installed">પ્રાપ્ય બધાં જ સાધનો/ટુલ્સ તમે ડાઉનલોડ કરી લીધાં છે.</string>
     <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>

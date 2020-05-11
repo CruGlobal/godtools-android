@@ -36,7 +36,6 @@
         <item quantity="other">%1$,d valodas</item>
         <item quantity="zero">%1$,d valodu</item>
     </plurals>
-    <string name="text_tools_all_installed">Jūs lejupielādējāt visus pieejamos rīkus.</string>
     <string name="menu_add_to_home">Pievienot sākuma ekrānam</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ valodas</string>

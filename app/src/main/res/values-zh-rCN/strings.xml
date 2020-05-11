@@ -34,7 +34,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 种语言</item>
     </plurals>
-    <string name="text_tools_all_installed">您已下载所有可用工具。</string>
     <string name="menu_add_to_home">添加到主屏幕</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80多种语言</string>

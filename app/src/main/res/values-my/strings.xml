@@ -32,7 +32,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">" %1$,d ဘာသာစကားများ"</item>
     </plurals>
-    <string name="text_tools_all_installed">အသုံးပြုနိုင် သော tools ကို ဒေါင်းလုတ်ဆွဲပြီးပါပြီ</string>
     <string name="menu_add_to_home">" မူလစာမျက်နှာတွင် ထည့်ပါ"</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၈၀  ကျော်</string>

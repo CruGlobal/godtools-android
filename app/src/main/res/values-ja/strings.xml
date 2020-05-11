@@ -33,7 +33,6 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 言語</item>
     </plurals>
-    <string name="text_tools_all_installed">利用可能なツールをすべてダウンロードしました。</string>
     <string name="menu_add_to_home">ホーム画面に追加</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80種類以上の言語</string>

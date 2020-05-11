@@ -35,7 +35,6 @@
         <item quantity="one">%1$,d Sprog</item>
         <item quantity="other">%1$,d Sprog</item>
     </plurals>
-    <string name="text_tools_all_installed">Du har hentet alle tilgængelige værktøjer.</string>
     <string name="menu_add_to_home">Føj til startside</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 90 sprog</string>

@@ -34,7 +34,6 @@
         <item quantity="one">%1$,d ቋንቋ</item>
         <item quantity="other">%1$,d ቋንቋዎች</item>
     </plurals>
-    <string name="text_tools_all_installed">ሁሉንም መሳሪያዎች አዉርደዋል</string>
     <string name="menu_add_to_home">ዋና ስክሪን ይጨምሩት</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ከ 70 በላይ ቋንቋዎች</string>

@@ -4,8 +4,6 @@ import android.app.Dialog
 import android.graphics.drawable.NinePatchDrawable
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -76,8 +74,8 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
     override fun onBindingCreated(binding: ToolsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
+        binding.fragment = this
         binding.setTools(dataModel.tools)
-        inflateEmptyListUi(binding)
         setupToolsList(binding)
     }
 
@@ -244,19 +242,6 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         toolsDragDropAdapter = null
     }
     // endregion Tools List
-
-    // region Empty List UI
-    private fun inflateEmptyListUi(binding: ToolsFragmentBinding) {
-        val layout = when (mode) {
-            MODE_ADDED -> R.layout.tools_added_empty_ui
-            else -> R.layout.tools_available_empty_ui
-        }
-        val emptyUi = LayoutInflater.from(binding.emptyListUi.context).inflate(layout, binding.emptyListUi)
-
-        // HACK: quick and dirty way to attach an OnClickListener
-        emptyUi.findViewById<View>(R.id.action)?.setOnClickListener { _ -> onEmptyActionClick() }
-    }
-    // endregion Empty List UI
 }
 
 class RemoveFavoriteConfirmationDialogFragment() : DialogFragment() {
