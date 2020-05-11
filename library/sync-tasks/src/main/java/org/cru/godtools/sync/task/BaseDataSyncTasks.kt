@@ -100,7 +100,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     }
 
     @VisibleForTesting
-    protected fun storeLanguage(events: SimpleArrayMap<Class<*>, Any>, language: Language) {
+    internal fun storeLanguage(events: SimpleArrayMap<Class<*>, Any>, language: Language) {
         // this language doesn't exist yet, check to see if a different language shares the same id
         if (language.id != Base.INVALID_ID && dao.refresh(language) == null) {
             // update the language code to preserve the added state
