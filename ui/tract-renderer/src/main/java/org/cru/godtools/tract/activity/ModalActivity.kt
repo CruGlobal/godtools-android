@@ -32,6 +32,17 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import javax.inject.Inject
 
+internal fun Activity.startModalActivity(toolCode: String, locale: Locale, page: String, modal: String) = startActivity(
+    Intent(this, ModalActivity::class.java).putExtras(Bundle(4).apply {
+        putString(EXTRA_TOOL, toolCode)
+        putLocale(EXTRA_LANGUAGE, locale)
+        putString(EXTRA_PAGE, page)
+        putString(EXTRA_MODAL, modal)
+    }),
+    ActivityOptionsCompat.makeCustomAnimation(this, R.anim.activity_fade_in, R.anim.activity_fade_out)
+        .toBundle()
+)
+
 class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
     @JvmField
     @BindView(R2.id.modal_root)
@@ -109,23 +120,6 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
 
     private fun checkForDismissEvent(event: Event) {
         if (mModal?.dismissListeners?.contains(event.id) == true) finish()
-    }
-
-    companion object {
-        @JvmStatic
-        fun start(activity: Activity, toolCode: String, locale: Locale, page: String, modal: String) {
-            val extras = Bundle(4).apply {
-                putString(EXTRA_TOOL, toolCode)
-                putLocale(EXTRA_LANGUAGE, locale)
-                putString(EXTRA_PAGE, page)
-                putString(EXTRA_MODAL, modal)
-            }
-            activity.startActivity(
-                Intent(activity, ModalActivity::class.java).putExtras(extras),
-                ActivityOptionsCompat.makeCustomAnimation(activity, R.anim.activity_fade_in, R.anim.activity_fade_out)
-                    .toBundle()
-            )
-        }
     }
 }
 

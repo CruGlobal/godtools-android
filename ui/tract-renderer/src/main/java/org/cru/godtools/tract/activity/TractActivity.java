@@ -731,7 +731,7 @@ public class TractActivity extends BaseToolActivity
     public void showModal(@NonNull final Modal modal) {
         final Manifest manifest = modal.getManifest();
         final Page page = modal.getPage();
-        ModalActivity.start(this, manifest.getCode(), manifest.getLocale(), page.getId(), modal.getId());
+        ModalActivityKt.startModalActivity(this, manifest.getCode(), manifest.getLocale(), page.getId(), modal.getId());
     }
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
