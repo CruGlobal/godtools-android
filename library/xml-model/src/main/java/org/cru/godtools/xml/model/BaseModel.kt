@@ -4,4 +4,4 @@ interface BaseModel {
     val stylesParent: Styles?
 }
 
-internal val BaseModel?.stylesParent get() = this?.stylesParent
+val BaseModel?.stylesParent get() = this?.stylesParent
