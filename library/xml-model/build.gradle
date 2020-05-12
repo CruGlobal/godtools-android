@@ -9,5 +9,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
 }

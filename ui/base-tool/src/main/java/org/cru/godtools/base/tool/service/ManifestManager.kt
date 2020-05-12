@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.service
 
-import android.content.Context
 import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
@@ -25,9 +24,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @Reusable
-class ManifestManager @Inject constructor(context: Context, private val dao: GodToolsDao) {
-    private val manifestParser = ManifestParser.getInstance(context)
-
+class ManifestManager @Inject constructor(private val dao: GodToolsDao, private val manifestParser: ManifestParser) {
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         GlobalScope.launch(Dispatchers.Default) {
