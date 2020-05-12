@@ -82,6 +82,8 @@ public class TractActivity extends BaseToolActivity
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     FollowupService mFollowupService;
+    @Inject
+    ManifestManager mManifestManager;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -671,9 +673,8 @@ public class TractActivity extends BaseToolActivity
 
     private void startLoaders() {
         final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
-        final ManifestManager manifestManager = ManifestManager.Companion.getInstance(this);
         for (final Locale language : mLanguages) {
-            manifestManager.getLatestPublishedManifestLiveData(mTool, language)
+            mManifestManager.getLatestPublishedManifestLiveData(mTool, language)
                     .observe(this, m -> setManifest(language, m));
             dao.getLatestTranslationLiveData(mTool, language, true, false, true)
                     .observe(this, t -> setTranslation(language, t));
