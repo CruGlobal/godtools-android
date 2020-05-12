@@ -24,7 +24,11 @@ import java.util.Locale
 import javax.inject.Inject
 
 @Reusable
-class ManifestManager @Inject constructor(private val dao: GodToolsDao, private val manifestParser: ManifestParser) {
+class ManifestManager @Inject constructor(
+    private val dao: GodToolsDao,
+    private val eventBus: EventBus,
+    private val manifestParser: ManifestParser
+) {
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         GlobalScope.launch(Dispatchers.Default) {
@@ -68,6 +72,6 @@ class ManifestManager @Inject constructor(private val dao: GodToolsDao, private 
             TranslationTable.FIELD_MANIFEST.eq(manifestName),
             TranslationTable.COLUMN_DOWNLOADED
         )
-        EventBus.getDefault().post(TranslationUpdateEvent)
+        eventBus.post(TranslationUpdateEvent)
     }
 }
