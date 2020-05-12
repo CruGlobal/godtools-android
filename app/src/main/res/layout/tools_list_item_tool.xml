@@ -123,11 +123,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_open"
-                style="?borderlessButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:minWidth="48dp"
                 android:onClick="@{() -> callbacks.openTool(tool, primaryTranslation, parallelTranslation)}"
                 android:text="@string/action_tools_open"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -135,11 +134,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_details"
-                style="?borderlessButtonStyle"
+                style="?materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:minWidth="48dp"
                 android:onClick="@{() -> callbacks.onToolInfo(tool.code)}"
                 android:text="@string/action_tools_about"
                 app:layout_constraintBottom_toBottomOf="parent"
