@@ -10,6 +10,7 @@
       "resource-type": "tract",
       "attr-banner": "1",
       "attr-banner-about": "2",
+      "attr-category": "conversation_starter",
       "attr-default-order": "10"
     },
     "relationships": {

@@ -20,6 +20,8 @@ class ToolTest {
 
         assertEquals(1, tool.id)
         assertEquals("kgp-us", tool.code)
+        assertEquals("Know God Personally", tool.name)
+        assertEquals("conversation_starter", tool.category)
         assertEquals("Gospel presentation", tool.description)
         assertEquals(12345, tool.shares)
         assertEquals(Tool.Type.TRACT, tool.type)
