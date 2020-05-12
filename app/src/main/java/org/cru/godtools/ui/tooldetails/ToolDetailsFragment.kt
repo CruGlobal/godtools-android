@@ -13,10 +13,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import dagger.Lazy
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -37,6 +39,8 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
+    @Inject
+    internal lateinit var manifestManager: Lazy<ManifestManager>
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
@@ -107,6 +111,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         tool?.code?.let { code ->
             val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
             val parallelLanguage = parallelTranslation?.languageCode
+
+            // start pre-loading the tool in the primary language
+            manifestManager.get().preloadLatestPublishedManifest(code, primaryLanguage)
             if (parallelLanguage != null) {
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage, parallelLanguage)
             } else {
