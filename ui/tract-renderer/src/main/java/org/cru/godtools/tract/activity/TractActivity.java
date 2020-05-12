@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -658,9 +657,7 @@ public class TractActivity extends BaseToolActivity
             mPagerAdapter.setManifest(manifest);
 
             if (mPager != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
-                }
+                mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
 
                 // scroll to initial page
                 if (manifest != null && mInitialPage >= 0) {

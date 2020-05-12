@@ -35,7 +35,7 @@ class LanguagesFragmentViewModel @AssistedInject constructor(
     val isPrimary = MutableLiveData<Boolean>(true)
 
     // region Search
-    val query: MutableLiveData<String> = savedState.getLiveData(KEY_QUERY, null)
+    val query: MutableLiveData<String?> = savedState.getLiveData(KEY_QUERY, null)
 
     var isSearchViewOpen: Boolean
         get() = savedState.get<Boolean>(KEY_IS_SEARCH_VIEW_OPEN) == true
@@ -59,16 +59,16 @@ class LanguagesFragmentViewModel @AssistedInject constructor(
         .map { it.associateBy { lang -> lang.getDisplayName(context) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
-            query.isNullOrEmpty() -> languages?.values?.toList()
-            else -> languages?.entries?.filter { it.key.contains(query, true) }?.map { it.value }?.toList()
+            query.isNullOrEmpty() -> languages.values.toList()
+            else -> languages.entries.filter { it.key.contains(query, true) }.map { it.value }.toList()
         }
     }
 
     // List of sorted filtered languages with none (null) prepended if requested
     val languages = isPrimary.distinctUntilChanged().combineWith(filteredLanguages) { isPrimary, languages ->
         when (isPrimary) {
-            false -> listOf<Language?>(null) + languages.orEmpty()
-            else -> languages.orEmpty()
+            false -> listOf<Language?>(null) + languages
+            else -> languages
         }
     }
     // endregion Languages

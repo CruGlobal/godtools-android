@@ -8,18 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.TintableBackgroundView;
 import androidx.core.view.ViewCompat;
 
 public class ViewUtils {
-    public static int getTopOffset(@NonNull final ViewGroup root, @IdRes final int id) {
-        final View descendant = root.findViewById(id);
-        return descendant != null ? getTopOffset(root, descendant) : 0;
-    }
-
     public static int getTopOffset(@NonNull final ViewGroup root, @NonNull final View descendant) {
         final Rect bounds = new Rect();
         descendant.getDrawingRect(bounds);
