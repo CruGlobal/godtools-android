@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,6 +19,7 @@ import org.cru.godtools.base.Constants.EXTRA_LANGUAGE
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.ImmersiveActivity
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.tract.Constants.EXTRA_MODAL
 import org.cru.godtools.tract.Constants.EXTRA_PAGE
@@ -101,8 +101,8 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
     }
 }
 
-class ModalActivityDataModel @Inject constructor(application: Application) :
-    LatestPublishedManifestDataModel(application) {
+class ModalActivityDataModel @Inject constructor(manifestManager: ManifestManager) :
+    LatestPublishedManifestDataModel(manifestManager) {
     val pageId = MutableLiveData<String?>()
     val modalId = MutableLiveData<String?>()
 
