@@ -45,8 +45,8 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
 
     boolean mVisible = false;
 
-    protected BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
-                   @Nullable final BaseViewHolder parentViewHolder) {
+    protected BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent,
+                             @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
         this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
     }
 
