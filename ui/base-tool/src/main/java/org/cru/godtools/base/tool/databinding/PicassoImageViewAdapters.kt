@@ -1,4 +1,4 @@
-package org.cru.godtools.article.databinding.adapter
+package org.cru.godtools.base.tool.databinding
 
 import androidx.databinding.BindingAdapter
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView

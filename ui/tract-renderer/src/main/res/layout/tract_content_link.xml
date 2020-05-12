@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_link"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:minHeight="32dp"
-    android:saveEnabled="false" />
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.BaseModelKt" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
+        <variable name="holder" type="org.cru.godtools.tract.viewmodel.LinkViewHolder" />
+        <variable name="model" type="org.cru.godtools.xml.model.Link" />
+    </data>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/content_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="32dp"
+        android:saveEnabled="false"
+        android:onClick="@{() -> holder.click(model)}"
+        android:text="@{model.text}"
+        app:defaultTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
+</layout>

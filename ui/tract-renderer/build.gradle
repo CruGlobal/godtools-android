@@ -2,6 +2,9 @@ apply plugin: 'com.jakewharton.butterknife'
 
 android {
     defaultConfig {
+        dataBinding {
+            enabled = true
+        }
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
