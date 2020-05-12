@@ -139,7 +139,7 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
         ViewCompat.setLayoutDirection(mRoot, CallToAction.getLayoutDirection(mModel));
     }
 
-    final void sendEvents(@NonNull final Set<Event.Id> ids) {
+    public final void sendEvents(@NonNull final Set<Event.Id> ids) {
         // short-circuit if there are no events being triggered
         if (ids.isEmpty()) {
             return;
