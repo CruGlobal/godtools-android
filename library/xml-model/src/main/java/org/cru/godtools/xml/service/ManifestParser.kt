@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Page
@@ -19,10 +18,11 @@ import org.xmlpull.v1.XmlPullParser
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ManifestParser private constructor(private val context: Context) {
-    companion object : SingletonHolder<ManifestParser, Context>({ ManifestParser(it.applicationContext) })
-
+@Singleton
+class ManifestParser @Inject constructor(private val context: Context) {
     private val cache = WeakLruCache<String, Result.Data>(6)
     private val loadingMutex = MutexMap()
 

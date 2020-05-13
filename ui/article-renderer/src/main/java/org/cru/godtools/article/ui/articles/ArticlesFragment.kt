@@ -1,6 +1,5 @@
 package org.cru.godtools.article.ui.articles
 
-import android.app.Application
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -21,6 +20,7 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 import java.util.Locale
@@ -117,8 +117,10 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel @Inject constructor(application: Application, private val articleDao: ArticleDao) :
-    LatestPublishedManifestDataModel(application) {
+class ArticlesFragmentDataModel @Inject constructor(
+    manifestManager: ManifestManager,
+    private val articleDao: ArticleDao
+) : LatestPublishedManifestDataModel(manifestManager) {
     internal val category = MutableLiveData<String?>()
 
     private val tags = manifest.combineWith(category) { manifest, category ->

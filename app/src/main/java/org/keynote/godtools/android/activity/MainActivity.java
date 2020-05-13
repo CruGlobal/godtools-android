@@ -19,6 +19,7 @@ import org.cru.godtools.analytics.LaunchTrackingViewModel;
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tutorial.PageSet;
@@ -30,6 +31,8 @@ import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +40,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import dagger.Lazy;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.STARTED;
@@ -53,6 +57,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     private static final int STATE_MY_TOOLS = 0;
     private static final int STATE_FIND_TOOLS = 1;
+
+    @Inject
+    Lazy<ManifestManager> mManifestManager;
 
     @Nullable
     private TabLayout.Tab mFavoriteToolsTab;
@@ -145,6 +152,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (languages == null || languages.length == 0) {
             return;
         }
+
+        // start pre-loading the tool in the first language
+        mManifestManager.get().preloadLatestPublishedManifest(code, languages[0]);
 
         ActivityUtilsKt.openToolActivity(this, code, type, languages);
     }

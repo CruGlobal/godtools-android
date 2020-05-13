@@ -1,18 +1,17 @@
 package org.cru.godtools.base.tool.service
 
-import android.content.Context
 import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import dagger.Reusable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.xml.model.Manifest
@@ -22,13 +21,14 @@ import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
+import javax.inject.Inject
 
-class ManifestManager private constructor(context: Context) {
-    companion object : SingletonHolder<ManifestManager, Context>({ ManifestManager(it.applicationContext) })
-
-    private val dao = GodToolsDao.getInstance(context)
-    private val manifestParser = ManifestParser.getInstance(context)
-
+@Reusable
+class ManifestManager @Inject constructor(
+    private val dao: GodToolsDao,
+    private val eventBus: EventBus,
+    private val manifestParser: ManifestParser
+) {
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         GlobalScope.launch(Dispatchers.Default) {
@@ -72,6 +72,6 @@ class ManifestManager private constructor(context: Context) {
             TranslationTable.FIELD_MANIFEST.eq(manifestName),
             TranslationTable.COLUMN_DOWNLOADED
         )
-        EventBus.getDefault().post(TranslationUpdateEvent)
+        eventBus.post(TranslationUpdateEvent)
     }
 }

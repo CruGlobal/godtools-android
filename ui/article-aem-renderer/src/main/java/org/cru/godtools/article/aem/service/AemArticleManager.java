@@ -126,7 +126,7 @@ public class AemArticleManager {
 
     @Inject
     AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao, final AemApi api,
-                      final ArticleRoomDatabase aemDb) {
+                      final ManifestManager manifestManager, final ArticleRoomDatabase aemDb) {
         mApi = api;
         mContext = context.getApplicationContext();
         mAemDb = aemDb;
@@ -135,7 +135,7 @@ public class AemArticleManager {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AemArticleManager.class.getSimpleName()));
-        mManifestManager = ManifestManager.Companion.getInstance(mContext);
+        mManifestManager = manifestManager;
 
         eventBus.register(this);
 
