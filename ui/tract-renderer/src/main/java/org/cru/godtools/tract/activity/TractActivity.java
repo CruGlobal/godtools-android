@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,6 @@ import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
-import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,7 +105,8 @@ public class TractActivity extends BaseToolActivity
     /*final*/ int mPrimaryLanguages = 1;
     /*final*/ int mParallelLanguages = 0;
 
-    private final SparseArray<Translation> mTranslations;
+    @NonNull
+    private List<Translation> mTranslations = Collections.emptyList();
     @NonNull
     private List<Manifest> mManifests = Collections.emptyList();
     @NonNull
@@ -139,12 +138,10 @@ public class TractActivity extends BaseToolActivity
 
     public TractActivity() {
         super(true);
-        mTranslations = new SparseArray<>();
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    TractActivity(@NonNull final SparseArray<Translation> translations,
-                  @NonNull final List<Manifest> manifests) {
+    TractActivity(@NonNull final List<Translation> translations, @NonNull final List<Manifest> manifests) {
         super(true);
         mTranslations = translations;
         mManifests = manifests;
@@ -181,8 +178,9 @@ public class TractActivity extends BaseToolActivity
             trackToolOpen(mTool);
         }
 
-        // HACK: for now we need to initialize mManifests to be the correct length
+        // HACK: for now we need to initialize mManifests and mTranslations to be the correct length
         mManifests = Arrays.asList(new Manifest[mLanguages.length]);
+        mTranslations = Arrays.asList(new Translation[mLanguages.length]);
 
         setupDataModel();
         startLoaders();
@@ -426,8 +424,7 @@ public class TractActivity extends BaseToolActivity
                 return STATE_INVALID_TYPE;
             }
             return STATE_LOADED;
-        } else if (isSyncToolsDone() && mTranslations.indexOfKey(languageIndex) >= 0 &&
-                mTranslations.get(languageIndex) == null) {
+        } else if (isSyncToolsDone() && mTranslations.get(languageIndex) == null) {
             return STATE_NOT_FOUND;
         } else {
             return STATE_LOADING;
@@ -495,19 +492,6 @@ public class TractActivity extends BaseToolActivity
             }
 
             mLanguageTabs.addOnTabSelectedListener(this);
-        }
-    }
-
-    void setTranslation(@NonNull final Locale locale, @Nullable final Translation translation) {
-        for (int i = 0; i < mLanguages.length; i++) {
-            if (locale.equals(mLanguages[i])) {
-                mTranslations.put(i, translation);
-
-                if (i == mActiveLanguage) {
-                    updateVisibilityState();
-                }
-                break;
-            }
         }
     }
 
@@ -675,11 +659,10 @@ public class TractActivity extends BaseToolActivity
             onUpdateActiveManifest();
             updateLanguageToggle();
         });
-        final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
-        for (final Locale language : mLanguages) {
-            dao.getLatestTranslationLiveData(mTool, language, true, false, true)
-                    .observe(this, t -> setTranslation(language, t));
-        }
+        mDataModel.getTranslations().observe(this, translations -> {
+            mTranslations = translations;
+            updateVisibilityState();
+        });
     }
 
     private void startDownloadProgressListener() {

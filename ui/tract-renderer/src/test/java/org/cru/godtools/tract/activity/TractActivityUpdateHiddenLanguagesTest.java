@@ -1,7 +1,5 @@
 package org.cru.godtools.tract.activity;
 
-import android.util.SparseArray;
-
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.xml.model.Manifest;
 import org.junit.Before;
@@ -24,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class TractActivityUpdateHiddenLanguagesTest {
     private TractActivity mActivity;
     @Mock
-    private SparseArray<Translation> mTranslations;
+    private List<Translation> mTranslations;
     @Mock
     private List<Manifest> mManifests;
     private Manifest mManifest;
@@ -83,7 +81,6 @@ public class TractActivityUpdateHiddenLanguagesTest {
         setLanguages(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN);
         mActivity.mActiveLanguage = 2;
         mActivity.mPrimaryLanguages = 2;
-        translationMissing(0);
         whenGetTranslation(1).thenReturn(new Translation());
 
         // run logic and verify results
@@ -113,12 +110,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     }
 
     private OngoingStubbing<Translation> whenGetTranslation(final int index) {
-        when(mTranslations.indexOfKey(index)).thenReturn(0);
         return when(mTranslations.get(index));
-    }
-
-    private void translationMissing(final int index) {
-        when(mTranslations.indexOfKey(index)).thenReturn(-1);
     }
 
     private OngoingStubbing<Manifest> whenGetManifest(final int index) {
