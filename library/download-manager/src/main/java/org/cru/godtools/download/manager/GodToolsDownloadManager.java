@@ -9,7 +9,6 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.common.base.Objects;
 import com.google.common.io.Closer;
 import com.google.common.io.CountingInputStream;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -31,6 +30,7 @@ import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
+import org.cru.godtools.model.TranslationKey;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
@@ -432,7 +432,7 @@ public final class GodToolsDownloadManager {
         synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
             // process the most recent published version
             final Query<Translation> query = Query.select(Translation.class)
-                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(key.mTool, key.mLocale)
+                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(key.getTool(), key.getLocale())
                                    .and(TranslationTable.SQL_WHERE_PUBLISHED))
                     .orderBy(TranslationTable.COLUMN_VERSION + " DESC")
                     .limit(1);
@@ -821,40 +821,6 @@ public final class GodToolsDownloadManager {
 
     // endregion Download & Cleaning Scheduling Methods
 
-    static final class TranslationKey {
-        @Nullable
-        final String mTool;
-        @NonNull
-        final Locale mLocale;
-
-        TranslationKey(@NonNull final Translation translation) {
-            this(translation.getToolCode(), translation.getLanguageCode());
-        }
-
-        TranslationKey(@Nullable final String tool, @NonNull final Locale locale) {
-            mTool = tool;
-            mLocale = locale;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            TranslationKey that = (TranslationKey) o;
-            return Objects.equal(mTool, that.mTool) &&
-                    Objects.equal(mLocale, that.mLocale);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(mTool, mLocale);
-        }
-    }
-
     public interface OnDownloadProgressUpdateListener {
         /**
          * @param progress The current download progress. If this is null there is no download running.
@@ -879,8 +845,8 @@ public final class GodToolsDownloadManager {
             mKey = key;
             final Locale primary = mPrefs.getPrimaryLanguage();
             final Locale parallel = mPrefs.getParallelLanguage();
-            mPriority = mKey.mLocale.equals(primary) ? PRIORITY_PRIMARY :
-                    mKey.mLocale.equals(parallel) ? PRIORITY_PARALLEL : PRIORITY_OTHER;
+            mPriority = primary.equals(mKey.getLocale()) ? PRIORITY_PRIMARY :
+                    mKey.getLocale().equals(parallel) ? PRIORITY_PARALLEL : PRIORITY_OTHER;
         }
 
         @Override
