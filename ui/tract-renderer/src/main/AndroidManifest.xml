@@ -15,8 +15,6 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <!-- HACK: We need to keep the domain hardcoded, otherwise the play store blocks releasing the instant
-                     HACK: app because the main app doesn't have an intent-filter that "matches" knowgod.com -->
                 <data android:host="knowgod.com" />
                 <data android:pathPattern="/.*/fourlaws.*" />
                 <data android:pathPattern="/.*/honorrestored.*" />
