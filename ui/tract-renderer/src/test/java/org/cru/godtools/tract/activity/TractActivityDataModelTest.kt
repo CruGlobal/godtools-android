@@ -8,10 +8,12 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.model.Translation
 import org.cru.godtools.xml.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -46,6 +48,7 @@ class TractActivityDataModelTest {
         observer = mock()
     }
 
+    // region Property: manifests
     @Test
     fun verifyManifests() {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
@@ -70,7 +73,60 @@ class TractActivityDataModelTest {
         assertThat(dataModel.manifests.value, empty())
         verify(observer).onChanged(eq(emptyList<Manifest?>()))
     }
+    // endregion Property: manifests
+
+    // region Property: translations
+    @Test
+    fun verifyTranslations() {
+        val translation = Translation()
+        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        wheneverGetTranslation(TOOL, Locale.CHINESE).thenReturn(MutableLiveData(translation))
+        dataModel.tool.value = TOOL
+        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
+
+        dataModel.translations.observeForever(observer)
+        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
+        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
+        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.CHINESE), any(), any(), any())
+        argumentCaptor<List<Translation?>> {
+            verify(observer).onChanged(capture())
+            assertThat(lastValue, contains(null, null, translation))
+        }
+    }
+
+    @Test
+    fun verifyTranslationsNoLocales() {
+        dataModel.translations.observeForever(observer)
+        assertThat(dataModel.translations.value, empty())
+        dataModel.tool.value = TOOL
+        assertThat(dataModel.translations.value, empty())
+        verify(observer).onChanged(eq(emptyList<Translation?>()))
+    }
+
+    @Test
+    fun verifyTranslationsUpdateTranslation() {
+        val french = MutableLiveData<Translation?>(null)
+        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(french)
+        dataModel.tool.value = TOOL
+        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+
+        dataModel.translations.observeForever(observer)
+        french.value = Translation()
+        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
+        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
+        argumentCaptor<List<Translation?>> {
+            verify(observer, times(2)).onChanged(capture())
+            assertThat(firstValue, contains(null, null))
+            assertThat(lastValue, contains(null, french.value))
+        }
+    }
+    // endregion Property: translations
 
     private fun wheneverGetManifest(tool: String, locale: Locale) =
         whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))
+
+    private fun wheneverGetTranslation(tool: String, locale: Locale) =
+        whenever(dao.getLatestTranslationLiveData(tool, locale, trackAccess = true))
 }
