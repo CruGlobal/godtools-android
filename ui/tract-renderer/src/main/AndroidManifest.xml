@@ -32,6 +32,7 @@
 
         <activity
             android:name=".activity.ModalActivity"
+            android:exported="false"
             android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>
 </manifest>

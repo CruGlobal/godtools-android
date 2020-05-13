@@ -26,17 +26,17 @@ import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.R2
 import org.cru.godtools.tract.viewmodel.ModalViewHolder
+import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.Locale
 import javax.inject.Inject
 
-internal fun Activity.startModalActivity(toolCode: String, locale: Locale, page: String, modal: String) = startActivity(
+internal fun Activity.startModalActivity(modal: Modal) = startActivity(
     Intent(this, ModalActivity::class.java).putExtras(Bundle(4).apply {
-        putString(EXTRA_TOOL, toolCode)
-        putLocale(EXTRA_LANGUAGE, locale)
-        putString(EXTRA_PAGE, page)
-        putString(EXTRA_MODAL, modal)
+        putString(EXTRA_TOOL, modal.manifest.code)
+        putLocale(EXTRA_LANGUAGE, modal.manifest.locale)
+        putString(EXTRA_PAGE, modal.page.id)
+        putString(EXTRA_MODAL, modal.id)
     }),
     ActivityOptionsCompat.makeCustomAnimation(this, R.anim.activity_fade_in, R.anim.activity_fade_out)
         .toBundle()
