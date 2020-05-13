@@ -62,6 +62,7 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
@@ -179,6 +180,7 @@ public class TractActivity extends BaseToolActivity
             trackToolOpen(mTool);
         }
 
+        setupDataModel();
         startLoaders();
         setContentView(R.layout.tract_activity);
     }
@@ -297,6 +299,16 @@ public class TractActivity extends BaseToolActivity
         outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
     // endregion Lifecycle
+
+    // region Data Model
+    private TractActivityDataModel mDataModel;
+
+    private void setupDataModel() {
+        mDataModel = new ViewModelProvider(this).get(TractActivityDataModel.class);
+        mDataModel.getTool().setValue(mTool);
+        mDataModel.getLocales().setValue(Arrays.asList(mLanguages));
+    }
+    // endregion Data Model
 
     // region Creation Methods
 
