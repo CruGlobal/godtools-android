@@ -48,6 +48,7 @@ import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -107,7 +108,8 @@ public class TractActivity extends BaseToolActivity
     /*final*/ int mParallelLanguages = 0;
 
     private final SparseArray<Translation> mTranslations;
-    private final SparseArray<Manifest> mManifests;
+    @NonNull
+    private List<Manifest> mManifests = Collections.emptyList();
     @NonNull
     boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
@@ -138,12 +140,11 @@ public class TractActivity extends BaseToolActivity
     public TractActivity() {
         super(true);
         mTranslations = new SparseArray<>();
-        mManifests = new SparseArray<>();
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     TractActivity(@NonNull final SparseArray<Translation> translations,
-                  @NonNull final SparseArray<Manifest> manifests) {
+                  @NonNull final List<Manifest> manifests) {
         super(true);
         mTranslations = translations;
         mManifests = manifests;
@@ -179,6 +180,9 @@ public class TractActivity extends BaseToolActivity
         if (savedInstanceState == null) {
             trackToolOpen(mTool);
         }
+
+        // HACK: for now we need to initialize mManifests to be the correct length
+        mManifests = Arrays.asList(new Manifest[mLanguages.length]);
 
         setupDataModel();
         startLoaders();
@@ -507,24 +511,6 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
-    void setManifest(@NonNull final Locale locale, @Nullable final Manifest manifest) {
-        for (int i = 0; i < mLanguages.length; i++) {
-            if (locale.equals(mLanguages[i])) {
-                if (manifest != null) {
-                    mManifests.put(i, manifest);
-                } else {
-                    mManifests.remove(i);
-                }
-
-                if (i == mActiveLanguage) {
-                    onUpdateActiveManifest();
-                }
-                updateLanguageToggle();
-                break;
-            }
-        }
-    }
-
     private void updateActiveLanguage(@NonNull final Locale locale) {
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
@@ -684,10 +670,13 @@ public class TractActivity extends BaseToolActivity
     // endregion Tool Pager Methods
 
     private void startLoaders() {
+        mDataModel.getManifests().observe(this, manifests -> {
+            mManifests = manifests;
+            onUpdateActiveManifest();
+            updateLanguageToggle();
+        });
         final GodToolsDao dao = GodToolsDao.Companion.getInstance(this);
         for (final Locale language : mLanguages) {
-            mManifestManager.getLatestPublishedManifestLiveData(mTool, language)
-                    .observe(this, m -> setManifest(language, m));
             dao.getLatestTranslationLiveData(mTool, language, true, false, true)
                     .observe(this, t -> setTranslation(language, t));
         }

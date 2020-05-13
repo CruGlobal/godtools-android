@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.List;
 import java.util.Locale;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -25,7 +26,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     @Mock
     private SparseArray<Translation> mTranslations;
     @Mock
-    private SparseArray<Manifest> mManifests;
+    private List<Manifest> mManifests;
     private Manifest mManifest;
 
     @Before
