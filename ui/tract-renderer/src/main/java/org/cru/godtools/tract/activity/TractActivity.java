@@ -1,7 +1,5 @@
 package org.cru.godtools.tract.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -68,7 +66,7 @@ import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 public class TractActivity extends KotlinTractActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
         GodToolsDownloadManager.OnDownloadProgressUpdateListener {
-    private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
+    static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
 
@@ -99,27 +97,6 @@ public class TractActivity extends KotlinTractActivity
     @VisibleForTesting
     int mActiveLanguage = 0;
     int mInitialPage = 0;
-
-    protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
-                                         @NonNull final Locale... languages) {
-        extras.putString(EXTRA_TOOL, toolCode);
-        // XXX: we use singleString mode to support using this intent for legacy shortcuts
-        BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new),
-                true);
-    }
-
-    @NonNull
-    public static Intent createIntent(@NonNull final Context context, @NonNull final String toolCode,
-                                      @NonNull final Locale... languages) {
-        final Bundle extras = new Bundle();
-        populateExtras(extras, toolCode, languages);
-        return new Intent(context, TractActivity.class).putExtras(extras);
-    }
-
-    public static void start(@NonNull final Activity activity, @NonNull final String toolCode,
-                             @NonNull final Locale... languages) {
-        activity.startActivity(createIntent(activity, toolCode, languages));
-    }
 
     public TractActivity() {
         super();
