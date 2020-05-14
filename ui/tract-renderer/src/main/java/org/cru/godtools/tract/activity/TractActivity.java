@@ -5,12 +5,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.annimon.stream.Stream;
-import com.google.android.instantapps.InstantApps;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutUtils;
 
@@ -22,7 +19,6 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
@@ -155,24 +151,8 @@ public class TractActivity extends KotlinTractActivity
     @Override
     protected void onSetupActionBar() {
         super.onSetupActionBar();
-        if (toolbar != null && InstantApps.isInstantApp(this)) {
-            toolbar.setNavigationIcon(R.drawable.ic_close);
-        }
         setupLanguageToggle();
         updateLanguageToggle();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_tract, menu);
-
-        // make the install menu item visible if this is an Instant App
-        final MenuItem install = menu.findItem(R.id.action_install);
-        if (install != null) {
-            install.setVisible(InstantApps.isInstantApp(this));
-        }
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -193,22 +173,6 @@ public class TractActivity extends KotlinTractActivity
     protected void onUpdateToolbar() {
         super.onUpdateToolbar();
         updateLanguageToggle();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
-        final int id = item.getItemId();
-        if (id == R.id.action_install) {
-            installFullAppFromInstantApp();
-            return true;
-        } else if (id == android.R.id.home) {
-            // handle close button if this is an instant app
-            if (InstantApps.isInstantApp(this)) {
-                finish();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -575,10 +539,6 @@ public class TractActivity extends KotlinTractActivity
             mTranslations = translations;
             updateVisibilityState();
         });
-    }
-
-    private void installFullAppFromInstantApp() {
-        InstantApps.showInstallPrompt(this, null, -1, "instantapp");
     }
 
     // region Share Link logic

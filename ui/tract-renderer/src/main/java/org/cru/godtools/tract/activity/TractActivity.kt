@@ -6,10 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
+import com.google.android.instantapps.InstantApps
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.BaseToolActivity
@@ -47,6 +51,32 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
         super.onContentChanged()
         setupBackground()
         startDownloadProgressListener()
+    }
+
+    @CallSuper
+    override fun onSetupActionBar() {
+        super.onSetupActionBar()
+        if (InstantApps.isInstantApp(this)) toolbar?.setNavigationIcon(R.drawable.ic_close)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
+        menuInflater.inflate(R.menu.activity_tract, menu)
+
+        // make the install menu item visible if this is an Instant App
+        menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when {
+        item.itemId == R.id.action_install -> {
+            InstantApps.showInstallPrompt(this, -1, "instantapp")
+            true
+        }
+        item.itemId == android.R.id.home && InstantApps.isInstantApp(this) -> {
+            // handle close button if this is an instant app
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
 
