@@ -46,6 +46,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
     override fun onContentChanged() {
         super.onContentChanged()
         setupBackground()
+        startDownloadProgressListener()
     }
     // endregion Lifecycle
 
@@ -74,6 +75,10 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
             window.decorView.setBackgroundColor(Manifest.getBackgroundColor(it))
             ManifestViewUtils.bindBackgroundImage(it, binding.mainContent.backgroundImage)
         }
+    }
+
+    private fun startDownloadProgressListener() {
+        dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
     // endregion UI
 

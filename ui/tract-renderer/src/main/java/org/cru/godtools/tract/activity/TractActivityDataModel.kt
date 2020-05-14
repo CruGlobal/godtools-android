@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.xml.model.Manifest
@@ -29,6 +30,7 @@ private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 class TractActivityDataModel @AssistedInject constructor(
     private val dao: GodToolsDao,
+    private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
@@ -47,8 +49,8 @@ class TractActivityDataModel @AssistedInject constructor(
             savedState.set(STATE_ACTIVE_LOCALE, value?.let { LocaleCompat.toLanguageTag(value) })
         }
     private val activeLocaleLiveData = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
-        .distinctUntilChanged()
         .map { it?.let { LocaleCompat.forLanguageTag(it) } }
+        .distinctUntilChanged()
 
     val activeManifest = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
         manifestCache.get(TranslationKey(t, l))!!
@@ -56,6 +58,13 @@ class TractActivityDataModel @AssistedInject constructor(
             .withInitialValue(null)
     }
     // endregion Active Tool
+
+    val downloadProgress = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+        when {
+            t == null || l == null -> emptyLiveData()
+            else -> downloadManager.getDownloadProgressLiveData(t, l)
+        }
+    }
 
     val manifests: LiveData<List<Manifest?>> =
         distinctLocales.switchFold(ImmutableLiveData(emptyList())) { acc, locale ->

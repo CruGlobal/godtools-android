@@ -49,7 +49,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
@@ -180,7 +179,6 @@ public class TractActivity extends KotlinTractActivity
     protected void onStart() {
         super.onStart();
         eventBus.register(this);
-        startDownloadProgressListener();
     }
 
     @Override
@@ -427,7 +425,6 @@ public class TractActivity extends KotlinTractActivity
             if (mLanguages[i].equals(locale)) {
                 if (i != mActiveLanguage) {
                     mActiveLanguage = i;
-                    restartDownloadProgressListener();
                     onUpdateActiveManifest();
                 }
                 getDataModel().setActiveLocale(locale);
@@ -578,17 +575,6 @@ public class TractActivity extends KotlinTractActivity
             mTranslations = translations;
             updateVisibilityState();
         });
-    }
-
-    private void startDownloadProgressListener() {
-        startDownloadProgressListener(getDataModel().getTool().getValue(), mLanguages[mActiveLanguage]);
-    }
-
-    private void restartDownloadProgressListener() {
-        stopDownloadProgressListener();
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-            startDownloadProgressListener();
-        }
     }
 
     private void installFullAppFromInstantApp() {
