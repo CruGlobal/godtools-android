@@ -5,6 +5,9 @@ android {
         dataBinding {
             enabled = true
         }
+        viewBinding {
+            enabled = true
+        }
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {

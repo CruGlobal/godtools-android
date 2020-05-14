@@ -22,8 +22,6 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
-import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -33,6 +31,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
+import org.cru.godtools.tract.databinding.TractActivityBinding;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
@@ -78,8 +77,6 @@ public class TractActivity extends KotlinTractActivity
     TabLayout mLanguageTabs;
 
     // Manifest page pager
-    @BindView(R2.id.background_image)
-    ScaledPicassoImageView mBackgroundImage;
     @Nullable
     @BindView(R2.id.pages)
     ViewPager mPager;
@@ -172,14 +169,14 @@ public class TractActivity extends KotlinTractActivity
 
         setupDataModel();
         startLoaders();
-        setContentView(R.layout.tract_activity);
+        setBinding(TractActivityBinding.inflate(getLayoutInflater()));
+        setContentView(getBinding().getRoot());
     }
 
     @Override
     @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
-        setupBackground();
         setupPager();
     }
 
@@ -579,13 +576,6 @@ public class TractActivity extends KotlinTractActivity
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
         }
-    }
-
-    private void setupBackground() {
-        getDataModel().getActiveManifest().observe(this, manifest -> {
-            getWindow().getDecorView().setBackgroundColor(Manifest.getBackgroundColor(manifest));
-            ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
-        });
     }
 
     // region Tool Pager Methods

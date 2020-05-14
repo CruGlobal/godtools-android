@@ -11,7 +11,9 @@
 
     <include layout="@layout/activity_tool_loading" />
 
-    <include layout="@layout/tract_activity_content" />
+    <include
+        android:id="@+id/mainContent"
+        layout="@layout/tract_activity_content" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
