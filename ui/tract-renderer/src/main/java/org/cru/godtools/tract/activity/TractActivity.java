@@ -22,9 +22,7 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
-import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -35,7 +33,6 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
-import org.cru.godtools.tract.service.FollowupService;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
@@ -51,8 +48,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -61,7 +56,6 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
@@ -72,18 +66,12 @@ import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 
-public class TractActivity extends BaseToolActivity
+public class TractActivity extends KotlinTractActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
         GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
-
-    // Inject the FollowupService to ensure it is running to capture any followup forms
-    @Inject
-    FollowupService mFollowupService;
-    @Inject
-    ManifestManager mManifestManager;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -137,12 +125,12 @@ public class TractActivity extends BaseToolActivity
     }
 
     public TractActivity() {
-        super(true);
+        super();
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     TractActivity(@NonNull final List<Translation> translations, @NonNull final List<Manifest> manifests) {
-        super(true);
+        super();
         mTranslations = translations;
         mManifests = manifests;
     }
@@ -303,13 +291,10 @@ public class TractActivity extends BaseToolActivity
     // endregion Lifecycle
 
     // region Data Model
-    private TractActivityDataModel mDataModel;
-
     private void setupDataModel() {
-        mDataModel = new ViewModelProvider(this).get(TractActivityDataModel.class);
-        mDataModel.getTool().setValue(mTool);
-        mDataModel.getLocales().setValue(Arrays.asList(mLanguages));
-        mDataModel.setActiveLocale(mLanguages[mActiveLanguage]);
+        getDataModel().getTool().setValue(mTool);
+        getDataModel().getLocales().setValue(Arrays.asList(mLanguages));
+        getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
     }
     // endregion Data Model
 
@@ -504,7 +489,7 @@ public class TractActivity extends BaseToolActivity
                     restartDownloadProgressListener();
                     onUpdateActiveManifest();
                 }
-                mDataModel.setActiveLocale(locale);
+                getDataModel().setActiveLocale(locale);
                 return;
             }
         }
@@ -543,11 +528,6 @@ public class TractActivity extends BaseToolActivity
 
         // default to null
         return null;
-    }
-
-    @Nullable
-    protected Manifest getActiveManifest() {
-        return mDataModel.getActiveManifest().getValue();
     }
 
     private void updateLanguageToggle() {
@@ -602,7 +582,7 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void setupBackground() {
-        mDataModel.getActiveManifest().observe(this, manifest -> {
+        getDataModel().getActiveManifest().observe(this, manifest -> {
             getWindow().getDecorView().setBackgroundColor(Manifest.getBackgroundColor(manifest));
             ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
         });
@@ -616,7 +596,7 @@ public class TractActivity extends BaseToolActivity
             mPager.setAdapter(mPagerAdapter);
             getLifecycle().addObserver(mPagerAdapter);
 
-            mDataModel.getActiveManifest().observe(this, manifest -> {
+            getDataModel().getActiveManifest().observe(this, manifest -> {
                 mPagerAdapter.setManifest(manifest);
 
                 // scroll to initial page
@@ -655,12 +635,12 @@ public class TractActivity extends BaseToolActivity
     // endregion Tool Pager Methods
 
     private void startLoaders() {
-        mDataModel.getManifests().observe(this, manifests -> {
+        getDataModel().getManifests().observe(this, manifests -> {
             mManifests = manifests;
             onUpdateActiveManifest();
             updateLanguageToggle();
         });
-        mDataModel.getTranslations().observe(this, translations -> {
+        getDataModel().getTranslations().observe(this, translations -> {
             mTranslations = translations;
             updateVisibilityState();
         });
@@ -682,11 +662,6 @@ public class TractActivity extends BaseToolActivity
     }
 
     // region Share Link logic
-    @Override
-    protected boolean hasShareLinkUri() {
-        return getActiveManifest() != null;
-    }
-
     @Nullable
     @Override
     protected String getShareLinkUri() {
