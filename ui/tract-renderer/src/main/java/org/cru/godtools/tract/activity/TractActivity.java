@@ -37,7 +37,6 @@ import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -293,20 +292,6 @@ public class TractActivity extends KotlinTractActivity
             mLanguages = languages != null ? languages : mLanguages;
         }
         mHiddenLanguages = new boolean[mLanguages.length];
-    }
-
-    @Contract("null -> false")
-    private boolean isDeepLinkValid(@Nullable final Uri data) {
-        if (data != null) {
-            if ("http".equalsIgnoreCase(data.getScheme()) || "https".equalsIgnoreCase(data.getScheme())) {
-                final String host1 = getString(R.string.tract_deeplink_host_1);
-                final String host2 = getString(R.string.tract_deeplink_host_2);
-                if (host1.equalsIgnoreCase(data.getHost()) || host2.equalsIgnoreCase(data.getHost())) {
-                    return data.getPathSegments().size() >= 2;
-                }
-            }
-        }
-        return false;
     }
 
     @NonNull

@@ -4,16 +4,21 @@ package org.cru.godtools.tract.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.xml.model.Manifest
+import org.jetbrains.annotations.Contract
 import java.util.Locale
 import javax.inject.Inject
 
@@ -43,6 +48,16 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
         setupBackground()
     }
     // endregion Lifecycle
+
+    // region Intent Processing
+    @Contract("null -> false")
+    @VisibleForTesting(otherwise = PROTECTED)
+    fun isDeepLinkValid(data: Uri?) = data != null &&
+        ("http".equals(data.scheme, true) || "https".equals(data.scheme, true)) &&
+        (getString(R.string.tract_deeplink_host_1).equals(data.host, true) ||
+            getString(R.string.tract_deeplink_host_2).equals(data.host, true)) &&
+        data.pathSegments.size >= 2
+    // endregion Intent Processing
 
     override val activeManifest get() = dataModel.activeManifest.value
 
