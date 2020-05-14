@@ -1,7 +1,7 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
-import android.os.AsyncTask
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -9,13 +9,15 @@ import android.widget.ProgressBar
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
-import com.google.common.util.concurrent.Futures
-import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.base.Constants
-import org.ccci.gto.android.common.util.WeakTask
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.R
@@ -34,6 +36,7 @@ import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
+import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 
@@ -202,21 +205,21 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     // endregion Tool state
 
     // region Tool sync/download logic
-    private var syncToolsState: ListenableFuture<*>? = null
-    protected val isSyncToolsDone get() = syncToolsState?.isDone == true
     @Inject
     internal lateinit var toolSyncTasks: ToolSyncTasks
+    private val syncsRunning = MutableLiveData<Int>()
+    protected val isSyncRunning get() = syncsRunning.map { it > 0 }
+    protected val isSyncToolsDone get() = syncsRunning.value == 0
 
-    private fun syncTools() {
+    private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {
         cacheTools()
-        val task = SyncToolsRunnable(toolSyncTasks, WeakTask(this, TASK_CACHE_TOOLS))
-            .also { AsyncTask.THREAD_POOL_EXECUTOR.execute(it) }
-
-        // track sync tools state, combining previous state with current state
-        syncToolsState = when (syncToolsState?.isDone) {
-            false -> Futures.successfulAsList(syncToolsState, task.future)
-            else -> task.future
+        syncsRunning.value = (syncsRunning.value ?: 0) + 1
+        try {
+            toolSyncTasks.syncTools(Bundle.EMPTY)
+        } catch (ignored: IOException) {
         }
+        cacheTools()
+        syncsRunning.value = ((syncsRunning.value ?: 0) - 1).coerceAtLeast(0)
     }
 
     protected abstract fun cacheTools()
@@ -329,7 +332,5 @@ abstract class BaseToolActivity @JvmOverloads constructor(
         const val STATE_LOADED = 1
         const val STATE_NOT_FOUND = 2
         const val STATE_INVALID_TYPE = 3
-
-        private val TASK_CACHE_TOOLS = WeakTask.Task<BaseToolActivity> { it.cacheTools() }
     }
 }
