@@ -34,6 +34,15 @@ class TractActivityDeepLinkTest {
     }
 
     @Test
+    fun verifyExtractToolFromDeepLink() {
+        with(activity) {
+            assertNull(Uri.parse("https://knowgod.com/en").extractToolFromDeepLink())
+            assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp").extractToolFromDeepLink())
+            assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp/1").extractToolFromDeepLink())
+        }
+    }
+
+    @Test
     fun verifyExtractPageFromDeepLink() {
         with(activity) {
             assertNull(Uri.parse("https://knowgod.com/en/kgp").extractPageFromDeepLink())

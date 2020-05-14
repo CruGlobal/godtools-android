@@ -267,13 +267,12 @@ public class TractActivity extends KotlinTractActivity
     // endregion Data Model
 
     // region Creation Methods
-
     private void processIntent(@Nullable final Intent intent, @Nullable final Bundle savedInstanceState) {
         final String action = intent != null ? intent.getAction() : null;
         final Uri data = intent != null ? intent.getData() : null;
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
-            getDataModel().getTool().setValue(getToolFromDeepLink(data));
+            getDataModel().getTool().setValue(extractToolFromDeepLink(data));
             mLanguages = processDeepLinkLanguages(data);
             final Integer page = extractPageFromDeepLink(data);
             if (savedInstanceState == null && page != null) {
@@ -326,15 +325,9 @@ public class TractActivity extends KotlinTractActivity
                 .map(LocaleCompat::forLanguageTag);
     }
 
-    @Nullable
-    private String getToolFromDeepLink(@NonNull final Uri data) {
-        return data.getPathSegments().get(1);
-    }
-
     private boolean validStartState() {
         return getDataModel().getTool().getValue() != null && mLanguages.length > 0;
     }
-
     // endregion Creation Methods
 
     @Override

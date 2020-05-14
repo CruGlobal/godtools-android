@@ -59,6 +59,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
         data.pathSegments.size >= 2
 
     @VisibleForTesting(otherwise = PROTECTED)
+    fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
+    @VisibleForTesting(otherwise = PROTECTED)
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
 
