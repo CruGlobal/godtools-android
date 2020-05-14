@@ -1,6 +1,7 @@
 package org.cru.godtools.sync.task
 
 import android.os.Bundle
+import androidx.annotation.AnyThread
 import androidx.collection.SimpleArrayMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -43,6 +44,7 @@ class ToolSyncTasks @Inject internal constructor(
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 
+    @AnyThread
     suspend fun syncTools(args: Bundle) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
