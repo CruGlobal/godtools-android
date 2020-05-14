@@ -191,6 +191,7 @@ public class TractActivity extends BaseToolActivity
     @CallSuper
     public void onContentChanged() {
         super.onContentChanged();
+        setupBackground();
         setupPager();
     }
 
@@ -229,7 +230,6 @@ public class TractActivity extends BaseToolActivity
     @CallSuper
     protected void onUpdateActiveManifest() {
         super.onUpdateActiveManifest();
-        updateBackground();
         updatePager();
         showNextFeatureDiscovery();
     }
@@ -309,6 +309,7 @@ public class TractActivity extends BaseToolActivity
         mDataModel = new ViewModelProvider(this).get(TractActivityDataModel.class);
         mDataModel.getTool().setValue(mTool);
         mDataModel.getLocales().setValue(Arrays.asList(mLanguages));
+        mDataModel.setActiveLocale(mLanguages[mActiveLanguage]);
     }
     // endregion Data Model
 
@@ -503,6 +504,7 @@ public class TractActivity extends BaseToolActivity
                     restartDownloadProgressListener();
                     onUpdateActiveManifest();
                 }
+                mDataModel.setActiveLocale(locale);
                 return;
             }
         }
@@ -545,8 +547,7 @@ public class TractActivity extends BaseToolActivity
 
     @Nullable
     protected Manifest getActiveManifest() {
-        final Manifest manifest = mManifests.get(mActiveLanguage);
-        return manifest != null && manifest.getType() == Manifest.Type.TRACT ? manifest : null;
+        return mDataModel.getActiveManifest().getValue();
     }
 
     private void updateLanguageToggle() {
@@ -600,10 +601,11 @@ public class TractActivity extends BaseToolActivity
         }
     }
 
-    private void updateBackground() {
-        final Manifest manifest = getActiveManifest();
-        getWindow().getDecorView().setBackgroundColor(Manifest.getBackgroundColor(manifest));
-        ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
+    private void setupBackground() {
+        mDataModel.getActiveManifest().observe(this, manifest -> {
+            getWindow().getDecorView().setBackgroundColor(Manifest.getBackgroundColor(manifest));
+            ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
+        });
     }
 
     // region Tool Pager Methods
@@ -613,6 +615,16 @@ public class TractActivity extends BaseToolActivity
             mPagerAdapter.setCallbacks(this);
             mPager.setAdapter(mPagerAdapter);
             getLifecycle().addObserver(mPagerAdapter);
+
+            mDataModel.getActiveManifest().observe(this, manifest -> {
+                mPagerAdapter.setManifest(manifest);
+
+                // scroll to initial page
+                if (manifest != null && mInitialPage >= 0) {
+                    mPager.setCurrentItem(mInitialPage, false);
+                    mInitialPage = -1;
+                }
+            });
             updatePager();
         }
     }
@@ -636,19 +648,8 @@ public class TractActivity extends BaseToolActivity
     }
 
     private void updatePager() {
-        if (mPagerAdapter != null) {
-            final Manifest manifest = getActiveManifest();
-            mPagerAdapter.setManifest(manifest);
-
-            if (mPager != null) {
-                mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
-
-                // scroll to initial page
-                if (manifest != null && mInitialPage >= 0) {
-                    mPager.setCurrentItem(mInitialPage, false);
-                    mInitialPage = -1;
-                }
-            }
+        if (mPager != null) {
+            mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
         }
     }
     // endregion Tool Pager Methods
