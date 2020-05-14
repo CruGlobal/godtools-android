@@ -57,6 +57,9 @@ class TractActivityDataModel @AssistedInject constructor(
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
             .withInitialValue(null)
     }
+    val activeTranslation = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+        translationCache.get(TranslationKey(t, l))!!.withInitialValue(null)
+    }
     // endregion Active Tool
 
     val downloadProgress = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
