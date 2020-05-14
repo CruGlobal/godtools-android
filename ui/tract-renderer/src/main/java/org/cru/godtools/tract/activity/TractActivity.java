@@ -21,7 +21,6 @@ import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -79,8 +78,6 @@ public class TractActivity extends KotlinTractActivity
     @Nullable
     private ManifestPagerAdapter mPagerAdapter;
 
-    @Nullable
-    /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
     /*final*/ int mPrimaryLanguages = 1;
@@ -135,7 +132,7 @@ public class TractActivity extends KotlinTractActivity
 
         // track this view
         if (savedInstanceState == null) {
-            trackToolOpen(mTool);
+            trackToolOpen(getDataModel().getTool().getValue());
         }
 
         // HACK: for now we need to initialize mManifests and mTranslations to be the correct length
@@ -221,7 +218,7 @@ public class TractActivity extends KotlinTractActivity
         final Locale locale = (Locale) tab.getTag();
         if (locale != null) {
             updateActiveLanguage(locale);
-            eventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
+            eventBus.post(new ToggleLanguageAnalyticsActionEvent(getDataModel().getTool().getValue(), locale));
         }
     }
 
@@ -264,7 +261,6 @@ public class TractActivity extends KotlinTractActivity
 
     // region Data Model
     private void setupDataModel() {
-        getDataModel().getTool().setValue(mTool);
         getDataModel().getLocales().setValue(Arrays.asList(mLanguages));
         getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
     }
@@ -277,7 +273,7 @@ public class TractActivity extends KotlinTractActivity
         final Uri data = intent != null ? intent.getData() : null;
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
-            mTool = getToolFromDeepLink(data);
+            getDataModel().getTool().setValue(getToolFromDeepLink(data));
             mLanguages = processDeepLinkLanguages(data);
             final Integer page = extractPageFromDeepLink(data);
             if (savedInstanceState == null && page != null) {
@@ -289,7 +285,7 @@ public class TractActivity extends KotlinTractActivity
                 eventBus.post(new AnalyticsDeepLinkEvent(data));
             }
         } else if (extras != null) {
-            mTool = extras.getString(EXTRA_TOOL, mTool);
+            getDataModel().getTool().setValue(extras.getString(EXTRA_TOOL, getDataModel().getTool().getValue()));
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
             mLanguages = languages != null ? languages : mLanguages;
         }
@@ -336,16 +332,16 @@ public class TractActivity extends KotlinTractActivity
     }
 
     private boolean validStartState() {
-        return mTool != null && mLanguages.length > 0;
+        return getDataModel().getTool().getValue() != null && mLanguages.length > 0;
     }
 
     // endregion Creation Methods
 
     @Override
     protected void cacheTools() {
-        if (mTool != null) {
+        if (getDataModel().getTool().getValue() != null) {
             for (final Locale language : mLanguages) {
-                getDownloadManager().cacheTranslation(mTool, language);
+                getDownloadManager().cacheTranslation(getDataModel().getTool().getValue(), language);
             }
         }
     }
@@ -592,7 +588,7 @@ public class TractActivity extends KotlinTractActivity
     }
 
     private void startDownloadProgressListener() {
-        startDownloadProgressListener(mTool, mLanguages[mActiveLanguage]);
+        startDownloadProgressListener(getDataModel().getTool().getValue(), mLanguages[mActiveLanguage]);
     }
 
     private void restartDownloadProgressListener() {
