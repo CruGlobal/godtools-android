@@ -16,7 +16,6 @@ import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
-import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
@@ -280,7 +279,10 @@ public class TractActivity extends KotlinTractActivity
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
             mLanguages = processDeepLinkLanguages(data);
-            processDeepLinkPage(data, savedInstanceState);
+            final Integer page = extractPageFromDeepLink(data);
+            if (savedInstanceState == null && page != null) {
+                mInitialPage = page;
+            }
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
             if (savedInstanceState == null) {
@@ -326,15 +328,6 @@ public class TractActivity extends KotlinTractActivity
                 .map(String::trim)
                 .filterNot(TextUtils::isEmpty)
                 .map(LocaleCompat::forLanguageTag);
-    }
-
-    private void processDeepLinkPage(@NonNull final Uri data, @Nullable final Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            final List<String> segments = data.getPathSegments();
-            if (segments.size() >= 3) {
-                mInitialPage = NumberUtils.toInteger(segments.get(2), mInitialPage);
-            }
-        }
     }
 
     @Nullable

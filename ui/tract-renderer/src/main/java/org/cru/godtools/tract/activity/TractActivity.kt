@@ -57,14 +57,15 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
         (getString(R.string.tract_deeplink_host_1).equals(data.host, true) ||
             getString(R.string.tract_deeplink_host_2).equals(data.host, true)) &&
         data.pathSegments.size >= 2
+
+    @VisibleForTesting(otherwise = PROTECTED)
+    fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
 
     override val activeManifest get() = dataModel.activeManifest.value
 
     // region UI
-    // region View Binding
     protected lateinit var binding: TractActivityBinding
-    // endregion View Binding
 
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
