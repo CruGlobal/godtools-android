@@ -112,6 +112,12 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
     }
     // endregion UI
 
+    override fun cacheTools() {
+        dataModel.tool.value?.let { tool ->
+            dataModel.locales.value?.forEach { downloadManager.cacheTranslation(tool, it) }
+        }
+    }
+
     // region Share Link Logic
     override fun hasShareLinkUri() = activeManifest != null
     // endregion Share Link Logic

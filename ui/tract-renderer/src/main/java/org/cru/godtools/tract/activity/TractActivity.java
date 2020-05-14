@@ -293,15 +293,6 @@ public class TractActivity extends KotlinTractActivity
     // endregion Creation Methods
 
     @Override
-    protected void cacheTools() {
-        if (getDataModel().getTool().getValue() != null) {
-            for (final Locale language : mLanguages) {
-                getDownloadManager().cacheTranslation(getDataModel().getTool().getValue(), language);
-            }
-        }
-    }
-
-    @Override
     protected int determineActiveToolState() {
         return determineLanguageState(mActiveLanguage);
     }
