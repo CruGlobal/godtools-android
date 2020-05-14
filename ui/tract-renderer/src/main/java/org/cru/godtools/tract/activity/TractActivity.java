@@ -180,7 +180,7 @@ public class TractActivity extends BaseToolActivity
         }
 
         startLoaders();
-        setContentView(R.layout.activity_tract);
+        setContentView(R.layout.tract_activity);
     }
 
     @Override
