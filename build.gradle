@@ -8,7 +8,7 @@ buildscript {
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.0.0',
                 assistedInject     : '0.5.2',
-                autoService        : '1.0-rc6',
+                autoService        : '1.0-rc7',
                 butterknife        : '10.2.1',
                 circleindicator    : '2.1.4',
                 dagger             : '2.27',
