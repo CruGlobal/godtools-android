@@ -8,6 +8,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.nullableArgumentCaptor
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -47,6 +49,26 @@ class TractActivityDataModelTest {
     fun setupObserver() {
         observer = mock()
     }
+
+    // region Property: activeManifest
+    @Test
+    fun verifyActiveManifestChangeActiveLocale() {
+        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        dataModel.tool.value = TOOL
+        dataModel.activeLocale = Locale.ENGLISH
+
+        dataModel.activeManifest.observeForever(observer)
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager, never()).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        dataModel.activeLocale = Locale.FRENCH
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        nullableArgumentCaptor<Manifest> {
+            verify(observer, times(2)).onChanged(capture())
+        }
+    }
+    // endregion Property: activeManifest
 
     // region Property: manifests
     @Test
