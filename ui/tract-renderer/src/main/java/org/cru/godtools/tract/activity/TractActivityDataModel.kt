@@ -18,6 +18,10 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -39,6 +43,7 @@ class TractActivityDataModel @AssistedInject constructor(
 
     val tool = MutableLiveData<String?>()
     val locales = MutableLiveData<List<Locale>>(emptyList())
+    val isSyncRunning = MutableLiveData<Boolean?>(null)
     private val distinctTool = tool.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
 
@@ -52,13 +57,15 @@ class TractActivityDataModel @AssistedInject constructor(
         .map { it?.let { LocaleCompat.forLanguageTag(it) } }
         .distinctUntilChanged()
 
-    val activeManifest = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
-        manifestCache.get(TranslationKey(t, l))!!
-            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-            .withInitialValue(null)
+    private val rawActiveManifest = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+        manifestCache.get(TranslationKey(t, l))!!.withInitialValue(null)
     }
+    val activeManifest = rawActiveManifest.map { it?.takeIf { it.type == Manifest.Type.TRACT } }
     val activeTranslation = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
         translationCache.get(TranslationKey(t, l))!!.withInitialValue(null)
+    }
+    val activeState = rawActiveManifest.combineWith(activeTranslation, isSyncRunning) { m, t, s ->
+        determineState(m, t, s)
     }
     // endregion Active Tool
 
@@ -83,6 +90,9 @@ class TractActivityDataModel @AssistedInject constructor(
                     .distinctUntilChanged()
             acc.distinctUntilChanged().combineWith(translation) { translations, trans -> translations + trans }
         }
+    val state = manifests.combineWith(translations, isSyncRunning) { manifests, translations, isSyncRunning ->
+        manifests.mapIndexed { i, manifest -> determineState(manifest, translations.getOrNull(i), isSyncRunning) }
+    }
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
         override fun create(key: TranslationKey): LiveData<Manifest?> {
@@ -95,4 +105,11 @@ class TractActivityDataModel @AssistedInject constructor(
         override fun create(key: TranslationKey) =
             dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
     }
+}
+
+private fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
+    manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
+    manifest != null -> STATE_LOADED
+    translation == null && isSyncRunning == false -> STATE_NOT_FOUND
+    else -> STATE_LOADING
 }
