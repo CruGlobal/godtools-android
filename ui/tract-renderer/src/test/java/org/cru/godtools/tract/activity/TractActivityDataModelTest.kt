@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
@@ -24,11 +25,13 @@ import org.hamcrest.Matchers.empty
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 
 private const val TOOL = "kgp"
 
+@RunWith(AndroidJUnit4::class)
 class TractActivityDataModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -97,6 +100,44 @@ class TractActivityDataModelTest {
         dataModel.tool.value = TOOL
         assertThat(dataModel.manifests.value, empty())
         verify(observer).onChanged(eq(emptyList<Manifest?>()))
+    }
+
+    @Test
+    fun verifyManifestsUpdateLocales() {
+        val french = MutableLiveData(Manifest())
+        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
+        dataModel.tool.value = TOOL
+        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+
+        dataModel.manifests.observeForever(observer)
+        dataModel.locales.value = listOf(Locale.FRENCH)
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        argumentCaptor<List<Manifest?>> {
+            verify(observer, times(2)).onChanged(capture())
+            assertThat(firstValue, contains(null, french.value))
+            assertThat(lastValue, contains(french.value))
+        }
+    }
+
+    @Test
+    fun verifyManifestsUpdateManifest() {
+        val french = MutableLiveData<Manifest?>()
+        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
+        dataModel.tool.value = TOOL
+        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.manifests.observeForever(observer)
+        french.value = Manifest()
+
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        argumentCaptor<List<Manifest?>> {
+            verify(observer, times(2)).onChanged(capture())
+            assertThat(firstValue, contains(null, null))
+            assertThat(lastValue, contains(null, french.value))
+        }
     }
     // endregion Property: manifests
 
