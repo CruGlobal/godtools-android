@@ -1,0 +1,14 @@
+<modal
+    xmlns="https://mobile-content-api.cru.org/xmlns/tract"
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    listeners="listener1 listener2" dismiss-listeners="dismiss-listener1 dismiss-listener2">
+    <title>
+        <content:text>Thank you</content:text>
+    </title>
+    <content:paragraph>
+        <content:text>Check your email soon for your first study in following Jesus Christ.</content:text>
+    </content:paragraph>
+    <content:paragraph>
+        <content:text>If you don't receive it, please check your spam folder.</content:text>
+    </content:paragraph>
+</modal>
