@@ -67,12 +67,12 @@ class TractActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         dataModel.tool.value = TOOL
-        dataModel.activeLocale = Locale.ENGLISH
+        dataModel.setActiveLocale(Locale.ENGLISH)
 
         dataModel.activeManifest.observeForever(observer)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager, never()).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        dataModel.activeLocale = Locale.FRENCH
+        dataModel.setActiveLocale(Locale.FRENCH)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
         nullableArgumentCaptor<Manifest> {

@@ -50,20 +50,17 @@ class TractActivityDataModel @AssistedInject constructor(
     private val distinctLocales = locales.distinctUntilChanged()
 
     // region Active Tool
-    var activeLocale: Locale?
-        get() = (savedState.get(STATE_ACTIVE_LOCALE) as? String)?.let { LocaleCompat.forLanguageTag(it) }
-        set(value) {
-            savedState.set(STATE_ACTIVE_LOCALE, value?.let { LocaleCompat.toLanguageTag(value) })
-        }
-    private val activeLocaleLiveData = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
+    val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
         .map { it?.let { LocaleCompat.forLanguageTag(it) } }
         .distinctUntilChanged()
+    fun setActiveLocale(locale: Locale?) =
+        savedState.set(STATE_ACTIVE_LOCALE, locale?.let { LocaleCompat.toLanguageTag(locale) })
 
-    private val rawActiveManifest = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+    private val rawActiveManifest = distinctTool.switchCombineWith(activeLocale) { t, l ->
         manifestCache.get(TranslationKey(t, l))!!.withInitialValue(null)
     }
     val activeManifest = rawActiveManifest.map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeTranslation = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+    val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
         translationCache.get(TranslationKey(t, l))!!.withInitialValue(null)
     }
     val activeState = rawActiveManifest.combineWith(activeTranslation, isSyncRunning) { m, t, s ->
@@ -71,7 +68,7 @@ class TractActivityDataModel @AssistedInject constructor(
     }
     // endregion Active Tool
 
-    val downloadProgress = distinctTool.switchCombineWith(activeLocaleLiveData) { t, l ->
+    val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
         when {
             t == null || l == null -> emptyLiveData()
             else -> downloadManager.getDownloadProgressLiveData(t, l)
