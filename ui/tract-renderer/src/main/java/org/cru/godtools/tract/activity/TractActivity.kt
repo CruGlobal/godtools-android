@@ -25,9 +25,13 @@ import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
+import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.service.FollowupService
+import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Modal
+import org.cru.godtools.xml.model.Page
 import org.jetbrains.annotations.Contract
 import java.util.Locale
 import javax.inject.Inject
@@ -84,6 +88,10 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onUpdateActiveCard(page: Page, card: Card?) {
+        trackTractPage(page, card)
     }
     // endregion Lifecycle
 
@@ -150,6 +158,14 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
     private fun setupPager() {
         pager.adapter = pagerAdapter
     }
+
+    // region ManifestPagerAdapter.Callbacks
+    override fun goToPage(position: Int) {
+        pager.currentItem = position
+    }
+
+    override fun showModal(modal: Modal) = startModalActivity(modal)
+    // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI
 
@@ -158,6 +174,10 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
             dataModel.locales.value?.forEach { downloadManager.cacheTranslation(tool, it) }
         }
     }
+
+    private fun trackTractPage(page: Page, card: Card?) = eventBus.post(
+        TractPageAnalyticsScreenEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
+    )
 
     // region Share Link Logic
     override fun hasShareLinkUri() = activeManifest != null

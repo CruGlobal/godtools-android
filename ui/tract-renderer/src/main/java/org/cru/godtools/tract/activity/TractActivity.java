@@ -19,14 +19,10 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
-import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.databinding.TractActivityBinding;
 import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
-import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -50,8 +46,7 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 
 public class TractActivity extends KotlinTractActivity
-        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
-        GodToolsDownloadManager.OnDownloadProgressUpdateListener {
+        implements TabLayout.OnTabSelectedListener, GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
@@ -162,12 +157,6 @@ public class TractActivity extends KotlinTractActivity
 
     @Override
     public void onTabReselected(final TabLayout.Tab tab) {
-    }
-
-    @Override
-    public void onUpdateActiveCard(@NonNull final Page page,
-                                   @Nullable final Card card) {
-        trackTractPage(page, card);
     }
 
     @MainThread
@@ -440,11 +429,6 @@ public class TractActivity extends KotlinTractActivity
         }
     }
 
-    @Override
-    public void goToPage(final int position) {
-        getPager().setCurrentItem(position);
-    }
-
     private void updatePager() {
         getPager().setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
     }
@@ -482,15 +466,4 @@ public class TractActivity extends KotlinTractActivity
                 .build().toString();
     }
     // endregion Share Link logic
-
-    @Override
-    public void showModal(@NonNull final Modal modal) {
-        ModalActivityKt.startModalActivity(this, modal);
-    }
-
-    void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
-        final Manifest manifest = page.getManifest();
-        eventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                                                        card != null ? card.getPosition() : null));
-    }
 }
