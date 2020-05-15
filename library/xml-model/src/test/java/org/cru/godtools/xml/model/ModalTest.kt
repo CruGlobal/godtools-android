@@ -42,7 +42,7 @@ class ModalTest {
         val listenerEvents = Event.Id.parse(TOOL_CODE, "listener1 listener2")
         val dismissListenerEvents = Event.Id.parse(TOOL_CODE, "dismiss-listener1 dismiss-listener2")
 
-        val modal = Modal.fromXml(page, getXmlParserForResource("modal.xml"), 0)
+        val modal = Modal(page, 0, getXmlParserForResource("modal.xml"))
         assertThat(modal.listeners, containsInAnyOrder(*listenerEvents.toTypedArray()))
         assertThat(modal.dismissListeners, containsInAnyOrder(*dismissListenerEvents.toTypedArray()))
         assertThat(modal.content, contains(instanceOf(Paragraph::class.java), instanceOf(Paragraph::class.java)))
