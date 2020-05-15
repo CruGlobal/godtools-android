@@ -14,6 +14,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.BaseToolActivity
@@ -72,8 +73,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
             InstantApps.showInstallPrompt(this, -1, "instantapp")
             true
         }
+        // handle close button if this is an instant app
         item.itemId == android.R.id.home && InstantApps.isInstantApp(this) -> {
-            // handle close button if this is an instant app
             finish()
             true
         }
@@ -92,6 +93,11 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
 
     @VisibleForTesting(otherwise = PROTECTED)
     fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
+    protected fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
+        .flatMap { it.split(",") }
+        .map { it.trim() }.filterNot { it.isEmpty() }
+        .map { LocaleCompat.forLanguageTag(it) }
+        .toList()
     @VisibleForTesting(otherwise = PROTECTED)
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing

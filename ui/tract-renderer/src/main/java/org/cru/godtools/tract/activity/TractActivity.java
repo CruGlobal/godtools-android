@@ -242,7 +242,7 @@ public class TractActivity extends KotlinTractActivity
         if (!TextUtils.isEmpty(data.getQueryParameter(PARAM_USE_DEVICE_LANGUAGE))) {
             rawPrimaryLanguages.add(Locale.getDefault());
         }
-        streamLanguageParamater(data, PARAM_PRIMARY_LANGUAGE).forEach(rawPrimaryLanguages::add);
+        rawPrimaryLanguages.addAll(extractLanguagesFromDeepLinkParam(data, PARAM_PRIMARY_LANGUAGE));
         rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
         final Locale[] primaryLanguages = getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
         Collections.addAll(locales, primaryLanguages);
@@ -250,21 +250,12 @@ public class TractActivity extends KotlinTractActivity
 
         // process parallel languages specified in the uri
         final Locale[] parallelLanguages =
-                getFallbacks(streamLanguageParamater(data, PARAM_PARALLEL_LANGUAGE).toArray(Locale[]::new));
+                getFallbacks(extractLanguagesFromDeepLinkParam(data, PARAM_PARALLEL_LANGUAGE).toArray(new Locale[0]));
         Collections.addAll(locales, parallelLanguages);
         mParallelLanguages = parallelLanguages.length;
 
         // return all the parsed languages
         return locales.toArray(new Locale[0]);
-    }
-
-    @NonNull
-    private Stream<Locale> streamLanguageParamater(@NonNull final Uri data, @NonNull final String param) {
-        return Stream.of(data.getQueryParameters(param))
-                .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
-                .map(String::trim)
-                .filterNot(TextUtils::isEmpty)
-                .map(LocaleCompat::forLanguageTag);
     }
 
     private boolean validStartState() {
