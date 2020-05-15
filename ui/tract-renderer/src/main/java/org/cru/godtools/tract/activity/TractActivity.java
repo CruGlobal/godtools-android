@@ -214,9 +214,7 @@ public class TractActivity extends KotlinTractActivity
     @Override
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mActiveLanguage < mLanguages.length) {
-            BundleUtils.putLocale(outState, EXTRA_ACTIVE_LANGUAGE, mLanguages[mActiveLanguage]);
-        }
+        BundleUtils.putLocale(outState, EXTRA_ACTIVE_LANGUAGE, getDataModel().getActiveLocale().getValue());
         outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
     // endregion Lifecycle
@@ -225,6 +223,7 @@ public class TractActivity extends KotlinTractActivity
     private void setupDataModel() {
         getDataModel().getLocales().setValue(Arrays.asList(mLanguages));
         getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
+        isSyncRunning().observe(this, running -> getDataModel().isSyncRunning().setValue(running));
     }
     // endregion Data Model
 
@@ -294,21 +293,13 @@ public class TractActivity extends KotlinTractActivity
 
     @Override
     protected int determineActiveToolState() {
-        return determineLanguageState(mActiveLanguage);
+        final Integer state = getDataModel().getActiveState().getValue();
+        return state != null ? state : STATE_LOADING;
     }
 
     private int determineLanguageState(final int languageIndex) {
-        final Manifest manifest = mManifests.get(languageIndex);
-        if (manifest != null) {
-            if (manifest.getType() != Manifest.Type.TRACT) {
-                return STATE_INVALID_TYPE;
-            }
-            return STATE_LOADED;
-        } else if (isSyncToolsDone() && mTranslations.get(languageIndex) == null) {
-            return STATE_NOT_FOUND;
-        } else {
-            return STATE_LOADING;
-        }
+        final List<Integer> state = getDataModel().getState().getValue();
+        return state != null && state.size() > languageIndex ? state.get(languageIndex) : STATE_LOADING;
     }
 
     /**
@@ -378,11 +369,11 @@ public class TractActivity extends KotlinTractActivity
     private void updateActiveLanguage(@NonNull final Locale locale) {
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
+                getDataModel().setActiveLocale(locale);
                 if (i != mActiveLanguage) {
                     mActiveLanguage = i;
                     onUpdateActiveManifest();
                 }
-                getDataModel().setActiveLocale(locale);
                 return;
             }
         }
@@ -390,7 +381,7 @@ public class TractActivity extends KotlinTractActivity
 
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
         // only process if the active language is not found or invalid
-        final int activeLanguageState = determineLanguageState(mActiveLanguage);
+        final int activeLanguageState = determineActiveToolState();
         if (activeLanguageState == STATE_NOT_FOUND || activeLanguageState == STATE_INVALID_TYPE) {
             Stream.of(mLanguages)
                     .filterIndexed((i, l) -> {
@@ -528,8 +519,12 @@ public class TractActivity extends KotlinTractActivity
         });
         getDataModel().getTranslations().observe(this, translations -> {
             mTranslations = translations;
-            updateVisibilityState();
         });
+        getDataModel().getState().observe(this, state -> {
+            updateVisibilityState();
+            updateLanguageToggle();
+        });
+        getDataModel().getActiveState().observe(this, i -> updateVisibilityState());
     }
 
     // region Share Link logic

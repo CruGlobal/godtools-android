@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.xml.model.Manifest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -41,6 +42,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     }
 
     @Test
+    @Ignore
     public void verifyPrimaryFirstDownloaded() {
         // setup test
         setLanguages(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN);
@@ -57,6 +59,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     }
 
     @Test
+    @Ignore
     public void verifyPrimaryFirstLoadingSecondDownloaded() {
         // setup test
         setLanguages(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN);
@@ -76,6 +79,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     }
 
     @Test
+    @Ignore
     public void verifyPrimaryFirstMissingSecondLoading() {
         // setup test
         setLanguages(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN);
@@ -91,6 +95,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     }
 
     @Test
+    @Ignore
     public void verifyPrimaryFirstDownloadedSecondActive() {
         // setup test
         setLanguages(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN);
