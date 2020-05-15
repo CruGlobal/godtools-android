@@ -14,6 +14,7 @@ import org.cru.godtools.base.FileManager
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Page
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.Locale
@@ -44,6 +45,8 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound
+                } catch (e: XmlPullParserException) {
+                    return@withContext Result.Error.Corrupted
                 }
 
                 // load pages
