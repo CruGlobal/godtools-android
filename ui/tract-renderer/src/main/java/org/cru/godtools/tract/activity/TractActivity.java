@@ -11,7 +11,6 @@ import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutUtils;
 
-import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
@@ -43,7 +42,6 @@ import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
-import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 
 public class TractActivity extends KotlinTractActivity
         implements TabLayout.OnTabSelectedListener, GodToolsDownloadManager.OnDownloadProgressUpdateListener {
@@ -442,28 +440,4 @@ public class TractActivity extends KotlinTractActivity
         getDataModel().getActiveManifest().observe(this, manifest -> onUpdateActiveManifest());
         getDataModel().getActiveState().observe(this, i -> updateVisibilityState());
     }
-
-    // region Share Link logic
-    @Nullable
-    @Override
-    protected String getShareLinkUri() {
-        final Manifest manifest = getActiveManifest();
-        if (manifest == null) {
-            return null;
-        }
-
-        // build share link
-        final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
-                .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                .appendPath(manifest.getCode());
-        final int page = getPager().getCurrentItem();
-        if (page > 0) {
-            uri.appendPath(String.valueOf(page));
-        }
-
-        return uri
-                .appendQueryParameter("icid", "gtshare")
-                .build().toString();
-    }
-    // endregion Share Link logic
 }

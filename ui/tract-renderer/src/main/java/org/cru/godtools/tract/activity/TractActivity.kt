@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
+import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
@@ -181,5 +182,14 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
 
     // region Share Link Logic
     override fun hasShareLinkUri() = activeManifest != null
+    override val shareLinkUri
+        get() = activeManifest?.let {
+            URI_SHARE_BASE.buildUpon()
+                .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
+                .appendPath(it.code)
+                .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
+                .appendQueryParameter("icid", "gtshare")
+                .build().toString()
+        }
     // endregion Share Link Logic
 }
