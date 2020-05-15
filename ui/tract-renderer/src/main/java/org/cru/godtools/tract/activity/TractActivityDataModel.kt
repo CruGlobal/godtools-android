@@ -44,10 +44,8 @@ class TractActivityDataModel @AssistedInject constructor(
     interface Factory : AssistedSavedStateViewModelFactory<TractActivityDataModel>
 
     val tool = MutableLiveData<String?>()
-    val locales = MutableLiveData<List<Locale>>(emptyList())
     val isSyncRunning = MutableLiveData<Boolean?>(null)
     private val distinctTool = tool.distinctUntilChanged()
-    private val distinctLocales = locales.distinctUntilChanged()
 
     // region Active Tool
     val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
@@ -60,13 +58,12 @@ class TractActivityDataModel @AssistedInject constructor(
         manifestCache.get(TranslationKey(t, l))!!.withInitialValue(null)
     }
     val activeManifest = rawActiveManifest.map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
+    private val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
         translationCache.get(TranslationKey(t, l))!!.withInitialValue(null)
     }
     val activeState = rawActiveManifest.combineWith(activeTranslation, isSyncRunning) { m, t, s ->
         determineState(m, t, s)
     }
-    // endregion Active Tool
 
     val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
         when {
@@ -74,6 +71,13 @@ class TractActivityDataModel @AssistedInject constructor(
             else -> downloadManager.getDownloadProgressLiveData(t, l)
         }
     }
+    // endregion Active Tool
+
+    // region Language Switcher
+    val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
+    val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
+    val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
+    private val distinctLocales = locales.distinctUntilChanged()
 
     val manifests: LiveData<List<Manifest?>> =
         distinctLocales.switchFold(ImmutableLiveData(emptyList())) { acc, locale ->
@@ -92,6 +96,7 @@ class TractActivityDataModel @AssistedInject constructor(
     val state = manifests.combineWith(translations, isSyncRunning) { manifests, translations, isSyncRunning ->
         manifests.mapIndexed { i, manifest -> determineState(manifest, translations.getOrNull(i), isSyncRunning) }
     }
+    // endregion Language Switcher
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
         override fun create(key: TranslationKey): LiveData<Manifest?> {

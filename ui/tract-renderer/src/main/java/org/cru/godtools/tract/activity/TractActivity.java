@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -88,6 +89,12 @@ public class TractActivity extends KotlinTractActivity
         // read requested tract from the provided intent
         processIntent(getIntent(), savedInstanceState);
 
+        // finish now if this activity is in an invalid state
+        if (!validStartState()) {
+            finish();
+            return;
+        }
+
         // restore any persisted state
         if (savedInstanceState != null) {
             final Locale activeLanguage = BundleUtils.getLocale(savedInstanceState, EXTRA_ACTIVE_LANGUAGE, null);
@@ -98,12 +105,6 @@ public class TractActivity extends KotlinTractActivity
                 }
             }
             mInitialPage = savedInstanceState.getInt(EXTRA_INITIAL_PAGE, mInitialPage);
-        }
-
-        // finish now if this activity is in an invalid state
-        if (!validStartState()) {
-            finish();
-            return;
         }
 
         // track this view
@@ -198,7 +199,6 @@ public class TractActivity extends KotlinTractActivity
 
     // region Data Model
     private void setupDataModel() {
-        getDataModel().getLocales().setValue(Arrays.asList(mLanguages));
         getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
         isSyncRunning().observe(this, running -> getDataModel().isSyncRunning().setValue(running));
     }
@@ -212,9 +212,8 @@ public class TractActivity extends KotlinTractActivity
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             getDataModel().getTool().setValue(extractToolFromDeepLink(data));
             final Pair<List<Locale>, List<Locale>> languages = extractLanguagesFromDeepLink(data);
-            mPrimaryLanguages = languages.getFirst().size();
-            mParallelLanguages = languages.getSecond().size();
-            mLanguages = CollectionsKt.plus(languages.getFirst(), languages.getSecond()).toArray(new Locale[0]);
+            getDataModel().getPrimaryLocales().setValue(languages.getFirst());
+            getDataModel().getParallelLocales().setValue(languages.getSecond());
             final Integer page = extractPageFromDeepLink(data);
             if (savedInstanceState == null && page != null) {
                 mInitialPage = page;
@@ -226,9 +225,20 @@ public class TractActivity extends KotlinTractActivity
             }
         } else if (extras != null) {
             getDataModel().getTool().setValue(extras.getString(EXTRA_TOOL, getDataModel().getTool().getValue()));
-            final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
-            mLanguages = languages != null ? languages : mLanguages;
+            final Locale[] raw = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
+            final List<Locale> languages = raw != null ? Arrays.asList(raw) : Collections.emptyList();
+            getDataModel().getPrimaryLocales()
+                    .setValue(languages.size() > 0 ? languages.subList(0, 1) : Collections.emptyList());
+            getDataModel().getParallelLocales()
+                    .setValue(languages.size() > 1 ? languages.subList(1, languages.size()) : Collections.emptyList());
+        } else {
+            getDataModel().getTool().setValue(null);
         }
+        mPrimaryLanguages = getDataModel().getPrimaryLocales().getValue().size();
+        mParallelLanguages = getDataModel().getParallelLocales().getValue().size();
+        mLanguages = CollectionsKt
+                .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
+                .toArray(new Locale[0]);
         mHiddenLanguages = new boolean[mLanguages.length];
     }
 
@@ -313,13 +323,13 @@ public class TractActivity extends KotlinTractActivity
     }
 
     private void updateActiveLanguage(@NonNull final Locale locale) {
-        getDataModel().setActiveLocale(locale);
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
                 mActiveLanguage = i;
-                return;
+                break;
             }
         }
+        getDataModel().setActiveLocale(locale);
     }
 
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {

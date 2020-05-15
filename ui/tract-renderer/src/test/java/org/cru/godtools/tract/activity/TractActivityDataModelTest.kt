@@ -87,7 +87,7 @@ class TractActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
@@ -113,10 +113,10 @@ class TractActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
-        dataModel.locales.value = listOf(Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
         argumentCaptor<List<Manifest?>> {
@@ -132,7 +132,7 @@ class TractActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
         dataModel.manifests.observeForever(observer)
         french.value = Manifest()
 
@@ -154,7 +154,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         wheneverGetTranslation(TOOL, Locale.CHINESE).thenReturn(MutableLiveData(translation))
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
 
         dataModel.translations.observeForever(observer)
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
@@ -181,7 +181,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(french)
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.translations.observeForever(observer)
         french.value = Translation()
@@ -200,7 +200,7 @@ class TractActivityDataModelTest {
     fun verifyStateUpdateTranslation() {
         val translation = MutableLiveData<Translation?>(null)
         dataModel.tool.value = TOOL
-        dataModel.locales.value = listOf(Locale.ENGLISH)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
         dataModel.isSyncRunning.value = false
         wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
