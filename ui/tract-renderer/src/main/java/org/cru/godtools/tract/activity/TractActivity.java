@@ -31,9 +31,7 @@ import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,13 +43,11 @@ import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
+import kotlin.Pair;
+import kotlin.collections.CollectionsKt;
 
-import static org.ccci.gto.android.common.util.LocaleUtils.getFallbacks;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
-import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
-import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
-import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 
 public class TractActivity extends KotlinTractActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
@@ -215,7 +211,10 @@ public class TractActivity extends KotlinTractActivity
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             getDataModel().getTool().setValue(extractToolFromDeepLink(data));
-            mLanguages = processDeepLinkLanguages(data);
+            final Pair<List<Locale>, List<Locale>> languages = extractLanguagesFromDeepLink(data);
+            mPrimaryLanguages = languages.getFirst().size();
+            mParallelLanguages = languages.getSecond().size();
+            mLanguages = CollectionsKt.plus(languages.getFirst(), languages.getSecond()).toArray(new Locale[0]);
             final Integer page = extractPageFromDeepLink(data);
             if (savedInstanceState == null && page != null) {
                 mInitialPage = page;
@@ -231,31 +230,6 @@ public class TractActivity extends KotlinTractActivity
             mLanguages = languages != null ? languages : mLanguages;
         }
         mHiddenLanguages = new boolean[mLanguages.length];
-    }
-
-    @NonNull
-    private Locale[] processDeepLinkLanguages(@NonNull final Uri data) {
-        final List<Locale> locales = new ArrayList<>();
-
-        // process the primary languages specified in the uri
-        final List<Locale> rawPrimaryLanguages = new ArrayList<>();
-        if (!TextUtils.isEmpty(data.getQueryParameter(PARAM_USE_DEVICE_LANGUAGE))) {
-            rawPrimaryLanguages.add(Locale.getDefault());
-        }
-        rawPrimaryLanguages.addAll(extractLanguagesFromDeepLinkParam(data, PARAM_PRIMARY_LANGUAGE));
-        rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
-        final Locale[] primaryLanguages = getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
-        Collections.addAll(locales, primaryLanguages);
-        mPrimaryLanguages = primaryLanguages.length;
-
-        // process parallel languages specified in the uri
-        final Locale[] parallelLanguages =
-                getFallbacks(extractLanguagesFromDeepLinkParam(data, PARAM_PARALLEL_LANGUAGE).toArray(new Locale[0]));
-        Collections.addAll(locales, parallelLanguages);
-        mParallelLanguages = parallelLanguages.length;
-
-        // return all the parsed languages
-        return locales.toArray(new Locale[0]);
     }
 
     private boolean validStartState() {

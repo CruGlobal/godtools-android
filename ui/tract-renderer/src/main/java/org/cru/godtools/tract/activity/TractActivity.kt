@@ -15,10 +15,14 @@ import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
+import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
+import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.databinding.TractActivityBinding
@@ -93,11 +97,25 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
 
     @VisibleForTesting(otherwise = PROTECTED)
     fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
-    protected fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
+
+    @OptIn(ExperimentalStdlibApi::class)
+    protected fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
+        val primary = LocaleUtils.getFallbacks(*buildList<Locale> {
+            if (!getQueryParameter(PARAM_USE_DEVICE_LANGUAGE).isNullOrEmpty()) add(Locale.getDefault())
+            addAll(extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE))
+            add(LocaleCompat.forLanguageTag(pathSegments[0]))
+        }.toTypedArray())
+
+        val parallel = LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+        return Pair(primary.toList(), parallel.toList())
+    }
+
+    private fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { LocaleCompat.forLanguageTag(it) }
         .toList()
+
     @VisibleForTesting(otherwise = PROTECTED)
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
