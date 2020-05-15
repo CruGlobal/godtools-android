@@ -18,7 +18,6 @@ import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.model.Translation;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
@@ -42,7 +41,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RestrictTo;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.viewpager.widget.ViewPager;
@@ -79,10 +77,6 @@ public class TractActivity extends KotlinTractActivity
     /*final*/ int mParallelLanguages = 0;
 
     @NonNull
-    private List<Translation> mTranslations = Collections.emptyList();
-    @NonNull
-    private List<Manifest> mManifests = Collections.emptyList();
-    @NonNull
     boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
     int mActiveLanguage = 0;
@@ -90,13 +84,6 @@ public class TractActivity extends KotlinTractActivity
 
     public TractActivity() {
         super();
-    }
-
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    TractActivity(@NonNull final List<Translation> translations, @NonNull final List<Manifest> manifests) {
-        super();
-        mTranslations = translations;
-        mManifests = manifests;
     }
 
     // region Lifecycle
@@ -129,10 +116,6 @@ public class TractActivity extends KotlinTractActivity
         if (savedInstanceState == null) {
             trackToolOpen(getDataModel().getTool().getValue());
         }
-
-        // HACK: for now we need to initialize mManifests and mTranslations to be the correct length
-        mManifests = Arrays.asList(new Manifest[mLanguages.length]);
-        mTranslations = Arrays.asList(new Translation[mLanguages.length]);
 
         setupDataModel();
         startLoaders();
@@ -367,13 +350,10 @@ public class TractActivity extends KotlinTractActivity
     }
 
     private void updateActiveLanguage(@NonNull final Locale locale) {
+        getDataModel().setActiveLocale(locale);
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
-                getDataModel().setActiveLocale(locale);
-                if (i != mActiveLanguage) {
-                    mActiveLanguage = i;
-                    onUpdateActiveManifest();
-                }
+                mActiveLanguage = i;
                 return;
             }
         }
@@ -512,18 +492,11 @@ public class TractActivity extends KotlinTractActivity
     // endregion Tool Pager Methods
 
     private void startLoaders() {
-        getDataModel().getManifests().observe(this, manifests -> {
-            mManifests = manifests;
-            onUpdateActiveManifest();
-            updateLanguageToggle();
-        });
-        getDataModel().getTranslations().observe(this, translations -> {
-            mTranslations = translations;
-        });
         getDataModel().getState().observe(this, state -> {
             updateVisibilityState();
             updateLanguageToggle();
         });
+        getDataModel().getActiveManifest().observe(this, manifest -> onUpdateActiveManifest());
         getDataModel().getActiveState().observe(this, i -> updateVisibilityState());
     }
 

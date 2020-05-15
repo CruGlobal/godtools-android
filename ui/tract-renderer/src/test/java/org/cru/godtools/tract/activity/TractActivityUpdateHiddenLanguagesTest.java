@@ -32,7 +32,7 @@ public class TractActivityUpdateHiddenLanguagesTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        mActivity = new TractActivity(mTranslations, mManifests);
+        mActivity = new TractActivity();
         mManifest = new Manifest();
     }
 
