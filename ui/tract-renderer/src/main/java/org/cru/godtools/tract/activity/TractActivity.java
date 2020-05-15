@@ -68,8 +68,6 @@ public class TractActivity extends KotlinTractActivity
     @Nullable
     @BindView(R2.id.pages)
     ViewPager mPager;
-    @Nullable
-    private ManifestPagerAdapter mPagerAdapter;
 
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
@@ -448,16 +446,14 @@ public class TractActivity extends KotlinTractActivity
     // region Tool Pager Methods
     private void setupPager() {
         if (mPager != null) {
-            mPagerAdapter = new ManifestPagerAdapter();
-            mPagerAdapter.setCallbacks(this);
-            mPager.setAdapter(mPagerAdapter);
-            getLifecycle().addObserver(mPagerAdapter);
+            mPager.setAdapter(getPagerAdapter());
 
             getDataModel().getActiveManifest().observe(this, manifest -> {
-                mPagerAdapter.setManifest(manifest);
-
                 // scroll to initial page
-                if (manifest != null && mInitialPage >= 0) {
+                if (mInitialPage >= 0 && manifest != null) {
+                    // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
+                    //       This is normally handled by the pager adapter observer.
+                    getPagerAdapter().setManifest(manifest);
                     mPager.setCurrentItem(mInitialPage, false);
                     mInitialPage = -1;
                 }

@@ -19,6 +19,7 @@ import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.tract.R
+import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.xml.model.Manifest
@@ -39,7 +40,7 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(TractActivity.EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
-abstract class KotlinTractActivity : BaseToolActivity(true) {
+abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapter.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -110,6 +111,16 @@ abstract class KotlinTractActivity : BaseToolActivity(true) {
     private fun startDownloadProgressListener() {
         dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
+
+    // region Tool Pager
+    protected val pagerAdapter by lazy {
+        ManifestPagerAdapter().also {
+            it.setCallbacks(this)
+            lifecycle.addObserver(it)
+            dataModel.activeManifest.observe(this, it)
+        }
+    }
+    // endregion Tool Pager
     // endregion UI
 
     override fun cacheTools() {

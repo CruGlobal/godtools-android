@@ -29,11 +29,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements
-        DefaultLifecycleObserver {
+        DefaultLifecycleObserver, Observer<Manifest> {
     public interface Callbacks {
         void goToPage(int position);
 
@@ -99,6 +100,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         EventBus.getDefault().register(this);
         Optional.ofNullable(getPrimaryItem())
                 .ifPresent(RVPageViewHolder::markVisible);
+    }
+
+    @Override
+    public void onChanged(final Manifest manifest) {
+        setManifest(manifest);
     }
 
     @NonNull
