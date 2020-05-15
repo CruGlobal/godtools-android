@@ -14,6 +14,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
+import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.os.putLocaleArray
@@ -155,9 +157,20 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
             dataModel.activeManifest.observe(this, it)
         }
     }
+    protected var initialPage = 0
 
     private fun setupPager() {
         pager.adapter = pagerAdapter
+
+        if (initialPage >= 0) dataModel.activeManifest.notNull().observeOnce(this) {
+            if (initialPage < 0) return@observeOnce
+
+            // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
+            //       This is normally handled by the pager adapter observer.
+            pagerAdapter.setManifest(it)
+            pager.setCurrentItem(initialPage, false)
+            initialPage = -1
+        }
     }
 
     // region ManifestPagerAdapter.Callbacks

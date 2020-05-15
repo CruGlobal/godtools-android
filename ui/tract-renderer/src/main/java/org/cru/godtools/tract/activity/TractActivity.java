@@ -62,7 +62,6 @@ public class TractActivity extends KotlinTractActivity
     boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
     int mActiveLanguage = 0;
-    int mInitialPage = 0;
 
     public TractActivity() {
         super();
@@ -91,7 +90,7 @@ public class TractActivity extends KotlinTractActivity
                     break;
                 }
             }
-            mInitialPage = savedInstanceState.getInt(EXTRA_INITIAL_PAGE, mInitialPage);
+            setInitialPage(savedInstanceState.getInt(EXTRA_INITIAL_PAGE, getInitialPage()));
         }
 
         // track this view
@@ -174,7 +173,7 @@ public class TractActivity extends KotlinTractActivity
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         BundleUtils.putLocale(outState, EXTRA_ACTIVE_LANGUAGE, getDataModel().getActiveLocale().getValue());
-        outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
+        outState.putInt(EXTRA_INITIAL_PAGE, getInitialPage());
     }
     // endregion Lifecycle
 
@@ -197,7 +196,7 @@ public class TractActivity extends KotlinTractActivity
             getDataModel().getParallelLocales().setValue(languages.getSecond());
             final Integer page = extractPageFromDeepLink(data);
             if (savedInstanceState == null && page != null) {
-                mInitialPage = page;
+                setInitialPage(page);
             }
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
@@ -401,17 +400,6 @@ public class TractActivity extends KotlinTractActivity
 
     // region Tool Pager Methods
     private void setupPager() {
-        getDataModel().getActiveManifest().observe(this, manifest -> {
-            // scroll to initial page
-            if (mInitialPage >= 0 && manifest != null) {
-                // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
-                //       This is normally handled by the pager adapter observer.
-                getPagerAdapter().setManifest(manifest);
-                getPager().setCurrentItem(mInitialPage, false);
-                mInitialPage = -1;
-            }
-        });
-
         // TODO: this needs to be triggered on hidden tool updates as well
         getDataModel().getState().observe(this, state -> updatePager());
     }
