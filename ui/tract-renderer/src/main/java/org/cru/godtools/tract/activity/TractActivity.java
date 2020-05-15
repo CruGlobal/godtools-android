@@ -42,7 +42,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
@@ -60,11 +59,6 @@ public class TractActivity extends KotlinTractActivity
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
-
-    // Manifest page pager
-    @Nullable
-    @BindView(R2.id.pages)
-    ViewPager mPager;
 
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
@@ -420,21 +414,19 @@ public class TractActivity extends KotlinTractActivity
 
     // region Tool Pager Methods
     private void setupPager() {
-        if (mPager != null) {
-            mPager.setAdapter(getPagerAdapter());
+        getDataModel().getActiveManifest().observe(this, manifest -> {
+            // scroll to initial page
+            if (mInitialPage >= 0 && manifest != null) {
+                // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
+                //       This is normally handled by the pager adapter observer.
+                getPagerAdapter().setManifest(manifest);
+                getPager().setCurrentItem(mInitialPage, false);
+                mInitialPage = -1;
+            }
+        });
 
-            getDataModel().getActiveManifest().observe(this, manifest -> {
-                // scroll to initial page
-                if (mInitialPage >= 0 && manifest != null) {
-                    // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
-                    //       This is normally handled by the pager adapter observer.
-                    getPagerAdapter().setManifest(manifest);
-                    mPager.setCurrentItem(mInitialPage, false);
-                    mInitialPage = -1;
-                }
-            });
-            updatePager();
-        }
+        // TODO: this needs to be triggered on hidden tool updates as well
+        getDataModel().getState().observe(this, state -> updatePager());
     }
 
     private void checkForPageEvent(@NonNull final Event event) {
@@ -450,15 +442,11 @@ public class TractActivity extends KotlinTractActivity
 
     @Override
     public void goToPage(final int position) {
-        if (mPager != null) {
-            mPager.setCurrentItem(position);
-        }
+        getPager().setCurrentItem(position);
     }
 
     private void updatePager() {
-        if (mPager != null) {
-            mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
-        }
+        getPager().setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
     }
     // endregion Tool Pager Methods
 
@@ -484,7 +472,7 @@ public class TractActivity extends KotlinTractActivity
         final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
                 .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
                 .appendPath(manifest.getCode());
-        final int page = mPager != null ? mPager.getCurrentItem() : 0;
+        final int page = getPager().getCurrentItem();
         if (page > 0) {
             uri.appendPath(String.valueOf(page));
         }

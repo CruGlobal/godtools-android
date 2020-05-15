@@ -57,6 +57,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
         super.onContentChanged()
         setupBackground()
         startDownloadProgressListener()
+        setupPager()
     }
 
     @CallSuper
@@ -137,12 +138,17 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
     }
 
     // region Tool Pager
+    protected val pager get() = binding.mainContent.pages
     protected val pagerAdapter by lazy {
         ManifestPagerAdapter().also {
             it.setCallbacks(this)
             lifecycle.addObserver(it)
             dataModel.activeManifest.observe(this, it)
         }
+    }
+
+    private fun setupPager() {
+        pager.adapter = pagerAdapter
     }
     // endregion Tool Pager
     // endregion UI
