@@ -195,6 +195,28 @@ class TractActivityDataModelTest {
     }
     // endregion Property: translations
 
+    // region Property: state
+    @Test
+    fun verifyStateUpdateTranslation() {
+        val translation = MutableLiveData<Translation?>(null)
+        dataModel.tool.value = TOOL
+        dataModel.locales.value = listOf(Locale.ENGLISH)
+        dataModel.isSyncRunning.value = false
+        wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
+        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
+
+        dataModel.state.observeForever(observer)
+        assertThat(dataModel.state.value, contains(STATE_NOT_FOUND))
+        translation.value = Translation()
+        assertThat(dataModel.state.value, contains(STATE_LOADING))
+        argumentCaptor<List<Int>> {
+            verify(observer, times(2)).onChanged(capture())
+            assertThat(firstValue, contains(STATE_NOT_FOUND))
+            assertThat(lastValue, contains(STATE_LOADING))
+        }
+    }
+    // endregion Property: state
+
     @Test
     fun verifyDetermineState() {
         assertEquals(STATE_LOADED, determineState(Manifest().apply { mType = Manifest.Type.TRACT }, null, null))
