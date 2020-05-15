@@ -19,6 +19,7 @@ import java.util.Set;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
@@ -41,7 +42,8 @@ public final class Modal extends Base implements Parent, Styles {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Modal(@NonNull final Base parent, final int position) {
+    @VisibleForTesting
+    Modal(@NonNull final Base parent, final int position) {
         super(parent);
         mPosition = position;
     }
