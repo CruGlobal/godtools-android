@@ -15,6 +15,10 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -22,6 +26,7 @@ import org.cru.godtools.xml.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -189,6 +194,15 @@ class TractActivityDataModelTest {
         }
     }
     // endregion Property: translations
+
+    @Test
+    fun verifyDetermineState() {
+        assertEquals(STATE_LOADED, determineState(Manifest().apply { mType = Manifest.Type.TRACT }, null, null))
+        assertEquals(STATE_INVALID_TYPE, determineState(Manifest().apply { mType = Manifest.Type.ARTICLE }, null, null))
+        assertEquals(STATE_NOT_FOUND, determineState(null, null, false))
+        assertEquals(STATE_LOADING, determineState(null, Translation(), null))
+        assertEquals(STATE_LOADING, determineState(null, null, true))
+    }
 
     private fun wheneverGetManifest(tool: String, locale: Locale) =
         whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))

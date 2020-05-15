@@ -92,7 +92,8 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     private final Locale mLocale;
     @NonNull
-    private Type mType = Type.DEFAULT;
+    @VisibleForTesting
+    public Type mType = Type.DEFAULT;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;

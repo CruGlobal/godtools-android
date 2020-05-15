@@ -1,5 +1,7 @@
 package org.cru.godtools.tract.activity
 
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -107,7 +109,8 @@ class TractActivityDataModel @AssistedInject constructor(
     }
 }
 
-private fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
+@VisibleForTesting(otherwise = PRIVATE)
+internal fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
     manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
     manifest != null -> STATE_LOADED
     translation == null && isSyncRunning == false -> STATE_NOT_FOUND
