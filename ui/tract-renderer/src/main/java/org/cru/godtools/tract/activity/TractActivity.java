@@ -227,12 +227,6 @@ public class TractActivity extends KotlinTractActivity
     }
     // endregion Creation Methods
 
-    @Override
-    protected int determineActiveToolState() {
-        final Integer state = getDataModel().getActiveState().getValue();
-        return state != null ? state : STATE_LOADING;
-    }
-
     private int determineLanguageState(final int languageIndex) {
         final List<Integer> state = getDataModel().getState().getValue();
         return state != null && state.size() > languageIndex ? state.get(languageIndex) : STATE_LOADING;

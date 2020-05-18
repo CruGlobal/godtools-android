@@ -23,6 +23,7 @@ import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.model.Translation
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
@@ -132,8 +133,6 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
 
-    override val activeManifest get() = dataModel.activeManifest.value
-
     // region UI
     protected lateinit var binding: TractActivityBinding
 
@@ -193,6 +192,12 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
         TractPageAnalyticsScreenEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
     )
 
+    // region Active Translation management
+    override val activeManifest get() = dataModel.activeManifest.value
+
+    override fun determineActiveToolState() = dataModel.activeState.value ?: STATE_LOADING
+    // endregion Active Translation management
+
     // region Share Link Logic
     override fun hasShareLinkUri() = activeManifest != null
     override val shareLinkUri
@@ -205,4 +210,13 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
                 .build().toString()
         }
     // endregion Share Link Logic
+
+    companion object {
+        internal fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
+            manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
+            manifest != null -> STATE_LOADED
+            translation == null && isSyncRunning == false -> STATE_NOT_FOUND
+            else -> STATE_LOADING
+        }
+    }
 }

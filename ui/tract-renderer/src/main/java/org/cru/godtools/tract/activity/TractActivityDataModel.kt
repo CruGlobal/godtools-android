@@ -1,7 +1,5 @@
 package org.cru.godtools.tract.activity
 
-import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,14 +18,11 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
+import org.cru.godtools.tract.activity.KotlinTractActivity.Companion.determineState
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
@@ -109,12 +104,4 @@ class TractActivityDataModel @AssistedInject constructor(
         override fun create(key: TranslationKey) =
             dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
     }
-}
-
-@VisibleForTesting(otherwise = PRIVATE)
-internal fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
-    manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
-    manifest != null -> STATE_LOADED
-    translation == null && isSyncRunning == false -> STATE_NOT_FOUND
-    else -> STATE_LOADING
 }
