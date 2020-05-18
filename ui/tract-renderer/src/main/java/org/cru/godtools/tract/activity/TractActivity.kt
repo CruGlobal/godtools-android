@@ -4,6 +4,7 @@ package org.cru.godtools.tract.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -14,9 +15,11 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
+import com.google.android.material.tabs.TabLayout
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
@@ -32,6 +35,7 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.service.FollowupService
+import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
@@ -53,7 +57,8 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(TractActivity.EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
-abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapter.Callbacks {
+abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener,
+    ManifestPagerAdapter.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -65,6 +70,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
         super.onContentChanged()
         setupBackground()
         startDownloadProgressListener()
+        setupLanguageToggle()
         setupPager()
     }
 
@@ -146,6 +152,29 @@ abstract class KotlinTractActivity : BaseToolActivity(true), ManifestPagerAdapte
     private fun startDownloadProgressListener() {
         dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
+
+    // region Language Toggle
+    private fun setupLanguageToggle() {
+        ViewCompat.setClipToOutline(binding.languageToggle, true)
+        binding.languageToggle.addOnTabSelectedListener(this)
+        dataModel.activeManifest.observe(this) { manifest ->
+            // determine colors for the language toggle
+            val controlColor = Manifest.getNavBarControlColor(manifest)
+            var selectedColor = Manifest.getNavBarColor(manifest)
+            if (Color.alpha(selectedColor) < 255) {
+                // XXX: the expected behavior is to support transparent text. But we currently don't support
+                // XXX: transparent text, so pick white or black based on the control color
+                val hsv = FloatArray(3)
+                Color.colorToHSV(controlColor, hsv)
+                selectedColor = if (hsv[2] > 0.6) Color.BLACK else Color.WHITE
+            }
+
+            // update colors for tab text, and background
+            binding.languageToggle.setTabTextColors(controlColor, selectedColor)
+            ViewUtils.setBackgroundTint(binding.languageToggle, controlColor)
+        }
+    }
+    // endregion Language Toggle
 
     // region Tool Pager
     protected val pager get() = binding.mainContent.pages

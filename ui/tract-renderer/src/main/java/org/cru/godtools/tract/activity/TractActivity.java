@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +10,6 @@ import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutUtils;
 
-import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
@@ -20,7 +18,6 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.databinding.TractActivityBinding;
-import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
@@ -283,16 +280,12 @@ public class TractActivity extends KotlinTractActivity
 
     private void setupLanguageToggle() {
         if (mLanguageTabs != null) {
-            ViewCompat.setClipToOutline(mLanguageTabs, true);
-
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
                                              .setText(LocaleUtils.getDisplayName(locale, mLanguageTabs.getContext(),
                                                                                  null, locale))
                                              .setTag(locale));
             }
-
-            mLanguageTabs.addOnTabSelectedListener(this);
         }
     }
 
@@ -345,23 +338,8 @@ public class TractActivity extends KotlinTractActivity
         // update the styles for the language tabs
         int visibleTabs = 0;
         if (mLanguageTabs != null) {
-            // determine colors for the language toggle
-            final Manifest manifest = getActiveManifest();
-            final int controlColor = Manifest.getNavBarControlColor(manifest);
-            int selectedColor = Manifest.getNavBarColor(manifest);
-            if (Color.alpha(selectedColor) < 255) {
-                // XXX: the expected behavior is to support transparent text. But we currently don't support
-                // XXX: transparent text, so pick white or black based on the control color
-                final float[] hsv = new float[3];
-                Color.colorToHSV(controlColor, hsv);
-                selectedColor = hsv[2] > 0.6 ? Color.BLACK : Color.WHITE;
-            }
-
-            // update colors for tab text, and background
-            mLanguageTabs.setTabTextColors(controlColor, selectedColor);
-            ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
-
             // update visible tabs
+            final int controlColor = Manifest.getNavBarControlColor(getActiveManifest());
             updateHiddenLanguages();
             for (int i = 0; i < mLanguages.length; i++) {
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
