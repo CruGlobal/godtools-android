@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.service
 
-import android.content.Context
 import android.util.Xml
 import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
@@ -11,10 +10,11 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
-import org.cru.godtools.base.util.getGodToolsFile
+import org.cru.godtools.base.FileManager
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Page
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.Locale
@@ -22,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ManifestParser @Inject constructor(private val context: Context) {
+class ManifestParser @Inject internal constructor(private val fileManager: FileManager) {
     private val cache = WeakLruCache<String, Result.Data>(6)
     private val loadingMutex = MutexMap()
 
@@ -36,7 +36,7 @@ class ManifestParser @Inject constructor(private val context: Context) {
         try {
             cache[manifestName] ?: withContext(Dispatchers.IO) {
                 val manifest = try {
-                    context.getGodToolsFile(manifestName)!!.inputStream().buffered().use {
+                    fileManager.getInputStream(manifestName)!!.buffered().use {
                         Manifest.fromXml(Xml.newPullParser().apply {
                             setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
                             setInput(it, "UTF-8")
@@ -45,6 +45,8 @@ class ManifestParser @Inject constructor(private val context: Context) {
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound
+                } catch (e: XmlPullParserException) {
+                    return@withContext Result.Error.Corrupted
                 }
 
                 // load pages
@@ -62,7 +64,7 @@ class ManifestParser @Inject constructor(private val context: Context) {
     private fun Page.parse(): Result {
         val fileName = page.localFileName ?: return Result.Success
         return try {
-            context.getGodToolsFile(fileName)!!.inputStream().buffered().use {
+            fileManager.getInputStream(fileName)!!.buffered().use {
                 page.parsePageXml(Xml.newPullParser().apply {
                     setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
                     setInput(it, "UTF-8")
