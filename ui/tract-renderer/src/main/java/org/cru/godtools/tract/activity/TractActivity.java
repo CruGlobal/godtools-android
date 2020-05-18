@@ -13,7 +13,6 @@ import com.google.android.material.tabs.TabLayoutUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
@@ -112,7 +111,6 @@ public class TractActivity extends KotlinTractActivity
     @Override
     protected void onSetupActionBar() {
         super.onSetupActionBar();
-        setupLanguageToggle();
         updateLanguageToggle();
     }
 
@@ -278,17 +276,6 @@ public class TractActivity extends KotlinTractActivity
         super.updateVisibilityState();
     }
 
-    private void setupLanguageToggle() {
-        if (mLanguageTabs != null) {
-            for (final Locale locale : mLanguages) {
-                mLanguageTabs.addTab(mLanguageTabs.newTab()
-                                             .setText(LocaleUtils.getDisplayName(locale, mLanguageTabs.getContext(),
-                                                                                 null, locale))
-                                             .setTag(locale));
-            }
-        }
-    }
-
     private void updateActiveLanguage(@NonNull final Locale locale) {
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
@@ -339,7 +326,6 @@ public class TractActivity extends KotlinTractActivity
         int visibleTabs = 0;
         if (mLanguageTabs != null) {
             // update visible tabs
-            final int controlColor = Manifest.getNavBarControlColor(getActiveManifest());
             updateHiddenLanguages();
             for (int i = 0; i < mLanguages.length; i++) {
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
@@ -349,14 +335,6 @@ public class TractActivity extends KotlinTractActivity
                     TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
                     if (visible) {
                         visibleTabs++;
-                    }
-
-                    // update tab background
-                    TabLayoutUtils.setBackgroundTint(tab, controlColor);
-
-                    // ensure tab is selected if it is active
-                    if (i == mActiveLanguage && !tab.isSelected()) {
-                        tab.select();
                     }
                 }
             }

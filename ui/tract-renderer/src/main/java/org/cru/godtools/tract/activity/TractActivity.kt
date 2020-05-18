@@ -30,6 +30,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
+import org.cru.godtools.tract.LanguageToggleController
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
@@ -173,6 +174,11 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
             binding.languageToggle.setTabTextColors(controlColor, selectedColor)
             ViewUtils.setBackgroundTint(binding.languageToggle, controlColor)
         }
+
+        val controller = LanguageToggleController(binding.languageToggle)
+        dataModel.activeLocale.observe(this) { controller.activeLocale = it }
+        dataModel.activeManifest.observe(this) { controller.activeManifest = it }
+        dataModel.locales.observe(this) { controller.locales = it }
     }
     // endregion Language Toggle
 
