@@ -26,7 +26,6 @@ import org.hamcrest.Matchers.aMapWithSize
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anEmptyMap
 import org.hamcrest.Matchers.contains
-import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasEntry
 import org.junit.Before
 import org.junit.Rule
@@ -93,19 +92,25 @@ class TractActivityDataModelTest {
         dataModel.manifests.observeForever(observer)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<List<Manifest?>> {
+        argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer).onChanged(capture())
-            assertThat(lastValue, contains(null, null))
+            assertThat(
+                lastValue, allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
+                )
+            )
         }
     }
 
     @Test
     fun verifyManifestsNoLocales() {
         dataModel.manifests.observeForever(observer)
-        assertThat(dataModel.manifests.value, empty())
+        assertThat(dataModel.manifests.value, anEmptyMap())
         dataModel.tool.value = TOOL
-        assertThat(dataModel.manifests.value, empty())
-        verify(observer).onChanged(eq(emptyList<Manifest?>()))
+        assertThat(dataModel.manifests.value, anEmptyMap())
+        verify(observer).onChanged(eq(emptyMap<Locale, Manifest?>()))
     }
 
     @Test
@@ -120,10 +125,14 @@ class TractActivityDataModelTest {
         dataModel.primaryLocales.value = listOf(Locale.FRENCH)
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<List<Manifest?>> {
+        argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, contains(null, french.value))
-            assertThat(lastValue, contains(french.value))
+            assertThat(firstValue, allOf(
+                aMapWithSize(2),
+                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
+            ))
+            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)))
         }
     }
 
@@ -139,10 +148,18 @@ class TractActivityDataModelTest {
 
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<List<Manifest?>> {
+        argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, contains(null, null))
-            assertThat(lastValue, contains(null, french.value))
+            assertThat(firstValue, allOf(
+                aMapWithSize(2),
+                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
+            ))
+            assertThat(lastValue, allOf(
+                aMapWithSize(2),
+                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
+            ))
         }
     }
     // endregion Property: manifests

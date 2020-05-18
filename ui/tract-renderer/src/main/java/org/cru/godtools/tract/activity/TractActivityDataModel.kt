@@ -75,13 +75,13 @@ class TractActivityDataModel @AssistedInject constructor(
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
     private val distinctLocales = locales.distinctUntilChanged()
 
-    val manifests: LiveData<List<Manifest?>> =
-        distinctLocales.switchFold(ImmutableLiveData(emptyList())) { acc, locale ->
-            val manifest =
-                distinctTool.switchMap { manifestCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
-                    .distinctUntilChanged()
-            acc.distinctUntilChanged().combineWith(manifest) { manifests, manifest -> manifests + manifest }
-        }
+    @VisibleForTesting
+    internal val manifests =
+        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
+            distinctTool.switchMap { manifestCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
+                .distinctUntilChanged()
+                .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
+        }.map { it.toMap() }
     @VisibleForTesting
     internal val translations =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
@@ -91,7 +91,7 @@ class TractActivityDataModel @AssistedInject constructor(
         }.map { it.toMap() }
     val state =
         locales.combineWith(manifests, translations, isSyncRunning) { locales, manifests, translations, isSyncRunning ->
-            locales.mapIndexed { i, l -> determineState(manifests.getOrNull(i), translations[l], isSyncRunning) }
+            locales.map { determineState(manifests[it], translations[it], isSyncRunning) }
         }
     // endregion Language Switcher
 
