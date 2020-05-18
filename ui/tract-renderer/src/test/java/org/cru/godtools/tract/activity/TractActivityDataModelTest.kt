@@ -15,8 +15,6 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
 import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
 import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -24,9 +22,12 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.xml.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.aMapWithSize
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anEmptyMap
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
-import org.junit.Assert.assertEquals
+import org.hamcrest.Matchers.hasEntry
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -160,19 +161,26 @@ class TractActivityDataModelTest {
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.CHINESE), any(), any(), any())
-        argumentCaptor<List<Translation?>> {
+        argumentCaptor<Map<Locale, Translation?>> {
             verify(observer).onChanged(capture())
-            assertThat(lastValue, contains(null, null, translation))
+            assertThat(
+                lastValue, allOf(
+                    aMapWithSize(3),
+                    hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Translation?>(Locale.FRENCH, null),
+                    hasEntry(Locale.CHINESE, translation)
+                )
+            )
         }
     }
 
     @Test
     fun verifyTranslationsNoLocales() {
         dataModel.translations.observeForever(observer)
-        assertThat(dataModel.translations.value, empty())
+        assertThat(dataModel.translations.value, anEmptyMap())
         dataModel.tool.value = TOOL
-        assertThat(dataModel.translations.value, empty())
-        verify(observer).onChanged(eq(emptyList<Translation?>()))
+        assertThat(dataModel.translations.value, anEmptyMap())
+        verify(observer).onChanged(eq(emptyMap<Locale, Translation?>()))
     }
 
     @Test
@@ -187,10 +195,22 @@ class TractActivityDataModelTest {
         french.value = Translation()
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
         verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
-        argumentCaptor<List<Translation?>> {
+        argumentCaptor<Map<Locale, Translation?>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, contains(null, null))
-            assertThat(lastValue, contains(null, french.value))
+            assertThat(
+                firstValue, allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Translation?>(Locale.FRENCH, null)
+                )
+            )
+            assertThat(
+                lastValue, allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Translation?>(Locale.FRENCH, french.value)
+                )
+            )
         }
     }
     // endregion Property: translations

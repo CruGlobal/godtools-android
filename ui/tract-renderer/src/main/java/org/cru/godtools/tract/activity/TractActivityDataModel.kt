@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.activity
 
+import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -81,16 +82,17 @@ class TractActivityDataModel @AssistedInject constructor(
                     .distinctUntilChanged()
             acc.distinctUntilChanged().combineWith(manifest) { manifests, manifest -> manifests + manifest }
         }
-    val translations: LiveData<List<Translation?>> =
-        distinctLocales.switchFold(ImmutableLiveData(emptyList())) { acc, locale ->
-            val translation =
-                distinctTool.switchMap { translationCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
-                    .distinctUntilChanged()
-            acc.distinctUntilChanged().combineWith(translation) { translations, trans -> translations + trans }
+    @VisibleForTesting
+    internal val translations =
+        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
+            distinctTool.switchMap { translationCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
+                .distinctUntilChanged()
+                .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
+        }.map { it.toMap() }
+    val state =
+        locales.combineWith(manifests, translations, isSyncRunning) { locales, manifests, translations, isSyncRunning ->
+            locales.mapIndexed { i, l -> determineState(manifests.getOrNull(i), translations[l], isSyncRunning) }
         }
-    val state = manifests.combineWith(translations, isSyncRunning) { manifests, translations, isSyncRunning ->
-        manifests.mapIndexed { i, manifest -> determineState(manifest, translations.getOrNull(i), isSyncRunning) }
-    }
     // endregion Language Switcher
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
