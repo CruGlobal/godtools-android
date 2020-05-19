@@ -108,20 +108,30 @@ class TractActivityDataModel @AssistedInject constructor(
             locales.associateWith { determineState(manifests[it], translations[it], syncFinished) }
         }
     @OptIn(ExperimentalStdlibApi::class)
-    val visibleLocales =
+    val availableLocales =
         activeLocale.combineWith(primaryLocales, parallelLocales, state) { activeLocale, primary, parallel, state ->
             buildList {
                 primary
                     .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
-                    .let { it.firstOrNull { it == activeLocale } ?: it.firstOrNull { state[it] == STATE_LOADED } }
+                    .let {
+                        it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull { state[it] == STATE_LOADED }
+                            ?: it.firstOrNull()
+                    }
                     ?.let { add(it) }
                 parallel
                     .filterNot { contains(it) }
                     .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
-                    .let { it.firstOrNull { it == activeLocale } ?: it.firstOrNull { state[it] == STATE_LOADED } }
+                    .let {
+                        it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull { state[it] == STATE_LOADED }
+                            ?: it.firstOrNull()
+                    }
                     ?.let { add(it) }
             }
         }
+    val visibleLocales =
+        availableLocales.combineWith(state) { locales, state -> locales.filter { state[it] == STATE_LOADED } }
     // endregion Language Switcher
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {

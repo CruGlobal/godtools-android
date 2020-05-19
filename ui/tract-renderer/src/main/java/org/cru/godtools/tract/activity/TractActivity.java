@@ -29,7 +29,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import butterknife.BindView;
 import kotlin.Pair;
@@ -52,8 +51,6 @@ public class TractActivity extends KotlinTractActivity
     /*final*/ int mPrimaryLanguages = 1;
     /*final*/ int mParallelLanguages = 0;
 
-    @NonNull
-    boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
     int mActiveLanguage = 0;
 
@@ -217,15 +214,6 @@ public class TractActivity extends KotlinTractActivity
         final List<Locale> languages = getDataModel().getLocales().getValue();
         final Map<Locale, Integer> state = getDataModel().getState().getValue();
         return state != null && languages != null && languages.size() > languageIndex ? state.get(languages.get(languageIndex)) : STATE_LOADING;
-    }
-
-    /**
-     * This method updates the list of artificially hidden languages. This includes primary language fallbacks provided
-     * via a deep link.
-     */
-    @UiThread
-    @VisibleForTesting
-    void updateHiddenLanguages() {
     }
 
     @Override
