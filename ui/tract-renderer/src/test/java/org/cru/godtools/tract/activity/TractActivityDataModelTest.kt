@@ -53,7 +53,9 @@ class TractActivityDataModelTest {
         dao = mock()
         downloadManager = mock()
         manifestManager = mock()
-        dataModel = TractActivityDataModel(dao, downloadManager, manifestManager, SavedStateHandle())
+        dataModel = TractActivityDataModel(dao, downloadManager, manifestManager, SavedStateHandle()).apply {
+            isInitialSyncFinished.value = true
+        }
     }
 
     @Before
@@ -238,7 +240,6 @@ class TractActivityDataModelTest {
         val translation = MutableLiveData<Translation?>(null)
         dataModel.tool.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
-        dataModel.isSyncRunning.value = false
         wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
 

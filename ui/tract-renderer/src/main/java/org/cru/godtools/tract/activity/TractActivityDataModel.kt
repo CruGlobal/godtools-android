@@ -49,7 +49,7 @@ class TractActivityDataModel @AssistedInject constructor(
     interface Factory : AssistedSavedStateViewModelFactory<TractActivityDataModel>
 
     val tool = MutableLiveData<String?>()
-    val isSyncRunning = MutableLiveData<Boolean?>(null)
+    val isInitialSyncFinished = MutableLiveData(false)
     private val distinctTool = tool.distinctUntilChanged()
 
     // region Active Tool
@@ -66,7 +66,7 @@ class TractActivityDataModel @AssistedInject constructor(
     private val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
         translationCache.get(TranslationKey(t, l))!!
     }
-    val activeState = rawActiveManifest.combineWith(activeTranslation, isSyncRunning) { m, t, s ->
+    val activeState = rawActiveManifest.combineWith(activeTranslation, isInitialSyncFinished) { m, t, s ->
         determineState(m, t, s)
     }
 
@@ -103,9 +103,9 @@ class TractActivityDataModel @AssistedInject constructor(
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
-    val state =
-        locales.combineWith(manifests, translations, isSyncRunning) { locales, manifests, translations, isSyncRunning ->
-            locales.associateWith { determineState(manifests[it], translations[it], isSyncRunning) }
+    val state = locales
+        .combineWith(manifests, translations, isInitialSyncFinished) { locales, manifests, translations, syncFinished ->
+            locales.associateWith { determineState(manifests[it], translations[it], syncFinished) }
         }
     @OptIn(ExperimentalStdlibApi::class)
     val visibleLocales =

@@ -259,11 +259,12 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     // endregion Share Link Logic
 
     companion object {
-        internal fun determineState(manifest: Manifest?, translation: Translation?, isSyncRunning: Boolean?) = when {
-            manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
-            manifest != null -> STATE_LOADED
-            translation == null && isSyncRunning == false -> STATE_NOT_FOUND
-            else -> STATE_LOADING
-        }
+        internal fun determineState(manifest: Manifest?, translation: Translation?, isInitialSyncFinished: Boolean) =
+            when {
+                manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
+                manifest != null -> STATE_LOADED
+                translation == null && isInitialSyncFinished == true -> STATE_NOT_FOUND
+                else -> STATE_LOADING
+            }
     }
 }

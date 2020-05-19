@@ -16,10 +16,10 @@ import org.junit.runner.RunWith
 class TractActivityTest {
     @Test
     fun verifyDetermineState() {
-        assertEquals(STATE_LOADED, determineState(Manifest().apply { mType = Manifest.Type.TRACT }, null, null))
-        assertEquals(STATE_INVALID_TYPE, determineState(Manifest().apply { mType = Manifest.Type.ARTICLE }, null, null))
-        assertEquals(STATE_NOT_FOUND, determineState(null, null, false))
-        assertEquals(STATE_LOADING, determineState(null, Translation(), null))
-        assertEquals(STATE_LOADING, determineState(null, null, true))
+        assertEquals(STATE_LOADED, determineState(Manifest().apply { mType = Manifest.Type.TRACT }, null, false))
+        assertEquals(STATE_INVALID_TYPE, determineState(Manifest().apply { mType = Manifest.Type.ARTICLE }, null, false))
+        assertEquals(STATE_LOADING, determineState(null, null, false))
+        assertEquals(STATE_LOADING, determineState(null, Translation(), true))
+        assertEquals(STATE_NOT_FOUND, determineState(null, null, true))
     }
 }

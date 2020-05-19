@@ -165,7 +165,9 @@ public class TractActivity extends KotlinTractActivity
     // region Data Model
     private void setupDataModel() {
         getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
-        isSyncRunning().observe(this, running -> getDataModel().isSyncRunning().setValue(running));
+        isInitialSyncFinished().observe(this, finished -> {
+            if (finished) { getDataModel().isInitialSyncFinished().setValue(true); }
+        });
     }
     // endregion Data Model
 
