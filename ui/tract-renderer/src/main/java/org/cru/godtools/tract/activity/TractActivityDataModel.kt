@@ -58,7 +58,7 @@ class TractActivityDataModel @AssistedInject constructor(
     }
     val activeManifest = rawActiveManifest.map { it?.takeIf { it.type == Manifest.Type.TRACT } }
     private val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
-        translationCache.get(TranslationKey(t, l))!!.withInitialValue(null)
+        translationCache.get(TranslationKey(t, l))!!
     }
     val activeState = rawActiveManifest.combineWith(activeTranslation, isSyncRunning) { m, t, s ->
         determineState(m, t, s)
