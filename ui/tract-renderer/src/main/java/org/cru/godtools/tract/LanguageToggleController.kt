@@ -27,9 +27,21 @@ class LanguageToggleController(private val tabs: TabLayout) {
         }
 
     private fun createTabs() {
+        // if the selected locale is no longer valid, we need to remove all tabs to prevent an onTabSelected callback
         val selected = tabs.getTabAt(tabs.selectedTabPosition)?.tag as? Locale
-        tabs.removeAllTabs()
-        locales.forEach { tabs.addTab(tabs.newTab().setTag(it), selected == it) }
+        if (selected != null && !locales.contains(selected)) tabs.removeAllTabs()
+
+        // update tabs
+        locales.forEachIndexed { i, locale ->
+            // if this is the selected locale, reposition the selected tab
+            if (locale == selected) while (tabs.selectedTabPosition > i) tabs.removeTabAt(i)
+
+            // insert a new tab if the current tab isn't correct
+            if (tabs.getTabAt(i)?.tag != locale) tabs.addTab(tabs.newTab().setTag(locale), i, locale == selected)
+        }
+
+        // remove excess tabs
+        while (tabs.tabCount > locales.size) tabs.removeTabAt(locales.size)
         configureTabs()
     }
 
