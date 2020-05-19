@@ -3,6 +3,7 @@ package org.cru.godtools.tract
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.setBackgroundTint
 import org.cru.godtools.base.util.getDisplayName
+import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
 import java.util.Locale
 
@@ -24,6 +25,12 @@ class LanguageToggleController(private val tabs: TabLayout) {
             val changed = value != field
             field = value
             if (changed) createTabs()
+        }
+    var languages: Map<Locale, Language> = emptyMap()
+        set(value) {
+            val changed = value != field
+            field = value
+            if (changed) configureTabs()
         }
 
     private fun createTabs() {
@@ -51,7 +58,7 @@ class LanguageToggleController(private val tabs: TabLayout) {
             val locale = tab.tag as? Locale
 
             tab.setBackgroundTint(controlColor)
-            tab.text = locale?.getDisplayName(tabs.context)
+            tab.text = languages[locale]?.getDisplayName(tabs.context) ?: locale?.getDisplayName(tabs.context)
         }
         updateSelectedTab()
     }

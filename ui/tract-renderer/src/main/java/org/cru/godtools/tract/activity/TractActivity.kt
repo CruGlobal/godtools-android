@@ -187,6 +187,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         dataModel.activeLocale.observe(this) { controller.activeLocale = it }
         dataModel.activeManifest.observe(this) { controller.activeManifest = it }
         dataModel.visibleLocales.observe(this) { controller.locales = it }
+        dataModel.languages.observe(this) { controller.languages = it }
     }
     // endregion Language Toggle
 

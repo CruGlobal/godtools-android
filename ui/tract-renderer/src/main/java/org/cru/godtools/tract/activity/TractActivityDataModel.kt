@@ -19,15 +19,21 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
+import org.ccci.gto.android.common.db.Expression
+import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
 import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
 import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tract.activity.KotlinTractActivity.Companion.determineState
 import org.cru.godtools.xml.model.Manifest
+import org.keynote.godtools.android.db.Contract
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
 
@@ -78,6 +84,11 @@ class TractActivityDataModel @AssistedInject constructor(
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
     private val distinctLocales = locales.distinctUntilChanged()
 
+    val languages = distinctLocales.switchMap {
+        Query.select<Language>()
+            .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*it.toTypedArray())))
+            .getAsLiveData(dao)
+    }.map { it.associateBy { it.code } }
     @VisibleForTesting
     internal val manifests =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
