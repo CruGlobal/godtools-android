@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -195,6 +196,9 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
 
     private fun setupPager() {
         pager.adapter = pagerAdapter
+        dataModel.visibleLocales.observe(this) {
+            pager.layoutDirection = TextUtils.getLayoutDirectionFromLocale(it.firstOrNull())
+        }
 
         if (initialPage >= 0) dataModel.activeManifest.notNull().observeOnce(this) {
             if (initialPage < 0) return@observeOnce

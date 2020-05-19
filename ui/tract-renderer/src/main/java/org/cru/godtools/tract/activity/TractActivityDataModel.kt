@@ -19,6 +19,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
+import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -92,6 +95,21 @@ class TractActivityDataModel @AssistedInject constructor(
     val state =
         locales.combineWith(manifests, translations, isSyncRunning) { locales, manifests, translations, isSyncRunning ->
             locales.associateWith { determineState(manifests[it], translations[it], isSyncRunning) }
+        }
+    @OptIn(ExperimentalStdlibApi::class)
+    val visibleLocales =
+        activeLocale.combineWith(primaryLocales, parallelLocales, state) { activeLocale, primary, parallel, state ->
+            buildList {
+                primary
+                    .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
+                    .let { it.firstOrNull { it == activeLocale } ?: it.firstOrNull { state[it] == STATE_LOADED } }
+                    ?.let { add(it) }
+                parallel
+                    .filterNot { contains(it) }
+                    .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
+                    .let { it.firstOrNull { it == activeLocale } ?: it.firstOrNull { state[it] == STATE_LOADED } }
+                    ?.let { add(it) }
+            }
         }
     // endregion Language Switcher
 

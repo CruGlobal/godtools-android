@@ -3,7 +3,6 @@ package org.cru.godtools.tract.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.annimon.stream.Stream;
@@ -101,13 +100,6 @@ public class TractActivity extends KotlinTractActivity
         setContentView(getBinding().getRoot());
     }
 
-    @Override
-    @CallSuper
-    public void onContentChanged() {
-        super.onContentChanged();
-        setupPager();
-    }
-
     @CallSuper
     @Override
     protected void onSetupActionBar() {
@@ -125,7 +117,6 @@ public class TractActivity extends KotlinTractActivity
     @CallSuper
     protected void onUpdateActiveManifest() {
         super.onUpdateActiveManifest();
-        updatePager();
         showNextFeatureDiscovery();
     }
 
@@ -302,27 +293,6 @@ public class TractActivity extends KotlinTractActivity
         }
     }
 
-    @Nullable
-    private Locale getFirstVisibleLocale() {
-        for (int i = 0; i < mLanguages.length; i++) {
-            // skip any hidden languages
-            if (mHiddenLanguages[i]) {
-                continue;
-            }
-
-            // skip any language that isn't loaded
-            if (determineLanguageState(i) != STATE_LOADED) {
-                continue;
-            }
-
-            // return this language
-            return mLanguages[i];
-        }
-
-        // default to null
-        return null;
-    }
-
     private void updateLanguageToggle() {
         // update the styles for the language tabs
         int visibleTabs = 0;
@@ -351,11 +321,6 @@ public class TractActivity extends KotlinTractActivity
     }
 
     // region Tool Pager Methods
-    private void setupPager() {
-        // TODO: this needs to be triggered on hidden tool updates as well
-        getDataModel().getState().observe(this, state -> updatePager());
-    }
-
     private void checkForPageEvent(@NonNull final Event event) {
         final Manifest manifest = getActiveManifest();
         if (manifest != null) {
@@ -365,10 +330,6 @@ public class TractActivity extends KotlinTractActivity
                 }
             }
         }
-    }
-
-    private void updatePager() {
-        getPager().setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
     }
     // endregion Tool Pager Methods
 
