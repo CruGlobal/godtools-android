@@ -91,7 +91,7 @@ class TractActivityDataModel @AssistedInject constructor(
         }.map { it.toMap() }
     val state =
         locales.combineWith(manifests, translations, isSyncRunning) { locales, manifests, translations, isSyncRunning ->
-            locales.map { determineState(manifests[it], translations[it], isSyncRunning) }
+            locales.associateWith { determineState(manifests[it], translations[it], isSyncRunning) }
         }
     // endregion Language Switcher
 

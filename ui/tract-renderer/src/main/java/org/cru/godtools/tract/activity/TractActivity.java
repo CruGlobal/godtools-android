@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
@@ -223,8 +224,9 @@ public class TractActivity extends KotlinTractActivity
     // endregion Creation Methods
 
     private int determineLanguageState(final int languageIndex) {
-        final List<Integer> state = getDataModel().getState().getValue();
-        return state != null && state.size() > languageIndex ? state.get(languageIndex) : STATE_LOADING;
+        final List<Locale> languages = getDataModel().getLocales().getValue();
+        final Map<Locale, Integer> state = getDataModel().getState().getValue();
+        return state != null && languages != null && languages.size() > languageIndex ? state.get(languages.get(languageIndex)) : STATE_LOADING;
     }
 
     /**

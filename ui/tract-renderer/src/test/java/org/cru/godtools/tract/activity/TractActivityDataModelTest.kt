@@ -243,13 +243,13 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
 
         dataModel.state.observeForever(observer)
-        assertThat(dataModel.state.value, contains(STATE_NOT_FOUND))
+        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_NOT_FOUND)))
         translation.value = Translation()
-        assertThat(dataModel.state.value, contains(STATE_LOADING))
-        argumentCaptor<List<Int>> {
+        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_LOADING)))
+        argumentCaptor<Map<Locale, Int>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, contains(STATE_NOT_FOUND))
-            assertThat(lastValue, contains(STATE_LOADING))
+            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_NOT_FOUND)))
+            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_LOADING)))
         }
     }
     // endregion Property: state
