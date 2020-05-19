@@ -3,11 +3,9 @@ package org.cru.godtools.tract.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
@@ -206,7 +204,6 @@ public class TractActivity extends KotlinTractActivity
         mLanguages = CollectionsKt
                 .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
                 .toArray(new Locale[0]);
-        mHiddenLanguages = new boolean[mLanguages.length];
     }
 
     private boolean validStartState() {
@@ -227,39 +224,6 @@ public class TractActivity extends KotlinTractActivity
     @UiThread
     @VisibleForTesting
     void updateHiddenLanguages() {
-        showSingleBestLanguageInRange(0, mPrimaryLanguages);
-        showSingleBestLanguageInRange(mPrimaryLanguages, mPrimaryLanguages + mParallelLanguages);
-    }
-
-    private void showSingleBestLanguageInRange(final int start, final int end) {
-        int language = -1;
-        for (int i = start; i < mLanguages.length && i < end; i++) {
-            // default hidden state to whether the language exists or not
-            final int state = determineLanguageState(i);
-            mHiddenLanguages[i] = state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE;
-
-            // short-circuit loop if this language was not found
-            if (mHiddenLanguages[i]) {
-                continue;
-            }
-
-            // is this language currently active, or is it loaded and we haven't found a language to show yet
-            if (mActiveLanguage == i || (state == STATE_LOADED && language == -1)) {
-                // don't hide the language
-                mHiddenLanguages[i] = false;
-
-                // hide any previously identified languages
-                if (language != -1) {
-                    mHiddenLanguages[language] = true;
-                }
-
-                // track our current language
-                language = i;
-            } else {
-                // hide any other potential language
-                mHiddenLanguages[i] = true;
-            }
-        }
     }
 
     @Override
@@ -294,29 +258,10 @@ public class TractActivity extends KotlinTractActivity
     }
 
     private void updateLanguageToggle() {
-        // update the styles for the language tabs
-        int visibleTabs = 0;
-        if (mLanguageTabs != null) {
-            // update visible tabs
-            updateHiddenLanguages();
-            for (int i = 0; i < mLanguages.length; i++) {
-                final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
-                if (tab != null) {
-                    // update tab visibility
-                    final boolean visible = !mHiddenLanguages[i] && determineLanguageState(i) == STATE_LOADED;
-                    TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
-                    if (visible) {
-                        visibleTabs++;
-                    }
-                }
-            }
-
-            mLanguageTabs.setVisibility(visibleTabs > 1 ? View.VISIBLE : View.GONE);
-        }
-
         // show or hide the title based on how many visible tabs we have
         if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
+            final List<Locale> visibleLocales = getDataModel().getVisibleLocales().getValue();
+            actionBar.setDisplayShowTitleEnabled(visibleLocales == null || visibleLocales.size() <= 1);
         }
     }
 

@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.List" />
+        <import type="java.util.Locale" />
+
+        <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,6 +43,7 @@
                     style="@style/Widget.GodTools.TabLayout.AppBar"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/appbar_tabs_height"
+                    app:visibleIf="@{visibleLocales.size > 1 || (visibleLocales.size() == 1 &amp;&amp; !visibleLocales.contains(activeLocale))}"
                     app:tabBackground="@drawable/bkg_tab_label_tintable" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>

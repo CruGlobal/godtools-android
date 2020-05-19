@@ -147,6 +147,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
 
     private fun setupBinding() {
         binding.lifecycleOwner = this
+        binding.activeLocale = dataModel.activeLocale
+        binding.visibleLocales = dataModel.visibleLocales
     }
 
     private fun setupBackground() {
@@ -184,7 +186,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         val controller = LanguageToggleController(binding.languageToggle)
         dataModel.activeLocale.observe(this) { controller.activeLocale = it }
         dataModel.activeManifest.observe(this) { controller.activeManifest = it }
-        dataModel.locales.observe(this) { controller.locales = it }
+        dataModel.visibleLocales.observe(this) { controller.locales = it }
     }
     // endregion Language Toggle
 
