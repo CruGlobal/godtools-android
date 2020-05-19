@@ -70,6 +70,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     // region Lifecycle
     override fun onContentChanged() {
         super.onContentChanged()
+        setupBinding()
         setupBackground()
         startDownloadProgressListener()
         setupLanguageToggle()
@@ -143,6 +144,10 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
 
     // region UI
     protected lateinit var binding: TractActivityBinding
+
+    private fun setupBinding() {
+        binding.lifecycleOwner = this
+    }
 
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
