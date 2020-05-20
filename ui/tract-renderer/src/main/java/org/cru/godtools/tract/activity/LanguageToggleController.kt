@@ -1,4 +1,4 @@
-package org.cru.godtools.tract
+package org.cru.godtools.tract.activity
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.setBackgroundTint

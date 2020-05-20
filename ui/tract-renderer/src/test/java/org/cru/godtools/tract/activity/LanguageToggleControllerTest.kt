@@ -1,4 +1,4 @@
-package org.cru.godtools.tract
+package org.cru.godtools.tract.activity
 
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import org.cru.godtools.tract.activity.TractActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

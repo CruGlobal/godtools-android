@@ -35,7 +35,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
-import org.cru.godtools.tract.LanguageToggleController
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
@@ -223,7 +222,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
         (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
 
     // region Data Model
-    protected val dataModel: TractActivityDataModel by viewModels()
+    private val dataModel: TractActivityDataModel by viewModels()
     private fun setupDataModel() {
         dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
         dataModel.activeState.observe(this) { updateVisibilityState() }
