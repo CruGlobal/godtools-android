@@ -298,8 +298,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
 
     private fun setupActiveTranslationManagement() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
-        dataModel.locales.observe(this) {
-            if (dataModel.activeLocale.value == null) it.firstOrNull()?.let { dataModel.setActiveLocale(it) }
+        dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
+            if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
         }
 
         dataModel.availableLocales.observe(this) {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
@@ -14,22 +13,16 @@ import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import kotlin.collections.CollectionsKt;
 
 public class TractActivity extends KotlinTractActivity
         implements TabLayout.OnTabSelectedListener, GodToolsDownloadManager.OnDownloadProgressUpdateListener {
-    private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
-
-    @NonNull
-    /*final*/ Locale[] mLanguages = new Locale[0];
 
     // region Lifecycle
     @Override
@@ -39,16 +32,8 @@ public class TractActivity extends KotlinTractActivity
             return;
         }
 
-        mLanguages = CollectionsKt
-                .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
-                .toArray(new Locale[0]);
-
         // restore any persisted state
         if (savedInstanceState != null) {
-            final Locale activeLanguage = BundleUtils.getLocale(savedInstanceState, EXTRA_ACTIVE_LANGUAGE, null);
-            if (activeLanguage != null) {
-                getDataModel().setActiveLocale(activeLanguage);
-            }
             setInitialPage(savedInstanceState.getInt(EXTRA_INITIAL_PAGE, getInitialPage()));
         }
 
@@ -108,7 +93,6 @@ public class TractActivity extends KotlinTractActivity
     @Override
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
-        BundleUtils.putLocale(outState, EXTRA_ACTIVE_LANGUAGE, getDataModel().getActiveLocale().getValue());
         outState.putInt(EXTRA_INITIAL_PAGE, getInitialPage());
     }
     // endregion Lifecycle
