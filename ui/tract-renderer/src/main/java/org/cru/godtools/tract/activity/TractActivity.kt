@@ -72,6 +72,12 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         processIntent(intent, savedInstanceState)
+
+        // finish now if this activity is in an invalid start state
+        if (!validStartState()) {
+            finish()
+            return
+        }
     }
 
     override fun onContentChanged() {
@@ -166,6 +172,9 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     @VisibleForTesting
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
+
+    private fun validStartState() = dataModel.tool.value != null &&
+        (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
 
     // region UI
     protected lateinit var binding: TractActivityBinding

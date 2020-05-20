@@ -46,12 +46,6 @@ public class TractActivity extends KotlinTractActivity
                 .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
                 .toArray(new Locale[0]);
 
-        // finish now if this activity is in an invalid state
-        if (!validStartState()) {
-            finish();
-            return;
-        }
-
         // restore any persisted state
         if (savedInstanceState != null) {
             final Locale activeLanguage = BundleUtils.getLocale(savedInstanceState, EXTRA_ACTIVE_LANGUAGE, null);
@@ -144,12 +138,6 @@ public class TractActivity extends KotlinTractActivity
         });
     }
     // endregion Data Model
-
-    // region Creation Methods
-    private boolean validStartState() {
-        return getDataModel().getTool().getValue() != null && mLanguages.length > 0;
-    }
-    // endregion Creation Methods
 
     private int determineLanguageState(final int languageIndex) {
         final List<Locale> languages = getDataModel().getLocales().getValue();
