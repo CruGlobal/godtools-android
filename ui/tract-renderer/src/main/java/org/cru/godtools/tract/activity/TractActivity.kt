@@ -13,9 +13,11 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.tabs.TabLayout
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -93,6 +95,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     @CallSuper
     override fun onSetupActionBar() {
         super.onSetupActionBar()
+        setupActionBarTitle()
         if (InstantApps.isInstantApp(this)) toolbar?.setNavigationIcon(R.drawable.ic_close)
     }
 
@@ -192,6 +195,12 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         binding.lifecycleOwner = this
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
+    }
+
+    private fun setupActionBarTitle() {
+        dataModel.activeLocale.combineWith(dataModel.visibleLocales) { active, locales ->
+            locales.isEmpty() || (locales.size < 2 && locales.contains(active))
+        }.observe(this) { supportActionBar?.setDisplayShowTitleEnabled(it) }
     }
 
     private fun setupBackground() {

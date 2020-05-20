@@ -62,13 +62,6 @@ public class TractActivity extends KotlinTractActivity
         setContentView(getBinding().getRoot());
     }
 
-    @CallSuper
-    @Override
-    protected void onSetupActionBar() {
-        super.onSetupActionBar();
-        updateLanguageToggle();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -80,12 +73,6 @@ public class TractActivity extends KotlinTractActivity
     protected void onUpdateActiveManifest() {
         super.onUpdateActiveManifest();
         showNextFeatureDiscovery();
-    }
-
-    @Override
-    protected void onUpdateToolbar() {
-        super.onUpdateToolbar();
-        updateLanguageToggle();
     }
 
     @Override
@@ -126,14 +113,6 @@ public class TractActivity extends KotlinTractActivity
     }
     // endregion Lifecycle
 
-    private void updateLanguageToggle() {
-        // show or hide the title based on how many visible tabs we have
-        if (actionBar != null) {
-            final List<Locale> visibleLocales = getDataModel().getVisibleLocales().getValue();
-            actionBar.setDisplayShowTitleEnabled(visibleLocales == null || visibleLocales.size() <= 1);
-        }
-    }
-
     // region Tool Pager Methods
     private void checkForPageEvent(@NonNull final Event event) {
         final Manifest manifest = getActiveManifest();
@@ -150,7 +129,6 @@ public class TractActivity extends KotlinTractActivity
     private void startLoaders() {
         getDataModel().getState().observe(this, state -> {
             updateVisibilityState();
-            updateLanguageToggle();
         });
         getDataModel().getActiveManifest().observe(this, manifest -> onUpdateActiveManifest());
         getDataModel().getActiveState().observe(this, i -> updateVisibilityState());
