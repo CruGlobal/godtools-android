@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
+import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
@@ -27,6 +28,7 @@ import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.model.Translation
@@ -36,6 +38,7 @@ import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.LanguageToggleController
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
+import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.service.FollowupService
@@ -44,10 +47,13 @@ import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import javax.inject.Inject
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
+private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
 
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?) =
     startActivity(createTractActivityIntent(toolCode, *languages))
@@ -62,8 +68,7 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
-abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener,
-    ManifestPagerAdapter.Callbacks {
+class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -79,8 +84,18 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
             return
         }
 
+        // restore any saved state
+        savedInstanceState?.run {
+            initialPage = getInt(EXTRA_INITIAL_PAGE, initialPage)
+        }
+
+        // track this view
+        if (savedInstanceState == null) dataModel.tool.value?.let { trackToolOpen(it) }
+
         setupDataModel()
         setupActiveTranslationManagement()
+        binding = TractActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onContentChanged() {
@@ -106,6 +121,11 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        eventBus.register(this)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, -1, "instantapp")
@@ -119,8 +139,30 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         else -> super.onOptionsItemSelected(item)
     }
 
+    @CallSuper
+    override fun onUpdateActiveManifest() {
+        super.onUpdateActiveManifest()
+        showNextFeatureDiscovery()
+    }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onContentEvent(event: Event) {
+        checkForPageEvent(event)
+    }
+
     override fun onUpdateActiveCard(page: Page, card: Card?) {
         trackTractPage(page, card)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(EXTRA_INITIAL_PAGE, initialPage)
+    }
+
+    override fun onStop() {
+        eventBus.unregister(this)
+        super.onStop()
     }
     // endregion Lifecycle
 
@@ -189,7 +231,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     // endregion Data Model
 
     // region UI
-    protected lateinit var binding: TractActivityBinding
+    private lateinit var binding: TractActivityBinding
 
     private fun setupBinding() {
         binding.lifecycleOwner = this
@@ -241,18 +283,29 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         dataModel.visibleLocales.observe(this) { controller.locales = it }
         dataModel.languages.observe(this) { controller.languages = it }
     }
+
+    // region TabLayout.OnTabSelectedListener
+    override fun onTabSelected(tab: TabLayout.Tab) {
+        val locale = tab.tag as? Locale ?: return
+        dataModel.setActiveLocale(locale)
+        eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+    // endregion TabLayout.OnTabSelectedListener
     // endregion Language Toggle
 
     // region Tool Pager
-    protected val pager get() = binding.mainContent.pages
-    protected val pagerAdapter by lazy {
+    private val pager get() = binding.mainContent.pages
+    private val pagerAdapter by lazy {
         ManifestPagerAdapter().also {
             it.setCallbacks(this)
             lifecycle.addObserver(it)
             dataModel.activeManifest.observe(this, it)
         }
     }
-    protected var initialPage = 0
+    private var initialPage = 0
 
     private fun setupPager() {
         pager.adapter = pagerAdapter
@@ -269,6 +322,10 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
             pager.setCurrentItem(initialPage, false)
             initialPage = -1
         }
+    }
+
+    private fun checkForPageEvent(event: Event) {
+        activeManifest?.pages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
     }
 
     // region ManifestPagerAdapter.Callbacks
