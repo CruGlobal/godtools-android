@@ -60,7 +60,6 @@ class LanguageToggleController(private val tabs: TabLayout) {
             tab.setBackgroundTint(controlColor)
             tab.text = languages[locale]?.getDisplayName(tabs.context) ?: locale?.getDisplayName(tabs.context)
         }
-        updateSelectedTab()
     }
 
     private fun updateSelectedTab() {
