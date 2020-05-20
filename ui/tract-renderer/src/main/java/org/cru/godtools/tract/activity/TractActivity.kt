@@ -263,7 +263,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
             when {
                 manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
                 manifest != null -> STATE_LOADED
-                translation == null && isInitialSyncFinished == true -> STATE_NOT_FOUND
+                translation == null && isInitialSyncFinished -> STATE_NOT_FOUND
                 else -> STATE_LOADING
             }
     }

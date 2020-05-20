@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.databinding.TractActivityBinding;
 import org.cru.godtools.xml.model.Manifest;
@@ -30,7 +29,6 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import butterknife.BindView;
 import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
 
@@ -42,21 +40,11 @@ public class TractActivity extends KotlinTractActivity
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
 
-    @Nullable
-    @BindView(R2.id.language_toggle)
-    TabLayout mLanguageTabs;
-
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
-    /*final*/ int mPrimaryLanguages = 1;
-    /*final*/ int mParallelLanguages = 0;
 
     @VisibleForTesting
     int mActiveLanguage = 0;
-
-    public TractActivity() {
-        super();
-    }
 
     // region Lifecycle
     @Override
@@ -75,11 +63,8 @@ public class TractActivity extends KotlinTractActivity
         // restore any persisted state
         if (savedInstanceState != null) {
             final Locale activeLanguage = BundleUtils.getLocale(savedInstanceState, EXTRA_ACTIVE_LANGUAGE, null);
-            for (int i = 0; i < mLanguages.length; i++) {
-                if (mLanguages[i].equals(activeLanguage)) {
-                    mActiveLanguage = i;
-                    break;
-                }
+            if (activeLanguage != null) {
+                updateActiveLanguage(activeLanguage);
             }
             setInitialPage(savedInstanceState.getInt(EXTRA_INITIAL_PAGE, getInitialPage()));
         }
@@ -198,8 +183,6 @@ public class TractActivity extends KotlinTractActivity
         } else {
             getDataModel().getTool().setValue(null);
         }
-        mPrimaryLanguages = getDataModel().getPrimaryLocales().getValue().size();
-        mParallelLanguages = getDataModel().getParallelLocales().getValue().size();
         mLanguages = CollectionsKt
                 .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
                 .toArray(new Locale[0]);

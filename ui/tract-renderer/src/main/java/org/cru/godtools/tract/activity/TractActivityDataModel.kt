@@ -32,7 +32,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tract.activity.KotlinTractActivity.Companion.determineState
 import org.cru.godtools.xml.model.Manifest
-import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
