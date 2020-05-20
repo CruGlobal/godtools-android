@@ -12,15 +12,33 @@ android {
 dependencies {
     api project(':library:model')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-jsonapi-scarlet:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-scarlet-actioncable:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
+    api "com.tinder.scarlet:scarlet:${deps.scarlet}"
+    implementation "com.tinder.scarlet:lifecycle-android:${deps.scarlet}"
+    implementation "com.tinder.scarlet:stream-adapter-coroutines:${deps.scarlet}"
+    implementation "com.tinder.scarlet:websocket-okhttp:${deps.scarlet}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+}
+
+configurations.all {
+    resolutionStrategy {
+        dependencySubstitution {
+            // HACK: use generic moshi instead of moshi-kotlin
+            // TODO: convert this to removing the transitive dependency from scarlet instead
+            substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
+        }
+    }
 }
