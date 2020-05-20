@@ -57,15 +57,13 @@ class TractActivityDataModel @AssistedInject constructor(
         .distinctUntilChanged()
     fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, LocaleCompat.toLanguageTag(locale))
 
-    private val rawActiveManifest = distinctTool.switchCombineWith(activeLocale) { t, l ->
-        manifestCache.get(TranslationKey(t, l))!!.withInitialValue(null)
-    }
-    val activeManifest = rawActiveManifest.map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    private val activeTranslation = distinctTool.switchCombineWith(activeLocale) { t, l ->
-        translationCache.get(TranslationKey(t, l))!!
-    }
-    val activeState = rawActiveManifest.combineWith(activeTranslation, isInitialSyncFinished) { m, t, s ->
-        determineState(m, t, s)
+    val activeManifest =
+        distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
+            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
+    val activeState = distinctTool.switchCombineWith(activeLocale) { t, l ->
+        manifestCache.get(t, l).combineWith(translationCache.get(t, l), isInitialSyncFinished) { m, t, s ->
+            determineState(m, t, s)
+        }
     }
 
     val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
@@ -90,14 +88,14 @@ class TractActivityDataModel @AssistedInject constructor(
     @VisibleForTesting
     internal val manifests =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
-            distinctTool.switchMap { manifestCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
+            distinctTool.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
         }.map { it.toMap() }
     @VisibleForTesting
     internal val translations =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
-            distinctTool.switchMap { translationCache.get(TranslationKey(it, locale))!!.withInitialValue(null) }
+            distinctTool.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
@@ -144,3 +142,5 @@ class TractActivityDataModel @AssistedInject constructor(
             dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
     }
 }
+
+private fun <T> LruCache<TranslationKey, T>.get(tool: String?, locale: Locale?) = get(TranslationKey(tool, locale))!!

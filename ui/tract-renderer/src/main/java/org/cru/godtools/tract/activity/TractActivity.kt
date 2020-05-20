@@ -78,6 +78,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         }
 
         setupDataModel()
+        setupActiveTranslationManagement()
     }
 
     override fun onContentChanged() {
@@ -179,10 +180,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     // region Data Model
     protected val dataModel: TractActivityDataModel by viewModels()
     private fun setupDataModel() {
-        isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
-        dataModel.locales.observe(this) {
-            if (dataModel.activeLocale.value == null) it.firstOrNull()?.let { dataModel.setActiveLocale(it) }
-        }
+        dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
+        dataModel.activeState.observe(this) { updateVisibilityState() }
     }
     // endregion Data Model
 
@@ -287,6 +286,31 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     override val activeManifest get() = dataModel.activeManifest.value
 
     override fun determineActiveToolState() = dataModel.activeState.value ?: STATE_LOADING
+
+    private fun setupActiveTranslationManagement() {
+        isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
+        dataModel.locales.observe(this) {
+            if (dataModel.activeLocale.value == null) it.firstOrNull()?.let { dataModel.setActiveLocale(it) }
+        }
+
+        dataModel.availableLocales.observe(this) {
+            updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
+        }
+        dataModel.activeState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(activeState = it) }
+        dataModel.state.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(state = it) }
+    }
+
+    private fun updateActiveLocaleToAvailableLocaleIfNecessary(
+        activeState: Int? = dataModel.activeState.value,
+        availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
+        state: Map<Locale, Int> = dataModel.state.value.orEmpty()
+    ) {
+        // only process if the active language is not found or invalid
+        if (activeState == STATE_NOT_FOUND || activeState == STATE_INVALID_TYPE) {
+            availableLocales.firstOrNull { state[it] != STATE_NOT_FOUND && state[it] != STATE_INVALID_TYPE }
+                ?.let { dataModel.setActiveLocale(it) }
+        }
+    }
     // endregion Active Translation management
 
     // region Share Link Logic

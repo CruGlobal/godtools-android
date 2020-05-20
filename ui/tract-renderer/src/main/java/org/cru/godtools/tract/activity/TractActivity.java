@@ -2,7 +2,6 @@ package org.cru.godtools.tract.activity;
 
 import android.os.Bundle;
 
-import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
@@ -17,7 +16,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
@@ -127,33 +125,6 @@ public class TractActivity extends KotlinTractActivity
         outState.putInt(EXTRA_INITIAL_PAGE, getInitialPage());
     }
     // endregion Lifecycle
-
-    private int determineLanguageState(final int languageIndex) {
-        final List<Locale> languages = getDataModel().getLocales().getValue();
-        final Map<Locale, Integer> state = getDataModel().getState().getValue();
-        return state != null && languages != null && languages.size() > languageIndex ? state.get(languages.get(languageIndex)) : STATE_LOADING;
-    }
-
-    @Override
-    @CallSuper
-    protected void updateVisibilityState() {
-        updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary();
-        super.updateVisibilityState();
-    }
-
-    private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
-        // only process if the active language is not found or invalid
-        final int activeLanguageState = determineActiveToolState();
-        if (activeLanguageState == STATE_NOT_FOUND || activeLanguageState == STATE_INVALID_TYPE) {
-            Stream.of(mLanguages)
-                    .filterIndexed((i, l) -> {
-                        final int state = determineLanguageState(i);
-                        return state != STATE_NOT_FOUND && state != STATE_INVALID_TYPE;
-                    })
-                    .findFirst()
-                    .ifPresent(getDataModel()::setActiveLocale);
-        }
-    }
 
     private void updateLanguageToggle() {
         // show or hide the title based on how many visible tabs we have
