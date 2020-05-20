@@ -42,7 +42,6 @@ public class TractActivity extends KotlinTractActivity
             trackToolOpen(getDataModel().getTool().getValue());
         }
 
-        startLoaders();
         setBinding(TractActivityBinding.inflate(getLayoutInflater()));
         setContentView(getBinding().getRoot());
     }
@@ -87,7 +86,6 @@ public class TractActivity extends KotlinTractActivity
     protected void onStop() {
         super.onStop();
         eventBus.unregister(this);
-        stopDownloadProgressListener();
     }
 
     @Override
@@ -109,12 +107,4 @@ public class TractActivity extends KotlinTractActivity
         }
     }
     // endregion Tool Pager Methods
-
-    private void startLoaders() {
-        getDataModel().getState().observe(this, state -> {
-            updateVisibilityState();
-        });
-        getDataModel().getActiveManifest().observe(this, manifest -> onUpdateActiveManifest());
-        getDataModel().getActiveState().observe(this, i -> updateVisibilityState());
-    }
 }
