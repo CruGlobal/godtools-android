@@ -23,7 +23,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import kotlin.collections.CollectionsKt;
 
 public class TractActivity extends KotlinTractActivity
@@ -33,9 +32,6 @@ public class TractActivity extends KotlinTractActivity
 
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
-
-    @VisibleForTesting
-    int mActiveLanguage = 0;
 
     // region Lifecycle
     @Override
@@ -53,7 +49,7 @@ public class TractActivity extends KotlinTractActivity
         if (savedInstanceState != null) {
             final Locale activeLanguage = BundleUtils.getLocale(savedInstanceState, EXTRA_ACTIVE_LANGUAGE, null);
             if (activeLanguage != null) {
-                updateActiveLanguage(activeLanguage);
+                getDataModel().setActiveLocale(activeLanguage);
             }
             setInitialPage(savedInstanceState.getInt(EXTRA_INITIAL_PAGE, getInitialPage()));
         }
@@ -63,7 +59,6 @@ public class TractActivity extends KotlinTractActivity
             trackToolOpen(getDataModel().getTool().getValue());
         }
 
-        getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
         startLoaders();
         setBinding(TractActivityBinding.inflate(getLayoutInflater()));
         setContentView(getBinding().getRoot());
@@ -99,7 +94,7 @@ public class TractActivity extends KotlinTractActivity
     public void onTabSelected(final TabLayout.Tab tab) {
         final Locale locale = (Locale) tab.getTag();
         if (locale != null) {
-            updateActiveLanguage(locale);
+            getDataModel().setActiveLocale(locale);
             eventBus.post(new ToggleLanguageAnalyticsActionEvent(getDataModel().getTool().getValue(), locale));
         }
     }
@@ -146,16 +141,6 @@ public class TractActivity extends KotlinTractActivity
         super.updateVisibilityState();
     }
 
-    private void updateActiveLanguage(@NonNull final Locale locale) {
-        for (int i = 0; i < mLanguages.length; i++) {
-            if (mLanguages[i].equals(locale)) {
-                mActiveLanguage = i;
-                break;
-            }
-        }
-        getDataModel().setActiveLocale(locale);
-    }
-
     private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
         // only process if the active language is not found or invalid
         final int activeLanguageState = determineActiveToolState();
@@ -166,7 +151,7 @@ public class TractActivity extends KotlinTractActivity
                         return state != STATE_NOT_FOUND && state != STATE_INVALID_TYPE;
                     })
                     .findFirst()
-                    .ifPresent(this::updateActiveLanguage);
+                    .ifPresent(getDataModel()::setActiveLocale);
         }
     }
 

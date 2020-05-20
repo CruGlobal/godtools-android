@@ -180,6 +180,9 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     protected val dataModel: TractActivityDataModel by viewModels()
     private fun setupDataModel() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
+        dataModel.locales.observe(this) {
+            if (dataModel.activeLocale.value == null) it.firstOrNull()?.let { dataModel.setActiveLocale(it) }
+        }
     }
     // endregion Data Model
 

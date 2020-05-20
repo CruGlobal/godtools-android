@@ -55,8 +55,7 @@ class TractActivityDataModel @AssistedInject constructor(
     val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
         .map { it?.let { LocaleCompat.forLanguageTag(it) } }
         .distinctUntilChanged()
-    fun setActiveLocale(locale: Locale?) =
-        savedState.set(STATE_ACTIVE_LOCALE, locale?.let { LocaleCompat.toLanguageTag(locale) })
+    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, LocaleCompat.toLanguageTag(locale))
 
     private val rawActiveManifest = distinctTool.switchCombineWith(activeLocale) { t, l ->
         manifestCache.get(TranslationKey(t, l))!!.withInitialValue(null)
