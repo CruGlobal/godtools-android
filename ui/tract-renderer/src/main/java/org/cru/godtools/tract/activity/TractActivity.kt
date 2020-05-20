@@ -205,7 +205,8 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
             add(LocaleCompat.forLanguageTag(pathSegments[0]))
         }.toTypedArray())
 
-        val parallel = LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+        val parallel =
+            LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
         return Pair(primary.toList(), parallel.toList())
     }
 
@@ -213,7 +214,6 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { LocaleCompat.forLanguageTag(it) }
-        .toList()
 
     @VisibleForTesting
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
