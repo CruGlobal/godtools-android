@@ -41,6 +41,9 @@ public class TractActivity extends KotlinTractActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isFinishing()) {
+            return;
+        }
 
         mLanguages = CollectionsKt
                 .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
@@ -60,7 +63,7 @@ public class TractActivity extends KotlinTractActivity
             trackToolOpen(getDataModel().getTool().getValue());
         }
 
-        setupDataModel();
+        getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
         startLoaders();
         setBinding(TractActivityBinding.inflate(getLayoutInflater()));
         setContentView(getBinding().getRoot());
@@ -129,15 +132,6 @@ public class TractActivity extends KotlinTractActivity
         outState.putInt(EXTRA_INITIAL_PAGE, getInitialPage());
     }
     // endregion Lifecycle
-
-    // region Data Model
-    private void setupDataModel() {
-        getDataModel().setActiveLocale(mLanguages[mActiveLanguage]);
-        isInitialSyncFinished().observe(this, finished -> {
-            if (finished) { getDataModel().isInitialSyncFinished().setValue(true); }
-        });
-    }
-    // endregion Data Model
 
     private int determineLanguageState(final int languageIndex) {
         final List<Locale> languages = getDataModel().getLocales().getValue();

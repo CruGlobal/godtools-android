@@ -66,8 +66,6 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     @Inject
     internal lateinit var followupService: FollowupService
 
-    protected val dataModel: TractActivityDataModel by viewModels()
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +76,8 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
             finish()
             return
         }
+
+        setupDataModel()
     }
 
     override fun onContentChanged() {
@@ -175,6 +175,13 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
 
     private fun validStartState() = dataModel.tool.value != null &&
         (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
+
+    // region Data Model
+    protected val dataModel: TractActivityDataModel by viewModels()
+    private fun setupDataModel() {
+        isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
+    }
+    // endregion Data Model
 
     // region UI
     protected lateinit var binding: TractActivityBinding
