@@ -1,14 +1,11 @@
 package org.cru.godtools.tract.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
-import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
@@ -18,8 +15,6 @@ import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,14 +24,10 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
-
-import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public class TractActivity extends KotlinTractActivity
         implements TabLayout.OnTabSelectedListener, GodToolsDownloadManager.OnDownloadProgressUpdateListener {
-    static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
     private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
 
@@ -51,8 +42,9 @@ public class TractActivity extends KotlinTractActivity
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // read requested tract from the provided intent
-        processIntent(getIntent(), savedInstanceState);
+        mLanguages = CollectionsKt
+                .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
+                .toArray(new Locale[0]);
 
         // finish now if this activity is in an invalid state
         if (!validStartState()) {
@@ -154,40 +146,6 @@ public class TractActivity extends KotlinTractActivity
     // endregion Data Model
 
     // region Creation Methods
-    private void processIntent(@Nullable final Intent intent, @Nullable final Bundle savedInstanceState) {
-        final String action = intent != null ? intent.getAction() : null;
-        final Uri data = intent != null ? intent.getData() : null;
-        final Bundle extras = intent != null ? intent.getExtras() : null;
-        if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
-            getDataModel().getTool().setValue(extractToolFromDeepLink(data));
-            final Pair<List<Locale>, List<Locale>> languages = extractLanguagesFromDeepLink(data);
-            getDataModel().getPrimaryLocales().setValue(languages.getFirst());
-            getDataModel().getParallelLocales().setValue(languages.getSecond());
-            final Integer page = extractPageFromDeepLink(data);
-            if (savedInstanceState == null && page != null) {
-                setInitialPage(page);
-            }
-
-            // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
-            if (savedInstanceState == null) {
-                eventBus.post(new AnalyticsDeepLinkEvent(data));
-            }
-        } else if (extras != null) {
-            getDataModel().getTool().setValue(extras.getString(EXTRA_TOOL, getDataModel().getTool().getValue()));
-            final Locale[] raw = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
-            final List<Locale> languages = raw != null ? Arrays.asList(raw) : Collections.emptyList();
-            getDataModel().getPrimaryLocales()
-                    .setValue(languages.size() > 0 ? languages.subList(0, 1) : Collections.emptyList());
-            getDataModel().getParallelLocales()
-                    .setValue(languages.size() > 1 ? languages.subList(1, languages.size()) : Collections.emptyList());
-        } else {
-            getDataModel().getTool().setValue(null);
-        }
-        mLanguages = CollectionsKt
-                .plus(getDataModel().getPrimaryLocales().getValue(), getDataModel().getParallelLocales().getValue())
-                .toArray(new Locale[0]);
-    }
-
     private boolean validStartState() {
         return getDataModel().getTool().getValue() != null && mLanguages.length > 0;
     }

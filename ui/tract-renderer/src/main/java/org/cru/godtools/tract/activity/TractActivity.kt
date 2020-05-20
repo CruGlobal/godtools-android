@@ -13,7 +13,6 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.tabs.TabLayout
@@ -22,6 +21,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
@@ -42,9 +42,10 @@ import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
-import org.jetbrains.annotations.Contract
 import java.util.Locale
 import javax.inject.Inject
+
+private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?) =
     startActivity(createTractActivityIntent(toolCode, *languages))
@@ -56,7 +57,7 @@ fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale
 private fun Bundle.populateTractActivityExtras(toolCode: String, vararg languages: Locale?) = apply {
     putString(EXTRA_TOOL, toolCode)
     // XXX: we use singleString mode to support using this intent for legacy shortcuts
-    putLocaleArray(TractActivity.EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
+    putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
 abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener,
@@ -68,6 +69,11 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     protected val dataModel: TractActivityDataModel by viewModels()
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        processIntent(intent, savedInstanceState)
+    }
+
     override fun onContentChanged() {
         super.onContentChanged()
         setupBinding()
@@ -109,19 +115,38 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
     // endregion Lifecycle
 
     // region Intent Processing
-    @Contract("null -> false")
-    @VisibleForTesting(otherwise = PROTECTED)
+    private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+        val data = intent?.data
+        val extras = intent?.extras
+        if (intent?.action == Intent.ACTION_VIEW && data != null && isDeepLinkValid(data)) {
+            dataModel.tool.value = data.extractToolFromDeepLink()
+            val (primary, parallel) = data.extractLanguagesFromDeepLink()
+            dataModel.primaryLocales.value = primary
+            dataModel.parallelLocales.value = parallel
+            if (savedInstanceState == null) data.extractPageFromDeepLink()?.let { initialPage = it }
+        } else if (extras != null) {
+            dataModel.tool.value = extras.getString(EXTRA_TOOL, dataModel.tool.value)
+            val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
+            dataModel.primaryLocales.value = if (languages.isNotEmpty()) languages.subList(0, 1) else emptyList()
+            dataModel.parallelLocales.value =
+                if (languages.size > 1) languages.subList(1, languages.size) else emptyList()
+        } else {
+            dataModel.tool.value = null
+        }
+    }
+
+    @VisibleForTesting
     fun isDeepLinkValid(data: Uri?) = data != null &&
         ("http".equals(data.scheme, true) || "https".equals(data.scheme, true)) &&
         (getString(R.string.tract_deeplink_host_1).equals(data.host, true) ||
             getString(R.string.tract_deeplink_host_2).equals(data.host, true)) &&
         data.pathSegments.size >= 2
 
-    @VisibleForTesting(otherwise = PROTECTED)
+    @VisibleForTesting
     fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
 
     @OptIn(ExperimentalStdlibApi::class)
-    protected fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
+    private fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
         val primary = LocaleUtils.getFallbacks(*buildList<Locale> {
             if (!getQueryParameter(PARAM_USE_DEVICE_LANGUAGE).isNullOrEmpty()) add(Locale.getDefault())
             addAll(extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE))
@@ -138,7 +163,7 @@ abstract class KotlinTractActivity : BaseToolActivity(true), TabLayout.OnTabSele
         .map { LocaleCompat.forLanguageTag(it) }
         .toList()
 
-    @VisibleForTesting(otherwise = PROTECTED)
+    @VisibleForTesting
     fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
 
