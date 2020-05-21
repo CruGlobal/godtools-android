@@ -16,7 +16,7 @@ buildscript {
                 facebook           : '6.3.0',
                 facebookFlipper    : '0.37.0',
                 findbugs           : '3.0.2',
-                gtoSupport         : '3.5.0-SNAPSHOT',
+                gtoSupport         : '3.5.0',
                 guava              : '28.2-android',
                 hamcrest           : '2.2',
                 jacoco             : '0.8.5',
@@ -66,7 +66,7 @@ buildscript {
         deps.firebase = [
                 core          : '17.3.0',
                 crashlytics   : '17.0.0-beta04',
-                inAppMessaging: '19.0.5',
+                inAppMessaging: '19.0.6',
                 perf          : '19.0.6',
         ]
         uris = [
