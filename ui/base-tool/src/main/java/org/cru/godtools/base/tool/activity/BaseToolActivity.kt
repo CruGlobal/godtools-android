@@ -164,7 +164,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     protected open val shareLinkTitle get() = activeManifest?.title
     protected open val shareLinkUri: String? get() = null
 
-    private fun shareCurrentTool() {
+    fun shareCurrentTool() {
         // short-circuit if we don't have a share tool url
         val shareUrl = shareLinkUri ?: return
 

@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -13,16 +14,22 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.delay
+import org.ccci.gto.android.common.androidx.fragment.app.BaseDialogFragment
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.findListener
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
@@ -31,6 +38,7 @@ import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
@@ -135,6 +143,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         }
         item.itemId == R.id.action_live_share_publish -> {
             publisherController.stateMachine.transition(LiveShareEvent.Start)
+            shareLiveShareLink()
             true
         }
         // handle close button if this is an instant app
@@ -391,6 +400,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
                 .appendPath(it.code)
                 .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
+                .apply {
+                    publisherController.publisherInfo.value?.subscriberChannelId
+                        ?.let { appendQueryParameter(PARAM_LIVE_SHARE_STREAM, it) }
+                }
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString()
         }
@@ -399,10 +412,40 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
 
+    fun shareLiveShareLink() {
+        if (publisherController.publisherInfo.value == null) {
+            LiveShareDialogFragment().show(supportFragmentManager, null)
+        } else {
+            shareCurrentTool()
+        }
+    }
+
     private fun sendLiveShareNavigationEvent(page: Page, card: Card?) {
         publisherController.sendNavigationEvent(
             NavigationEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
         )
     }
     // endregion Live Share Logic
+}
+
+class LiveShareDialogFragment : BaseDialogFragment() {
+    private val publisherController: TractPublisherController by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        liveData {
+            delay(2_000)
+            emitSource(publisherController.publisherInfo)
+        }.observe(this) {
+            findListener<TractActivity>()?.shareLiveShareLink()
+            dismissAllowingStateLoss()
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Starting Screen Sharing...")
+            .setView(R.layout.tract_live_share_dialog)
+            .create()
+    }
 }
