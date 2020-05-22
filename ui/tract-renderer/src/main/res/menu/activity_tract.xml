@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_live_share_publish"
+        android:title="@string/menu_live_share_publish"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_install"
         android:icon="@drawable/ic_get_app"
         android:orderInCategory="300"

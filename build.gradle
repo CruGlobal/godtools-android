@@ -41,6 +41,7 @@ buildscript {
                 taptargetview      : '1.13.0',
                 thekey             : '4.0.0-SNAPSHOT',
                 timber             : '4.7.1',
+                tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
         ]
@@ -151,6 +152,9 @@ subprojects {
                 // use the new condensed version of hamcrest
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
                 substitute module('org.hamcrest:hamcrest-library') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
+
+                // use regular moshi library instead of moshi-kotlin, any Kotlin moshi models should use moshi-kotlin-codegen instead
+                substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
 
                 // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
                 substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6')

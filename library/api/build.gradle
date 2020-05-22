@@ -32,13 +32,3 @@ dependencies {
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }
-
-configurations.all {
-    resolutionStrategy {
-        dependencySubstitution {
-            // HACK: use generic moshi instead of moshi-kotlin
-            // TODO: convert this to removing the transitive dependency from scarlet instead
-            substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
-        }
-    }
-}

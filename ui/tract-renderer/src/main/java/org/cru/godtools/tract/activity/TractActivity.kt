@@ -25,6 +25,7 @@ import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
+import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
@@ -38,6 +39,7 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
+import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.xml.model.Card
@@ -48,6 +50,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import javax.inject.Inject
+import org.cru.godtools.tract.liveshare.Event as LiveShareEvent
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
@@ -130,6 +133,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
             InstantApps.showInstallPrompt(this, -1, "instantapp")
             true
         }
+        item.itemId == R.id.action_live_share_publish -> {
+            publisherController.stateMachine.transition(LiveShareEvent.Start)
+            true
+        }
         // handle close button if this is an instant app
         item.itemId == android.R.id.home && InstantApps.isInstantApp(this) -> {
             finish()
@@ -152,6 +159,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     override fun onUpdateActiveCard(page: Page, card: Card?) {
         trackTractPage(page, card)
+        sendLiveShareNavigationEvent(page, card)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -387,4 +395,14 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 .build().toString()
         }
     // endregion Share Link Logic
+
+    // region Live Share Logic
+    private val publisherController: TractPublisherController by viewModels()
+
+    private fun sendLiveShareNavigationEvent(page: Page, card: Card?) {
+        publisherController.sendNavigationEvent(
+            NavigationEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
+        )
+    }
+    // endregion Live Share Logic
 }
