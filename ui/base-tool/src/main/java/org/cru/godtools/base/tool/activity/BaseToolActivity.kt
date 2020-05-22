@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -207,19 +206,16 @@ abstract class BaseToolActivity @JvmOverloads constructor(
     // region Tool sync/download logic
     @Inject
     internal lateinit var toolSyncTasks: ToolSyncTasks
-    private val syncsRunning = MutableLiveData<Int>()
-    protected val isSyncRunning get() = syncsRunning.map { it > 0 }
-    protected val isSyncToolsDone get() = syncsRunning.value == 0
+    protected val isInitialSyncFinished = MutableLiveData<Boolean>()
 
     private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {
         cacheTools()
-        syncsRunning.value = (syncsRunning.value ?: 0) + 1
         try {
             toolSyncTasks.syncTools(Bundle.EMPTY)
+            isInitialSyncFinished.value = true
         } catch (ignored: IOException) {
         }
         cacheTools()
-        syncsRunning.value = ((syncsRunning.value ?: 0) - 1).coerceAtLeast(0)
     }
 
     protected abstract fun cacheTools()

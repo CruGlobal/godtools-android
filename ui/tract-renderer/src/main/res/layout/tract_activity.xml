@@ -1,36 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:keepScreenOn="true"
-    tools:theme="@style/Theme.GodTools.Tract.Activity.Tract">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/activity_tool_missing" />
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.List" />
+        <import type="java.util.Locale" />
 
-    <include layout="@layout/activity_tool_loading" />
+        <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
+    </data>
 
-    <include layout="@layout/tract_activity_content" />
-
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:elevation="0dp">
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        tools:theme="@style/Theme.GodTools.Tract.Activity.Tract">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/appbar"
+        <include layout="@layout/activity_tool_missing" />
+
+        <include layout="@layout/activity_tool_loading" />
+
+        <include
+            android:id="@+id/mainContent"
+            layout="@layout/tract_activity_content" />
+
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             app:elevation="0dp">
 
-            <androidx.appcompat.widget.AppCompatTabLayout
-                android:id="@+id/language_toggle"
-                style="@style/Widget.GodTools.TabLayout.AppBar"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/appbar_tabs_height"
-                app:tabBackground="@drawable/bkg_tab_label_tintable" />
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:elevation="0dp">
+
+                <androidx.appcompat.widget.AppCompatTabLayout
+                    android:id="@+id/language_toggle"
+                    style="@style/Widget.GodTools.TabLayout.AppBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/appbar_tabs_height"
+                    app:visibleIf="@{visibleLocales.size > 1 || (visibleLocales.size() == 1 &amp;&amp; !visibleLocales.contains(activeLocale))}"
+                    app:tabBackground="@drawable/bkg_tab_label_tintable" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

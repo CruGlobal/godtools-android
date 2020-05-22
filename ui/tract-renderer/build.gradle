@@ -5,6 +5,9 @@ android {
         dataBinding {
             enabled = true
         }
+        viewBinding {
+            enabled = true
+        }
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
@@ -32,6 +35,7 @@ dependencies {
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
@@ -50,8 +54,13 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
+    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
+
+    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

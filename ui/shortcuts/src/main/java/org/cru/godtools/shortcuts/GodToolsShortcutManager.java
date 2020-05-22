@@ -34,7 +34,7 @@ import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
-import org.cru.godtools.tract.activity.TractActivity;
+import org.cru.godtools.tract.activity.TractActivityKt;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -382,7 +382,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         final Intent intent;
         switch (tool.getType()) {
             case TRACT:
-                intent = TractActivity.createIntent(mContext, code, locales.toArray(new Locale[0]));
+                intent = TractActivityKt.createTractActivityIntent(mContext, code, locales.toArray(new Locale[0]));
                 break;
             case ARTICLE:
                 intent = CategoriesActivityKt.createCategoriesIntent(mContext, code, locales.get(0));
