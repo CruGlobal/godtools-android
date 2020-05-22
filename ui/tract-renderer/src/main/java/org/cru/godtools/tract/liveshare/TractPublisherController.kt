@@ -81,14 +81,15 @@ class TractPublisherController @AssistedInject constructor(
                 service.publisherInfo().consumeEach {
                     publisherInfo.value = it.data
                     stateMachine.transition(Event.Started)
+                    lastEvent?.let { sendNavigationEvent(it) }
                 }
             }
         }
     }
 
-    // private var lastEvent: NavigationEvent? = null
+    private var lastEvent: NavigationEvent? = null
     fun sendNavigationEvent(event: NavigationEvent) {
         if (stateMachine.state == State.On) service.sendEvent(Message(identifier, event))
-        // lastEvent = event
+        lastEvent = event
     }
 }
