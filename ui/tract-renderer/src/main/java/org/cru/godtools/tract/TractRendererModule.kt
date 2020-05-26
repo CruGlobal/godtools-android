@@ -16,6 +16,7 @@ import org.cru.godtools.tract.activity.ModalActivityDataModel
 import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.activity.TractActivityDataModel
 import org.cru.godtools.tract.liveshare.TractPublisherController
+import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @AssistedModule
@@ -38,6 +39,11 @@ abstract class TractRendererModule {
     @ViewModelKey(TractPublisherController::class)
     abstract fun tractPublisherController(f: TractPublisherController.Factory):
         AssistedSavedStateViewModelFactory<out ViewModel>
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TractSubscriberController::class)
+    abstract fun tractSubscriberController(controller: TractSubscriberController): ViewModel
 
     @Binds
     @IntoMap
