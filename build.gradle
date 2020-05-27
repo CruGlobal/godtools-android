@@ -11,7 +11,7 @@ buildscript {
                 autoService        : '1.0-rc7',
                 butterknife        : '10.2.1',
                 circleindicator    : '2.1.4',
-                dagger             : '2.27',
+                dagger             : '2.28',
                 eventbus           : '3.2.0',
                 facebook           : '7.0.0',
                 facebookFlipper    : '0.44.0',
