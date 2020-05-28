@@ -18,6 +18,9 @@ android {
 
         vectorDrawables.useSupportLibrary = true
     }
+    buildFeatures {
+        dataBinding = true
+    }
 
     lintOptions {
         checkDependencies true
@@ -28,9 +31,6 @@ android {
         exclude '**/*.kotlin_*'
     }
 
-    dataBinding {
-        enabled = true
-    }
     kapt {
         javacOptions {
             option("-Adagger.fastInit=enabled")
