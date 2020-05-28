@@ -81,16 +81,20 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.google.firebase:perf-plugin:1.3.1'
         classpath 'com.google.firebase:firebase-appdistribution-gradle:1.4.1'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.1.1'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
+
+        // HACK: use master-SNAPSHOT version to work around a gradle 6 incompatibility with v0.1.4 of the jacoco-android plugin
+//        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
+        classpath 'com.github.arturdm:jacoco-android-gradle-plugin:master-SNAPSHOT'
     }
 }
 
