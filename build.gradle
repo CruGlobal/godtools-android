@@ -142,6 +142,9 @@ subprojects {
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
             force "junit:junit:${deps.junit}"
 
+            // force the correct version of transitive coroutine libraries
+            force "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${deps.kotlinCoroutines}"
+
             // XXX: Force okhttp3 to older version to support older versions of Android.
             // XXX: This can go away once we bump minimum android version to API-21+
             force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
