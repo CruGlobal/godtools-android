@@ -1,5 +1,3 @@
-apply plugin: 'com.jakewharton.butterknife'
-
 android {
     defaultConfig {
         javaCompileOptions {
