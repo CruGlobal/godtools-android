@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
 import org.ccci.gto.android.common.jsonapi.scarlet.JsonApiMessageAdapterFactory
+import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
 import org.ccci.gto.android.common.util.DynamicSSLSocketFactory
@@ -129,12 +130,17 @@ object ApiModule {
     fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
 
     @Provides
+    @Singleton
+    fun scarletReferenceLifecycle() = ReferenceLifecycle()
+
+    @Provides
     @Reusable
     fun actionCableScarlet(
         @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
         app: Application,
         jsonApi: JsonApiConverter,
-        okhttp: OkHttpClient
+        okhttp: OkHttpClient,
+        referenceLifecycle: ReferenceLifecycle
     ) = Scarlet.Builder()
         .webSocketFactory(okhttp.newWebSocketFactory(ActionCableRequestFactory("${baseUrl}cable")))
         .addMessageAdapterFactory(
@@ -143,7 +149,7 @@ object ApiModule {
                 .build()
         )
         .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
-        .lifecycle(AndroidLifecycle.ofApplicationForeground(app))
+        .lifecycle(AndroidLifecycle.ofApplicationForeground(app).combineWith(referenceLifecycle))
         .build()
 
     @Provides

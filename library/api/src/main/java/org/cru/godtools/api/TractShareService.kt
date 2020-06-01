@@ -9,6 +9,7 @@ import org.ccci.gto.android.common.scarlet.actioncable.ActionCableChannel
 import org.ccci.gto.android.common.scarlet.actioncable.model.ConfirmSubscription
 import org.ccci.gto.android.common.scarlet.actioncable.model.Message
 import org.ccci.gto.android.common.scarlet.actioncable.model.Subscribe
+import org.ccci.gto.android.common.scarlet.actioncable.model.Unsubscribe
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.api.model.PublisherInfo
 
@@ -22,6 +23,8 @@ interface TractShareService {
 
     @Send
     fun subscribe(subscribe: Subscribe)
+    @Send
+    fun unsubscribe(unsubscribe: Unsubscribe)
 
     @Receive
     fun webSocketEvents(): ReceiveChannel<WebSocket.Event>

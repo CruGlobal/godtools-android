@@ -19,6 +19,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-jsonapi-scarlet:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-scarlet:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-scarlet-actioncable:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 

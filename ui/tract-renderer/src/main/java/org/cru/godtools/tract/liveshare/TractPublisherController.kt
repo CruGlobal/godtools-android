@@ -14,9 +14,11 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
+import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.model.Identifier
 import org.ccci.gto.android.common.scarlet.actioncable.model.Message
 import org.ccci.gto.android.common.scarlet.actioncable.model.Subscribe
+import org.ccci.gto.android.common.scarlet.actioncable.model.Unsubscribe
 import org.cru.godtools.api.TractShareService
 import org.cru.godtools.api.TractShareService.Companion.PARAM_CHANNEL_ID
 import org.cru.godtools.api.model.NavigationEvent
@@ -29,6 +31,7 @@ private const val TAG = "TractPublisherContrller"
 @OptIn(ExperimentalCoroutinesApi::class)
 class TractPublisherController @AssistedInject constructor(
     private val service: TractShareService,
+    private val referenceLifecycle: ReferenceLifecycle,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
@@ -54,16 +57,21 @@ class TractPublisherController @AssistedInject constructor(
         state<State.On> {
             var jobs: Job? = null
             onEnter {
+                referenceLifecycle.acquire(this@TractPublisherController)
                 jobs = viewModelScope.launch {
                     val socketEventsChannel = service.webSocketEvents()
                     val subscriptionChannel = service.subscriptionConfirmation()
                     val publisherInfoChannel = service.publisherInfo()
 
                     launch {
-                        service.subscribe(Subscribe(identifier))
-                        subscriptionChannel
-                            .filter { it.identifier == identifier }
-                            .consumeEach { lastEvent?.let { sendNavigationEvent(it) } }
+                        try {
+                            service.subscribe(Subscribe(identifier))
+                            subscriptionChannel
+                                .filter { it.identifier == identifier }
+                                .consumeEach { lastEvent?.let { sendNavigationEvent(it) } }
+                        } finally {
+                            service.unsubscribe(Unsubscribe(identifier))
+                        }
                     }
 
                     launch {
@@ -78,8 +86,6 @@ class TractPublisherController @AssistedInject constructor(
                                 is WebSocket.Event.OnConnectionOpened<*> -> service.subscribe(Subscribe(identifier))
                                 is WebSocket.Event.OnConnectionFailed -> Timber.tag(TAG).d(it.throwable)
                             }
-
-                            Timber.tag(TAG).d(it.toString())
                         }
                     }
                 }
@@ -90,6 +96,7 @@ class TractPublisherController @AssistedInject constructor(
             onExit {
                 jobs?.cancel()
                 jobs = null
+                referenceLifecycle.release(this@TractPublisherController)
             }
         }
     }
