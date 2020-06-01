@@ -147,6 +147,7 @@ object ApiModule {
         .build()
 
     @Provides
+    @Singleton
     fun tractShareService(scarlet: Scarlet): TractShareService = scarlet.create()
     // endregion mobile-content-api APIs
 

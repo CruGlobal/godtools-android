@@ -145,7 +145,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
             true
         }
         item.itemId == R.id.action_live_share_publish -> {
-            publisherController.stateMachine.transition(LiveShareEvent.Start)
+            publisherController.started = true
             shareLiveShareLink()
             true
         }
@@ -454,7 +454,7 @@ class LiveShareDialogFragment : BaseDialogFragment() {
         liveData {
             delay(2_000)
             emitSource(publisherController.publisherInfo)
-        }.observe(this) {
+        }.notNull().observe(this) {
             findListener<TractActivity>()?.shareLiveShareLink()
             dismissAllowingStateLoss()
         }

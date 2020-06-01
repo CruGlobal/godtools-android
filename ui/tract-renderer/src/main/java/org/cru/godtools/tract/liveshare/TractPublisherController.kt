@@ -7,10 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.tinder.StateMachine
-import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.scarlet.actioncable.model.Identifier
@@ -27,7 +28,7 @@ private const val TAG = "TractPublisherContrller"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TractPublisherController @AssistedInject constructor(
-    private val scarlet: Scarlet,
+    private val service: TractShareService,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
@@ -40,56 +41,73 @@ class TractPublisherController @AssistedInject constructor(
         Identifier(TractShareService.CHANNEL_PUBLISHER, mapOf(PARAM_CHANNEL_ID to channelId))
     }
 
-    internal val stateMachine = StateMachine.create<State, Event, SideEffect> {
-        initialState(State.Initial)
-        state<State.Initial> { on<Event.Start> { transitionTo(State.Starting, SideEffect.OpenSocket) } }
-        state<State.Starting> { on<Event.Started> { transitionTo(State.On) } }
-        state<State.On> { on<Event.Stop> { transitionTo(State.Off) } }
-        state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
-
-        onTransition {
-            if (it is StateMachine.Transition.Valid) {
-                when (it.sideEffect) {
-                    SideEffect.OpenSocket -> openSocket()
-                }
-                state.value = it.toState
-            }
+    var started: Boolean
+        get() = savedStateHandle["started"] ?: false
+        set(value) {
+            savedStateHandle["started"] = value
+            if (value) stateMachine.transition(Event.Start) else stateMachine.transition(Event.Stop)
         }
-    }
-    internal val state = MutableLiveData<State>(State.Initial)
 
-    private lateinit var service: TractShareService
-    val publisherInfo = MutableLiveData<PublisherInfo>()
+    private val stateMachine = StateMachine.create<State, Event, SideEffect> {
+        initialState(State.Off)
+        state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
+        state<State.On> {
+            var jobs: Job? = null
+            onEnter {
+                jobs = viewModelScope.launch {
+                    val socketEventsChannel = service.webSocketEvents()
+                    val subscriptionChannel = service.subscriptionConfirmation()
+                    val publisherInfoChannel = service.publisherInfo()
 
-    private fun openSocket() {
-        viewModelScope.launch {
-            service = scarlet.create()
+                    launch {
+                        service.subscribe(Subscribe(identifier))
+                        subscriptionChannel
+                            .filter { it.identifier == identifier }
+                            .consumeEach { lastEvent?.let { sendNavigationEvent(it) } }
+                    }
 
-            launch {
-                service.webSocketEvents().consumeEach {
-                    when (it) {
-                        is WebSocket.Event.OnConnectionOpened<*> -> {
-                            service.subscribeToChannel(Subscribe(identifier))
-                        }
-                        is WebSocket.Event.OnConnectionFailed -> {
-                            Timber.tag(TAG).d(it.throwable)
+                    launch {
+                        publisherInfoChannel
+                            .filter { it.identifier == identifier }
+                            .consumeEach { publisherInfo.value = it.data }
+                    }
+
+                    launch {
+                        socketEventsChannel.consumeEach {
+                            when (it) {
+                                is WebSocket.Event.OnConnectionOpened<*> -> service.subscribe(Subscribe(identifier))
+                                is WebSocket.Event.OnConnectionFailed -> Timber.tag(TAG).d(it.throwable)
+                            }
+
+                            Timber.tag(TAG).d(it.toString())
                         }
                     }
                 }
             }
-            launch {
-                service.publisherInfo().consumeEach {
-                    publisherInfo.value = it.data
-                    stateMachine.transition(Event.Started)
-                    lastEvent?.let { sendNavigationEvent(it) }
-                }
+
+            on<Event.Stop> { transitionTo(State.Off) }
+
+            onExit {
+                jobs?.cancel()
+                jobs = null
             }
         }
     }
+
+    init {
+        if (started) stateMachine.transition(Event.Start)
+    }
+
+    val publisherInfo = MutableLiveData<PublisherInfo>()
 
     private var lastEvent: NavigationEvent? = null
     fun sendNavigationEvent(event: NavigationEvent) {
         if (stateMachine.state == State.On) service.sendEvent(Message(identifier, event))
         lastEvent = event
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stateMachine.transition(Event.Stop)
     }
 }

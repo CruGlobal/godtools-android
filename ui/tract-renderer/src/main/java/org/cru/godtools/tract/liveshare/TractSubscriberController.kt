@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
-import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.consumeEach
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 private const val TAG = "TractSubscribrControllr"
 
-class TractSubscriberController @Inject internal constructor(private val scarlet: Scarlet) : ViewModel() {
+class TractSubscriberController @Inject internal constructor(private val service: TractShareService) : ViewModel() {
     var channelId: String? = null
         set(value) {
             if (field == value) return
@@ -43,15 +42,13 @@ class TractSubscriberController @Inject internal constructor(private val scarlet
         }
     }
 
-    private lateinit var service: TractShareService
     private fun connectToWebSocket() {
-        service = scarlet.create()
         viewModelScope.launch {
             launch {
                 service.webSocketEvents().consumeEach {
                     when (it) {
                         is WebSocket.Event.OnConnectionOpened<*> -> {
-                            service.subscribeToChannel(Subscribe(identifier))
+                            service.subscribe(Subscribe(identifier))
                         }
                         is WebSocket.Event.OnConnectionFailed -> {
                             Timber.tag(TAG).d(it.throwable)
