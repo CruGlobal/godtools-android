@@ -60,7 +60,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import javax.inject.Inject
-import org.cru.godtools.tract.liveshare.Event as LiveShareEvent
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
@@ -404,8 +403,14 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 .appendPath(it.code)
                 .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
                 .apply {
-                    publisherController.publisherInfo.value?.subscriberChannelId
-                        ?.let { appendQueryParameter(PARAM_LIVE_SHARE_STREAM, it) }
+                    val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return@apply
+                    appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
+                    dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
+                        ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                        ?.let { appendQueryParameter(PARAM_PRIMARY_LANGUAGE, it) }
+                    dataModel.parallelLocales.value?.takeUnless { it.isEmpty() }
+                        ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                        ?.let { appendQueryParameter(PARAM_PARALLEL_LANGUAGE, it) }
                 }
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString()
@@ -440,6 +445,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
         if (event == null) return
+        event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
+            dataModel.tool.value?.let { tool -> downloadManager.cacheTranslation(tool, it) }
+            dataModel.setActiveLocale(it)
+        }
         event.page?.let { goToPage(it) }
         eventBus.post(event)
     }
