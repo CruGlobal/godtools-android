@@ -2,12 +2,6 @@ apply plugin: 'com.jakewharton.butterknife'
 
 android {
     defaultConfig {
-        dataBinding {
-            enabled = true
-        }
-        viewBinding {
-            enabled = true
-        }
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
@@ -15,6 +9,10 @@ android {
                 arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
             }
         }
+    }
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
     }
 }
 
