@@ -6,10 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.model.Identifier
 import org.ccci.gto.android.common.scarlet.actioncable.model.Subscribe
+import org.ccci.gto.android.common.scarlet.actioncable.model.Unsubscribe
 import org.cru.godtools.api.TractShareService
 import org.cru.godtools.api.TractShareService.Companion.CHANNEL_SUBSCRIBER
 import org.cru.godtools.api.TractShareService.Companion.PARAM_CHANNEL_ID
@@ -19,7 +23,10 @@ import javax.inject.Inject
 
 private const val TAG = "TractSubscribrControllr"
 
-class TractSubscriberController @Inject internal constructor(private val service: TractShareService) : ViewModel() {
+class TractSubscriberController @Inject internal constructor(
+    private val service: TractShareService,
+    private val referenceLifecycle: ReferenceLifecycle
+) : ViewModel() {
     var channelId: String? = null
         set(value) {
             if (field == value) return
@@ -28,44 +35,54 @@ class TractSubscriberController @Inject internal constructor(private val service
         }
     private val identifier get() = Identifier(CHANNEL_SUBSCRIBER, mapOf(PARAM_CHANNEL_ID to channelId))
 
-    private val stateMachine = StateMachine.create<State, Event, SideEffect> {
-        initialState(State.Initial)
-        state<State.Initial> { on<Event.Start> { transitionTo(State.On, SideEffect.OpenSocket) } }
-        state<State.On> {}
+    private val stateMachine = StateMachine.create<State, Event, Unit> {
+        initialState(State.Off)
+        state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
+        state<State.On> {
+            var jobs: Job? = null
 
-        onTransition {
-            if (it is StateMachine.Transition.Valid) {
-                when (it.sideEffect) {
-                    is SideEffect.OpenSocket -> connectToWebSocket()
-                }
-            }
-        }
-    }
+            onEnter {
+                referenceLifecycle.acquire(this@TractSubscriberController)
+                jobs = viewModelScope.launch {
+                    val socketEventsChannel = service.webSocketEvents()
+                    val navigationEventsChannel = service.navigationEvents()
 
-    private fun connectToWebSocket() {
-        viewModelScope.launch {
-            launch {
-                service.webSocketEvents().consumeEach {
-                    when (it) {
-                        is WebSocket.Event.OnConnectionOpened<*> -> {
+                    launch {
+                        try {
                             service.subscribe(Subscribe(identifier))
-                        }
-                        is WebSocket.Event.OnConnectionFailed -> {
-                            Timber.tag(TAG).d(it.throwable)
+                            socketEventsChannel.consumeEach {
+                                when (it) {
+                                    is WebSocket.Event.OnConnectionOpened<*> -> service.subscribe(Subscribe(identifier))
+                                    is WebSocket.Event.OnConnectionFailed -> Timber.tag(TAG).d(it.throwable)
+                                }
+                            }
+                        } finally {
+                            service.unsubscribe(Unsubscribe(identifier))
                         }
                     }
 
-                    Timber.tag(TAG).d(it.toString())
+                    launch(Dispatchers.Main) {
+                        navigationEventsChannel
+                            .filter { it.identifier == identifier }
+                            .consumeEach { receivedEvent.value = it.data }
+                    }
                 }
             }
 
-            launch(Dispatchers.Main) {
-                service.navigationEvents().consumeEach { msg ->
-                    receivedEvent.value = msg.data.dataSingle
-                }
+            on<Event.Stop> { transitionTo(State.Off) }
+
+            onExit {
+                jobs?.cancel()
+                jobs = null
+                referenceLifecycle.release(this@TractSubscriberController)
             }
         }
     }
 
     val receivedEvent = MutableLiveData<NavigationEvent?>()
+
+    override fun onCleared() {
+        super.onCleared()
+        stateMachine.transition(Event.Stop)
+    }
 }

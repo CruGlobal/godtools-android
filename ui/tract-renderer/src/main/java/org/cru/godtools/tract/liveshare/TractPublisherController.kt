@@ -51,7 +51,7 @@ class TractPublisherController @AssistedInject constructor(
             if (value) stateMachine.transition(Event.Start) else stateMachine.transition(Event.Stop)
         }
 
-    private val stateMachine = StateMachine.create<State, Event, SideEffect> {
+    private val stateMachine = StateMachine.create<State, Event, Unit> {
         initialState(State.Off)
         state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
         state<State.On> {

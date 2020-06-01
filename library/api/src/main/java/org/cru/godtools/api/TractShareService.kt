@@ -4,7 +4,6 @@ import com.tinder.scarlet.WebSocket
 import com.tinder.scarlet.ws.Receive
 import com.tinder.scarlet.ws.Send
 import kotlinx.coroutines.channels.ReceiveChannel
-import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableChannel
 import org.ccci.gto.android.common.scarlet.actioncable.model.ConfirmSubscription
 import org.ccci.gto.android.common.scarlet.actioncable.model.Message
@@ -42,5 +41,5 @@ interface TractShareService {
 
     @Receive
     @ActionCableChannel(CHANNEL_SUBSCRIBER)
-    fun navigationEvents(): ReceiveChannel<Message<JsonApiObject<NavigationEvent>>>
+    fun navigationEvents(): ReceiveChannel<Message<NavigationEvent>>
 }
