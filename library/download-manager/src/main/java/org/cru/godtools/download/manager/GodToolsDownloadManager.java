@@ -546,10 +546,7 @@ public final class GodToolsDownloadManager {
                     }
 
                     // associate this file with this translation
-                    final TranslationFile translationFile = new TranslationFile();
-                    translationFile.setTranslation(translation);
-                    translationFile.setFile(localFile);
-                    mDao.updateOrInsert(translationFile);
+                    mDao.updateOrInsert(new TranslationFile(translation, localFile));
                 }
 
                 updateProgress(translationKey, count.getCount(), size);
