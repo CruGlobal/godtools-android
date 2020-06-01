@@ -451,9 +451,11 @@ class LiveShareDialogFragment : BaseDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val source = publisherController.publisherInfo
         liveData {
+            emit(source.value)
             delay(2_000)
-            emitSource(publisherController.publisherInfo)
+            emitSource(source)
         }.notNull().observe(this) {
             findListener<TractActivity>()?.shareLiveShareLink()
             dismissAllowingStateLoss()
