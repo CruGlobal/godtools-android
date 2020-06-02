@@ -42,12 +42,4 @@
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
     <string name="label_language_search">Filter Languages</string>
-
-    <!-- Sharing -->
-    <eat-comment />
-    <string name="share_general_message">Here’s the link to download the app we were looking at today: https://godtoolsapp.com \n\n
-
-Here’s a link to a web version of the app {{share_link}} \n\n
-
-Let’s talk more!</string>
 </resources>
