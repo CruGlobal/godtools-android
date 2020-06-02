@@ -20,9 +20,8 @@ internal object TranslationFileMapper : AbstractMapper<TranslationFile>() {
         }
     }
 
-    override fun newObject(c: Cursor) = TranslationFile()
-    override fun toObject(c: Cursor) = super.toObject(c).apply {
-        setTranslationId(c.getLong(COLUMN_TRANSLATION, Base.INVALID_ID))
+    override fun newObject(c: Cursor) = TranslationFile(
+        translationId = c.getLong(COLUMN_TRANSLATION, Base.INVALID_ID),
         fileName = c.getString(COLUMN_FILE, LocalFile.INVALID_FILE_NAME)
-    }
+    )
 }

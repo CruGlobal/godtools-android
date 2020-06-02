@@ -62,7 +62,7 @@ class GodToolsDao private constructor(context: Context) :
             AttachmentTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            Translation::class.java, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL, TranslationMapper(),
+            Translation::class.java, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL, TranslationMapper,
             TranslationTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
