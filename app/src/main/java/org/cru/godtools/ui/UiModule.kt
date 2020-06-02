@@ -29,4 +29,7 @@ import org.keynote.godtools.android.activity.MainActivity
 abstract class UiModule {
     @ContributesAndroidInjector
     internal abstract fun mainActivityInjector(): MainActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun removeFavoriteConfirmationDialogFragmentInjector(): RemoveFavoriteConfirmationDialogFragment
 }

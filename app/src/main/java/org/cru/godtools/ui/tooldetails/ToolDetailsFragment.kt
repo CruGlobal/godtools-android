@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -26,6 +27,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
+import org.cru.godtools.ui.RemoveFavoriteConfirmationDialogFragment
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 import java.util.Locale
@@ -103,8 +105,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         if (toolCode != null) downloadManager.addTool(toolCode)
     }
 
-    fun removeTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.removeTool(toolCode)
+    fun removeTool(tool: Tool?, translation: Translation?) {
+        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, null).toString())
+            .show(childFragmentManager, null)
     }
 
     fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
