@@ -47,9 +47,4 @@
     <string name="label_language_none">Heç biri</string>
     <string name="label_language_search">Dilləri filtrlə</string>
     <!-- Sharing -->
-    <string name="share_general_message">Bu gün baxdığımız tətbiqi yükləmək üçün keçid aşağıdadır: http://godtoolsapp.com \n\n
-
-Tətbiqin veb versiyasına keçid {{share_link}} \n\n
-
-Gəlin daha çox danışaq!</string>
 </resources>

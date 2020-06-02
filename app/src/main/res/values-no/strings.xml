@@ -48,9 +48,4 @@
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer språk</string>
     <!-- Sharing -->
-    <string name="share_general_message">Her er koblingen for å laste ned appen vi så på i dag: http://godtoolsapp.com \n\n
-
-Her er en kobling til en nettversjon av appen {{share_link}} \n\n
-
-La oss snakke mer!</string>
 </resources>

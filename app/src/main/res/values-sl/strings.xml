@@ -52,9 +52,4 @@
     <string name="label_language_none">Noben</string>
     <string name="label_language_search">Filtriraj jezike</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tukaj je povezava za prenos današnje gledane aplikacije: http://godtoolsapp.com  \n\n
-
-Tukaj je povezava do spletne različice aplikacije {{share_link}} \n\n
-
-Govorimo več!</string>
 </resources>

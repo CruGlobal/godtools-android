@@ -46,9 +46,4 @@
     <string name="text_language_warning">ሁሉም አገልግሎቶች በሁሉም ቋንቋ አይገኙም</string>
     <string name="label_language_none">ምንም</string>
     <!-- Sharing -->
-    <string name="share_general_message">ዛሬ ስንመለከተዉ የነበረዉ መተግብሪያ(App) በዚህ መጠቆሚያ በኩል ማግኘት ይችላሉ: http://godtoolsapp.com \n\n
-
-ይህን መተግበሪያ ዌብ ላይ ለመጠቀም መጠቆሚያዉ: {{share_link}} \n\n
-
-ተጨማሪ እንነጋገር !</string>
 </resources>

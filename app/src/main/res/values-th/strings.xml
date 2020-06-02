@@ -46,9 +46,4 @@
     <string name="label_language_none">ไม่มี</string>
     <string name="label_language_search">กรองภาษา</string>
     <!-- Sharing -->
-    <string name="share_general_message">ลิงก์สำหรับดาวน์โหลดแอปที่เราดูไปเมื่อวันนี้: http://godtoolsapp.com \n\n
-
-ลิงก์สำหรับใช้งานแอปในรูปแบบเว็บ {{share_link}} \n\n
-
-มาคุยกันอีก!</string>
 </resources>

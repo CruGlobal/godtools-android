@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Kunne ikke åpne %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Her er koblingen for å laste ned appen vi så på i dag: http://godtoolsapp.com \n\n
+
+Her er en kobling til en nettversjon av appen %1$s \n\n
+
+La oss snakke mer!</string>
 </resources>

@@ -46,10 +46,4 @@
     <string name="text_language_warning">Nie elke hulpmiddel is in elke taal beskikbaar nie.</string>
     <string name="label_language_none">Geen</string>
     <string name="label_language_search">Filter tale</string>
-    <!-- Sharing -->
-    <string name="share_general_message">Hier is die skakel om die toep waarna ons vandag kyk af te laai: http://godtoolsapp.com\n\n
-
-Hier is \'n skakel na die webweergawe van die toep {{share_link}}\\nn
-
-Kom ons gesels verder!</string>
 </resources>

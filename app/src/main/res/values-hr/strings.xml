@@ -50,9 +50,4 @@
     <string name="label_language_none">Ništa</string>
     <string name="label_language_search">Filtriraj jezike</string>
     <!-- Sharing -->
-    <string name="share_general_message">U nastavku je veza za preuzimanje aplikacije o kojoj smo danas razgovarali: http://godtoolsapp.com \n\n
-
-		Slijedi veza na internetsku verziju aplikacije {{share_link}} \n\n
-
-		Razgovarajmo još više!</string>
 </resources>

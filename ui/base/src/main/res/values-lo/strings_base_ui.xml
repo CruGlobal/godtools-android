@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">ການດາວໂຫຼດບໍ່ຖືກຕ້ອງ %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາເບິ່ງນໍາກັນຄັ້ງຫຼ້າສຸດໃນມື້ນີ້: %@. ມາລົມກັນຕື່ມ!
+
+ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ %1$s https://godtoolsapp.com</string>
 </resources>

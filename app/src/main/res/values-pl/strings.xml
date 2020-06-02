@@ -52,9 +52,4 @@
     <string name="label_language_none">Żaden</string>
     <string name="label_language_search">Filtruj języki</string>
     <!-- Sharing -->
-    <string name="share_general_message">Przesyłam link do pobrania aplikacji, o której dzisiaj rozmawialiśmy: http://godtoolsapp.com \n\n
-
-Oto link do do wersji internetowej aplikacji {{share_link}} \n\n
-
-Bądźmy w kontakcie!</string>
 </resources>

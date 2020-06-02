@@ -47,9 +47,4 @@
     <string name="label_language_none">कोई नहीं</string>
     <string name="label_language_search">भाषाएं फिल्टर करें</string>
     <!-- Sharing -->
-    <string name="share_general_message">ऐप डाउनलोड करने का लिंक यहाँ दिया गया है जिसे हम आज देख रहे थे: http://godtoolsapp.com \ n \ n
-
-ऐप {{share_link}} \ n \ n के वेब संस्करण का एक लिंक यहाँ दिया गया है
-
-चलो और बात करते हैं!</string>
 </resources>

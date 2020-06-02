@@ -46,7 +46,4 @@
     <string name="label_language_none">ບໍ່ເລີຍ</string>
     <string name="label_language_search">ການກັ່ນຕອງພາສາ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາເບິ່ງນໍາກັນຄັ້ງຫຼ້າສຸດໃນມື້ນີ້: %@. ມາລົມກັນຕື່ມ!
-
-ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ {{share_link}} https://godtoolsapp.com</string>
 </resources>

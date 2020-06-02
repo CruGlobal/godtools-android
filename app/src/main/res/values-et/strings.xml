@@ -48,9 +48,4 @@
     <string name="label_language_none">Mitte ühtki</string>
     <string name="label_language_search">Filtri keeled</string>
     <!-- Sharing -->
-    <string name="share_general_message">Aadressilt http://godtoolsapp.com saab alla laadida rakenduse, mida me täna vaatame \n\n
-
-Rakenduse veebiversioon on saadaval aadressil {{share_link}}\n\n
-
-Räägime lähemalt!</string>
 </resources>

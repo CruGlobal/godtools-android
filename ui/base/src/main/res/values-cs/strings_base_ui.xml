@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nepodařilo se otevřít %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Na následujícím odkazu najdete aplikaci, na kterou jsme se dnes dívali: http://godtoolsapp.com \n\n
+
+Tady máte odkaz na webovou verzi aplikace %1$s \n\n
+
+Pojďme si o tom ještě povykládat!</string>
 </resources>

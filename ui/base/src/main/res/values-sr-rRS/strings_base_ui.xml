@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Није могуће отворити %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Ево везе за преузимање апликације коју смо гледали данас: http://godtoolsapp.com \n\n
+
+		Ево везе за веб верзију апликације %1$s \n\n
+
+		Хајде да разговарамо више!</string>
 </resources>

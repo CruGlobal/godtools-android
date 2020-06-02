@@ -46,9 +46,4 @@
     <string name="label_language_none">なし</string>
     <string name="label_language_search">言語を絞り込む</string>
     <!-- Sharing -->
-    <string name="share_general_message">今日見たアプリは、こちらからダウンロードできます：http://godtoolsapp.com \n\n
-
-アプリのウェブ版のリンクはこちらです{{share_link}} \n\n
-
-もっとお話しましょう！</string>
 </resources>

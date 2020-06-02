@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s को खोला नहीं जा सका</string>
+    <!-- Sharing -->
+    <string name="share_general_message">ये रहा उस ऐप का लिंक जिसे हम आज देख रहे हैं: http://godtoolsapp.com \n\n
+
+		यह है उस ऐप के वेब संस्करण का लिंक %1$s\n\n
+
+		चलिए कुछ और बात करते हैं!</string>
 </resources>

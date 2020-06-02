@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">খোলা যাচ্ছে না %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন:
+http://godtoolsapp.com
+
+Here’s a link to a web version of the app %1$s \n\n</string>
 </resources>

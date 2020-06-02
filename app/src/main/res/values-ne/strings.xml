@@ -48,9 +48,4 @@
  "</string>
     <string name="label_language_none">केहि  छैन</string>
     <!-- Sharing -->
-    <string name="share_general_message">ऐप डाउनलोड गर्नलाई  लिंक यहाँ दिएको छ जसमा हामी आज हेर्दै छौ : http://godtoolsapp.com \ n \ n
-
-ऐप {{share_link}} \ n \ n को वेब संस्करणको एउटा  लिंक यहाँ दिएको हो 
-
-आउनुहोस अझै अरु कुरा गरौ!</string>
 </resources>

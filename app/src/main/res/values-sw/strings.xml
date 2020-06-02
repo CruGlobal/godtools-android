@@ -48,10 +48,4 @@
     <string name="label_language_none">Hakuna</string>
     <string name="label_language_search">Chuja Lugha</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hapa ni kiungo cha kupakua programu ambayo tulitazama 
-leo: http://godtoolsapp.com \n\n
-
-Hapa kuna kiungo kwenye toleo la mtandao la programu {{share_link}} \n\n       
-
-Tuzungumze Zaidi!</string>
 </resources>

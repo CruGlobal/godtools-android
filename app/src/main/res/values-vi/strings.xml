@@ -46,9 +46,4 @@
     <string name="label_language_none">Không gì cả</string>
     <string name="label_language_search">Lọc các Ngôn ngữ</string>
     <!-- Sharing -->
-    <string name="share_general_message">Đây là đường dẫn để tải về ứng dụng chúng tôi đang tìm kiếm ngày hôm nay: http://godtoolsapp.com\n\n
-
-Đây là một đường dẫn tới một phiên bản web của ứng dụng {{share_link}}\n\n
-
-Hãy nói thêm nữa!</string>
 </resources>

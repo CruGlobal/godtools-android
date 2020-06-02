@@ -48,9 +48,4 @@
     <string name="label_language_none">Nessuno</string>
     <string name="label_language_search">Filtra le lingue</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ecco qui il link per scaricare l\'app che abbiamo visto oggi: http://godtoolsapp.com \n\n
-
-Ecco qui il link alla versione web dell\'app {{share_link}} \n\n
-
-Parliamone ancora!</string>
 </resources>

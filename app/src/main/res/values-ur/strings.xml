@@ -47,14 +47,4 @@
     <string name="label_language_none">کوئی بھی نہیں</string>
     <string name="label_language_search">زبانیں فلٹر کریں</string>
     <!-- Sharing -->
-    <string name="share_general_message">\"آج جو ایپ ہم دیکھ رہے تھے اسے اس لنک سے ڈاونلوڈ کریں:
-http://godtoolsapp.com \n\n
-
-ایپ کے ویب ورژن کے لیے یہ لِنک ہے
-
-{{share_link}}
-
- \n\n
-
-آئیے مزید بات کرتے ہیں!\"</string>
 </resources>

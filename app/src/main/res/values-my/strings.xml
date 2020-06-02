@@ -45,9 +45,4 @@
     <string name="label_language_none">မရှိပါ</string>
     <string name="label_language_search">ဘာသာစကား များကိုရွေးချယ်ခြင်း</string>
     <!-- Sharing -->
-    <string name="share_general_message">"  app ကို ဒေါင်းလုတ်ဆွဲရန် လင့်ခ်မှာ http;//godtoolsapp.com\n\n ဖြစ်သည်။
-
-app၏ wed ဗားရှင်း ၏ လင့်ခ်({{share_link}} ဖြစ်ပါသည်
-
-ဆက်ဆွေးနွေးကြပါစို့"</string>
 </resources>

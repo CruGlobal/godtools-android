@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Openen %s mislukt</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Hier is de link om de app te downloaden die we vandaag hebben bekeken: http://godtoolsapp.com \n\n
+
+Hier is een link naar een webversie van de app %1$s \n\n
+
+Laten we verder praten!</string>
 </resources>

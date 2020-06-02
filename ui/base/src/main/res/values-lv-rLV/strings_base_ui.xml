@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nav iespējams atvērt %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Lūk saite šodien apspriestās lietotnes lejupielādei: http://godtoolsapp.com \n\n
+
+Lūk saite uz lietotnes tīmekļa versiju %1$s\n\n
+
+Parunāsim vēl!</string>
 </resources>

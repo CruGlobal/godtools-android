@@ -47,9 +47,4 @@
     <string name="label_language_none">Ei mitään</string>
     <string name="label_language_search">Suodata kieliä</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tässä linkki, jolla voit ladata sovelluksen, jota katsoimme tänään: http://godtoolsapp.com \n\n
-
-Tässä on linkki sovelluksen webversioon {{share_link}} \n\n
-
-Jutellaan lisää asiasta!</string>
 </resources>

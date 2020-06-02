@@ -43,9 +43,4 @@
     <string name="text_language_warning">Jo çdo mjet është i disponueshëm në çdo gjuhë</string>
     <string name="label_language_none">Asnjë</string>
     <!-- Sharing -->
-    <string name="share_general_message">Këtu është linku për të shkarkuar aplikacionin që ishim duke kërkuar sot: http://godtoolsapp.com \ n \ n
-
-Ja një link me një version interneti të këtij aplikacioni {{share_link}} \ n \n
-
-Le të flasim më shumë!</string>
 </resources>

@@ -46,9 +46,4 @@
     <string name="label_language_none">無</string>
     <string name="label_language_search">篩選語言</string>
     <!-- Sharing -->
-    <string name="share_general_message">這是我們今天體驗的應用程式：http://godtoolsapp.com \n\n
-
-這是通往應用程式網頁版的連結：{{share_link}}\n\n
-
-看完後再談！</string>
 </resources>

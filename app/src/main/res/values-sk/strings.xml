@@ -52,9 +52,4 @@
     <string name="label_language_none">Žiadne</string>
     <string name="label_language_search">Filtrovať jazyky</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tu je odkaz na stiahnutie aplikácie, na ktorú sme sa dnes pozerali: http://godtoolsapp.com \n\n
-
-		Tu je odkaz na webovú verziu aplikácie {{share_link}} \n\n
-
-		Porozprávajme sa viac!</string>
 </resources>

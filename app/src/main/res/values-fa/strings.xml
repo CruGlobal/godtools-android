@@ -50,10 +50,4 @@
     <string name="label_language_none">هیچکدام</string>
     <string name="label_language_search">فیلتر کردن زبان‌ها</string>
     <!-- Sharing -->
-    <string name="share_general_message">لینک دانلود برنامه‌ای که امروز مشاهده می‌کردیم اینجا قرار دارد:
-http://godtoolsapp.com \n\n
-
-یک لینک برای نسخه اینترنتی برنامه اینجا قرار دارد  {{share_link}} \n\n
-
-بیایید بیشتر صحبت کنیم!</string>
 </resources>

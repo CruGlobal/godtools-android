@@ -43,10 +43,4 @@
     <string name="label_language_none">Ekkert</string>
     <string name="label_language_search">Sía tungumál</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hér er tengilinn til að sækja appið sem við erum að skoða í dag: http://godtoolsapp.com \n\n
-
-Hér er tengill fyrir vefútgáfu appsins {{share_link}}
-\n\n
-
-Spjöllum meira saman!</string>
 </resources>

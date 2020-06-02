@@ -48,9 +48,4 @@
     <string name="label_language_none">Κανένα</string>
     <string name="label_language_search">Φιλτράρισμα Γλωσσών</string>
     <!-- Sharing -->
-    <string name="share_general_message">Να ο σύνδεσμος για να κατεβάσετε την εφαρμογή που εξετάσαμε σήμερα: http://godtoolsapp.com \n\n
-
-Να ένας σύνδεσμος σε μια διαδικτυακή έκδοση εφαρμογής {{share_link}} \n\n
-
-Ας μιλήσουμε περισσότερο!</string>
 </resources>
