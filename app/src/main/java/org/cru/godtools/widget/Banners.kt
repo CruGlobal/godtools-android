@@ -2,6 +2,7 @@
 package org.cru.godtools.widget
 
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.sergivonavi.materialbanner.Banner
 import com.sergivonavi.materialbanner.BannerInterface
@@ -10,12 +11,18 @@ import org.cru.godtools.R
 enum class BannerType(
     @StringRes internal val message: Int,
     @StringRes internal val primaryButton: Int,
-    @StringRes internal val secondaryButton: Int? = null
+    @StringRes internal val secondaryButton: Int? = null,
+    @DrawableRes internal val icon: Int? = null
 ) {
+    TOOL_LIST_FAVORITES(
+        message = R.string.tools_list_favorites_banner_text,
+        primaryButton = R.string.tools_list_favorites_banner_action_dismiss,
+        icon = R.drawable.ic_favorite_24dp
+    ),
     TUTORIAL_TRAINING(
-        R.string.tutorial_training_banner_text,
-        R.string.tutorial_training_banner_action_open,
-        R.string.tutorial_training_banner_action_dismiss
+        message = R.string.tutorial_training_banner_text,
+        primaryButton = R.string.tutorial_training_banner_action_open,
+        secondaryButton = R.string.tutorial_training_banner_action_dismiss
     );
 }
 
@@ -46,6 +53,12 @@ private fun Banner.updateUi(
         setLeftButton(type.secondaryButton, secondaryCallback)
     } else {
         setLeftButton(null, null)
+    }
+    if (type.icon != null) {
+        setIcon(type.icon)
+        setIconTintColor(R.color.gt_blue)
+    } else {
+        setIcon(null)
     }
 }
 

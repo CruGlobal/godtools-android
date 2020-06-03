@@ -123,6 +123,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     private fun bannerPrimaryCallback() {
         when (dataModel.banner.value) {
             BannerType.TUTORIAL_TRAINING -> openTrainingTutorial()
+            BannerType.TOOL_LIST_FAVORITES -> settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
         }
     }
 

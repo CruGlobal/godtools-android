@@ -12,6 +12,8 @@
     <string name="tools_list_remove_favorite_dialog_title">Remove “%1$s” from Favorites?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Remove</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancel</string>
+    <string name="tools_list_favorites_banner_text">Make a tool available offline by tapping the heart icon which adds it to your favorites.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Dismiss</string>
 
     <!-- Tool Details UI -->
     <eat-comment />

@@ -8,10 +8,12 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_FAVORITE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TRAINING
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_AVAILABLE
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -39,10 +41,14 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
             .getAsLiveData(dao)
     }
 
-    val banner = mode.combineWith(settings.isFeatureDiscoveredLiveData(FEATURE_TUTORIAL_TRAINING)) { mode, training ->
+    val banner = mode.combineWith(
+        settings.isFeatureDiscoveredLiveData(FEATURE_TOOL_FAVORITE),
+        settings.isFeatureDiscoveredLiveData(FEATURE_TUTORIAL_TRAINING)
+    ) { mode, favorite, training ->
         when {
             mode == MODE_ADDED && !training && PageSet.TRAINING.supportsLocale(Locale.getDefault()) ->
                 BannerType.TUTORIAL_TRAINING
+            mode == MODE_ALL && !favorite -> BannerType.TOOL_LIST_FAVORITES
             else -> null
         }
     }
