@@ -57,8 +57,8 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         dao.updateOrInsert(
             tool, SQLiteDatabase.CONFLICT_REPLACE,
             ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
-            ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER, ToolTable.COLUMN_DETAILS_BANNER,
-            ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_OVERVIEW_VIDEO
+            ToolTable.COLUMN_CATEGORY, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
+            ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_OVERVIEW_VIDEO
         )
         coalesceEvent(events, ToolUpdateEvent)
 

@@ -9,6 +9,7 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER
+import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CATEGORY
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DEFAULT_ORDER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION
@@ -27,6 +28,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
             COLUMN_TYPE -> values.put(field, serialize(obj.type))
             COLUMN_NAME -> values.put(field, obj.name)
             COLUMN_DESCRIPTION -> values.put(field, obj.description)
+            COLUMN_CATEGORY -> values.put(field, obj.category)
             COLUMN_SHARES -> values.put(field, obj.shares)
             COLUMN_PENDING_SHARES -> values.put(field, obj.pendingShares)
             COLUMN_BANNER -> values.put(field, obj.bannerId)
@@ -45,6 +47,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
         type = getEnum(c, COLUMN_TYPE, Tool.Type::class.java, Tool.Type.DEFAULT)!!
         name = c.getString(COLUMN_NAME)
         description = c.getString(COLUMN_DESCRIPTION)
+        category = c.getString(COLUMN_CATEGORY)
         shares = c.getInt(COLUMN_SHARES, 0)
         pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0)
         bannerId = c.getLong(COLUMN_BANNER)
