@@ -46,9 +46,4 @@
     <string name="label_language_none">Tiada</string>
     <string name="label_language_search">Tapis Bahasa</string>
     <!-- Sharing -->
-    <string name="share_general_message">Berikut ialah pautan untuk memuat turun aplikasi yang sedang kami lihat hari ini: http://godtoolsapp.com \n\n
-
-Berikut ialah pautan ke aplikasi versi web {{share_link}} \n\n
-
-Ayuh berbual lagi!</string>
 </resources>

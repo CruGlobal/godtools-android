@@ -41,6 +41,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
+import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -62,8 +63,6 @@ internal val URI_HELP = Uri.parse("https://godtoolsapp.com/faq/")
 internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
 internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
 internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
-
-private const val SHARE_LINK = "{{share_link}}"
 
 private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
@@ -338,13 +337,11 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
             .appendPath(LocaleCompat.toLanguageTag(settings.primaryLanguage).toLowerCase(Locale.US))
             .appendPath("")
             .build().toString()
-        val text = getString(R.string.share_general_message)
-            .replace(SHARE_LINK, shareLink)
 
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
             .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, text)
+            .putExtra(Intent.EXTRA_TEXT, getShareMessage(shareLink))
             .let { Intent.createChooser(it, getString(R.string.share_prompt)) }
             .also { startActivity(it) }
     }

@@ -48,9 +48,4 @@
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer sprog</string>
     <!-- Sharing -->
-    <string name="share_general_message">Her er linket til overførsel af appen, som vi så på i dag: http://godtoolsapp.com \n\n
-
-Her er et link til en webversion af appen {{share_link}} \n\n
-
-Lad os tale mere sammen!</string>
 </resources>

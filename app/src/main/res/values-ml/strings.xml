@@ -46,11 +46,4 @@
     <string name="text_language_warning">"ഇപ്പോൾ എല്ലാ ടൂളുകളും എല്ലാ ഭാഷകളിലും ലഭ്യമാണ്. "</string>
     <string name="label_language_none">ഒന്നും ഇല്ല</string>
     <!-- Sharing -->
-    <string name="share_general_message">ഇന്ന് നാം നോക്കി കൊണ്ടിരിക്കുന്ന ആപ്പ് ഡൗൺലോഡ് ചെയ്യുവാനുള്ള ലിങ്ക് ഇതാ:
-http://godtoolsapp.com \n\n
-
-ഈ ആപ്പിന്റെ വെബ് വേർഷനായുള്ള ലിങ്ക്
-{{share_link}} \n\n
-
-നമുക്ക് കൂടുതൽ സംസാരിക്കാം!</string>
 </resources>

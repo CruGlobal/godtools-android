@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">אי אפשר לפתוח את %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">הנה הקישור להורדה של האפליקציה שהסתכלנו עליה היום: http://godtoolsapp.com \n\n
+
+הנה הקישור לגרסת האתר של האפליקציה %1$s\n\n
+
+בואו נדבר יותר!</string>
 </resources>

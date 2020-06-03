@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nepavyksta atidaryti %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Štai nuoroda, iš kur galima atsisiųsti mūsų šiandien pristatomą programėlę: http://godtoolsapp.com \n\n
+
+		Štai nuoroda į programėlės internetinę versiją %1$s\n\n
+
+		Pakalbėkime išsamiau!</string>
 </resources>

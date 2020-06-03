@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Не вдається відкрити %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Ось посилання, за яким можна завантажити програму, яку ми сьогодні дивилися: http://godtoolsapp.com \n\n
+
+Ось посилання на онлайн версію програми: %1$s\n\n
+
+Поговорімо іще :-)</string>
 </resources>

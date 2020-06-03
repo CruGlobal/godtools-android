@@ -56,10 +56,4 @@
     <string name="label_language_none">لا شيء</string>
     <string name="label_language_search">فلترة اللغات</string>
     <!-- Sharing -->
-    <string name="share_general_message">إليك الرابط لتحميل التطبيق الذي نبحث عنه اليوم:
-http://godtoolsapp.com \n\n
-
-إليك رابط إلى نسخة الويب للتطبيق {{share_link}} \n\n
-
-لنتحدث أكثر!</string>
 </resources>

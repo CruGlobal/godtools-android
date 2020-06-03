@@ -48,9 +48,4 @@
     <string name="label_language_none">ఏదీ కాదు</string>
     <string name="label_language_search">భాషలను ఫిల్టర్ చేయి</string>
     <!-- Sharing -->
-    <string name="share_general_message">ఈ రోజు మేము చూస్తున్న యాప్‌ను డౌన్‌లోడ్ చేసేందుకు ఇక్కడ లింకు ఉన్నది: http://godtoolsapp.com \n\n
-
-యాప్ యొక్క వెబ్ వర్షన్‌కు లింకు ఇక్కడ ఉంది   {{share_link}} \n\n
-
-		మనము మరింత మాట్లాడుకుందాము!</string>
 </resources>

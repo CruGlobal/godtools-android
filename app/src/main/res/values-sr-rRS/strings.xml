@@ -50,9 +50,4 @@
     <string name="label_language_none">Ниједно</string>
     <string name="label_language_search">Филтрирај језике</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ево везе за преузимање апликације коју смо гледали данас: http://godtoolsapp.com \n\n
-
-		Ево везе за веб верзију апликације {{share_link}} \n\n
-
-		Хајде да разговарамо више!</string>
 </resources>

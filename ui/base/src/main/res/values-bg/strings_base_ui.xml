@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Неуспешно отваряне %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Ето линка за изтегляне на приложението, което видяхме днес: http://godtoolsapp.com \n\n
+
+		Ето линк за уеб версията на приложението %1$s \n\n
+
+		Да говорим повече!</string>
 </resources>

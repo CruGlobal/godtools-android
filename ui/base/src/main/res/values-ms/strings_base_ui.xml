@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Tidak dapat membuka %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Berikut ialah pautan untuk memuat turun aplikasi yang sedang kami lihat hari ini: http://godtoolsapp.com \n\n
+
+Berikut ialah pautan ke aplikasi versi web %1$s\n\n
+
+Ayuh berbual lagi!</string>
 </resources>

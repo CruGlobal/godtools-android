@@ -52,9 +52,4 @@
     <string name="label_language_none">Нічого</string>
     <string name="label_language_search">Фільтрувати мови</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ось посилання, за яким можна завантажити програму, яку ми сьогодні дивилися: http://godtoolsapp.com \n\n
-
-Ось посилання на онлайн версію програми: {{share_link}} \n\n
-
-Поговорімо іще :-)</string>
 </resources>

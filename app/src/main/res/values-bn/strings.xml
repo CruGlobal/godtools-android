@@ -46,8 +46,4 @@
     <string name="text_language_warning">সব রকম টুল সব ককম ভাষায় উপলব্ধ নয়</string>
     <string name="label_language_none">কোনটাই না</string>
     <!-- Sharing -->
-    <string name="share_general_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন:
-http://godtoolsapp.com
-
-Here’s a link to a web version of the app {{share_link}} \n\n</string>
 </resources>

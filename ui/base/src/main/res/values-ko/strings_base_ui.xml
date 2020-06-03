@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s을/를 열 수 없음</string>
+    <!-- Sharing -->
+    <string name="share_general_message">저희가 오늘 봤던 앱을 다운로드할 수 있는 링크: http://godtoolsapp.com \n\n
+
+앱의 웹 버전 링크: %1$s\n\n
+
+더 이야기해요!</string>
 </resources>

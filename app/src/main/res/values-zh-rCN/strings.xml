@@ -47,10 +47,4 @@
     <string name="label_language_none">无</string>
     <string name="label_language_search">筛选语言</string>
     <!-- Sharing -->
-    <string name="share_general_message">以下链接可以下载我们今天看到的应用：
-http://godtoolsapp.com \n\n
-
-以下链接可以进入应用的网页版 {{share_link}} \n\n
-
-让我们详谈吧！</string>
 </resources>

@@ -48,9 +48,4 @@
     <string name="label_language_none">Wala</string>
     <string name="label_language_search">I-filter ang mga Wika</string>
     <!-- Sharing -->
-    <string name="share_general_message">Narito ang link para i-download ang app na tinitingnan namin ngayong araw: http://godtoolsapp.com \n\n
-
-Narito ang isang link sa web na bersyon ng app {{share_link}} \n\n
-
-Mag-usap pa tayo!</string>
 </resources>

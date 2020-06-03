@@ -48,9 +48,4 @@
     <string name="label_language_none">Няма</string>
     <string name="label_language_search">Филтриране на езици</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ето линка за изтегляне на приложението, което видяхме днес: http://godtoolsapp.com \n\n
-
-		Ето линк за уеб версията на приложението {{share_link}} \n\n
-
-		Да говорим повече!</string>
 </resources>

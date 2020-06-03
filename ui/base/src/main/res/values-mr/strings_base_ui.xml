@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">उघडता येत नाही.%s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">आज आपण जी ऍप पाहत होतो ती डाऊनलोड करण्यासाठी लिंक इथे आहे : http://godtoolsapp.com\n\n
+
+ऍपच्या वेब आवृत्तीची लिंक येथे आहे  %1$s\n\n
+
+आणखी बोलू या!</string>
 </resources>

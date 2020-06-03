@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">Inkapás pa habri %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">At\'akí e lenk pa deskargá e app ku nos tabata wak awe: https://godtoolsapp.com \n\n
+
+At\'akí e lenk pa e vershon di e app riba wèb %1$s \n\n
+
+Laga nos papia mas!</string>
+</resources>

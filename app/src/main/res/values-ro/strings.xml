@@ -50,9 +50,4 @@
     <string name="label_language_none">Niciunul</string>
     <string name="label_language_search">Filtrează limbile</string>
     <!-- Sharing -->
-    <string name="share_general_message">Iată linkul de descărcare a aplicației pe care am analizat-o azi: http://godtoolsapp.com \n\n
-
-Iată linkul către versiunea web a aplicației {{share_link}} \n\n
-
-Să discutăm mai multe!</string>
 </resources>

@@ -48,9 +48,4 @@
     <string name="label_language_none">Hiçbiri</string>
     <string name="label_language_search">Dilleri Filtrele</string>
     <!-- Sharing -->
-    <string name="share_general_message">İşte bugün incelediğimiz uygulamanın indirme bağlantısı: http://godtoolsapp.com \n\n
-
-İşte uygulamanın web sürümünün bir bağlantısı {{share_link}} \n\n
-
-Daha çok konuşalım!</string>
 </resources>

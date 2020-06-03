@@ -51,9 +51,4 @@
     <string name="label_language_none">Joks</string>
     <string name="label_language_search">Filtruoti kalbas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Štai nuoroda, iš kur galima atsisiųsti mūsų šiandien pristatomą programėlę: http://godtoolsapp.com \n\n
-
-		Štai nuoroda į programėlės internetinę versiją {{share_link}} \n\n
-
-		Pakalbėkime išsamiau!</string>
 </resources>

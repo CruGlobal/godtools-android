@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Gat ekki opnað %s</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Hér er tengilinn til að sækja appið sem við erum að skoða í dag: http://godtoolsapp.com \n\n
+
+Hér er tengill fyrir vefútgáfu appsins %1$s
+\n\n
+
+Spjöllum meira saman!</string>
 </resources>

@@ -46,9 +46,4 @@
     <string name="label_language_none">Tidak ada</string>
     <string name="label_language_search">Filter Bahasa</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ini adalah tautan untuk mengunduh aplikasi yang kita lihat hari ini: http://godtoolsapp.com \n\n
-
-Ini adalah tautan ke versi web dari aplikasi {{share_link}} \n\n
-
-Mari kita bicarakan lebih lanjut!</string>
 </resources>

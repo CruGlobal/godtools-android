@@ -55,9 +55,4 @@
     <string name="label_language_none">एक ही नाही</string>
     <string name="label_language_search">भाषा फिल्टर करा</string>
     <!-- Sharing -->
-    <string name="share_general_message">आज आपण जी ऍप पाहत होतो ती डाऊनलोड करण्यासाठी लिंक इथे आहे : http://godtoolsapp.com\n\n
-
-ऍपच्या वेब आवृत्तीची लिंक येथे आहे  {{share_link}} \n\n
-
-आणखी बोलू या!</string>
 </resources>

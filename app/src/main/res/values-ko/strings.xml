@@ -46,9 +46,4 @@
     <string name="label_language_none">없음</string>
     <string name="label_language_search">언어 필터</string>
     <!-- Sharing -->
-    <string name="share_general_message">저희가 오늘 봤던 앱을 다운로드할 수 있는 링크: http://godtoolsapp.com \n\n
-
-앱의 웹 버전 링크: {{share_link}} \n\n
-
-더 이야기해요!</string>
 </resources>

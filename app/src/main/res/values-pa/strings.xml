@@ -48,9 +48,4 @@
     <string name="label_language_none">ਕੋਈ ਵੀ ਨਹੀਂ</string>
     <string name="label_language_search">ਭਾਸ਼ਾਵਾਂ ਫਿਲਟਰ ਕਰੋ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ਇਹ ਜਿਸ ਐਪ ਨੂੰ ਅਸੀਂ ਅੱਜ ਵੇਖ ਰਹੇ ਸੀ ਉਸਨੂੰ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਲਿੰਕ ਹੈ: http://godtoolsapp.com \n\n
-
-ਇਹ ਐਪ ਦੇ ਵੈਬ ਸੰਸਕਰਣ ਦਾ ਲਿੰਕ ਹੈ {{share_link}} \n\n
-
-ਚਲੋ ਹੋਰ ਗੱਲ ਕਰੀਏ!</string>
 </resources>

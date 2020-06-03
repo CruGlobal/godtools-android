@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nie in staat om %s oop te maak nie</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Hier is die skakel om die toep waarna ons vandag kyk af te laai: http://godtoolsapp.com\n\n
+
+Hier is \'n skakel na die webweergawe van die toep %1$s\\nn
+
+Kom ons gesels verder!</string>
 </resources>
