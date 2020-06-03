@@ -21,23 +21,10 @@
     <string name="menu_copyright">版权</string>
     <!-- Share a story -->
     <string name="share_story_subject">聆听神是如何作工的！</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">查找工具</string>
-    <string name="nav_my_tools">我的工具</string>
-    <string name="menu_switch_language">切换语言</string>
-    <string name="title_add_new_tools">添加新工具</string>
-    <string name="action_tools_open_tool">打开工具</string>
-    <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d 次浏览</item>
-    </plurals>
-    <string name="label_tools_about">关于</string>
-    <plurals name="label_tools_languages">
-        <item quantity="other">%1$,d 种语言</item>
-    </plurals>
-    <string name="menu_add_to_home">添加到主屏幕</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80多种语言</string>
     <string name="menu_language_settings">语言设置</string>
+    <string name="menu_switch_language">切换语言</string>
     <string name="title_language_settings">语言设置</string>
     <string name="title_language_primary">主要语言</string>
     <string name="title_language_parallel">同步语言</string>
@@ -46,5 +33,4 @@
     <string name="text_language_warning">有些工具不能涵盖所有语种。</string>
     <string name="label_language_none">无</string>
     <string name="label_language_search">筛选语言</string>
-    <!-- Sharing -->
 </resources>

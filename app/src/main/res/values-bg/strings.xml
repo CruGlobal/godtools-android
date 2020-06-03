@@ -20,25 +20,10 @@
     <string name="menu_copyright">Авторско право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Чуйте как се движи Бог</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Намиране на инструменти</string>
-    <string name="nav_my_tools">Моите инструменти</string>
-    <string name="menu_switch_language">Променете езика</string>
-    <string name="title_add_new_tools">Добавете нови инструменти</string>
-    <string name="action_tools_open_tool">Отворете инструмента</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Преглед</item>
-        <item quantity="other">%1$,d Прегледи</item>
-    </plurals>
-    <string name="label_tools_about">За приложението</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d език</item>
-        <item quantity="other">%1$,d езици</item>
-    </plurals>
-    <string name="menu_add_to_home">Добавяне към началния екран</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Езика</string>
     <string name="menu_language_settings">Езикови настройки</string>
+    <string name="menu_switch_language">Променете езика</string>
     <string name="title_language_settings">Езикови настройки</string>
     <string name="title_language_primary">Главен език</string>
     <string name="title_language_parallel">Успореден език</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Не всеки инструмент е наличен на всеки език.</string>
     <string name="label_language_none">Няма</string>
     <string name="label_language_search">Филтриране на езици</string>
-    <!-- Sharing -->
 </resources>

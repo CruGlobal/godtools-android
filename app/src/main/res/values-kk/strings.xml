@@ -5,11 +5,6 @@
     <!-- Navigation Menu -->
     <string name="menu_about">туралы</string>
     <!-- Share a story -->
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Құралдарды табу</string>
-    <string name="nav_my_tools">Менің құралдарым</string>
-    <string name="menu_switch_language">Тілді ауыстыру</string>
-    <string name="action_tools_open_tool">Ашық</string>
     <!-- Language Selection UI -->
-    <!-- Sharing -->
+    <string name="menu_switch_language">Тілді ауыстыру</string>
 </resources>

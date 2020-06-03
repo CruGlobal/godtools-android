@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Mi Profíl</string>
+    <string name="menu_profile">Aktividat Global</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Aktividat</string>
+    <string name="profile_global_activity_heading">%s Aktividat Global</string>
+    <string name="profile_activity_unique_users">Usuarionan Úniko</string>
+    <string name="profile_activity_gospel_presentations">Presentashonnan di e Evangelio</string>
+    <string name="profile_activity_sessions">Seshonnan</string>
+    <string name="profile_activity_countries">Paísnan</string>
+</resources>

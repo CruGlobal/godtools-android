@@ -20,23 +20,10 @@
     <string name="menu_copyright">ລິຂະສິດ</string>
     <!-- Share a story -->
     <string name="share_story_subject">ມາຟັງກັນວ່າ ພຣະຜູ້ເປັນເຈົ້າຈະຊົງນຳເຮົາຢ່າງໃດ!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">ຫາເຄື່ອງມື</string>
-    <string name="nav_my_tools">ເຄື່ອງມືຂອງຂ້ອຍ</string>
-    <string name="menu_switch_language">ປ່ຽນພາສາ</string>
-    <string name="title_add_new_tools">ເພິ່ມເຄື່ອງມືໃໝ່</string>
-    <string name="action_tools_open_tool">ເປີດເຄື່ອງມື</string>
-    <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d ຮັບຊົມ</item>
-    </plurals>
-    <string name="label_tools_about">ກ່ຽວກັບ</string>
-    <plurals name="label_tools_languages">
-        <item quantity="other">" %1$,d ພາສາ"</item>
-    </plurals>
-    <string name="menu_add_to_home">ເພີ່ມໃສ່ ໜ້າ ຈໍເຮືອນ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ພາສາ</string>
     <string name="menu_language_settings">ການຕັ້ງຄ່າພາສາ</string>
+    <string name="menu_switch_language">ປ່ຽນພາສາ</string>
     <string name="title_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_primary">ພາສາຫຼັກ</string>
     <string name="title_language_parallel">ພາສາທີ່ໄປຄູ່ກັນ</string>
@@ -45,5 +32,4 @@
     <string name="text_language_warning">ບໍ່ມີເຄື່ອງມືໃດໆໃຫ້ບໍລິການໃນທຸກໆພາສາ.</string>
     <string name="label_language_none">ບໍ່ເລີຍ</string>
     <string name="label_language_search">ການກັ່ນຕອງພາສາ</string>
-    <!-- Sharing -->
 </resources>

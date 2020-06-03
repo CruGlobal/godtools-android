@@ -20,23 +20,10 @@
     <string name="menu_copyright">著作權</string>
     <!-- Share a story -->
     <string name="share_story_subject">聆聽上帝的故事！</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">搜尋工具</string>
-    <string name="nav_my_tools">我的工具</string>
-    <string name="menu_switch_language">切換語言</string>
-    <string name="title_add_new_tools">添加新工具</string>
-    <string name="action_tools_open_tool">開啟工具</string>
-    <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d 個瀏覽次數</item>
-    </plurals>
-    <string name="label_tools_about">關於</string>
-    <plurals name="label_tools_languages">
-        <item quantity="other">%1$,d 種語言</item>
-    </plurals>
-    <string name="menu_add_to_home">加到主頁</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">超過 80 種語言</string>
     <string name="menu_language_settings">語言選項</string>
+    <string name="menu_switch_language">切換語言</string>
     <string name="title_language_settings">語言選項</string>
     <string name="title_language_primary">主要語言</string>
     <string name="title_language_parallel">平行語言</string>
@@ -45,5 +32,4 @@
     <string name="text_language_warning">並非所有工具都包含所有語言的版本。</string>
     <string name="label_language_none">無</string>
     <string name="label_language_search">篩選語言</string>
-    <!-- Sharing -->
 </resources>

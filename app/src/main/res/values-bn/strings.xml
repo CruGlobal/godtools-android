@@ -19,25 +19,10 @@
     <string name="menu_copyright">কপিরাইট তথ্য</string>
     <!-- Share a story -->
     <string name="share_story_subject">শুনুন ঈশ্বর কি করে কাজ করছেন</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
-    <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
-    <string name="menu_switch_language">ভাষা বদলান</string>
-    <string name="title_add_new_tools">নতুন সরঞ্জাম যোগ করুন</string>
-    <string name="action_tools_open_tool">খোলা</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d মতামত</item>
-        <item quantity="other">%1$,d মতামত</item>
-    </plurals>
-    <string name="label_tools_about">বিষয়ে</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d ভাষাগুলি</item>
-        <item quantity="other">%1$,d ভাষাগুলি</item>
-    </plurals>
-    <string name="menu_add_to_home">হোম স্ক্রিন এ যোগ করুন</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">৭০+ ভাষা</string>
     <string name="menu_language_settings">ভাষা ব্যাবস্থা</string>
+    <string name="menu_switch_language">ভাষা বদলান</string>
     <string name="title_language_settings">ভাষা ব্যাবস্থা</string>
     <string name="title_language_primary">প্রাথমিক ভাষা</string>
     <string name="title_language_parallel">সমান্তরাল ভাষা</string>
@@ -45,5 +30,4 @@
     <string name="text_language_parallel_description">স্থানীয় ভাষায় কেউ সঙ্গে  GodTools শেয়ার করুন</string>
     <string name="text_language_warning">সব রকম টুল সব ককম ভাষায় উপলব্ধ নয়</string>
     <string name="label_language_none">কোনটাই না</string>
-    <!-- Sharing -->
 </resources>

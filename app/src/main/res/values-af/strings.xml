@@ -19,25 +19,10 @@
     <string name="menu_copyright">Kopiereg</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hoor hoe God beweeg!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Vind hulpmiddels</string>
-    <string name="nav_my_tools">My hulpmiddels</string>
-    <string name="menu_switch_language">Verander taal</string>
-    <string name="title_add_new_tools">Voeg nuwe Hulpmiddels by</string>
-    <string name="action_tools_open_tool">Maak hulpmiddel oop</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Besigtiging</item>
-        <item quantity="other">%1$,d Besigtiginge</item>
-    </plurals>
-    <string name="label_tools_about">Aangaande</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Taal</item>
-        <item quantity="other">%1$,d Tale</item>
-    </plurals>
-    <string name="menu_add_to_home">Voeg by tuisskerm</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+Tale</string>
     <string name="menu_language_settings">Taalinstellings</string>
+    <string name="menu_switch_language">Verander taal</string>
     <string name="title_language_settings">Taalinstellings</string>
     <string name="title_language_primary">Primêre taal</string>
     <string name="title_language_parallel">Parallele taal</string>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
+    <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
+    <string name="title_add_new_tools">নতুন সরঞ্জাম যোগ করুন</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">হোম স্ক্রিন এ যোগ করুন</string>
+    <string name="action_tools_open_tool">খোলা</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d মতামত</item>
+        <item quantity="other">%1$,d মতামত</item>
+    </plurals>
+    <string name="label_tools_about">বিষয়ে</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d ভাষাগুলি</item>
+        <item quantity="other">%1$,d ভাষাগুলি</item>
+    </plurals>
+</resources>

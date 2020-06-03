@@ -20,27 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Află cum lucrează Dumnezeu!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Găsește instrumente</string>
-    <string name="nav_my_tools">Instrumentele mele</string>
-    <string name="menu_switch_language">Schimbă limba</string>
-    <string name="title_add_new_tools">Adaugă instrumente noi</string>
-    <string name="action_tools_open_tool">Deschide instrumentul</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d vizualizare</item>
-        <item quantity="other">%1$,d vizualizări</item>
-        <item quantity="few">%1$,d vizualizări</item>
-    </plurals>
-    <string name="label_tools_about">Despre</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d limbă</item>
-        <item quantity="other">%1$,d limbi</item>
-        <item quantity="few">%1$,d limbi</item>
-    </plurals>
-    <string name="menu_add_to_home">Adaugă la ecranul de pornire</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 80 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
+    <string name="menu_switch_language">Schimbă limba</string>
     <string name="title_language_settings">Setări de limbă</string>
     <string name="title_language_primary">Limba principală</string>
     <string name="title_language_parallel">Limbă secundară</string>
@@ -49,5 +32,4 @@
     <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
     <string name="label_language_none">Niciunul</string>
     <string name="label_language_search">Filtrează limbile</string>
-    <!-- Sharing -->
 </resources>

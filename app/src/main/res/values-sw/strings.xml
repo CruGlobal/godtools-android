@@ -20,25 +20,10 @@
     <string name="menu_copyright">Hati miliki</string>
     <!-- Share a story -->
     <string name="share_story_subject">Sikiliza namna Mungu anavyotembea!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Pata Zana</string>
-    <string name="nav_my_tools">Zana Zangu</string>
-    <string name="menu_switch_language">Badilisha lugha</string>
-    <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
-    <string name="action_tools_open_tool">Kifaa Wazi</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">Maoni %1$,d</item>
-        <item quantity="other">Maoni %1$,d</item>
-    </plurals>
-    <string name="label_tools_about">Kuhusu</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">Lugha %1$,d</item>
-        <item quantity="other">Lugha %1$,d</item>
-    </plurals>
-    <string name="menu_add_to_home">Weka kwenye Skrini ya Jumla</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Lugha Themanini na Zaidi</string>
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
+    <string name="menu_switch_language">Badilisha lugha</string>
     <string name="title_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_primary">Lugha ya Msingi</string>
     <string name="title_language_parallel">Lugha Sambamba</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Si kila chombo kinapatikana kwa kila lugha.</string>
     <string name="label_language_none">Hakuna</string>
     <string name="label_language_search">Chuja Lugha</string>
-    <!-- Sharing -->
 </resources>

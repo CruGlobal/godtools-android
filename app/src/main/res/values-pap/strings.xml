@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">Selektá kon lo bo ke kompartí</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">General</string>
+    <string name="menu_heading_account">Kuenta</string>
+    <string name="menu_heading_share">Kompartí</string>
+    <string name="menu_heading_legal">Legal</string>
+    <string name="menu_about">Tokante</string>
+    <string name="menu_help">Preguntanan Frekuente</string>
+    <string name="menu_contact_us">Tuma Kontakto Ku Nos</string>
+    <string name="menu_tutorial">Instrukshon</string>
+    <string name="menu_login">Inisiá seshon</string>
+    <string name="menu_signup">Krea un Kuenta di Miembro</string>
+    <string name="menu_logout">Tèrminá seshon</string>
+    <string name="menu_share_godtools">Kompartí e app di GodTools</string>
+    <string name="menu_share_story">Kompartí un Storia Ku Nos</string>
+    <string name="menu_terms_of_use">Terminonan di Uzo</string>
+    <string name="menu_privacy_policy">Pólisa di Privasidat</string>
+    <string name="menu_copyright">Derecho di outor</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Tende kon Dios ta move!</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">80+ Idioma</string>
+    <string name="menu_language_settings">Ahuste di Idioma</string>
+    <string name="menu_switch_language">Kambia di Idioma</string>
+    <string name="title_language_settings">Ahuste di Idioma</string>
+    <string name="title_language_primary">Idioma Primario</string>
+    <string name="title_language_parallel">Idioma Paralelo</string>
+    <string name="action_language_parallel_select">Skohe un Idioma Paralelo</string>
+    <string name="text_language_parallel_description">Kompartí GodTools ku un hende den su idioma natal.</string>
+    <string name="text_language_warning">No ta tur hèrmènt ta dísponibel den tur idioma.</string>
+    <string name="label_language_none">Ningun</string>
+    <string name="label_language_search">Filtra Idiomanan</string>
+</resources>

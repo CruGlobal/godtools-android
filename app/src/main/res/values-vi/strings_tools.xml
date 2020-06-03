@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Tìm Công cụ</string>
+    <string name="nav_my_tools">Công cụ của Tôi</string>
+    <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Thêm vào màn hình Trang chủ</string>
+    <string name="action_tools_open_tool">Mở Công cụ</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d Lượt xem</item>
+    </plurals>
+    <string name="label_tools_about">Giới thiệu về</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d Ngôn ngữ</item>
+    </plurals>
+</resources>

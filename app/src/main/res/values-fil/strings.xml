@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Pakinggan kung paano nakakabagabag ng puso ang Diyos!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Makahanap ng Mga Tool</string>
-    <string name="nav_my_tools">Mga Tool Ko</string>
-    <string name="menu_switch_language">Magpalit ng Wika</string>
-    <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
-    <string name="action_tools_open_tool">Buksan ang Tool</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Pagtingin</item>
-        <item quantity="other">%1$,d (na) Pagtingin</item>
-    </plurals>
-    <string name="label_tools_about">Tungkol dito</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Wika</item>
-        <item quantity="other">%1$,d (na) Wika</item>
-    </plurals>
-    <string name="menu_add_to_home">Idagdag sa Home screen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ na Wika</string>
     <string name="menu_language_settings">Mga Setting ng Wika</string>
+    <string name="menu_switch_language">Magpalit ng Wika</string>
     <string name="title_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_primary">Pangunahing Wika</string>
     <string name="title_language_parallel">Parallel na Wika</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Ang bawat tool ay hindi available sa bawat wika.</string>
     <string name="label_language_none">Wala</string>
     <string name="label_language_search">I-filter ang mga Wika</string>
-    <!-- Sharing -->
 </resources>

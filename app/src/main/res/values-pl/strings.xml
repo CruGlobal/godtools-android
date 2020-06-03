@@ -20,29 +20,10 @@
     <string name="menu_copyright">Prawa autorskie</string>
     <!-- Share a story -->
     <string name="share_story_subject">Posłuchaj o tym jak porusza się Bóg we świecie!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Znajdź Prezentacje</string>
-    <string name="nav_my_tools">Moje Prezentacje</string>
-    <string name="menu_switch_language">Zmień język</string>
-    <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
-    <string name="action_tools_open_tool">Otwórz narzędzie</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d odsłona</item>
-        <item quantity="other">%1$,d odsłon</item>
-        <item quantity="few">%1$,d odsłon</item>
-        <item quantity="many">%1$,d odsłon</item>
-    </plurals>
-    <string name="label_tools_about">O aplikacji</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d język</item>
-        <item quantity="other">%1$,d języki</item>
-        <item quantity="few">%1$,d języków</item>
-        <item quantity="many">%1$,d języków</item>
-    </plurals>
-    <string name="menu_add_to_home">Dodaj do ekranu głównego</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ języków</string>
     <string name="menu_language_settings">Ustawienia języka</string>
+    <string name="menu_switch_language">Zmień język</string>
     <string name="title_language_settings">Ustawienia języka</string>
     <string name="title_language_primary">Język podstawowy</string>
     <string name="title_language_parallel">Język równoległy</string>
@@ -51,5 +32,4 @@
     <string name="text_language_warning">Nie każde narzędzie jest dostępne w każdym języku</string>
     <string name="label_language_none">Żaden</string>
     <string name="label_language_search">Filtruj języki</string>
-    <!-- Sharing -->
 </resources>

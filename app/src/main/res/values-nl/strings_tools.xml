@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Tools vinden</string>
+    <string name="nav_my_tools">Mijn tools</string>
+    <string name="title_add_new_tools">Voeg nieuwe hulpmiddelen toe</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Toevoegen aan startscherm</string>
+    <string name="action_tools_open_tool">Tool openen</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d</item>
+        <item quantity="other">%1$,d weergaven</item>
+    </plurals>
+    <string name="label_tools_about">Over</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Taal</item>
+        <item quantity="other">%1$,d Talen</item>
+    </plurals>
+</resources>

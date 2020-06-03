@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Шукати інструменти</string>
+    <string name="nav_my_tools">Інструменти</string>
+    <string name="title_add_new_tools">Додати інструменти</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Додати до головного екрану</string>
+    <string name="action_tools_open_tool">Відкрити інструмент</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d перегляд</item>
+        <item quantity="other">%1$,d переглядів</item>
+        <item quantity="few">%1$,d перегляди</item>
+        <item quantity="many">%1$,d переглядів</item>
+    </plurals>
+    <string name="label_tools_about">Про програму</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d мова</item>
+        <item quantity="other">%1$,d мов</item>
+        <item quantity="few">%1$,d мови</item>
+        <item quantity="many">%1$,d мов</item>
+    </plurals>
+</resources>

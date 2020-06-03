@@ -17,27 +17,10 @@
     <string name="menu_copyright">Авторское право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Услышьте поступь божью!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Другие</string>
-    <string name="nav_my_tools">Мои инструменты</string>
-    <string name="menu_switch_language">Изменить язык</string>
-    <string name="action_tools_open_tool">Открыть инструмент</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d просмотр</item>
-        <item quantity="other">%1$,d просмотров</item>
-        <item quantity="few">%1$,d просмотра</item>
-        <item quantity="many">%1$,d просмотров</item>
-    </plurals>
-    <string name="label_tools_about">О приложении</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d язык</item>
-        <item quantity="other">%1$,d языков</item>
-        <item quantity="few">%1$,d языка</item>
-        <item quantity="many">%1$,d языков</item>
-    </plurals>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 60 языков</string>
     <string name="menu_language_settings">Настройки языка</string>
+    <string name="menu_switch_language">Изменить язык</string>
     <string name="title_language_settings">Настройки языка</string>
     <string name="title_language_primary">Основной язык</string>
     <string name="title_language_parallel">Параллельный язык</string>

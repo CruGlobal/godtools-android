@@ -19,23 +19,10 @@
     <string name="menu_copyright">မူပိုင်ခွင့်</string>
     <!-- Share a story -->
     <string name="share_story_subject">ဘုရားမည်သို့လုပ်ဆောင်နေခြင်းကို ကြားချင်ပါသည်။</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Tools များကိုရှာဖွေရန်</string>
-    <string name="nav_my_tools">ကျွန်ုပ်၏ Tools များ</string>
-    <string name="menu_switch_language">ဘာသာ စကားကို ပြောင်းရန်</string>
-    <string name="title_add_new_tools">Tools သစ် ကို ထပ်ထည့်ရန်</string>
-    <string name="action_tools_open_tool">Tool ဖွင့်ရန်</string>
-    <plurals name="label_tools_shares">
-        <item quantity="other">" %1$,d toolကိုကြည့်ရှုသူများ"</item>
-    </plurals>
-    <string name="label_tools_about">အ ကြောင်း</string>
-    <plurals name="label_tools_languages">
-        <item quantity="other">" %1$,d ဘာသာစကားများ"</item>
-    </plurals>
-    <string name="menu_add_to_home">" မူလစာမျက်နှာတွင် ထည့်ပါ"</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၈၀  ကျော်</string>
     <string name="menu_language_settings">"ဘာသာစကား၏ ဆက်တင်များ "</string>
+    <string name="menu_switch_language">ဘာသာ စကားကို ပြောင်းရန်</string>
     <string name="title_language_settings">ဘာသာစကားကို ဆက်တင်ချပါ</string>
     <string name="title_language_primary">အဓိကအသုံးပြု သောဘာသာစကား</string>
     <string name="title_language_parallel">ယှဉ်တွဲ အသုံးပြုနိုင် သောဘာသာစကား</string>
@@ -44,5 +31,4 @@
     <string name="text_language_warning">အချို့ဘာသာစကားများအတွက် အသုံးမပြုနိုင် သေးပါ</string>
     <string name="label_language_none">မရှိပါ</string>
     <string name="label_language_search">ဘာသာစကား များကိုရွေးချယ်ခြင်း</string>
-    <!-- Sharing -->
 </resources>

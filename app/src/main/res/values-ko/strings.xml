@@ -20,23 +20,10 @@
     <string name="menu_copyright">저작권</string>
     <!-- Share a story -->
     <string name="share_story_subject">신이 어떻게 움직이는지 들어보세요!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">도구 찾기</string>
-    <string name="nav_my_tools">내 도구</string>
-    <string name="menu_switch_language">언어 변경</string>
-    <string name="title_add_new_tools">새 툴 추가</string>
-    <string name="action_tools_open_tool">툴 열기</string>
-    <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d 뷰</item>
-    </plurals>
-    <string name="label_tools_about">정보</string>
-    <plurals name="label_tools_languages">
-        <item quantity="other">%1$,d 언어</item>
-    </plurals>
-    <string name="menu_add_to_home">홈 스크린에 추가</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>
+    <string name="menu_switch_language">언어 변경</string>
     <string name="title_language_settings">언어 설정</string>
     <string name="title_language_primary">기본 언어</string>
     <string name="title_language_parallel">병행 언어</string>
@@ -45,5 +32,4 @@
     <string name="text_language_warning">모든 언어로 모든 도구를 이용할 수 있지는 않습니다.</string>
     <string name="label_language_none">없음</string>
     <string name="label_language_search">언어 필터</string>
-    <!-- Sharing -->
 </resources>

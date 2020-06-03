@@ -20,25 +20,10 @@
     <string name="menu_copyright">Πνευματικά δικαιώματα</string>
     <!-- Share a story -->
     <string name="share_story_subject">Ακούστε πώς κινείται ο Θεός!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Βρείτε Εργαλεία</string>
-    <string name="nav_my_tools">Τα Εργαλεία μου</string>
-    <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
-    <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
-    <string name="action_tools_open_tool">Άνοιγμα Εργαλείου</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Προβολή</item>
-        <item quantity="other">%1$,d Προβολές</item>
-    </plurals>
-    <string name="label_tools_about">Σχετικά</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Γλώσσα</item>
-        <item quantity="other">%1$,d Γλώσσες</item>
-    </plurals>
-    <string name="menu_add_to_home">Προσθήκη στην Αρχική Οθόνη</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Γλώσσες</string>
     <string name="menu_language_settings">Ρυθμίσεις Γλώσσας</string>
+    <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
     <string name="title_language_settings">Ρυθμίσεις Γλώσσας</string>
     <string name="title_language_primary">Κύρια Γλώσσα</string>
     <string name="title_language_parallel">Παράλληλη Γλώσσα</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Δεν είναι διαθέσιμο κάθε εργαλείο σε κάθε γλώσσα.</string>
     <string name="label_language_none">Κανένα</string>
     <string name="label_language_search">Φιλτράρισμα Γλωσσών</string>
-    <!-- Sharing -->
 </resources>

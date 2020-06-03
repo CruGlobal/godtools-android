@@ -20,28 +20,10 @@
     <string name="menu_copyright">काॅपीराईट</string>
     <!-- Share a story -->
     <string name="share_story_subject">देव कसे कार्य करीत आहे ते ऐका!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">साधने शोधा</string>
-    <string name="nav_my_tools">माझे साधने</string>
-    <string name="menu_switch_language">भाषा बदला</string>
-    <string name="title_add_new_tools">नवीन साधने जोडा</string>
-    <string name="action_tools_open_tool">साधन उघडा</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">" %1$,d मत "</item>
-        <item quantity="other">%1$,d
-  मते</item>
-    </plurals>
-    <string name="label_tools_about">विषयी</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">"%1$,d एक भाषा
-
-"</item>
-        <item quantity="other">%1$,d भाषा</item>
-    </plurals>
-    <string name="menu_add_to_home">होम स्क्रीनमध्ये जोडा.</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ भाषा</string>
     <string name="menu_language_settings">भाषेच्या मांडण्या</string>
+    <string name="menu_switch_language">भाषा बदला</string>
     <string name="title_language_settings">भाषेच्या मांडण्या</string>
     <string name="title_language_primary">"मूळ भाषा
 "</string>
@@ -54,5 +36,4 @@
     <string name="text_language_warning">प्रत्येक साधन प्रत्येक भाषेत उपलब्ध नसते</string>
     <string name="label_language_none">एक ही नाही</string>
     <string name="label_language_search">भाषा फिल्टर करा</string>
-    <!-- Sharing -->
 </resources>

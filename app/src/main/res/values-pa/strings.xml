@@ -20,25 +20,10 @@
     <string name="menu_copyright">ਕਾਪੀਰਾਈਟ</string>
     <!-- Share a story -->
     <string name="share_story_subject">ਸੁਣੋਂ ਪਰਮੇਸ਼ੁਰ ਕਿਸ ਤਰ੍ਹਾਂ ਕੰਮ ਕਰ ਰਿਹਾ ਹੈ!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">ਟੂਲ ਲੱਭੋ</string>
-    <string name="nav_my_tools">ਮੇਰੇ ਟੂਲ</string>
-    <string name="menu_switch_language">ਭਾਸ਼ਾ ਨੂੰ ਬਦਲੋ</string>
-    <string name="title_add_new_tools">ਨਵੇਂ ਟੂਲ ਜੋੜੋ</string>
-    <string name="action_tools_open_tool">ਟੂਲ ਖੋਲ੍ਹੋ</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d ਨੇ ਵੇਖਿਆ</item>
-        <item quantity="other">%1$,d ਨੇ ਵੇਖਿਆ</item>
-    </plurals>
-    <string name="label_tools_about">ਸਾਡੇ ਬਾਰੇ</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d ਭਾਸ਼ਾਵਾ</item>
-        <item quantity="other">%1$,d ਭਾਸ਼ਾਵਾ</item>
-    </plurals>
-    <string name="menu_add_to_home">ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ਭਾਸ਼ਾਵਾਂ</string>
     <string name="menu_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
+    <string name="menu_switch_language">ਭਾਸ਼ਾ ਨੂੰ ਬਦਲੋ</string>
     <string name="title_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
     <string name="title_language_primary">ਮੂਲ ਭਾਸ਼ਾ</string>
     <string name="title_language_parallel">ਸਮਾਨੰਤਰ ਭਾਸ਼ਾ</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">ਹਰੋਕ ਡੂਲ ਹਰੇਕ ਭਾਸ਼ਾ ਵਿੱਚ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ ।</string>
     <string name="label_language_none">ਕੋਈ ਵੀ ਨਹੀਂ</string>
     <string name="label_language_search">ਭਾਸ਼ਾਵਾਂ ਫਿਲਟਰ ਕਰੋ</string>
-    <!-- Sharing -->
 </resources>

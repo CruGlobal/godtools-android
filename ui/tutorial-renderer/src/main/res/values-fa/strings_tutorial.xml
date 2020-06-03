@@ -19,7 +19,7 @@
     <string name="tutorial_onboarding_action_begin">شروع</string>
     <string name="tutorial_onboarding_action_continue">ادامه</string>
     <string name="tutorial_onboarding_action_skip">ردکردن</string>
-    <!-- Onboarding Tutorial -->
+    <!-- Training Tutorial -->
     <string name="tutorial_training_watch_headline">تماشا کردن</string>
     <string name="tutorial_training_watch_subhead">دراین ویدبو آنچه را که این برنامه ارائه می دهد را ببینید.</string>
     <string name="tutorial_training_prepare_headline">آماده کردن</string>

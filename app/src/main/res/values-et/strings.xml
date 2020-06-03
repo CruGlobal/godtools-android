@@ -20,25 +20,10 @@
     <string name="menu_copyright">Autoriõigus</string>
     <!-- Share a story -->
     <string name="share_story_subject">Kuula, kuidas Jumal tegutseb!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Ei ole saadaval</string>
-    <string name="nav_my_tools">Leia tööriistu</string>
-    <string name="menu_switch_language">Vaheta keelt</string>
-    <string name="title_add_new_tools">Lisa uusi tööriistu</string>
-    <string name="action_tools_open_tool">Ava tööriist</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d külastus</item>
-        <item quantity="other">%1$,d külastust</item>
-    </plurals>
-    <string name="label_tools_about">Teave</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d keel</item>
-        <item quantity="other">%1$,d keelt</item>
-    </plurals>
-    <string name="menu_add_to_home">Lisa esilehele</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
+    <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_language_settings">Keeleseaded</string>
     <string name="title_language_primary">Põhikeel</string>
     <string name="title_language_parallel">Teine keel</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Kõik tööriistad ei ole kõigis keeltes saadaval.</string>
     <string name="label_language_none">Mitte ühtki</string>
     <string name="label_language_search">Filtri keeled</string>
-    <!-- Sharing -->
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">Instalá</string>
+    <string name="menu_share_tool">Kompartí</string>
+    <string name="share_tool_title">Kompartí “%1$s” uzando</string>
+    <string name="tool_not_found">No por haña e hèrmènt ku bo ta buska</string>
+    <string name="tool_loading">E hèrmènt ku bo a pidi ta kargando...</string>
+    <string name="feature_discovery_title_share_tool">Kompartí un lenk</string>
+    <string name="feature_discovery_desc_share_tool">Manda e hèrmènt aki pa un amigu dor di primi riba e boton aki</string>
+</resources>

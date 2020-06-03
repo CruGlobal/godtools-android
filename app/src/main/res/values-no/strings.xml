@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hør hvordan Gud rører!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Finn verktøy</string>
-    <string name="nav_my_tools">Mine verktøy</string>
-    <string name="menu_switch_language">Bytt språk</string>
-    <string name="title_add_new_tools">Legg til nye verktøy</string>
-    <string name="action_tools_open_tool">Åpne verktøy</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d visning</item>
-        <item quantity="other">%1$,d visninger</item>
-    </plurals>
-    <string name="label_tools_about">Om</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d språk</item>
-        <item quantity="other">%1$,d språk</item>
-    </plurals>
-    <string name="menu_add_to_home">Legg til å hjemskjermen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 80 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
+    <string name="menu_switch_language">Bytt språk</string>
     <string name="title_language_settings">Språkinnstillinger</string>
     <string name="title_language_primary">Hovedspråk</string>
     <string name="title_language_parallel">Parallellspråk</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer språk</string>
-    <!-- Sharing -->
 </resources>

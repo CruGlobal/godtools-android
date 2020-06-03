@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <!-- Tool Details UI -->
+    <string name="action_tools_open_tool">Բացեք</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$d դիտում</item>
+        <item quantity="other">%1$d դիտում</item>
+    </plurals>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$d լեզու</item>
+        <item quantity="other">%1$d լեզուներով</item>
+    </plurals>
+</resources>
