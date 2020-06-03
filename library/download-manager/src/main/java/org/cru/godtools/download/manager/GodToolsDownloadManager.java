@@ -54,7 +54,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -87,9 +86,7 @@ import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
-import static org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS;
 import static org.ccci.gto.android.common.db.Expression.NULL;
-import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 @Singleton
@@ -250,18 +247,18 @@ public final class GodToolsDownloadManager {
                     .map(Language::getCode)
                     .toArray();
 
-            // remove any translation that is no longer added to this device and hasn't been accessed within the past
-            // week
-            final Translation translation = new Translation();
-            translation.setDownloaded(false);
-            int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
-                    .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
-                    .and(TranslationTable.FIELD_LAST_ACCESSED.lt(new Date(System.currentTimeMillis() - WEEK_IN_MS)))
-                    .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
+//            // remove any translation that is no longer added to this device and hasn't been accessed within the past
+//            // week
+//            final Translation translation = new Translation();
+//            translation.setDownloaded(false);
+//            int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
+//                    .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
+//                    .and(TranslationTable.FIELD_LAST_ACCESSED.lt(new Date(System.currentTimeMillis() - WEEK_IN_MS)))
+//                    .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
 
             // remove any translation we have a newer version of
             final Set<TranslationKey> seen = new ArraySet<>();
-            changes += mDao.streamCompat(Query.select(Translation.class)
+            final long changes = mDao.streamCompat(Query.select(Translation.class)
                                                  .where(TranslationTable.SQL_WHERE_DOWNLOADED)
                                                  .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
                     // filter out the newest version of every translation
