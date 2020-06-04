@@ -29,7 +29,6 @@ dependencies {
     api "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
-    implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 
