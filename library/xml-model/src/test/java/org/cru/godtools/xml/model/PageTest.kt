@@ -1,10 +1,12 @@
 package org.cru.godtools.xml.model
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,6 +18,20 @@ class PageTest {
     @Before
     fun setup() {
         manifest = Manifest(TOOL_CODE)
+    }
+
+    @Test
+    fun verifyParse() {
+        val page = parsePageXml("page.xml")
+        assertEquals(Color.RED, page.backgroundColor)
+        assertTrue(ImageGravity(page.backgroundImageGravity).isTop())
+        assertTrue(ImageGravity(page.backgroundImageGravity).isStart())
+        assertEquals(ImageScaleType.FILL, page.backgroundImageScaleType)
+        assertEquals("header", page.header!!.title!!.text)
+        assertEquals("hero", page.hero!!.heading!!.text)
+        assertEquals("call to action", page.callToAction.label!!.text)
+        assertThat(page.cards, hasSize(0))
+        assertThat(page.modals, hasSize(0))
     }
 
     @Test
