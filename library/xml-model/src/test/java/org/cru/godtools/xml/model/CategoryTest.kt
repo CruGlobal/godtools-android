@@ -14,7 +14,7 @@ class CategoryTest {
     @Test
     fun testParseCategory() {
         val manifest = Manifest.fromXml(getXmlParserForResource("categories.xml"), TOOL_CODE, Locale.US)
-        val category = manifest.findCategory("testParseCategory").get()
+        val category = manifest.findCategory("testParseCategory")!!
         assertEquals("testParseCategory", category.id)
         val banner = category.banner!!
         assertEquals("banner.jpg", banner.name)

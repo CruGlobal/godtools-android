@@ -3,9 +3,6 @@ package org.cru.godtools.xml.model;
 import android.graphics.Color;
 import android.net.Uri;
 
-import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -28,6 +25,7 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import androidx.collection.SimpleArrayMap;
+import androidx.core.util.ObjectsCompat;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
@@ -181,11 +179,14 @@ public final class Manifest extends Base implements Styles {
         return mCategories;
     }
 
-    @NonNull
-    public Optional<Category> findCategory(@Nullable final String category) {
-        return Stream.of(mCategories)
-                .filter(c -> Objects.equal(category, c.getId()))
-                .findFirst();
+    @Nullable
+    public Category findCategory(@Nullable final String category) {
+        for (final Category c : mCategories) {
+            if (ObjectsCompat.equals(category, c.getId())) {
+                return c;
+            }
+        }
+        return null;
     }
 
     @NonNull
@@ -195,10 +196,12 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public Page findPage(@Nullable final String id) {
-        return Stream.of(mPages)
-                .filter(p -> p.getId().equalsIgnoreCase(id))
-                .findFirst()
-                .orElse(null);
+        for (final Page page : mPages) {
+            if (page.getId().equalsIgnoreCase(id)) {
+                return page;
+            }
+        }
+        return null;
     }
 
     @NonNull

@@ -126,7 +126,7 @@ class ArticlesFragmentDataModel @Inject constructor(
     private val tags = manifest.combineWith(category) { manifest, category ->
         when (category) {
             null -> null
-            else -> manifest?.findCategory(category)?.orElse(null)?.aemTags.orEmpty()
+            else -> manifest?.findCategory(category)?.aemTags.orEmpty()
         }
     }
 

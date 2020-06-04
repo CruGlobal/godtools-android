@@ -2,7 +2,6 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 
-import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -195,9 +194,12 @@ public final class Page extends Base implements Styles, Parent {
 
     @Nullable
     public Modal findModal(@Nullable final String id) {
-        return Stream.of(mModals)
-                .filter(m -> m.getId().equalsIgnoreCase(id))
-                .findFirst().orElse(null);
+        for (final Modal modal : mModals) {
+            if (modal.getId().equalsIgnoreCase(id)) {
+                return modal;
+            }
+        }
+        return null;
     }
 
     @NonNull
