@@ -2,7 +2,7 @@ package org.cru.godtools.xml.model
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.annotation.VisibleForTesting
+import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
@@ -27,10 +27,9 @@ class Page : Base, Styles, Parent {
     val id get() = fileName ?: "${manifest.code}-$position"
     val position: Int
 
-    private var fileName: String? = null
-    var localFileName: String? = null
-        private set
-    var listeners: Set<Event.Id>  = emptySet()
+    private val fileName: String?
+    val localFileName: String?
+    var listeners: Set<Event.Id> = emptySet()
         private set
 
     @ColorInt
@@ -73,25 +72,28 @@ class Page : Base, Styles, Parent {
 
     override val content get() = emptyList<Content>()
 
-    @VisibleForTesting
-    internal constructor(manifest: Manifest, position: Int) : super(manifest) {
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal constructor(
+        manifest: Manifest,
+        position: Int,
+        fileName: String? = null,
+        localFileName: String? = null
+    ) : super(manifest) {
         this.position = position
+        this.fileName = fileName
+        this.localFileName = localFileName
+    }
+
+    internal constructor(manifest: Manifest, position: Int, manifestParser: XmlPullParser) : super(manifest) {
+        this.position = position
+
+        manifestParser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE)
+        fileName = manifestParser.getAttributeValue(null, XML_MANIFEST_FILENAME)
+        localFileName = manifestParser.getAttributeValue(null, XML_MANIFEST_SRC)
+        XmlPullParserUtils.skipTag(manifestParser)
     }
 
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
-
-    @WorkerThread
-    @Throws(IOException::class, XmlPullParserException::class)
-    private fun parseManifestXml(parser: XmlPullParser): Page {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE)
-
-        fileName = parser.getAttributeValue(null, XML_MANIFEST_FILENAME)
-        localFileName = parser.getAttributeValue(null, XML_MANIFEST_SRC)
-
-        // discard any nested nodes
-        XmlPullParserUtils.skipTag(parser)
-        return this
-    }
 
     private var pageXmlParsed = false
 
@@ -107,7 +109,7 @@ class Page : Base, Styles, Parent {
         _primaryTextColor = parser.parseColor(XML_PRIMARY_TEXT_COLOR, _primaryTextColor)
         _textColor = parser.parseColor(XML_TEXT_COLOR, _textColor)
         _cardTextColor = parser.parseColor(XML_CARD_TEXT_COLOR, _cardTextColor)
-        backgroundColor = parser.parseColor(XML_BACKGROUND_COLOR, backgroundColor)!!
+        backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: backgroundColor
         backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
             parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, backgroundImageGravity)
@@ -174,12 +176,10 @@ class Page : Base, Styles, Parent {
     companion object {
         const val XML_PAGE = "page"
 
-
         @JvmStatic
         @WorkerThread
         @Throws(XmlPullParserException::class, IOException::class)
-        fun fromManifestXml(manifest: Manifest, position: Int, parser: XmlPullParser) =
-            Page(manifest, position).parseManifestXml(parser)
+        fun fromManifestXml(manifest: Manifest, position: Int, parser: XmlPullParser) = Page(manifest, position, parser)
     }
 }
 
