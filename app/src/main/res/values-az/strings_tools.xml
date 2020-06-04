@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Alət tapın</string>
+    <string name="nav_my_tools">Mənim alətlərim</string>
+    <string name="title_add_new_tools">Yeni alətlər əlavə edin</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Ana səhifəyə əlavə et</string>
+    <string name="action_tools_open_tool">Aləti aç</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Baxış</item>
+        <item quantity="other">%1$,d Baxışlar</item>
+    </plurals>
+    <string name="label_tools_about">Haqqında</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Dil</item>
+        <item quantity="other">%1$,d Dillər</item>
+    </plurals>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Pata Zana</string>
+    <string name="nav_my_tools">Zana Zangu</string>
+    <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Weka kwenye Skrini ya Jumla</string>
+    <string name="action_tools_open_tool">Kifaa Wazi</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">Maoni %1$,d</item>
+        <item quantity="other">Maoni %1$,d</item>
+    </plurals>
+    <string name="label_tools_about">Kuhusu</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">Lugha %1$,d</item>
+        <item quantity="other">Lugha %1$,d</item>
+    </plurals>
+</resources>

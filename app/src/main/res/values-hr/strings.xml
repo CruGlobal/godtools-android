@@ -20,27 +20,10 @@
     <string name="menu_copyright">Autorska prava</string>
     <!-- Share a story -->
     <string name="share_story_subject">Poslušajte kako nas Bog nadahnjuje!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Pronađi alate</string>
-    <string name="nav_my_tools">Moji alati</string>
-    <string name="menu_switch_language">Promijeni jezik</string>
-    <string name="title_add_new_tools">Dodajte nove alate</string>
-    <string name="action_tools_open_tool">Otvori alat</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d pregled</item>
-        <item quantity="other">%1$,d pregleda</item>
-        <item quantity="few">%1$,d pregleda</item>
-    </plurals>
-    <string name="label_tools_about">O nama</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d jezik</item>
-        <item quantity="other">%1$,d jezika</item>
-        <item quantity="few">%1$,d jezika</item>
-    </plurals>
-    <string name="menu_add_to_home">Dodaj na početni zaslon</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Više od 80 jezika</string>
     <string name="menu_language_settings">Postavke jezika</string>
+    <string name="menu_switch_language">Promijeni jezik</string>
     <string name="title_language_settings">Postavke jezika</string>
     <string name="title_language_primary">Primarni jezik</string>
     <string name="title_language_parallel">Usporedni jezik</string>
@@ -49,5 +32,4 @@
     <string name="text_language_warning">Nije svaki alat dostupan na svakom od jezika.</string>
     <string name="label_language_none">Ništa</string>
     <string name="label_language_search">Filtriraj jezike</string>
-    <!-- Sharing -->
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">查找工具</string>
+    <string name="nav_my_tools">我的工具</string>
+    <string name="action_tools_about">关于</string>
+    <string name="title_add_new_tools">添加新工具</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">添加到主屏幕</string>
+    <string name="action_tools_open_tool">打开工具</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d 次浏览</item>
+    </plurals>
+    <string name="label_tools_about">关于</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d 种语言</item>
+    </plurals>
+</resources>

@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Découvrez comment Dieu agit !</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Trouver des outils</string>
-    <string name="nav_my_tools">Mes outils</string>
-    <string name="menu_switch_language">Changer de langue</string>
-    <string name="title_add_new_tools">Ajouter de nouveaux outils</string>
-    <string name="action_tools_open_tool">Ouvrir l\'outil</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d vue</item>
-        <item quantity="other">%1$,d vues</item>
-    </plurals>
-    <string name="label_tools_about">À propos</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d langue</item>
-        <item quantity="other">%1$,d langues</item>
-    </plurals>
-    <string name="menu_add_to_home">Ajouter à l\'écran d\'accueil</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Plus de 80 langues</string>
     <string name="menu_language_settings">Paramètres de langue</string>
+    <string name="menu_switch_language">Changer de langue</string>
     <string name="title_language_settings">Paramètres de langue</string>
     <string name="title_language_primary">Langue principale</string>
     <string name="title_language_parallel">Langue secondaire</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Tous les outils ne sont pas disponibles dans toutes les langues.</string>
     <string name="label_language_none">Aucun(e)</string>
     <string name="label_language_search">Filtrer les langues</string>
-    <!-- Sharing -->
 </resources>

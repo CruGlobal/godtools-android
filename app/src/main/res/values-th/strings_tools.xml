@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">ค้นหาเครื่องมือ</string>
+    <string name="nav_my_tools">เครื่องมือของฉัน</string>
+    <string name="title_add_new_tools">เพิ่มเครื่องมือใหม่</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">เพิ่มไปยังหน้าหลัก</string>
+    <string name="action_tools_open_tool">เปิดเครื่องมือ</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">ดู %1$,d ครั้ง</item>
+    </plurals>
+    <string name="label_tools_about">เกี่ยวกับ</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d ภาษา</item>
+    </plurals>
+</resources>

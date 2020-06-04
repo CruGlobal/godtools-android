@@ -19,29 +19,10 @@
     <string name="menu_copyright">Autoriaus teisės</string>
     <!-- Share a story -->
     <string name="share_story_subject">Išgirsk, kaip Dievas juda!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Rasti įrankius</string>
-    <string name="nav_my_tools">Mano įrankiai</string>
-    <string name="menu_switch_language">Pakeisti kalbą</string>
-    <string name="title_add_new_tools">Pridėti naujus įrankius</string>
-    <string name="action_tools_open_tool">Atidaryti įrankį</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d peržiūra</item>
-        <item quantity="other">%1$,d peržiūros</item>
-        <item quantity="few">%1$,d peržiūros</item>
-        <item quantity="many">%1$,d peržiūrų</item>
-    </plurals>
-    <string name="label_tools_about">Apie</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d kalba</item>
-        <item quantity="other">%1$,d kalbos</item>
-        <item quantity="few">%1$,d kalbos</item>
-        <item quantity="many">%1$,d kalbų</item>
-    </plurals>
-    <string name="menu_add_to_home">Pridėti į pagrindinį puslapį</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kalbų</string>
     <string name="menu_language_settings">Kalbos nustatymai</string>
+    <string name="menu_switch_language">Pakeisti kalbą</string>
     <string name="title_language_settings">Kalbos nustatymai</string>
     <string name="title_language_primary">Pagrindinė kalba</string>
     <string name="title_language_parallel">Paralelinė kalba</string>
@@ -50,5 +31,4 @@
     <string name="text_language_warning">Ne kiekvienas įrankis pateikiamas kiekviena kalba</string>
     <string name="label_language_none">Joks</string>
     <string name="label_language_search">Filtruoti kalbas</string>
-    <!-- Sharing -->
 </resources>

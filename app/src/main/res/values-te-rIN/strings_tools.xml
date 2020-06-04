@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">సాధనాలను కనుగొనండి</string>
+    <string name="nav_my_tools">నా సాధనాలు</string>
+    <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">హోమ్ స్క్రీన్‌కు జోడించండి</string>
+    <string name="action_tools_open_tool">పరికరం తెరవండి</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d వీక్షణ</item>
+        <item quantity="other">%1$,d వీక్షణలు</item>
+    </plurals>
+    <string name="label_tools_about">గురించి</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d భాష</item>
+        <item quantity="other">%1$,d భాషలు</item>
+    </plurals>
+</resources>

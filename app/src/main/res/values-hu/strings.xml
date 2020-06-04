@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Halld Isten cselekedeteit!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Eszközök keresése</string>
-    <string name="nav_my_tools">Saját eszközeim</string>
-    <string name="menu_switch_language">Nyelv váltása</string>
-    <string name="title_add_new_tools">Új eszközök hozzáadása</string>
-    <string name="action_tools_open_tool">Eszköz megnyitása</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d megtekintés</item>
-        <item quantity="other">%1$,d megtekintés</item>
-    </plurals>
-    <string name="label_tools_about">Rólunk</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d nyelv</item>
-        <item quantity="other">%1$,d nyelv</item>
-    </plurals>
-    <string name="menu_add_to_home">Hozzáadás kezdőképernyőhöz</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ nyelv</string>
     <string name="menu_language_settings">Nyelvbeállítások</string>
+    <string name="menu_switch_language">Nyelv váltása</string>
     <string name="title_language_settings">Nyelvbeállítások</string>
     <string name="title_language_primary">Elsődleges nyelv</string>
     <string name="title_language_parallel">Párhuzamos nyelv</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Nem minden eszköz áll rendelkezésre minden nyelven.</string>
     <string name="label_language_none">Nincs</string>
     <string name="label_language_search">Nyelvek szűrése</string>
-    <!-- Sharing -->
 </resources>

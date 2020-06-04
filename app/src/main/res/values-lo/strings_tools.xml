@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">ຫາເຄື່ອງມື</string>
+    <string name="nav_my_tools">ເຄື່ອງມືຂອງຂ້ອຍ</string>
+    <string name="title_add_new_tools">ເພິ່ມເຄື່ອງມືໃໝ່</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">ເພີ່ມໃສ່ ໜ້າ ຈໍເຮືອນ</string>
+    <string name="action_tools_open_tool">ເປີດເຄື່ອງມື</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d ຮັບຊົມ</item>
+    </plurals>
+    <string name="label_tools_about">ກ່ຽວກັບ</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">" %1$,d ພາສາ"</item>
+    </plurals>
+</resources>

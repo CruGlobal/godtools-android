@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Шинэ хайлт</string>
+    <string name="nav_my_tools">Миний багаж</string>
+    <!-- Tool Details UI -->
+    <string name="action_tools_open_tool">Нээлттэй</string>
+</resources>

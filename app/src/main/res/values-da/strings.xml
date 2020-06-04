@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hør, hvordan Gud bevæger!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Find værktøjer</string>
-    <string name="nav_my_tools">Mine værktøjer</string>
-    <string name="menu_switch_language">Skift sprog</string>
-    <string name="title_add_new_tools">Tilføj nye værktøjer</string>
-    <string name="action_tools_open_tool">Åbn værktøj</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Visning</item>
-        <item quantity="other">%1$,d Visninger</item>
-    </plurals>
-    <string name="label_tools_about">Om</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Sprog</item>
-        <item quantity="other">%1$,d Sprog</item>
-    </plurals>
-    <string name="menu_add_to_home">Føj til startside</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 90 sprog</string>
     <string name="menu_language_settings">Sprogindstillinger</string>
+    <string name="menu_switch_language">Skift sprog</string>
     <string name="title_language_settings">Sprogindstillinger</string>
     <string name="title_language_primary">Primært sprog</string>
     <string name="title_language_parallel">Parallelt sprog</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Ikke alle værktøjer findes på alle sprog.</string>
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer sprog</string>
-    <!-- Sharing -->
 </resources>

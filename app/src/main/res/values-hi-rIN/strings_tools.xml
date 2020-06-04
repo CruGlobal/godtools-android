@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">टूल्स को ढूँढें</string>
+    <string name="nav_my_tools">मेरे टूल्स</string>
+    <string name="title_add_new_tools">नए टूल्स को जोड़ें</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">मुख्य पृष्ठ में जोड़ दें</string>
+    <string name="action_tools_open_tool">टूल खोलें</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d ने देखा</item>
+        <item quantity="other">%1$,d ने देखा</item>
+    </plurals>
+    <string name="label_tools_about">के बारे में</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d भाषा</item>
+        <item quantity="other">%1$,d भाषा</item>
+    </plurals>
+</resources>

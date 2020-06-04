@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">સાધનો/ટુલ્સ શોધો</string>
+    <string name="nav_my_tools">મારા સાધનો/ટુલ્સ</string>
+    <string name="title_add_new_tools">નવા સાધનો/ટુલ્સ ઉમેરો</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
+    <string name="action_tools_open_tool">ખુલ્લું સાધન</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d દર્શક</item>
+        <item quantity="other">%1$,d દર્શકો</item>
+    </plurals>
+    <string name="label_tools_about">વિશે/આશરે</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d ભાષા</item>
+        <item quantity="other">%1$,d ભાષાઓ</item>
+    </plurals>
+</resources>

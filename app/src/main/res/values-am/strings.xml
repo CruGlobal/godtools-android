@@ -19,25 +19,10 @@
     <string name="menu_copyright">የቅጂ መብት</string>
     <!-- Share a story -->
     <string name="share_story_subject">እግዚአብሔር  እንዴት እየሰራ እንደሆነ ያዳምጡ!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">መሳሪያዎችን ፈልግ</string>
-    <string name="nav_my_tools">የኔ መሳሪያዎች</string>
-    <string name="menu_switch_language">ቋንቋ ይቀይሩ</string>
-    <string name="title_add_new_tools">አዲስ መሳሪያን ይጨምሩ</string>
-    <string name="action_tools_open_tool">ክፈት</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d ታይቷል</item>
-        <item quantity="other">%1$,d ታይቷል</item>
-    </plurals>
-    <string name="label_tools_about">ስለ</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d ቋንቋ</item>
-        <item quantity="other">%1$,d ቋንቋዎች</item>
-    </plurals>
-    <string name="menu_add_to_home">ዋና ስክሪን ይጨምሩት</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ከ 70 በላይ ቋንቋዎች</string>
     <string name="menu_language_settings">የቋንቋ ማስተካከያ</string>
+    <string name="menu_switch_language">ቋንቋ ይቀይሩ</string>
     <string name="title_language_settings">የቋንቋ ማስተካከያ</string>
     <string name="title_language_primary">ዋና ቋንቋ</string>
     <string name="title_language_parallel">ሁለት ቋንቋ</string>
@@ -45,5 +30,4 @@
     <string name="text_language_parallel_description">GodTools\'ን ለሰዎች በራሳቸዉ ቋንቋ አጋራ</string>
     <string name="text_language_warning">ሁሉም አገልግሎቶች በሁሉም ቋንቋ አይገኙም</string>
     <string name="label_language_none">ምንም</string>
-    <!-- Sharing -->
 </resources>

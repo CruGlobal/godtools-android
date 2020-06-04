@@ -14,11 +14,6 @@
     <string name="menu_privacy_policy">இரகசியகாப்பு கொள்கை</string>
     <string name="menu_copyright">பதிப்புரிமை தகவல்</string>
     <!-- Share a story -->
-    <!-- Tools UI -->
-    <string name="nav_find_tools">உபகரணங்களை தேடு</string>
-    <string name="nav_my_tools">என் உபகரணங்கள்</string>
-    <string name="action_tools_open_tool">திறந்த</string>
-    <string name="label_tools_about">பற்றி</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ மொழிகளை</string>
     <string name="menu_language_settings">மொழி அமைப்புகள்</string>
@@ -28,5 +23,4 @@
     <string name="action_language_parallel_select">இணை மொழியை தெரிந்தெடுங்கள்</string>
     <string name="text_language_parallel_description">காட்டூல்ஸ்-யை இன்னொருவருடன் அவரது தாய்மொழியில் பகிர்ந்திடுங்கள்</string>
     <string name="text_language_warning">எல்லா உபகரணங்களும் எல்லா மொழியிலும்  இல்லை</string>
-    <!-- Sharing -->
 </resources>

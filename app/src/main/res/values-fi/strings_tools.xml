@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Etsi työkaluja</string>
+    <string name="nav_my_tools">Omat työkalut</string>
+    <string name="title_add_new_tools">Lisää uusia työkaluja</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Lisää aloitusnäyttöön</string>
+    <string name="action_tools_open_tool">Avaa työkalu</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d tarkastelu</item>
+        <item quantity="other">%1$,d tarkastelua</item>
+    </plurals>
+    <string name="label_tools_about">Info</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d kieli</item>
+        <item quantity="other">%1$,d kieltä</item>
+    </plurals>
+</resources>

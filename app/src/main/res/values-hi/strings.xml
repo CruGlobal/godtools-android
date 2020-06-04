@@ -20,25 +20,10 @@
     <string name="menu_copyright">कॉपीराइट</string>
     <!-- Share a story -->
     <string name="share_story_subject">गॉड का चलना सुनें!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">टूल्स खोजें</string>
-    <string name="nav_my_tools">मेरे टूल्स</string>
-    <string name="menu_switch_language">भाषा बदलें</string>
-    <string name="title_add_new_tools">नए टूल जोड़ें</string>
-    <string name="action_tools_open_tool">टूल खोलें</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d दृश्य</item>
-        <item quantity="other">%1$,d दृश्य</item>
-    </plurals>
-    <string name="label_tools_about">परिचय</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d भाषा</item>
-        <item quantity="other">%1$,d भाषाएं</item>
-    </plurals>
-    <string name="menu_add_to_home">होम स्क्रीन में जोड़ें</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ भाषाएँ</string>
     <string name="menu_language_settings">भाषा सेटिंग्स</string>
+    <string name="menu_switch_language">भाषा बदलें</string>
     <string name="title_language_settings">भाषा सेटिंग्स</string>
     <string name="title_language_primary">प्राथमिक भाषा</string>
     <string name="title_language_parallel">समानांतर भाषा</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">सभी टूल सभी भाषा में उपलब्ध नहीं होते।</string>
     <string name="label_language_none">कोई नहीं</string>
     <string name="label_language_search">भाषाएं फ़िल्टर करें</string>
-    <!-- Sharing -->
 </resources>

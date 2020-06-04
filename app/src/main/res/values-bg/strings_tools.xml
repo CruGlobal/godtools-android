@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Намиране на инструменти</string>
+    <string name="nav_my_tools">Моите инструменти</string>
+    <string name="title_add_new_tools">Добавете нови инструменти</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Добавяне към началния екран</string>
+    <string name="action_tools_open_tool">Отворете инструмента</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Преглед</item>
+        <item quantity="other">%1$,d Прегледи</item>
+    </plurals>
+    <string name="label_tools_about">За приложението</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d език</item>
+        <item quantity="other">%1$,d езици</item>
+    </plurals>
+</resources>

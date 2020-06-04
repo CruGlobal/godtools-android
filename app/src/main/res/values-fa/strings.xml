@@ -22,25 +22,10 @@
     <string name="menu_copyright">حق نسخه‌برداری</string>
     <!-- Share a story -->
     <string name="share_story_subject">صدای کارخداوند را بشنوید!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">یافتن ابزار</string>
-    <string name="nav_my_tools">ابزار من</string>
-    <string name="menu_switch_language">تغییر زبان</string>
-    <string name="title_add_new_tools">افزودن ابزارهای جدید</string>
-    <string name="action_tools_open_tool">باز کردن ابزار</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d مشاهده</item>
-        <item quantity="other">%1$,d مشاهده</item>
-    </plurals>
-    <string name="label_tools_about">درباره</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d زبان</item>
-        <item quantity="other">%1$,d زبان</item>
-    </plurals>
-    <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+80 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>
+    <string name="menu_switch_language">تغییر زبان</string>
     <string name="title_language_settings">تنظیمات زبان</string>
     <string name="title_language_primary">زبان اصلی</string>
     <string name="title_language_parallel">زبان موازی</string>
@@ -49,5 +34,4 @@
     <string name="text_language_warning">تمام ابزار به تمام زبان‌ها در دسترس نیستند.</string>
     <string name="label_language_none">هیچکدام</string>
     <string name="label_language_search">فیلتر کردن زبان‌ها</string>
-    <!-- Sharing -->
 </resources>

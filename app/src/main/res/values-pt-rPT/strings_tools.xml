@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Encontrar ferramentas</string>
+    <string name="nav_my_tools">As minhas ferramentas</string>
+    <string name="title_add_new_tools">Adicionar novas ferramentas</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
+    <string name="action_tools_open_tool">Abrir ferramenta</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d visualização</item>
+        <item quantity="other">%1$,d visualizações</item>
+    </plurals>
+    <string name="label_tools_about">Sobre</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d idioma</item>
+        <item quantity="other">%1$,d idiomas</item>
+    </plurals>
+</resources>

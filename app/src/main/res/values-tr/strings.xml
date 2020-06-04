@@ -20,25 +20,10 @@
     <string name="menu_copyright">Telif Hakkı</string>
     <!-- Share a story -->
     <string name="share_story_subject">Tanrı\'nın nasıl hareket ettiğini duyun!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Araçlar Bul</string>
-    <string name="nav_my_tools">Araçlarım</string>
-    <string name="menu_switch_language">Dil Değiştir</string>
-    <string name="title_add_new_tools">Yeni Araçlar Ekle</string>
-    <string name="action_tools_open_tool">Aracı Aç</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Görüntüleme</item>
-        <item quantity="other">%1$,d Görüntüleme</item>
-    </plurals>
-    <string name="label_tools_about">Hakkında</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Dil</item>
-        <item quantity="other">%1$,d Dil</item>
-    </plurals>
-    <string name="menu_add_to_home">Ana Ekrana Ekle</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80\'i Aşkın Dil</string>
     <string name="menu_language_settings">Dil Ayarları</string>
+    <string name="menu_switch_language">Dil Değiştir</string>
     <string name="title_language_settings">Dil Ayarları</string>
     <string name="title_language_primary">Birincil Dil</string>
     <string name="title_language_parallel">Paralel Dil</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Her araç her dilde kullanıma hazır değildir.</string>
     <string name="label_language_none">Hiçbiri</string>
     <string name="label_language_search">Dilleri Filtrele</string>
-    <!-- Sharing -->
 </resources>

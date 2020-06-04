@@ -20,25 +20,10 @@
     <string name="menu_copyright">कॉपीराइट</string>
     <!-- Share a story -->
     <string name="share_story_subject">परमेश्वरले कसरी कार्य गर्दै हुनुहुन्छ सुन्नुहोस !</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">"टुल्सको खोजि गर्नु "</string>
-    <string name="nav_my_tools">"मेरो टुल्स "</string>
-    <string name="menu_switch_language">"भाषा बदल्नु होस् "</string>
-    <string name="title_add_new_tools">"नयाँ टुल्सलाई जोड्नुहोस् "</string>
-    <string name="action_tools_open_tool">खोल्नुहोस्</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d ले हेर्यो</item>
-        <item quantity="other">"%1$,d ले हेर्यो "</item>
-    </plurals>
-    <string name="label_tools_about">"को बारेमा "</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d भाषा</item>
-        <item quantity="other">%1$,d भाषा</item>
-    </plurals>
-    <string name="menu_add_to_home">"मुख्य पृष्ठमा जोड दिनुहोस "</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">"70+ भाषाहरु "</string>
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>
+    <string name="menu_switch_language">"भाषा बदल्नु होस् "</string>
     <string name="title_language_settings">बहसलाई चुन्नुहोस</string>
     <string name="title_language_primary">मुख्य भाषा</string>
     <string name="title_language_parallel">समान्तर भाषा</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">"प्रत्येक भाषामा प्रत्येक टूल उपलब्ध ।
  "</string>
     <string name="label_language_none">केहि  छैन</string>
-    <!-- Sharing -->
 </resources>

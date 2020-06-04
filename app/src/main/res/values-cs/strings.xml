@@ -20,29 +20,10 @@
     <string name="menu_copyright">Autorská práva</string>
     <!-- Share a story -->
     <string name="share_story_subject">Poslechněte si, jak Bůh hýbe světem!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Najít nástroje</string>
-    <string name="nav_my_tools">Moje nástroje</string>
-    <string name="menu_switch_language">Přepnout jazyk</string>
-    <string name="title_add_new_tools">Přidat nové nástroje</string>
-    <string name="action_tools_open_tool">Otevřít nástroj</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d zhlédnutí</item>
-        <item quantity="other">%1$,d zhlédnutí</item>
-        <item quantity="few">%1$,d zhlédnutí</item>
-        <item quantity="many">%1$,d zhlédnutí</item>
-    </plurals>
-    <string name="label_tools_about">O nás</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d jazyk</item>
-        <item quantity="other">%1$,d jazyky</item>
-        <item quantity="few">%1$,d jazyků</item>
-        <item quantity="many">%1$,d jazyků</item>
-    </plurals>
-    <string name="menu_add_to_home">Přidat na úvodní obrazovku</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ jazyků</string>
     <string name="menu_language_settings">Jazyková nastavení</string>
+    <string name="menu_switch_language">Přepnout jazyk</string>
     <string name="title_language_settings">Jazyková nastavení</string>
     <string name="title_language_primary">Primární jazyk</string>
     <string name="title_language_parallel">Paralelní jazyk</string>
@@ -51,5 +32,4 @@
     <string name="text_language_warning">Ne každý nástroj je dostupný ve všech jazycích.</string>
     <string name="label_language_none">Žádný</string>
     <string name="label_language_search">Filtrovat jazyky</string>
-    <!-- Sharing -->
 </resources>

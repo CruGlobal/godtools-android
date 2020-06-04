@@ -19,7 +19,7 @@
     <string name="tutorial_onboarding_action_begin">开始</string>
     <string name="tutorial_onboarding_action_continue">继续</string>
     <string name="tutorial_onboarding_action_skip">跳过</string>
-    <!-- Onboarding Tutorial -->
+    <!-- Training Tutorial -->
     <string name="tutorial_training_watch_headline">观看</string>
     <string name="tutorial_training_watch_subhead">在我们的演示视频中观看GodTools可以发挥的作用
 

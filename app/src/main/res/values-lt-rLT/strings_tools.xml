@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Rasti įrankius</string>
+    <string name="nav_my_tools">Mano įrankiai</string>
+    <string name="title_add_new_tools">Pridėti naujus įrankius</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Pridėti į pagrindinį puslapį</string>
+    <string name="action_tools_open_tool">Atidaryti įrankį</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d peržiūra</item>
+        <item quantity="other">%1$,d peržiūros</item>
+        <item quantity="few">%1$,d peržiūros</item>
+        <item quantity="many">%1$,d peržiūrų</item>
+    </plurals>
+    <string name="label_tools_about">Apie</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d kalba</item>
+        <item quantity="other">%1$,d kalbos</item>
+        <item quantity="few">%1$,d kalbos</item>
+        <item quantity="many">%1$,d kalbų</item>
+    </plurals>
+</resources>

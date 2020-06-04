@@ -19,25 +19,10 @@
     <string name="menu_copyright">કોપીરાઈટ</string>
     <!-- Share a story -->
     <string name="share_story_subject">ઈશ્વર કેવી રીતે કાર્ય કરે છે તે સાંભળો!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">સાધનો/ટુલ્સ શોધો</string>
-    <string name="nav_my_tools">મારા સાધનો/ટુલ્સ</string>
-    <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
-    <string name="title_add_new_tools">નવા સાધનો/ટુલ્સ ઉમેરો</string>
-    <string name="action_tools_open_tool">ખુલ્લું સાધન</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d દર્શક</item>
-        <item quantity="other">%1$,d દર્શકો</item>
-    </plurals>
-    <string name="label_tools_about">વિશે/આશરે</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d ભાષા</item>
-        <item quantity="other">%1$,d ભાષાઓ</item>
-    </plurals>
-    <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સુયોજન</string>
+    <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
     <string name="title_language_settings">ભાષા સુયોજન</string>
     <string name="title_language_primary">પ્રાથમિક ભાષા</string>
     <string name="title_language_parallel">સમાંતર ભાષા</string>
@@ -45,5 +30,4 @@
     <string name="text_language_parallel_description">કોઈની સાથે તેની જ મૂળ ભાષામાં \'ગોડ ટુલ્સ\' વહેંચો</string>
     <string name="text_language_warning">બધી જ ભાષામાં બધાં જ સાધનો/ટુલ્સ પ્રાપ્ય નથી</string>
     <string name="label_language_none">એક પણ નહિ</string>
-    <!-- Sharing -->
 </resources>

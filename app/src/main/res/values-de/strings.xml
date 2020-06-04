@@ -20,25 +20,10 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hören Sie, wie Gott bewegt!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">Tools finden</string>
-    <string name="nav_my_tools">Meine Tools</string>
-    <string name="menu_switch_language">Sprache wechseln</string>
-    <string name="title_add_new_tools">Neue Tools hinzufügen</string>
-    <string name="action_tools_open_tool">Tool öffnen</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d Aufruf</item>
-        <item quantity="other">%1$,d Aufrufe</item>
-    </plurals>
-    <string name="label_tools_about">Über</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d Sprache</item>
-        <item quantity="other">%1$,d Sprachen</item>
-    </plurals>
-    <string name="menu_add_to_home">Zum Homescreen hinzufügen</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Über 80 Sprachen</string>
     <string name="menu_language_settings">Spracheinstellungen</string>
+    <string name="menu_switch_language">Sprache wechseln</string>
     <string name="title_language_settings">Spracheinstellungen</string>
     <string name="title_language_primary">Hauptsprache</string>
     <string name="title_language_parallel">Zweite Sprache</string>
@@ -47,5 +32,4 @@
     <string name="text_language_warning">Nicht jedes Tool ist in jeder Sprache verfügbar.</string>
     <string name="label_language_none">Keine</string>
     <string name="label_language_search">Sprachen filtern</string>
-    <!-- Sharing -->
 </resources>

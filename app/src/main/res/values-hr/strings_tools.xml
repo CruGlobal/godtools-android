@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Pronađi alate</string>
+    <string name="nav_my_tools">Moji alati</string>
+    <string name="title_add_new_tools">Dodajte nove alate</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Dodaj na početni zaslon</string>
+    <string name="action_tools_open_tool">Otvori alat</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d pregled</item>
+        <item quantity="other">%1$,d pregleda</item>
+        <item quantity="few">%1$,d pregleda</item>
+    </plurals>
+    <string name="label_tools_about">O nama</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d jezik</item>
+        <item quantity="other">%1$,d jezika</item>
+        <item quantity="few">%1$,d jezika</item>
+    </plurals>
+</resources>

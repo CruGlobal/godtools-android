@@ -20,33 +20,10 @@
     <string name="menu_copyright">حق النشر والتأليف</string>
     <!-- Share a story -->
     <string name="share_story_subject">استمع لكيفية تحرك الرب!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">إيجاد أدوات</string>
-    <string name="nav_my_tools">أدواتي</string>
-    <string name="menu_switch_language">تبديل اللغة</string>
-    <string name="title_add_new_tools">إضافة مزيد من الأدوات</string>
-    <string name="action_tools_open_tool">فتح أداة</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d مشاهدة</item>
-        <item quantity="other">%1$,d مشاهدات</item>
-        <item quantity="few">%1$,d مشاهدات</item>
-        <item quantity="many">%1$,d مشاهدات</item>
-        <item quantity="two">%1$,d مشاهدتين</item>
-        <item quantity="zero">%1$,d مشاهدة</item>
-    </plurals>
-    <string name="label_tools_about">حول</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d لغة</item>
-        <item quantity="other">%1$,d لغات</item>
-        <item quantity="few">%1$,d لغات</item>
-        <item quantity="many">%1$,d لغات</item>
-        <item quantity="two">%1$,d لغتين</item>
-        <item quantity="zero">%1$,d لغة</item>
-    </plurals>
-    <string name="menu_add_to_home">إضافة إلى الشاشة الرئيسية</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+80 لغة</string>
     <string name="menu_language_settings">إعدادات اللغة</string>
+    <string name="menu_switch_language">تبديل اللغة</string>
     <string name="title_language_settings">إعدادات اللغات</string>
     <string name="title_language_primary">اللغة الرئيسية</string>
     <string name="title_language_parallel">اللغة الموازية</string>
@@ -55,5 +32,4 @@
     <string name="text_language_warning">ليس كل أداة متوفرة في كل لغة.</string>
     <string name="label_language_none">لا شيء</string>
     <string name="label_language_search">فلترة اللغات</string>
-    <!-- Sharing -->
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">חפש כלים</string>
+    <string name="nav_my_tools">הכלים שלי</string>
+    <string name="title_add_new_tools">הוסף כלים חדשים</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">הוסף למסך הבית</string>
+    <string name="action_tools_open_tool">פתח כלי</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d צפייה</item>
+        <item quantity="other">%1$,d צפיות</item>
+        <item quantity="many">%1$,d צפיות</item>
+        <item quantity="two">%1$,d צפיות</item>
+    </plurals>
+    <string name="label_tools_about">אודות</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d שפה</item>
+        <item quantity="other">%1$,d שפות</item>
+        <item quantity="many">%1$,d שפות</item>
+        <item quantity="two">%1$,d שפות</item>
+    </plurals>
+</resources>

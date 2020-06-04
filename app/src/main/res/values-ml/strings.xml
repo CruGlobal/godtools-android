@@ -19,25 +19,10 @@
     <string name="menu_copyright">കോപ്പിറൈറ്റ്</string>
     <!-- Share a story -->
     <string name="share_story_subject">ദൈവം എങ്ങനെ ചലിക്കുന്നു എന്ന് നോക്കുക!</string>
-    <!-- Tools UI -->
-    <string name="nav_find_tools">ടൂൾസ് കണ്ട് പിടിക്കുക</string>
-    <string name="nav_my_tools">എന്റെ ടൂളുകൾ</string>
-    <string name="menu_switch_language">ഭാഷ മാറ്റുക</string>
-    <string name="title_add_new_tools">പുതിയ ടൂളുകൾ കൂട്ടി ചേർക്കുക</string>
-    <string name="action_tools_open_tool">തുറക്കുക</string>
-    <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d വീക്ഷണം</item>
-        <item quantity="other">%1$,d വീക്ഷണങ്ങൾ</item>
-    </plurals>
-    <string name="label_tools_about">കുറിച്ച്</string>
-    <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d ഭാഷ</item>
-        <item quantity="other">%1$,d ഭാഷകൾ</item>
-    </plurals>
-    <string name="menu_add_to_home">ഹോം സ്ക്രീനിലേക്ക് കൂട്ടി ചേർക്കുക</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">70 ൽ പരം ഭാഷകൾ</string>
     <string name="menu_language_settings">ഭാഷയുടെ സെറ്റിംഗ്സ്</string>
+    <string name="menu_switch_language">ഭാഷ മാറ്റുക</string>
     <string name="title_language_settings">ഭാഷയുടെ സെറ്റിംഗ്സ്</string>
     <string name="title_language_primary">മുഖ്യ ഭാഷ</string>
     <string name="title_language_parallel">സമാന്തരത ഭാഷ</string>
@@ -45,5 +30,4 @@
     <string name="text_language_parallel_description">മറ്റുള്ളവരുമായി അവരുടെ മാതൃഭാഷയിൽ ഗോഡ് ടൂൾസ് പങ്കിടുക</string>
     <string name="text_language_warning">"ഇപ്പോൾ എല്ലാ ടൂളുകളും എല്ലാ ഭാഷകളിലും ലഭ്യമാണ്. "</string>
     <string name="label_language_none">ഒന്നും ഇല്ല</string>
-    <!-- Sharing -->
 </resources>

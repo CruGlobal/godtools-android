@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Atrast rīkus</string>
+    <string name="nav_my_tools">Mani rīki</string>
+    <string name="title_add_new_tools">Pievienot jaunus rīkus</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Pievienot sākuma ekrānam</string>
+    <string name="action_tools_open_tool">Atvērt rīku</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d skatījums</item>
+        <item quantity="other">%1$,d skatījumi</item>
+        <item quantity="zero">%1$,d skatījumu</item>
+    </plurals>
+    <string name="label_tools_about">Par</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d valoda</item>
+        <item quantity="other">%1$,d valodas</item>
+        <item quantity="zero">%1$,d valodu</item>
+    </plurals>
+</resources>

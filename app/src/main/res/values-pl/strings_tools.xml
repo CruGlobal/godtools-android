@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Znajdź Prezentacje</string>
+    <string name="nav_my_tools">Moje Prezentacje</string>
+    <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Dodaj do ekranu głównego</string>
+    <string name="action_tools_open_tool">Otwórz narzędzie</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d odsłona</item>
+        <item quantity="other">%1$,d odsłon</item>
+        <item quantity="few">%1$,d odsłon</item>
+        <item quantity="many">%1$,d odsłon</item>
+    </plurals>
+    <string name="label_tools_about">O aplikacji</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d język</item>
+        <item quantity="other">%1$,d języki</item>
+        <item quantity="few">%1$,d języków</item>
+        <item quantity="many">%1$,d języków</item>
+    </plurals>
+</resources>

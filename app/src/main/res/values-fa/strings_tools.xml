@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">یافتن ابزار</string>
+    <string name="nav_my_tools">ابزار من</string>
+    <string name="title_add_new_tools">افزودن ابزارهای جدید</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
+    <string name="action_tools_open_tool">باز کردن ابزار</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d مشاهده</item>
+        <item quantity="other">%1$,d مشاهده</item>
+    </plurals>
+    <string name="label_tools_about">درباره</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d زبان</item>
+        <item quantity="other">%1$,d زبان</item>
+    </plurals>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Araçlar Bul</string>
+    <string name="nav_my_tools">Araçlarım</string>
+    <string name="title_add_new_tools">Yeni Araçlar Ekle</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Ana Ekrana Ekle</string>
+    <string name="action_tools_open_tool">Aracı Aç</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Görüntüleme</item>
+        <item quantity="other">%1$,d Görüntüleme</item>
+    </plurals>
+    <string name="label_tools_about">Hakkında</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Dil</item>
+        <item quantity="other">%1$,d Dil</item>
+    </plurals>
+</resources>

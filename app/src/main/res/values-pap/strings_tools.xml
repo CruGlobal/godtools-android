@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Buska Hèrmèntnan</string>
+    <string name="nav_my_tools">Mi Hèrmèntnan</string>
+    <string name="nav_favorite_tools">Lista di Faboritonan</string>
+    <string name="nav_all_tools">Tur hèrmènt</string>
+    <string name="action_tools_about">Tokante</string>
+    <string name="action_tools_open">Habri</string>
+    <string name="title_add_new_tools">Agregá Hèrmèntnan Nobo</string>
+    <string name="tools_list_remove_favorite_dialog_title">Kita “%1$s” for di lista di Faboritonan?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Kita</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselá</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Agregá na bo Pantaya prinsipal</string>
+    <string name="action_tools_open_tool">Habri e Hèrmènt</string>
+    <string name="action_tools_add_favorite">Agregá na lista di Faboritonan</string>
+    <string name="action_tools_remove_favorite">Kita for di lista di Faboritonan</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d View</item>
+        <item quantity="other">%1$,d Views</item>
+    </plurals>
+    <string name="label_tools_about">Tokante</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Idioma</item>
+        <item quantity="other">%1$,d Idiomanan</item>
+    </plurals>
+</resources>
