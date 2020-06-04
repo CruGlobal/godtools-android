@@ -74,7 +74,7 @@ inline class ImageGravity(internal val gravity: Int) {
 
                 return ImageGravity(gravity)
             } catch (e: IllegalArgumentException) {
-                Timber.e(e, "error parsing ImageGravity")
+                Timber.tag("ImageGravity").e(e, "error parsing ImageGravity")
                 return defaultGravity
             }
         }
