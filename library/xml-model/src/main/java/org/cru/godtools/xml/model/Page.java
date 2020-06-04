@@ -8,7 +8,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +21,6 @@ import androidx.annotation.WorkerThread;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 import static org.cru.godtools.xml.model.CallToAction.XML_CALL_TO_ACTION;
-import static org.cru.godtools.xml.model.Card.XML_CARD;
 import static org.cru.godtools.xml.model.Header.XML_HEADER;
 import static org.cru.godtools.xml.model.Hero.XML_HERO;
 import static org.cru.godtools.xml.model.Utils.parseColor;
@@ -32,7 +30,7 @@ public final class Page extends Base implements Styles, Parent {
     static final String XML_PAGE = "page";
     private static final String XML_MANIFEST_FILENAME = "filename";
     private static final String XML_MANIFEST_SRC = "src";
-    private static final String XML_CARDS = "cards";
+    static final String XML_CARDS = "cards";
     static final String XML_MODALS = "modals";
     private static final String XML_CARD_TEXT_COLOR = "card-text-color";
 
@@ -259,7 +257,7 @@ public final class Page extends Base implements Styles, Parent {
                             mHero = Hero.fromXml(this, parser);
                             continue;
                         case XML_CARDS:
-                            parseCardsXml(parser);
+                            mCards = PageKt.parseCardsXml(this, parser);
                             continue;
                         case XML_MODALS:
                             mModals = PageKt.parseModalsXml(this, parser);
@@ -277,32 +275,5 @@ public final class Page extends Base implements Styles, Parent {
 
         // mark page XML as parsed
         mPageXmlParsed = true;
-    }
-
-    private void parseCardsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS);
-
-        // process any child elements
-        final List<Card> cards = new ArrayList<>();
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-
-            // process recognized nodes
-            switch (parser.getNamespace()) {
-                case XMLNS_TRACT:
-                    switch (parser.getName()) {
-                        case XML_CARD:
-                            cards.add(Card.fromXml(this, parser, cards.size()));
-                            continue;
-                    }
-                    break;
-            }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser);
-        }
-        mCards = Collections.unmodifiableList(cards);
     }
 }
