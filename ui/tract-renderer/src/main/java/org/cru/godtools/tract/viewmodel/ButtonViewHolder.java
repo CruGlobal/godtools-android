@@ -13,6 +13,7 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Button;
+import org.cru.godtools.xml.model.ButtonKt;
 import org.cru.godtools.xml.model.Text;
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,7 +40,7 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
         super.onBind();
         final Text text = mModel != null ? mModel.getText() : null;
         TextViewUtils.bind(text, mButton);
-        ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(Button.getButtonColor(mModel)));
+        ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(ButtonKt.getButtonColor(mModel)));
     }
 
     // endregion Lifecycle Events

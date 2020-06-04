@@ -35,7 +35,7 @@ abstract class Content protected constructor(parent: Base) : Base(parent) {
                     Tabs.XML_TABS -> Tabs(parent, parser)
                     Text.XML_TEXT -> Text(parent, parser)
                     Image.XML_IMAGE -> Image(parent, parser)
-                    Button.XML_BUTTON -> Button.fromXml(parent, parser)
+                    Button.XML_BUTTON -> Button(parent, parser)
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input.fromXml(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
