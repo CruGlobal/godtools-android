@@ -3,8 +3,6 @@ package org.cru.godtools.xml.model;
 import android.graphics.Color;
 import android.net.Uri;
 
-import com.google.common.collect.ImmutableList;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.xml.R;
 import org.cru.godtools.xml.model.Text.Align;
@@ -385,7 +383,7 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mCategories = ImmutableList.copyOf(categories);
+        mCategories = categories;
     }
 
     @WorkerThread
@@ -425,8 +423,8 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mPages = ImmutableList.copyOf(pages);
-        mAemImports = ImmutableList.copyOf(aemImports);
+        mPages = pages;
+        mAemImports = aemImports;
     }
 
     @WorkerThread
