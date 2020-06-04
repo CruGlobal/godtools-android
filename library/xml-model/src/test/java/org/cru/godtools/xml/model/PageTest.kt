@@ -24,8 +24,8 @@ class PageTest {
     fun verifyParse() {
         val page = parsePageXml("page.xml")
         assertEquals(Color.RED, page.backgroundColor)
-        assertTrue(ImageGravity(page.backgroundImageGravity).isTop())
-        assertTrue(ImageGravity(page.backgroundImageGravity).isStart())
+        assertTrue(page.backgroundImageGravity.isTop())
+        assertTrue(page.backgroundImageGravity.isStart())
         assertEquals(ImageScaleType.FILL, page.backgroundImageScaleType)
         assertEquals("header", page.header!!.title!!.text)
         assertEquals("hero", page.hero!!.heading!!.text)
