@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import androidx.annotation.ColorInt
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
@@ -41,3 +42,9 @@ fun Page.parseModalsXml(parser: XmlPullParser): List<Modal> {
         }
     }
 }
+
+@get:ColorInt
+val Page?.backgroundColor get() = this?.mBackgroundColor ?: Page.DEFAULT_BACKGROUND_COLOR
+val Page?.backgroundImageResource get() = this?.getResource(mBackgroundImage)
+val Page?.backgroundImageScaleType get() = this?.mBackgroundImageScaleType ?: Page.DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+val Page?.backgroundImageGravity get() = this?.mBackgroundImageGravity ?: Page.DEFAULT_BACKGROUND_IMAGE_GRAVITY

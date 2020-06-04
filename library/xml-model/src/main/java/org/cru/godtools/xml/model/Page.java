@@ -35,9 +35,9 @@ public final class Page extends Base implements Styles, Parent {
     private static final String XML_CARD_TEXT_COLOR = "card-text-color";
 
     @ColorInt
-    private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravityKt.CENTER;
+    static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
+    static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
+    static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravityKt.CENTER;
 
     private final int mPosition;
 
@@ -63,12 +63,12 @@ public final class Page extends Base implements Styles, Parent {
     @ColorInt
     private Integer mCardTextColor = null;
     @ColorInt
-    private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+    int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     @Nullable
-    private String mBackgroundImage;
-    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
+    String mBackgroundImage;
+    int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
-    private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
     private Header mHeader;
@@ -140,25 +140,6 @@ public final class Page extends Base implements Styles, Parent {
     @ColorInt
     int getCardTextColor() {
         return mCardTextColor != null ? mCardTextColor : getTextColor();
-    }
-
-    @ColorInt
-    public static int getBackgroundColor(@Nullable final Page page) {
-        return page != null ? page.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
-    }
-
-    @Nullable
-    public static Resource getBackgroundImageResource(@Nullable final Page page) {
-        return page != null ? page.getResource(page.mBackgroundImage) : null;
-    }
-
-    public static int getBackgroundImageGravity(@Nullable final Page page) {
-        return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
-    }
-
-    @NonNull
-    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Page page) {
-        return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
     @Nullable
