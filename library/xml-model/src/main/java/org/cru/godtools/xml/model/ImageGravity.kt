@@ -90,8 +90,6 @@ fun XmlPullParser.parseImageGravity(attribute: String, defaultGravity: Int) =
 
 const val CENTER = BIT_CENTER
 
-fun isCenter(gravity: Int) = ImageGravity(gravity).isCenter()
-
 /* X-Axis tests */
 fun isCenterX(gravity: Int) = ImageGravity(gravity).isCenterX()
 fun isStart(gravity: Int) = ImageGravity(gravity).isStart()

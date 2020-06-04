@@ -15,7 +15,7 @@ import java.io.IOException
 @ColorInt
 private const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
-private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity(CENTER)
+private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
 private const val XML_MANIFEST_FILENAME = "filename"
 private const val XML_MANIFEST_SRC = "src"
