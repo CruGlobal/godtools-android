@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -119,11 +120,11 @@ public final class Manifest extends Base implements Styles {
     private Text mTitle;
 
     @NonNull
-    private List<Category> mCategories = ImmutableList.of();
+    private List<Category> mCategories = Collections.emptyList();
     @NonNull
-    private List<Page> mPages = ImmutableList.of();
+    private List<Page> mPages = Collections.emptyList();
     @NonNull
-    private List<Uri> mAemImports = ImmutableList.of();
+    private List<Uri> mAemImports = Collections.emptyList();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
