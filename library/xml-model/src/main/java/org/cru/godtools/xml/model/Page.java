@@ -25,7 +25,6 @@ import static org.cru.godtools.xml.model.CallToAction.XML_CALL_TO_ACTION;
 import static org.cru.godtools.xml.model.Card.XML_CARD;
 import static org.cru.godtools.xml.model.Header.XML_HEADER;
 import static org.cru.godtools.xml.model.Hero.XML_HERO;
-import static org.cru.godtools.xml.model.Modal.XML_MODAL;
 import static org.cru.godtools.xml.model.Utils.parseColor;
 import static org.cru.godtools.xml.model.Utils.parseScaleType;
 
@@ -34,7 +33,7 @@ public final class Page extends Base implements Styles, Parent {
     private static final String XML_MANIFEST_FILENAME = "filename";
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
-    private static final String XML_MODALS = "modals";
+    static final String XML_MODALS = "modals";
     private static final String XML_CARD_TEXT_COLOR = "card-text-color";
 
     @ColorInt
@@ -263,7 +262,7 @@ public final class Page extends Base implements Styles, Parent {
                             parseCardsXml(parser);
                             continue;
                         case XML_MODALS:
-                            parseModalsXml(parser);
+                            mModals = PageKt.parseModalsXml(this, parser);
                             continue;
                         case XML_CALL_TO_ACTION:
                             mCallToAction = new CallToAction(this, parser);
@@ -305,32 +304,5 @@ public final class Page extends Base implements Styles, Parent {
             XmlPullParserUtils.skipTag(parser);
         }
         mCards = Collections.unmodifiableList(cards);
-    }
-
-    private void parseModalsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODALS);
-
-        // process any child elements
-        final List<Modal> modals = new ArrayList<>();
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-
-            // process recognized nodes
-            switch (parser.getNamespace()) {
-                case XMLNS_TRACT:
-                    switch (parser.getName()) {
-                        case XML_MODAL:
-                            modals.add(Modal.fromXml(this, parser, modals.size()));
-                            continue;
-                    }
-                    break;
-            }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser);
-        }
-        mModals = Collections.unmodifiableList(modals);
     }
 }

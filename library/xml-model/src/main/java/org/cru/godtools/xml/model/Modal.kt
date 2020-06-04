@@ -10,12 +10,14 @@ import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.Text.Companion.fromNestedXml
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 
 private const val XML_TITLE = "title"
 
 class Modal : Base, Parent, Styles {
+    companion object {
+        internal const val XML_MODAL = "modal"
+    }
+
     val id get() = "${page.id}-$position"
     private val position: Int
 
@@ -83,17 +85,5 @@ class Modal : Base, Parent, Styles {
             }
         }
         this.title = title
-    }
-
-    companion object {
-        const val XML_MODAL = "modal"
-
-        @JvmStatic
-        @Deprecated(
-            "Use constructor directly",
-            ReplaceWith("Modal(parent, position, parser)", "org.cru.godtools.xml.model.Modal")
-        )
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun fromXml(parent: Base, parser: XmlPullParser, position: Int) = Modal(parent, position, parser)
     }
 }
