@@ -83,9 +83,6 @@ public final class Manifest extends Base implements Styles {
         }
     }
 
-    @NonNull
-    private final String mManifestName;
-
     // XXX: for now we will make this fixed
     @NonNull
     private final String mCode;
@@ -139,12 +136,11 @@ public final class Manifest extends Base implements Styles {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     Manifest(@NonNull final String toolCode) {
-        this("", toolCode, Locale.ENGLISH);
+        this(toolCode, Locale.ENGLISH);
     }
 
-    private Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {
+    private Manifest(@NonNull final String toolCode, @NonNull final Locale locale) {
         super();
-        mManifestName = manifestName;
         mCode = toolCode;
         mLocale = locale;
     }
@@ -153,11 +149,6 @@ public final class Manifest extends Base implements Styles {
     @Override
     public Manifest getManifest() {
         return this;
-    }
-
-    @NonNull
-    public String getManifestName() {
-        return mManifestName;
     }
 
     @NonNull
@@ -310,10 +301,9 @@ public final class Manifest extends Base implements Styles {
 
     @NonNull
     @WorkerThread
-    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
-                                   @NonNull final String toolCode, @NonNull final Locale locale)
-            throws XmlPullParserException, IOException {
-        return new Manifest(manifestName, toolCode, locale).parse(parser);
+    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String toolCode,
+                                   @NonNull final Locale locale) throws XmlPullParserException, IOException {
+        return new Manifest(toolCode, locale).parse(parser);
     }
 
     @NonNull

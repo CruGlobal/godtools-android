@@ -18,6 +18,5 @@ class ManifestTest {
         assertThat(manifest.mResources.size(), equalTo(0))
     }
 
-    private fun parseManifestXml(file: String) =
-        Manifest.fromXml(getXmlParserForResource(file), file, "kgp", Locale.ENGLISH)
+    private fun parseManifestXml(file: String) = Manifest.fromXml(getXmlParserForResource(file), "kgp", Locale.ENGLISH)
 }

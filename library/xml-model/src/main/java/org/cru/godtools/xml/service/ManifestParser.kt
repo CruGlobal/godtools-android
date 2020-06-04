@@ -41,7 +41,7 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
                             setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
                             setInput(it, "UTF-8")
                             nextTag()
-                        }, manifestName, toolCode, locale)
+                        }, toolCode, locale)
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound
