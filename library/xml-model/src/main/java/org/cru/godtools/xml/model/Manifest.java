@@ -3,11 +3,6 @@ package org.cru.godtools.xml.model;
 import android.graphics.Color;
 import android.net.Uri;
 
-import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.xml.R;
 import org.cru.godtools.xml.model.Text.Align;
@@ -17,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,6 +24,7 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import androidx.collection.SimpleArrayMap;
+import androidx.core.util.ObjectsCompat;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
@@ -83,9 +80,6 @@ public final class Manifest extends Base implements Styles {
         }
     }
 
-    @NonNull
-    private final String mManifestName;
-
     // XXX: for now we will make this fixed
     @NonNull
     private final String mCode;
@@ -124,11 +118,11 @@ public final class Manifest extends Base implements Styles {
     private Text mTitle;
 
     @NonNull
-    private List<Category> mCategories = ImmutableList.of();
+    private List<Category> mCategories = Collections.emptyList();
     @NonNull
-    private List<Page> mPages = ImmutableList.of();
+    private List<Page> mPages = Collections.emptyList();
     @NonNull
-    private List<Uri> mAemImports = ImmutableList.of();
+    private List<Uri> mAemImports = Collections.emptyList();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
@@ -139,12 +133,11 @@ public final class Manifest extends Base implements Styles {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     Manifest(@NonNull final String toolCode) {
-        this("", toolCode, Locale.ENGLISH);
+        this(toolCode, Locale.ENGLISH);
     }
 
-    private Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {
+    private Manifest(@NonNull final String toolCode, @NonNull final Locale locale) {
         super();
-        mManifestName = manifestName;
         mCode = toolCode;
         mLocale = locale;
     }
@@ -153,11 +146,6 @@ public final class Manifest extends Base implements Styles {
     @Override
     public Manifest getManifest() {
         return this;
-    }
-
-    @NonNull
-    public String getManifestName() {
-        return mManifestName;
     }
 
     @NonNull
@@ -190,11 +178,14 @@ public final class Manifest extends Base implements Styles {
         return mCategories;
     }
 
-    @NonNull
-    public Optional<Category> findCategory(@Nullable final String category) {
-        return Stream.of(mCategories)
-                .filter(c -> Objects.equal(category, c.getId()))
-                .findFirst();
+    @Nullable
+    public Category findCategory(@Nullable final String category) {
+        for (final Category c : mCategories) {
+            if (ObjectsCompat.equals(category, c.getId())) {
+                return c;
+            }
+        }
+        return null;
     }
 
     @NonNull
@@ -204,10 +195,12 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public Page findPage(@Nullable final String id) {
-        return Stream.of(mPages)
-                .filter(p -> p.getId().equalsIgnoreCase(id))
-                .findFirst()
-                .orElse(null);
+        for (final Page page : mPages) {
+            if (page.getId().equalsIgnoreCase(id)) {
+                return page;
+            }
+        }
+        return null;
     }
 
     @NonNull
@@ -310,10 +303,9 @@ public final class Manifest extends Base implements Styles {
 
     @NonNull
     @WorkerThread
-    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
-                                   @NonNull final String toolCode, @NonNull final Locale locale)
-            throws XmlPullParserException, IOException {
-        return new Manifest(manifestName, toolCode, locale).parse(parser);
+    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String toolCode,
+                                   @NonNull final Locale locale) throws XmlPullParserException, IOException {
+        return new Manifest(toolCode, locale).parse(parser);
     }
 
     @NonNull
@@ -391,7 +383,7 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mCategories = ImmutableList.copyOf(categories);
+        mCategories = categories;
     }
 
     @WorkerThread
@@ -431,8 +423,8 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mPages = ImmutableList.copyOf(pages);
-        mAemImports = ImmutableList.copyOf(aemImports);
+        mPages = pages;
+        mAemImports = aemImports;
     }
 
     @WorkerThread

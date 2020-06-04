@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import com.annimon.stream.IntStream;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.common.collect.ImmutableList;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
@@ -15,6 +14,7 @@ import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.Content;
 import org.cru.godtools.xml.model.Parent;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.CallSuper;
@@ -75,7 +75,7 @@ public abstract class ParentViewHolder<T extends Base & Parent> extends BaseView
 
     private void bindContent() {
         if (mContent != null) {
-            final List<Content> content = mModel != null ? mModel.getContent() : ImmutableList.of();
+            final List<Content> content = mModel != null ? mModel.getContent() : Collections.emptyList();
             mContent.removeAllViews();
 
             for (final Content item : content) {

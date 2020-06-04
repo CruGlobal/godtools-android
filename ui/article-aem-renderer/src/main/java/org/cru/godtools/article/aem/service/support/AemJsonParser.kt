@@ -62,7 +62,7 @@ private fun JSONObject.parseAemArticle(url: Uri): Article {
                     .map { optString(it, null) }
                     .filterNotNull()
                     .toList()
-            } ?: emptyList()
+            }.orEmpty()
         }
     }
 }

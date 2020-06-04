@@ -23,9 +23,6 @@ class Tool : Base() {
     companion object {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
-
-        @JvmField
-        val INVALID_CODE: String? = null
     }
 
     enum class Type(val json: String?) {

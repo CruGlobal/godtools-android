@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model;
 import android.net.Uri;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
@@ -14,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import androidx.annotation.ColorInt;
@@ -59,12 +59,12 @@ public final class Button extends Content implements Styles {
     private Integer mColor;
 
     @NonNull
-    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = Collections.emptySet();
 
     @NonNull
     private Type mType = Type.DEFAULT;
     @NonNull
-    private Set<Event.Id> mEvents = ImmutableSet.of();
+    private Set<Event.Id> mEvents = Collections.emptySet();
     @Nullable
     private Uri mUrl;
     @Nullable

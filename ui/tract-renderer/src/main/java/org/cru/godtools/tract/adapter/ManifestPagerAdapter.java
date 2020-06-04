@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.annimon.stream.Optional;
-import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.util.IdUtils;
 import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
@@ -22,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.MainThread;
@@ -78,7 +78,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     @Override
     protected int getItemPositionFromId(final long id) {
-        final List<Page> pages = mManifest != null ? mManifest.getPages() : ImmutableList.of();
+        final List<Page> pages = mManifest != null ? mManifest.getPages() : Collections.emptyList();
         for (int i = 0; i < pages.size(); i++) {
             if (id == IdUtils.convertId(pages.get(i).getId())) {
                 return i;

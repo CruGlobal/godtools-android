@@ -2,10 +2,6 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 
-import com.annimon.stream.Stream;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.xmlpull.v1.XmlPullParser;
@@ -13,6 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +51,7 @@ public final class Page extends Base implements Styles, Parent {
     private boolean mPageXmlParsed = false;
 
     @NonNull
-    private Set<Event.Id> mListeners = ImmutableSet.of();
+    private Set<Event.Id> mListeners = Collections.emptySet();
 
     @Nullable
     @ColorInt
@@ -80,8 +77,8 @@ public final class Page extends Base implements Styles, Parent {
     private Header mHeader;
     @Nullable
     private Hero mHero;
-    private List<Card> mCards = ImmutableList.of();
-    private List<Modal> mModals = ImmutableList.of();
+    private List<Card> mCards = Collections.emptyList();
+    private List<Modal> mModals = Collections.emptyList();
     @NonNull
     private CallToAction mCallToAction;
 
@@ -180,7 +177,7 @@ public final class Page extends Base implements Styles, Parent {
     @NonNull
     @Override
     public List<Content> getContent() {
-        return ImmutableList.of();
+        return Collections.emptyList();
     }
 
     @NonNull
@@ -195,9 +192,12 @@ public final class Page extends Base implements Styles, Parent {
 
     @Nullable
     public Modal findModal(@Nullable final String id) {
-        return Stream.of(mModals)
-                .filter(m -> m.getId().equalsIgnoreCase(id))
-                .findFirst().orElse(null);
+        for (final Modal modal : mModals) {
+            if (modal.getId().equalsIgnoreCase(id)) {
+                return modal;
+            }
+        }
+        return null;
     }
 
     @NonNull
@@ -208,8 +208,7 @@ public final class Page extends Base implements Styles, Parent {
     @NonNull
     @WorkerThread
     static Page fromManifestXml(@NonNull final Manifest manifest, final int position,
-                                @NonNull final XmlPullParser parser)
-            throws XmlPullParserException, IOException {
+                                @NonNull final XmlPullParser parser) throws XmlPullParserException, IOException {
         return new Page(manifest, position).parseManifestXml(parser);
     }
 
@@ -305,7 +304,7 @@ public final class Page extends Base implements Styles, Parent {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mCards = ImmutableList.copyOf(cards);
+        mCards = Collections.unmodifiableList(cards);
     }
 
     private void parseModalsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -332,6 +331,6 @@ public final class Page extends Base implements Styles, Parent {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mModals = ImmutableList.copyOf(modals);
+        mModals = Collections.unmodifiableList(modals);
     }
 }

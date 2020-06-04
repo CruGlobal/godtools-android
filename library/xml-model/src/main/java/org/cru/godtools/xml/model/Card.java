@@ -1,15 +1,14 @@
 package org.cru.godtools.xml.model;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -35,12 +34,12 @@ public final class Card extends Base implements Styles, Parent {
 
     private boolean mHidden = false;
     @NonNull
-    private Set<Event.Id> mListeners = ImmutableSet.of();
+    private Set<Event.Id> mListeners = Collections.emptySet();
     @NonNull
-    private Set<Event.Id> mDismissListeners = ImmutableSet.of();
+    private Set<Event.Id> mDismissListeners = Collections.emptySet();
 
     @NonNull
-    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = Collections.emptySet();
 
     @Nullable
     @ColorInt
@@ -59,7 +58,7 @@ public final class Card extends Base implements Styles, Parent {
     private Text mLabel;
 
     @NonNull
-    private List<Content> mContent = ImmutableList.of();
+    private List<Content> mContent = Collections.emptyList();
 
     private Card(@NonNull final Page parent, final int position) {
         super(parent);
@@ -154,7 +153,7 @@ public final class Card extends Base implements Styles, Parent {
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
-        final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
+        final List<Content> contentList = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -190,7 +189,7 @@ public final class Card extends Base implements Styles, Parent {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mContent = contentList.build();
+        mContent = contentList;
 
         return this;
     }

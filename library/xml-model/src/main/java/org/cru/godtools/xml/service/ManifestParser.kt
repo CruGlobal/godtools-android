@@ -2,10 +2,8 @@ package org.cru.godtools.xml.service
 
 import android.util.Xml
 import androidx.annotation.AnyThread
-import androidx.annotation.WorkerThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -26,11 +24,6 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
     private val cache = WeakLruCache<String, Result.Data>(6)
     private val loadingMutex = MutexMap()
 
-    @WorkerThread
-    @Throws(InterruptedException::class)
-    fun parseBlocking(manifestName: String, toolCode: String, locale: Locale) =
-        runBlocking { parse(manifestName, toolCode, locale) }
-
     @AnyThread
     suspend fun parse(manifestName: String, toolCode: String, locale: Locale) = loadingMutex.withLock(manifestName) {
         try {
@@ -41,7 +34,7 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
                             setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
                             setInput(it, "UTF-8")
                             nextTag()
-                        }, manifestName, toolCode, locale)
+                        }, toolCode, locale)
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound

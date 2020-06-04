@@ -64,7 +64,7 @@ class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     override fun updateToolbarTitle() {
         // try to use the Category Label for the title
         activeManifest
-            ?.findCategory(category)?.orElse(null)
+            ?.findCategory(category)
             ?.label?.text
             ?.let {
                 title = it

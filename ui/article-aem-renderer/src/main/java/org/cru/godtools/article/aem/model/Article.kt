@@ -8,7 +8,6 @@ import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.google.common.collect.ImmutableList
 import javax.annotation.concurrent.Immutable
 
 @Entity(tableName = "articles")
@@ -25,13 +24,10 @@ class Article(@field:PrimaryKey val uri: Uri) {
             ?.build()
 
     @Ignore
-    var tags: List<String> = ImmutableList.of()
-        set(it) {
-            field = ImmutableList.copyOf(it)
-        }
+    var tags = emptyList<String>()
 
     @Ignore
-    var resources: List<Resource> = ImmutableList.of()
+    var resources = emptyList<Resource>()
 
     val tagObjects: List<Tag>
         @RestrictTo(RestrictTo.Scope.LIBRARY)
