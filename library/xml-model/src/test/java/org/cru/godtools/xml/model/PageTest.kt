@@ -19,6 +19,14 @@ class PageTest {
     }
 
     @Test
+    fun verifyParseCards() {
+        val page = parsePageXml("page_cards.xml")
+        assertThat(page.cards, hasSize(2))
+        assertEquals("Card 1", page.cards[0].label!!.text)
+        assertEquals("Card 2", page.cards[1].label!!.text)
+    }
+
+    @Test
     fun verifyParseModals() {
         val page = parsePageXml("page_modals.xml")
         assertThat(page.modals, hasSize(2))
