@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    xmlns="https://mobile-content-api.cru.org/xmlns/tract">
+    <modals>
+        <modal dismiss-listeners="dismiss" listeners="open">
+            <title>
+                <content:text>Modal 1</content:text>
+            </title>
+        </modal>
+        <modal dismiss-listeners="dismiss" listeners="open">
+            <title>
+                <content:text>Modal 2</content:text>
+            </title>
+        </modal>
+    </modals>
+</page>
