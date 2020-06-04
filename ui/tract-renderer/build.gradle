@@ -45,7 +45,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
-    implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
