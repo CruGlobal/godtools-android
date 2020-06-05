@@ -5,6 +5,10 @@
     <!-- Tool Categories -->
     <eat-comment />
     <string name="tool_category_gospel">Gospel Invitation</string>
+    <string name="tool_category_articles">Articles</string>
+    <string name="tool_category_conversation_starter">Conversation Starter</string>
+    <string name="tool_category_growth">Christian Growth</string>
+    <string name="tool_category_training">Training</string>
 
     <!-- Sharing -->
     <eat-comment />
