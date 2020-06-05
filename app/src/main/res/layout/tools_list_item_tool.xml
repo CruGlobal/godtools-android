@@ -105,7 +105,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="2"
+                android:lines="1"
                 android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 app:layout_constraintBottom_toTopOf="@id/actions"
