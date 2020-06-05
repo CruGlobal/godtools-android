@@ -2,6 +2,10 @@
 <resources>
     <string name="toast_unable_to_launch_activity">Unable to open %s</string>
 
+    <!-- Tool Categories -->
+    <eat-comment />
+    <string name="tool_category_gospel">Gospel Invitation</string>
+
     <!-- Sharing -->
     <eat-comment />
     <string name="share_general_message">Here’s the link to download the app we were looking at today: https://godtoolsapp.com \n\n
