@@ -2,22 +2,28 @@ package org.cru.godtools.article.aem.db
 
 import androidx.core.database.getStringOrNull
 import androidx.room.testing.MigrationTestHelper
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [19])
 class ArticleRoomDatabaseMigrationIT {
     @get:Rule
-    val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(),
-            ArticleRoomDatabase::class.java.canonicalName)
+    val helper = MigrationTestHelper(
+        InstrumentationRegistry.getInstrumentation(), ArticleRoomDatabase::class.java.canonicalName
+    )
 
     @Test
     fun migrate8To9() {
         // create v8 database
         helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 8)
-                .close()
+            .close()
 
         // run migration
         helper.runMigrationsAndValidate(ArticleRoomDatabase.DATABASE_NAME, 9, true, MIGRATION_8_9)
@@ -37,7 +43,8 @@ class ArticleRoomDatabaseMigrationIT {
     fun migrate10To11() {
         // create v10 database
         helper.createDatabase(ArticleRoomDatabase.DATABASE_NAME, 10).apply {
-            execSQL("""
+            execSQL(
+                """
                 INSERT INTO articles (uri, uuid, title, canonicalUri, shareUri, date_created, date_updated)
                 VALUES (?, ?, ?, ?, ?, ?, ?)""",
                 arrayOf("uri:1", "", "", "https://www.example.com", "https://www.example.com", 0, 0)

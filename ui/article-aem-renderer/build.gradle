@@ -14,7 +14,7 @@ android {
     }
 
     sourceSets {
-        androidTest.assets.srcDirs += files("$projectDir/room-schemas")
+        test.assets.srcDirs += files("$projectDir/room-schemas")
     }
 }
 
@@ -49,14 +49,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
     implementation "org.jsoup:jsoup:${deps.jsoup}"
 
-    // For Testing
-    androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
-    androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
-    androidTestImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
-    // HACK: connectedCheck on SDK 17 complains about dagger.Reusable not being on the classpath
-    androidTestImplementation "com.google.dagger:dagger:${deps.dagger}"
-
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation "androidx.room:room-testing:${deps.androidX.room}"
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
