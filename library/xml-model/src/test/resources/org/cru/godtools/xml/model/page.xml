@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    background-color="rgba(255, 0, 0, 1)" background-image-align="start top"
+    background-image-scale-type="fill" xmlns="https://mobile-content-api.cru.org/xmlns/tract">
+    <header>
+        <title>
+            <content:text>header</content:text>
+        </title>
+    </header>
+    <hero>
+        <heading>
+            <content:text>hero</content:text>
+        </heading>
+    </hero>
+    <call-to-action>
+        <content:text>call to action</content:text>
+    </call-to-action>
+</page>

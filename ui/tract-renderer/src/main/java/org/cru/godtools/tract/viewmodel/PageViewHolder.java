@@ -17,6 +17,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
+import org.cru.godtools.xml.model.PageKt;
 
 import java.util.List;
 import java.util.Set;
@@ -241,10 +242,10 @@ public class PageViewHolder extends ParentViewHolder<Page>
     }
 
     private void bindPage() {
-        mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(Page.getBackgroundImageResource(mModel), mBackgroundImage,
-                                              Page.getBackgroundImageScaleType(mModel),
-                                              Page.getBackgroundImageGravity(mModel));
+        mPageView.setBackgroundColor(PageKt.getBackgroundColor(mModel));
+        ResourceViewUtils.bindBackgroundImage(PageKt.getBackgroundImageResource(mModel), mBackgroundImage,
+                                              PageKt.getBackgroundImageScaleType(mModel),
+                                              PageKt.getBackgroundImageGravity(mModel));
     }
 
     @UiThread
