@@ -3,10 +3,10 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
 import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.content.localize
 import timber.log.Timber
 import java.util.Locale
 
@@ -33,10 +33,7 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
 }
 
 @JvmName("localizeContextIfPossible")
-fun Context.localizeIfPossible(locale: Locale?): Context = when (locale) {
-    null -> this
-    else -> createConfigurationContext(Configuration(resources.configuration).apply { setLocale(locale) })
-}
+fun Context.localizeIfPossible(locale: Locale?) = locale?.let { localize(it) } ?: this
 
 private fun Context.getLanguageNameStringRes(locale: Locale): String? {
     return when (val stringId = resources.getIdentifier(
