@@ -9,6 +9,8 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +28,7 @@ class ButtonTest {
     fun testParseButtonEvent() {
         val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
         val button = Button(manifest, getXmlParserForResource("button_event.xml"))
+        assertFalse(button.isIgnored)
         assertThat(button.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("event button", button.text!!.text)
         assertEquals(Color.RED, button.buttonColor)
@@ -34,9 +37,16 @@ class ButtonTest {
     @Test
     fun testParseButtonUrl() {
         val button = Button(manifest, getXmlParserForResource("button_url.xml"))
+        assertFalse(button.isIgnored)
         assertEquals(Button.Type.URL, button.type)
         assertEquals("https://www.google.com/", button.url!!.toString())
         assertEquals("url button", button.text!!.text)
         assertThat(button.analyticsEvents, contains(instanceOf(AnalyticsEvent::class.java)))
+    }
+
+    @Test
+    fun testParseButtonRestrictTo() {
+        val button = Button(manifest, getXmlParserForResource("button_restrictTo.xml"))
+        assertTrue(button.isIgnored)
     }
 }

@@ -1,0 +1,4 @@
+<content:button xmlns:content="https://mobile-content-api.cru.org/xmlns/content" restrictTo="web"
+    type="url" url="https://www.google.com/">
+    <content:text>url button</content:text>
+</content:button>
