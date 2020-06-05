@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="2"
-                android:text="@{ModelUtils.getTranslationTagline(primaryTranslation ?? parallelTranslation, tool, context)}"
+                android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 app:layout_constraintBottom_toTopOf="@id/actions"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
