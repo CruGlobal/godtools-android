@@ -4,13 +4,10 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.view.View
 import androidx.annotation.LayoutRes
-import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.cru.godtools.base.ui.activity.BaseActivity
 
-abstract class ImmersiveActivity(
-    private val enableImmersive: Boolean,
-    @LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
-) : BaseActivity(contentLayoutId) {
+abstract class ImmersiveActivity(private val enableImmersive: Boolean, @LayoutRes contentLayoutId: Int) :
+    BaseActivity(contentLayoutId) {
     // region Lifecycle
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
         super.onMultiWindowModeChanged(isInMultiWindowMode)

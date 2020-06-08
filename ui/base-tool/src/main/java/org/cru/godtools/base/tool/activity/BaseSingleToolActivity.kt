@@ -3,7 +3,9 @@ package org.cru.godtools.base.tool.activity
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.LayoutRes
 import androidx.lifecycle.observe
+import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants
@@ -15,8 +17,9 @@ import java.util.Locale
 
 abstract class BaseSingleToolActivity @JvmOverloads constructor(
     immersive: Boolean,
-    private val requireTool: Boolean = true
-) : BaseToolActivity(immersive) {
+    private val requireTool: Boolean = true,
+    @LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
+) : BaseToolActivity(immersive, contentLayoutId) {
     override var activeManifest: Manifest? = null
     private var translationLoaded = false
     private var translation: Translation? = null
