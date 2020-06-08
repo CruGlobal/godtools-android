@@ -6,11 +6,12 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 
 private const val JSON_API_TYPE = "resource"
 
-private const val JSON_NAME = "name"
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
 private const val JSON_TYPE_ARTICLE = "article"
 private const val JSON_ABBREVIATION = "abbreviation"
+private const val JSON_NAME = "name"
+private const val JSON_CATEGORY = "attr-category"
 private const val JSON_DESCRIPTION = "description"
 private const val JSON_TOTAL_VIEWS = "total-views"
 private const val JSON_BANNER = "attr-banner"
@@ -51,6 +52,8 @@ class Tool : Base() {
 
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
+    @JsonApiAttribute(JSON_CATEGORY)
+    var category: String? = null
     @JsonApiAttribute(JSON_DESCRIPTION)
     var description: String? = null
 

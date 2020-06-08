@@ -39,6 +39,7 @@ class ToolsListItemToolBindingTest {
         code = "test"
         name = "toolName"
         description = "toolDescription"
+        category = "gospel"
     }
     private val primaryTranslation = Translation().apply {
         languageCode = Locale("en")
@@ -106,7 +107,7 @@ class ToolsListItemToolBindingTest {
         binding.executePendingBindings()
 
         assertEquals("primaryName", binding.title.text)
-        assertEquals("primaryTagline", binding.tagline.text)
+        assertEquals("Gospel Invitation", binding.tagline.text)
     }
 
     @Test
@@ -115,7 +116,7 @@ class ToolsListItemToolBindingTest {
         binding.executePendingBindings()
 
         assertEquals("parallelName", binding.title.text)
-        assertEquals("parallelTagline", binding.tagline.text)
+        assertEquals("Gospel Invitation", binding.tagline.text)
     }
 
     @Test
@@ -125,7 +126,7 @@ class ToolsListItemToolBindingTest {
         binding.executePendingBindings()
 
         assertEquals("toolName", binding.title.text)
-        assertEquals("toolDescription", binding.tagline.text)
+        assertEquals("Gospel Invitation", binding.tagline.text)
     }
     // endregion Title & Tagline
 

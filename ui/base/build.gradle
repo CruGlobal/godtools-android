@@ -27,6 +27,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
