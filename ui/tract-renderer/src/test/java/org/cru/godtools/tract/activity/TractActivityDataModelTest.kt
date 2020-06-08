@@ -15,8 +15,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
+import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -245,13 +244,13 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
 
         dataModel.state.observeForever(observer)
-        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_NOT_FOUND)))
+        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.NOT_FOUND)))
         translation.value = Translation()
-        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_LOADING)))
-        argumentCaptor<Map<Locale, Int>> {
+        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.LOADING)))
+        argumentCaptor<Map<Locale, ToolState>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_NOT_FOUND)))
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, STATE_LOADING)))
+            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.NOT_FOUND)))
+            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.LOADING)))
         }
     }
     // endregion Property: state

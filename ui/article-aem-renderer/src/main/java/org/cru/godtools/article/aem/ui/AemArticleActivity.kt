@@ -160,11 +160,11 @@ class AemArticleActivity : BaseArticleActivity(false) {
     override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
     // endregion Share Link logic
 
-    override fun determineActiveToolState(): Int {
+    override fun determineActiveToolState(): ToolState {
         return when {
-            article?.content != null -> STATE_LOADED
-            syncTask?.isDone != true -> STATE_LOADING
-            else -> STATE_NOT_FOUND
+            article?.content != null -> ToolState.LOADED
+            syncTask?.isDone != true -> ToolState.LOADING
+            else -> ToolState.NOT_FOUND
         }
     }
 

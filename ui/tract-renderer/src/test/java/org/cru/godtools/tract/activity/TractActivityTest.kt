@@ -1,10 +1,7 @@
 package org.cru.godtools.tract.activity
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADING
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
+import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tract.activity.TractActivity.Companion.determineState
 import org.cru.godtools.xml.model.Manifest
@@ -17,10 +14,10 @@ import org.junit.runner.RunWith
 class TractActivityTest {
     @Test
     fun verifyDetermineState() {
-        assertEquals(STATE_LOADED, determineState(Manifest().apply { mType = Type.TRACT }, null, false))
-        assertEquals(STATE_INVALID_TYPE, determineState(Manifest().apply { mType = Type.ARTICLE }, null, false))
-        assertEquals(STATE_LOADING, determineState(null, null, false))
-        assertEquals(STATE_LOADING, determineState(null, Translation(), true))
-        assertEquals(STATE_NOT_FOUND, determineState(null, null, true))
+        assertEquals(ToolState.LOADED, determineState(Manifest().apply { mType = Type.TRACT }, null, false))
+        assertEquals(ToolState.INVALID_TYPE, determineState(Manifest().apply { mType = Type.ARTICLE }, null, false))
+        assertEquals(ToolState.LOADING, determineState(null, null, false))
+        assertEquals(ToolState.LOADING, determineState(null, Translation(), true))
+        assertEquals(ToolState.NOT_FOUND, determineState(null, null, true))
     }
 }

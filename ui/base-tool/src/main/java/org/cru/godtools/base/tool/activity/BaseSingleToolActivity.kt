@@ -87,11 +87,11 @@ abstract class BaseSingleToolActivity(
     }
 
     override fun determineActiveToolState() = when {
-        !hasTool() -> STATE_LOADED
-        activeManifest?.type?.let { isSupportedType(it) } == false -> STATE_INVALID_TYPE
-        activeManifest != null -> STATE_LOADED
-        translationLoaded && translation == null -> STATE_NOT_FOUND
-        else -> STATE_LOADING
+        !hasTool() -> ToolState.LOADED
+        activeManifest?.type?.let { isSupportedType(it) } == false -> ToolState.INVALID_TYPE
+        activeManifest != null -> ToolState.LOADED
+        translationLoaded && translation == null -> ToolState.NOT_FOUND
+        else -> ToolState.LOADING
     }
 
     protected abstract fun isSupportedType(type: Manifest.Type): Boolean

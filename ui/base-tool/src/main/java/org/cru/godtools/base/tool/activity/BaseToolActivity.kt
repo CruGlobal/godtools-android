@@ -190,16 +190,18 @@ abstract class BaseToolActivity(
     @BindView(R2.id.mainContent)
     internal var mainContent: View? = null
 
+    enum class ToolState { LOADING, LOADED, NOT_FOUND, INVALID_TYPE }
+
     @CallSuper
     protected open fun updateVisibilityState() {
         val state = determineActiveToolState()
-        loadingContent?.visibility = if (state == STATE_LOADING) View.VISIBLE else View.GONE
-        mainContent?.visibility = if (state == STATE_LOADED) View.VISIBLE else View.GONE
+        loadingContent?.visibility = if (state == ToolState.LOADING) View.VISIBLE else View.GONE
+        mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
         missingContent?.visibility =
-            if (state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE) View.VISIBLE else View.GONE
+            if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
     }
 
-    protected abstract fun determineActiveToolState(): Int
+    protected abstract fun determineActiveToolState(): ToolState
     // endregion Tool state
 
     // region Tool sync/download logic
@@ -321,11 +323,4 @@ abstract class BaseToolActivity(
 
     override fun setTitle(title: CharSequence) =
         super.setTitle(title.applyTypefaceSpan(ManifestViewUtils.getTypeface(activeManifest, this)))
-
-    companion object {
-        const val STATE_LOADING = 0
-        const val STATE_LOADED = 1
-        const val STATE_NOT_FOUND = 2
-        const val STATE_INVALID_TYPE = 3
-    }
 }
