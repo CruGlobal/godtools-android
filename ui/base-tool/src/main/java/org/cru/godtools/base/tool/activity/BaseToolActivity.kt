@@ -190,7 +190,17 @@ abstract class BaseToolActivity(
     @BindView(R2.id.mainContent)
     internal var mainContent: View? = null
 
-    enum class ToolState { LOADING, LOADED, NOT_FOUND, INVALID_TYPE }
+    enum class ToolState {
+        LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
+
+        companion object {
+            // TODO: this should be an actual state
+            val UNKNOWN = LOADING
+        }
+    }
+
+    protected open val activeToolStateLiveData: LiveData<ToolState>
+        get() = TODO("This should be abstract once it's fully supported")
 
     @CallSuper
     protected open fun updateVisibilityState() {
@@ -201,7 +211,7 @@ abstract class BaseToolActivity(
             if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
     }
 
-    protected abstract fun determineActiveToolState(): ToolState
+    protected open fun determineActiveToolState(): ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN
     // endregion Tool state
 
     // region Tool sync/download logic

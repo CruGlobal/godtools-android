@@ -348,8 +348,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
 
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
-
-    override fun determineActiveToolState() = dataModel.activeState.value ?: ToolState.LOADING
+    override val activeToolStateLiveData get() = dataModel.activeState
 
     private fun setupActiveTranslationManagement() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
