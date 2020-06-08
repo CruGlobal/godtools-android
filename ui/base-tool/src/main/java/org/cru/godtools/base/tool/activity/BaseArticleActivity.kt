@@ -2,6 +2,8 @@ package org.cru.godtools.base.tool.activity
 
 import org.cru.godtools.xml.model.Manifest
 
-abstract class BaseArticleActivity(requireTool: Boolean = true) : BaseSingleToolActivity(false, requireTool) {
+abstract class BaseArticleActivity(
+    requireTool: Boolean = true
+) : BaseSingleToolActivity(false, requireTool = requireTool) {
     override fun isSupportedType(type: Manifest.Type) = type == Manifest.Type.ARTICLE
 }

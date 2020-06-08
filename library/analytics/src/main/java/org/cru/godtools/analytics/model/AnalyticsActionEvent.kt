@@ -7,7 +7,7 @@ import javax.annotation.concurrent.Immutable
 private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION = "action"
 
 @Immutable
-open class AnalyticsActionEvent @JvmOverloads constructor(
+open class AnalyticsActionEvent(
     val action: String,
     val label: String? = null,
     locale: Locale? = null

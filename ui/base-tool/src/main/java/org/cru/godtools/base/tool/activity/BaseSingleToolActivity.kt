@@ -15,10 +15,10 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.xml.model.Manifest
 import java.util.Locale
 
-abstract class BaseSingleToolActivity @JvmOverloads constructor(
+abstract class BaseSingleToolActivity(
     immersive: Boolean,
-    private val requireTool: Boolean = true,
-    @LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
+    @LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES,
+    private val requireTool: Boolean = true
 ) : BaseToolActivity(immersive, contentLayoutId) {
     override var activeManifest: Manifest? = null
     private var translationLoaded = false

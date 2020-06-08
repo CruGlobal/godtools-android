@@ -40,7 +40,7 @@ import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 
-abstract class BaseToolActivity @JvmOverloads constructor(
+abstract class BaseToolActivity(
     immersive: Boolean,
     @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
 ) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
