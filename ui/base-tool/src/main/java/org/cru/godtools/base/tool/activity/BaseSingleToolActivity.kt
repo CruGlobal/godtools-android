@@ -20,7 +20,7 @@ abstract class BaseSingleToolActivity(
     @LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES,
     private val requireTool: Boolean = true
 ) : BaseToolActivity(immersive, contentLayoutId) {
-    override var activeManifest: Manifest? = null
+    override val activeManifestLiveData get() = dataModel.manifest
     private var translationLoaded = false
     private var translation: Translation? = null
 
@@ -99,13 +99,8 @@ abstract class BaseSingleToolActivity(
     private fun validStartState() = !requireTool || hasTool()
 
     private fun startLoaders() {
-        dataModel.manifest.observe(this) { setManifest(it) }
+        dataModel.manifest.observe(this) { onUpdateActiveManifest() }
         dataModel.translation.observe(this) { setTranslation(it) }
-    }
-
-    private fun setManifest(manifest: Manifest?) {
-        activeManifest = manifest
-        onUpdateActiveManifest()
     }
 
     private fun setTranslation(translation: Translation?) {

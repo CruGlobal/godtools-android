@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import butterknife.BindView
@@ -103,7 +104,8 @@ abstract class BaseToolActivity(
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
-    protected abstract val activeManifest: Manifest?
+    protected val activeManifest get() = activeManifestLiveData.value
+    protected abstract val activeManifestLiveData: LiveData<Manifest?>
 
     // region Toolbar update logic
     private var toolbarMenu: Menu? = null

@@ -347,7 +347,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     )
 
     // region Active Translation management
-    override val activeManifest get() = dataModel.activeManifest.value
+    override val activeManifestLiveData get() = dataModel.activeManifest
 
     override fun determineActiveToolState() = dataModel.activeState.value ?: STATE_LOADING
 
