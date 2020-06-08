@@ -100,7 +100,6 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
         super.onContentChanged()
         setupBinding()
         setupBackground()
-        startDownloadProgressListener()
         setupLanguageToggle()
         setupPager()
     }
@@ -233,6 +232,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     private fun setupBinding() {
         binding.lifecycleOwner = this
         binding.activeLocale = dataModel.activeLocale
+        binding.progress = dataModel.downloadProgress
         binding.visibleLocales = dataModel.visibleLocales
     }
 
@@ -247,10 +247,6 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
             window.decorView.setBackgroundColor(Manifest.getBackgroundColor(it))
             ManifestViewUtils.bindBackgroundImage(it, binding.mainContent.backgroundImage)
         }
-    }
-
-    private fun startDownloadProgressListener() {
-        dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
 
     // region Language Toggle

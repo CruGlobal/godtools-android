@@ -7,8 +7,10 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="java.util.List" />
         <import type="java.util.Locale" />
+        <import type="org.cru.godtools.download.manager.DownloadProgress" />
 
         <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
     </data>
 
@@ -20,7 +22,9 @@
 
         <include layout="@layout/activity_tool_missing" />
 
-        <include layout="@layout/activity_tool_loading" />
+        <include
+            layout="@layout/activity_tool_loading"
+            app:progress="@{progress}" />
 
         <include
             android:id="@+id/mainContent"
