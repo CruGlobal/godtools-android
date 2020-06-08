@@ -12,6 +12,7 @@ import androidx.core.view.forEach
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -63,7 +64,7 @@ abstract class BaseToolActivity(
 
     override fun onSetupActionBar() {
         super.onSetupActionBar()
-        updateToolbar()
+        setupToolbar()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -92,11 +93,7 @@ abstract class BaseToolActivity(
     }
 
     @CallSuper
-    protected open fun onUpdateToolbar() = Unit
-
-    @CallSuper
     protected open fun onUpdateActiveManifest() {
-        updateToolbar()
         updateVisibilityState()
     }
     // endregion Lifecycle
@@ -114,31 +111,30 @@ abstract class BaseToolActivity(
         toolbarMenu = this
     }
 
-    private fun updateToolbar() {
-        toolbar?.apply {
-            val manifest = activeManifest
+    private fun setupToolbar() {
+        activeManifestLiveData.observe(this) { manifest ->
+            toolbar?.apply {
+                // set toolbar background color
+                setBackgroundColor(Manifest.getNavBarColor(manifest))
 
-            // set toolbar background color
-            setBackgroundColor(Manifest.getNavBarColor(manifest))
-
-            // set text & controls color
-            val controlColor = Manifest.getNavBarControlColor(manifest)
-            navigationIcon = toolbar!!.navigationIcon.tint(controlColor)
-            setTitleTextColor(controlColor)
-            setSubtitleTextColor(controlColor)
+                // set text & controls color
+                val controlColor = Manifest.getNavBarControlColor(manifest)
+                navigationIcon = navigationIcon.tint(controlColor)
+                setTitleTextColor(controlColor)
+                setSubtitleTextColor(controlColor)
+            }
+            updateToolbarTitle()
+            updateToolbarMenu(manifest)
         }
-        updateToolbarTitle()
-        updateToolbarMenu()
-        onUpdateToolbar()
     }
 
     protected open fun updateToolbarTitle() {
         title = Manifest.getTitle(activeManifest).orEmpty()
     }
 
-    private fun updateToolbarMenu() {
+    private fun updateToolbarMenu(manifest: Manifest? = activeManifest) {
         // tint all action icons
-        val controlColor = Manifest.getNavBarControlColor(activeManifest)
+        val controlColor = Manifest.getNavBarControlColor(manifest)
         toolbar?.apply { overflowIcon = overflowIcon.tint(controlColor) }
         toolbarMenu?.forEach { it.icon = it.icon.tint(controlColor) }
 
