@@ -4,14 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Translation
 import org.cru.godtools.xml.model.Manifest
 import java.util.Locale
 
@@ -21,8 +22,6 @@ abstract class BaseSingleToolActivity(
     private val requireTool: Boolean = true
 ) : BaseToolActivity(immersive, contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
-    private var translationLoaded = false
-    private var translation: Translation? = null
 
     private val dataModel: BaseSingleToolActivityDataModel by viewModels()
     protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
@@ -48,10 +47,6 @@ abstract class BaseSingleToolActivity(
     override fun onStart() {
         super.onStart()
         startDownloadProgressListener(dataModel.toolCode.value, dataModel.locale.value)
-    }
-
-    private fun onUpdateTranslation() {
-        updateVisibilityState()
     }
 
     override fun onStop() {
@@ -86,12 +81,15 @@ abstract class BaseSingleToolActivity(
         downloadManager.cacheTranslation(toolCode, locale)
     }
 
-    override fun determineActiveToolState() = when {
-        !hasTool() -> ToolState.LOADED
-        activeManifest?.type?.let { isSupportedType(it) } == false -> ToolState.INVALID_TYPE
-        activeManifest != null -> ToolState.LOADED
-        translationLoaded && translation == null -> ToolState.NOT_FOUND
-        else -> ToolState.LOADING
+    override val activeToolStateLiveData by lazy {
+        activeManifestLiveData.combineWith(dataModel.translation) { manifest, translation ->
+            when {
+                manifest?.type?.let { isSupportedType(it) } == false -> ToolState.INVALID_TYPE
+                manifest != null -> ToolState.LOADED
+                translation == null -> ToolState.NOT_FOUND
+                else -> ToolState.LOADING
+            }
+        }.distinctUntilChanged()
     }
 
     protected abstract fun isSupportedType(type: Manifest.Type): Boolean
@@ -100,13 +98,6 @@ abstract class BaseSingleToolActivity(
 
     private fun startLoaders() {
         dataModel.manifest.observe(this) { onUpdateActiveManifest() }
-        dataModel.translation.observe(this) { setTranslation(it) }
-    }
-
-    private fun setTranslation(translation: Translation?) {
-        translationLoaded = true
-        this.translation = translation
-        onUpdateTranslation()
     }
 
     // region Up Navigation

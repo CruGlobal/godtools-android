@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
@@ -77,7 +78,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
     private fun onUpdateArticle(article: Article?) {
         this.article = article
         updateToolbarTitle()
-        updateVisibilityState()
         sendAnalyticsEventIfNeededAndPossible()
         showNextFeatureDiscovery()
     }
@@ -156,8 +156,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
             Futures.nonCancellationPropagating(future).await()
             withContext(Dispatchers.Main) { syncFinished.value = true }
         }
-
-        syncFinished.distinctUntilChanged().observe(this) { updateVisibilityState() }
     }
     // endregion Sync logic
 
@@ -167,12 +165,14 @@ class AemArticleActivity : BaseArticleActivity(false) {
     override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
     // endregion Share Link logic
 
-    override fun determineActiveToolState(): ToolState {
-        return when {
-            article?.content != null -> ToolState.LOADED
-            syncFinished.value != true -> ToolState.LOADING
-            else -> ToolState.NOT_FOUND
-        }
+    override val activeToolStateLiveData by lazy {
+        dataModel.article.combineWith(syncFinished) { article, syncFinished ->
+            when {
+                article?.content != null -> ToolState.LOADED
+                !syncFinished -> ToolState.LOADING
+                else -> ToolState.NOT_FOUND
+            }
+        }.distinctUntilChanged()
     }
 
     @MainThread

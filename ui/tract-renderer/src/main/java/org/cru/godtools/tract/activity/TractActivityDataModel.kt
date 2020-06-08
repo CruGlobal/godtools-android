@@ -62,7 +62,7 @@ class TractActivityDataModel @AssistedInject constructor(
         manifestCache.get(t, l).combineWith(translationCache.get(t, l), isInitialSyncFinished) { m, t, s ->
             determineState(m, t, s)
         }
-    }
+    }.distinctUntilChanged()
 
     val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
         when {

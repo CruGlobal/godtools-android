@@ -224,7 +224,6 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     private val dataModel: TractActivityDataModel by viewModels()
     private fun setupDataModel() {
         dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
-        dataModel.activeState.observe(this) { updateVisibilityState() }
     }
     // endregion Data Model
 

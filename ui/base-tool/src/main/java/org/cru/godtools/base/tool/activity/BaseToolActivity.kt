@@ -59,7 +59,7 @@ abstract class BaseToolActivity(
         BaseToolActivity_ViewBinding(this)
 
         super.onContentChanged()
-        updateVisibilityState()
+        activeToolStateLiveData.observe(this) { updateVisibilityState(it) }
     }
 
     override fun onSetupActionBar() {
@@ -199,19 +199,14 @@ abstract class BaseToolActivity(
         }
     }
 
-    protected open val activeToolStateLiveData: LiveData<ToolState>
-        get() = TODO("This should be abstract once it's fully supported")
+    protected abstract val activeToolStateLiveData: LiveData<ToolState>
 
-    @CallSuper
-    protected open fun updateVisibilityState() {
-        val state = determineActiveToolState()
+    private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
         loadingContent?.visibility = if (state == ToolState.LOADING) View.VISIBLE else View.GONE
         mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
         missingContent?.visibility =
             if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
     }
-
-    protected open fun determineActiveToolState(): ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN
     // endregion Tool state
 
     // region Tool sync/download logic
