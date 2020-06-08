@@ -42,16 +42,7 @@ abstract class BaseSingleToolActivity(
         }
 
         startLoaders()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        startDownloadProgressListener(dataModel.toolCode.value, dataModel.locale.value)
-    }
-
-    override fun onStop() {
-        stopDownloadProgressListener()
-        super.onStop()
+        dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
     // endregion Lifecycle
 

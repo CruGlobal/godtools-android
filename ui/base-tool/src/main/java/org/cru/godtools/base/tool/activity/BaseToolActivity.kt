@@ -32,20 +32,18 @@ import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.download.manager.GodToolsDownloadManager.OnDownloadProgressUpdateListener
 import org.cru.godtools.download.manager.databinding.bindProgress
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
-import java.util.Locale
 import javax.inject.Inject
 
 abstract class BaseToolActivity(
     immersive: Boolean,
     @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
-) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
+) : ImmersiveActivity(immersive, contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
@@ -232,20 +230,9 @@ abstract class BaseToolActivity(
     @BindView(R2.id.loading_progress)
     internal var loadingProgress: ProgressBar? = null
 
-    protected fun startDownloadProgressListener(tool: String?, language: Locale?) {
-        if (tool != null && language != null) {
-            downloadManager.addOnDownloadProgressUpdateListener(tool, language, this)
-            onDownloadProgressUpdated(downloadManager.getDownloadProgress(tool, language))
-        }
-    }
-
-    override fun onDownloadProgressUpdated(progress: DownloadProgress?) {
+    protected fun onDownloadProgressUpdated(progress: DownloadProgress?) {
         // TODO: move this to data binding
         loadingProgress?.bindProgress(progress ?: DownloadProgress.INDETERMINATE)
-    }
-
-    protected fun stopDownloadProgressListener() {
-        downloadManager.removeOnDownloadProgressUpdateListener(this)
     }
     // endregion DownloadProgress logic
 
