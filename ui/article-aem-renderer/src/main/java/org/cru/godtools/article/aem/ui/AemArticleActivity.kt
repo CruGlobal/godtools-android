@@ -8,10 +8,15 @@ import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.net.toUri
 import androidx.fragment.app.commit
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
-import com.google.common.util.concurrent.ListenableFuture
-import org.ccci.gto.android.common.util.MainThreadExecutor
-import org.ccci.gto.android.common.util.WeakTask
+import com.google.common.util.concurrent.Futures
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.R
@@ -67,10 +72,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
         super.onResume()
         pendingAnalyticsEvent = true
         sendAnalyticsEventIfNeededAndPossible()
-    }
-
-    internal fun onSyncTaskFinished() {
-        updateVisibilityState()
     }
 
     private fun onUpdateArticle(article: Article?) {
@@ -144,13 +145,19 @@ class AemArticleActivity : BaseArticleActivity(false) {
     // region Sync logic
     @Inject
     internal lateinit var aemArticleManager: AemArticleManager
-    private var syncTask: ListenableFuture<Boolean>? = null
+    private val syncFinished = MutableLiveData(false)
 
     private fun syncData() {
-        syncTask = when {
-            isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
-            else -> aemArticleManager.downloadArticle(articleUri, false)
-        }.also { it.addListener(WeakTask(this, WeakTask.Task { it.onSyncTaskFinished() }), MainThreadExecutor()) }
+        lifecycleScope.launch {
+            val future = when {
+                isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
+                else -> aemArticleManager.downloadArticle(articleUri, false)
+            }
+            Futures.nonCancellationPropagating(future).await()
+            withContext(Dispatchers.Main) { syncFinished.value = true }
+        }
+
+        syncFinished.distinctUntilChanged().observe(this) { updateVisibilityState() }
     }
     // endregion Sync logic
 
@@ -163,7 +170,7 @@ class AemArticleActivity : BaseArticleActivity(false) {
     override fun determineActiveToolState(): ToolState {
         return when {
             article?.content != null -> ToolState.LOADED
-            syncTask?.isDone != true -> ToolState.LOADING
+            syncFinished.value != true -> ToolState.LOADING
             else -> ToolState.NOT_FOUND
         }
     }
