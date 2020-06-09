@@ -5,7 +5,7 @@
         <activity
             android:name=".ui.AemArticleActivity"
             android:parentActivityName="org.cru.godtools.article.ui.articles.ArticlesActivity"
-            android:screenOrientation="@integer/default_screen_orientation"
+            android:screenOrientation="user"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
