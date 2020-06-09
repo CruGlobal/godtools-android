@@ -31,7 +31,7 @@ class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
 
-        setContentView(R.layout.activity_generic_tool_fragment)
+        setContentView(R.layout.tool_generic_fragment_activity)
     }
 
     override fun onStart() {
