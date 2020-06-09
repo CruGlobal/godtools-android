@@ -5,9 +5,11 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState" />
         <import type="org.cru.godtools.download.manager.DownloadProgress" />
 
         <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
+        <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +19,7 @@
         android:clipToPadding="false"
         android:padding="32dp"
         android:visibility="gone"
+        app:visibleIf="@{toolState == ToolState.LOADING}"
         tools:visibility="visible">
 
         <ImageView

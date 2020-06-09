@@ -59,6 +59,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     @CallSuper
     protected open fun onBindingChanged() {
         binding.setVariable(BR.progress, activeDownloadProgressLiveData)
+        binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
 
     @CallSuper
@@ -199,10 +200,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
 
     // region Tool state
     @JvmField
-    @BindView(R2.id.contentLoading)
-    internal var loadingContent: View? = null
-
-    @JvmField
     @BindView(R2.id.noContent)
     internal var missingContent: View? = null
 
@@ -224,7 +221,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     protected abstract val activeToolStateLiveData: LiveData<ToolState>
 
     private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
-        loadingContent?.visibility = if (state == ToolState.LOADING) View.VISIBLE else View.GONE
         mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
         missingContent?.visibility =
             if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
