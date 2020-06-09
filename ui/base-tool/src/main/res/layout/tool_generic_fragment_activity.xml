@@ -36,7 +36,9 @@
                 app:progress="@{progress}"
                 app:toolState="@{toolState}" />
 
-            <include layout="@layout/activity_tool_missing" />
+            <include
+                layout="@layout/activity_tool_missing"
+                app:toolState="@{toolState}" />
 
             <FrameLayout
                 android:id="@+id/mainContent"

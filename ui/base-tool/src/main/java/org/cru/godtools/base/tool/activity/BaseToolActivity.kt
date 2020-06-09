@@ -14,7 +14,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
-import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.R
-import org.cru.godtools.base.tool.R2
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpened
@@ -62,16 +60,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
 
-    @CallSuper
-    override fun onContentChanged() {
-        // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
-        // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
-        BaseToolActivity_ViewBinding(this)
-
-        super.onContentChanged()
-        activeToolStateLiveData.observe(this) { updateVisibilityState(it) }
-    }
-
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         setupToolbar()
@@ -103,9 +91,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     }
 
     @CallSuper
-    protected open fun onUpdateActiveManifest() {
-        updateVisibilityState()
-    }
+    protected open fun onUpdateActiveManifest() = Unit
     // endregion Lifecycle
 
     // region DataBinding
@@ -199,10 +185,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     // endregion Share tool logic
 
     // region Tool state
-    @JvmField
-    @BindView(R2.id.noContent)
-    internal var missingContent: View? = null
-
     enum class ToolState {
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
 
@@ -215,11 +197,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
     protected abstract val activeManifestLiveData: LiveData<Manifest?>
     protected abstract val activeToolStateLiveData: LiveData<ToolState>
-
-    private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
-        missingContent?.visibility =
-            if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
-    }
     // endregion Tool state
 
     // region Tool sync/download logic

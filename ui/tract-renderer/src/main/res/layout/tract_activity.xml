@@ -22,7 +22,9 @@
         android:keepScreenOn="true"
         tools:theme="@style/Theme.GodTools.Tract.Activity.Tract">
 
-        <include layout="@layout/activity_tool_missing" />
+        <include
+            layout="@layout/activity_tool_missing"
+            app:toolState="@{toolState}" />
 
         <include
             layout="@layout/activity_tool_loading"
