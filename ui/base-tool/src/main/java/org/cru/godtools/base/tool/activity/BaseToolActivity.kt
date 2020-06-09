@@ -9,8 +9,10 @@ import android.widget.ProgressBar
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -57,12 +59,12 @@ abstract class BaseToolActivity(
         BaseToolActivity_ViewBinding(this)
 
         super.onContentChanged()
-        updateVisibilityState()
+        activeToolStateLiveData.observe(this) { updateVisibilityState(it) }
     }
 
     override fun onSetupActionBar() {
         super.onSetupActionBar()
-        updateToolbar()
+        setupToolbar()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -91,11 +93,7 @@ abstract class BaseToolActivity(
     }
 
     @CallSuper
-    protected open fun onUpdateToolbar() = Unit
-
-    @CallSuper
     protected open fun onUpdateActiveManifest() {
-        updateToolbar()
         updateVisibilityState()
     }
     // endregion Lifecycle
@@ -103,7 +101,8 @@ abstract class BaseToolActivity(
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
-    protected abstract val activeManifest: Manifest?
+    protected val activeManifest get() = activeManifestLiveData.value
+    protected abstract val activeManifestLiveData: LiveData<Manifest?>
 
     // region Toolbar update logic
     private var toolbarMenu: Menu? = null
@@ -112,31 +111,30 @@ abstract class BaseToolActivity(
         toolbarMenu = this
     }
 
-    private fun updateToolbar() {
-        toolbar?.apply {
-            val manifest = activeManifest
+    private fun setupToolbar() {
+        activeManifestLiveData.observe(this) { manifest ->
+            toolbar?.apply {
+                // set toolbar background color
+                setBackgroundColor(Manifest.getNavBarColor(manifest))
 
-            // set toolbar background color
-            setBackgroundColor(Manifest.getNavBarColor(manifest))
-
-            // set text & controls color
-            val controlColor = Manifest.getNavBarControlColor(manifest)
-            navigationIcon = toolbar!!.navigationIcon.tint(controlColor)
-            setTitleTextColor(controlColor)
-            setSubtitleTextColor(controlColor)
+                // set text & controls color
+                val controlColor = Manifest.getNavBarControlColor(manifest)
+                navigationIcon = navigationIcon.tint(controlColor)
+                setTitleTextColor(controlColor)
+                setSubtitleTextColor(controlColor)
+            }
+            updateToolbarTitle()
+            updateToolbarMenu(manifest)
         }
-        updateToolbarTitle()
-        updateToolbarMenu()
-        onUpdateToolbar()
     }
 
     protected open fun updateToolbarTitle() {
         title = Manifest.getTitle(activeManifest).orEmpty()
     }
 
-    private fun updateToolbarMenu() {
+    private fun updateToolbarMenu(manifest: Manifest? = activeManifest) {
         // tint all action icons
-        val controlColor = Manifest.getNavBarControlColor(activeManifest)
+        val controlColor = Manifest.getNavBarControlColor(manifest)
         toolbar?.apply { overflowIcon = overflowIcon.tint(controlColor) }
         toolbarMenu?.forEach { it.icon = it.icon.tint(controlColor) }
 
@@ -192,16 +190,23 @@ abstract class BaseToolActivity(
     @BindView(R2.id.mainContent)
     internal var mainContent: View? = null
 
-    @CallSuper
-    protected open fun updateVisibilityState() {
-        val state = determineActiveToolState()
-        loadingContent?.visibility = if (state == STATE_LOADING) View.VISIBLE else View.GONE
-        mainContent?.visibility = if (state == STATE_LOADED) View.VISIBLE else View.GONE
-        missingContent?.visibility =
-            if (state == STATE_NOT_FOUND || state == STATE_INVALID_TYPE) View.VISIBLE else View.GONE
+    enum class ToolState {
+        LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
+
+        companion object {
+            // TODO: this should be an actual state
+            val UNKNOWN = LOADING
+        }
     }
 
-    protected abstract fun determineActiveToolState(): Int
+    protected abstract val activeToolStateLiveData: LiveData<ToolState>
+
+    private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
+        loadingContent?.visibility = if (state == ToolState.LOADING) View.VISIBLE else View.GONE
+        mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
+        missingContent?.visibility =
+            if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
+    }
     // endregion Tool state
 
     // region Tool sync/download logic
@@ -323,11 +328,4 @@ abstract class BaseToolActivity(
 
     override fun setTitle(title: CharSequence) =
         super.setTitle(title.applyTypefaceSpan(ManifestViewUtils.getTypeface(activeManifest, this)))
-
-    companion object {
-        const val STATE_LOADING = 0
-        const val STATE_LOADED = 1
-        const val STATE_NOT_FOUND = 2
-        const val STATE_INVALID_TYPE = 3
-    }
 }

@@ -22,9 +22,7 @@ import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelF
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_INVALID_TYPE
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_LOADED
-import org.cru.godtools.base.tool.activity.BaseToolActivity.Companion.STATE_NOT_FOUND
+import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
@@ -64,7 +62,7 @@ class TractActivityDataModel @AssistedInject constructor(
         manifestCache.get(t, l).combineWith(translationCache.get(t, l), isInitialSyncFinished) { m, t, s ->
             determineState(m, t, s)
         }
-    }
+    }.distinctUntilChanged()
 
     val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
         when {
@@ -108,26 +106,26 @@ class TractActivityDataModel @AssistedInject constructor(
         activeLocale.combineWith(primaryLocales, parallelLocales, state) { activeLocale, primary, parallel, state ->
             buildList {
                 primary
-                    .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
+                    .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
                         it.firstOrNull { it == activeLocale }
-                            ?: it.firstOrNull { state[it] == STATE_LOADED }
+                            ?: it.firstOrNull { state[it] == ToolState.LOADED }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
                 parallel
                     .filterNot { contains(it) }
-                    .filterNot { state[it] == STATE_INVALID_TYPE || state[it] == STATE_NOT_FOUND }
+                    .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
                         it.firstOrNull { it == activeLocale }
-                            ?: it.firstOrNull { state[it] == STATE_LOADED }
+                            ?: it.firstOrNull { state[it] == ToolState.LOADED }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
             }
         }
     val visibleLocales =
-        availableLocales.combineWith(state) { locales, state -> locales.filter { state[it] == STATE_LOADED } }
+        availableLocales.combineWith(state) { locales, state -> locales.filter { state[it] == ToolState.LOADED } }
     // endregion Language Switcher
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {

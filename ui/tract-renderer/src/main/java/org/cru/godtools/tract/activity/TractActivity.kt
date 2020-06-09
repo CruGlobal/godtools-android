@@ -224,7 +224,6 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     private val dataModel: TractActivityDataModel by viewModels()
     private fun setupDataModel() {
         dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
-        dataModel.activeState.observe(this) { updateVisibilityState() }
     }
     // endregion Data Model
 
@@ -347,9 +346,8 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     )
 
     // region Active Translation management
-    override val activeManifest get() = dataModel.activeManifest.value
-
-    override fun determineActiveToolState() = dataModel.activeState.value ?: STATE_LOADING
+    override val activeManifestLiveData get() = dataModel.activeManifest
+    override val activeToolStateLiveData get() = dataModel.activeState
 
     private fun setupActiveTranslationManagement() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
@@ -365,13 +363,13 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     }
 
     private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeState: Int? = dataModel.activeState.value,
+        activeState: ToolState? = dataModel.activeState.value,
         availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        state: Map<Locale, Int> = dataModel.state.value.orEmpty()
+        state: Map<Locale, ToolState> = dataModel.state.value.orEmpty()
     ) {
         // only process if the active language is not found or invalid
-        if (activeState == STATE_NOT_FOUND || activeState == STATE_INVALID_TYPE) {
-            availableLocales.firstOrNull { state[it] != STATE_NOT_FOUND && state[it] != STATE_INVALID_TYPE }
+        if (activeState == ToolState.NOT_FOUND || activeState == ToolState.INVALID_TYPE) {
+            availableLocales.firstOrNull { state[it] != ToolState.NOT_FOUND && state[it] != ToolState.INVALID_TYPE }
                 ?.let { dataModel.setActiveLocale(it) }
         }
     }
@@ -393,10 +391,10 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     companion object {
         internal fun determineState(manifest: Manifest?, translation: Translation?, isInitialSyncFinished: Boolean) =
             when {
-                manifest != null && manifest.type != Manifest.Type.TRACT -> STATE_INVALID_TYPE
-                manifest != null -> STATE_LOADED
-                translation == null && isInitialSyncFinished -> STATE_NOT_FOUND
-                else -> STATE_LOADING
+                manifest != null && manifest.type != Manifest.Type.TRACT -> ToolState.INVALID_TYPE
+                manifest != null -> ToolState.LOADED
+                translation == null && isInitialSyncFinished -> ToolState.NOT_FOUND
+                else -> ToolState.LOADING
             }
     }
 }
