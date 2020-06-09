@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
@@ -30,9 +29,7 @@ import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
-import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.download.manager.databinding.bindProgress
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
@@ -224,17 +221,6 @@ abstract class BaseToolActivity(
 
     protected abstract fun cacheTools()
     // endregion Tool sync/download logic
-
-    // region DownloadProgress logic
-    @JvmField
-    @BindView(R2.id.loading_progress)
-    internal var loadingProgress: ProgressBar? = null
-
-    protected fun onDownloadProgressUpdated(progress: DownloadProgress?) {
-        // TODO: move this to data binding
-        loadingProgress?.bindProgress(progress ?: DownloadProgress.INDETERMINATE)
-    }
-    // endregion DownloadProgress logic
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null
