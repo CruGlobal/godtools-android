@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.base.Constants
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
+import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.R2
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
@@ -31,6 +32,7 @@ import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
+import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
@@ -55,7 +57,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     }
 
     @CallSuper
-    protected open fun onBindingChanged() = Unit
+    protected open fun onBindingChanged() {
+        binding.setVariable(BR.progress, activeDownloadProgressLiveData)
+    }
 
     @CallSuper
     override fun onContentChanged() {
@@ -119,7 +123,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
     protected val activeManifest get() = activeManifestLiveData.value
-    protected abstract val activeManifestLiveData: LiveData<Manifest?>
 
     // region Toolbar update logic
     private var toolbarMenu: Menu? = null
@@ -216,6 +219,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         }
     }
 
+    protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
+    protected abstract val activeManifestLiveData: LiveData<Manifest?>
     protected abstract val activeToolStateLiveData: LiveData<ToolState>
 
     private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {

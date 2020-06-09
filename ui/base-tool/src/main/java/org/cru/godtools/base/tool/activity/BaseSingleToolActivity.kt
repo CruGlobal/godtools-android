@@ -3,7 +3,6 @@ package org.cru.godtools.base.tool.activity
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
@@ -12,7 +11,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants
-import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
@@ -45,12 +43,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 
         startLoaders()
     }
-
-    @CallSuper
-    override fun onBindingChanged() {
-        super.onBindingChanged()
-        binding.setVariable(BR.progress, dataModel.downloadProgress)
-    }
     // endregion Lifecycle
 
     private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
@@ -79,6 +71,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         downloadManager.cacheTranslation(toolCode, locale)
     }
 
+    override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolStateLiveData by lazy {
         activeManifestLiveData.combineWith(dataModel.translation) { manifest, translation ->
             when {

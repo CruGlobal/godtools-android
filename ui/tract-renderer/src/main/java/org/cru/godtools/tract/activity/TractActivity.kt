@@ -230,9 +230,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // endregion Data Model
 
     // region UI
+    override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
+
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
-        binding.progress = dataModel.downloadProgress
         binding.visibleLocales = dataModel.visibleLocales
     }
 
