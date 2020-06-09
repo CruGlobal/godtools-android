@@ -60,7 +60,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
         }
 
         syncData()
-        setContentView(R.layout.tool_generic_fragment_activity)
         setupDataModel()
     }
 

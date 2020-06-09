@@ -27,13 +27,6 @@ class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (isFinishing) return
-
-        setContentView(R.layout.tool_generic_fragment_activity)
-    }
-
     override fun onStart() {
         super.onStart()
         loadPrimaryFragmentIfNeeded()

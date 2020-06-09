@@ -29,7 +29,6 @@ class CategoriesActivity : BaseArticleActivity(), CategorySelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
-        setContentView(R.layout.tool_generic_fragment_activity)
         if (savedInstanceState == null) trackToolOpen(tool)
     }
 
