@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
@@ -21,9 +20,9 @@ import java.util.Locale
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
-    @LayoutRes private val contentLayoutId: Int,
+    @LayoutRes contentLayoutId: Int,
     private val requireTool: Boolean = true
-) : BaseToolActivity(immersive) {
+) : BaseToolActivity<B>(immersive, contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
     private val dataModel: BaseSingleToolActivityDataModel by viewModels()
@@ -44,12 +43,12 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             return
         }
 
-        setupDataBinding()
         startLoaders()
     }
 
     @CallSuper
-    protected open fun onBindingCreated(binding: B) {
+    override fun onBindingChanged() {
+        super.onBindingChanged()
         binding.setVariable(BR.progress, dataModel.downloadProgress)
     }
     // endregion Lifecycle
@@ -73,17 +72,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
                 "requireTool is true, but a valid locale wasn't specified"
             }
         }
-
-    // region DataBinding
-    private lateinit var binding: B
-
-    private fun setupDataBinding() {
-        binding = DataBindingUtil.inflate(layoutInflater, contentLayoutId, null, false)!!
-        binding.lifecycleOwner = this
-        onBindingCreated(binding)
-        setContentView(binding.root)
-    }
-    // endregion DataBinding
 
     override fun cacheTools() {
         val toolCode = dataModel.toolCode.value ?: return

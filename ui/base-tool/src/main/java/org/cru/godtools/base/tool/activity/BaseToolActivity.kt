@@ -8,6 +8,8 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -37,16 +39,24 @@ import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
 import javax.inject.Inject
 
-abstract class BaseToolActivity(
+abstract class BaseToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
-    @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
-) : ImmersiveActivity(immersive, contentLayoutId) {
+    @LayoutRes private val contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
+) : ImmersiveActivity(immersive) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupDataBinding()
+    }
+
+    @CallSuper
+    protected open fun onBindingChanged() = Unit
+
     @CallSuper
     override fun onContentChanged() {
         // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
@@ -92,6 +102,18 @@ abstract class BaseToolActivity(
         updateVisibilityState()
     }
     // endregion Lifecycle
+
+    // region DataBinding
+    protected lateinit var binding: B
+        private set
+
+    private fun setupDataBinding() {
+        binding = DataBindingUtil.inflate(layoutInflater, contentLayoutId, null, false)!!
+        binding.lifecycleOwner = this
+        setContentView(binding.root)
+        onBindingChanged()
+    }
+    // endregion DataBinding
 
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
