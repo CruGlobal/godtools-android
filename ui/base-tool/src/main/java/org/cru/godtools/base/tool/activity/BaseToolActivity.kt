@@ -203,10 +203,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     @BindView(R2.id.noContent)
     internal var missingContent: View? = null
 
-    @JvmField
-    @BindView(R2.id.mainContent)
-    internal var mainContent: View? = null
-
     enum class ToolState {
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
 
@@ -221,7 +217,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     protected abstract val activeToolStateLiveData: LiveData<ToolState>
 
     private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
-        mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
         missingContent?.visibility =
             if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
     }

@@ -29,9 +29,25 @@
             app:progress="@{progress}"
             app:toolState="@{toolState}" />
 
-        <include
+        <RelativeLayout
             android:id="@+id/mainContent"
-            layout="@layout/tract_activity_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:visibleIf="@{toolState == ToolState.LOADED}">
+
+            <org.cru.godtools.tract.widget.TractPicassoImageView
+                android:id="@+id/background_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:cropToPadding="false" />
+
+            <org.cru.godtools.tract.widget.HackyRtlViewPager
+                android:id="@+id/pages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

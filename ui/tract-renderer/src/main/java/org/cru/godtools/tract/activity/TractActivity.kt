@@ -246,7 +246,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
             window.decorView.setBackgroundColor(Manifest.getBackgroundColor(it))
-            ManifestViewUtils.bindBackgroundImage(it, binding.mainContent.backgroundImage)
+            ManifestViewUtils.bindBackgroundImage(it, binding.backgroundImage)
         }
     }
 
@@ -291,7 +291,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // endregion Language Toggle
 
     // region Tool Pager
-    private val pager get() = binding.mainContent.pages
+    private val pager get() = binding.pages
     private val pagerAdapter by lazy {
         ManifestPagerAdapter().also {
             it.setCallbacks(this)
