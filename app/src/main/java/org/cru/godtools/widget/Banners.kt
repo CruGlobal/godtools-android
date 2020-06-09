@@ -26,7 +26,6 @@ enum class BannerType(
     );
 }
 
-@JvmOverloads
 fun Banner.show(
     banner: BannerType? = null,
     primaryCallback: BannerInterface.OnClickListener? = null,

@@ -142,8 +142,8 @@ internal class Tasks @Inject constructor(
         }
     }
 
-    suspend fun importBundledTranslations() = withContext(Dispatchers.IO) {
-        try {
+    suspend fun importBundledTranslations() = try {
+        withContext(Dispatchers.IO) {
             context.assets.list("translations")?.forEach { file ->
                 launch {
                     // load the translation unless it's downloaded already
@@ -175,8 +175,8 @@ internal class Tasks @Inject constructor(
                     }
                 }
             }
-        } catch (e: Exception) {
-            Timber.tag(TAG).e(e, "Error importing bundled translations")
         }
+    } catch (e: Exception) {
+        Timber.tag(TAG).e(e, "Error importing bundled translations")
     }
 }

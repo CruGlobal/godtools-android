@@ -1,4 +1,3 @@
-// ktlint-disable filename
 package org.cru.godtools.tract.activity
 
 import android.app.Activity

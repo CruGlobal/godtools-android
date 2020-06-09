@@ -105,10 +105,10 @@ class Page : Base, Styles, Parent {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
 
         listeners = parseEvents(parser, XML_LISTENERS)
-        _primaryColor = parser.parseColor(XML_PRIMARY_COLOR, _primaryColor)
-        _primaryTextColor = parser.parseColor(XML_PRIMARY_TEXT_COLOR, _primaryTextColor)
-        _textColor = parser.parseColor(XML_TEXT_COLOR, _textColor)
-        _cardTextColor = parser.parseColor(XML_CARD_TEXT_COLOR, _cardTextColor)
+        _primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR) ?: _primaryColor
+        _primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR) ?: _primaryTextColor
+        _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR) ?: _textColor
+        _cardTextColor = parser.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR) ?: _cardTextColor
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: backgroundColor
         backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
