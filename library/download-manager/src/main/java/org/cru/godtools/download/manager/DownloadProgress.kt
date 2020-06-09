@@ -2,7 +2,7 @@ package org.cru.godtools.download.manager
 
 private const val INDETERMINATE_VAL = 0L
 
-class DownloadProgress constructor(progress: Long, max: Long) {
+class DownloadProgress(progress: Long, max: Long) {
     companion object {
         @JvmField
         internal val INITIAL = DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL)
