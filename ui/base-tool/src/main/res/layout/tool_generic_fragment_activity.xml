@@ -40,6 +40,10 @@
                 layout="@layout/activity_tool_missing"
                 app:toolState="@{toolState}" />
 
+            <include
+                layout="@layout/activity_tool_offline"
+                app:toolState="@{toolState}" />
+
             <FrameLayout
                 android:id="@+id/mainContent"
                 android:layout_width="match_parent"

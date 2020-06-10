@@ -187,7 +187,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
 
     // region Tool state
     enum class ToolState {
-        LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
+        LOADING, LOADED, NOT_FOUND, INVALID_TYPE, OFFLINE;
 
         companion object {
             // TODO: this should be an actual state
