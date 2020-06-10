@@ -52,11 +52,12 @@ dependencies {
 
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
 
-    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
-
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+
+    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }
