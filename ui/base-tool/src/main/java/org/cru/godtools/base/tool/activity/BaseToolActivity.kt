@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
-import butterknife.BindView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.base.Constants
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
+import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.R
-import org.cru.godtools.base.tool.R2
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpened
@@ -32,34 +32,32 @@ import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.download.manager.GodToolsDownloadManager.OnDownloadProgressUpdateListener
-import org.cru.godtools.download.manager.databinding.bindProgress
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
-import java.util.Locale
 import javax.inject.Inject
 
-abstract class BaseToolActivity(
+abstract class BaseToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
-    @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
-) : ImmersiveActivity(immersive, contentLayoutId), OnDownloadProgressUpdateListener {
+    @LayoutRes private val contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
+) : ImmersiveActivity(immersive) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
 
     // region Lifecycle
-    @CallSuper
-    override fun onContentChanged() {
-        // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
-        // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
-        BaseToolActivity_ViewBinding(this)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupDataBinding()
+    }
 
-        super.onContentChanged()
-        activeToolStateLiveData.observe(this) { updateVisibilityState(it) }
+    @CallSuper
+    protected open fun onBindingChanged() {
+        binding.setVariable(BR.progress, activeDownloadProgressLiveData)
+        binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
 
     override fun onSetupActionBar() {
@@ -93,16 +91,25 @@ abstract class BaseToolActivity(
     }
 
     @CallSuper
-    protected open fun onUpdateActiveManifest() {
-        updateVisibilityState()
-    }
+    protected open fun onUpdateActiveManifest() = Unit
     // endregion Lifecycle
+
+    // region DataBinding
+    protected lateinit var binding: B
+        private set
+
+    private fun setupDataBinding() {
+        binding = DataBindingUtil.inflate(layoutInflater, contentLayoutId, null, false)!!
+        binding.lifecycleOwner = this
+        setContentView(binding.root)
+        onBindingChanged()
+    }
+    // endregion DataBinding
 
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
     protected val activeManifest get() = activeManifestLiveData.value
-    protected abstract val activeManifestLiveData: LiveData<Manifest?>
 
     // region Toolbar update logic
     private var toolbarMenu: Menu? = null
@@ -178,18 +185,6 @@ abstract class BaseToolActivity(
     // endregion Share tool logic
 
     // region Tool state
-    @JvmField
-    @BindView(R2.id.contentLoading)
-    internal var loadingContent: View? = null
-
-    @JvmField
-    @BindView(R2.id.noContent)
-    internal var missingContent: View? = null
-
-    @JvmField
-    @BindView(R2.id.mainContent)
-    internal var mainContent: View? = null
-
     enum class ToolState {
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE;
 
@@ -199,14 +194,9 @@ abstract class BaseToolActivity(
         }
     }
 
+    protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
+    protected abstract val activeManifestLiveData: LiveData<Manifest?>
     protected abstract val activeToolStateLiveData: LiveData<ToolState>
-
-    private fun updateVisibilityState(state: ToolState = activeToolStateLiveData.value ?: ToolState.UNKNOWN) {
-        loadingContent?.visibility = if (state == ToolState.LOADING) View.VISIBLE else View.GONE
-        mainContent?.visibility = if (state == ToolState.LOADED) View.VISIBLE else View.GONE
-        missingContent?.visibility =
-            if (state == ToolState.NOT_FOUND || state == ToolState.INVALID_TYPE) View.VISIBLE else View.GONE
-    }
     // endregion Tool state
 
     // region Tool sync/download logic
@@ -226,28 +216,6 @@ abstract class BaseToolActivity(
 
     protected abstract fun cacheTools()
     // endregion Tool sync/download logic
-
-    // region DownloadProgress logic
-    @JvmField
-    @BindView(R2.id.loading_progress)
-    internal var loadingProgress: ProgressBar? = null
-
-    protected fun startDownloadProgressListener(tool: String?, language: Locale?) {
-        if (tool != null && language != null) {
-            downloadManager.addOnDownloadProgressUpdateListener(tool, language, this)
-            onDownloadProgressUpdated(downloadManager.getDownloadProgress(tool, language))
-        }
-    }
-
-    override fun onDownloadProgressUpdated(progress: DownloadProgress?) {
-        // TODO: move this to data binding
-        loadingProgress?.bindProgress(progress ?: DownloadProgress.INDETERMINATE)
-    }
-
-    protected fun stopDownloadProgressListener() {
-        downloadManager.removeOnDownloadProgressUpdateListener(this)
-    }
-    // endregion DownloadProgress logic
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null

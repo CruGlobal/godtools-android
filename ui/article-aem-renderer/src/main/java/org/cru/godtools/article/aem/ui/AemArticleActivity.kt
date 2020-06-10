@@ -28,6 +28,7 @@ import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
+import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import java.util.Locale
 import javax.inject.Inject
 
@@ -40,7 +41,8 @@ fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articl
         .also { startActivity(it) }
 }
 
-class AemArticleActivity : BaseArticleActivity(false) {
+class AemArticleActivity :
+    BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity, false) {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var articleUri: Uri
 
@@ -60,7 +62,6 @@ class AemArticleActivity : BaseArticleActivity(false) {
         }
 
         syncData()
-        setContentView(R.layout.activity_generic_tool_fragment)
         setupDataModel()
     }
 

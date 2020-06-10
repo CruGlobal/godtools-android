@@ -7,8 +7,12 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="java.util.List" />
         <import type="java.util.Locale" />
+        <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState" />
+        <import type="org.cru.godtools.download.manager.DownloadProgress" />
 
         <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
+        <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
         <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
     </data>
 
@@ -18,13 +22,34 @@
         android:keepScreenOn="true"
         tools:theme="@style/Theme.GodTools.Tract.Activity.Tract">
 
-        <include layout="@layout/activity_tool_missing" />
-
-        <include layout="@layout/activity_tool_loading" />
+        <include
+            layout="@layout/activity_tool_missing"
+            app:toolState="@{toolState}" />
 
         <include
+            layout="@layout/activity_tool_loading"
+            app:progress="@{progress}"
+            app:toolState="@{toolState}" />
+
+        <RelativeLayout
             android:id="@+id/mainContent"
-            layout="@layout/tract_activity_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:visibleIf="@{toolState == ToolState.LOADED}">
+
+            <org.cru.godtools.tract.widget.TractPicassoImageView
+                android:id="@+id/background_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:cropToPadding="false" />
+
+            <org.cru.godtools.tract.widget.HackyRtlViewPager
+                android:id="@+id/pages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

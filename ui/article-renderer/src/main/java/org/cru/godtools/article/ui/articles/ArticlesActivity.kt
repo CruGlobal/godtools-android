@@ -2,7 +2,6 @@ package org.cru.godtools.article.ui.articles
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.fragment.app.commit
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
@@ -12,6 +11,7 @@ import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
+import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import java.util.Locale
 
 fun Activity.startArticlesActivity(toolCode: String, language: Locale, category: String?) {
@@ -23,17 +23,12 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
         .also { this.startActivity(it) }
 }
 
-class ArticlesActivity : BaseArticleActivity(), ArticlesFragment.Callbacks {
+class ArticlesActivity :
+    BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity),
+    ArticlesFragment.Callbacks {
     private val category: String? by lazy { intent?.extras?.getString(EXTRA_CATEGORY) }
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (isFinishing) return
-
-        setContentView(R.layout.activity_generic_tool_fragment)
-    }
-
     override fun onStart() {
         super.onStart()
         loadPrimaryFragmentIfNeeded()

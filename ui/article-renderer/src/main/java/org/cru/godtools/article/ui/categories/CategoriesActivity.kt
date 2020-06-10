@@ -12,6 +12,7 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
+import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.xml.model.Category
 import java.util.Locale
 
@@ -24,12 +25,13 @@ fun Activity.startCategoriesActivity(toolCode: String, language: Locale) {
     startActivity(createCategoriesIntent(toolCode, language))
 }
 
-class CategoriesActivity : BaseArticleActivity(), CategorySelectedListener {
+class CategoriesActivity :
+    BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity),
+    CategorySelectedListener {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
-        setContentView(R.layout.activity_generic_tool_fragment)
         if (savedInstanceState == null) trackToolOpen(tool)
     }
 

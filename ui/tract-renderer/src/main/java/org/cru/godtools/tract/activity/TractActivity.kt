@@ -66,7 +66,8 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
-class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks {
+class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.tract_activity),
+    TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -92,15 +93,16 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
 
         setupDataModel()
         setupActiveTranslationManagement()
-        binding = TractActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    }
+
+    override fun onBindingChanged() {
+        super.onBindingChanged()
+        setupBinding()
     }
 
     override fun onContentChanged() {
         super.onContentChanged()
-        setupBinding()
         setupBackground()
-        startDownloadProgressListener()
         setupLanguageToggle()
         setupPager()
     }
@@ -228,10 +230,9 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     // endregion Data Model
 
     // region UI
-    private lateinit var binding: TractActivityBinding
+    override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
 
     private fun setupBinding() {
-        binding.lifecycleOwner = this
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
     }
@@ -245,12 +246,8 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
             window.decorView.setBackgroundColor(Manifest.getBackgroundColor(it))
-            ManifestViewUtils.bindBackgroundImage(it, binding.mainContent.backgroundImage)
+            ManifestViewUtils.bindBackgroundImage(it, binding.backgroundImage)
         }
-    }
-
-    private fun startDownloadProgressListener() {
-        dataModel.downloadProgress.observe(this) { onDownloadProgressUpdated(it) }
     }
 
     // region Language Toggle
@@ -294,7 +291,7 @@ class TractActivity : BaseToolActivity(true), TabLayout.OnTabSelectedListener, M
     // endregion Language Toggle
 
     // region Tool Pager
-    private val pager get() = binding.mainContent.pages
+    private val pager get() = binding.pages
     private val pagerAdapter by lazy {
         ManifestPagerAdapter().also {
             it.setCallbacks(this)
