@@ -32,6 +32,7 @@ import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
@@ -191,6 +192,20 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         companion object {
             // TODO: this should be an actual state
             val UNKNOWN = LOADING
+
+            fun determineToolState(
+                manifest: Manifest? = null,
+                translation: Translation? = null,
+                manifestType: Manifest.Type? = null,
+                isSyncFinished: Boolean = true
+            ) = when {
+                manifest != null -> when {
+                    manifestType != null && manifest.type != manifestType -> INVALID_TYPE
+                    else -> LOADED
+                }
+                translation == null && isSyncFinished -> NOT_FOUND
+                else -> LOADING
+            }
         }
     }
 

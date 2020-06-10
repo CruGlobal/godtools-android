@@ -74,16 +74,11 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolStateLiveData by lazy {
         activeManifestLiveData.combineWith(dataModel.translation) { manifest, translation ->
-            when {
-                manifest?.type?.let { isSupportedType(it) } == false -> ToolState.INVALID_TYPE
-                manifest != null -> ToolState.LOADED
-                translation == null -> ToolState.NOT_FOUND
-                else -> ToolState.LOADING
-            }
+            ToolState.determineToolState(manifest, translation, manifestType = supportedType)
         }.distinctUntilChanged()
     }
 
-    protected abstract fun isSupportedType(type: Manifest.Type): Boolean
+    protected open val supportedType: Manifest.Type? get() = null
 
     private fun validStartState() = !requireTool || hasTool()
 

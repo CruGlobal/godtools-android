@@ -384,14 +384,4 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 .build().toString()
         }
     // endregion Share Link Logic
-
-    companion object {
-        internal fun determineState(manifest: Manifest?, translation: Translation?, isInitialSyncFinished: Boolean) =
-            when {
-                manifest != null && manifest.type != Manifest.Type.TRACT -> ToolState.INVALID_TYPE
-                manifest != null -> ToolState.LOADED
-                translation == null && isInitialSyncFinished -> ToolState.NOT_FOUND
-                else -> ToolState.LOADING
-            }
-    }
 }
