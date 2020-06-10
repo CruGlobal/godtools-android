@@ -45,4 +45,6 @@ dependencies {
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+
+    kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }
