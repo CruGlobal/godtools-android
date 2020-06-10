@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants
@@ -73,8 +74,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolStateLiveData by lazy {
-        activeManifestLiveData.combineWith(dataModel.translation) { manifest, translation ->
-            ToolState.determineToolState(manifest, translation, manifestType = supportedType)
+        activeManifestLiveData.combineWith(dataModel.translation, isConnectedLiveData()) { m, t, isConnected ->
+            ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
 

@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.activity
 
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
@@ -14,6 +15,7 @@ import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
@@ -36,6 +38,7 @@ import java.util.Locale
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 class TractActivityDataModel @AssistedInject constructor(
+    context: Context,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
@@ -45,6 +48,7 @@ class TractActivityDataModel @AssistedInject constructor(
     interface Factory : AssistedSavedStateViewModelFactory<TractActivityDataModel>
 
     val tool = MutableLiveData<String?>()
+    private val isConnected = context.isConnectedLiveData()
     val isInitialSyncFinished = MutableLiveData(false)
     private val distinctTool = tool.distinctUntilChanged()
 
@@ -58,8 +62,9 @@ class TractActivityDataModel @AssistedInject constructor(
         distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
     val activeState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
-        manifestCache.get(tool, l).combineWith(translationCache.get(tool, l), isInitialSyncFinished) { m, t, s ->
-            ToolState.determineToolState(m, t, manifestType = Manifest.Type.TRACT, isSyncFinished = s)
+        val translation = translationCache.get(tool, l)
+        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
+            ToolState.determineToolState(m, t, manifestType = Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
