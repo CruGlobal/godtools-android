@@ -25,8 +25,19 @@ class ToolStateTest {
             }
         }
 
+        assertEquals(
+            ToolState.NOT_FOUND,
+            ToolState.determineToolState(null, null, isSyncFinished = true, isConnected = true)
+        )
+        assertEquals(
+            ToolState.NOT_FOUND,
+            ToolState.determineToolState(null, null, isSyncFinished = true, isConnected = false)
+        )
         assertEquals(ToolState.LOADING, ToolState.determineToolState(null, null, isSyncFinished = false))
         assertEquals(ToolState.LOADING, ToolState.determineToolState(null, Translation(), isSyncFinished = true))
-        assertEquals(ToolState.NOT_FOUND, ToolState.determineToolState(null, null, isSyncFinished = true))
+        assertEquals(
+            ToolState.OFFLINE,
+            ToolState.determineToolState(null, null, isSyncFinished = false, isConnected = false)
+        )
     }
 }

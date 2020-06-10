@@ -190,20 +190,19 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE, OFFLINE;
 
         companion object {
-            // TODO: this should be an actual state
-            val UNKNOWN = LOADING
-
             fun determineToolState(
                 manifest: Manifest? = null,
                 translation: Translation? = null,
                 manifestType: Manifest.Type? = null,
+                isConnected: Boolean = true,
                 isSyncFinished: Boolean = true
             ) = when {
                 manifest != null -> when {
                     manifestType != null && manifest.type != manifestType -> INVALID_TYPE
                     else -> LOADED
                 }
-                translation == null && isSyncFinished -> NOT_FOUND
+                isSyncFinished && translation == null -> NOT_FOUND
+                !isConnected -> OFFLINE
                 else -> LOADING
             }
         }
