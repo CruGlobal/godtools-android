@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.base.Constants
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
@@ -39,6 +40,7 @@ import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Named
 
 abstract class BaseToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
@@ -53,6 +55,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataBinding()
+        isConnected.observe(this) { if (it) syncTools() }
     }
 
     @CallSuper
@@ -76,11 +79,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         updateToolbarMenu()
         return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        syncTools()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -216,6 +214,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     // region Tool sync/download logic
     @Inject
     internal lateinit var toolSyncTasks: ToolSyncTasks
+    @Inject
+    @Named(IS_CONNECTED_LIVE_DATA)
+    internal lateinit var isConnected: LiveData<Boolean>
     protected val isInitialSyncFinished = MutableLiveData<Boolean>()
 
     private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {

@@ -5,21 +5,16 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants
-import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Named
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
@@ -77,13 +72,9 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         downloadManager.cacheTranslation(toolCode, locale)
     }
 
-    @Inject
-    @Named(IS_CONNECTED_LIVE_DATA)
-    internal lateinit var isConnectedLiveData: LiveData<Boolean>
-
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolStateLiveData by lazy {
-        activeManifestLiveData.combineWith(dataModel.translation, isConnectedLiveData) { m, t, isConnected ->
+        activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
             ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
