@@ -1,12 +1,10 @@
 dependencies {
     implementation project(':library:api')
-    implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
-    implementation "androidx.collection:collection:${deps.androidX.collection}"
     implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
     api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
@@ -19,6 +17,4 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
-
-    testImplementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 }
