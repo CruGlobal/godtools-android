@@ -101,11 +101,12 @@ class TractActivityDataModel @AssistedInject constructor(
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
     val state = locales
-        .combineWith(manifests, translations, isInitialSyncFinished) { locales, manifests, translations, syncFinished ->
-            locales.associateWith {
+        .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
+            l.associateWith {
                 ToolState.determineToolState(
-                    manifests[it], translations[it],
+                    m[it], t[it],
                     manifestType = Manifest.Type.TRACT,
+                    isConnected = connected,
                     isSyncFinished = syncFinished
                 )
             }
@@ -117,8 +118,9 @@ class TractActivityDataModel @AssistedInject constructor(
                 primary
                     .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale }
+                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
                             ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
@@ -126,8 +128,9 @@ class TractActivityDataModel @AssistedInject constructor(
                     .filterNot { contains(it) }
                     .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale }
+                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
                             ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
