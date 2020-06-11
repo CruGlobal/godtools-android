@@ -5,6 +5,4 @@ import androidx.databinding.ViewDataBinding
 import org.cru.godtools.xml.model.Manifest
 
 abstract class BaseArticleActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int, requireTool: Boolean = true) :
-    BaseSingleToolActivity<B>(false, contentLayoutId, requireTool) {
-    override val supportedType get() = Manifest.Type.ARTICLE
-}
+    BaseSingleToolActivity<B>(false, contentLayoutId, requireTool, Manifest.Type.ARTICLE)

@@ -24,7 +24,8 @@ import javax.inject.Named
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
     @LayoutRes contentLayoutId: Int,
-    private val requireTool: Boolean = true
+    private val requireTool: Boolean = true,
+    private val supportedType: Manifest.Type? = null
 ) : BaseToolActivity<B>(immersive, contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
@@ -86,8 +87,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
-
-    protected open val supportedType: Manifest.Type? get() = null
 
     private fun validStartState() = !requireTool || hasTool()
 
