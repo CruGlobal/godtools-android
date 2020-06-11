@@ -8,7 +8,6 @@ include 'library:download-manager'
 include 'library:initial-content'
 include 'library:model'
 include 'library:sync'
-include 'library:sync-tasks'
 include 'library:xml-model'
 
 include 'ui:account'

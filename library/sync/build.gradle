@@ -1,8 +1,11 @@
 dependencies {
-    api project(':library:sync-tasks')
+    implementation project(':library:api')
+    implementation project(':library:db')
+    implementation project(':library:model')
 
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
+    implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
     api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
