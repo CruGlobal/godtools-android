@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
@@ -15,7 +14,6 @@ import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
@@ -24,6 +22,7 @@ import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelF
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -34,21 +33,21 @@ import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
+import javax.inject.Named
 
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 class TractActivityDataModel @AssistedInject constructor(
-    context: Context,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
+    @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
     interface Factory : AssistedSavedStateViewModelFactory<TractActivityDataModel>
 
     val tool = MutableLiveData<String?>()
-    private val isConnected = context.isConnectedLiveData()
     val isInitialSyncFinished = MutableLiveData(false)
     private val distinctTool = tool.distinctUntilChanged()
 
