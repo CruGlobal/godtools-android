@@ -16,12 +16,16 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="knowgod.com" />
-                <data android:pathPattern="/.*/fourlaws.*" />
-                <data android:pathPattern="/.*/honorrestored.*" />
-                <data android:pathPattern="/.*/kgp.*" />
-                <!--<data android:pathPattern="/.*/kgp-us.*" />-->
-                <data android:pathPattern="/.*/satisfied.*" />
-                <data android:pathPattern="/.*/thefour.*" />
+<!--                <data android:pathPattern="/.*/emojitool.*" />-->
+<!--                <data android:pathPattern="/.*/fourlaws.*" />-->
+<!--                <data android:pathPattern="/.*/honorrestored.*" />-->
+<!--                <data android:pathPattern="/.*/kgp.*" />-->
+<!--                <data android:pathPattern="/.*/kgp-us.*" />-->
+<!--                <data android:pathPattern="/.*/poweroverfear.*" />-->
+<!--                <data android:pathPattern="/.*/satisfied.*" />-->
+<!--                <data android:pathPattern="/.*/teachmetoshare.*" />-->
+<!--                <data android:pathPattern="/.*/thefour.*" />-->
+                <data android:pathPattern="/.*/.*" />
             </intent-filter>
             <meta-data
                 android:name="default-url"
