@@ -10,12 +10,15 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
@@ -460,21 +463,34 @@ class LiveShareDialogFragment : BaseDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val source = publisherController.publisherInfo
-        liveData {
-            emit(source.value)
-            delay(2_000)
-            emitSource(source)
-        }.notNull().observe(this) {
-            findListener<TractActivity>()?.shareLiveShareLink()
-            dismissAllowingStateLoss()
-        }
+        startAutoDismissObservers()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Starting Screen Sharing...")
+            .setTitle(R.string.tract_live_share_starting)
             .setView(R.layout.tract_live_share_dialog)
             .create()
+    }
+
+    private fun startAutoDismissObservers() {
+        // auto-dismiss dialog when we have publisherInfo
+        publisherController.publisherInfo.let {
+            liveData {
+                emit(it.value)
+                delay(2_000)
+                emitSource(it)
+            }.notNull().observe(this@LiveShareDialogFragment) {
+                findListener<TractActivity>()?.shareLiveShareLink()
+                dismissAllowingStateLoss()
+            }
+        }
+
+        // auto-dismiss dialog if we are unable to connect after 10 seconds
+        lifecycleScope.launchWhenResumed {
+            delay(10_000)
+            context?.let { Toast.makeText(it, R.string.tract_live_share_unable_to_connect, LENGTH_LONG).show() }
+            dismissAllowingStateLoss()
+        }
     }
 }
