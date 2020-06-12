@@ -12,6 +12,11 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
@@ -68,25 +73,26 @@ open class KotlinGodToolsShortcutManager(
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     protected fun updateShortcuts() {
-        val shortcuts = createAllShortcuts()
-        updateDynamicShortcuts(shortcuts)
-        updatePinnedShortcuts(shortcuts)
-    }
-
-    // TODO: make this a suspend function to support calling it from any thread
-    @WorkerThread
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
-        shortcutManager?.dynamicShortcuts = Query.select<Tool>()
-            .where(ToolTable.FIELD_ADDED.eq(true))
-            .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
-            .get(dao)
-            .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
-            .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
+        runBlocking {
+            val shortcuts = createAllShortcuts()
+            updateDynamicShortcuts(shortcuts)
+            updatePinnedShortcuts(shortcuts)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
+    private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) =
+        withContext(Dispatchers.IO) {
+            shortcutManager?.dynamicShortcuts = Query.select<Tool>()
+                .where(ToolTable.FIELD_ADDED.eq(true))
+                .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
+                .get(dao)
+                .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
+                .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
+        }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    private fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
         shortcutManager?.apply {
             disableShortcuts(pinnedShortcuts.map { it.id }.filterNot { shortcuts.containsKey(it) })
             enableShortcuts(shortcuts.keys.toList())
@@ -95,10 +101,12 @@ open class KotlinGodToolsShortcutManager(
     }
     // endregion Update Existing Shortcuts
 
-    @WorkerThread
-    protected fun createAllShortcuts(): Map<String, ShortcutInfoCompat> = dao.get(Tool::class.java)
-        .mapNotNull { createToolShortcut(it) }
-        .associateBy { it.id }
+    private suspend fun createAllShortcuts() = withContext(Dispatchers.IO) {
+        dao.get(Tool::class.java)
+            .map { async { createToolShortcut(it) } }.awaitAll()
+            .filterNotNull()
+            .associateBy { it.id }
+    }
 
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
