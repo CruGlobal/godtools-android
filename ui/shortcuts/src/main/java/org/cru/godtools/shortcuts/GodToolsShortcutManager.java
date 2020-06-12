@@ -71,23 +71,21 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     private static final long DELAY_UPDATE_PENDING_SHORTCUTS = 100;
 
     @NonNull
-    private final Settings mSettings;
-    @NonNull
     private final Handler mHandler;
 
     private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
     @Inject
-    GodToolsShortcutManager(@NonNull final Context context, @NonNull final GodToolsDao dao) {
-        super(context, dao);
-        mSettings = Settings.Companion.getInstance(context);
+    GodToolsShortcutManager(@NonNull final Context context, @NonNull final GodToolsDao dao,
+                            @NonNull final Settings settings) {
+        super(context, dao, settings);
         mHandler = new Handler(Looper.getMainLooper());
 
         // native ShortcutManager support
         if (SUPPORTS_SHORTCUT_MANAGER) {
             // register any appropriate event listeners
             EventBus.getDefault().register(this);
-            mSettings.registerOnSharedPreferenceChangeListener(this);
+            settings.registerOnSharedPreferenceChangeListener(this);
 
             // enqueue an initial update
             enqueueUpdateShortcuts(true);
@@ -315,7 +313,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         }
 
         // short-circuit if we don't have a primary translation
-        final Translation translation = getDao().getLatestTranslation(code, mSettings.getPrimaryLanguage())
+        final Translation translation = getDao().getLatestTranslation(code, getSettings().getPrimaryLanguage())
                 .or(() -> getDao().getLatestTranslation(code, Locale.ENGLISH))
                 .orElse(null);
         if (translation == null) {
@@ -324,8 +322,8 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         // generate the list of locales to use for this tool
         final List<Locale> locales = new ArrayList<>();
         locales.add(translation.getLanguageCode());
-        if (mSettings.getParallelLanguage() != null) {
-            locales.add(mSettings.getParallelLanguage());
+        if (getSettings().getParallelLanguage() != null) {
+            locales.add(getSettings().getParallelLanguage());
         }
 
         // generate the target intent for this shortcut

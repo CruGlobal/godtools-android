@@ -10,13 +10,18 @@ import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
+import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val TYPE_TOOL = "tool|"
 
-open class KotlinGodToolsShortcutManager(protected val context: Context, protected val dao: GodToolsDao) {
+open class KotlinGodToolsShortcutManager(
+    protected val context: Context,
+    protected val dao: GodToolsDao,
+    protected val settings: Settings
+) {
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     protected val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
