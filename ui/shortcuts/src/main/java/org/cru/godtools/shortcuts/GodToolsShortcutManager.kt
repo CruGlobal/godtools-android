@@ -67,23 +67,28 @@ open class KotlinGodToolsShortcutManager(
     // TODO: make this a suspend function to support calling it from any thread
     @WorkerThread
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfo>) {
+    protected fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
         shortcutManager?.dynamicShortcuts = Query.select<Tool>()
             .where(ToolTable.FIELD_ADDED.eq(true))
             .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
             .get(dao)
-            .mapNotNull { shortcuts[it.shortcutId] }
+            .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
             .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfo>) {
+    protected fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
         shortcutManager?.apply {
             disableShortcuts(pinnedShortcuts.map { it.id }.filterNot { shortcuts.containsKey(it) })
             enableShortcuts(shortcuts.keys.toList())
-            updateShortcuts(shortcuts.values.toList())
+            ShortcutManagerCompat.updateShortcuts(context, shortcuts.values.toList())
         }
     }
+
+    @WorkerThread
+    protected fun createAllShortcuts(): Map<String, ShortcutInfoCompat> = dao.get(Tool::class.java)
+        .mapNotNull { createToolShortcut(it) }
+        .associateBy { it.id }
 
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)

@@ -4,17 +4,14 @@ import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.annimon.stream.Collectors;
 import com.google.common.base.Strings;
 
-import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.model.Tool;
@@ -41,7 +38,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
@@ -236,19 +232,8 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @WorkerThread
     @TargetApi(Build.VERSION_CODES.N_MR1)
     synchronized void updateShortcuts() {
-        final Map<String, ShortcutInfo> shortcuts = createAllShortcuts();
+        final Map<String, ShortcutInfoCompat> shortcuts = createAllShortcuts();
         updateDynamicShortcuts(shortcuts);
         updatePinnedShortcuts(shortcuts);
-    }
-
-    @WorkerThread
-    @TargetApi(Build.VERSION_CODES.N_MR1)
-    private Map<String, ShortcutInfo> createAllShortcuts() {
-        // create tool shortcuts
-        return getDao().streamCompat(Query.select(Tool.class))
-                .map(this::createToolShortcut)
-                .withoutNulls()
-                .map(ShortcutInfoCompat::toShortcutInfo)
-                .collect(Collectors.toMap(ShortcutInfo::getId));
     }
 }
