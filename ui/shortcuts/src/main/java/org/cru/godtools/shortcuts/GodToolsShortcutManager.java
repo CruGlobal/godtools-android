@@ -61,7 +61,8 @@ import androidx.core.graphics.drawable.IconCompat;
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 
-public final class GodToolsShortcutManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
     private static final int MSG_UPDATE_SHORTCUTS = 1;
     private static final int MSG_UPDATE_PENDING_SHORTCUTS = 2;
@@ -71,8 +72,6 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     private static final String TYPE_TOOL = "tool|";
 
     @NonNull
-    private final Context mContext;
-    @NonNull
     private final Settings mSettings;
     @NonNull
     private final GodToolsDao mDao;
@@ -81,8 +80,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
 
     private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
-    private GodToolsShortcutManager(@NonNull final Context context) {
-        mContext = context;
+    GodToolsShortcutManager(@NonNull final Context context) {
+        super(context);
         mSettings = Settings.Companion.getInstance(context);
         mDao = GodToolsDao.Companion.getInstance(context);
         mHandler = new Handler(Looper.getMainLooper());
@@ -175,7 +174,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @Subscribe
     public void onToolUsed(@NonNull final ToolUsedEvent event) {
         if (SUPPORTS_SHORTCUT_MANAGER) {
-            mContext.getSystemService(ShortcutManager.class).reportShortcutUsed(toolShortcutId(event.getToolCode()));
+            getShortcutManager().reportShortcutUsed(toolShortcutId(event.getToolCode()));
         }
     }
 
@@ -198,7 +197,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         }
 
         // return if the shortcut manager supports pinning
-        return ShortcutManagerCompat.isRequestPinShortcutSupported(mContext);
+        return ShortcutManagerCompat.isRequestPinShortcutSupported(getContext());
     }
 
     @Nullable
@@ -226,7 +225,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     public void pinShortcut(@NonNull final PendingShortcut pendingShortcut) {
         final ShortcutInfoCompat shortcut = pendingShortcut.getShortcut();
         if (shortcut != null) {
-            ShortcutManagerCompat.requestPinShortcut(mContext, shortcut, null);
+            ShortcutManagerCompat.requestPinShortcut(getContext(), shortcut, null);
         }
     }
 
@@ -317,7 +316,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @WorkerThread
     @TargetApi(Build.VERSION_CODES.N_MR1)
     private void updateDynamicShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
-        final ShortcutManager manager = mContext.getSystemService(ShortcutManager.class);
+        final ShortcutManager manager = getShortcutManager();
 
         final List<ShortcutInfo> dynamic = mDao.streamCompat(
                 Query.select(Tool.class)
@@ -333,7 +332,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
     private void updatePinnedShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
-        final ShortcutManager manager = mContext.getSystemService(ShortcutManager.class);
+        final ShortcutManager manager = getShortcutManager();
 
         final List<String> invalid = Stream.of(manager.getPinnedShortcuts())
                 .map(ShortcutInfo::getId)
@@ -382,10 +381,10 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         final Intent intent;
         switch (tool.getType()) {
             case TRACT:
-                intent = TractActivityKt.createTractActivityIntent(mContext, code, locales.toArray(new Locale[0]));
+                intent = TractActivityKt.createTractActivityIntent(getContext(), code, locales.toArray(new Locale[0]));
                 break;
             case ARTICLE:
-                intent = CategoriesActivityKt.createCategoriesIntent(mContext, code, locales.get(0));
+                intent = CategoriesActivityKt.createCategoriesIntent(getContext(), code, locales.get(0));
                 break;
             default:
                 // XXX: we don't support shortcuts for this tool type
@@ -398,7 +397,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
                 .map(locale -> mDao.getLatestTranslation(code, locale))
                 .flatMap(Optional::stream)
                 .findFirst().orElse(null);
-        final CharSequence label = ModelUtils.getTranslationName(deviceTranslation, tool, mContext);
+        final CharSequence label = ModelUtils.getTranslationName(deviceTranslation, tool, getContext());
 
         // create the icon bitmap
         final Attachment banner = mDao.find(Attachment.class, tool.getDetailsBannerId());
@@ -407,7 +406,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             try {
                 icon = IconCompat.createWithAdaptiveBitmap(
                         Picasso.get()
-                                .load(FileUtils.getGodToolsFile(mContext, banner.getLocalFileName()))
+                                .load(FileUtils.getGodToolsFile(getContext(), banner.getLocalFileName()))
                                 .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                                 .centerCrop()
                                 .get());
@@ -415,11 +414,11 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             }
         }
         if (icon == null) {
-            icon = IconCompat.createWithResource(mContext, R.mipmap.ic_launcher);
+            icon = IconCompat.createWithResource(getContext(), R.mipmap.ic_launcher);
         }
 
         // build the shortcut
-        return Optional.of(new ShortcutInfoCompat.Builder(mContext, toolShortcutId(tool))
+        return Optional.of(new ShortcutInfoCompat.Builder(getContext(), toolShortcutId(tool))
                                    .setAlwaysBadged()
                                    .setIntent(intent)
                                    .setShortLabel(label)
