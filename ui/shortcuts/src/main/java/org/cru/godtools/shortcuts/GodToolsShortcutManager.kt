@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.os.Build
+import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import androidx.core.content.getSystemService
@@ -22,7 +23,9 @@ import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.tract.activity.createTractActivityIntent
+import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
@@ -37,6 +40,16 @@ open class KotlinGodToolsShortcutManager(
 ) {
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     protected val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
+
+    // region Events
+    @AnyThread
+    @Subscribe
+    fun onToolUsed(event: ToolUsedEvent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
+        }
+    }
+    // endregion Events
 
     // TODO: make this a suspend function to support calling it from any thread
     @WorkerThread

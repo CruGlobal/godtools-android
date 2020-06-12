@@ -20,7 +20,6 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
-import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -134,15 +133,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         enqueueUpdateShortcuts(false);
         enqueueUpdatePendingShortcuts(false);
     }
-
-    @AnyThread
-    @Subscribe
-    public void onToolUsed(@NonNull final ToolUsedEvent event) {
-        if (SUPPORTS_SHORTCUT_MANAGER) {
-            getShortcutManager().reportShortcutUsed(getToolShortcutId(event.getToolCode()));
-        }
-    }
-
     // endregion Lifecycle Events
 
     // region Pending shortcut
