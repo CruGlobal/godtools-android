@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -36,7 +35,6 @@ import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.tract.activity.TractActivityKt;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
@@ -294,23 +292,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         final Map<String, ShortcutInfo> shortcuts = createAllShortcuts();
         updateDynamicShortcuts(shortcuts);
         updatePinnedShortcuts(shortcuts);
-    }
-
-    @WorkerThread
-    @TargetApi(Build.VERSION_CODES.N_MR1)
-    private void updateDynamicShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
-        final ShortcutManager manager = getShortcutManager();
-
-        final List<ShortcutInfo> dynamic = getDao().streamCompat(
-                Query.select(Tool.class)
-                        .where(ToolTable.FIELD_ADDED.eq(true))
-                        .orderBy(ToolTable.COLUMN_ORDER))
-                .map(this::getShortcutId)
-                .map(shortcuts::get)
-                .withoutNulls()
-                .limit(manager.getMaxShortcutCountPerActivity())
-                .toList();
-        manager.setDynamicShortcuts(dynamic);
     }
 
     @WorkerThread
