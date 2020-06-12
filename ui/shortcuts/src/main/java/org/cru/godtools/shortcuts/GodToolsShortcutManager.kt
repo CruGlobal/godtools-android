@@ -2,7 +2,6 @@ package org.cru.godtools.shortcuts
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
@@ -64,6 +63,16 @@ open class KotlinGodToolsShortcutManager(
     }
     // endregion Pending Shortcuts
 
+    // region Update Existing Shortcuts
+    @WorkerThread
+    @Synchronized
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    protected fun updateShortcuts() {
+        val shortcuts = createAllShortcuts()
+        updateDynamicShortcuts(shortcuts)
+        updatePinnedShortcuts(shortcuts)
+    }
+
     // TODO: make this a suspend function to support calling it from any thread
     @WorkerThread
     @RequiresApi(Build.VERSION_CODES.N_MR1)
@@ -84,6 +93,7 @@ open class KotlinGodToolsShortcutManager(
             ShortcutManagerCompat.updateShortcuts(context, shortcuts.values.toList())
         }
     }
+    // endregion Update Existing Shortcuts
 
     @WorkerThread
     protected fun createAllShortcuts(): Map<String, ShortcutInfoCompat> = dao.get(Tool::class.java)

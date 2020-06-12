@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts;
 
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,7 +36,6 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import androidx.core.content.pm.ShortcutInfoCompat;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
@@ -227,13 +225,5 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         final Message m = Message.obtain(mHandler, task);
         m.what = MSG_UPDATE_SHORTCUTS;
         mHandler.sendMessageDelayed(m, immediate ? 0 : DELAY_UPDATE_SHORTCUTS);
-    }
-
-    @WorkerThread
-    @TargetApi(Build.VERSION_CODES.N_MR1)
-    synchronized void updateShortcuts() {
-        final Map<String, ShortcutInfoCompat> shortcuts = createAllShortcuts();
-        updateDynamicShortcuts(shortcuts);
-        updatePinnedShortcuts(shortcuts);
     }
 }
