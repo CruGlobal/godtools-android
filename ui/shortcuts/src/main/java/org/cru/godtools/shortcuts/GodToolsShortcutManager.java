@@ -158,14 +158,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     }
 
     @AnyThread
-    public void pinShortcut(@NonNull final PendingShortcut pendingShortcut) {
-        final ShortcutInfoCompat shortcut = pendingShortcut.getShortcut();
-        if (shortcut != null) {
-            ShortcutManagerCompat.requestPinShortcut(getContext(), shortcut, null);
-        }
-    }
-
-    @AnyThread
     private void enqueueUpdatePendingShortcuts(final boolean immediate) {
         // cancel any pending update
         mHandler.removeMessages(MSG_UPDATE_PENDING_SHORTCUTS);

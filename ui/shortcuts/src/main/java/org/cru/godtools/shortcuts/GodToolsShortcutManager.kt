@@ -57,6 +57,11 @@ open class KotlinGodToolsShortcutManager(
         Tool.Type.TRACT, Tool.Type.ARTICLE -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
         else -> false
     }
+
+    @AnyThread
+    fun pinShortcut(pendingShortcut: PendingShortcut) {
+        pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
+    }
     // endregion Pending Shortcuts
 
     // TODO: make this a suspend function to support calling it from any thread
