@@ -6,7 +6,10 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.GodToolsDao
+
+private const val TYPE_TOOL = "tool|"
 
 open class KotlinGodToolsShortcutManager(protected val context: Context, protected val dao: GodToolsDao) {
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
@@ -20,4 +23,7 @@ open class KotlinGodToolsShortcutManager(protected val context: Context, protect
             updateShortcuts(shortcuts.values.toList())
         }
     }
+
+    protected val Tool.shortcutId get() = code.toolShortcutId
+    protected val String?.toolShortcutId get() = "$TYPE_TOOL$this"
 }

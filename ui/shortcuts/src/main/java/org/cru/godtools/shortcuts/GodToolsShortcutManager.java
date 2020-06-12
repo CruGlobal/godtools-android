@@ -72,8 +72,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     private static final long DELAY_UPDATE_SHORTCUTS = 5000;
     private static final long DELAY_UPDATE_PENDING_SHORTCUTS = 100;
 
-    private static final String TYPE_TOOL = "tool|";
-
     @NonNull
     private final Settings mSettings;
     @NonNull
@@ -159,7 +157,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @Subscribe
     public void onToolUsed(@NonNull final ToolUsedEvent event) {
         if (SUPPORTS_SHORTCUT_MANAGER) {
-            getShortcutManager().reportShortcutUsed(toolShortcutId(event.getToolCode()));
+            getShortcutManager().reportShortcutUsed(getToolShortcutId(event.getToolCode()));
         }
     }
 
@@ -192,7 +190,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
             return null;
         }
 
-        final String id = toolShortcutId(code);
+        final String id = getToolShortcutId(code);
         PendingShortcut shortcut;
         synchronized (mPendingShortcuts) {
             final WeakReference<PendingShortcut> ref = mPendingShortcuts.get(id);
@@ -307,7 +305,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
                 Query.select(Tool.class)
                         .where(ToolTable.FIELD_ADDED.eq(true))
                         .orderBy(ToolTable.COLUMN_ORDER))
-                .map(GodToolsShortcutManager::toolShortcutId)
+                .map(this::getShortcutId)
                 .map(shortcuts::get)
                 .withoutNulls()
                 .limit(manager.getMaxShortcutCountPerActivity())
@@ -390,22 +388,12 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         }
 
         // build the shortcut
-        return Optional.of(new ShortcutInfoCompat.Builder(getContext(), toolShortcutId(tool))
+        return Optional.of(new ShortcutInfoCompat.Builder(getContext(), getShortcutId(tool))
                                    .setAlwaysBadged()
                                    .setIntent(intent)
                                    .setShortLabel(label)
                                    .setLongLabel(label)
                                    .setIcon(icon)
                                    .build());
-    }
-
-    @NonNull
-    private static String toolShortcutId(@NonNull final Tool tool) {
-        return toolShortcutId(tool.getCode());
-    }
-
-    @NonNull
-    private static String toolShortcutId(@Nullable final String tool) {
-        return TYPE_TOOL + tool;
     }
 }
