@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts
 
-import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,9 +20,6 @@ abstract class ShortcutModule {
     internal abstract fun localeUpdateBroadcastReceiverInjector(): LocaleUpdateBroadcastReceiver
 
     companion object {
-        @Provides
-        fun shortcutManager(context: Context) = GodToolsShortcutManager.getInstance(context)
-
         @IntoSet
         @Provides
         @Reusable

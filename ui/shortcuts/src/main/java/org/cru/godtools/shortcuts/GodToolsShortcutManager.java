@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,6 +48,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -61,6 +63,7 @@ import androidx.core.graphics.drawable.IconCompat;
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 
+@Singleton
 public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
@@ -80,6 +83,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
 
     private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
+    @Inject
     GodToolsShortcutManager(@NonNull final Context context) {
         super(context);
         mSettings = Settings.Companion.getInstance(context);
@@ -95,22 +99,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
             // enqueue an initial update
             enqueueUpdateShortcuts(true);
         }
-    }
-
-    @Nullable
-    @SuppressLint("StaticFieldLeak")
-    private static GodToolsShortcutManager sInstance;
-
-    @NonNull
-    @MainThread
-    public static GodToolsShortcutManager getInstance(@NonNull final Context context) {
-        synchronized (GodToolsShortcutManager.class) {
-            if (sInstance == null) {
-                sInstance = new GodToolsShortcutManager(context.getApplicationContext());
-            }
-        }
-
-        return sInstance;
     }
 
     // region Lifecycle Events
