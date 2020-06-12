@@ -318,19 +318,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         manager.setDynamicShortcuts(dynamic);
     }
 
-    @TargetApi(Build.VERSION_CODES.N_MR1)
-    private void updatePinnedShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
-        final ShortcutManager manager = getShortcutManager();
-
-        final List<String> invalid = Stream.of(manager.getPinnedShortcuts())
-                .map(ShortcutInfo::getId)
-                .filterNot(shortcuts::containsKey)
-                .toList();
-        manager.disableShortcuts(invalid);
-        manager.enableShortcuts(new ArrayList<>(shortcuts.keySet()));
-        manager.updateShortcuts(new ArrayList<>(shortcuts.values()));
-    }
-
     @WorkerThread
     @TargetApi(Build.VERSION_CODES.N_MR1)
     private Map<String, ShortcutInfo> createAllShortcuts() {
