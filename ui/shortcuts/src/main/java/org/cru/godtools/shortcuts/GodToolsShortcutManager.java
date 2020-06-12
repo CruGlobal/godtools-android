@@ -3,7 +3,6 @@ package org.cru.godtools.shortcuts;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.os.AsyncTask;
@@ -13,37 +12,25 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.annimon.stream.Collectors;
-import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
 import com.google.common.base.Strings;
-import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
-import org.cru.godtools.article.ui.categories.CategoriesActivityKt;
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.base.ui.util.ModelUtils;
-import org.cru.godtools.base.util.FileUtils;
-import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
-import org.cru.godtools.tract.activity.TractActivityKt;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -56,7 +43,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
@@ -301,78 +287,5 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
                 .withoutNulls()
                 .map(ShortcutInfoCompat::toShortcutInfo)
                 .collect(Collectors.toMap(ShortcutInfo::getId));
-    }
-
-    @Nullable
-    @WorkerThread
-    private ShortcutInfoCompat createToolShortcut(@NonNull final Tool tool) {
-        // short-circuit if we don't have a valid tool code
-        final String code = tool.getCode();
-        if (code == null) {
-            return null;
-        }
-
-        // short-circuit if we don't have a primary translation
-        final Translation translation = getDao().getLatestTranslation(code, getSettings().getPrimaryLanguage())
-                .or(() -> getDao().getLatestTranslation(code, Locale.ENGLISH))
-                .orElse(null);
-        if (translation == null) {
-            return null;
-        }
-        // generate the list of locales to use for this tool
-        final List<Locale> locales = new ArrayList<>();
-        locales.add(translation.getLanguageCode());
-        if (getSettings().getParallelLanguage() != null) {
-            locales.add(getSettings().getParallelLanguage());
-        }
-
-        // generate the target intent for this shortcut
-        final Intent intent;
-        switch (tool.getType()) {
-            case TRACT:
-                intent = TractActivityKt.createTractActivityIntent(getContext(), code, locales.toArray(new Locale[0]));
-                break;
-            case ARTICLE:
-                intent = CategoriesActivityKt.createCategoriesIntent(getContext(), code, locales.get(0));
-                break;
-            default:
-                // XXX: we don't support shortcuts for this tool type
-                return null;
-        }
-        intent.setAction(Intent.ACTION_VIEW);
-
-        // Generate the shortcut label
-        final Translation deviceTranslation = Stream.of(LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH))
-                .map(locale -> getDao().getLatestTranslation(code, locale))
-                .flatMap(Optional::stream)
-                .findFirst().orElse(null);
-        final CharSequence label = ModelUtils.getTranslationName(deviceTranslation, tool, getContext());
-
-        // create the icon bitmap
-        final Attachment banner = getDao().find(Attachment.class, tool.getDetailsBannerId());
-        IconCompat icon = null;
-        if (banner != null) {
-            try {
-                icon = IconCompat.createWithAdaptiveBitmap(
-                        Picasso.get()
-                                .load(FileUtils.getGodToolsFile(getContext(), banner.getLocalFileName()))
-                                .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
-                                .centerCrop()
-                                .get());
-            } catch (final IOException ignored) {
-            }
-        }
-        if (icon == null) {
-            icon = IconCompat.createWithResource(getContext(), R.mipmap.ic_launcher);
-        }
-
-        // build the shortcut
-        return new ShortcutInfoCompat.Builder(getContext(), getShortcutId(tool))
-                .setAlwaysBadged()
-                .setIntent(intent)
-                .setShortLabel(label)
-                .setLongLabel(label)
-                .setIcon(icon)
-                .build();
     }
 }
