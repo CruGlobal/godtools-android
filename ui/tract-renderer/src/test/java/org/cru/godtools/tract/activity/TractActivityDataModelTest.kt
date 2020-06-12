@@ -46,6 +46,7 @@ class TractActivityDataModelTest {
     private lateinit var manifestManager: ManifestManager
     private lateinit var dataModel: TractActivityDataModel
 
+    private val isConnnected = MutableLiveData(true)
     private lateinit var observer: Observer<Any?>
 
     @Before
@@ -53,9 +54,8 @@ class TractActivityDataModelTest {
         dao = mock()
         downloadManager = mock()
         manifestManager = mock()
-        dataModel = TractActivityDataModel(dao, downloadManager, manifestManager, SavedStateHandle()).apply {
-            isInitialSyncFinished.value = true
-        }
+        dataModel = TractActivityDataModel(dao, downloadManager, manifestManager, isConnnected, SavedStateHandle())
+            .apply { isInitialSyncFinished.value = true }
     }
 
     @Before

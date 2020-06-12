@@ -30,7 +30,6 @@ import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
-import org.cru.godtools.model.Translation
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
@@ -364,10 +363,14 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
         state: Map<Locale, ToolState> = dataModel.state.value.orEmpty()
     ) {
-        // only process if the active language is not found or invalid
-        if (activeState == ToolState.NOT_FOUND || activeState == ToolState.INVALID_TYPE) {
-            availableLocales.firstOrNull { state[it] != ToolState.NOT_FOUND && state[it] != ToolState.INVALID_TYPE }
-                ?.let { dataModel.setActiveLocale(it) }
+        when (activeState) {
+            // update the active language if the current active language is not found, invalid, or offline
+            ToolState.NOT_FOUND,
+            ToolState.INVALID_TYPE,
+            ToolState.OFFLINE -> availableLocales.firstOrNull {
+                state[it] != ToolState.NOT_FOUND && state[it] != ToolState.INVALID_TYPE &&
+                    state[it] != ToolState.OFFLINE
+            }?.let { dataModel.setActiveLocale(it) }
         }
     }
     // endregion Active Translation management
@@ -384,14 +387,4 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 .build().toString()
         }
     // endregion Share Link Logic
-
-    companion object {
-        internal fun determineState(manifest: Manifest?, translation: Translation?, isInitialSyncFinished: Boolean) =
-            when {
-                manifest != null && manifest.type != Manifest.Type.TRACT -> ToolState.INVALID_TYPE
-                manifest != null -> ToolState.LOADED
-                translation == null && isInitialSyncFinished -> ToolState.NOT_FOUND
-                else -> ToolState.LOADING
-            }
-    }
 }

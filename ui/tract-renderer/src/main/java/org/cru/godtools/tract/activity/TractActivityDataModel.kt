@@ -22,17 +22,18 @@ import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelF
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.tract.activity.TractActivity.Companion.determineState
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.util.Locale
+import javax.inject.Named
 
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
@@ -40,6 +41,7 @@ class TractActivityDataModel @AssistedInject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
+    @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
     @AssistedInject.Factory
@@ -58,9 +60,10 @@ class TractActivityDataModel @AssistedInject constructor(
     val activeManifest =
         distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeState = distinctTool.switchCombineWith(activeLocale) { t, l ->
-        manifestCache.get(t, l).combineWith(translationCache.get(t, l), isInitialSyncFinished) { m, t, s ->
-            determineState(m, t, s)
+    val activeState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
+        val translation = translationCache.get(tool, l)
+        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
+            ToolState.determineToolState(m, t, manifestType = Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
@@ -98,8 +101,15 @@ class TractActivityDataModel @AssistedInject constructor(
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
     val state = locales
-        .combineWith(manifests, translations, isInitialSyncFinished) { locales, manifests, translations, syncFinished ->
-            locales.associateWith { determineState(manifests[it], translations[it], syncFinished) }
+        .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
+            l.associateWith {
+                ToolState.determineToolState(
+                    m[it], t[it],
+                    manifestType = Manifest.Type.TRACT,
+                    isConnected = connected,
+                    isSyncFinished = syncFinished
+                )
+            }
         }
     @OptIn(ExperimentalStdlibApi::class)
     val availableLocales =
@@ -108,8 +118,9 @@ class TractActivityDataModel @AssistedInject constructor(
                 primary
                     .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale }
+                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
                             ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
@@ -117,8 +128,9 @@ class TractActivityDataModel @AssistedInject constructor(
                     .filterNot { contains(it) }
                     .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale }
+                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
                             ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }

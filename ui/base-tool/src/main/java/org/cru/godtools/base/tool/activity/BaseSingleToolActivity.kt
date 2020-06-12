@@ -19,7 +19,8 @@ import java.util.Locale
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     immersive: Boolean,
     @LayoutRes contentLayoutId: Int,
-    private val requireTool: Boolean = true
+    private val requireTool: Boolean = true,
+    private val supportedType: Manifest.Type? = null
 ) : BaseToolActivity<B>(immersive, contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
@@ -73,17 +74,10 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolStateLiveData by lazy {
-        activeManifestLiveData.combineWith(dataModel.translation) { manifest, translation ->
-            when {
-                manifest?.type?.let { isSupportedType(it) } == false -> ToolState.INVALID_TYPE
-                manifest != null -> ToolState.LOADED
-                translation == null -> ToolState.NOT_FOUND
-                else -> ToolState.LOADING
-            }
+        activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
+            ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
-
-    protected abstract fun isSupportedType(type: Manifest.Type): Boolean
 
     private fun validStartState() = !requireTool || hasTool()
 

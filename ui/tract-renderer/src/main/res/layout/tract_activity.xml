@@ -27,6 +27,10 @@
             app:toolState="@{toolState}" />
 
         <include
+            layout="@layout/activity_tool_offline"
+            app:toolState="@{toolState}" />
+
+        <include
             layout="@layout/activity_tool_loading"
             app:progress="@{progress}"
             app:toolState="@{toolState}" />

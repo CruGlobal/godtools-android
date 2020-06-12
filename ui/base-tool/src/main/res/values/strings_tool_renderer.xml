@@ -7,6 +7,7 @@
 
     <string name="tool_not_found">The tool you requested cannot be found</string>
     <string name="tool_loading">The tool you requested is loading…</string>
+    <string name="tool_offline">The tool you requested requires an internet connection to open</string>
 
     <string name="feature_discovery_title_share_tool">Share a link</string>
     <string name="feature_discovery_desc_share_tool">Send this tool to a friend by clicking this icon</string>
