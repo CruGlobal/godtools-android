@@ -13,8 +13,13 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
@@ -34,6 +39,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicReference
 
 private const val TYPE_TOOL = "tool|"
 
@@ -69,6 +75,22 @@ open class KotlinGodToolsShortcutManager(
     // endregion Pending Shortcuts
 
     // region Update Existing Shortcuts
+    private val updateShortcutsJob = AtomicReference<Job>()
+
+    @AnyThread
+    protected fun launchUpdateShortcutsJob(immediate: Boolean) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
+
+        // cancel any pending update
+        updateShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
+
+        // launch the update
+        updateShortcutsJob.set(GlobalScope.launch {
+            if (!immediate) delay(5_000)
+            withContext(NonCancellable) { updateShortcuts() }
+        })
+    }
+
     @WorkerThread
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.N_MR1)

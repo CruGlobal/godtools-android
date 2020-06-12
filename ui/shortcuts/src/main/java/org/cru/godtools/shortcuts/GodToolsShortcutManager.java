@@ -67,7 +67,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
             settings.registerOnSharedPreferenceChangeListener(this);
 
             // enqueue an initial update
-            enqueueUpdateShortcuts(true);
+            launchUpdateShortcutsJob(true);
         }
     }
 
@@ -97,7 +97,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         switch (Strings.nullToEmpty(key)) {
             case PREF_PRIMARY_LANGUAGE:
             case PREF_PARALLEL_LANGUAGE:
-                enqueueUpdateShortcuts(false);
+                launchUpdateShortcutsJob(false);
                 enqueueUpdatePendingShortcuts(false);
         }
     }
@@ -108,7 +108,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @AnyThread
     @Subscribe
     public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
-        enqueueUpdateShortcuts(false);
+        launchUpdateShortcutsJob(false);
         enqueueUpdatePendingShortcuts(false);
     }
 
@@ -116,7 +116,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @Subscribe
     public void onToolUpdate(@NonNull final ToolUpdateEvent event) {
         // Could change which tools are visible or the label for tools
-        enqueueUpdateShortcuts(false);
+        launchUpdateShortcutsJob(false);
         enqueueUpdatePendingShortcuts(false);
     }
 
@@ -124,7 +124,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @Subscribe
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         // Could change which tools are available or the label for tools
-        enqueueUpdateShortcuts(false);
+        launchUpdateShortcutsJob(false);
         enqueueUpdatePendingShortcuts(false);
     }
     // endregion Lifecycle Events
@@ -202,28 +202,4 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     }
 
     // endregion Pending shortcut
-
-    @AnyThread
-    private void enqueueUpdateShortcuts(final boolean immediate) {
-        // short-circuit if there isn't native ShortcutManager support
-        if (!SUPPORTS_SHORTCUT_MANAGER) {
-            return;
-        }
-
-        // cancel any pending update
-        mHandler.removeMessages(MSG_UPDATE_SHORTCUTS);
-
-        final Runnable task = () -> {
-            if (ThreadUtils.isUiThread()) {
-                AsyncTask.THREAD_POOL_EXECUTOR.execute(this::updateShortcuts);
-            } else {
-                updateShortcuts();
-            }
-        };
-
-        // enqueue processing
-        final Message m = Message.obtain(mHandler, task);
-        m.what = MSG_UPDATE_SHORTCUTS;
-        mHandler.sendMessageDelayed(m, immediate ? 0 : DELAY_UPDATE_SHORTCUTS);
-    }
 }
