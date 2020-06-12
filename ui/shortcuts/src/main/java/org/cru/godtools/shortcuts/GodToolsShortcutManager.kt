@@ -6,8 +6,9 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import org.keynote.godtools.android.db.GodToolsDao
 
-open class KotlinGodToolsShortcutManager(protected val context: Context) {
+open class KotlinGodToolsShortcutManager(protected val context: Context, protected val dao: GodToolsDao) {
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     protected val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 

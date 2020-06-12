@@ -77,17 +77,14 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @NonNull
     private final Settings mSettings;
     @NonNull
-    private final GodToolsDao mDao;
-    @NonNull
     private final Handler mHandler;
 
     private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
     @Inject
-    GodToolsShortcutManager(@NonNull final Context context) {
-        super(context);
+    GodToolsShortcutManager(@NonNull final Context context, @NonNull final GodToolsDao dao) {
+        super(context, dao);
         mSettings = Settings.Companion.getInstance(context);
-        mDao = GodToolsDao.Companion.getInstance(context);
         mHandler = new Handler(Looper.getMainLooper());
 
         // native ShortcutManager support
@@ -257,7 +254,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         // update all the pending shortcuts
         for (final PendingShortcut shortcut : shortcuts) {
             // short-circuit if the tool doesn't actually exist
-            final Tool tool = mDao.find(Tool.class, shortcut.getTool());
+            final Tool tool = getDao().find(Tool.class, shortcut.getTool());
             if (tool == null) {
                 continue;
             }
@@ -306,7 +303,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     private void updateDynamicShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
         final ShortcutManager manager = getShortcutManager();
 
-        final List<ShortcutInfo> dynamic = mDao.streamCompat(
+        final List<ShortcutInfo> dynamic = getDao().streamCompat(
                 Query.select(Tool.class)
                         .where(ToolTable.FIELD_ADDED.eq(true))
                         .orderBy(ToolTable.COLUMN_ORDER))
@@ -322,7 +319,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @TargetApi(Build.VERSION_CODES.N_MR1)
     private Map<String, ShortcutInfo> createAllShortcuts() {
         // create tool shortcuts
-        return mDao.streamCompat(Query.select(Tool.class))
+        return getDao().streamCompat(Query.select(Tool.class))
                 .map(this::createToolShortcut)
                 .flatMap(Optional::stream)
                 .map(ShortcutInfoCompat::toShortcutInfo)
@@ -339,8 +336,8 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         }
 
         // short-circuit if we don't have a primary translation
-        final Translation translation = mDao.getLatestTranslation(code, mSettings.getPrimaryLanguage())
-                .or(() -> mDao.getLatestTranslation(code, Locale.ENGLISH))
+        final Translation translation = getDao().getLatestTranslation(code, mSettings.getPrimaryLanguage())
+                .or(() -> getDao().getLatestTranslation(code, Locale.ENGLISH))
                 .orElse(null);
         if (translation == null) {
             return Optional.empty();
@@ -369,13 +366,13 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
 
         // Generate the shortcut label
         final Translation deviceTranslation = Stream.of(LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH))
-                .map(locale -> mDao.getLatestTranslation(code, locale))
+                .map(locale -> getDao().getLatestTranslation(code, locale))
                 .flatMap(Optional::stream)
                 .findFirst().orElse(null);
         final CharSequence label = ModelUtils.getTranslationName(deviceTranslation, tool, getContext());
 
         // create the icon bitmap
-        final Attachment banner = mDao.find(Attachment.class, tool.getDetailsBannerId());
+        final Attachment banner = getDao().find(Attachment.class, tool.getDetailsBannerId());
         IconCompat icon = null;
         if (banner != null) {
             try {
