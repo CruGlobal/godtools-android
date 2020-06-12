@@ -254,7 +254,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
             }
 
             // update the shortcut
-            shortcut.setShortcut(createToolShortcut(tool).orElse(null));
+            shortcut.setShortcut(createToolShortcut(tool));
         }
     }
 
@@ -298,18 +298,18 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         // create tool shortcuts
         return getDao().streamCompat(Query.select(Tool.class))
                 .map(this::createToolShortcut)
-                .flatMap(Optional::stream)
+                .withoutNulls()
                 .map(ShortcutInfoCompat::toShortcutInfo)
                 .collect(Collectors.toMap(ShortcutInfo::getId));
     }
 
-    @NonNull
+    @Nullable
     @WorkerThread
-    private Optional<ShortcutInfoCompat> createToolShortcut(@NonNull final Tool tool) {
+    private ShortcutInfoCompat createToolShortcut(@NonNull final Tool tool) {
         // short-circuit if we don't have a valid tool code
         final String code = tool.getCode();
         if (code == null) {
-            return Optional.empty();
+            return null;
         }
 
         // short-circuit if we don't have a primary translation
@@ -317,7 +317,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
                 .or(() -> getDao().getLatestTranslation(code, Locale.ENGLISH))
                 .orElse(null);
         if (translation == null) {
-            return Optional.empty();
+            return null;
         }
         // generate the list of locales to use for this tool
         final List<Locale> locales = new ArrayList<>();
@@ -337,7 +337,7 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
                 break;
             default:
                 // XXX: we don't support shortcuts for this tool type
-                return Optional.empty();
+                return null;
         }
         intent.setAction(Intent.ACTION_VIEW);
 
@@ -367,12 +367,12 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         }
 
         // build the shortcut
-        return Optional.of(new ShortcutInfoCompat.Builder(getContext(), getShortcutId(tool))
-                                   .setAlwaysBadged()
-                                   .setIntent(intent)
-                                   .setShortLabel(label)
-                                   .setLongLabel(label)
-                                   .setIcon(icon)
-                                   .build());
+        return new ShortcutInfoCompat.Builder(getContext(), getShortcutId(tool))
+                .setAlwaysBadged()
+                .setIntent(intent)
+                .setShortLabel(label)
+                .setLongLabel(label)
+                .setIcon(icon)
+                .build();
     }
 }
