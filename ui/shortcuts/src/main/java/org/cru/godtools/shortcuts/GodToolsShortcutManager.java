@@ -136,25 +136,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     // endregion Lifecycle Events
 
     // region Pending shortcut
-
-    @AnyThread
-    public boolean canPinToolShortcut(@Nullable final Tool tool) {
-        // short-circuit if this tool isn't pinnable
-        if (tool == null) {
-            return false;
-        }
-        switch (tool.getType()) {
-            case TRACT:
-            case ARTICLE:
-                break;
-            default:
-                return false;
-        }
-
-        // return if the shortcut manager supports pinning
-        return ShortcutManagerCompat.isRequestPinShortcutSupported(getContext());
-    }
-
     @Nullable
     @AnyThread
     public PendingShortcut getPendingToolShortcut(@Nullable final String code) {
