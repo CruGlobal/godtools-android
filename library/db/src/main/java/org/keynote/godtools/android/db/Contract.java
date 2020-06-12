@@ -125,6 +125,7 @@ public final class Contract extends BaseContract {
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
         public static final Expression SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0);
+        public static final String SQL_ORDER_BY_ORDER = ToolTable.COLUMN_ORDER + "," + ToolTable.COLUMN_DEFAULT_ORDER;
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_CODE, SQL_COLUMN_TYPE, SQL_COLUMN_NAME,

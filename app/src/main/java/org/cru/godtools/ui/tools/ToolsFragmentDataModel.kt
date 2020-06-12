@@ -34,7 +34,7 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
             })
             .orderBy(
                 when (mode) {
-                    MODE_ADDED -> "${ToolTable.COLUMN_ORDER},${ToolTable.COLUMN_DEFAULT_ORDER}"
+                    MODE_ADDED -> ToolTable.SQL_ORDER_BY_ORDER
                     else -> ToolTable.COLUMN_DEFAULT_ORDER
                 }
             )
