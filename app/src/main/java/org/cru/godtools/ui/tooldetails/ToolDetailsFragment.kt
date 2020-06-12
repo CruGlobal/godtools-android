@@ -25,7 +25,7 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut
+import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 import java.util.Locale

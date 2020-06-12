@@ -224,7 +224,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
 
     @AnyThread
     public void pinShortcut(@NonNull final PendingShortcut pendingShortcut) {
-        final ShortcutInfoCompat shortcut = pendingShortcut.mShortcut;
+        final ShortcutInfoCompat shortcut = pendingShortcut.getShortcut();
         if (shortcut != null) {
             ShortcutManagerCompat.requestPinShortcut(mContext, shortcut, null);
         }
@@ -270,13 +270,13 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         // update all the pending shortcuts
         for (final PendingShortcut shortcut : shortcuts) {
             // short-circuit if the tool doesn't actually exist
-            final Tool tool = mDao.find(Tool.class, shortcut.mTool);
+            final Tool tool = mDao.find(Tool.class, shortcut.getTool());
             if (tool == null) {
                 continue;
             }
 
             // update the shortcut
-            shortcut.mShortcut = createToolShortcut(tool).orElse(null);
+            shortcut.setShortcut(createToolShortcut(tool).orElse(null));
         }
     }
 
@@ -436,17 +436,5 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @NonNull
     private static String toolShortcutId(@Nullable final String tool) {
         return TYPE_TOOL + tool;
-    }
-
-    public static final class PendingShortcut {
-        @NonNull
-        final String mTool;
-
-        @Nullable
-        volatile ShortcutInfoCompat mShortcut;
-
-        PendingShortcut(@NonNull final String tool) {
-            mTool = tool;
-        }
     }
 }
