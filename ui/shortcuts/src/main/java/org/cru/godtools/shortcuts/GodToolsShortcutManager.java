@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -24,7 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
@@ -58,22 +56,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     }
 
     // region Lifecycle Events
-
-    /**
-     * Called when the device locale was updated.
-     */
-    @MainThread
-    public void onUpdateSystemLocale(@NonNull final BroadcastReceiver.PendingResult result) {
-        if (SUPPORTS_SHORTCUT_MANAGER) {
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-                updateShortcuts();
-                updatePendingShortcuts();
-                result.finish();
-            });
-        } else {
-            result.finish();
-        }
-    }
 
     /**
      * Called when the in-app language preferences are changed.

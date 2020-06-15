@@ -1,5 +1,6 @@
 package org.cru.godtools.shortcuts
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutManager
@@ -63,6 +64,15 @@ open class KotlinGodToolsShortcutManager(
     fun onToolUsed(event: ToolUsedEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
+        }
+    }
+
+    @AnyThread
+    fun onUpdateSystemLocale(result: BroadcastReceiver.PendingResult) {
+        launch {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
+            updatePendingShortcuts()
+            result.finish()
         }
     }
     // endregion Events
@@ -136,14 +146,12 @@ open class KotlinGodToolsShortcutManager(
         })
     }
 
-    @WorkerThread
+    @AnyThread
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updateShortcuts() = runBlocking {
-        updateShortcutsMutex.withLock {
-            val shortcuts = createAllShortcuts()
-            updateDynamicShortcuts(shortcuts)
-            updatePinnedShortcuts(shortcuts)
-        }
+    private suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
+        val shortcuts = createAllShortcuts()
+        updateDynamicShortcuts(shortcuts)
+        updatePinnedShortcuts(shortcuts)
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
