@@ -21,6 +21,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -74,16 +76,17 @@ open class KotlinGodToolsShortcutManager(
     }
 
     @WorkerThread
-    protected fun updatePendingShortcut(shortcut: PendingShortcut) {
-        synchronized(shortcut) {
-            val tool = dao.find<Tool>(shortcut.tool) ?: return
-            shortcut.shortcut = runBlocking { createToolShortcut(tool) }
+    protected fun updatePendingShortcut(shortcut: PendingShortcut) = runBlocking {
+        shortcut.mutex.withLock {
+            val tool = dao.find<Tool>(shortcut.tool) ?: return@runBlocking
+            shortcut.shortcut = createToolShortcut(tool)
         }
     }
     // endregion Pending Shortcuts
 
     // region Update Existing Shortcuts
-    private val updateShortcutsJob = AtomicReference<Job>()
+    private val updateShortcutsJob = AtomicReference<Job?>()
+    private val updateShortcutsMutex = Mutex()
 
     @AnyThread
     protected fun launchUpdateShortcutsJob(immediate: Boolean) {
@@ -100,10 +103,9 @@ open class KotlinGodToolsShortcutManager(
     }
 
     @WorkerThread
-    @Synchronized
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected fun updateShortcuts() {
-        runBlocking {
+    protected fun updateShortcuts() = runBlocking {
+        updateShortcutsMutex.withLock {
             val shortcuts = createAllShortcuts()
             updateDynamicShortcuts(shortcuts)
             updatePinnedShortcuts(shortcuts)
