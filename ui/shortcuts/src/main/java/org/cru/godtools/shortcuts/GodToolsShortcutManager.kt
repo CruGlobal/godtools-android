@@ -3,6 +3,7 @@ package org.cru.godtools.shortcuts
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
@@ -34,8 +35,12 @@ import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.event.AttachmentUpdateEvent
+import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.ToolUsedEvent
+import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tract.activity.createTractActivityIntent
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -43,29 +48,31 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val TYPE_TOOL = "tool|"
 
-open class KotlinGodToolsShortcutManager(
+@Singleton
+class GodToolsShortcutManager @Inject constructor(
     private val context: Context,
     private val dao: GodToolsDao,
+    eventBus: EventBus,
     private val settings: Settings
-) : CoroutineScope {
+) : SharedPreferences.OnSharedPreferenceChangeListener, CoroutineScope {
     private val job = Job()
     override val coroutineContext get() = Dispatchers.Default + job
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
-    // region Events
-    @AnyThread
-    @Subscribe
-    fun onToolUsed(event: ToolUsedEvent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
-        }
+    init {
+        // register event listeners
+        eventBus.register(this)
+        settings.registerOnSharedPreferenceChangeListener(this)
     }
 
+    // region Events
     @AnyThread
     fun onUpdateSystemLocale(result: BroadcastReceiver.PendingResult) {
         launch {
@@ -74,11 +81,52 @@ open class KotlinGodToolsShortcutManager(
             result.finish()
         }
     }
+
+    @AnyThread
+    @Subscribe
+    fun onToolUpdate(event: ToolUpdateEvent) {
+        // Could change which tools are visible or the label for tools
+        launchUpdateShortcutsJob(false)
+        launchUpdatePendingShortcutsJob(false)
+    }
+
+    @AnyThread
+    @Subscribe
+    fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
+        // Handles potential icon image changes.
+        launchUpdateShortcutsJob(false)
+        launchUpdatePendingShortcutsJob(false)
+    }
+
+    @AnyThread
+    @Subscribe
+    fun onTranslationUpdate(event: TranslationUpdateEvent) {
+        // Could change which tools are available or the label for tools
+        launchUpdateShortcutsJob(false)
+        launchUpdatePendingShortcutsJob(false)
+    }
+
+    @AnyThread
+    @Subscribe
+    fun onToolUsed(event: ToolUsedEvent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when (key) {
+            // primary/parallel language preferences changed.
+            Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE -> {
+                launchUpdateShortcutsJob(false)
+                launchUpdatePendingShortcutsJob(false)
+            }
+        }
+    }
     // endregion Events
 
     // region Pending Shortcuts
-    @JvmField
-    protected val pendingShortcuts = mutableMapOf<String, WeakReference<PendingShortcut>>()
+    private val pendingShortcuts = mutableMapOf<String, WeakReference<PendingShortcut>>()
 
     @AnyThread
     fun canPinToolShortcut(tool: Tool?) = when (tool?.type) {
@@ -108,7 +156,7 @@ open class KotlinGodToolsShortcutManager(
     private val updatePendingShortcutsMutex = Mutex()
 
     @AnyThread
-    protected fun launchUpdatePendingShortcutsJob(immediate: Boolean) {
+    private fun launchUpdatePendingShortcutsJob(immediate: Boolean) {
         // cancel any pending update
         updatePendingShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
 
@@ -147,12 +195,12 @@ open class KotlinGodToolsShortcutManager(
     private val updateShortcutsMutex = Mutex()
 
     init {
-        // enqueue an initial update
+        // launch an initial update
         launchUpdateShortcutsJob(false)
     }
 
     @AnyThread
-    protected fun launchUpdateShortcutsJob(immediate: Boolean) {
+    private fun launchUpdateShortcutsJob(immediate: Boolean) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
 
         // cancel any pending update

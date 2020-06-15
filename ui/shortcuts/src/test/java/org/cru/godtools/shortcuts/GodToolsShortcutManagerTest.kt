@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
+import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -21,6 +22,7 @@ class GodToolsShortcutManagerTest {
     private lateinit var context: Context
     private lateinit var systemShortcutManager: ShortcutManager
     private lateinit var dao: GodToolsDao
+    private lateinit var eventBus: EventBus
     private lateinit var settings: Settings
 
     private lateinit var shortcutManager: GodToolsShortcutManager
@@ -34,9 +36,10 @@ class GodToolsShortcutManagerTest {
             whenever(it.getSystemService(ShortcutManager::class.java)) doReturn systemShortcutManager
         }
         dao = mock()
+        eventBus = mock()
         settings = mock()
 
-        shortcutManager = GodToolsShortcutManager(context, dao, settings)
+        shortcutManager = GodToolsShortcutManager(context, dao, eventBus, settings)
     }
 
     @Test
