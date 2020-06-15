@@ -2,6 +2,7 @@
 <resources>
     <string name="menu_install">Install</string>
     <string name="menu_share_tool">Share</string>
+    <string name="menu_live_share_publish">Share your screen</string>
     <string name="share_tool_subject" translatable="false">%1$s</string>
     <string name="share_tool_title">Share “%1$s” using</string>
 

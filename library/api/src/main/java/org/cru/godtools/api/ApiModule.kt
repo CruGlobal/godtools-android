@@ -1,6 +1,11 @@
 package org.cru.godtools.api
 
+import android.app.Application
 import android.os.Build
+import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
+import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
+import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -16,7 +21,13 @@ import org.ccci.gto.android.common.dagger.okhttp3.OkHttp3Module
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
+import org.ccci.gto.android.common.jsonapi.scarlet.JsonApiMessageAdapterFactory
+import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
+import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
+import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
 import org.ccci.gto.android.common.util.DynamicSSLSocketFactory
+import org.cru.godtools.api.model.NavigationEvent
+import org.cru.godtools.api.model.PublisherInfo
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Followup
@@ -67,6 +78,7 @@ object ApiModule {
         .addClasses(Translation::class.java)
         .addClasses(Followup::class.java)
         .addClasses(GlobalActivityAnalytics::class.java)
+        .addClasses(PublisherInfo::class.java, NavigationEvent::class.java)
         .addConverters(ToolTypeConverter)
         .addConverters(LocaleTypeConverter)
         .build()
@@ -116,7 +128,34 @@ object ApiModule {
     @Provides
     @Reusable
     fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
-    // region mobile-content-api APIs
+
+    @Provides
+    @Singleton
+    fun scarletReferenceLifecycle() = ReferenceLifecycle()
+
+    @Provides
+    @Reusable
+    fun actionCableScarlet(
+        @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
+        app: Application,
+        jsonApi: JsonApiConverter,
+        okhttp: OkHttpClient,
+        referenceLifecycle: ReferenceLifecycle
+    ) = Scarlet.Builder()
+        .webSocketFactory(okhttp.newWebSocketFactory(ActionCableRequestFactory("${baseUrl}cable")))
+        .addMessageAdapterFactory(
+            ActionCableMessageAdapterFactory.Builder()
+                .addMessageAdapterFactory(JsonApiMessageAdapterFactory(jsonApi))
+                .build()
+        )
+        .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
+        .lifecycle(AndroidLifecycle.ofApplicationForeground(app).combineWith(referenceLifecycle))
+        .build()
+
+    @Provides
+    @Singleton
+    fun tractShareService(scarlet: Scarlet): TractShareService = scarlet.create()
+    // endregion mobile-content-api APIs
 
     // region Adobe APIs
     @Provides

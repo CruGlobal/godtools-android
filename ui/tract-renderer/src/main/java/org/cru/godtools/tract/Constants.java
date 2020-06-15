@@ -6,6 +6,8 @@ public final class Constants {
     public static final String PARAM_PRIMARY_LANGUAGE = "primaryLanguage";
     public static final String PARAM_PARALLEL_LANGUAGE = "parallelLanguage";
 
+    public static final String PARAM_LIVE_SHARE_STREAM = "liveShareStream";
+
     // common extras
     public static final String EXTRA_PAGE = "page";
     public static final String EXTRA_MODAL = "modal";
