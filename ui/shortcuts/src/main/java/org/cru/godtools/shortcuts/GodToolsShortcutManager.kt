@@ -96,10 +96,24 @@ open class KotlinGodToolsShortcutManager(
     }
 
     @WorkerThread
-    protected fun updatePendingShortcut(shortcut: PendingShortcut) = runBlocking {
-        shortcut.mutex.withLock {
-            val tool = dao.find<Tool>(shortcut.tool) ?: return@runBlocking
-            shortcut.shortcut = createToolShortcut(tool)
+    @Synchronized
+    @OptIn(ExperimentalStdlibApi::class)
+    protected fun updatePendingShortcuts() = runBlocking {
+        synchronized(pendingShortcuts) {
+            val i = pendingShortcuts.iterator()
+            while (i.hasNext()) {
+                when (val shortcut = i.next().value.get()) {
+                    null -> i.remove()
+                    else -> launch { updatePendingShortcut(shortcut) }
+                }
+            }
+        }
+    }
+
+    @WorkerThread
+    private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
+        withContext(Dispatchers.IO) {
+            dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
         }
     }
     // endregion Pending Shortcuts

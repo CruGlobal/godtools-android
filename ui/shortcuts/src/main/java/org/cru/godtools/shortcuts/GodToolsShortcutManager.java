@@ -20,18 +20,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
@@ -139,30 +133,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         final Message m = Message.obtain(mHandler, task);
         m.what = MSG_UPDATE_PENDING_SHORTCUTS;
         mHandler.sendMessageDelayed(m, immediate ? 0 : DELAY_UPDATE_PENDING_SHORTCUTS);
-    }
-
-    @WorkerThread
-    synchronized void updatePendingShortcuts() {
-        final List<PendingShortcut> shortcuts = new ArrayList<>();
-        synchronized (pendingShortcuts) {
-            final Iterator<WeakReference<PendingShortcut>> i = pendingShortcuts.values().iterator();
-            while (i.hasNext()) {
-                // prune any references that are no longer valid
-                final WeakReference<PendingShortcut> ref = i.next();
-                final PendingShortcut shortcut = ref != null ? ref.get() : null;
-                if (shortcut == null) {
-                    i.remove();
-                    continue;
-                }
-
-                shortcuts.add(shortcut);
-            }
-        }
-
-        // update all the pending shortcuts
-        for (final PendingShortcut shortcut : shortcuts) {
-            updatePendingShortcut(shortcut);
-        }
     }
     // endregion Pending shortcut
 }
