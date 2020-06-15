@@ -159,7 +159,6 @@ internal class Tasks @Inject constructor(
                     // short-circuit if a newer translation is already downloaded
                     val latestTranslation =
                         dao.getLatestTranslation(toolCode, languageCode, isPublished = true, isDownloaded = true)
-                            .orElse(null)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
                     withContext(Dispatchers.IO) {

@@ -256,8 +256,8 @@ class GodToolsShortcutManager @Inject constructor(
 
         // generate the list of locales to use for this tool
         val locales = buildList {
-            val translation = dao.getLatestTranslation(code, settings.primaryLanguage).orElse(null)
-                ?: dao.getLatestTranslation(code, Locale.ENGLISH).orElse(null)
+            val translation = dao.getLatestTranslation(code, settings.primaryLanguage)
+                ?: dao.getLatestTranslation(code, Locale.ENGLISH)
                 ?: return@withContext null
             add(translation.languageCode)
             settings.parallelLanguage?.let { add(it) }
@@ -272,7 +272,7 @@ class GodToolsShortcutManager @Inject constructor(
 
         // Generate the shortcut label
         val label = LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH).asSequence()
-            .mapNotNull { dao.getLatestTranslation(code, it).orElse(null) }
+            .mapNotNull { dao.getLatestTranslation(code, it) }
             .firstOrNull()
             .getName(tool, context)
 
