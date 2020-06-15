@@ -47,15 +47,15 @@ import java.util.concurrent.atomic.AtomicReference
 private const val TYPE_TOOL = "tool|"
 
 open class KotlinGodToolsShortcutManager(
-    protected val context: Context,
-    protected val dao: GodToolsDao,
-    protected val settings: Settings
+    private val context: Context,
+    private val dao: GodToolsDao,
+    private val settings: Settings
 ) : CoroutineScope {
     private val job = Job()
     override val coroutineContext get() = Dispatchers.Default + job
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
-    protected val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
+    private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
     // region Events
     @AnyThread
@@ -213,7 +213,7 @@ open class KotlinGodToolsShortcutManager(
             .setIcon(icon)
             .build()
     }
-
-    private val Tool.shortcutId get() = code.toolShortcutId
-    protected val String?.toolShortcutId get() = "$TYPE_TOOL$this"
 }
+
+private val Tool.shortcutId get() = code.toolShortcutId
+private val String?.toolShortcutId get() = "$TYPE_TOOL$this"
