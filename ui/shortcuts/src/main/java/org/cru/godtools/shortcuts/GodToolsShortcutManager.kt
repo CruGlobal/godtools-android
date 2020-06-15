@@ -72,6 +72,14 @@ open class KotlinGodToolsShortcutManager(
     fun pinShortcut(pendingShortcut: PendingShortcut) {
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
+
+    @WorkerThread
+    protected fun updatePendingShortcut(shortcut: PendingShortcut) {
+        synchronized(shortcut) {
+            val tool = dao.find<Tool>(shortcut.tool) ?: return
+            shortcut.shortcut = runBlocking { createToolShortcut(tool) }
+        }
+    }
     // endregion Pending Shortcuts
 
     // region Update Existing Shortcuts
@@ -130,16 +138,16 @@ open class KotlinGodToolsShortcutManager(
             .associateBy { it.id }
     }
 
-    @WorkerThread
+    @AnyThread
     @OptIn(ExperimentalStdlibApi::class)
-    protected fun createToolShortcut(tool: Tool): ShortcutInfoCompat? {
-        val code = tool.code ?: return null
+    private suspend fun createToolShortcut(tool: Tool) = withContext(Dispatchers.IO) {
+        val code = tool.code ?: return@withContext null
 
         // generate the list of locales to use for this tool
         val locales = buildList {
             val translation = dao.getLatestTranslation(code, settings.primaryLanguage).orElse(null)
                 ?: dao.getLatestTranslation(code, Locale.ENGLISH).orElse(null)
-                ?: return null
+                ?: return@withContext null
             add(translation.languageCode)
             settings.parallelLanguage?.let { add(it) }
         }
@@ -148,7 +156,7 @@ open class KotlinGodToolsShortcutManager(
         val intent = when (tool.type) {
             Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
             Tool.Type.ARTICLE -> context.createCategoriesIntent(code, locales[0])
-            else -> return null
+            else -> return@withContext null
         }.apply { action = Intent.ACTION_VIEW }
 
         // Generate the shortcut label
@@ -162,6 +170,7 @@ open class KotlinGodToolsShortcutManager(
             ?.let { context.getGodToolsFile(it.localFileName) }
             ?.let {
                 try {
+                    // TODO: create a suspend extension method to async load an image in a coroutine
                     Picasso.get().load(it)
                         .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                         .centerCrop()
@@ -174,7 +183,7 @@ open class KotlinGodToolsShortcutManager(
             ?: IconCompat.createWithResource(context, R.mipmap.ic_launcher)
 
         // build the shortcut
-        return ShortcutInfoCompat.Builder(context, tool.shortcutId)
+        ShortcutInfoCompat.Builder(context, tool.shortcutId)
             .setAlwaysBadged()
             .setIntent(intent)
             .setShortLabel(label)

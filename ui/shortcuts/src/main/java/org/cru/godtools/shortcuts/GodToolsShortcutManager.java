@@ -13,7 +13,6 @@ import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
@@ -44,9 +43,7 @@ import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
-    private static final int MSG_UPDATE_SHORTCUTS = 1;
     private static final int MSG_UPDATE_PENDING_SHORTCUTS = 2;
-    private static final long DELAY_UPDATE_SHORTCUTS = 5000;
     private static final long DELAY_UPDATE_PENDING_SHORTCUTS = 100;
 
     @NonNull
@@ -190,16 +187,8 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
 
         // update all the pending shortcuts
         for (final PendingShortcut shortcut : shortcuts) {
-            // short-circuit if the tool doesn't actually exist
-            final Tool tool = getDao().find(Tool.class, shortcut.getTool());
-            if (tool == null) {
-                continue;
-            }
-
-            // update the shortcut
-            shortcut.setShortcut(createToolShortcut(tool));
+            updatePendingShortcut(shortcut);
         }
     }
-
     // endregion Pending shortcut
 }
