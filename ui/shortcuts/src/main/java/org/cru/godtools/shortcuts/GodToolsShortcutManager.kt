@@ -12,8 +12,8 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
@@ -40,6 +40,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
+import java.lang.ref.WeakReference
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
@@ -49,7 +50,10 @@ open class KotlinGodToolsShortcutManager(
     protected val context: Context,
     protected val dao: GodToolsDao,
     protected val settings: Settings
-) {
+) : CoroutineScope {
+    private val job = Job()
+    override val coroutineContext get() = Dispatchers.Default + job
+
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     protected val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
@@ -64,10 +68,26 @@ open class KotlinGodToolsShortcutManager(
     // endregion Events
 
     // region Pending Shortcuts
+    @JvmField
+    protected val pendingShortcuts = mutableMapOf<String, WeakReference<PendingShortcut>>()
+
     @AnyThread
     fun canPinToolShortcut(tool: Tool?) = when (tool?.type) {
         Tool.Type.TRACT, Tool.Type.ARTICLE -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
         else -> false
+    }
+
+    @AnyThread
+    fun getPendingToolShortcut(code: String?): PendingShortcut? {
+        val id = code?.toolShortcutId ?: return null
+
+        return synchronized(pendingShortcuts) {
+            pendingShortcuts[id]?.get()
+                ?: PendingShortcut(code).also {
+                    pendingShortcuts[id] = WeakReference(it)
+                    launch { updatePendingShortcut(it) }
+                }
+        }
     }
 
     @AnyThread
@@ -96,7 +116,7 @@ open class KotlinGodToolsShortcutManager(
         updateShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
 
         // launch the update
-        updateShortcutsJob.set(GlobalScope.launch {
+        updateShortcutsJob.set(launch {
             if (!immediate) delay(5_000)
             withContext(NonCancellable) { updateShortcuts() }
         })

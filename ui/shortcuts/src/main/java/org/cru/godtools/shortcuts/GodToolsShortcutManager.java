@@ -22,10 +22,8 @@ import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,7 +31,6 @@ import javax.inject.Singleton;
 import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
@@ -48,8 +45,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
 
     @NonNull
     private final Handler mHandler;
-
-    private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
     @Inject
     GodToolsShortcutManager(@NonNull final Context context, @NonNull final GodToolsDao dao,
@@ -127,27 +122,6 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     // endregion Lifecycle Events
 
     // region Pending shortcut
-    @Nullable
-    @AnyThread
-    public PendingShortcut getPendingToolShortcut(@Nullable final String code) {
-        if (code == null) {
-            return null;
-        }
-
-        final String id = getToolShortcutId(code);
-        PendingShortcut shortcut;
-        synchronized (mPendingShortcuts) {
-            final WeakReference<PendingShortcut> ref = mPendingShortcuts.get(id);
-            shortcut = ref != null ? ref.get() : null;
-            if (shortcut == null) {
-                shortcut = new PendingShortcut(code);
-                mPendingShortcuts.put(id, new WeakReference<>(shortcut));
-            }
-        }
-        enqueueUpdatePendingShortcuts(true);
-        return shortcut;
-    }
-
     @AnyThread
     private void enqueueUpdatePendingShortcuts(final boolean immediate) {
         // cancel any pending update
@@ -170,8 +144,8 @@ public class GodToolsShortcutManager extends KotlinGodToolsShortcutManager
     @WorkerThread
     synchronized void updatePendingShortcuts() {
         final List<PendingShortcut> shortcuts = new ArrayList<>();
-        synchronized (mPendingShortcuts) {
-            final Iterator<WeakReference<PendingShortcut>> i = mPendingShortcuts.values().iterator();
+        synchronized (pendingShortcuts) {
+            final Iterator<WeakReference<PendingShortcut>> i = pendingShortcuts.values().iterator();
             while (i.hasNext()) {
                 // prune any references that are no longer valid
                 final WeakReference<PendingShortcut> ref = i.next();
