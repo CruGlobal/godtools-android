@@ -7,7 +7,6 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
-import androidx.annotation.WorkerThread
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -19,9 +18,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -105,22 +104,37 @@ open class KotlinGodToolsShortcutManager(
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
 
-    @WorkerThread
-    @Synchronized
-    @OptIn(ExperimentalStdlibApi::class)
-    protected fun updatePendingShortcuts() = runBlocking {
-        synchronized(pendingShortcuts) {
-            val i = pendingShortcuts.iterator()
-            while (i.hasNext()) {
-                when (val shortcut = i.next().value.get()) {
-                    null -> i.remove()
-                    else -> launch { updatePendingShortcut(shortcut) }
+    private val updatePendingShortcutsJob = AtomicReference<Job?>()
+    private val updatePendingShortcutsMutex = Mutex()
+
+    @AnyThread
+    protected fun launchUpdatePendingShortcutsJob(immediate: Boolean) {
+        // cancel any pending update
+        updatePendingShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
+
+        // launch the update
+        updatePendingShortcutsJob.set(launch {
+            if (!immediate) delay(100)
+            withContext(NonCancellable) { updatePendingShortcuts() }
+        })
+    }
+
+    @AnyThread
+    private suspend fun updatePendingShortcuts() = coroutineScope {
+        updatePendingShortcutsMutex.withLock {
+            synchronized(pendingShortcuts) {
+                val i = pendingShortcuts.iterator()
+                while (i.hasNext()) {
+                    when (val shortcut = i.next().value.get()) {
+                        null -> i.remove()
+                        else -> launch { updatePendingShortcut(shortcut) }
+                    }
                 }
             }
         }
     }
 
-    @WorkerThread
+    @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
         withContext(Dispatchers.IO) {
             dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
@@ -131,6 +145,11 @@ open class KotlinGodToolsShortcutManager(
     // region Update Existing Shortcuts
     private val updateShortcutsJob = AtomicReference<Job?>()
     private val updateShortcutsMutex = Mutex()
+
+    init {
+        // enqueue an initial update
+        launchUpdateShortcutsJob(false)
+    }
 
     @AnyThread
     protected fun launchUpdateShortcutsJob(immediate: Boolean) {
