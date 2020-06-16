@@ -1,30 +1,28 @@
 package org.cru.godtools.xml.model
 
-import androidx.annotation.CallSuper
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
 
-abstract class Content protected constructor(parent: Base) : Base(parent) {
-    protected constructor(parent: Base, parser: XmlPullParser) : this(parent) {
-        parseAttrs(parser)
+abstract class Content : Base {
+    private val restrictTo: Set<DeviceType>
+
+    protected constructor(parent: Base) : super(parent) {
+        restrictTo = DeviceType.ALL
     }
 
-    private lateinit var restrictTo: Set<DeviceType>
-
-    /**
-     * @return true if this content element should be completely ignored.
-     */
-    val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
-
-    @CallSuper
-    protected open fun parseAttrs(parser: XmlPullParser) {
+    protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
         restrictTo = DeviceType.parse(
             types = parser.getAttributeValue(null, XML_RESTRICT_TO),
             defValue = DeviceType.ALL
         )
     }
+
+    /**
+     * @return true if this content element should be completely ignored.
+     */
+    val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
 
     companion object {
         fun fromXml(parent: Base, parser: XmlPullParser): Content? {
