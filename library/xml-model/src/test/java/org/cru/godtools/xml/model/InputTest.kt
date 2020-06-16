@@ -22,11 +22,11 @@ class InputTest {
 
     @Test
     fun testParseInputHidden() {
-        val input = Input.fromXml(manifest, getXmlParserForResource("input_hidden.xml"))
+        val input = Input(manifest, getXmlParserForResource("input_hidden.xml"))
         assertEquals(Input.Type.HIDDEN, input.type)
         assertEquals("destination_id", input.name)
         assertEquals("1", input.value)
-        assertFalse(input.mRequired)
+        assertFalse(input.required)
 
         // test validateValue
         assertNull(input.validateValue(null))
@@ -36,12 +36,12 @@ class InputTest {
 
     @Test
     fun testParseInputText() {
-        val input = Input.fromXml(manifest, getXmlParserForResource("input_text.xml"))
+        val input = Input(manifest, getXmlParserForResource("input_text.xml"))
         assertEquals(Input.Type.TEXT, input.type)
         assertEquals("name", input.name)
         assertEquals("Name", input.label!!.text)
         assertEquals("First Name and Last Name", input.placeholder!!.text)
-        assertTrue(input.mRequired)
+        assertTrue(input.required)
 
         // test validateValue
         assertEquals(R.string.tract_content_input_error_required, input.validateValue(null)!!.msgId)
@@ -52,10 +52,10 @@ class InputTest {
 
     @Test
     fun testParseInputEmail() {
-        val input = Input.fromXml(manifest, getXmlParserForResource("input_email.xml"))
+        val input = Input(manifest, getXmlParserForResource("input_email.xml"))
         assertEquals(Input.Type.EMAIL, input.type)
         assertEquals("email", input.name)
-        assertTrue(input.mRequired)
+        assertTrue(input.required)
 
         // test validateValue
         assertEquals(R.string.tract_content_input_error_required, input.validateValue(null)!!.msgId)
