@@ -12,9 +12,6 @@ private val REGEX_COLOR =
     "^\\s*rgba\\(\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9.]+)\\s*\\)\\s*$".toRegex()
 internal val REGEX_SEQUENCE_SEPARATOR = Regex("\\s+")
 
-@Deprecated("Use toBoolean extension method instead", ReplaceWith("raw?.toBoolean() ?: defaultValue"))
-fun parseBoolean(raw: String?, defaultValue: Boolean) = raw?.toBoolean() ?: defaultValue
-
 @ColorInt
 @Deprecated(
     "Use getAttributeValueAsColorOrNull extension method instead",
