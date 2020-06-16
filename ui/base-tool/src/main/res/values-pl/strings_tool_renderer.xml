@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Zainstaluj</string>
     <string name="menu_share_tool">Podziel się</string>
+    <string name="menu_live_share_publish">Udostępnij swój ekran</string>
     <string name="share_tool_title">Podziel się “%1$s” przy pomocy</string>
     <string name="tool_not_found">Nie można znaleźć żądanego narzędzia</string>
     <string name="tool_loading">Trwa wczytywanie żądanego narzędzia...</string>
+    <string name="tool_offline">Narzędzie, którego potrzebujesz, nie można otworzyć bez połączenia z internetem</string>
     <string name="feature_discovery_title_share_tool">Udostępnij link</string>
     <string name="feature_discovery_desc_share_tool">Wyślij to narzędzie znajomemu, klikając w tę ikonę</string>
 </resources>

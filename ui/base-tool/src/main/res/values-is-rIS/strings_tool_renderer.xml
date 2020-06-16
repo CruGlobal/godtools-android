@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Setja upp</string>
     <string name="menu_share_tool">Deila</string>
+    <string name="menu_live_share_publish">Deildu þínum skjá</string>
     <string name="share_tool_title">Deila “%1$s” með því að nota</string>
     <string name="tool_not_found">Tólið sem þú baðst um finnst ekki</string>
     <string name="tool_loading">Tólið sem þú baðst um er að hlaðast...</string>
+    <string name="tool_offline">Tólið sem þú biður um þarfnast nettengingar til að opnast</string>
     <string name="feature_discovery_title_share_tool">Deila tengli</string>
     <string name="feature_discovery_desc_share_tool">Sendu þetta tól til vinar með því að smella á þetta tákn</string>
 </resources>

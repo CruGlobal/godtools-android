@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Yükle</string>
     <string name="menu_share_tool">Paylaş</string>
+    <string name="menu_live_share_publish">Ekranını paylaş</string>
     <string name="share_tool_title">Şunu kullanarak \"%1$s\" paylaşın:</string>
     <string name="tool_not_found">Talep ettiğiniz araç bulunamıyor</string>
     <string name="tool_loading">Talep ettiğiniz araç yükleniyor...</string>
+    <string name="tool_offline">İstediğin araç, açılması için internet bağlantısı gerektiriyor</string>
     <string name="feature_discovery_title_share_tool">Bir bağlantı paylaş</string>
     <string name="feature_discovery_desc_share_tool">Bu simgeye tıklayarak bu aracı bir arkadaşına gönder</string>
 </resources>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Неуспешно отваряне %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Покана за евангелието</string>
+    <string name="tool_category_articles">Статии</string>
+    <string name="tool_category_conversation_starter">Започване на разговор</string>
+    <string name="tool_category_growth">Християнско израстване</string>
+    <string name="tool_category_training">Обучение</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ето линка за изтегляне на приложението, което видяхме днес: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Тази връзка води към интернет-версия на последната страница, която преглеждахме заедно днес: %1$s \n\n
 
-		Ето линк за уеб версията на приложението %1$s \n\n
+Приложението може да бъде изтеглено от https://godtoolsapp.com \n\n
 
-		Да говорим повече!</string>
+Да поговорим още!</string>
 </resources>

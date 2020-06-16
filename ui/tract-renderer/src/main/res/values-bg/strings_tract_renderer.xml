@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Напред</string>
+    <!-- Live Sharing -->
 </resources>

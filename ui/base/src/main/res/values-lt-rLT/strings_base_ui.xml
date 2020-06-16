@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nepavyksta atidaryti %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Evangelijos kvietimas</string>
+    <string name="tool_category_articles">Straipsniai</string>
+    <string name="tool_category_conversation_starter">Pokalbiui pradėti</string>
+    <string name="tool_category_growth">Krikščionio augimas</string>
+    <string name="tool_category_training">Mokymas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Štai nuoroda, iš kur galima atsisiųsti mūsų šiandien pristatomą programėlę: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Ši nuoroda nuves į internetinę versiją to, apie ką šiandien kalbame: %1$s \n\n
 
-		Štai nuoroda į programėlės internetinę versiją %1$s\n\n
+Programėlę galima atsisiųsti adresu https://godtoolsapp.com \n\n
 
-		Pakalbėkime išsamiau!</string>
+Pakalbėkime daugiau!</string>
 </resources>

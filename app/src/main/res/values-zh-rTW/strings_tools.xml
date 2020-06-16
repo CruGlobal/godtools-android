@@ -3,12 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">搜尋工具</string>
     <string name="nav_my_tools">我的工具</string>
+    <string name="nav_favorite_tools">我的最愛</string>
+    <string name="nav_all_tools">所有工具</string>
     <string name="action_tools_about">關於</string>
     <string name="action_tools_open">開啟</string>
     <string name="title_add_new_tools">添加新工具</string>
+    <string name="tools_list_remove_favorite_dialog_title">要將「%1$s」從我的最愛移除嗎？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">移除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="tools_list_favorites_banner_text">點擊愛心圖示，將工具新增至你的最愛，就能離線使用工具。</string>
+    <string name="tools_list_favorites_banner_action_dismiss">略過</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">加到主頁</string>
     <string name="action_tools_open_tool">開啟工具</string>
+    <string name="action_tools_add_favorite">新增至我的最愛</string>
+    <string name="action_tools_remove_favorite">從我的最愛移除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 個瀏覽次數</item>
     </plurals>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Inkapás pa habri %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Invitashon di e Evangelio</string>
+    <string name="tool_category_training">Entrenamentu</string>
     <!-- Sharing -->
     <string name="share_general_message">At\'akí e lenk pa deskargá e app ku nos tabata wak awe: https://godtoolsapp.com \n\n
 

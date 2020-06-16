@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">کھولنے کے ناقابل  %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">انجیل کا دعوت نامہ</string>
+    <string name="tool_category_articles">مضامین</string>
+    <string name="tool_category_conversation_starter">گفتگو کے آغاز میں مددگار</string>
+    <string name="tool_category_growth">مسیحی ترقی</string>
+    <string name="tool_category_training">تربیت</string>
     <!-- Sharing -->
-    <string name="share_general_message">\"آج جو ایپ ہم دیکھ رہے تھے اسے اس لنک سے ڈاونلوڈ کریں:
-http://godtoolsapp.com \n\n
+    <string name="share_general_message">آج ہم جس بارے میں بات کر رہے تھے یہ لنک آپ کو اس کے ویب ورژن پر لے جائے گا:
+%1$s \n\n
 
-ایپ کے ویب ورژن کے لیے یہ لِنک ہے
+ایپ کو یہاں سے ڈاؤن لوڈ کیا جا سکتا ہے https://godtoolsapp.com \n\n
 
-%1$s
-
- \n\n
-
-آئیے مزید بات کرتے ہیں!\"</string>
+آئیے مزید بات کرتے ہیں!</string>
 </resources>

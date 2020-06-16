@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Встановити</string>
     <string name="menu_share_tool">Переслати</string>
+    <string name="menu_live_share_publish">Поділитися екраном</string>
     <string name="share_tool_title">Перешліть “%1$s” з допомогою</string>
     <string name="tool_not_found">Інструмент не знайдено</string>
     <string name="tool_loading">Ваш інструмент завантажується...</string>
+    <string name="tool_offline">Необхідний вам інструмент вимагає підключення до Інтернету</string>
     <string name="feature_discovery_title_share_tool">Поширте посилання</string>
     <string name="feature_discovery_desc_share_tool">Нажміть цю іконку, щоб відправити програму другові чи подружці</string>
 </resources>

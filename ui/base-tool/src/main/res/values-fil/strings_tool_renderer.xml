@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">I-install</string>
     <string name="menu_share_tool">Ibahagi</string>
+    <string name="menu_live_share_publish">Ibahagi ang iyong screen</string>
     <string name="share_tool_title">Ibahagi ang “%1$s” gamit ang</string>
     <string name="tool_not_found">Hindi mahanap ang tool na hiniling mo</string>
     <string name="tool_loading">Naglo-load ang hiniling mong tool…</string>
+    <string name="tool_offline">Ang ni-request mong tool ay kailangan ng koneksyon sa internet para magbukas</string>
     <string name="feature_discovery_title_share_tool">Magbahagi ng link</string>
     <string name="feature_discovery_desc_share_tool">Ipadala ang tool na ito sa isang kaibigan sa pamamagitan ng pag-click sa icon na ito</string>
 </resources>

@@ -3,10 +3,22 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Cari Alat</string>
     <string name="nav_my_tools">Alat Saya</string>
+    <string name="nav_favorite_tools">Kegemaran</string>
+    <string name="nav_all_tools">Semua Alat</string>
+    <string name="action_tools_about">Perihal</string>
+    <string name="action_tools_open">Buka</string>
     <string name="title_add_new_tools">Tambah Alat Baharu</string>
+    <string name="tools_list_remove_favorite_dialog_title">Buang “%1$s” daripada Kegemaran?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Buang</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="tools_list_favorites_banner_text">"Menjadikan sesuatu alat tersedia semasa luar talian dengan mengetik pada ikon hati yang akan menambahkannya ke kegemaran anda.
+"</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Surai</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Tambah ke skrin Laman Utama</string>
     <string name="action_tools_open_tool">Buka Alat</string>
+    <string name="action_tools_add_favorite">Tambah ke Kegemaran</string>
+    <string name="action_tools_remove_favorite">Buang daripada Kegemaran</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Melihat</item>
     </plurals>

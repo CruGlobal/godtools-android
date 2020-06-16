@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Encontrar ferramentas</string>
     <string name="nav_my_tools">Minhas ferramentas</string>
+    <string name="nav_favorite_tools">Favoritos</string>
+    <string name="nav_all_tools">Todas as ferramentas</string>
+    <string name="action_tools_about">Sobre</string>
+    <string name="action_tools_open">Abrir</string>
     <string name="title_add_new_tools">Adicionar novas ferramentas</string>
+    <string name="tools_list_remove_favorite_dialog_title">Pretende remover \"%1$s\" dos Favoritos?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Remover</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Cancelar</string>
+    <string name="tools_list_favorites_banner_text">Para ficar com uma ferramenta disponível offline, toque no ícone de coração para a adicionar aos seus favoritos.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Cancelar</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
     <string name="action_tools_open_tool">Abrir ferramenta</string>
+    <string name="action_tools_add_favorite">Adicionar aos Favoritos</string>
+    <string name="action_tools_remove_favorite">Remover dos Favoritos</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d visualização</item>
         <item quantity="other">%1$,d visualizações</item>

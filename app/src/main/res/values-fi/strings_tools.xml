@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Etsi työkaluja</string>
     <string name="nav_my_tools">Omat työkalut</string>
+    <string name="nav_favorite_tools">Suosikit</string>
+    <string name="nav_all_tools">Kaikki työkalut</string>
+    <string name="action_tools_about">Info</string>
+    <string name="action_tools_open">Avaa</string>
     <string name="title_add_new_tools">Lisää uusia työkaluja</string>
+    <string name="tools_list_remove_favorite_dialog_title">Poistetaanko “%1$s” suosikeista?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Poista</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Peruuta</string>
+    <string name="tools_list_favorites_banner_text">Ota työkalu käyttöön offline-tilassa sydänkuvaketta napauttamalla, jolloin se lisätään suosikkeihisi.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Hylkää</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Lisää aloitusnäyttöön</string>
     <string name="action_tools_open_tool">Avaa työkalu</string>
+    <string name="action_tools_add_favorite">Lisää suosikkeihin</string>
+    <string name="action_tools_remove_favorite">Poista suosikeista</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d tarkastelu</item>
         <item quantity="other">%1$,d tarkastelua</item>

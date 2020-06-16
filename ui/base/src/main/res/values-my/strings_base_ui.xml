@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">" %sကိုဖွင့်၍ မရပါ"</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">ခရစ်ဝင်ကျမ်းဖိတ်ခေါ်မှု</string>
+    <string name="tool_category_articles">ဆောင်းပါးများ</string>
+    <string name="tool_category_conversation_starter">စကားစမြည်ပြောခြင်း စတင်သူ</string>
+    <string name="tool_category_growth">ခရစ်ယာန်ဘာသာကို ယုံကြည်သက်ဝင်မှု တိုးပွားလာခြင်း</string>
+    <string name="tool_category_training">သင်တန်း</string>
     <!-- Sharing -->
-    <string name="share_general_message">"  app ကို ဒေါင်းလုတ်ဆွဲရန် လင့်ခ်မှာ https://godtoolsapp.com\n\n ဖြစ်သည်။
+    <string name="share_general_message">ယနေ့ကျွန်ုပ်တို့ဆွေးနွေးခဲ့သည်များ၏ ဝက်ဘ်ဗားရှင်းကို ယခုလင့်ခ်မှ သင်ဝင်ရောက်နိုင်သည်။ http://godtoolsapp.com%1$s \n\n
 
-app၏ wed ဗားရှင်း ၏ လင့်ခ်(%1$s ဖြစ်ပါသည်
+ထိုအက်ပ်ကို https://godtoolsapp.com \n\n တွင် ဒေါင်းလုပ်ချရယူနိုင်ပါသည်။
 
-ဆက်ဆွေးနွေးကြပါစို့"</string>
+ဆက်ဆွေးနွေးကြပါစို့</string>
 </resources>

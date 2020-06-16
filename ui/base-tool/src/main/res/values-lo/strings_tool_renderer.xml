@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">ຕິດຕັ້ງ</string>
     <string name="menu_share_tool">ແບ່ງປັນ</string>
+    <string name="menu_live_share_publish">ແບ່ງປັນໜ້າຈໍຂອງທ່ານ</string>
     <string name="share_tool_title">ແບ່ງປັນ “%1$s” ໃຊ້ງານ</string>
     <string name="tool_not_found">ບໍ່ພົບເຄື່ອງມືທີ່ທ່ານຂໍ</string>
     <string name="tool_loading">ເຄື່ອງມືທີ່ທ່ານຂໍກຳລັງໂຫຼດ…</string>
+    <string name="tool_offline">ຕ້ອງມີການເຊື່ອມຕໍ່ອິນເຕີເນັດເພື່ອເປີດເຄື່ອງມືທີ່ທ່ານໄດ້ສະເໜີຂໍ</string>
     <string name="feature_discovery_title_share_tool">ແບ່ງປັນລິ້ງ</string>
     <string name="feature_discovery_desc_share_tool">ສົ່ງເຄື່ອງມືນີ້ໄປໃຫ້ໝູ່ໂດຍການຄລິກໄອຄອນນີ້</string>
 </resources>

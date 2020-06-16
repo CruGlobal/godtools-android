@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Αδυναμία ανοίγματος %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Πρόσκληση στο Ευαγγέλιο</string>
+    <string name="tool_category_articles">Άρθρα</string>
+    <string name="tool_category_conversation_starter">Εκκίνηση Συζήτησης</string>
+    <string name="tool_category_growth">Πνευματική Ανάπτυξη</string>
+    <string name="tool_category_training">Εξάσκηση</string>
     <!-- Sharing -->
-    <string name="share_general_message">Να ο σύνδεσμος για να κατεβάσετε την εφαρμογή που εξετάσαμε σήμερα: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Αυτός ο σύνδεσμος θα σας μεταφέρει σε μια έκδοση ιστού για αυτό που συζητούσαμε σήμερα: %1$s \n\n
 
-Να ένας σύνδεσμος σε μια διαδικτυακή έκδοση εφαρμογής %1$s \n\n
-
-Ας μιλήσουμε περισσότερο!</string>
+Μπορείτε να κατεβάσετε την εφαρμογή από τη διεύθυνση https://godtoolsapp.com \n\n</string>
 </resources>

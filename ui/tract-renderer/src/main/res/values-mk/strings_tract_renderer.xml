@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">претходниот</string>
     <string name="tract_card_next">Следно</string>
+    <!-- Live Sharing -->
 </resources>

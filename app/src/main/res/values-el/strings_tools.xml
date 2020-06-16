@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Βρείτε Εργαλεία</string>
     <string name="nav_my_tools">Τα Εργαλεία μου</string>
+    <string name="nav_favorite_tools">Αγαπημένα</string>
+    <string name="nav_all_tools">Όλα τα Εργαλεία</string>
+    <string name="action_tools_about">Σχετικά</string>
+    <string name="action_tools_open">Άνοιγμα</string>
     <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
+    <string name="tools_list_remove_favorite_dialog_title">Αφαίρεση “%1$s” από τα Αγαπημένα;</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Αφαίρεση</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ακύρωση</string>
+    <string name="tools_list_favorites_banner_text">Κάντε το εργαλείο διαθέσιμο offline πατώντας το εικονίδιο με την καρδιά που το προσθέτει στα αγαπημένα σας.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Απόρριψη</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Προσθήκη στην Αρχική Οθόνη</string>
     <string name="action_tools_open_tool">Άνοιγμα Εργαλείου</string>
+    <string name="action_tools_add_favorite">Προσθήκη στα Αγαπημένα</string>
+    <string name="action_tools_remove_favorite">Αφαίρεση από τα Αγαπημένα</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Προβολή</item>
         <item quantity="other">%1$,d Προβολές</item>

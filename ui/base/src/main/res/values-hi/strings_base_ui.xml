@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s को खोला नहीं जा सका</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">इंजील आमंत्रण</string>
+    <string name="tool_category_articles">लेख</string>
+    <string name="tool_category_conversation_starter">वार्तालाप शुरुआत</string>
+    <string name="tool_category_growth">मसीही विकास</string>
+    <string name="tool_category_training">प्रशिक्षण</string>
     <!-- Sharing -->
-    <string name="share_general_message">ये रहा उस ऐप का लिंक जिसे हम आज देख रहे हैं: http://godtoolsapp.com \n\n
+    <string name="share_general_message">यह लिंक आपको हमारे आज के विषय के वेब संस्करण पर ले जाएगी: %1$s \ n \ n
 
-		यह है उस ऐप के वेब संस्करण का लिंक %1$s\n\n
+ऐप यहां से डाउनलोड की जा सकती है https://godtoolsapp.com \ n \ n
 
-		चलिए कुछ और बात करते हैं!</string>
+चलो और बात करते हैं!</string>
 </resources>

@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Tools vinden</string>
     <string name="nav_my_tools">Mijn tools</string>
+    <string name="nav_favorite_tools">Favorieten</string>
+    <string name="nav_all_tools">Alle hulpmiddelen</string>
+    <string name="action_tools_about">Over</string>
+    <string name="action_tools_open">Openen</string>
     <string name="title_add_new_tools">Voeg nieuwe hulpmiddelen toe</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” uit Favorieten verwijderen?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Verwijderen</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuleren</string>
+    <string name="tools_list_favorites_banner_text">Maak een hulpmiddel offline beschikbaar door op het hartje te tikken en het zo aan je Favorieten toe te voegen.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Afwijzen</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Toevoegen aan startscherm</string>
     <string name="action_tools_open_tool">Tool openen</string>
+    <string name="action_tools_add_favorite">Toevoegen aan Favorieten</string>
+    <string name="action_tools_remove_favorite">Verwijderen uit Favorieten</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d</item>
         <item quantity="other">%1$,d weergaven</item>

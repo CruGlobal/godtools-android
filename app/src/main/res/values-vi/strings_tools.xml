@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Tìm Công cụ</string>
     <string name="nav_my_tools">Công cụ của Tôi</string>
+    <string name="nav_favorite_tools">Ưa thích</string>
+    <string name="nav_all_tools">Tất cả Công cụ</string>
+    <string name="action_tools_about">Giới thiệu về</string>
+    <string name="action_tools_open">Mở</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
+    <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" khỏi Ưa thích?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>
+    <string name="tools_list_favorites_banner_text">Để công cụ ngoại tuyến bằng cách gõ vào biểu tượng trái tìm để thêm vào phần ưa thích của bạn.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Bỏ qua</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Thêm vào màn hình Trang chủ</string>
     <string name="action_tools_open_tool">Mở Công cụ</string>
+    <string name="action_tools_add_favorite">Thêm vào Ưa thích</string>
+    <string name="action_tools_remove_favorite">Gỡ bỏ khỏi Ưa thích</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Lượt xem</item>
     </plurals>

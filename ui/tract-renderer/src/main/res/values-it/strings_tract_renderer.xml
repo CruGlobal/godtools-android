@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Precedente</string>
     <string name="tract_card_next">Succ.</string>
+    <!-- Live Sharing -->
 </resources>

@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Instalează</string>
     <string name="menu_share_tool">Distribuie</string>
+    <string name="menu_live_share_publish">Partajează ecranul</string>
     <string name="share_tool_title">Distribuie “%1$s” folosind</string>
     <string name="tool_not_found">Instrumentul solicitat nu poate fi găsit</string>
     <string name="tool_loading">Instrumentul solicitat se încarcă...</string>
+    <string name="tool_offline">Instrumentul solicitat necesită conexiune la internet pentru a fi deschis</string>
     <string name="feature_discovery_title_share_tool">Partajează un link</string>
     <string name="feature_discovery_desc_share_tool">Trimite acest instrument unui prieten făcând clic pe această pictogramă</string>
 </resources>

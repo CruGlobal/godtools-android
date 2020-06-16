@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">ਟੂਲ ਲੱਭੋ</string>
     <string name="nav_my_tools">ਮੇਰੇ ਟੂਲ</string>
+    <string name="nav_favorite_tools">ਮਨਪਸੰਦ</string>
+    <string name="nav_all_tools">ਸਾਰੇ ਟੂਲ</string>
+    <string name="action_tools_about">ਇਸਦੇ ਬਾਰੇ</string>
+    <string name="action_tools_open">ਖੋਲੋ</string>
     <string name="title_add_new_tools">ਨਵੇਂ ਟੂਲ ਜੋੜੋ</string>
+    <string name="tools_list_remove_favorite_dialog_title">ਮਨਪਸੰਦਾਂ ਤੋਂ \"%1$s\" ਨੂੰ ਹਟਾਉਣਾ ਹੈ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ਹਟਾਓ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ਰੱਦ ਕਰੋ</string>
+    <string name="tools_list_favorites_banner_text">ਦਿਲ ਦੇ ਆਈਕਨ ਨੂੰ ਟੈਪ ਕਰਕੇ ਇੱਕ ਟੂਲ ਨੂੰ ਔਫਲਾਈਨ ਉਪਲੱਬਧ ਕਰੋ ਜੋ ਇਸਨੂੰ ਤੁਹਾਡੇ ਮਨਪਸੰਦ ਵਿੱਚ ਜੋੜਦਾ ਹੈ।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ਬਰਖਾਸਤ ਕਰੋ</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ</string>
     <string name="action_tools_open_tool">ਟੂਲ ਖੋਲ੍ਹੋ</string>
+    <string name="action_tools_add_favorite">ਮਨਪਸੰਦ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="action_tools_remove_favorite">ਮਨਪਸੰਦ ਤੋਂ ਹਟਾਓ</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ਨੇ ਵੇਖਿਆ</item>
         <item quantity="other">%1$,d ਨੇ ਵੇਖਿਆ</item>

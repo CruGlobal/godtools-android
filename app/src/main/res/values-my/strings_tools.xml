@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Tools များကိုရှာဖွေရန်</string>
     <string name="nav_my_tools">ကျွန်ုပ်၏ Tools များ</string>
+    <string name="nav_favorite_tools">အနှစ်သက်ဆုံးများ</string>
+    <string name="nav_all_tools">ကိရိယာများအားလုံး</string>
+    <string name="action_tools_about">အကြောင်းအရာ</string>
+    <string name="action_tools_open">ဖွင့်ရန်</string>
     <string name="title_add_new_tools">Tools သစ် ကို ထပ်ထည့်ရန်</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” ကိုသင့်အကြိုက်ဆုံးမှ ပယ်ဖျက်မည်လား?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ပယ်ဖျက်မည်</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ဖျက်သိမ်းသည်</string>
+    <string name="tools_list_favorites_banner_text">ကိရိယာတစ္ခုကိုအင္တာနက္ဆက္သြယ္မႈမရွိခ်ိန္တြင္ အသံုးျပဳႏိုင္ရန္အတြက္ သင္၏အႀကိဳက္ဆံုးမ်ားထဲသို႔ထည္႔သည္႔ အသဲပံုအိုင္ကြန္ကို ႏွိပ္ၿပီးျပဳလုပ္ပါ။</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ထုတ်ပစ်သည်</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">" မူလစာမျက်နှာတွင် ထည့်ပါ"</string>
     <string name="action_tools_open_tool">Tool ဖွင့်ရန်</string>
+    <string name="action_tools_add_favorite">အကြိုက်ဆုံးထဲသို့ထည့်သည်</string>
+    <string name="action_tools_remove_favorite">အကြိုက်ဆုံးထဲမှပယ်ဖျက်သည်</string>
     <plurals name="label_tools_shares">
         <item quantity="other">" %1$,d toolကိုကြည့်ရှုသူများ"</item>
     </plurals>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nie je možné otvoriť %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Pozvanie na gospel</string>
+    <string name="tool_category_articles">Články</string>
+    <string name="tool_category_conversation_starter">Téma na začatie konverzácie</string>
+    <string name="tool_category_growth">Rozvoj kresťanstva</string>
+    <string name="tool_category_training">Školenie</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tu je odkaz na stiahnutie aplikácie, na ktorú sme sa dnes pozerali: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Tento odkaz vás nasmeruje na webovú verziu obsahu, o ktorom sme sa dnes rozprávali: %1$s \n\n
 
-		Tu je odkaz na webovú verziu aplikácie %1$s\n\n
+Aplikácia sa dá stiahnuť na https://godtoolsapp.com \n\n
 
-		Porozprávajme sa viac!</string>
+Porozprávajme sa podrobnejšie!</string>
 </resources>

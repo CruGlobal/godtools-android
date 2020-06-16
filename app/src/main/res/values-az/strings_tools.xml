@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Alət tapın</string>
     <string name="nav_my_tools">Mənim alətlərim</string>
+    <string name="nav_favorite_tools">Sevimlilər</string>
+    <string name="nav_all_tools">Bütün alətlər</string>
+    <string name="action_tools_about">Haqqında</string>
+    <string name="action_tools_open">Aç</string>
     <string name="title_add_new_tools">Yeni alətlər əlavə edin</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” Sevimlilərdən silinsin?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Sil</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ləğv et</string>
+    <string name="tools_list_favorites_banner_text">Ürək təsvirinə toxunub sevimlilərə əlavə etməklə alətdən offlayn rejimdə də istifadə edin.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Burax</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Ana səhifəyə əlavə et</string>
     <string name="action_tools_open_tool">Aləti aç</string>
+    <string name="action_tools_add_favorite">Sevimlilərə əlavə et</string>
+    <string name="action_tools_remove_favorite">Sevimlilərdən sil</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Baxış</item>
         <item quantity="other">%1$,d Baxışlar</item>

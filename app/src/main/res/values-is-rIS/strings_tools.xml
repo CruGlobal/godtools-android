@@ -3,10 +3,25 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Finna tól</string>
     <string name="nav_my_tools">Mín tól</string>
+    <string name="nav_favorite_tools">Uppáhalds</string>
+    <string name="nav_all_tools">Öll tól</string>
+    <string name="action_tools_about">Um</string>
+    <string name="action_tools_open">Opna</string>
     <string name="title_add_new_tools">Bæta við nýjum tólum</string>
+    <string name="tools_list_remove_favorite_dialog_title">Fjarlægja \"%1$s\" úr Uppáhalds?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Fjarlægja</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Hætta við</string>
+    <string name="tools_list_favorites_banner_text">Gera tól tiltækt án netsambands með því að ýta á hjartatáknið sem bætir því við þitt uppáhald.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Hafna</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Bæta við á heimaskjá</string>
     <string name="action_tools_open_tool">Opna tól</string>
+    <string name="action_tools_add_favorite">Bæta við Uppáhald</string>
+    <string name="action_tools_remove_favorite">Fjarlægja frá Uppáhaldi</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d skoðun</item>
+        <item quantity="other">%1$,d skoðanir</item>
+    </plurals>
     <string name="label_tools_about">Um</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d Tungumál</item>

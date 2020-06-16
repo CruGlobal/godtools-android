@@ -3,6 +3,7 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Gjej Burimet​</string>
     <string name="nav_my_tools">Burimet e mia</string>
+    <string name="action_tools_about">Rreth</string>
     <string name="title_add_new_tools">Shto mjete të reja</string>
     <!-- Tool Details UI -->
     <string name="action_tools_open_tool">Hapur</string>

@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Шукати інструменти</string>
     <string name="nav_my_tools">Інструменти</string>
+    <string name="nav_favorite_tools">Улюблене</string>
+    <string name="nav_all_tools">Усі інструменти</string>
+    <string name="action_tools_about">Про</string>
+    <string name="action_tools_open">Відкрити</string>
     <string name="title_add_new_tools">Додати інструменти</string>
+    <string name="tools_list_remove_favorite_dialog_title">Вилучити «%1$s» з улюбленого?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Вилучити</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Скасувати</string>
+    <string name="tools_list_favorites_banner_text">Інструмент буде доступним у режимі офлайн, якщо торкнутись значка серця. Його буде додано до улюбленого.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Закрити</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Додати до головного екрану</string>
     <string name="action_tools_open_tool">Відкрити інструмент</string>
+    <string name="action_tools_add_favorite">Додати до улюбленого</string>
+    <string name="action_tools_remove_favorite">Вилучити з улюбленого</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d перегляд</item>
         <item quantity="other">%1$,d переглядів</item>

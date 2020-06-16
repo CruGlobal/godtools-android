@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Najít nástroje</string>
     <string name="nav_my_tools">Moje nástroje</string>
+    <string name="nav_favorite_tools">Oblíbené</string>
+    <string name="nav_all_tools">Všechny nástroje</string>
+    <string name="action_tools_about">O nás</string>
+    <string name="action_tools_open">Otevřít</string>
     <string name="title_add_new_tools">Přidat nové nástroje</string>
+    <string name="tools_list_remove_favorite_dialog_title">Odstranit \"%1$s” z Oblíbených?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstranit</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušit</string>
+    <string name="tools_list_favorites_banner_text">Klepnutím na ikonu srdíčka přidáte nástroj do svých oblíbených a budete jej mít k dispozici offline.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Zrušit</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Přidat na úvodní obrazovku</string>
     <string name="action_tools_open_tool">Otevřít nástroj</string>
+    <string name="action_tools_add_favorite">Přidat do oblíbených</string>
+    <string name="action_tools_remove_favorite">Odstranit z oblíbených</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d zhlédnutí</item>
         <item quantity="other">%1$,d zhlédnutí</item>

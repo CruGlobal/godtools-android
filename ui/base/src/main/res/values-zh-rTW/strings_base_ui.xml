@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">未能打開%s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">福音邀請</string>
+    <string name="tool_category_articles">文章</string>
+    <string name="tool_category_conversation_starter">開場白</string>
+    <string name="tool_category_growth">基督徒靈命成長</string>
+    <string name="tool_category_training">訓練</string>
     <!-- Sharing -->
+    <string name="share_general_message">還記得我們今天一起查看的頁面嗎？點擊此連結，可看到網路版本：%1$s \n\n
+
+前往這裡下載應用程式：https://godtoolsapp.com \n\n
+
+讓我們更深入討論吧！</string>
 </resources>

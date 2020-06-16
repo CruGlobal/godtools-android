@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Gat ekki opnað %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gospel boð</string>
+    <string name="tool_category_articles">Greinar</string>
+    <string name="tool_category_conversation_starter">Umræðuhefjandi</string>
+    <string name="tool_category_growth">Vöxtur kristni</string>
+    <string name="tool_category_training">Þjálfun</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hér er tengilinn til að sækja appið sem við erum að skoða í dag: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Þessi tengill mun fara með þig á vefútgáfuna af því sem við vorum að tala um í dag: %1$s \n\n
 
-Hér er tengill fyrir vefútgáfu appsins %1$s
-\n\n
+Hægt er að niðurhala appinu frá https://godtoolsapp.com \n\n
 
-Spjöllum meira saman!</string>
+Tölum meira saman!</string>
 </resources>

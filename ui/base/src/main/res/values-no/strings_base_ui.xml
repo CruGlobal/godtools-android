@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Kunne ikke åpne %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gospel-invitasjon</string>
+    <string name="tool_category_articles">Artikler</string>
+    <string name="tool_category_conversation_starter">Samtalestarter</string>
+    <string name="tool_category_growth">Kristen vekst</string>
+    <string name="tool_category_training">Opplæring</string>
     <!-- Sharing -->
-    <string name="share_general_message">Her er koblingen for å laste ned appen vi så på i dag: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Denne koblingen tar deg til nettversjonen av det vi snakket om i dag: %1$s \n\n
 
-Her er en kobling til en nettversjon av appen %1$s \n\n
+Appen kan lastes ned fra https://godtoolsapp.com \n\n
 
 La oss snakke mer!</string>
 </resources>

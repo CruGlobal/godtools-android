@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">ٹُولز نکالیں</string>
     <string name="nav_my_tools">میرے ٹُولز</string>
+    <string name="nav_favorite_tools">پسندیدگان</string>
+    <string name="nav_all_tools">تمام ٹولز</string>
+    <string name="action_tools_about">ہمارے متعلق</string>
+    <string name="action_tools_open">کھولیں</string>
     <string name="title_add_new_tools">نئے ٹُولز ایڈ کریں</string>
+    <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>
+    <string name="tools_list_favorites_banner_text">دل کے آئیکن پر ٹیپ کر کے کسی ٹول کو آف لائن دستیاب کروائیں جو کہ اسے آپ کے پسندیدگان میں شامل کر دیتا ہے۔</string>
+    <string name="tools_list_favorites_banner_action_dismiss">برخاست کریں</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">ہوم اسکرین میں شامل کریں</string>
     <string name="action_tools_open_tool">ٹول کھولیں</string>
+    <string name="action_tools_add_favorite">پسندیدگان میں شامل کریں</string>
+    <string name="action_tools_remove_favorite">پسندیدگان سے ہٹائیں</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d وِیُو</item>
         <item quantity="other">%1$,d وِیُوز</item>

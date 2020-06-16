@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Pata Zana</string>
     <string name="nav_my_tools">Zana Zangu</string>
+    <string name="nav_favorite_tools">Vipendwa</string>
+    <string name="nav_all_tools">Zana Zote</string>
+    <string name="action_tools_about">Kuhusu</string>
+    <string name="action_tools_open">Fungua</string>
     <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
+    <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>
+    <string name="tools_list_favorites_banner_text">Fanya zana ipatikane nje ya mkondo kwa kudonoa ikoni ya moyo inayoiongeza kwenye Vipendwa vyako.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Puuza</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Weka kwenye Skrini ya Jumla</string>
     <string name="action_tools_open_tool">Kifaa Wazi</string>
+    <string name="action_tools_add_favorite">Ongeza kwenye Vipendwa</string>
+    <string name="action_tools_remove_favorite">Ondoa kwenye Vipendwa</string>
     <plurals name="label_tools_shares">
         <item quantity="one">Maoni %1$,d</item>
         <item quantity="other">Maoni %1$,d</item>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Không thể mở %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Lời mời đến với Kinh Phúc âm</string>
+    <string name="tool_category_articles">Bài viết</string>
+    <string name="tool_category_conversation_starter">Người khởi tạo Hội thoại</string>
+    <string name="tool_category_growth">Tốc độ phát triển của Cơ đốc Nhân</string>
+    <string name="tool_category_training">Đào tạo</string>
     <!-- Sharing -->
-    <string name="share_general_message">Đây là đường dẫn để tải về ứng dụng chúng tôi đang tìm kiếm ngày hôm nay: http://godtoolsapp.com\n\n
+    <string name="share_general_message">Đường dẫn này sẽ dẫn bạn tới một phiên bản web của những gì chúng ta đang trao đổi ngày hôm nay: %1$s \n\n
 
-Đây là một đường dẫn tới một phiên bản web của ứng dụng %1$s\n\n
-
+Ứng dụng có thể được tải về từ https://godtoolsapp.com \n\n
+thích
 Hãy nói thêm nữa!</string>
 </resources>

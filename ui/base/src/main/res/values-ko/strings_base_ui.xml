@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s을/를 열 수 없음</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">복음 초대</string>
+    <string name="tool_category_articles">규약</string>
+    <string name="tool_category_conversation_starter">대화 시작</string>
+    <string name="tool_category_growth">그리스도인 성장</string>
+    <string name="tool_category_training">훈련</string>
     <!-- Sharing -->
-    <string name="share_general_message">저희가 오늘 봤던 앱을 다운로드할 수 있는 링크: http://godtoolsapp.com \n\n
+    <string name="share_general_message">저희가 오늘 얘기했던 내용의 웹 버전을 확인할 수 있는 링크: %1$s\n\n
 
-앱의 웹 버전 링크: %1$s\n\n
+이 앱은 https://godtoolsapp.com에서 다운로드할 수 있습니다\n\n
 
 더 이야기해요!</string>
 </resources>

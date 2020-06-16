@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Dodaj orodje</string>
     <string name="nav_my_tools">Moja orodja</string>
+    <string name="nav_favorite_tools">Priljubljene</string>
+    <string name="nav_all_tools">Vsa orodja</string>
+    <string name="action_tools_about">O tej aplikaciji</string>
+    <string name="action_tools_open">Odpri</string>
     <string name="title_add_new_tools">Dodaj orodja</string>
+    <string name="tools_list_remove_favorite_dialog_title">Odstrani “%1$s” iz priljubljenih?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstrani</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Prekliči</string>
+    <string name="tools_list_favorites_banner_text">Če želite, da bo orodje na voljo brez povezave, se dotaknite ikone srca in jo dodajte med priljubljene.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Zapri</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Dodaj na domači zaslon</string>
     <string name="action_tools_open_tool">Odpri orodje</string>
+    <string name="action_tools_add_favorite">Dodaj med priljubljene</string>
+    <string name="action_tools_remove_favorite">Odstrani iz priljubljenih</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ogled</item>
         <item quantity="other">%1$,d ogledov</item>

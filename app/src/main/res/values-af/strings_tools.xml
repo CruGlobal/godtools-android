@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Vind hulpmiddels</string>
     <string name="nav_my_tools">My hulpmiddels</string>
+    <string name="nav_favorite_tools">Gunstelinge</string>
+    <string name="nav_all_tools">Alle hulpmiddels</string>
+    <string name="action_tools_about">Aangaande</string>
+    <string name="action_tools_open">Maak oop</string>
     <string name="title_add_new_tools">Voeg nuwe Hulpmiddels by</string>
+    <string name="tools_list_remove_favorite_dialog_title">Verwyder \"%1$s\" van Gunstelinge?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Verwyder</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselleer</string>
+    <string name="tools_list_favorites_banner_text">Maak \'n hulpmiddel beskikbaar wanneer jy van lyn af is deur op die hartikoon  te tik wat dit by jou gunstelinge voeg.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Laat gaan</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Voeg by tuisskerm</string>
     <string name="action_tools_open_tool">Maak hulpmiddel oop</string>
+    <string name="action_tools_add_favorite">Voeg by Gunstelinge</string>
+    <string name="action_tools_remove_favorite">Verwyder van Gunstelinge</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Besigtiging</item>
         <item quantity="other">%1$,d Besigtiginge</item>

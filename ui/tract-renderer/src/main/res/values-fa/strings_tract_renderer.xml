@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">قبلی</string>
     <string name="tract_card_next">بعدی</string>
+    <!-- Live Sharing -->
 </resources>

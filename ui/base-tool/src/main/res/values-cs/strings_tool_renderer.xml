@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Nainstalovat</string>
     <string name="menu_share_tool">Sdílet</string>
+    <string name="menu_live_share_publish">Sdílet obrazovku</string>
     <string name="share_tool_title">Sdílet “%1$s” přes</string>
     <string name="tool_not_found">Požadovaný nástroj nebyl nalezen</string>
     <string name="tool_loading">Požadovaný nástroj se načítá…</string>
+    <string name="tool_offline">Pro otevření požadovaného nástroje musíte být připojeni k internetu</string>
     <string name="feature_discovery_title_share_tool">Sdílet odkaz</string>
     <string name="feature_discovery_desc_share_tool">Klepnutím na tuto ikonku odešlete tento nástroj příteli</string>
 </resources>

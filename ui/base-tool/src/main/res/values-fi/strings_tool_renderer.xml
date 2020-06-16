@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Asenna</string>
     <string name="menu_share_tool">Jaa</string>
+    <string name="menu_live_share_publish">Jaa näyttösi</string>
     <string name="share_tool_title">Jaa “%1$s”</string>
     <string name="tool_not_found">Haluamaasi työkalua ei löydy</string>
     <string name="tool_loading">Haluamaasi työkalua ladataan…</string>
+    <string name="tool_offline">Pyytämäsi työkalun avaaminen vaatii verkkoyhteyden</string>
     <string name="feature_discovery_title_share_tool">Jaa linkki</string>
     <string name="feature_discovery_desc_share_tool">Lähetä tämä työkalu ystävälle tätä kuvaketta napsauttamalla</string>
 </resources>
