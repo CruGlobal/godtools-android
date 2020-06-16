@@ -15,7 +15,7 @@ class ToolStateTest {
     fun verifyDetermineToolState() {
         val types = EnumSet.allOf(Manifest.Type::class.java) - Manifest.Type.UNKNOWN
         types.forEach { validType ->
-            val manifest = Manifest().apply { mType = validType }
+            val manifest = Manifest(type = validType)
             assertEquals(ToolState.LOADED, ToolState.determineToolState(manifest, null))
             assertEquals(ToolState.LOADED, ToolState.determineToolState(manifest, null, manifestType = validType))
             EnumSet.complementOf(EnumSet.of(validType)).forEach { invalidType ->

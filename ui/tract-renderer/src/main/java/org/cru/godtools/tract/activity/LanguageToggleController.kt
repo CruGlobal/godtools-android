@@ -5,6 +5,7 @@ import com.google.android.material.tabs.setBackgroundTint
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.navBarControlColor
 import java.util.Locale
 
 class LanguageToggleController(private val tabs: TabLayout) {
@@ -53,7 +54,7 @@ class LanguageToggleController(private val tabs: TabLayout) {
     }
 
     private fun configureTabs() {
-        val controlColor = Manifest.getNavBarControlColor(activeManifest)
+        val controlColor = activeManifest.navBarControlColor
         tabs.forEachTab { tab ->
             val locale = tab.tag as? Locale
 

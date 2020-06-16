@@ -7,6 +7,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.article.ui.articles.ArticlesAdapter.Callbacks" />
         <import type="org.cru.godtools.xml.model.Manifest" />
+        <import type="org.cru.godtools.xml.model.ManifestKt" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
@@ -28,7 +29,7 @@
             android:lines="1"
             android:text="@{article.title}"
             android:textAppearance="@style/TextAppearance.GodTools.Article.ArticlesList.Item.Title"
-            android:textColor="@{Manifest.getPrimaryColor(manifest)}"
+            android:textColor="@{ManifestKt.getPrimaryColor(manifest)}"
             tools:text="Romances with wolves"
             tools:textColor="@color/gt_blue" />
     </RelativeLayout>

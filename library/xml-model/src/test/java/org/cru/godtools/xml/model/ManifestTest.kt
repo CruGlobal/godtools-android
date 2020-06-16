@@ -13,10 +13,8 @@ import java.util.Locale
 class ManifestTest {
     @Test
     fun verifyParseEmptyManifest() {
-        val manifest = parseManifestXml("manifest_empty.xml")
+        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_empty.xml"))
         assertThat(manifest.pages, empty())
-        assertThat(manifest.mResources.size(), equalTo(0))
+        assertThat(manifest.resources.size, equalTo(0))
     }
-
-    private fun parseManifestXml(file: String) = Manifest.fromXml(getXmlParserForResource(file), "kgp", Locale.ENGLISH)
 }
