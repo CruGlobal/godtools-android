@@ -18,6 +18,8 @@ dependencies {
     implementation project(':ui:base-app')
     implementation project(':ui:tract-renderer')
 
+    implementation "androidx.core:core-ktx:${deps.androidX.core}"
+
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"

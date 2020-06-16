@@ -8,7 +8,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.annimon.stream.Optional
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.AsyncDao
@@ -17,6 +16,7 @@ import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.StreamDao
+import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Attachment
@@ -140,9 +140,9 @@ class GodToolsDao private constructor(context: Context) :
         locale: Locale?,
         isPublished: Boolean = false,
         isDownloaded: Boolean = false
-    ): Optional<Translation> = when {
-        code == null || locale == null -> Optional.empty()
-        else -> streamCompat(getLatestTranslationQuery(code, locale, isPublished, isDownloaded)).findFirst()
+    ): Translation? = when {
+        code == null || locale == null -> null
+        else -> getLatestTranslationQuery(code, locale, isPublished, isDownloaded).get(this).firstOrNull()
     }
 
     @MainThread

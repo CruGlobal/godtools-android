@@ -32,7 +32,7 @@ class ManifestManager @Inject constructor(
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         GlobalScope.launch(Dispatchers.Default) {
-            val t = dao.getLatestTranslation(toolCode, locale, isPublished = true, isDownloaded = true).orElse(null)
+            val t = dao.getLatestTranslation(toolCode, locale, isPublished = true, isDownloaded = true)
             if (t != null) getManifest(t)
         }
     }
