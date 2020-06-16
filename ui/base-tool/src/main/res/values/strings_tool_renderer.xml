@@ -5,6 +5,7 @@
     <string name="menu_live_share_publish">Share your screen</string>
     <string name="share_tool_subject" translatable="false">%1$s</string>
     <string name="share_tool_title">Share “%1$s” using</string>
+    <string name="share_tool_message_article">I wanted to share this article with you and would enjoy getting to hear your thoughts about it.\n%1$s</string>
 
     <string name="tool_not_found">The tool you requested cannot be found</string>
     <string name="tool_loading">The tool you requested is loading…</string>
