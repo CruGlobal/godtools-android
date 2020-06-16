@@ -5,6 +5,7 @@ package org.cru.godtools.xml.model
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import androidx.annotation.VisibleForTesting
 import org.xmlpull.v1.XmlPullParser
 
 private val REGEX_COLOR =
@@ -28,6 +29,7 @@ internal fun XmlPullParser.getAttributeValueAsColorOrNull(name: String) = getAtt
 internal fun XmlPullParser.getAttributeValueAsColorOrNull(namespace: String?, name: String) =
     getAttributeValue(namespace, name)?.parseColorOrNull()
 
+@VisibleForTesting
 @ColorInt
 internal fun String.parseColorOrNull() = REGEX_COLOR.matchEntire(this)?.let {
     try {
@@ -52,5 +54,6 @@ fun XmlPullParser.parseScaleType(attribute: String, defValue: ImageScaleType?) =
 fun XmlPullParser.parseUrl(attribute: String, defValue: Uri?) = getAttributeValueAsUriOrNull(attribute) ?: defValue
 
 internal fun XmlPullParser.getAttributeValueAsUriOrNull(name: String) = getAttributeValue(null, name)?.toAbsoluteUri()
+@VisibleForTesting
 internal fun String.toAbsoluteUri(defaultScheme: String = "http"): Uri =
     Uri.parse(this).takeIf { it.isAbsolute } ?: Uri.parse("$defaultScheme://$this")
