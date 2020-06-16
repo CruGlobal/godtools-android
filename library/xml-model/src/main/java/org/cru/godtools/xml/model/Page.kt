@@ -146,7 +146,7 @@ class Page : Base, Styles, Parent {
 
             when (parser.namespace) {
                 XMLNS_TRACT -> when (parser.name) {
-                    Card.XML_CARD -> add(Card.fromXml(this@Page, parser, size))
+                    Card.XML_CARD -> add(Card(this@Page, size, parser))
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
                 else -> XmlPullParserUtils.skipTag(parser)
