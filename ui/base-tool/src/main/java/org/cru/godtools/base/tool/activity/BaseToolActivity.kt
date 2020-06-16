@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -29,7 +30,6 @@ import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpened
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
-import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -162,6 +162,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
 
     protected open fun hasShareLinkUri() = shareLinkUri != null
     protected open val shareLinkTitle get() = activeManifest?.title
+    @get:StringRes
+    protected open val shareLinkMessageRes get() = R.string.share_general_message
     protected open val shareLinkUri: String? get() = null
 
     fun shareCurrentTool() {
@@ -177,7 +179,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tool_subject, title))
-            putExtra(Intent.EXTRA_TEXT, getShareMessage(shareUrl))
+            putExtra(Intent.EXTRA_TEXT, getString(shareLinkMessageRes, shareUrl))
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)))
     }
