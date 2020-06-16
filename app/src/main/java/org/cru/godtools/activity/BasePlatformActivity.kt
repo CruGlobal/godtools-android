@@ -41,7 +41,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
-import org.cru.godtools.base.ui.util.getShareMessage
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -341,7 +340,7 @@ abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LA
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
             .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, getShareMessage(shareLink))
+            .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_general_message, shareLink))
             .let { Intent.createChooser(it, getString(R.string.share_prompt)) }
             .also { startActivity(it) }
     }
