@@ -69,8 +69,7 @@ class Text : Content {
     fun getTextColor(@ColorInt defColor: Int) = _textColor ?: defColor
 
     companion object {
-        // TODO: make internal
-        const val XML_TEXT = "text"
+        internal const val XML_TEXT = "text"
 
         @JvmStatic
         @Throws(IOException::class, XmlPullParserException::class)

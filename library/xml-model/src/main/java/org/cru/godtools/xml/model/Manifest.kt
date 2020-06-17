@@ -93,7 +93,7 @@ class Manifest : Base, Styles {
     internal val categoryLabelColor: Int?
 
     private val _title: Text?
-    val title: String? get() = _title.text
+    val title: String? get() = _title?.text
 
     val categories: List<Category>
     val pages: List<Page>
