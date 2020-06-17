@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputLayoutUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.InputKt;
 import org.cru.godtools.xml.model.Styles;
@@ -162,7 +162,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         }
 
         // style the input view
-        final Styles stylesParent = Base.getStylesParent(mModel);
+        final Styles stylesParent = BaseModelKt.getStylesParent(mModel);
         if (mInputLayout != null) {
             mInputLayout.setBoxStrokeColor(StylesKt.getPrimaryColor(stylesParent));
         }

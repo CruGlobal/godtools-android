@@ -48,7 +48,7 @@ class Page : Base, Styles, Parent {
     var callToAction: CallToAction = CallToAction(this)
         private set
 
-    override fun getPage() = this
+    override val page get() = this
 
     @ColorInt
     private var _primaryColor: Int? = null

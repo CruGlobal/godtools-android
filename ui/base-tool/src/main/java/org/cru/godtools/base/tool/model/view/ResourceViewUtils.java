@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
+import org.cru.godtools.xml.model.BaseKt;
 import org.cru.godtools.xml.model.ImageGravityKt;
 import org.cru.godtools.xml.model.ImageScaleType;
 import org.cru.godtools.xml.model.Resource;
@@ -50,7 +51,7 @@ public class ResourceViewUtils {
         // update the background image itself
         bind(resource, image);
         image.setScaleType(scale);
-        final boolean rtl = Resource.getLayoutDirection(resource) == ViewCompat.LAYOUT_DIRECTION_RTL;
+        final boolean rtl = BaseKt.getLayoutDirection(resource) == ViewCompat.LAYOUT_DIRECTION_RTL;
         image.setGravityHorizontal(
                 ImageGravityKt.isStart(gravity) ? (!rtl ? GravityHorizontal.LEFT : GravityHorizontal.RIGHT) :
                         ImageGravityKt.isEnd(gravity) ? (!rtl ? GravityHorizontal.RIGHT : GravityHorizontal.LEFT) :

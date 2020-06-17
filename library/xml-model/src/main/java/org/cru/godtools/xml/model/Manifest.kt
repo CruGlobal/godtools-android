@@ -178,7 +178,7 @@ class Manifest : Base, Styles {
         resources = emptyMap()
     }
 
-    override fun getManifest() = this
+    override val manifest get() = this
     override fun getResource(name: String?) = name?.let { resources[name] }
 
     fun findCategory(category: String?) = categories.firstOrNull { it.id == category }

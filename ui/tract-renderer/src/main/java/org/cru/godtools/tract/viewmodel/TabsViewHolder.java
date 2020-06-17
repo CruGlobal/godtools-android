@@ -13,7 +13,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Tab;
@@ -98,7 +98,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
         mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
 
         // change the tab styles
-        final Styles styles = Base.getStylesParent(mModel);
+        final Styles styles = BaseModelKt.getStylesParent(mModel);
         final int primaryColor = StylesKt.getPrimaryColor(styles);
         mTabs.setTabTextColors(primaryColor, StylesKt.getPrimaryTextColor(styles));
 

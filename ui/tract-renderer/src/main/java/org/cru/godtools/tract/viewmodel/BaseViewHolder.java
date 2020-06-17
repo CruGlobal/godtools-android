@@ -13,7 +13,7 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
 import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.cru.godtools.xml.model.Base;
-import org.cru.godtools.xml.model.CallToAction;
+import org.cru.godtools.xml.model.BaseKt;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Collection;
@@ -136,7 +136,7 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     protected void updateLayoutDirection() {
         // HACK: In theory we should be able to set this on the root page only.
         // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
-        ViewCompat.setLayoutDirection(mRoot, CallToAction.getLayoutDirection(mModel));
+        ViewCompat.setLayoutDirection(mRoot, BaseKt.getLayoutDirection(mModel));
     }
 
     public final void sendEvents(@NonNull final Set<Event.Id> ids) {
