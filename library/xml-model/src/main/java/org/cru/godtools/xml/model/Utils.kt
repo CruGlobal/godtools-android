@@ -13,13 +13,6 @@ private val REGEX_COLOR =
 internal val REGEX_SEQUENCE_SEPARATOR = Regex("\\s+")
 
 @ColorInt
-@Deprecated(
-    "Use getAttributeValueAsColorOrNull extension method instead",
-    ReplaceWith("getAttributeValueAsColorOrNull(name) ?: defValue")
-)
-fun XmlPullParser.parseColor(name: String, @ColorInt defValue: Int?) = getAttributeValueAsColorOrNull(name) ?: defValue
-
-@ColorInt
 internal fun XmlPullParser.getAttributeValueAsColorOrNull(name: String) = getAttributeValueAsColorOrNull(null, name)
 
 @ColorInt
@@ -36,19 +29,6 @@ internal fun String.parseColorOrNull() = REGEX_COLOR.matchEntire(this)?.let {
         null
     }
 }
-
-@Deprecated(
-    "Use getAttributeValueAsImageScaleTypeOrNull extension method instead",
-    ReplaceWith("getAttributeValueAsImageScaleTypeOrNull(attribute) ?: defValue")
-)
-fun XmlPullParser.parseScaleType(attribute: String, defValue: ImageScaleType?) =
-    getAttributeValueAsImageScaleTypeOrNull(attribute) ?: defValue
-
-@Deprecated(
-    "Use getAttributeValueAsUriOrNull instead",
-    ReplaceWith("getAttributeValueAsUriOrNull(attribute) ?: defValue")
-)
-fun XmlPullParser.parseUrl(attribute: String, defValue: Uri?) = getAttributeValueAsUriOrNull(attribute) ?: defValue
 
 internal fun XmlPullParser.getAttributeValueAsUriOrNull(name: String) = getAttributeValue(null, name)?.toAbsoluteUri()
 @VisibleForTesting
