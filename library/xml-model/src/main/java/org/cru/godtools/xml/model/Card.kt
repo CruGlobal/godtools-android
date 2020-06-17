@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParser
 private const val XML_LABEL = "label"
 private const val XML_HIDDEN = "hidden"
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
-private const val DEFAULT_BACKGROUND_IMAGE_GRAVITY = CENTER
+private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
 class Card : Base, Styles, Parent {
     companion object {
@@ -27,7 +27,7 @@ class Card : Base, Styles, Parent {
     val analyticsEvents: Collection<AnalyticsEvent>
 
     val backgroundImage: String?
-    val backgroundImageGravity: Int
+    internal val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
     @ColorInt
@@ -56,7 +56,7 @@ class Card : Base, Styles, Parent {
 
         backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
-            parser.parseImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
+            parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 

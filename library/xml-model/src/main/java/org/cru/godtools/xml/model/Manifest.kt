@@ -48,7 +48,7 @@ class Manifest : Base, Styles {
         @ColorInt
         val DEFAULT_BACKGROUND_COLOR = Color.WHITE
         val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL
-        const val DEFAULT_BACKGROUND_IMAGE_GRAVITY = CENTER
+        internal val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
     }
 
     enum class Type {
@@ -81,7 +81,7 @@ class Manifest : Base, Styles {
     val backgroundColor: Int
     private val _backgroundImage: String?
     val backgroundImage get() = getResource(_backgroundImage)
-    val backgroundImageGravity: Int
+    internal val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
     @ColorInt
@@ -116,7 +116,7 @@ class Manifest : Base, Styles {
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
         _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
-            parser.parseImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
+            parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 

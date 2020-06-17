@@ -84,12 +84,6 @@ inline class ImageGravity(internal val gravity: Int) {
 fun XmlPullParser.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
     ImageGravity.parse(getAttributeValue(null, name), defaultGravity)
 
-@JvmName("parse")
-fun XmlPullParser.parseImageGravity(attribute: String, defaultGravity: Int) =
-    getAttributeValueAsImageGravity(attribute, ImageGravity(defaultGravity)).gravity
-
-const val CENTER = BIT_CENTER
-
 /* X-Axis tests */
 fun isCenterX(gravity: Int) = ImageGravity(gravity).isCenterX()
 fun isStart(gravity: Int) = ImageGravity(gravity).isStart()
