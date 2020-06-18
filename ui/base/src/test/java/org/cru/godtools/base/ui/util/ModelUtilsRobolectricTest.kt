@@ -33,7 +33,7 @@ class ModelUtilsRobolectricTest {
     @Test
     fun testToolGetCategoryValidCategory() {
         assertEquals("Gospel Invitation", tool.getCategory(context, null))
-        assertEquals("Invitation Evangile", tool.getCategory(context, Locale.FRENCH))
+        assertEquals("Invitation à Évangile", tool.getCategory(context, Locale.FRENCH))
     }
 
     @Test
