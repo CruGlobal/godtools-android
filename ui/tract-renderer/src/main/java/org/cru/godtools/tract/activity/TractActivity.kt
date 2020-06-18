@@ -42,6 +42,7 @@ import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.tract.BuildConfig
 import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
@@ -134,8 +135,9 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tract, menu)
 
-        // make the install menu item visible if this is an Instant App
+        // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
+        menu.findItem(R.id.action_live_share_publish)?.isVisible = BuildConfig.DEBUG
     }
 
     override fun onStart() {
