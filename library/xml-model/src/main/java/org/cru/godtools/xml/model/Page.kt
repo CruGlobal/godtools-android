@@ -70,21 +70,14 @@ class Page : Base, Styles, Parent {
     override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(
-        manifest: Manifest,
-        position: Int,
-        fileName: String? = null
-    ) : super(manifest) {
+    internal constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
         this.position = position
         this.fileName = fileName
     }
 
-    internal constructor(
-        manifest: Manifest,
-        position: Int,
-        fileName: String?,
-        parser: XmlPullParser?
-    ) : super(manifest) {
+    @WorkerThread
+    internal constructor(manifest: Manifest, position: Int, fileName: String?, parser: XmlPullParser?) :
+        super(manifest) {
         this.position = position
         this.fileName = fileName
 
@@ -93,13 +86,8 @@ class Page : Base, Styles, Parent {
 
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
 
-    private var pageXmlParsed = false
-
     @WorkerThread
-    @Throws(IOException::class, XmlPullParserException::class)
-    fun parsePageXml(parser: XmlPullParser) {
-        // make sure we haven't parsed this page XML already
-        check(!pageXmlParsed) { "Page XML already parsed" }
+    private fun parsePageXml(parser: XmlPullParser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
 
         listeners = parseEvents(parser, XML_LISTENERS)
@@ -130,9 +118,6 @@ class Page : Base, Styles, Parent {
                 else -> XmlPullParserUtils.skipTag(parser)
             }
         }
-
-        // mark page XML as parsed
-        pageXmlParsed = true
     }
 
     @OptIn(ExperimentalStdlibApi::class)
