@@ -173,7 +173,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     // endregion Lifecycle Events
 
-    class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
+    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
         private final PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
@@ -234,7 +234,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         }
 
         @Nullable
-        Card getActiveCard() {
+        public Page getPage() {
+            return mPage;
+        }
+
+        @Nullable
+        public Card getActiveCard() {
             return mModelViewHolder.getActiveCard();
         }
 
