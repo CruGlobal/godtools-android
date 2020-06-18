@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Sebelumnya</string>
     <string name="tract_card_next">Berikutnya</string>
+    <!-- Live Sharing -->
 </resources>

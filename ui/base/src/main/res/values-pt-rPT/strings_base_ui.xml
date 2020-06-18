@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Não é possível abrir %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Convite para o Evangelho</string>
+    <string name="tool_category_articles">Artigos</string>
+    <string name="tool_category_conversation_starter">Início de conversa</string>
+    <string name="tool_category_growth">Crescimento espiritual</string>
+    <string name="tool_category_training">Formação</string>
     <!-- Sharing -->
-    <string name="share_general_message">Aqui está a ligação para transferir a aplicação que estávamos a ver hoje: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Esta ligação irá direcionar-te para uma versão Web do que estávamos a falar hoje: %1$s \n\n
 
-Aqui está uma ligação para a versão online da aplicação %1$s\n\n
+Podes transferir a aplicação em https://godtoolsapp.com \n\n
 
 Vamos falar mais!</string>
 </resources>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s ను తెరవలేకపోయాను</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">సువార్త ఆహ్వానం</string>
+    <string name="tool_category_articles">వస్తువులు</string>
+    <string name="tool_category_conversation_starter">సంభాషణ స్టార్టర్</string>
+    <string name="tool_category_growth">క్రిస్టియన్ ఎదుగుదల</string>
+    <string name="tool_category_training">శిక్షణ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ఈ రోజు మేము చూస్తున్న యాప్‌ను డౌన్‌లోడ్ చేసేందుకు ఇక్కడ లింకు ఉన్నది: http://godtoolsapp.com \n\n
+    <string name="share_general_message">ఈ రోజు మనం మాట్లాడుతున్న వెబ్ వెర్షన్‌కు ఈ లింక్ మిమ్మల్ని తీసుకెళుతుంది: %1$s \n\n
 
-యాప్ యొక్క వెబ్ వర్షన్‌కు లింకు ఇక్కడ ఉంది   %1$s \n\n
+ఆప్ https://godtoolsapp.com \n\n నుంచి డౌన్‌లోడ్ చేయబడవచ్చు
 
-		మనము మరింత మాట్లాడుకుందాము!</string>
+మనము మరింత మాట్లాడుకుందాము!</string>
 </resources>

@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Instalar</string>
     <string name="menu_share_tool">Partilhar</string>
+    <string name="menu_live_share_publish">Compartilhe a sua tela</string>
     <string name="share_tool_title">Partilhar \"%1$s\" com</string>
     <string name="tool_not_found">Não é possível encontrar a ferramenta que solicitou</string>
     <string name="tool_loading">A ferramenta que solicitou está carregando...</string>
+    <string name="tool_offline">Tem de ter ligação à Internet para abrir a ferramenta que solicitou</string>
     <string name="feature_discovery_title_share_tool">Compartilhar uma ligação</string>
     <string name="feature_discovery_desc_share_tool">Clique nesse ícone para enviar essa ferramenta a um amigo</string>
 </resources>

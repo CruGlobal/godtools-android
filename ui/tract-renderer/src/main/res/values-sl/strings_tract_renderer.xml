@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Nazaj</string>
     <string name="tract_card_next">Naprej</string>
+    <!-- Live Sharing -->
 </resources>

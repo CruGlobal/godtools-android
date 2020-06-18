@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Инсталирај</string>
     <string name="menu_share_tool">Подели</string>
+    <string name="menu_live_share_publish">Подели екран</string>
     <string name="share_tool_title">Подели “%1$s” користећи</string>
     <string name="tool_not_found">Алатка коју сте тражили није могуће пронаћи</string>
     <string name="tool_loading">Алатка коју сте тражили се учитава…</string>
+    <string name="tool_offline">Алатка коју сте тражили захтева отварање везе са интернетом</string>
     <string name="feature_discovery_title_share_tool">Подели везу</string>
     <string name="feature_discovery_desc_share_tool">Пошаљи ову алатку пријатељу тако што ћеш кликнути на ову икону</string>
 </resources>

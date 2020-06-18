@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tool Categories -->
     <!-- Sharing -->
     <string name="share_general_message">Këtu është linku për të shkarkuar aplikacionin që ishim duke kërkuar sot: http://godtoolsapp.com \ n \ n
 

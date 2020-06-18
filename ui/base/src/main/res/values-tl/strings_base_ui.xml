@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Hindi nabuksan ang %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Imbitasyon ng Ebanghelyo</string>
+    <string name="tool_category_articles">Mga Artikulo</string>
+    <string name="tool_category_conversation_starter">Nagsisimula ng Pag-uusap</string>
+    <string name="tool_category_growth">Pag-unlad ng Kristiyano</string>
+    <string name="tool_category_training">Pagsasanay</string>
     <!-- Sharing -->
-    <string name="share_general_message">Narito ang link para i-download ang app na tinitingnan namin ngayong araw: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Dadalhin ka ng link na ito sa isang web na bersyon ng pinag-uusapan natin ngayon: %1$s \n\n
 
-Narito ang isang link sa web na bersyon ng app %1$s \n\n
+Mada-download ang app mula sa https://godtoolsapp.com \n\n
 
-Mag-usap pa tayo!</string>
+Usap pa tayo!</string>
 </resources>

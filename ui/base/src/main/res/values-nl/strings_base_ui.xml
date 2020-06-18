@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Openen %s mislukt</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Uitnodiging voor Evangelie</string>
+    <string name="tool_category_articles">Artikelen</string>
+    <string name="tool_category_conversation_starter">Gespreksstarter</string>
+    <string name="tool_category_growth">Christelijke groei</string>
+    <string name="tool_category_training">Training</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hier is de link om de app te downloaden die we vandaag hebben bekeken: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Met deze link ga je naar de webversie van waar we het vandaag over hebben gehad: %1$s \n\n
 
-Hier is een link naar een webversie van de app %1$s \n\n
+Je kunt de app downloaden via https://godtoolsapp.com \n\n
 
-Laten we verder praten!</string>
+We praten gauw weer verder!</string>
 </resources>

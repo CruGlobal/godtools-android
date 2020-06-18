@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nav iespējams atvērt %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gospeļa uzaicinājums</string>
+    <string name="tool_category_articles">Raksti</string>
+    <string name="tool_category_conversation_starter">Sarunas sākšanai</string>
+    <string name="tool_category_growth">Kristīgā izaugsme</string>
+    <string name="tool_category_training">Apmācība</string>
     <!-- Sharing -->
-    <string name="share_general_message">Lūk saite šodien apspriestās lietotnes lejupielādei: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Šī saite atvērs tīmekļa lapu par to, ko šodien apspriedām: %1$s \n\n
 
-Lūk saite uz lietotnes tīmekļa versiju %1$s\n\n
+Lietotni var lejupielādēt no: https://godtoolsapp.com \n\n
 
-Parunāsim vēl!</string>
+Turpināsim sarunu!</string>
 </resources>

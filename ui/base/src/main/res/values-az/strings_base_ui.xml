@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s aça bilmir</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Müqəddəs həqiqətə dəvət</string>
+    <string name="tool_category_articles">Məqalələr</string>
+    <string name="tool_category_conversation_starter">Söhbət başlayıcı</string>
+    <string name="tool_category_growth">Məsihçilikdə böyümə</string>
+    <string name="tool_category_training">Təlim</string>
     <!-- Sharing -->
-    <string name="share_general_message">Bu gün baxdığımız tətbiqi yükləmək üçün keçid aşağıdadır: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Bu gün haqqında danışdıqlarımızın veb versiyasına buradan keçə bilərsiniz: %1$s \n\n
 
-Tətbiqin veb versiyasına keçid %1$s \n\n
+Tətbiqi https://godtoolsapp.com səhifəsindən yükləyə bilərsiniz \n\n
 
 Gəlin daha çox danışaq!</string>
 </resources>

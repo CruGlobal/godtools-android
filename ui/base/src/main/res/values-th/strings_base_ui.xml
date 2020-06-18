@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">ไม่สามารถเปิด %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">คำเชิญพระกิตติคุณ</string>
+    <string name="tool_category_articles">บทความ</string>
+    <string name="tool_category_conversation_starter">ผู้เริ่มบทสนทนา</string>
+    <string name="tool_category_growth">ชีวิตคริสเตียนเจริญขึ้น</string>
+    <string name="tool_category_training">การฝึกอบรม</string>
     <!-- Sharing -->
-    <string name="share_general_message">ลิงก์สำหรับดาวน์โหลดแอปที่เราดูไปเมื่อวันนี้: http://godtoolsapp.com \n\n
+    <string name="share_general_message">ลิงก์นี้จะนำคุณไปยังหน้าเพจที่เราพูดถึงกันวันนี้: %1$s \n\n
 
-ลิงก์สำหรับใช้งานแอปในรูปแบบเว็บ %1$s \n\n
+สามารถดาวน์โหลดแอปได้ที่ https://godtoolsapp.com \n\n
 
-มาคุยกันอีก!</string>
+มาคุยกัน!</string>
 </resources>

@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">ツールを探す</string>
     <string name="nav_my_tools">マイツール</string>
+    <string name="nav_favorite_tools">お気に入り</string>
+    <string name="nav_all_tools">すべてのツール</string>
+    <string name="action_tools_about">情報</string>
+    <string name="action_tools_open">開く</string>
     <string name="title_add_new_tools">新規ツールを追加</string>
+    <string name="tools_list_remove_favorite_dialog_title">お気に入りから『%1$s』を削除しますか？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">削除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">キャンセル</string>
+    <string name="tools_list_favorites_banner_text">ハートアイコンをタップすると、お気に入りに追加され、オフラインで利用できるようになります。</string>
+    <string name="tools_list_favorites_banner_action_dismiss">閉じる</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">ホーム画面に追加</string>
     <string name="action_tools_open_tool">ツールを開く</string>
+    <string name="action_tools_add_favorite">お気に入りに追加</string>
+    <string name="action_tools_remove_favorite">お気に入りから削除</string>
     <plurals name="label_tools_shares">
         <item quantity="other">表示回数 %1$,d 回</item>
     </plurals>

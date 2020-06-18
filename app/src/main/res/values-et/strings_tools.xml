@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Ei ole saadaval</string>
     <string name="nav_my_tools">Leia tööriistu</string>
+    <string name="nav_favorite_tools">Lemmikud</string>
+    <string name="nav_all_tools">Kõik tööriistad</string>
+    <string name="action_tools_about">Rakendusest</string>
+    <string name="action_tools_open">Ava</string>
     <string name="title_add_new_tools">Lisa uusi tööriistu</string>
+    <string name="tools_list_remove_favorite_dialog_title">Kas eemaldada “%1$s” lemmikutest?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Eemalda</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Tühista</string>
+    <string name="tools_list_favorites_banner_text">Tee tööriist kättesaadavaks võrguühenduseta, puudutades südameikoonil, et lisada see lemmikute hulka.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Jäta vahele</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Lisa esilehele</string>
     <string name="action_tools_open_tool">Ava tööriist</string>
+    <string name="action_tools_add_favorite">Lisa lemmikutesse</string>
+    <string name="action_tools_remove_favorite">Eemalda lemmikutest</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d külastus</item>
         <item quantity="other">%1$,d külastust</item>

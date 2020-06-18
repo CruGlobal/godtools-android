@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">חפש כלים</string>
     <string name="nav_my_tools">הכלים שלי</string>
+    <string name="nav_favorite_tools">מועדפים</string>
+    <string name="nav_all_tools">כל הכלים</string>
+    <string name="action_tools_about">אודות</string>
+    <string name="action_tools_open">פתח</string>
     <string name="title_add_new_tools">הוסף כלים חדשים</string>
+    <string name="tools_list_remove_favorite_dialog_title">האם להסיר את \"%1$s\" מהמועדפים?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">הסר</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">בטל</string>
+    <string name="tools_list_favorites_banner_text">הפוך כלי לזמין במצב לא מקוון על ידי הקשה על סמל הלב שמוסיף אותו למועדפים שלך.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">שחרר</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">הוסף למסך הבית</string>
     <string name="action_tools_open_tool">פתח כלי</string>
+    <string name="action_tools_add_favorite">הוסף למועדפים</string>
+    <string name="action_tools_remove_favorite">הסר מהמועדפים</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d צפייה</item>
         <item quantity="other">%1$,d צפיות</item>

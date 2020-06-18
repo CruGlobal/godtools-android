@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Predch.</string>
     <string name="tract_card_next">Ďalej</string>
+    <!-- Live Sharing -->
 </resources>

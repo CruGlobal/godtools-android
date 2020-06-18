@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Găsește instrumente</string>
     <string name="nav_my_tools">Instrumentele mele</string>
+    <string name="nav_favorite_tools">Favorite</string>
+    <string name="nav_all_tools">Toate instrumentele</string>
+    <string name="action_tools_about">Despre</string>
+    <string name="action_tools_open">Deschide</string>
     <string name="title_add_new_tools">Adaugă instrumente noi</string>
+    <string name="tools_list_remove_favorite_dialog_title">Elimini “%1$s” din Favorite?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Elimină</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Anulează</string>
+    <string name="tools_list_favorites_banner_text">Fă un instrument disponibil offline apăsând pictograma inimă care o adaugă la favorite.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Anulează</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Adaugă la ecranul de pornire</string>
     <string name="action_tools_open_tool">Deschide instrumentul</string>
+    <string name="action_tools_add_favorite">Adaugă la Favorite</string>
+    <string name="action_tools_remove_favorite">Elimină din Favorite</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d vizualizare</item>
         <item quantity="other">%1$,d vizualizări</item>

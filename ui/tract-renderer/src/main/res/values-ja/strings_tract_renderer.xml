@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">前</string>
     <string name="tract_card_next">次</string>
+    <!-- Live Sharing -->
 </resources>

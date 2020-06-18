@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Znajdź Prezentacje</string>
     <string name="nav_my_tools">Moje Prezentacje</string>
+    <string name="nav_favorite_tools">Ulubione</string>
+    <string name="nav_all_tools">Wszystkie narzędzia</string>
+    <string name="action_tools_about">O aplikacji</string>
+    <string name="action_tools_open">Otwórz</string>
     <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
+    <string name="tools_list_remove_favorite_dialog_title">Usunąć “%1$s” z ulubionych?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Usuń</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Anuluj</string>
+    <string name="tools_list_favorites_banner_text">Stukając w ikonę serca, dodasz narzędzie do ulubionych i sprawisz, że będzie dostępne offline.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Pomiń</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Dodaj do ekranu głównego</string>
     <string name="action_tools_open_tool">Otwórz narzędzie</string>
+    <string name="action_tools_add_favorite">Dodaj do ulubionych</string>
+    <string name="action_tools_remove_favorite">Usuń z ulubionych</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d odsłona</item>
         <item quantity="other">%1$,d odsłon</item>

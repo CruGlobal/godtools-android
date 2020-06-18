@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Simika</string>
     <string name="menu_share_tool">Shikisha</string>
+    <string name="menu_live_share_publish">Onyeshana skrini yako</string>
     <string name="share_tool_title">Shiriki “%1$s” kutumia</string>
     <string name="tool_not_found">Kifaa ulichoagiza hakipatikani</string>
     <string name="tool_loading">Kifaa ulichoagiza kinapakia</string>
+    <string name="tool_offline">Zana uliyoulizia inahitaji muunganisho wa wavuti ili ifunguke</string>
     <string name="feature_discovery_title_share_tool">Shirikisha wengine na kiungo</string>
     <string name="feature_discovery_desc_share_tool">Tuma zana hii kwa rafiki kwa kubofya ikoni hii</string>
 </resources>

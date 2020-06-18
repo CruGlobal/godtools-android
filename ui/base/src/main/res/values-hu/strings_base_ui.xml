@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s nem nyitható meg</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gospel meghívás</string>
+    <string name="tool_category_articles">Cikkek</string>
+    <string name="tool_category_conversation_starter">Beszélgetés indító</string>
+    <string name="tool_category_growth">Hitbeli növekedés</string>
+    <string name="tool_category_training">Képzés</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ezzel a hivatkozással töltheted le az alkalmazást, amelyet ma néztünk: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Ez a hivatkozás vezet el a webes verzióra, amelyről ma beszélgettünk: %1$s \n\n
 
-Ez az alkalmazás webes verziójának a hivatkozása %1$s \n\n
+Ez az alkalmazás innen tölthető le: https://godtoolsapp.com \n\n
 
 Beszélgessünk még!</string>
 </resources>

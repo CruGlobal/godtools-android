@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Find værktøjer</string>
     <string name="nav_my_tools">Mine værktøjer</string>
+    <string name="nav_favorite_tools">Favoritter</string>
+    <string name="nav_all_tools">Alle værktøjer</string>
+    <string name="action_tools_about">Om</string>
+    <string name="action_tools_open">Åbn</string>
     <string name="title_add_new_tools">Tilføj nye værktøjer</string>
+    <string name="tools_list_remove_favorite_dialog_title">Fjern “%1$s” fra Favoritter?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Fjern</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuller</string>
+    <string name="tools_list_favorites_banner_text">Gør et værktøj tilgængeligt offline ved at trykke på hjerteikonet, som tilføjer det til dine favoritter.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Afvis</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Føj til startside</string>
     <string name="action_tools_open_tool">Åbn værktøj</string>
+    <string name="action_tools_add_favorite">Føj til Favoritter</string>
+    <string name="action_tools_remove_favorite">Fjern fra Favoritter</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Visning</item>
         <item quantity="other">%1$,d Visninger</item>

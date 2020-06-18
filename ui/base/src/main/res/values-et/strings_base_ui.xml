@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s ei saanud avada</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gospeli kutse</string>
+    <string name="tool_category_articles">Artiklid</string>
+    <string name="tool_category_conversation_starter">Vestluse alustaja</string>
+    <string name="tool_category_growth">Areng kristlasena</string>
+    <string name="tool_category_training">Ettevalmistus</string>
     <!-- Sharing -->
-    <string name="share_general_message">Aadressilt http://godtoolsapp.com saab alla laadida rakenduse, mida me täna vaatame \n\n
+    <string name="share_general_message">Link viib sind täna käsitletu veebiversioonile: %1$s \n\n
 
-Rakenduse veebiversioon on saadaval aadressil %1$s\n\n
-
-Räägime lähemalt!</string>
+Rakenduse saab alla laadida lehelt godtoolsapp.com\n\n</string>
 </resources>

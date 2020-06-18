@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%sを開くことができません</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">ゴスペルへの招待</string>
+    <string name="tool_category_articles">記事</string>
+    <string name="tool_category_conversation_starter">会話のきっかけ</string>
+    <string name="tool_category_growth">クリスチャンとしての成長</string>
+    <string name="tool_category_training">トレーニング</string>
     <!-- Sharing -->
-    <string name="share_general_message">今日見たアプリは、こちらからダウンロードできます：http://godtoolsapp.com \n\n
+    <string name="share_general_message">今日お話ししたウェブ版にはこちらのリンクから移動できます: %1$s \n\n
 
-アプリのウェブ版のリンクはこちらです%1$s\n\n
+アプリはこちらからダウンロードできます://godtoolsapp.com \n\n
 
-もっとお話しましょう！</string>
+また一緒にお話ししましょう！</string>
 </resources>

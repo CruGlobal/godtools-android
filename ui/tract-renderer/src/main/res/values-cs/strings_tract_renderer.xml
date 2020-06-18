@@ -2,4 +2,5 @@
 <resources>
     <string name="tract_card_previous">Předchozí</string>
     <string name="tract_card_next">Další</string>
+    <!-- Live Sharing -->
 </resources>

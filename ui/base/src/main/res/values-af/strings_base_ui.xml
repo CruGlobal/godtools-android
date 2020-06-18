@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nie in staat om %s oop te maak nie</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Evangelie uitnodiging</string>
+    <string name="tool_category_articles">Artikels</string>
+    <string name="tool_category_conversation_starter">Gesprekinleiding</string>
+    <string name="tool_category_growth">Christelike groei</string>
+    <string name="tool_category_training">Opleiding</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hier is die skakel om die toep waarna ons vandag kyk af te laai: http://godtoolsapp.com\n\n
+    <string name="share_general_message">Hierdie skakel sal jou neem \'n webweergawe van waaroor ons vandag praat:%1$s\n\n
 
-Hier is \'n skakel na die webweergawe van die toep %1$s\\nn
+Die toep kan afgelaai word van https://godtoolsapp.com\n\n
 
 Kom ons gesels verder!</string>
 </resources>

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Imeshindwa kufungua %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Mwaliko wa Injili</string>
+    <string name="tool_category_articles">Nakala</string>
+    <string name="tool_category_conversation_starter">Kianzishi cha Mazungumzo</string>
+    <string name="tool_category_growth">Ukuaji wa Kikristo</string>
+    <string name="tool_category_training">Mafunzo</string>
     <!-- Sharing -->
-    <string name="share_general_message">Hapa ni kiungo cha kupakua programu ambayo tulitazama 
-leo: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Hili litakupeleka kwenye toleo la wavu kuhusu tunachozungumzia leo: %1$s \n\n
 
-Hapa kuna kiungo kwenye toleo la mtandao la programu %1$s \n\n
-
+Programu hii inaweza kupakuliwa kutoka https://godtoolsapp.com 
+ 
 Tuzungumze Zaidi!</string>
 </resources>

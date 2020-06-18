@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Diegti</string>
     <string name="menu_share_tool">Dalytis</string>
+    <string name="menu_live_share_publish">Dalytis savo puslapiu</string>
     <string name="share_tool_title">Dalytis „%1$s“ naudojant</string>
     <string name="tool_not_found">Jūsų prašomas įrankis nerastas</string>
     <string name="tool_loading">Jūsų prašomas įrankis įkeliamas…</string>
+    <string name="tool_offline">Kad galėtumėte atidaryti prašomą puslapį, reikalingas interneto ryšys</string>
     <string name="feature_discovery_title_share_tool">Bendrinti nuorodą</string>
     <string name="feature_discovery_desc_share_tool">Siųsti šį įrankį draugui paspaudus šią piktogramą</string>
 </resources>

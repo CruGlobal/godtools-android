@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">نصب</string>
     <string name="menu_share_tool">اشتراک‌گذاری</string>
+    <string name="menu_live_share_publish">صفحه نمایش خود را به اشتراک بگذارید</string>
     <string name="share_tool_title">اشتراک‌گذاری «%1$s» با استفاده</string>
     <string name="tool_not_found">ابزاری را که درخواست کردید نتوانستیم پیدا کنیم</string>
     <string name="tool_loading">ابزاری که درخواست کردید در حال بارگیری است…</string>
+    <string name="tool_offline">ابزاری که درخواست کردید برای باز شدن به اتصال اینترنت نیاز دارد</string>
     <string name="feature_discovery_title_share_tool">اشتراک‌گذاری یک پیوند</string>
     <string name="feature_discovery_desc_share_tool">با کلیک روی این آیکون، این ابزار را برای یک دوست ارسال کنید</string>
 </resources>

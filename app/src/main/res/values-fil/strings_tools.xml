@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Makahanap ng Mga Tool</string>
     <string name="nav_my_tools">Mga Tool Ko</string>
+    <string name="nav_favorite_tools">Mga Paborito</string>
+    <string name="nav_all_tools">Lahat ng Tool</string>
+    <string name="action_tools_about">Tungkol dito</string>
+    <string name="action_tools_open">Buksan</string>
     <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
+    <string name="tools_list_remove_favorite_dialog_title">Alisin ang “%1$s” sa Mga Paborito?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Alisin</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselahin</string>
+    <string name="tools_list_favorites_banner_text">Gawing available ang tool sa offline sa pamamagitan ng pag-tap sa icon na puso na magdaragdag dito sa iyong mga paborito.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">I-dismiss</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Idagdag sa Home screen</string>
     <string name="action_tools_open_tool">Buksan ang Tool</string>
+    <string name="action_tools_add_favorite">Idagdag sa Mga Paborito</string>
+    <string name="action_tools_remove_favorite">Alisin sa Mga Paborito</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Pagtingin</item>
         <item quantity="other">%1$,d (na) Pagtingin</item>

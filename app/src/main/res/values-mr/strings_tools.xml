@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">साधने शोधा</string>
     <string name="nav_my_tools">माझे साधने</string>
+    <string name="nav_favorite_tools">पसंत</string>
+    <string name="nav_all_tools">सर्व साधने</string>
+    <string name="action_tools_about">विषयी</string>
+    <string name="action_tools_open">उघडा</string>
     <string name="title_add_new_tools">नवीन साधने जोडा</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s”ला पसंतीतून काढायचे?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">काढा</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करा</string>
+    <string name="tools_list_favorites_banner_text">साधनाला आपल्या पसंतीत जोडणाऱ्या \'ह्रदय\' चिन्हावर टॅप करून ते साधन ऑफलाइन उपलब्ध करा.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">बंद करा</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">होम स्क्रीनमध्ये जोडा.</string>
     <string name="action_tools_open_tool">साधन उघडा</string>
+    <string name="action_tools_add_favorite">पसंतीत जोडा</string>
+    <string name="action_tools_remove_favorite">पसंतीतून काढा</string>
     <plurals name="label_tools_shares">
         <item quantity="one">" %1$,d मत "</item>
         <item quantity="other">%1$,d

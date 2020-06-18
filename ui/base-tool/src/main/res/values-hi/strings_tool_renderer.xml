@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">इन्स्टॉल करें</string>
     <string name="menu_share_tool">शेयर करें</string>
+    <string name="menu_live_share_publish">अपनी स्क्रीन साझा करें</string>
     <string name="share_tool_title">“%1$s” शेयर करें इसका प्रयोग करते हुए</string>
     <string name="tool_not_found">आपका अनुरोधित टूल नहीं मिला</string>
     <string name="tool_loading">आपका अनुरोधित टूल लोड हो रहा है...</string>
+    <string name="tool_offline">आपके द्वारा अनुरोधित टूल को खोलने के लिए इंटरनेट कनेक्शन आवश्यक है</string>
     <string name="feature_discovery_title_share_tool">लिंक साझा करें</string>
     <string name="feature_discovery_desc_share_tool">इस चिन्ह को क्लिक करके यह टूल एक दोस्त को भेजें</string>
 </resources>

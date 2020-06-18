@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">Инсталиране</string>
     <string name="menu_share_tool">Споделете</string>
+    <string name="menu_live_share_publish">Сподели екрана си</string>
     <string name="share_tool_title">Споделете “%1$s” чрез</string>
     <string name="tool_not_found">Изискваният от Вас инструмент не е намерен</string>
     <string name="tool_loading">Изискваният от Вас инструмент се зарежда</string>
+    <string name="tool_offline">За да се отвори инструмента, който поискахте, е нужна връзка с интернет</string>
     <string name="feature_discovery_title_share_tool">Споделете връзка</string>
     <string name="feature_discovery_desc_share_tool">Изпратете този инструмент на приятел, като кликнете тази икона</string>
 </resources>

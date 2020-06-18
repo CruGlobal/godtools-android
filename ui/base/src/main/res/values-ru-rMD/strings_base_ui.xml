@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tool Categories -->
     <!-- Sharing -->
     <string name="share_general_message">Вот ссылка на загрузку приложения, которое мы с вами смотрели сегодня: http://godtoolsapp.com \n\n
 

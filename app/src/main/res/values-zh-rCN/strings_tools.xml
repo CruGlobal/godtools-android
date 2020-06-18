@@ -3,11 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">查找工具</string>
     <string name="nav_my_tools">我的工具</string>
+    <string name="nav_favorite_tools">收藏夹</string>
+    <string name="nav_all_tools">所有工具</string>
     <string name="action_tools_about">关于</string>
+    <string name="action_tools_open">打开</string>
     <string name="title_add_new_tools">添加新工具</string>
+    <string name="tools_list_remove_favorite_dialog_title">从收藏夹中删除 “%1$s”？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">删除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="tools_list_favorites_banner_text">要离线使用某个工具，请点击心形图标将其添加到收藏夹。</string>
+    <string name="tools_list_favorites_banner_action_dismiss">取消</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">添加到主屏幕</string>
     <string name="action_tools_open_tool">打开工具</string>
+    <string name="action_tools_add_favorite">加入收藏夹</string>
+    <string name="action_tools_remove_favorite">移出收藏夹</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 次浏览</item>
     </plurals>

@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">یافتن ابزار</string>
     <string name="nav_my_tools">ابزار من</string>
+    <string name="nav_favorite_tools">موارد دلخواه</string>
+    <string name="nav_all_tools">تمام ابزار</string>
+    <string name="action_tools_about">درباره</string>
+    <string name="action_tools_open">باز کردن</string>
     <string name="title_add_new_tools">افزودن ابزارهای جدید</string>
+    <string name="tools_list_remove_favorite_dialog_title">«%1$s» از موارد دلخواه حذف شود؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">حذف</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">لغو</string>
+    <string name="tools_list_favorites_banner_text">روی آیکون قلب ضربه بزنید تا به موارد دلخواه شما اضافه شود و به صورت آفلاین در دسترس قرار بگیرد.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">مرخص</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">افزودن به صفحه اصلی</string>
     <string name="action_tools_open_tool">باز کردن ابزار</string>
+    <string name="action_tools_add_favorite">افزودن به موارد دلخواه</string>
+    <string name="action_tools_remove_favorite">حذف از موارد دلخواه</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d مشاهده</item>
         <item quantity="other">%1$,d مشاهده</item>

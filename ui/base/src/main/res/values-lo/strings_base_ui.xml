@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">ການດາວໂຫຼດບໍ່ຖືກຕ້ອງ %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">ຄໍາເຊີນຮັບຟັງຂ່າວປະເສີດ</string>
+    <string name="tool_category_articles">ບົດຄວາມ</string>
+    <string name="tool_category_conversation_starter">ຜູ້ເລີ່ມການສົນທະນາ</string>
+    <string name="tool_category_growth">ການເຕີບໃຫຍ່ຂອງຊາວຄຣິດ</string>
+    <string name="tool_category_training">ການຝຶກອົບຮົມ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາເບິ່ງນໍາກັນຄັ້ງຫຼ້າສຸດໃນມື້ນີ້: %@. ມາລົມກັນຕື່ມ!
+    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາລົມກັນໃນມື້ນີ້: %1$s\n\n
 
-ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ %1$s https://godtoolsapp.com</string>
+ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ https://godtoolsapp.com \n\n
+
+ມາລົມກັນຕື່ມ!</string>
 </resources>

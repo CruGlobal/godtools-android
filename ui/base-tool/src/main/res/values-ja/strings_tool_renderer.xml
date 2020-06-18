@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">インストール</string>
     <string name="menu_share_tool">シェア</string>
+    <string name="menu_live_share_publish">画面を共有する</string>
     <string name="share_tool_title">次を使って “%1$s” をシェア</string>
     <string name="tool_not_found">リクエストしたツールが見つかりません</string>
     <string name="tool_loading">リクエストしたツールを読み込み中…</string>
+    <string name="tool_offline">リクエストされたツールを開くためにはインターネット接続が必要です</string>
     <string name="feature_discovery_title_share_tool">リンクをシェア</string>
     <string name="feature_discovery_desc_share_tool">このアイコンをクリックして、このツールを友達に送りましょう</string>
 </resources>

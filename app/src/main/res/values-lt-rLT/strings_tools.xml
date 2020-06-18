@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Rasti įrankius</string>
     <string name="nav_my_tools">Mano įrankiai</string>
+    <string name="nav_favorite_tools">Mėgstamiausi</string>
+    <string name="nav_all_tools">Visi įrankiai</string>
+    <string name="action_tools_about">Apie</string>
+    <string name="action_tools_open">Atidaryti</string>
     <string name="title_add_new_tools">Pridėti naujus įrankius</string>
+    <string name="tools_list_remove_favorite_dialog_title">Pašalinti „%1$s“ iš Mėgstamiausių?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Pašalinti</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Atšaukti</string>
+    <string name="tools_list_favorites_banner_text">Įrankį galima naudoti atsijungus, paspaudus širdelės piktogramą, kuri prideda ją prie mėgstamiausių.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Išjungti</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Pridėti į pagrindinį puslapį</string>
     <string name="action_tools_open_tool">Atidaryti įrankį</string>
+    <string name="action_tools_add_favorite">Pridėti prie Mėgstamiausių</string>
+    <string name="action_tools_remove_favorite">Pašalinti iš Mėgstamiausių</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d peržiūra</item>
         <item quantity="other">%1$,d peržiūros</item>

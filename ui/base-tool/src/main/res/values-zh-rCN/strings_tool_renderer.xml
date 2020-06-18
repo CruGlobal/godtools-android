@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">安装</string>
     <string name="menu_share_tool">分享</string>
+    <string name="menu_live_share_publish">分享你的屏幕</string>
     <string name="share_tool_title">分享 “%1$s” 的方法：</string>
     <string name="tool_not_found">找不到您申请的工具</string>
     <string name="tool_loading">正在加载您申请的工具...</string>
+    <string name="tool_offline">你请求的工具需要有互联网连接才能打开</string>
     <string name="feature_discovery_title_share_tool">分享链接</string>
     <string name="feature_discovery_desc_share_tool">点击此图标，将这款工具发送给朋友</string>
 </resources>

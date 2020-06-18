@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Пронађи алатке</string>
     <string name="nav_my_tools">Моје алатке</string>
+    <string name="nav_favorite_tools">Омиљено</string>
+    <string name="nav_all_tools">Све алатке</string>
+    <string name="action_tools_about">O</string>
+    <string name="action_tools_open">Отвори</string>
     <string name="title_add_new_tools">Додај нове алатке</string>
+    <string name="tools_list_remove_favorite_dialog_title">Уклони “%1$s” из Омиљених?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Уклони</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Откажи</string>
+    <string name="tools_list_favorites_banner_text">Омогући да алатка буде доступна ван мреже тако што ћете додирнути иконицу срце која ће је додати у омиљене.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Откажо</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Додај на почетни екран</string>
     <string name="action_tools_open_tool">Отворени алат</string>
+    <string name="action_tools_add_favorite">Додај у Омиљене</string>
+    <string name="action_tools_remove_favorite">Уклони из Омиљених</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d преглед</item>
         <item quantity="other">%1$,d прегледа</item>

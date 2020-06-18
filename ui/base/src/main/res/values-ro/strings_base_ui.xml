@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Imposibil de deschis %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Invitație să descoperi Biblia</string>
+    <string name="tool_category_articles">Articole</string>
+    <string name="tool_category_conversation_starter">Ajutoare pentru inițierea conversațiilor</string>
+    <string name="tool_category_growth">Creșterea în credință</string>
+    <string name="tool_category_training">Instruire</string>
     <!-- Sharing -->
-    <string name="share_general_message">Iată linkul de descărcare a aplicației pe care am analizat-o azi: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Acest link te va conduce spre o versiune web a ceea ce am discutat azi: %1$s \n\n
 
-Iată linkul către versiunea web a aplicației %1$s\n\n
+Aplicația poate fi descărcată de pe https://godtoolsapp.com \n\n
 
-Să discutăm mai multe!</string>
+Hai să discutăm mai mult!</string>
 </resources>

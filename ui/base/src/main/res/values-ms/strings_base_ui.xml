@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Tidak dapat membuka %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Jemputan Gospel</string>
+    <string name="tool_category_articles">Makalah</string>
+    <string name="tool_category_conversation_starter">Pemula Pembualan</string>
+    <string name="tool_category_growth">Kemajuan Kristian</string>
+    <string name="tool_category_training">Latihan</string>
     <!-- Sharing -->
-    <string name="share_general_message">Berikut ialah pautan untuk memuat turun aplikasi yang sedang kami lihat hari ini: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Pautan ini akan membawa anda ke versi web yang sedang kami perkatakan hari ini: %1$s \n\n
 
-Berikut ialah pautan ke aplikasi versi web %1$s\n\n
+Apl ini boleh dimuat turunkan daripada https://godtoolsapp.com\n\n
 
-Ayuh berbual lagi!</string>
+Jom berbincang selanjutnya!</string>
 </resources>

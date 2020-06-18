@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">도구 찾기</string>
     <string name="nav_my_tools">내 도구</string>
+    <string name="nav_favorite_tools">즐겨찾기</string>
+    <string name="nav_all_tools">모든 도구</string>
+    <string name="action_tools_about">정보</string>
+    <string name="action_tools_open">열기</string>
     <string name="title_add_new_tools">새 툴 추가</string>
+    <string name="tools_list_remove_favorite_dialog_title">즐겨찾기에서 “%1$s”을(를) 제거할까요?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">제거</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">취소</string>
+    <string name="tools_list_favorites_banner_text">하트 아이콘을 탭하여 즐겨찾기에 추가해서 오프라인에서도 도구를 사용하세요.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">취소</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">홈 스크린에 추가</string>
     <string name="action_tools_open_tool">툴 열기</string>
+    <string name="action_tools_add_favorite">즐겨찾기에 추가</string>
+    <string name="action_tools_remove_favorite">즐겨찾기에서 제거</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 뷰</item>
     </plurals>

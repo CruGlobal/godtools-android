@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">%s लाई  खोलनेमा  असमर्थ</string>
+    <!-- Tool Categories -->
     <!-- Sharing -->
     <string name="share_general_message">ऐप डाउनलोड गर्नलाई  लिंक यहाँ दिएको छ जसमा हामी आज हेर्दै छौ : http://godtoolsapp.com \ n \ n
 

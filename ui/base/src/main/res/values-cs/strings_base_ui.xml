@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Nepodařilo se otevřít %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Pozvánka k evangeliu</string>
+    <string name="tool_category_articles">Články</string>
+    <string name="tool_category_conversation_starter">Zahájení konverzace</string>
+    <string name="tool_category_growth">Křesťanský růst ve víře</string>
+    <string name="tool_category_training">Školení</string>
     <!-- Sharing -->
-    <string name="share_general_message">Na následujícím odkazu najdete aplikaci, na kterou jsme se dnes dívali: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Tento odkaz vás přivede na webovou verzi stránky, o které jsme dnes spolu mluvili: %1$s\n\n
 
-Tady máte odkaz na webovou verzi aplikace %1$s \n\n
+Aplikaci si můžete stáhnout z https://godtoolsapp.com \n\n
 
 Pojďme si o tom ještě povykládat!</string>
 </resources>

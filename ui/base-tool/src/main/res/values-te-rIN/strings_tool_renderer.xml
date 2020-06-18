@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">ఇన్‌స్టాల్ చేయి</string>
     <string name="menu_share_tool">పంచుకోండి</string>
+    <string name="menu_live_share_publish">మీ స్క్రీన్ పంచుకోండి</string>
     <string name="share_tool_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>
     <string name="tool_not_found">మీరు అభ్యర్థించిన పరికరము కనుగొనబడలేదు</string>
     <string name="tool_loading">మీ అభ్యర్థించిన పరికరము లోడ్ అవుతున్నది…</string>
+    <string name="tool_offline">మీరు అభ్యర్థించిన పరికరం తెరవడానికి ఇంటర్నెట్ కనెక్షన్ అవసరం</string>
     <string name="feature_discovery_title_share_tool">లింకును పంచండి</string>
     <string name="feature_discovery_desc_share_tool">ఈ ఐకాన్ నొక్కడం ద్వారా ఈ పరికరంను ఒక స్నేహితునికి పంపండి</string>
 </resources>

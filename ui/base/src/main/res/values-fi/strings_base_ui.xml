@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">Ei voida avata %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Ilosanomakutsu</string>
+    <string name="tool_category_articles">Artikkelit</string>
+    <string name="tool_category_conversation_starter">Keskustelunaloittaja</string>
+    <string name="tool_category_growth">Kasvaminen kristittynä</string>
+    <string name="tool_category_training">Koulutus</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tässä linkki, jolla voit ladata sovelluksen, jota katsoimme tänään: http://godtoolsapp.com \n\n
+    <string name="share_general_message">Tämä linkki siirtää sinut tämänpäiväisen puheenaiheemme verkkoversioon: %1$s \n\n
 
-Tässä on linkki sovelluksen webversioon %1$s \n\n
+Sovelluksen voi ladata osoitteesta https://godtoolsapp.com \n\n
 
-Jutellaan lisää asiasta!</string>
+Jutellaan asiasta lisää!</string>
 </resources>

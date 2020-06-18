@@ -2,9 +2,11 @@
 <resources>
     <string name="menu_install">ਇੰਸਟਾਲ ਕਰੋ</string>
     <string name="menu_share_tool">ਸਾਂਝਿਆ ਕਰੋ</string>
+    <string name="menu_live_share_publish">ਆਪਣੀ ਸਕਰੀਨ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="share_tool_title">“%1$s” ਦਾ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਸਾਂਝਿਆ ਕਰੋ</string>
     <string name="tool_not_found">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਨਹੀਂ ਮਿਲ ਰਿਹਾ ਹੈ</string>
     <string name="tool_loading">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਲੋ਼ਡ ਹੋ ਰਿਹਾ ਹੈ</string>
+    <string name="tool_offline">ਤੁਹਾਡੇ ਦੁਆਰਾ ਬੇਨਤੀ ਕੀਤੇ ਟੂਲ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਇੱਕ ਇੰਟਰਨੈਟ ਕਨੈਕਸ਼ਨ ਦੀ ਲੋੜ ਹੈ</string>
     <string name="feature_discovery_title_share_tool">ਇੱਕ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="feature_discovery_desc_share_tool">ਇਸ ਆਈਕਾਨ ਨੂੰ ਕਲਿੱਕ ਕਰਕੇ ਇਸ ਟੂਲ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ</string>
 </resources>

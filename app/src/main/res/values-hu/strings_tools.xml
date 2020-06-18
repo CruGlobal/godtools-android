@@ -3,10 +3,21 @@
     <!-- Tools List UI -->
     <string name="nav_find_tools">Eszközök keresése</string>
     <string name="nav_my_tools">Saját eszközeim</string>
+    <string name="nav_favorite_tools">Kedvencek</string>
+    <string name="nav_all_tools">Minden eszköz</string>
+    <string name="action_tools_about">Rólunk</string>
+    <string name="action_tools_open">Megnyitás</string>
     <string name="title_add_new_tools">Új eszközök hozzáadása</string>
+    <string name="tools_list_remove_favorite_dialog_title">Eltávolítod ezt: “%1$s” a Kedvencekből?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Eltávolítás</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Mégse</string>
+    <string name="tools_list_favorites_banner_text">Offline elérhetővé teheted az eszközt a szív ikonra kattintva, amivel hozzáadod a kedvenceidhez.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Elvetés</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Hozzáadás kezdőképernyőhöz</string>
     <string name="action_tools_open_tool">Eszköz megnyitása</string>
+    <string name="action_tools_add_favorite">Hozzáadás Kedvencekhez</string>
+    <string name="action_tools_remove_favorite">Eltávolítás Kedvencek közül</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d megtekintés</item>
         <item quantity="other">%1$,d megtekintés</item>

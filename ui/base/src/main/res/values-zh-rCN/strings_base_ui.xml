@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_unable_to_launch_activity">无法打开%s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">福音邀请</string>
+    <string name="tool_category_articles">文章</string>
+    <string name="tool_category_conversation_starter">对话开场白</string>
+    <string name="tool_category_growth">基督徒成长</string>
+    <string name="tool_category_training">培训</string>
     <!-- Sharing -->
-    <string name="share_general_message">以下链接可以下载我们今天看到的应用：
-http://godtoolsapp.com \n\n
+    <string name="share_general_message">点击这个链接，您会看到我们今天谈论内容的网页版：%1$s \n\n
 
-以下链接可以进入应用的网页版 %1$s\n\n
+应用下载地址：https://godtoolsapp.com \n\n
 
-让我们详谈吧！</string>
+让我们畅谈吧！</string>
 </resources>
