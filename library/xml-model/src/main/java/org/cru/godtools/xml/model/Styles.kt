@@ -4,27 +4,21 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 
 interface Styles : BaseModel {
-    @JvmDefault
     @get:ColorInt
     val primaryColor: Int get() = stylesParent.primaryColor
 
-    @JvmDefault
     @get:ColorInt
     val primaryTextColor: Int get() = stylesParent.primaryTextColor
 
-    @JvmDefault
     @get:ColorInt
     val textColor: Int get() = stylesParent.textColor
 
-    @JvmDefault
     @get:ColorInt
     val buttonColor: Int get() = stylesParent.buttonColor
 
-    @JvmDefault
     @get:DimenRes
     val textSize: Int get() = stylesParent.textSize
 
-    @JvmDefault
     val textAlign: Text.Align get() = stylesParent.textAlign
 }
 
