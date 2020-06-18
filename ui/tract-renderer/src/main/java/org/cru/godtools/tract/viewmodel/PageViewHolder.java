@@ -361,7 +361,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
                 return;
             }
         }
-
     }
 
     @Override

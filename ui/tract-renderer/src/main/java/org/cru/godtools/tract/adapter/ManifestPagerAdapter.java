@@ -189,8 +189,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             mModelViewHolder.setCallbacks(this);
         }
 
-        // region Lifecycle Events
-
+        // region Lifecycle
         void onBind(@Nullable final Page page) {
             // short-circuit if we aren't changing the page
             if (page == mPage) {
@@ -213,14 +212,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
         @Override
         public void onUpdateActiveCard(@Nullable final Card card) {
-            if (getPrimaryItem() == this) {
-                if (mPage != null) {
-                    dispatchUpdateActiveCard(mPage, card);
-                }
+            if (getPrimaryItem() == this && mPage != null) {
+                dispatchUpdateActiveCard(mPage, card);
             }
         }
-
-        // endregion Lifecycle Events
+        // endregion Lifecycle
 
         private void checkForModalEvent(@NonNull final Event event) {
             assert mPage != null;
