@@ -272,8 +272,9 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mNeedsCardsRebind = false;
 
         // map old view holders to new location
+        final View invalid = mPageView; // We just need a non-null placeholder value that can't be a card view
+        View activeCard = mPageContentLayout.getActiveCard() != null ? invalid : null;
         final CardViewHolder[] holders = new CardViewHolder[mCards.length];
-        View activeCard = null;
         int lastNewPos = -1;
         for (final CardViewHolder holder : mCardViewHolders) {
             final Card card = holder.getModel();
@@ -294,7 +295,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
                 holders[newPos] = holder;
 
                 // is this the active card? if so track it to restore it after we finish binding
-                if (activeCard == null && mPageContentLayout.getActiveCard() == holder.mRoot) {
+                if (activeCard == invalid && mPageContentLayout.getActiveCard() == holder.mRoot) {
                     activeCard = holder.mRoot;
                 }
 
@@ -333,7 +334,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mBindingCards = false;
 
         // restore the active card
-        if (activeCard != null) {
+        if (activeCard != invalid) {
             mPageContentLayout.changeActiveCard(activeCard, false);
         } else {
             // trigger onActiveCard in case the active card changed during binding
