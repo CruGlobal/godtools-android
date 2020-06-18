@@ -26,6 +26,9 @@ private const val XML_NAVBAR_CONTROL_COLOR = "navbar-control-color"
 private const val XML_CATEGORY_LABEL_COLOR = "category-label-color"
 private const val XML_CATEGORIES = "categories"
 private const val XML_PAGES = "pages"
+private const val XML_PAGES_PAGE = "page"
+private const val XML_PAGES_PAGE_FILENAME = "filename"
+private const val XML_PAGES_PAGE_SRC = "src"
 private const val XML_PAGES_AEM_IMPORT = "aem-import"
 private const val XML_PAGES_AEM_IMPORT_SRC = "src"
 private const val XML_RESOURCES = "resources"
@@ -221,7 +224,15 @@ class Manifest : Base, Styles {
 
             when (parser.namespace) {
                 XMLNS_MANIFEST -> when (parser.name) {
-                    Page.XML_PAGE -> result.pages.add(Page.fromManifestXml(this, result.pages.size, parser))
+                    XML_PAGES_PAGE -> {
+                        val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                        val localFileName = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                        val position = result.pages.size
+                        XmlPullParserUtils.skipTag(parser)
+
+                        // TODO: parser should be for the actual page XML parser
+                        result.pages.add(Page(this@Manifest, position, fileName, localFileName, parser))
+                    }
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
                 XMLNS_ARTICLE -> when (parser.name) {

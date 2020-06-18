@@ -17,8 +17,7 @@ private const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
-private const val XML_MANIFEST_FILENAME = "filename"
-private const val XML_MANIFEST_SRC = "src"
+private const val XML_PAGE = "page"
 private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
@@ -84,13 +83,14 @@ class Page : Base, Styles, Parent {
         this.localFileName = localFileName
     }
 
-    internal constructor(manifest: Manifest, position: Int, manifestParser: XmlPullParser) : super(manifest) {
+    internal constructor(manifest: Manifest,
+                         position: Int,
+                         fileName: String? = null,
+                         localFileName: String? = null,
+                         parser: XmlPullParser) : super(manifest) {
         this.position = position
-
-        manifestParser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE)
-        fileName = manifestParser.getAttributeValue(null, XML_MANIFEST_FILENAME)
-        localFileName = manifestParser.getAttributeValue(null, XML_MANIFEST_SRC)
-        XmlPullParserUtils.skipTag(manifestParser)
+        this.fileName = fileName
+        this.localFileName = localFileName
     }
 
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
@@ -172,15 +172,6 @@ class Page : Base, Styles, Parent {
     }
 
     val isLastPage get() = position == manifest.pages.size - 1
-
-    companion object {
-        const val XML_PAGE = "page"
-
-        @JvmStatic
-        @WorkerThread
-        @Throws(XmlPullParserException::class, IOException::class)
-        fun fromManifestXml(manifest: Manifest, position: Int, parser: XmlPullParser) = Page(manifest, position, parser)
-    }
 }
 
 @get:ColorInt
