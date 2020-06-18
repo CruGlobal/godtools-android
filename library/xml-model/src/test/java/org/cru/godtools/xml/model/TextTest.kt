@@ -17,7 +17,7 @@ class TextTest {
 
         assertEquals("Text 1", text1.text)
         assertEquals(1.0, text1.textScale, 0.001)
-        assertEquals(Manifest.getDefaultTextColor(), text1.textColor)
+        assertEquals(Manifest.DEFAULT_TEXT_COLOR, text1.textColor)
         assertEquals(Text.Align.DEFAULT, text1.textAlign)
 
         assertEquals("Text 2", text2.text)

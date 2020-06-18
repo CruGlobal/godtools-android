@@ -49,30 +49,22 @@ class AnalyticsEvent internal constructor(parser: XmlPullParser) {
     val delay = parser.getAttributeValue(null, XML_DELAY)?.toIntOrNull() ?: 0
     private val systems = parser.getAttributeValue(null, XML_SYSTEM)?.parseSystems().orEmpty()
     private val trigger = Trigger.parse(parser.getAttributeValue(null, XML_TRIGGER), Trigger.DEFAULT)
-    val attributes: Map<String, String>
+    val attributes = buildMap<String, String> {
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) continue
 
-    init {
-        // process any child elements
-        attributes = buildMap<String, String> {
-            parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
-
-                when (parser.namespace) {
-                    XMLNS_ANALYTICS -> when (parser.name) {
-                        XML_ATTRIBUTE -> {
-                            put(
-                                parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
-                                parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
-                            )
-                            XmlPullParserUtils.skipTag(parser)
-                            continue@parsingChildren
-                        }
+            when (parser.namespace) {
+                XMLNS_ANALYTICS -> when (parser.name) {
+                    XML_ATTRIBUTE -> {
+                        put(
+                            parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
+                            parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
+                        )
                     }
                 }
-
-                // skip unrecognized nodes
-                XmlPullParserUtils.skipTag(parser)
             }
+
+            XmlPullParserUtils.skipTag(parser)
         }
     }
 

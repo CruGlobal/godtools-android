@@ -42,7 +42,7 @@ class Text : Content {
     @ColorInt
     private val _textColor: Int?
     @get:ColorInt
-    val textColor get() = _textColor ?: stylesParent.textColor
+    val textColor get() = _textColor ?: defaultTextColor
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
@@ -69,8 +69,7 @@ class Text : Content {
     fun getTextColor(@ColorInt defColor: Int) = _textColor ?: defColor
 
     companion object {
-        // TODO: make internal
-        const val XML_TEXT = "text"
+        internal const val XML_TEXT = "text"
 
         @JvmStatic
         @Throws(IOException::class, XmlPullParserException::class)
@@ -89,11 +88,11 @@ class Text : Content {
             }
             return text
         }
-
-        @ColorInt
-        fun defaultTextColor(text: Text?) = getStylesParent(text).textColor
     }
 }
+
+@get:ColorInt
+val Text?.defaultTextColor get() = stylesParent.textColor
 
 @Deprecated("Use null-safe accessor directly", ReplaceWith("this?.text"))
 val Text?.text get() = this?.text

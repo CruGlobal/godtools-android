@@ -6,6 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.xml.model.Manifest" />
+        <import type="org.cru.godtools.xml.model.ManifestKt" />
 
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
     </data>
@@ -19,7 +20,7 @@
             android:id="@+id/articles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@{Manifest.getBackgroundColor(manifest)}"
+            android:background="@{ManifestKt.getBackgroundColor(manifest)}"
             android:theme="@style/ThemeOverlay.Widget.GodTools.Article.ArticlesList"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_article" />

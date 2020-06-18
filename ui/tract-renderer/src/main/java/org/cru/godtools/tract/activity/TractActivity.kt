@@ -56,9 +56,11 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.xml.model.Card
-import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.backgroundColor
+import org.cru.godtools.xml.model.navBarColor
+import org.cru.godtools.xml.model.navBarControlColor
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
@@ -266,7 +268,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
-            window.decorView.setBackgroundColor(Manifest.getBackgroundColor(it))
+            window.decorView.setBackgroundColor(it.backgroundColor)
             ManifestViewUtils.bindBackgroundImage(it, binding.backgroundImage)
         }
     }
@@ -277,8 +279,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         binding.languageToggle.addOnTabSelectedListener(this)
         dataModel.activeManifest.observe(this) { manifest ->
             // determine colors for the language toggle
-            val controlColor = Manifest.getNavBarControlColor(manifest)
-            var selectedColor = Manifest.getNavBarColor(manifest)
+            val controlColor = manifest.navBarControlColor
+            var selectedColor = manifest.navBarColor
             if (Color.alpha(selectedColor) < 255) {
                 // XXX: the expected behavior is to support transparent text. But we currently don't support
                 // XXX: transparent text, so pick white or black based on the control color

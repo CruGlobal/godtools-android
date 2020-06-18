@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.defaultTextColor
 import org.cru.godtools.xml.model.textAlign
 import org.cru.godtools.xml.model.textScale
 import org.cru.godtools.xml.model.textSize
@@ -26,7 +27,7 @@ internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt def
     val size = textScale * (textSize ?: view.context.resources.getDimension(this.textSize))
     view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
-    val defColor = defaultTextColor ?: Text.defaultTextColor(this)
+    val defColor = defaultTextColor ?: this.defaultTextColor
     if (this != null) {
         view.setTextColor(getTextColor(defColor))
     } else {

@@ -37,6 +37,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.navBarColor
+import org.cru.godtools.xml.model.navBarControlColor
 import org.keynote.godtools.android.db.GodToolsDao
 import java.io.IOException
 import javax.inject.Inject
@@ -121,10 +123,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
         activeManifestLiveData.observe(this) { manifest ->
             toolbar?.apply {
                 // set toolbar background color
-                setBackgroundColor(Manifest.getNavBarColor(manifest))
+                setBackgroundColor(manifest.navBarColor)
 
                 // set text & controls color
-                val controlColor = Manifest.getNavBarControlColor(manifest)
+                val controlColor = manifest.navBarControlColor
                 navigationIcon = navigationIcon.tint(controlColor)
                 setTitleTextColor(controlColor)
                 setSubtitleTextColor(controlColor)
@@ -135,12 +137,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     }
 
     protected open fun updateToolbarTitle() {
-        title = Manifest.getTitle(activeManifest).orEmpty()
+        title = activeManifest?.title.orEmpty()
     }
 
     private fun updateToolbarMenu(manifest: Manifest? = activeManifest) {
         // tint all action icons
-        val controlColor = Manifest.getNavBarControlColor(manifest)
+        val controlColor = manifest.navBarControlColor
         toolbar?.apply { overflowIcon = overflowIcon.tint(controlColor) }
         toolbarMenu?.forEach { it.icon = it.icon.tint(controlColor) }
 

@@ -1,0 +1,2 @@
+<content:input xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    name="destination_id" type="hidden" value="1" />

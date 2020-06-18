@@ -7,6 +7,7 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.article.ui.categories.CategorySelectedListener" />
         <import type="org.cru.godtools.xml.model.Manifest" />
+        <import type="org.cru.godtools.xml.model.ManifestKt" />
 
         <variable name="callbacks" type="ObservableField&lt;CategorySelectedListener&gt;" />
         <variable name="category" type="org.cru.godtools.xml.model.Category" />
@@ -36,7 +37,7 @@
             android:lines="2"
             android:text="@{category.label}"
             android:textSize="@{@dimen/text_size_category}"
-            app:defaultTextColor="@{Manifest.getCategoryLabelColor(category.getManifest())}"
+            app:defaultTextColor="@{ManifestKt.getCategoryLabelColor(category.getManifest())}"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="About God"
             tools:textSize="@dimen/text_size_category" />

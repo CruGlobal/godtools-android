@@ -17,8 +17,9 @@ import com.google.android.material.textfield.TextInputLayoutUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Input;
+import org.cru.godtools.xml.model.InputKt;
 import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
@@ -149,7 +150,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         // setup inputType
         if (mInputView != null) {
             int inputType = InputType.TYPE_CLASS_TEXT;
-            switch (mModel != null ? mModel.getType() : Input.Type.DEFAULT) {
+            switch (InputKt.getType(mModel)) {
                 case EMAIL:
                     inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                     break;
@@ -161,7 +162,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         }
 
         // style the input view
-        final Styles stylesParent = Base.getStylesParent(mModel);
+        final Styles stylesParent = BaseModelKt.getStylesParent(mModel);
         if (mInputLayout != null) {
             mInputLayout.setBoxStrokeColor(StylesKt.getPrimaryColor(stylesParent));
         }

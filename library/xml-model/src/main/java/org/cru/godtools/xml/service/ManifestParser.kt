@@ -30,11 +30,11 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
             cache[manifestName] ?: withContext(Dispatchers.IO) {
                 val manifest = try {
                     fileManager.getInputStream(manifestName)!!.buffered().use {
-                        Manifest.fromXml(Xml.newPullParser().apply {
+                        Manifest(toolCode, locale, Xml.newPullParser().apply {
                             setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
                             setInput(it, "UTF-8")
                             nextTag()
-                        }, toolCode, locale)
+                        })
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound

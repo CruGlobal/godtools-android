@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    xmlns="https://mobile-content-api.cru.org/xmlns/tract">
+    <cards>
+        <card listeners="listener1 listener2" dismiss-listeners="dismiss-listener1 dismiss-listener2">
+            <label>
+                <content:text>Card 1</content:text>
+            </label>
+            <content:paragraph>
+                <content:text>Test</content:text>
+            </content:paragraph>
+        </card>
+    </cards>
+</page>

@@ -14,6 +14,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
+import org.cru.godtools.xml.model.CardKt;
 import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 
@@ -116,10 +117,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     private void bindBackground() {
-        mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(Card.getBackgroundImageResource(mModel), mBackgroundView,
-                Card.getBackgroundImageScaleType(mModel),
-                Card.getBackgroundImageGravity(mModel));
+        mCardView.setCardBackgroundColor(CardKt.getBackgroundColor(mModel));
+        ResourceViewUtils.bindBackgroundImage(CardKt.getBackgroundImageResource(mModel), mBackgroundView,
+                                              CardKt.getBackgroundImageScaleType(mModel),
+                                              CardKt.getBackgroundImageGravity(mModel));
     }
 
     private void bindLabel() {

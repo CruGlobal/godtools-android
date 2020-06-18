@@ -16,6 +16,7 @@ import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
+import org.cru.godtools.xml.model.BaseKt;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
 import org.cru.godtools.xml.model.PageKt;
@@ -239,7 +240,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
 
         // force the layout direction for any other views that do care
-        final int dir = Page.getLayoutDirection(mModel);
+        final int dir = BaseKt.getLayoutDirection(mModel);
         ViewCollections.run(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
     }
 

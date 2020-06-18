@@ -29,13 +29,13 @@ interface Styles : BaseModel {
 }
 
 @get:ColorInt
-val Styles?.primaryColor get() = this?.primaryColor ?: Manifest.getDefaultPrimaryColor()
+val Styles?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMARY_COLOR
 @get:ColorInt
-val Styles?.primaryTextColor get() = this?.primaryTextColor ?: Manifest.getDefaultPrimaryTextColor()
+val Styles?.primaryTextColor get() = this?.primaryTextColor ?: Manifest.DEFAULT_PRIMARY_TEXT_COLOR
 @get:ColorInt
 val Styles?.buttonColor get() = this?.buttonColor ?: primaryColor
 @get:ColorInt
-val Styles?.textColor get() = this?.textColor ?: Manifest.getDefaultTextColor()
+val Styles?.textColor get() = this?.textColor ?: Manifest.DEFAULT_TEXT_COLOR
 @get:DimenRes
-val Styles?.textSize get() = this?.textSize ?: Manifest.getDefaultTextSize()
-val Styles?.textAlign get() = this?.textAlign ?: Manifest.getDefaultTextAlign()
+val Styles?.textSize get() = this?.textSize ?: Manifest.DEFAULT_TEXT_SIZE
+val Styles?.textAlign get() = this?.textAlign ?: Manifest.DEFAULT_TEXT_ALIGN
