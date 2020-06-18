@@ -6,7 +6,6 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -27,7 +26,6 @@ class Page : Base, Styles, Parent {
     val position: Int
 
     private val fileName: String?
-    val localFileName: String?
     var listeners: Set<Event.Id> = emptySet()
         private set
 
@@ -75,22 +73,22 @@ class Page : Base, Styles, Parent {
     internal constructor(
         manifest: Manifest,
         position: Int,
-        fileName: String? = null,
-        localFileName: String? = null
+        fileName: String? = null
     ) : super(manifest) {
         this.position = position
         this.fileName = fileName
-        this.localFileName = localFileName
     }
 
-    internal constructor(manifest: Manifest,
-                         position: Int,
-                         fileName: String? = null,
-                         localFileName: String? = null,
-                         parser: XmlPullParser) : super(manifest) {
+    internal constructor(
+        manifest: Manifest,
+        position: Int,
+        fileName: String?,
+        parser: XmlPullParser?
+    ) : super(manifest) {
         this.position = position
         this.fileName = fileName
-        this.localFileName = localFileName
+
+        parser?.let { parsePageXml(parser) }
     }
 
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
