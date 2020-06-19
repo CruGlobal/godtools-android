@@ -306,8 +306,18 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // region TabLayout.OnTabSelectedListener
     override fun onTabSelected(tab: TabLayout.Tab) {
         val locale = tab.tag as? Locale ?: return
-        dataModel.setActiveLocale(locale)
         eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
+        dataModel.setActiveLocale(locale)
+
+        // trigger analytics & live share publisher events
+        // TODO: this should probably occur whenever the activeManifest changes language,
+        //       but we need to make sure it executes after the pagerAdapter is updated
+        pagerAdapter.primaryItem?.let {
+            val page = it.page ?: return@let
+            val card = it.activeCard
+            trackTractPage(page, card)
+            sendLiveShareNavigationEvent(page, card)
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) = Unit
