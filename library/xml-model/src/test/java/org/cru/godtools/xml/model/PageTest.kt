@@ -50,6 +50,5 @@ class PageTest {
         assertEquals("Modal 2", page.modals[1].title!!.text)
     }
 
-    private fun parsePageXml(file: String) =
-        Page(manifest, 0).apply { parsePageXml(getXmlParserForResource(file)) }
+    private fun parsePageXml(file: String) = Page(manifest, 0, null, getXmlParserForResource(file))
 }

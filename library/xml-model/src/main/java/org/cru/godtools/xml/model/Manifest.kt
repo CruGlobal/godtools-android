@@ -7,13 +7,16 @@ import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 import java.util.Locale
 
 private const val XML_MANIFEST = "manifest"
@@ -26,6 +29,9 @@ private const val XML_NAVBAR_CONTROL_COLOR = "navbar-control-color"
 private const val XML_CATEGORY_LABEL_COLOR = "category-label-color"
 private const val XML_CATEGORIES = "categories"
 private const val XML_PAGES = "pages"
+private const val XML_PAGES_PAGE = "page"
+private const val XML_PAGES_PAGE_FILENAME = "filename"
+private const val XML_PAGES_PAGE_SRC = "src"
 private const val XML_PAGES_AEM_IMPORT = "aem-import"
 private const val XML_PAGES_AEM_IMPORT_SRC = "src"
 private const val XML_RESOURCES = "resources"
@@ -102,7 +108,12 @@ class Manifest : Base, Styles {
     @VisibleForTesting
     val resources: Map<String?, Resource>
 
-    internal constructor(code: String, locale: Locale, parser: XmlPullParser) : super() {
+    internal constructor(
+        code: String,
+        locale: Locale,
+        parser: XmlPullParser,
+        fileParser: (String) -> CloseableXmlPullParser
+    ) : super() {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST)
 
         this.code = code
@@ -137,7 +148,7 @@ class Manifest : Base, Styles {
                 XMLNS_MANIFEST -> when (parser.name) {
                     XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
                     XML_CATEGORIES -> categoriesData = parseCategories(parser)
-                    XML_PAGES -> pagesData = parsePages(parser)
+                    XML_PAGES -> pagesData = parsePages(parser, fileParser)
                     XML_RESOURCES -> resourcesData = parseResources(parser)
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
@@ -205,23 +216,32 @@ class Manifest : Base, Styles {
     }
 
     private class PagesData {
-        val pages = mutableListOf<Page>()
+        var pages: List<Page>? = null
         val aemImports = mutableListOf<Uri>()
     }
 
     @WorkerThread
-    @Throws(IOException::class, XmlPullParserException::class)
-    private fun parsePages(parser: XmlPullParser): PagesData {
+    private fun parsePages(parser: XmlPullParser, fileParser: (String) -> CloseableXmlPullParser) = runBlocking {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
         val result = PagesData()
+        val pages = mutableListOf<Deferred<Page>>()
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
             when (parser.namespace) {
                 XMLNS_MANIFEST -> when (parser.name) {
-                    Page.XML_PAGE -> result.pages.add(Page.fromManifestXml(this, result.pages.size, parser))
+                    XML_PAGES_PAGE -> {
+                        val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                        val srcFile: String? = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                        val position = pages.size
+                        XmlPullParserUtils.skipTag(parser)
+
+                        pages.add(async {
+                            srcFile?.let { fileParser(it) }.use { Page(this@Manifest, position, fileName, it) }
+                        })
+                    }
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
                 XMLNS_ARTICLE -> when (parser.name) {
@@ -234,7 +254,8 @@ class Manifest : Base, Styles {
                 else -> XmlPullParserUtils.skipTag(parser)
             }
         }
-        return result
+        result.pages = pages.awaitAll()
+        return@runBlocking result
     }
 
     @WorkerThread

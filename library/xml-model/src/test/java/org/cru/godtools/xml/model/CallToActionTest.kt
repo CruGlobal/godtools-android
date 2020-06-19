@@ -15,8 +15,7 @@ class CallToActionTest {
     @Test
     fun testParseCallToAction() {
         val events = Event.Id.parse(TOOL_CODE, "event1 ns:event2")
-        val page = mockPage()
-        page.parsePageXml(getXmlParserForResource("call_to_action.xml"))
+        val page = Page(mockManifest(), 0, null, getXmlParserForResource("call_to_action.xml"))
         val callToAction = page.callToAction
 
         assertEquals(Color.RED, callToAction.controlColor)

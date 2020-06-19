@@ -6,136 +6,139 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 
 @ColorInt
 private const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
-private const val XML_MANIFEST_FILENAME = "filename"
-private const val XML_MANIFEST_SRC = "src"
+private const val XML_PAGE = "page"
 private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
 
 class Page : Base, Styles, Parent {
+    override val page get() = this
+
     val id get() = fileName ?: "${manifest.code}-$position"
     val position: Int
 
     private val fileName: String?
-    val localFileName: String?
-    var listeners: Set<Event.Id> = emptySet()
-        private set
+    val listeners: Set<Event.Id>
 
     @ColorInt
-    var backgroundColor: Int = DEFAULT_BACKGROUND_COLOR
-    var backgroundImage: String? = null
-    var backgroundImageGravity: ImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
-    var backgroundImageScaleType: ImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-    var header: Header? = null
-        private set
-    var hero: Hero? = null
-        private set
-    var cards: List<Card> = emptyList()
-        private set
-    var modals: List<Modal> = emptyList()
-        private set
-    var callToAction: CallToAction = CallToAction(this)
-        private set
+    val backgroundColor: Int
+    val backgroundImage: String?
+    val backgroundImageGravity: ImageGravity
+    val backgroundImageScaleType: ImageScaleType
 
-    override val page get() = this
+    val header: Header?
+    val hero: Hero?
+    val cards: List<Card>
+    val modals: List<Modal>
+    val callToAction: CallToAction
 
     @ColorInt
-    private var _primaryColor: Int? = null
+    private val _primaryColor: Int?
     @get:ColorInt
     override val primaryColor get() = _primaryColor ?: stylesParent.primaryColor
 
     @ColorInt
-    private var _primaryTextColor: Int? = null
+    private val _primaryTextColor: Int?
     @get:ColorInt
     override val primaryTextColor get() = _primaryTextColor ?: stylesParent.primaryTextColor
 
     @ColorInt
-    private var _textColor: Int? = null
+    private val _textColor: Int?
     @get:ColorInt
     override val textColor get() = _textColor ?: stylesParent.textColor
 
     @ColorInt
-    private var _cardTextColor: Int? = null
+    private val _cardTextColor: Int?
     @get:ColorInt
     val cardTextColor get() = _cardTextColor ?: textColor
 
     override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(
-        manifest: Manifest,
-        position: Int,
-        fileName: String? = null,
-        localFileName: String? = null
-    ) : super(manifest) {
+    internal constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
         this.position = position
         this.fileName = fileName
-        this.localFileName = localFileName
+
+        listeners = emptySet()
+
+        _primaryColor = null
+        _primaryTextColor = null
+        _textColor = null
+        _cardTextColor = null
+
+        backgroundColor = DEFAULT_BACKGROUND_COLOR
+        backgroundImage = null
+        backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
+        backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        header = null
+        hero = null
+        cards = emptyList()
+        modals = emptyList()
+        callToAction = CallToAction(this)
     }
 
-    internal constructor(manifest: Manifest, position: Int, manifestParser: XmlPullParser) : super(manifest) {
+    @WorkerThread
+    internal constructor(manifest: Manifest, position: Int, fileName: String?, parser: XmlPullParser?) :
+        super(manifest) {
         this.position = position
+        this.fileName = fileName
 
-        manifestParser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE)
-        fileName = manifestParser.getAttributeValue(null, XML_MANIFEST_FILENAME)
-        localFileName = manifestParser.getAttributeValue(null, XML_MANIFEST_SRC)
-        XmlPullParserUtils.skipTag(manifestParser)
+        parser?.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
+
+        listeners = parser?.let { parseEvents(it, XML_LISTENERS) }.orEmpty()
+        _primaryColor = parser?.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR)
+        _primaryTextColor = parser?.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR)
+        _textColor = parser?.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
+        _cardTextColor = parser?.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
+
+        backgroundColor = parser?.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
+        backgroundImage = parser?.getAttributeValue(null, XML_BACKGROUND_IMAGE)
+        backgroundImageGravity =
+            parser?.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
+                ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
+        backgroundImageScaleType = parser?.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
+            ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        var header: Header? = null
+        var hero: Hero? = null
+        var cards: List<Card>? = null
+        var modals: List<Modal>? = null
+        var callToAction: CallToAction? = null
+        if (parser != null) {
+            // process any child elements
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) continue
+
+                when (parser.namespace) {
+                    XMLNS_TRACT -> when (parser.name) {
+                        Header.XML_HEADER -> header = Header(this, parser)
+                        Hero.XML_HERO -> hero = Hero(this, parser)
+                        XML_CARDS -> cards = parseCardsXml(parser)
+                        XML_MODALS -> modals = parseModalsXml(parser)
+                        CallToAction.XML_CALL_TO_ACTION -> callToAction = CallToAction(this, parser)
+                        else -> XmlPullParserUtils.skipTag(parser)
+                    }
+                    else -> XmlPullParserUtils.skipTag(parser)
+                }
+            }
+        }
+        this.header = header
+        this.hero = hero
+        this.cards = cards.orEmpty()
+        this.modals = modals.orEmpty()
+        this.callToAction = callToAction ?: CallToAction(this)
     }
 
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
-
-    private var pageXmlParsed = false
-
-    @WorkerThread
-    @Throws(IOException::class, XmlPullParserException::class)
-    fun parsePageXml(parser: XmlPullParser) {
-        // make sure we haven't parsed this page XML already
-        check(!pageXmlParsed) { "Page XML already parsed" }
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
-
-        listeners = parseEvents(parser, XML_LISTENERS)
-        _primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR) ?: _primaryColor
-        _primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR) ?: _primaryTextColor
-        _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR) ?: _textColor
-        _cardTextColor = parser.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR) ?: _cardTextColor
-        backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: backgroundColor
-        backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
-        backgroundImageGravity =
-            parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, backgroundImageGravity)
-        backgroundImageScaleType =
-            parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE) ?: backgroundImageScaleType
-
-        // process any child elements
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
-
-            when (parser.namespace) {
-                XMLNS_TRACT -> when (parser.name) {
-                    Header.XML_HEADER -> header = Header(this, parser)
-                    Hero.XML_HERO -> hero = Hero(this, parser)
-                    XML_CARDS -> cards = parseCardsXml(parser)
-                    XML_MODALS -> modals = parseModalsXml(parser)
-                    CallToAction.XML_CALL_TO_ACTION -> callToAction = CallToAction(this, parser)
-                    else -> XmlPullParserUtils.skipTag(parser)
-                }
-                else -> XmlPullParserUtils.skipTag(parser)
-            }
-        }
-
-        // mark page XML as parsed
-        pageXmlParsed = true
-    }
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun parseCardsXml(parser: XmlPullParser) = buildList {
@@ -172,15 +175,6 @@ class Page : Base, Styles, Parent {
     }
 
     val isLastPage get() = position == manifest.pages.size - 1
-
-    companion object {
-        const val XML_PAGE = "page"
-
-        @JvmStatic
-        @WorkerThread
-        @Throws(XmlPullParserException::class, IOException::class)
-        fun fromManifestXml(manifest: Manifest, position: Int, parser: XmlPullParser) = Page(manifest, position, parser)
-    }
 }
 
 @get:ColorInt

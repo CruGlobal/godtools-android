@@ -11,8 +11,7 @@ import org.junit.runner.RunWith
 class TextTest {
     @Test
     fun testParseText() {
-        val page = mockPage()
-        page.parsePageXml(getXmlParserForResource("text.xml"))
+        val page = Page(mockManifest(), 0, null, getXmlParserForResource("text.xml"))
         val (text1, text2) = (page.hero!!.content[0] as Paragraph).content.filterIsInstance<Text>()
 
         assertEquals("Text 1", text1.text)

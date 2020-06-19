@@ -35,5 +35,5 @@ class CardTest {
     }
 
     private fun parseCardXml(file: String) =
-        Page(manifest, 0).apply { parsePageXml(getXmlParserForResource(file)) }.let { it.cards[0] }
+        Page(manifest, 0, null, getXmlParserForResource(file)).let { it.cards[0] }
 }

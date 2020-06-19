@@ -13,7 +13,7 @@ import java.util.Locale
 class CategoryTest {
     @Test
     fun testParseCategory() {
-        val manifest = Manifest(TOOL_CODE, Locale.US, getXmlParserForResource("categories.xml"))
+        val manifest = Manifest(TOOL_CODE, Locale.US, getXmlParserForResource("categories.xml")) { TODO() }
         val category = manifest.findCategory("testParseCategory")!!
         assertEquals("testParseCategory", category.id)
         val banner = category.banner!!
