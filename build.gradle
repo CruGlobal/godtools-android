@@ -13,7 +13,7 @@ buildscript {
                 circleindicator    : '2.1.4',
                 dagger             : '2.28',
                 eventbus           : '3.2.0',
-                facebook           : '7.0.0',
+                facebook           : '7.0.1',
                 facebookFlipper    : '0.47.0',
                 findbugs           : '3.0.2',
                 gradleAndroidPlugin: '4.0.0',
