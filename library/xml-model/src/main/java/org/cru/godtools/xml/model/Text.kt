@@ -47,8 +47,13 @@ class Text : Content {
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(parent: Base, text: String?, textScale: Double?, @ColorInt textColor: Int?, textAlign: Align?) :
-        super(parent) {
+    constructor(
+        parent: Base,
+        text: String? = null,
+        textScale: Double? = null,
+        @ColorInt textColor: Int? = null,
+        textAlign: Align? = null
+    ) : super(parent) {
         this.text = text
         _textAlign = textAlign
         _textColor = textColor

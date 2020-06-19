@@ -23,7 +23,7 @@ abstract class Base : BaseModel {
         parent = this
     }
 
-    internal constructor(parent: Base) {
+    internal constructor(parent: BaseModel) {
         this.parent = parent
     }
 

@@ -2,6 +2,9 @@ package org.cru.godtools.xml.model
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
@@ -48,5 +51,16 @@ class ButtonTest {
     fun testParseButtonRestrictTo() {
         val button = Button(manifest, getXmlParserForResource("button_restrictTo.xml"))
         assertTrue(button.isIgnored)
+    }
+
+    @Test
+    fun testButtonTextColorFallbackBehavior() {
+        val parent: Styles = mock() {
+            whenever(it.primaryColor) doReturn Color.RED
+            whenever(it.primaryTextColor) doReturn Color.GREEN
+        }
+
+        assertEquals(Color.BLUE, Button(parent, text = { Text(it, textColor = Color.BLUE) }).text!!.textColor)
+        assertEquals(Color.GREEN, Button(parent, text = { Text(it, textColor = null) }).text!!.textColor)
     }
 }
