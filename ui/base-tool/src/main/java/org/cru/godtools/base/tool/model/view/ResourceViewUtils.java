@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.model.view;
 
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,19 +19,14 @@ import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 
 import static android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM;
+import static android.widget.RelativeLayout.ALIGN_PARENT_END;
+import static android.widget.RelativeLayout.ALIGN_PARENT_START;
 import static android.widget.RelativeLayout.ALIGN_PARENT_TOP;
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static org.cru.godtools.base.util.FileUtils.getGodToolsFile;
 
 public class ResourceViewUtils {
-    private static final int ALIGN_PARENT_START =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? RelativeLayout.ALIGN_PARENT_START :
-                    RelativeLayout.ALIGN_PARENT_LEFT;
-    private static final int ALIGN_PARENT_END =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? RelativeLayout.ALIGN_PARENT_END :
-                    RelativeLayout.ALIGN_PARENT_RIGHT;
-
     public static void bind(@Nullable final Resource resource, @Nullable final PicassoImageView view) {
         if (view != null) {
             view.setPicassoFile(resource != null ? getGodToolsFile(view.getContext(), resource.getLocalName()) : null);
