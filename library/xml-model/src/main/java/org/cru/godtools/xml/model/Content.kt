@@ -8,11 +8,11 @@ private const val XML_RESTRICT_TO = "restrictTo"
 abstract class Content : Base {
     private val restrictTo: Set<DeviceType>
 
-    protected constructor(parent: Base) : super(parent) {
+    protected constructor(parent: BaseModel) : super(parent) {
         restrictTo = DeviceType.ALL
     }
 
-    protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    protected constructor(parent: BaseModel, parser: XmlPullParser) : super(parent) {
         restrictTo = DeviceType.parse(
             types = parser.getAttributeValue(null, XML_RESTRICT_TO),
             defValue = DeviceType.ALL
