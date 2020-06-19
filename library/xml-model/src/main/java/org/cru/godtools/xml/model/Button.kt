@@ -2,6 +2,7 @@ package org.cru.godtools.xml.model
 
 import android.net.Uri
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
@@ -33,13 +34,13 @@ class Button : Content, Styles {
         }
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_BUTTON)
 
         type = Type.parseOrNull(parser.getAttributeValue(null, XML_TYPE)) ?: Type.DEFAULT
-        _buttonColor = parser.getAttributeValueAsColorOrNull(XML_COLOR)
         events = parseEvents(parser, XML_EVENTS)
         url = parser.getAttributeValueAsUriOrNull(XML_URL)
+        _buttonColor = parser.getAttributeValueAsColorOrNull(XML_COLOR)
 
         // process any child elements
         var analyticsEvents: Collection<AnalyticsEvent> = emptySet()
@@ -60,6 +61,17 @@ class Button : Content, Styles {
         this.text = text
     }
 
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal constructor(parent: BaseModel, text: ((Button) -> Text?)? = null) : super(parent) {
+        type = Type.DEFAULT
+        events = emptySet()
+        url = null
+        _buttonColor = null
+
+        analyticsEvents = emptySet()
+        this.text = text?.invoke(this)
+    }
+
     val type: Type
     val events: Set<Event.Id>
     val url: Uri?
@@ -71,6 +83,7 @@ class Button : Content, Styles {
 
     val text: Text?
     override val textAlign get() = Text.Align.CENTER
+    override val textColor get() = stylesParent.primaryTextColor
 
     val analyticsEvents: Collection<AnalyticsEvent>
 }
