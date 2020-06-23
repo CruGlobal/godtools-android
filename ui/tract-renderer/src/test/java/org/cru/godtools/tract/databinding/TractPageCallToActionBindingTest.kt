@@ -1,9 +1,11 @@
 package org.cru.godtools.tract.databinding
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.widget.ImageViewCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
@@ -16,6 +18,7 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.CallToAction
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.Text
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -42,6 +45,7 @@ class TractPageCallToActionBindingTest {
         page = spy(Page(Manifest(), 0))
     }
 
+    // region Arrow Tests
     @Test
     fun verifyArrowVisibilityLastPage() {
         whenever(page.isLastPage).thenReturn(true)
@@ -94,5 +98,22 @@ class TractPageCallToActionBindingTest {
         binding.callToActionArrow.performClick()
         verify(binding.callbacks!!, never()).goToNextPage()
         verify(binding.controller!!).sendEvents(any())
+    }
+
+    @Test
+    fun verifyArrowColor() {
+        binding.callToAction = CallToAction(page, controlColor = Color.GREEN)
+        binding.executePendingBindings()
+
+        assertEquals(Color.GREEN, ImageViewCompat.getImageTintList(binding.callToActionArrow)!!.defaultColor)
+    }
+    // endregion Arrow Tests
+
+    @Test
+    fun verifyLabel() {
+        binding.callToAction = CallToAction(page, label = { Text(it, text = "Label Test") })
+        binding.executePendingBindings()
+
+        assertEquals("Label Test", binding.callToActionLabel.text.toString())
     }
 }
