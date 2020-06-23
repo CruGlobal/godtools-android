@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
     </data>
 
@@ -43,7 +45,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/header"
                         android:layout_marginLeft="@dimen/horiz_margin_hero"
-                        android:layout_marginRight="@dimen/horiz_margin_hero">
+                        android:layout_marginRight="@dimen/horiz_margin_hero"
+                        app:visibleIf="@{page.hero != null}">
 
                         <TextView
                             android:id="@+id/hero_heading"
@@ -51,9 +54,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
                             android:saveEnabled="false"
+                            android:text="@{page.hero.heading}"
                             android:textIsSelectable="true"
-                            tools:text="Knowing God Personally"
-                            tools:textSize="54sp" />
+                            android:textSize="@{@dimen/text_size_hero_heading}"
+                            app:defaultTextColor="@{StylesKt.getPrimaryColor(page.hero)}"
+                            app:visibleIf="@{page.hero.heading != null}"
+                            tools:text="Knowing God Personally" />
 
                         <LinearLayout
                             android:id="@+id/content"
