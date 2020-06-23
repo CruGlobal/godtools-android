@@ -41,7 +41,7 @@ import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
-import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.base.tool.model.view.bindBackgroundImage
 import org.cru.godtools.tract.BuildConfig
 import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
@@ -271,7 +271,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) {
             window.decorView.setBackgroundColor(it.backgroundColor)
-            ManifestViewUtils.bindBackgroundImage(it, binding.backgroundImage)
+            binding.backgroundImage.bindBackgroundImage(it)
         }
     }
 

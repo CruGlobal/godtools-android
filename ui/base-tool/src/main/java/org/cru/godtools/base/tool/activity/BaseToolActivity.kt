@@ -28,7 +28,7 @@ import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpened
-import org.cru.godtools.base.tool.model.view.ManifestViewUtils
+import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
@@ -314,5 +314,5 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     }
 
     override fun setTitle(title: CharSequence) =
-        super.setTitle(title.applyTypefaceSpan(ManifestViewUtils.getTypeface(activeManifest, this)))
+        super.setTitle(title.applyTypefaceSpan(activeManifest?.getTypeface(this)))
 }
