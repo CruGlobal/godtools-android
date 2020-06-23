@@ -63,7 +63,7 @@ class Page : Base, Styles, Parent {
     override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
+    constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
         this.position = position
         this.fileName = fileName
 

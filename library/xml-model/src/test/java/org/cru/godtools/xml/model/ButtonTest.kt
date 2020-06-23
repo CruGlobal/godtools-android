@@ -55,7 +55,7 @@ class ButtonTest {
 
     @Test
     fun testButtonTextColorFallbackBehavior() {
-        val parent: Styles = mock() {
+        val parent: Styles = mock {
             whenever(it.primaryColor) doReturn Color.RED
             whenever(it.primaryTextColor) doReturn Color.GREEN
         }

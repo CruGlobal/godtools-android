@@ -86,7 +86,8 @@
                 layout="@layout/tract_page_call_to_action"
                 app:callToAction="@{page.callToAction}"
                 app:callbacks="@{callbacks}"
-                app:controller="@{controller}"/>
+                app:controller="@{controller}"
+                app:page="@{page}" />
         </org.cru.godtools.tract.widget.PageContentLayout>
     </RelativeLayout>
 </layout>

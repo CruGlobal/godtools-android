@@ -5,6 +5,7 @@
     <data>
         <import type="org.cru.godtools.xml.model.CallToActionKt" />
 
+        <variable name="page" type="org.cru.godtools.xml.model.Page" />
         <variable name="callToAction" type="org.cru.godtools.xml.model.CallToAction" />
         <variable name="controller" type="org.cru.godtools.tract.viewmodel.PageViewHolder" />
         <variable name="callbacks" type="org.cru.godtools.tract.viewmodel.PageViewHolder.Callbacks" />
@@ -31,7 +32,7 @@
             android:saveEnabled="false"
             app:srcCompat="@drawable/ic_call_to_action"
             app:tint="@{CallToActionKt.getControlColor(callToAction)}"
-            app:visibleIf="@{callToAction == null || !callToAction.page.lastPage || !callToAction.events.empty}"
+            app:visibleIf="@{!page.lastPage || (callToAction != null &amp;&amp; !callToAction.events.empty)}"
             tools:tint="@android:color/holo_orange_light" />
 
         <TextView

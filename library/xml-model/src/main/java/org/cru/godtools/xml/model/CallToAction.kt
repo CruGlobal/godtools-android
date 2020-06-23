@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -52,6 +53,18 @@ class CallToAction : Base {
             XmlPullParserUtils.skipTag(parser)
         }
         this.label = label
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(
+        parent: Base,
+        label: ((CallToAction) -> Text?)? = null,
+        events: Set<Event.Id> = emptySet(),
+        @ColorInt controlColor: Int? = null
+    ) : super(parent) {
+        this.label = label?.invoke(this)
+        this.events = events
+        _controlColor = controlColor
     }
 }
 
