@@ -2,9 +2,7 @@ package org.cru.godtools.xml.model
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.annotation.DimenRes
 import org.ccci.gto.android.common.util.XmlPullParserUtils
-import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
 
@@ -21,9 +19,6 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : Base(pa
 
     @get:ColorInt
     override val textColor get() = primaryTextColor
-
-    @get:DimenRes
-    override val textSize get() = R.dimen.text_size_header
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HEADER)

@@ -58,8 +58,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @BindView(R2.id.page_content_layout)
     PageContentLayout mPageContentLayout;
 
-    @BindView(R2.id.header)
-    View mHeader;
     @BindView(R2.id.hero)
     View mHero;
     @BindView(R2.id.call_to_action)
@@ -74,8 +72,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
     private Card[] mCards = new Card[0];
     private Set<String> mVisibleCards = new ArraySet<>();
 
-    @NonNull
-    private final HeaderViewHolder mHeaderViewHolder;
     @NonNull
     private final HeroViewHolder mHeroViewHolder;
     @Nullable
@@ -95,7 +91,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mSettings = Settings.Companion.getInstance(root.getContext());
 
         mPageContentLayout.setActiveCardListener(this);
-        mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
         mHeroViewHolder = HeroViewHolder.forView(mHero, this);
         mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
         mCallToActionViewHolder.setCallbacks(this);
@@ -113,7 +108,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
     void onBind() {
         super.onBind();
         bindPage();
-        mHeaderViewHolder.bind(mModel != null ? mModel.getHeader() : null);
         mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();
         mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
