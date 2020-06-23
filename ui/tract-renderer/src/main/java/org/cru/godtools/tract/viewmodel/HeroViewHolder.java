@@ -24,7 +24,7 @@ public class HeroViewHolder extends ParentViewHolder<Hero> {
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
 
-    HeroViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
+    HeroViewHolder(@NonNull final View root, @Nullable final PageViewHolder parentViewHolder) {
         super(Hero.class, root, parentViewHolder);
     }
 

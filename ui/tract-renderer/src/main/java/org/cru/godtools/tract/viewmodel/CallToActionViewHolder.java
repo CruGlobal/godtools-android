@@ -30,7 +30,7 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
     @Nullable
     private Callbacks mCallbacks;
 
-    CallToActionViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
+    CallToActionViewHolder(@NonNull final View root, @Nullable final PageViewHolder parentViewHolder) {
         super(CallToAction.class, root, parentViewHolder);
     }
 
