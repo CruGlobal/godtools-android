@@ -22,8 +22,9 @@ stages:
   if: type = push AND branch = develop
 
 before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+#  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/executionHistory/
+#  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
