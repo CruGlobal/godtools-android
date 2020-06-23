@@ -25,7 +25,6 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import butterknife.ButterKnife;
 
@@ -136,7 +135,7 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     protected void updateLayoutDirection() {
         // HACK: In theory we should be able to set this on the root page only.
         // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
-        ViewCompat.setLayoutDirection(mRoot, BaseKt.getLayoutDirection(mModel));
+        mRoot.setLayoutDirection(BaseKt.getLayoutDirection(mModel));
     }
 
     public final void sendEvents(@NonNull final Set<Event.Id> ids) {

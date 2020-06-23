@@ -13,7 +13,6 @@ import org.cru.godtools.xml.model.CallToActionKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -80,6 +79,6 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
     @Override
     protected void updateLayoutDirection() {
         // force CallToAction to inherit it's layout direction
-        ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
+        mRoot.setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
     }
 }

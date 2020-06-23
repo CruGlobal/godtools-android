@@ -1,7 +1,7 @@
 package org.cru.godtools.xml.model
 
-import androidx.core.text.TextUtilsCompat
-import androidx.core.view.ViewCompat
+import android.text.TextUtils
+import android.view.View
 import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
@@ -48,11 +48,11 @@ abstract class Base : BaseModel {
 
     open fun getResource(name: String?): Resource? = manifest.getResource(name)
 
-    internal val layoutDirection get() = TextUtilsCompat.getLayoutDirectionFromLocale(manifest.locale)
+    internal val layoutDirection get() = TextUtils.getLayoutDirectionFromLocale(manifest.locale)
 
     private val defaultEventNamespace get() = manifest.code
     fun parseEvents(parser: XmlPullParser, attribute: String) =
         Event.Id.parse(defaultEventNamespace, parser.getAttributeValue(null, attribute))
 }
 
-val Base?.layoutDirection get() = this?.layoutDirection ?: ViewCompat.LAYOUT_DIRECTION_INHERIT
+val Base?.layoutDirection get() = this?.layoutDirection ?: View.LAYOUT_DIRECTION_INHERIT

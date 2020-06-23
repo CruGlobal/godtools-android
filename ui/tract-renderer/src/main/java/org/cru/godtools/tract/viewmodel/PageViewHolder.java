@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.collection.ArraySet;
 import androidx.core.util.Pools;
-import androidx.core.view.ViewCompat;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ViewCollections;
@@ -237,11 +236,11 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     protected void updateLayoutDirection() {
         // HACK: the root view should inherit it's layout direction so the call-to-action view can inherit as well.
-        ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
+        mRoot.setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
 
         // force the layout direction for any other views that do care
         final int dir = BaseKt.getLayoutDirection(mModel);
-        ViewCollections.run(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
+        ViewCollections.run(mLayoutDirectionViews, (v, i) -> v.setLayoutDirection(dir));
     }
 
     private void updateDisplayedCards() {
