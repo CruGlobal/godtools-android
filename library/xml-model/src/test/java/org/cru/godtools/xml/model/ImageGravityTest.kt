@@ -13,33 +13,33 @@ class ImageGravityTest {
     @Test
     fun verifyParse() {
         ImageGravity.parse("start unrecognized center", ImageGravity.NONE).also { gravity ->
-            assertFalse(gravity.isCenterX())
-            assertTrue(gravity.isStart())
-            assertFalse(gravity.isEnd())
-            assertTrue(gravity.isCenterY())
-            assertFalse(gravity.isTop())
-            assertFalse(gravity.isBottom())
-            assertFalse(gravity.isCenter())
+            assertFalse(gravity.isCenterX)
+            assertTrue(gravity.isStart)
+            assertFalse(gravity.isEnd)
+            assertTrue(gravity.isCenterY)
+            assertFalse(gravity.isTop)
+            assertFalse(gravity.isBottom)
+            assertFalse(gravity.isCenter)
         }
 
         ImageGravity.parse("center end", ImageGravity.NONE).also { gravity ->
-            assertFalse(gravity.isCenterX())
-            assertFalse(gravity.isStart())
-            assertTrue(gravity.isEnd())
-            assertTrue(gravity.isCenterY())
-            assertFalse(gravity.isTop())
-            assertFalse(gravity.isBottom())
-            assertFalse(gravity.isCenter())
+            assertFalse(gravity.isCenterX)
+            assertFalse(gravity.isStart)
+            assertTrue(gravity.isEnd)
+            assertTrue(gravity.isCenterY)
+            assertFalse(gravity.isTop)
+            assertFalse(gravity.isBottom)
+            assertFalse(gravity.isCenter)
         }
 
         ImageGravity.parse("center", ImageGravity.NONE).also { gravity ->
-            assertTrue(gravity.isCenterX())
-            assertFalse(gravity.isStart())
-            assertFalse(gravity.isEnd())
-            assertTrue(gravity.isCenterY())
-            assertFalse(gravity.isTop())
-            assertFalse(gravity.isBottom())
-            assertTrue(gravity.isCenter())
+            assertTrue(gravity.isCenterX)
+            assertFalse(gravity.isStart)
+            assertFalse(gravity.isEnd)
+            assertTrue(gravity.isCenterY)
+            assertFalse(gravity.isTop)
+            assertFalse(gravity.isBottom)
+            assertTrue(gravity.isCenter)
         }
     }
 

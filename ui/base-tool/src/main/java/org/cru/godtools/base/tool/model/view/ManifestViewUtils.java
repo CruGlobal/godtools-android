@@ -19,8 +19,8 @@ public class ManifestViewUtils {
 
     public static void bindBackgroundImage(@Nullable final Manifest manifest,
                                            @NonNull final ScaledPicassoImageView view) {
-        ResourceViewUtils.bindBackgroundImage(ManifestKt.getBackgroundImageResource(manifest), view,
-                                              ManifestKt.getBackgroundImageScaleType(manifest),
-                                              ManifestKt.getBackgroundImageGravity(manifest));
+        ResourceViewUtilsKt.bindBackgroundImage(view, ManifestKt.getBackgroundImageResource(manifest),
+                                                ManifestKt.getBackgroundImageScaleType(manifest),
+                                                ManifestKt.getBackgroundImageGravity(manifest));
     }
 }

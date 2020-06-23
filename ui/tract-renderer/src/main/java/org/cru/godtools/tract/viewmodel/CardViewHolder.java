@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
+import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
@@ -118,9 +118,9 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     private void bindBackground() {
         mCardView.setCardBackgroundColor(CardKt.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(CardKt.getBackgroundImageResource(mModel), mBackgroundView,
-                                              CardKt.getBackgroundImageScaleType(mModel),
-                                              CardKt.getBackgroundImageGravity(mModel));
+        ResourceViewUtilsKt.bindBackgroundImage(mBackgroundView, CardKt.getBackgroundImageResource(mModel),
+                                                CardKt.getBackgroundImageScaleType(mModel),
+                                                CardKt.getBackgroundImageGravity(mModel));
     }
 
     private void bindLabel() {
