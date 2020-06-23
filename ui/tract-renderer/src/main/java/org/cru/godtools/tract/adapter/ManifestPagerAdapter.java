@@ -184,6 +184,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             super(view);
             mBinding = TractPageBindingImpl.bind(view);
             mModelViewHolder = PageViewHolder.forView(view);
+            mBinding.setController(mModelViewHolder);
+            mBinding.setCallbacks(this);
             mModelViewHolder.setCallbacks(this);
         }
 

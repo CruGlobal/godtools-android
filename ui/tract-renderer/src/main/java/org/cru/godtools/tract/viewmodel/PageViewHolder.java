@@ -16,12 +16,10 @@ import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.xml.model.BaseKt;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
 import org.cru.godtools.xml.model.PageKt;
 
-import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.CallSuper;
@@ -31,15 +29,13 @@ import androidx.annotation.UiThread;
 import androidx.collection.ArraySet;
 import androidx.core.util.Pools;
 import butterknife.BindView;
-import butterknife.BindViews;
-import butterknife.ViewCollections;
 
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
 import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
 
 public class PageViewHolder extends ParentViewHolder<Page>
-        implements PageContentLayout.OnActiveCardListener, CallToActionViewHolder.Callbacks, CardViewHolder.Callbacks,
+        implements PageContentLayout.OnActiveCardListener, CardViewHolder.Callbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
@@ -60,11 +56,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @BindView(R2.id.hero)
     View mHero;
-    @BindView(R2.id.call_to_action)
-    View mCallToAction;
-
-    @BindViews({R2.id.background_image, R2.id.initial_page_content})
-    List<View> mLayoutDirectionViews;
 
     private boolean mBindingCards = false;
     private boolean mNeedsCardsRebind = false;
@@ -80,8 +71,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
     private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
     @NonNull
     private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
-    @NonNull
-    private final CallToActionViewHolder mCallToActionViewHolder;
 
     @Nullable
     private Callbacks mCallbacks;
@@ -92,8 +81,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
         mPageContentLayout.setActiveCardListener(this);
         mHeroViewHolder = HeroViewHolder.forView(mHero, this);
-        mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
-        mCallToActionViewHolder.setCallbacks(this);
     }
 
     @NonNull
@@ -110,7 +97,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
         bindPage();
         mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();
-        mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
     }
 
     @Override
@@ -229,12 +215,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @Override
     protected void updateLayoutDirection() {
-        // HACK: the root view should inherit it's layout direction so the call-to-action view can inherit as well.
-        mRoot.setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
-
-        // force the layout direction for any other views that do care
-        final int dir = BaseKt.getLayoutDirection(mModel);
-        ViewCollections.run(mLayoutDirectionViews, (v, i) -> v.setLayoutDirection(dir));
     }
 
     private void updateDisplayedCards() {
@@ -353,13 +333,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
                 mPageContentLayout.changeActiveCard(i, true);
                 return;
             }
-        }
-    }
-
-    @Override
-    public void goToNextPage() {
-        if (mCallbacks != null) {
-            mCallbacks.goToNextPage();
         }
     }
 

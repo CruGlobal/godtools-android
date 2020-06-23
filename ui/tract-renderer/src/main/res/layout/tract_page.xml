@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="callbacks" type="org.cru.godtools.tract.viewmodel.PageViewHolder.Callbacks" />
+        <variable name="controller" type="org.cru.godtools.tract.viewmodel.PageViewHolder" />
     </data>
 
     <RelativeLayout
@@ -18,19 +21,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:cropToPadding="false" />
+            android:cropToPadding="false"
+            android:layoutDirection="@{BaseKt.getLayoutDirection(page)}" />
 
         <org.cru.godtools.tract.widget.PageContentLayout
             android:id="@+id/page_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layoutDirection="inherit">
 
             <org.ccci.gto.android.common.widget.HackyNestedScrollView
                 android:id="@+id/initial_page_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true"
+                android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
                 app:layout_childType="hero">
 
                 <LinearLayout
@@ -62,7 +68,8 @@
                             android:textSize="@{@dimen/text_size_hero_heading}"
                             app:defaultTextColor="@{StylesKt.getPrimaryColor(page.hero)}"
                             app:visibleIf="@{page.hero.heading != null}"
-                            tools:text="Knowing God Personally" />
+                            tools:text="Knowing God Personally"
+                            tools:textSize="@dimen/text_size_hero_heading" />
 
                         <LinearLayout
                             android:id="@+id/content"
@@ -75,7 +82,11 @@
                 </LinearLayout>
             </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 
-            <include layout="@layout/tract_page_call_to_action" />
+            <include
+                layout="@layout/tract_page_call_to_action"
+                app:callToAction="@{page.callToAction}"
+                app:callbacks="@{callbacks}"
+                app:controller="@{controller}"/>
         </org.cru.godtools.tract.widget.PageContentLayout>
     </RelativeLayout>
 </layout>
