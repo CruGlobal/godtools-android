@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:id="@+id/call_to_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_childType="call_to_action">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/call_to_action_arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
+            android:padding="8dp"
+            android:saveEnabled="false"
+            app:srcCompat="@drawable/ic_call_to_action"
+            tools:src="@drawable/ic_call_to_action"
+            tools:tint="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/call_to_action_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
+            android:layout_toStartOf="@id/call_to_action_arrow"
+            android:saveEnabled="false"
+            android:textIsSelectable="true"
+            tools:text="Call To Action" />
+    </RelativeLayout>
+</layout>

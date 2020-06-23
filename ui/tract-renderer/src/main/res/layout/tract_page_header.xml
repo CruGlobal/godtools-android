@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:saveEnabled="false"
+        tools:background="@android:color/Purple_800">
+
+        <TextView
+            android:id="@+id/header_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:saveEnabled="false"
+            android:textIsSelectable="false"
+            tools:text="1"
+            tools:textSize="54sp" />
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:layout_toEndOf="@id/header_number"
+            android:saveEnabled="false"
+            android:textIsSelectable="true"
+            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
+            tools:textSize="18sp" />
+    </RelativeLayout>
+</layout>

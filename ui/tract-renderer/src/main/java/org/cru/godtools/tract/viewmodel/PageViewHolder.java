@@ -50,7 +50,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final Settings mSettings;
 
-    @BindView(R2.id.page)
+    @BindView(R2.id.pageView)
     View mPageView;
     @BindView(R2.id.background_image)
     ScaledPicassoImageView mBackgroundImage;

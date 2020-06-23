@@ -112,7 +112,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     @Override
     protected RVPageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
         return new RVPageViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.page_manifest_page, parent, false));
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_page, parent, false));
     }
 
     @Override
@@ -176,7 +176,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
         private final PageViewHolder mModelViewHolder;
 
-        @BindView(R2.id.page)
+        @BindView(R2.id.pageView)
         View mPageView;
 
         @Nullable
