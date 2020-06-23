@@ -27,7 +27,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
-            android:onClick="@{() -> !callToAction.events.empty ? controller.sendEvents(callToAction.events) : callbacks.goToNextPage()}"
+            android:onClick="@{() -> callToAction == null || callToAction.events.empty ? callbacks.goToNextPage() : controller.sendEvents(callToAction.events)}"
             android:padding="8dp"
             android:saveEnabled="false"
             app:srcCompat="@drawable/ic_call_to_action"
