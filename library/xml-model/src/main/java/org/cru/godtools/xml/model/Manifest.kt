@@ -289,7 +289,6 @@ val Manifest?.navBarControlColor get() = this?.navBarControlColor ?: primaryText
 
 @get:ColorInt
 val Manifest?.backgroundColor get() = this?.backgroundColor ?: Manifest.DEFAULT_BACKGROUND_COLOR
-val Manifest?.backgroundImageResource get() = this?.backgroundImage
 val Manifest?.backgroundImageGravity get() = this?.backgroundImageGravity ?: Manifest.DEFAULT_BACKGROUND_IMAGE_GRAVITY
 val Manifest?.backgroundImageScaleType
     get() = this?.backgroundImageScaleType ?: Manifest.DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
