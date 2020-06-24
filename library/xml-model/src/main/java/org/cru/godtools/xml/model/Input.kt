@@ -7,7 +7,6 @@ import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_CONTENT
-import org.cru.godtools.xml.model.Text.Companion.fromNestedXml
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TYPE = "type"
@@ -73,8 +72,8 @@ class Input : Content {
 
             when (parser.namespace) {
                 XMLNS_CONTENT -> when (parser.name) {
-                    XML_LABEL -> label = fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
-                    XML_PLACEHOLDER -> placeholder = fromNestedXml(this, parser, XMLNS_CONTENT, XML_PLACEHOLDER)
+                    XML_LABEL -> label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
+                    XML_PLACEHOLDER -> placeholder = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_PLACEHOLDER)
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
                 else -> XmlPullParserUtils.skipTag(parser)
