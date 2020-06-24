@@ -14,11 +14,11 @@ class Tabs : Content {
     val tabs: List<Tab>
 
     @VisibleForTesting
-    internal constructor(parent: Base, tabs: List<Tab>) : super(parent) {
+    internal constructor(parent: BaseModel, tabs: List<Tab>) : super(parent) {
         this.tabs = tabs
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TABS)
 
         // process any child elements

@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
@@ -25,8 +26,13 @@ abstract class Content : Base {
     val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
 
     companion object {
-        fun fromXml(parent: Base, parser: XmlPullParser): Content? {
+        internal fun fromXml(
+            parent: BaseModel,
+            parser: XmlPullParser,
+            consumeUnrecognizedTags: Boolean = false
+        ): Content? {
             parser.require(XmlPullParser.START_TAG, null, null)
+
             return when (parser.namespace) {
                 XMLNS_CONTENT -> when (parser.name) {
                     Paragraph.XML_PARAGRAPH -> Paragraph(parent, parser)
@@ -37,9 +43,15 @@ abstract class Content : Base {
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
-                    else -> null
+                    else -> {
+                        if (consumeUnrecognizedTags) XmlPullParserUtils.skipTag(parser)
+                        null
+                    }
                 }
-                else -> null
+                else -> {
+                    if (consumeUnrecognizedTags) XmlPullParserUtils.skipTag(parser)
+                    null
+                }
             }
         }
     }

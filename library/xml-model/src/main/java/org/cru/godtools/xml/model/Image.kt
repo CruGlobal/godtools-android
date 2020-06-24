@@ -11,7 +11,7 @@ private const val XML_RESOURCE = "resource"
 
 class Image : Content {
     @WorkerThread
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_IMAGE)
 
         resourceName = parser.getAttributeValue(null, XML_RESOURCE)

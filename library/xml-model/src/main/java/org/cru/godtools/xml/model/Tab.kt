@@ -1,12 +1,9 @@
 package org.cru.godtools.xml.model
 
-import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
-import org.cru.godtools.xml.model.Content.Companion.fromXml
 import org.xmlpull.v1.XmlPullParser
-import java.util.Collections
 
 private const val XML_LABEL = "label"
 
@@ -27,38 +24,17 @@ class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullP
         // process any child elements
         var analyticsEvents: Collection<AnalyticsEvent> = emptyList()
         var label: Text? = null
-        val contentList = mutableListOf<Content>()
-        parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
-
+        content = parseContent(parser) {
             when (parser.namespace) {
                 XMLNS_ANALYTICS -> when (parser.name) {
-                    AnalyticsEvent.XML_EVENTS -> {
-                        analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
-                        continue@parsingChildren
-                    }
+                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                 }
                 XMLNS_CONTENT -> when (parser.name) {
-                    XML_LABEL -> {
-                        label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
-                        continue@parsingChildren
-                    }
+                    XML_LABEL -> label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
                 }
             }
-
-            // try parsing this child element as a content node
-            val content = fromXml(this, parser)
-            if (content != null) {
-                if (!content.isIgnored) contentList.add(content)
-                continue
-            }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser)
         }
-
         this.analyticsEvents = analyticsEvents
         this.label = label
-        content = Collections.unmodifiableList(contentList)
     }
 }
