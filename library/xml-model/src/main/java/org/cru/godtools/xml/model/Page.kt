@@ -30,7 +30,8 @@ class Page : Base, Styles, Parent {
 
     @ColorInt
     val backgroundColor: Int
-    val backgroundImage: String?
+    private val _backgroundImage: String?
+    val backgroundImage get() = getResource(_backgroundImage)
     val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
@@ -63,7 +64,7 @@ class Page : Base, Styles, Parent {
     override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
+    constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
         this.position = position
         this.fileName = fileName
 
@@ -75,7 +76,7 @@ class Page : Base, Styles, Parent {
         _cardTextColor = null
 
         backgroundColor = DEFAULT_BACKGROUND_COLOR
-        backgroundImage = null
+        _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
@@ -101,7 +102,7 @@ class Page : Base, Styles, Parent {
         _cardTextColor = parser?.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
 
         backgroundColor = parser?.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
-        backgroundImage = parser?.getAttributeValue(null, XML_BACKGROUND_IMAGE)
+        _backgroundImage = parser?.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
             parser?.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
                 ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
@@ -179,6 +180,5 @@ class Page : Base, Styles, Parent {
 
 @get:ColorInt
 val Page?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
-val Page?.backgroundImageResource get() = this?.getResource(backgroundImage)
 val Page?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 val Page?.backgroundImageGravity: Int get() = (this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY).gravity

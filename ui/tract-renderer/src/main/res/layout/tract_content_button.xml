@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.AppCompatButton xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:saveEnabled="false" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.ButtonKt" />
+
+        <variable name="model" type="org.cru.godtools.xml.model.Button" />
+        <variable name="holder" type="org.cru.godtools.tract.viewmodel.ButtonViewHolder" />
+    </data>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> holder.click()}"
+        android:saveEnabled="false"
+        android:text="@{model.text}"
+        app:backgroundTintCompat="@{ButtonKt.getButtonColor(model)}"
+        app:defaultTextColor="@{ButtonKt.getTextColor(model)}" />
+</layout>

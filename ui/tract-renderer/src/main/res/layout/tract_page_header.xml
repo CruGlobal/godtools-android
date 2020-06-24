@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.cru.godtools.xml.model.HeaderKt" />
+
+        <variable name="header" type="org.cru.godtools.xml.model.Header" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:saveEnabled="false"
+        android:background="@{HeaderKt.getBackgroundColor(header)}"
+        app:visibleIf="@{header != null}"
+        tools:background="@android:color/Purple_800">
+
+        <TextView
+            android:id="@+id/header_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:saveEnabled="false"
+            android:textIsSelectable="false"
+            android:text="@{header.number}"
+            android:textSize="@{@dimen/text_size_header_number}"
+            app:visibleIf="@{header.number != null}"
+            tools:text="1"
+            tools:textSize="@dimen/text_size_header_number" />
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:layout_toEndOf="@id/header_number"
+            android:saveEnabled="false"
+            android:textIsSelectable="true"
+            android:text="@{header.title}"
+            android:textSize="@{@dimen/text_size_header}"
+            app:visibleIf="@{header.title != null}"
+            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
+            tools:textSize="@dimen/text_size_header" />
+    </RelativeLayout>
+</layout>

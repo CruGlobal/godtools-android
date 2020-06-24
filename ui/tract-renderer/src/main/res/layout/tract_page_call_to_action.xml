@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.cru.godtools.xml.model.CallToActionKt" />
+
+        <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="callToAction" type="org.cru.godtools.xml.model.CallToAction" />
+        <variable name="controller" type="org.cru.godtools.tract.viewmodel.PageViewHolder" />
+        <variable name="callbacks" type="org.cru.godtools.tract.viewmodel.PageViewHolder.Callbacks" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layoutDirection="inherit"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_childType="call_to_action">
+
+        <ImageView
+            android:id="@+id/call_to_action_arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
+            android:onClick="@{() -> callToAction == null || callToAction.events.empty ? callbacks.goToNextPage() : controller.sendEvents(callToAction.events)}"
+            android:padding="8dp"
+            android:saveEnabled="false"
+            app:srcCompat="@drawable/ic_call_to_action"
+            app:tint="@{CallToActionKt.getControlColor(callToAction)}"
+            app:visibleIf="@{!page.lastPage || (callToAction != null &amp;&amp; !callToAction.events.empty)}"
+            tools:tint="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/call_to_action_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
+            android:layout_toStartOf="@id/call_to_action_arrow"
+            android:saveEnabled="false"
+            android:text="@{callToAction.label}"
+            android:textIsSelectable="true"
+            tools:text="Call To Action" />
+    </RelativeLayout>
+</layout>

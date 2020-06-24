@@ -89,3 +89,4 @@ class Button : Content, Styles {
 }
 
 val Button?.buttonColor get() = this?.buttonColor ?: stylesParent.buttonColor
+val Button?.textColor get() = this?.textColor ?: stylesParent.primaryTextColor

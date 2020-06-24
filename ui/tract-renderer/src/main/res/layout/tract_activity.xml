@@ -42,7 +42,7 @@
             android:visibility="gone"
             app:visibleIf="@{toolState == ToolState.LOADED}">
 
-            <org.cru.godtools.tract.widget.TractPicassoImageView
+            <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
                 android:id="@+id/background_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

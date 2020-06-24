@@ -11,8 +11,9 @@ import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
+import org.cru.godtools.tract.databinding.TractPageBinding;
+import org.cru.godtools.tract.databinding.TractPageBindingImpl;
 import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
@@ -31,8 +32,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements
         DefaultLifecycleObserver, Observer<Manifest> {
@@ -112,7 +111,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     @Override
     protected RVPageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
         return new RVPageViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.page_manifest_page, parent, false));
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_page, parent, false));
     }
 
     @Override
@@ -176,16 +175,17 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
         private final PageViewHolder mModelViewHolder;
 
-        @BindView(R2.id.page)
-        View mPageView;
+        private final TractPageBinding mBinding;
 
         @Nullable
         Page mPage;
 
         RVPageViewHolder(@NonNull final View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            mBinding = TractPageBindingImpl.bind(view);
             mModelViewHolder = PageViewHolder.forView(view);
+            mBinding.setController(mModelViewHolder);
+            mBinding.setCallbacks(this);
             mModelViewHolder.setCallbacks(this);
         }
 
@@ -196,6 +196,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
                 return;
             }
             mPage = page;
+            mBinding.setPage(mPage);
             mModelViewHolder.bind(page);
         }
 
