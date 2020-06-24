@@ -8,10 +8,10 @@ import android.widget.TextView;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
+import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.CardKt;
@@ -43,7 +43,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     @BindView(R2.id.background_image)
-    TractPicassoImageView mBackgroundView;
+    SimpleScaledPicassoImageView mBackgroundView;
     @BindView(R2.id.card)
     CardView mCardView;
     @BindView(R2.id.label)

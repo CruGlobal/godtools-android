@@ -1,15 +1,14 @@
-package org.cru.godtools.tract.widget
+package org.cru.godtools.base.tool.widget
 
 import android.content.Context
 import android.util.AttributeSet
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-import org.cru.godtools.base.tool.widget.ScaledPicassoImageView
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView.ScaleHelper
 import org.cru.godtools.xml.model.ImageScaleType
 
-class TractPicassoImageView @JvmOverloads constructor(
+class SimpleScaledPicassoImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
