@@ -6,7 +6,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -39,6 +38,7 @@ private val DEFAULT_BACKGROUND_COLOR = Color.WHITE
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
+@OptIn(ExperimentalStdlibApi::class)
 class Manifest : Base, Styles {
     companion object {
         @ColorInt
@@ -96,7 +96,6 @@ class Manifest : Base, Styles {
     val categories: List<Category>
     val pages: List<Page>
     val aemImports: List<Uri>
-
     @VisibleForTesting
     val resources: Map<String?, Resource>
 
@@ -104,7 +103,7 @@ class Manifest : Base, Styles {
         code: String,
         locale: Locale,
         parser: XmlPullParser,
-        fileParser: (String) -> CloseableXmlPullParser
+        parseFile: (String) -> CloseableXmlPullParser
     ) : super() {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST)
 
@@ -140,7 +139,7 @@ class Manifest : Base, Styles {
                 XMLNS_MANIFEST -> when (parser.name) {
                     XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
                     XML_CATEGORIES -> categoriesData = parseCategories(parser)
-                    XML_PAGES -> pagesData = parsePages(parser, fileParser)
+                    XML_PAGES -> pagesData = parsePages(parser, parseFile)
                     XML_RESOURCES -> resourcesData = parseResources(parser)
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
@@ -188,7 +187,6 @@ class Manifest : Base, Styles {
     fun findPage(id: String?) = pages.firstOrNull { it.id.equals(id, ignoreCase = true) }
 
     @WorkerThread
-    @OptIn(ExperimentalStdlibApi::class)
     private fun parseCategories(parser: XmlPullParser): List<Category> {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES)
 
@@ -213,45 +211,44 @@ class Manifest : Base, Styles {
     }
 
     @WorkerThread
-    private fun parsePages(parser: XmlPullParser, fileParser: (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun parsePages(parser: XmlPullParser, parseFile: (String) -> CloseableXmlPullParser) = runBlocking {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
         val result = PagesData()
-        val pages = mutableListOf<Deferred<Page>>()
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        result.pages = buildList {
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_MANIFEST -> when (parser.name) {
-                    XML_PAGES_PAGE -> {
-                        val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
-                        val srcFile: String? = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                        val position = pages.size
-                        XmlPullParserUtils.skipTag(parser)
+                when (parser.namespace) {
+                    XMLNS_MANIFEST -> when (parser.name) {
+                        XML_PAGES_PAGE -> {
+                            val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                            val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                            val position = pages.size
+                            XmlPullParserUtils.skipTag(parser)
 
-                        pages.add(async {
-                            srcFile?.let { fileParser(it) }.use { Page(this@Manifest, position, fileName, it) }
-                        })
+                            if (srcFile != null)
+                                add(async { parseFile(srcFile).use { Page(this@Manifest, position, fileName, it) } })
+                        }
+                        else -> XmlPullParserUtils.skipTag(parser)
+                    }
+                    XMLNS_ARTICLE -> when (parser.name) {
+                        XML_PAGES_AEM_IMPORT -> {
+                            parser.getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)
+                                ?.let { result.aemImports.add(it) }
+                            XmlPullParserUtils.skipTag(parser)
+                        }
+                        else -> XmlPullParserUtils.skipTag(parser)
                     }
                     else -> XmlPullParserUtils.skipTag(parser)
                 }
-                XMLNS_ARTICLE -> when (parser.name) {
-                    XML_PAGES_AEM_IMPORT -> {
-                        parser.getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)?.let { result.aemImports.add(it) }
-                        XmlPullParserUtils.skipTag(parser)
-                    }
-                    else -> XmlPullParserUtils.skipTag(parser)
-                }
-                else -> XmlPullParserUtils.skipTag(parser)
             }
-        }
-        result.pages = pages.awaitAll()
+        }.awaitAll()
         return@runBlocking result
     }
 
     @WorkerThread
-    @OptIn(ExperimentalStdlibApi::class)
     private fun parseResources(parser: XmlPullParser): Map<String?, Resource> {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_RESOURCES)
 
