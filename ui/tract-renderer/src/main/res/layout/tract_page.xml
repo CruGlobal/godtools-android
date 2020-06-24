@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="org.cru.godtools.xml.model.BaseKt" />
+        <import type="org.cru.godtools.xml.model.PageKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
@@ -14,7 +15,8 @@
     <RelativeLayout
         android:id="@+id/pageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@{PageKt.getBackgroundColor(page)}">
 
         <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
             android:id="@+id/background_image"
@@ -22,7 +24,11 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:cropToPadding="false"
-            android:layoutDirection="@{BaseKt.getLayoutDirection(page)}" />
+            android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
+            app:gravity="@{PageKt.getBackgroundImageGravity(page)}"
+            app:picassoFile="@{page.backgroundImage}"
+            app:scaleType="@{PageKt.getBackgroundImageScaleType(page)}"
+            app:visibleIf="@{page.backgroundImage != null}" />
 
         <org.cru.godtools.tract.widget.PageContentLayout
             android:id="@+id/page_content_layout"

@@ -12,13 +12,10 @@ import com.google.common.collect.Sets;
 import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
-import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
-import org.cru.godtools.xml.model.PageKt;
 
 import java.util.Set;
 
@@ -45,11 +42,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @NonNull
     private final Settings mSettings;
-
-    @BindView(R2.id.pageView)
-    View mPageView;
-    @BindView(R2.id.background_image)
-    ScaledPicassoImageView mBackgroundImage;
 
     @BindView(R2.id.page_content_layout)
     PageContentLayout mPageContentLayout;
@@ -94,7 +86,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     void onBind() {
         super.onBind();
-        bindPage();
         mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();
     }
@@ -227,13 +218,6 @@ public class PageViewHolder extends ParentViewHolder<Page>
         bindCards();
     }
 
-    private void bindPage() {
-        mPageView.setBackgroundColor(PageKt.getBackgroundColor(mModel));
-        ResourceViewUtilsKt.bindBackgroundImage(mBackgroundImage, PageKt.getBackgroundImageResource(mModel),
-                                                PageKt.getBackgroundImageScaleType(mModel),
-                                                PageKt.getBackgroundImageGravity(mModel));
-    }
-
     @UiThread
     private void bindCards() {
         // short-circuit since we are already binding cards
@@ -245,7 +229,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mNeedsCardsRebind = false;
 
         // map old view holders to new location
-        final View invalid = mPageView; // We just need a non-null placeholder value that can't be a card view
+        final View invalid = mPageContentLayout; // We just need a non-null placeholder value that can't be a card view
         View activeCard = mPageContentLayout.getActiveCard() != null ? invalid : null;
         final CardViewHolder[] holders = new CardViewHolder[mCards.length];
         int lastNewPos = -1;
