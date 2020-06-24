@@ -16,13 +16,13 @@ private const val MASK_X_AXIS = BIT_START or BIT_END or BIT_CENTER_X
 private const val MASK_Y_AXIS = BIT_TOP or BIT_BOTTOM or BIT_CENTER_Y
 
 inline class ImageGravity(internal val gravity: Int) {
-    fun isCenter() = gravity and (MASK_X_AXIS or MASK_Y_AXIS) == BIT_CENTER
-    fun isCenterX() = gravity and MASK_X_AXIS == BIT_CENTER_X
-    fun isCenterY() = gravity and MASK_Y_AXIS == BIT_CENTER_Y
-    fun isStart() = gravity and MASK_X_AXIS == BIT_START
-    fun isEnd() = gravity and MASK_X_AXIS == BIT_END
-    fun isTop() = gravity and MASK_Y_AXIS == BIT_TOP
-    fun isBottom() = gravity and MASK_Y_AXIS == BIT_BOTTOM
+    val isCenter get() = gravity and (MASK_X_AXIS or MASK_Y_AXIS) == BIT_CENTER
+    val isCenterX get() = gravity and MASK_X_AXIS == BIT_CENTER_X
+    val isCenterY get() = gravity and MASK_Y_AXIS == BIT_CENTER_Y
+    val isStart get() = gravity and MASK_X_AXIS == BIT_START
+    val isEnd get() = gravity and MASK_X_AXIS == BIT_END
+    val isTop get() = gravity and MASK_Y_AXIS == BIT_TOP
+    val isBottom get() = gravity and MASK_Y_AXIS == BIT_BOTTOM
 
     infix fun and(other: ImageGravity) = ImageGravity(gravity and other.gravity)
     infix fun or(other: ImageGravity) = ImageGravity(gravity or other.gravity)
@@ -83,13 +83,3 @@ inline class ImageGravity(internal val gravity: Int) {
 
 fun XmlPullParser.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
     ImageGravity.parse(getAttributeValue(null, name), defaultGravity)
-
-/* X-Axis tests */
-fun isCenterX(gravity: Int) = ImageGravity(gravity).isCenterX()
-fun isStart(gravity: Int) = ImageGravity(gravity).isStart()
-fun isEnd(gravity: Int) = ImageGravity(gravity).isEnd()
-
-/* Y-Axis tests */
-fun isCenterY(gravity: Int) = ImageGravity(gravity).isCenterY()
-fun isTop(gravity: Int) = ImageGravity(gravity).isTop()
-fun isBottom(gravity: Int) = ImageGravity(gravity).isBottom()

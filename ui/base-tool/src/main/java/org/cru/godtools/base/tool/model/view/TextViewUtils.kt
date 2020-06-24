@@ -38,4 +38,4 @@ internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt def
     view.gravity = (view.gravity and Gravity.VERTICAL_GRAVITY_MASK) or textAlign.gravity
 }
 
-private fun Text.getTypeface(context: Context) = ManifestViewUtils.getTypeface(manifest, context)
+private fun Text.getTypeface(context: Context) = manifest.getTypeface(context)

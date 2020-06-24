@@ -12,7 +12,7 @@ import com.google.common.collect.Sets;
 import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
+import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
@@ -255,9 +255,9 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     private void bindPage() {
         mPageView.setBackgroundColor(PageKt.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(PageKt.getBackgroundImageResource(mModel), mBackgroundImage,
-                                              PageKt.getBackgroundImageScaleType(mModel),
-                                              PageKt.getBackgroundImageGravity(mModel));
+        ResourceViewUtilsKt.bindBackgroundImage(mBackgroundImage, PageKt.getBackgroundImageResource(mModel),
+                                                PageKt.getBackgroundImageScaleType(mModel),
+                                                PageKt.getBackgroundImageGravity(mModel));
     }
 
     @UiThread
