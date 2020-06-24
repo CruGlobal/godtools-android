@@ -7,8 +7,6 @@ import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 
 private const val XML_TEXT_ALIGN = "text-align"
 private const val XML_TEXT_ALIGN_START = "start"
@@ -76,9 +74,12 @@ class Text : Content {
     companion object {
         internal const val XML_TEXT = "text"
 
-        @JvmStatic
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun fromNestedXml(parent: Base, parser: XmlPullParser, parentNamespace: String?, parentName: String): Text? {
+        internal fun fromNestedXml(
+            parent: Base,
+            parser: XmlPullParser,
+            parentNamespace: String?,
+            parentName: String
+        ): Text? {
             parser.require(XmlPullParser.START_TAG, parentNamespace, parentName)
 
             // process any child elements
