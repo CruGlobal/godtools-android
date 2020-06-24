@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
-import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -13,7 +12,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
-import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
@@ -36,25 +34,19 @@ private const val XML_PAGES_AEM_IMPORT = "aem-import"
 private const val XML_PAGES_AEM_IMPORT_SRC = "src"
 private const val XML_RESOURCES = "resources"
 
+@ColorInt
+private val DEFAULT_BACKGROUND_COLOR = Color.WHITE
+private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL
+private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
+
 class Manifest : Base, Styles {
     companion object {
         @ColorInt
         val DEFAULT_PRIMARY_COLOR = Color.argb(255, 59, 164, 219)
-
         @ColorInt
         val DEFAULT_PRIMARY_TEXT_COLOR = Color.WHITE
-
         @ColorInt
         val DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90)
-        val DEFAULT_TEXT_ALIGN = Text.Align.DEFAULT
-
-        @DimenRes
-        val DEFAULT_TEXT_SIZE = R.dimen.text_size_base
-
-        @ColorInt
-        val DEFAULT_BACKGROUND_COLOR = Color.WHITE
-        val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL
-        internal val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
     }
 
     enum class Type {
@@ -288,10 +280,9 @@ val Manifest?.navBarColor get() = this?.navBarColor ?: primaryColor
 val Manifest?.navBarControlColor get() = this?.navBarControlColor ?: primaryTextColor
 
 @get:ColorInt
-val Manifest?.backgroundColor get() = this?.backgroundColor ?: Manifest.DEFAULT_BACKGROUND_COLOR
-val Manifest?.backgroundImageGravity get() = this?.backgroundImageGravity ?: Manifest.DEFAULT_BACKGROUND_IMAGE_GRAVITY
-val Manifest?.backgroundImageScaleType
-    get() = this?.backgroundImageScaleType ?: Manifest.DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+val Manifest?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
+val Manifest?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
+val Manifest?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
 @get:ColorInt
 val Manifest?.categoryLabelColor get() = this?.categoryLabelColor ?: textColor

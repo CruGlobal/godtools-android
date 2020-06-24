@@ -2,6 +2,11 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
+import org.cru.godtools.xml.R
+
+@DimenRes
+private val DEFAULT_TEXT_SIZE = R.dimen.text_size_base
+private val DEFAULT_TEXT_ALIGN = Text.Align.DEFAULT
 
 interface Styles : BaseModel {
     @get:ColorInt
@@ -31,5 +36,5 @@ val Styles?.buttonColor get() = this?.buttonColor ?: primaryColor
 @get:ColorInt
 val Styles?.textColor get() = this?.textColor ?: Manifest.DEFAULT_TEXT_COLOR
 @get:DimenRes
-val Styles?.textSize get() = this?.textSize ?: Manifest.DEFAULT_TEXT_SIZE
-val Styles?.textAlign get() = this?.textAlign ?: Manifest.DEFAULT_TEXT_ALIGN
+val Styles?.textSize get() = this?.textSize ?: DEFAULT_TEXT_SIZE
+val Styles?.textAlign get() = this?.textAlign ?: DEFAULT_TEXT_ALIGN
