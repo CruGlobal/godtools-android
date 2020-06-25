@@ -34,7 +34,7 @@ import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
 import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
 
-public class PageViewHolder extends ParentViewHolder<Page>
+public class PageViewHolder extends BaseViewHolder<Page>
         implements PageContentLayout.OnActiveCardListener, CardViewHolder.Callbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
     public interface Callbacks {

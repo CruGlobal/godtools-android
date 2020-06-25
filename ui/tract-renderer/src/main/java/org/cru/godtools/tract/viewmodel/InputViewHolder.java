@@ -55,7 +55,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     @Override
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         if (mModel != null) {
             mLabel = mModel.getLabel();
@@ -94,7 +94,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     @Override
-    boolean onValidate() {
+    public boolean onValidate() {
         final String value = getValue();
         final Input.Error error = mModel != null ? mModel.validateValue(value) : null;
         final String msg = error == null ? null : error.msgId != INVALID_STRING_RES ?
@@ -104,7 +104,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     @Override
-    void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
+    public void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
         if (mModel != null) {
             final String value = getValue();
             if (mModel.getName() != null && value != null) {

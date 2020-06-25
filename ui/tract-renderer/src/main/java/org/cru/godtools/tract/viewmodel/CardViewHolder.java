@@ -3,6 +3,7 @@ package org.cru.godtools.tract.viewmodel;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
@@ -12,6 +13,7 @@ import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.ui.controller.ParentController;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.CardKt;
@@ -31,7 +33,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 @UiThread
-public final class CardViewHolder extends ParentViewHolder<Card> {
+public final class CardViewHolder extends ParentController<Card> {
     public interface Callbacks {
         void onToggleCard(@NonNull CardViewHolder holder);
 
@@ -56,6 +58,9 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     TextView mCardPositionView;
     @BindView(R2.id.previous_card)
     TextView mPreviousCardView;
+
+    @BindView(R2.id.content)
+    LinearLayout mContent;
 
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
@@ -111,6 +116,12 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     // endregion Lifecycle Events
+
+    @NonNull
+    @Override
+    protected LinearLayout getContentContainer() {
+        return mContent;
+    }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;

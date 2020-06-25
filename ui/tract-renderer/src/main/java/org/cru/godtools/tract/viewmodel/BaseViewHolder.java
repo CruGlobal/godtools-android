@@ -40,9 +40,9 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @NonNull
     final Class<T> mModelType;
     @Nullable
-    T mModel;
+    protected T mModel;
 
-    boolean mVisible = false;
+    protected boolean mVisible = false;
 
     protected BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent,
                              @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
@@ -84,19 +84,21 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     }
 
     @CallSuper
-    void onBind() {
+    protected void onBind() {
         updateLayoutDirection();
     }
 
     @CallSuper
     protected void onVisible() {}
 
-    boolean onValidate() {
+    // TODO: this should be internal
+    public boolean onValidate() {
         // default to being valid
         return true;
     }
 
-    void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
+    // TODO: this should be internal
+    public void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
 
     @CallSuper
     public void onContentEvent(@NonNull final Event event) {}
@@ -203,11 +205,11 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     /**
      * @return true if the event has been built by a parent view holder.
      */
-    boolean buildEvent(@NonNull final Event.Builder builder) {
+    protected boolean buildEvent(@NonNull final Event.Builder builder) {
         return mParentViewHolder != null && mParentViewHolder.buildEvent(builder);
     }
 
-    boolean validate(@NonNull final Set<Event.Id> ids) {
+    protected boolean validate(@NonNull final Set<Event.Id> ids) {
         // navigate up hierarchy before performing validation
         if (mParentViewHolder != null) {
             return mParentViewHolder.validate(ids);

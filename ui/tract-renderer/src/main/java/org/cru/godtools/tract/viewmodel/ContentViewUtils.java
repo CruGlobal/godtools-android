@@ -19,7 +19,7 @@ import timber.log.Timber;
 
 public class ContentViewUtils {
     @Nullable
-    static BaseViewHolder createViewHolder(@NonNull final Class<? extends Content> clazz,
+    public static BaseViewHolder createViewHolder(@NonNull final Class<? extends Content> clazz,
                                            @NonNull final ViewGroup parent,
                                            @Nullable final BaseViewHolder parentViewHolder) {
         if (Button.class.equals(clazz)) {

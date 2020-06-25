@@ -52,7 +52,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
 
     @UiThread
     @Override
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         bindTabs();
     }

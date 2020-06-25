@@ -2,11 +2,12 @@ package org.cru.godtools.tract.ui.controller
 
 import org.cru.godtools.tract.databinding.TractContentModalBinding
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
-import org.cru.godtools.tract.viewmodel.ParentViewHolder
 import org.cru.godtools.xml.model.Modal
 
 class ModalController internal constructor(private val binding: TractContentModalBinding) :
-    ParentViewHolder<Modal>(Modal::class.java, binding.root, null) {
+    ParentController<Modal>(Modal::class.java, binding.root, null) {
+    override val contentContainer get() = binding.content
+
     override fun onBind() {
         super.onBind()
         binding.modal = model
