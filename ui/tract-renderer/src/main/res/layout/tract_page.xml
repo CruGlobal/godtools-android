@@ -54,6 +54,7 @@
                         app:header="@{page.header}" />
 
                     <include
+                        android:id="@+id/hero"
                         layout="@layout/tract_page_hero"
                         app:hero="@{page.hero}" />
                 </LinearLayout>

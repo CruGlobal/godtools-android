@@ -89,7 +89,7 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     }
 
     @CallSuper
-    void onVisible() {}
+    protected void onVisible() {}
 
     boolean onValidate() {
         // default to being valid
@@ -102,7 +102,7 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     public void onContentEvent(@NonNull final Event event) {}
 
     @CallSuper
-    void onHidden() {}
+    protected void onHidden() {}
     // endregion Lifecycle
 
     @Nullable
@@ -174,8 +174,8 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
      * @return Any pending analytics events.
      */
     @NonNull
-    final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
-                                                final AnalyticsEvent.Trigger... types) {
+    protected final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
+                                                          final AnalyticsEvent.Trigger... types) {
         return Stream.of(events)
                 .filter(e -> e.isTriggerType(types))
                 .map(this::sendAnalyticsEvent)
@@ -195,7 +195,7 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
         return null;
     }
 
-    final void cancelPendingAnalyticsEvents(@NonNull final List<Runnable> pendingTasks) {
+    protected final void cancelPendingAnalyticsEvents(@NonNull final List<Runnable> pendingTasks) {
         Stream.of(pendingTasks)
                 .forEach(mHandler::removeCallbacks);
     }

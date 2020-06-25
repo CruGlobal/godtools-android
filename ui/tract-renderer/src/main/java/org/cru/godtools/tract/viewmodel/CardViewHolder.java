@@ -87,7 +87,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     @Override
-    void onVisible() {
+    protected void onVisible() {
         super.onVisible();
         if (mModel != null) {
             mPendingAnalyticsEvents =
@@ -103,7 +103,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     @Override
-    void onHidden() {
+    protected void onHidden() {
         super.onHidden();
         if (mPendingAnalyticsEvents != null) {
             cancelPendingAnalyticsEvents(mPendingAnalyticsEvents);
