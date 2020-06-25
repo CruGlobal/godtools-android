@@ -25,6 +25,7 @@ import org.cru.godtools.tract.Constants.EXTRA_MODAL
 import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.R2
+import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.viewmodel.ModalViewHolder
 import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
@@ -42,7 +43,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
         .toBundle()
 )
 
-class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
+class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layout.tract_modal_activity) {
     @JvmField
     @BindView(R2.id.modal_root)
     var mModalView: View? = null

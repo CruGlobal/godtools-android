@@ -2,16 +2,25 @@ package org.cru.godtools.base.tool.activity
 
 import android.annotation.TargetApi
 import android.os.Build
+import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
-import org.ccci.gto.android.common.base.Constants
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import org.cru.godtools.base.ui.activity.BaseActivity
 
-abstract class ImmersiveActivity(
+abstract class ImmersiveActivity<B : ViewDataBinding>(
     private val enableImmersive: Boolean,
-    @LayoutRes contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
-) : BaseActivity(contentLayoutId) {
+    @LayoutRes private val contentLayoutId: Int
+) : BaseActivity() {
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupDataBinding()
+    }
+
+    protected open fun onBindingChanged() = Unit
+
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
         super.onMultiWindowModeChanged(isInMultiWindowMode)
         updateSystemUi()
@@ -22,6 +31,18 @@ abstract class ImmersiveActivity(
         if (hasFocus) updateSystemUi()
     }
     // endregion Lifecycle
+
+    // region DataBinding
+    protected lateinit var binding: B
+        private set
+
+    private fun setupDataBinding() {
+        binding = DataBindingUtil.inflate(layoutInflater, contentLayoutId, null, false)!!
+        binding.lifecycleOwner = this
+        setContentView(binding.root)
+        onBindingChanged()
+    }
+    // endregion DataBinding
 
     private fun updateSystemUi() {
         when {

@@ -9,7 +9,6 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.view.forEach
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +18,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.base.Constants
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
@@ -44,10 +42,8 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
-abstract class BaseToolActivity<B : ViewDataBinding>(
-    immersive: Boolean,
-    @LayoutRes private val contentLayoutId: Int = Constants.INVALID_LAYOUT_RES
-) : ImmersiveActivity(immersive) {
+abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @LayoutRes contentLayoutId: Int) :
+    ImmersiveActivity<B>(immersive, contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
@@ -56,12 +52,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupDataBinding()
         isConnected.observe(this) { if (it) syncTools() }
     }
 
     @CallSuper
-    protected open fun onBindingChanged() {
+    override fun onBindingChanged() {
         binding.setVariable(BR.progress, activeDownloadProgressLiveData)
         binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
@@ -94,18 +89,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(
     @CallSuper
     protected open fun onUpdateActiveManifest() = Unit
     // endregion Lifecycle
-
-    // region DataBinding
-    protected lateinit var binding: B
-        private set
-
-    private fun setupDataBinding() {
-        binding = DataBindingUtil.inflate(layoutInflater, contentLayoutId, null, false)!!
-        binding.lifecycleOwner = this
-        setContentView(binding.root)
-        onBindingChanged()
-    }
-    // endregion DataBinding
 
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.

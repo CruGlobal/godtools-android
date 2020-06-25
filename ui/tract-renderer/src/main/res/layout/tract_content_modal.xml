@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/modal_root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:paddingLeft="@dimen/horiz_margin_modal"
-    android:paddingRight="@dimen/horiz_margin_modal">
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Great!"
-        tools:textSize="54sp" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:id="@+id/content"
+        android:id="@+id/modal_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:orientation="vertical" />
-</RelativeLayout>
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/horiz_margin_modal"
+        android:paddingRight="@dimen/horiz_margin_modal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Great!"
+            tools:textSize="54sp" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+</layout>
