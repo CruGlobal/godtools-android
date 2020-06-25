@@ -75,7 +75,7 @@ class Text : Content {
         internal const val XML_TEXT = "text"
 
         internal fun fromNestedXml(
-            parent: Base,
+            parent: BaseModel,
             parser: XmlPullParser,
             parentNamespace: String?,
             parentName: String
