@@ -22,7 +22,8 @@ class TipTest {
 
     @Test
     fun verifyParse() {
-        val tip = Tip(manifest, getXmlParserForResource("tip.xml"))
+        val tip = Tip(manifest, "name", getXmlParserForResource("tip.xml"))
+        assertEquals("name", tip.id)
         assertEquals(2, tip.pages.size)
         assertEquals("Page 1", (tip.pages[0].content[0] as Text).text)
         assertEquals("Page 2", (tip.pages[1].content[0] as Text).text)

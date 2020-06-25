@@ -11,11 +11,13 @@ private const val XML_PAGES = "pages"
 
 @OptIn(ExperimentalStdlibApi::class)
 class Tip : BaseModel {
+    val id: String?
     val pages: List<TipPage>
 
-    constructor(base: Base, parser: XmlPullParser) : super(base) {
+    constructor(base: Base, id: String?, parser: XmlPullParser) : super(base) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
 
+        this.id = id
         pages = buildList {
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue

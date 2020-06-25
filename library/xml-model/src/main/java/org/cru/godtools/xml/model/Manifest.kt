@@ -13,6 +13,7 @@ import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
+import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
 
@@ -32,6 +33,10 @@ private const val XML_PAGES_PAGE_SRC = "src"
 private const val XML_PAGES_AEM_IMPORT = "aem-import"
 private const val XML_PAGES_AEM_IMPORT_SRC = "src"
 private const val XML_RESOURCES = "resources"
+private const val XML_TIPS = "tips"
+private const val XML_TIPS_TIP = "tip"
+private const val XML_TIPS_TIP_ID = "id"
+private const val XML_TIPS_TIP_SRC = "src"
 
 @ColorInt
 private val DEFAULT_BACKGROUND_COLOR = Color.WHITE
@@ -96,8 +101,11 @@ class Manifest : BaseModel, Styles {
     val categories: List<Category>
     val pages: List<Page>
     val aemImports: List<Uri>
+
     @VisibleForTesting
-    val resources: Map<String?, Resource>
+    internal val resources: Map<String?, Resource>
+    @VisibleForTesting
+    internal val tips: Map<String?, Tip>
 
     internal constructor(
         code: String,
@@ -132,6 +140,7 @@ class Manifest : BaseModel, Styles {
         var categoriesData: List<Category>? = null
         var pagesData: PagesData? = null
         var resourcesData: Map<String?, Resource>? = null
+        var tipsData: List<Tip>? = null
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
@@ -141,6 +150,7 @@ class Manifest : BaseModel, Styles {
                     XML_CATEGORIES -> categoriesData = parseCategories(parser)
                     XML_PAGES -> pagesData = parsePages(parser, parseFile)
                     XML_RESOURCES -> resourcesData = parseResources(parser)
+                    XML_TIPS -> tipsData = parser.parseTips(parseFile)
                     else -> parser.skipTag()
                 }
                 else -> parser.skipTag()
@@ -151,6 +161,7 @@ class Manifest : BaseModel, Styles {
         categories = categoriesData.orEmpty()
         pages = pagesData?.pages.orEmpty()
         resources = resourcesData.orEmpty()
+        tips = tipsData?.associateBy { it.id }.orEmpty()
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
@@ -178,6 +189,7 @@ class Manifest : BaseModel, Styles {
         categories = emptyList()
         pages = emptyList()
         resources = emptyMap()
+        tips = emptyMap()
     }
 
     override val manifest get() = this
@@ -265,6 +277,28 @@ class Manifest : BaseModel, Styles {
                 }
             }
         }.associateBy { it.name }
+    }
+
+    @WorkerThread
+    private fun XmlPullParser.parseTips(parseFile: (String) -> CloseableXmlPullParser) = runBlocking {
+        buildList {
+            while (next() != XmlPullParser.END_TAG) {
+                if (eventType != XmlPullParser.START_TAG) continue
+
+                when (namespace) {
+                    XMLNS_MANIFEST -> when (name) {
+                        XML_TIPS_TIP -> {
+                            val id = getAttributeValue(null, XML_TIPS_TIP_ID)
+                            val src = getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                            if (id != null && src != null)
+                                add(async { parseFile(src).use { Tip(this@Manifest, id, it) } })
+                        }
+                    }
+                }
+
+                skipTag()
+            }
+        }.awaitAll()
     }
 }
 

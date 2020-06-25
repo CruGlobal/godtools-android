@@ -2,9 +2,6 @@ package org.cru.godtools.xml.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.xml.util.getXmlParserForResource
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,8 +12,9 @@ class ManifestTest {
     @Test
     fun verifyParseEmptyManifest() {
         val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_empty.xml")) { TODO() }
-        assertThat(manifest.pages, empty())
-        assertThat(manifest.resources.size, equalTo(0))
+        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.resources.size)
+        assertEquals(0, manifest.tips.size)
     }
 
     @Test
@@ -27,5 +25,16 @@ class ManifestTest {
         assertEquals(2, manifest.pages.size)
         assertEquals(0, manifest.pages[0].position)
         assertEquals(1, manifest.pages[1].position)
+    }
+
+    @Test
+    fun verifyParseManifestWithTips() {
+        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips.xml")) {
+            getXmlParserForResource(it)
+        }
+        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.resources.size)
+        assertEquals(1, manifest.tips.size)
+        assertEquals("tip1", manifest.tips["tip1"]!!.id)
     }
 }
