@@ -62,7 +62,7 @@ buildscript {
                 multidex          : '2.0.1',
                 recyclerView      : '1.1.0',
                 room              : '2.2.5',
-                swipeRefreshLayout: '1.0.0',
+                swipeRefreshLayout: '1.1.0',
                 test              : '1.2.0',
                 testJUnit         : '1.1.1',
                 viewPager2        : '1.0.0',
