@@ -84,7 +84,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     // region Lifecycle Events
 
     @Override
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();

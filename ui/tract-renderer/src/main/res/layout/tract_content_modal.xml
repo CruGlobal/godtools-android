@@ -2,10 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.xml.model.Modal" />
-
-        <variable name="modal" type="LiveData&lt;Modal&gt;" />
+        <variable name="modal" type="org.cru.godtools.xml.model.Modal" />
     </data>
 
     <LinearLayout

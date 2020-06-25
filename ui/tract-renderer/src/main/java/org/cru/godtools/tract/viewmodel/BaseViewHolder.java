@@ -29,7 +29,7 @@ import androidx.lifecycle.Observer;
 import butterknife.ButterKnife;
 
 @UiThread
-abstract class BaseViewHolder<T extends Base> implements Observer<T> {
+public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     private final Handler mHandler;
 
     @Nullable

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.xml.model.Modal" />
-
-        <variable name="modal" type="LiveData&lt;Modal&gt;" />
-    </data>
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +7,6 @@
 
         <include
             layout="@layout/tract_content_modal"
-            android:id="@+id/modal_layout"
-            app:modal="@{modal}" />
+            android:id="@+id/modal_layout" />
     </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 </layout>

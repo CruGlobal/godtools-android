@@ -34,7 +34,7 @@ public abstract class ParentViewHolder<T extends Base & Parent> extends BaseView
         super(modelType, parent, layout, parentViewHolder);
     }
 
-    ParentViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
+    protected ParentViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
                      @Nullable final BaseViewHolder parentViewHolder) {
         super(modelType, root, parentViewHolder);
     }
@@ -43,7 +43,7 @@ public abstract class ParentViewHolder<T extends Base & Parent> extends BaseView
 
     @Override
     @CallSuper
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         bindContent();
     }

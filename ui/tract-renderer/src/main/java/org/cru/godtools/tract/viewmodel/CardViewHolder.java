@@ -79,7 +79,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     @Override
     @CallSuper
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         bindBackground();
         bindLabel();
