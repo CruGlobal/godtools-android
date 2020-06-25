@@ -6,7 +6,7 @@ import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
-class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser) {
+class Link internal constructor(parent: BaseModel, parser: XmlPullParser) : Content(parent, parser) {
     companion object {
         internal const val XML_LINK = "link"
     }

@@ -1,11 +1,9 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
-import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_TRACT
-import org.cru.godtools.xml.model.Text.Companion.fromNestedXml
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_LABEL = "label"
@@ -44,7 +42,6 @@ class Card : Base, Styles, Parent {
     val label: Text?
     override val content: List<Content>
 
-    @OptIn(ExperimentalStdlibApi::class)
     internal constructor(parent: Page, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
 
@@ -66,34 +63,14 @@ class Card : Base, Styles, Parent {
         // process any child elements
         var analyticsEvents: Collection<AnalyticsEvent>? = null
         var label: Text? = null
-        content = buildList<Content> {
-            parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
-
-                when (parser.namespace) {
-                    XMLNS_ANALYTICS -> when (parser.name) {
-                        AnalyticsEvent.XML_EVENTS -> {
-                            analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
-                            continue@parsingChildren
-                        }
-                    }
-                    XMLNS_TRACT -> when (parser.name) {
-                        XML_LABEL -> {
-                            label = fromNestedXml(this@Card, parser, XMLNS_TRACT, XML_LABEL)
-                            continue@parsingChildren
-                        }
-                    }
+        content = parseContent(parser) {
+            when (parser.namespace) {
+                XMLNS_ANALYTICS -> when (parser.name) {
+                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                 }
-
-                // try parsing this child element as a content node
-                val content = Content.fromXml(this@Card, parser)
-                if (content != null) {
-                    if (!content.isIgnored) add(content)
-                    continue@parsingChildren
+                XMLNS_TRACT -> when (parser.name) {
+                    XML_LABEL -> label = Text.fromNestedXml(this@Card, parser, XMLNS_TRACT, XML_LABEL)
                 }
-
-                // skip unrecognized nodes
-                XmlPullParserUtils.skipTag(parser)
             }
         }
         this.analyticsEvents = analyticsEvents.orEmpty()

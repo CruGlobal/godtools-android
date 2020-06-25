@@ -46,7 +46,7 @@ class Text : Content {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
-        parent: Base,
+        parent: BaseModel,
         text: String? = null,
         textScale: Double? = null,
         @ColorInt textColor: Int? = null,
@@ -58,7 +58,7 @@ class Text : Content {
         _textScale = textScale
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TEXT)
 
         _textAlign = Align.parseOrNull(parser.getAttributeValue(null, XML_TEXT_ALIGN))

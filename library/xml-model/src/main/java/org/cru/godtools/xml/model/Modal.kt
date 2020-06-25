@@ -4,11 +4,9 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
-import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRACT
-import org.cru.godtools.xml.model.Text.Companion.fromNestedXml
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TITLE = "title"
@@ -60,28 +58,11 @@ class Modal : Base, Parent, Styles {
 
         // process any child elements
         var title: Text? = null
-        content = buildList<Content> {
-            parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
-
-                when (parser.namespace) {
-                    XMLNS_TRACT -> when (parser.name) {
-                        XML_TITLE -> {
-                            title = fromNestedXml(this@Modal, parser, XMLNS_TRACT, XML_TITLE)
-                            continue@parsingChildren
-                        }
-                    }
+        content = parseContent(parser) {
+            when (parser.namespace) {
+                XMLNS_TRACT -> when (parser.name) {
+                    XML_TITLE -> title = Text.fromNestedXml(this@Modal, parser, XMLNS_TRACT, XML_TITLE)
                 }
-
-                // try parsing this child element as a content node
-                val content = Content.fromXml(this@Modal, parser)
-                if (content != null) {
-                    if (!content.isIgnored) add(content)
-                    continue
-                }
-
-                // skip unrecognized nodes
-                XmlPullParserUtils.skipTag(parser)
             }
         }
         this.title = title
