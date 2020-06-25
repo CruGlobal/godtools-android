@@ -13,6 +13,7 @@ import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.databinding.TractPageBinding;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
@@ -43,6 +44,9 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final Settings mSettings;
 
+    @NonNull
+    private final TractPageBinding mBinding;
+
     @BindView(R2.id.page_content_layout)
     PageContentLayout mPageContentLayout;
 
@@ -67,18 +71,13 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Nullable
     private Callbacks mCallbacks;
 
-    PageViewHolder(@NonNull final View root) {
-        super(Page.class, root, null);
-        mSettings = Settings.Companion.getInstance(root.getContext());
+    public PageViewHolder(@NonNull final TractPageBinding binding) {
+        super(Page.class, binding.getRoot(), null);
+        mBinding = binding;
+        mSettings = Settings.Companion.getInstance(binding.getRoot().getContext());
 
         mPageContentLayout.setActiveCardListener(this);
         mHeroViewHolder = HeroViewHolder.forView(mHero, this);
-    }
-
-    @NonNull
-    public static PageViewHolder forView(@NonNull final View root) {
-        final PageViewHolder holder = forView(root, PageViewHolder.class);
-        return holder != null ? holder : new PageViewHolder(root);
     }
 
     // region Lifecycle Events

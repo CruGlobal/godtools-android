@@ -14,6 +14,7 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
 import org.cru.godtools.tract.databinding.TractPageBinding;
 import org.cru.godtools.tract.databinding.TractPageBindingImpl;
+import org.cru.godtools.tract.ui.controller.PageControllerKt;
 import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
@@ -183,7 +184,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         RVPageViewHolder(@NonNull final View view) {
             super(view);
             mBinding = TractPageBindingImpl.bind(view);
-            mModelViewHolder = PageViewHolder.forView(view);
+            mModelViewHolder = PageControllerKt.bindController(mBinding);
             mBinding.setController(mModelViewHolder);
             mBinding.setCallbacks(this);
             mModelViewHolder.setCallbacks(this);
