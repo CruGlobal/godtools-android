@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.xml.model.Modal" />
+
+        <variable name="modal" type="LiveData&lt;Modal&gt;" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/modal_root"
+        android:id="@+id/modal_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -15,8 +21,10 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Great!"
-            tools:textSize="54sp" />
+            android:text="@{modal.title}"
+            android:textSize="@{@dimen/text_size_modal_title}"
+            tools:text="Thank you"
+            tools:textSize="@dimen/text_size_modal_title" />
 
         <LinearLayout
             android:id="@+id/content"

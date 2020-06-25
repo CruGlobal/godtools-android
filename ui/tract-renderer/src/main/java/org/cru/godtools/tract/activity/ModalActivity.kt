@@ -44,10 +44,6 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
 )
 
 class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layout.tract_modal_activity) {
-    @JvmField
-    @BindView(R2.id.modal_root)
-    var mModalView: View? = null
-
     private val dataModel: ModalActivityDataModel by viewModels()
 
     // region Lifecycle
@@ -68,10 +64,9 @@ class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layou
         dataModel.modal.observe(this) { if (it == null) finish() }
     }
 
-    @CallSuper
-    override fun onContentChanged() {
-        super.onContentChanged()
-        setupModalViewHolder()
+    override fun onBindingChanged() {
+        binding.modal = dataModel.modal
+        setupModalController()
     }
 
     override fun onResume() {
@@ -93,8 +88,8 @@ class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layou
 
     private fun validStartState() = dataModel.toolCode.value != null
 
-    private fun setupModalViewHolder() {
-        mModalView?.let { dataModel.modal.observe(this, ModalViewHolder.forView(it)) }
+    private fun setupModalController() {
+        dataModel.modal.observe(this, ModalViewHolder.forView(binding.modalLayout.modalLayout))
     }
 
     private fun checkForDismissEvent(event: Event) {
