@@ -6,6 +6,9 @@ interface Parent : BaseModel {
     val content: List<Content>
 }
 
+/**
+ * @param block Custom parsing logic, if the block processes the current tag, it should advance the parser to the END_TAG event.
+ */
 @OptIn(ExperimentalStdlibApi::class)
 internal inline fun Parent.parseContent(
     parser: XmlPullParser,
@@ -17,6 +20,7 @@ internal inline fun Parent.parseContent(
         if (parser.eventType != XmlPullParser.START_TAG) continue
 
         // execute any custom parsing logic from the call-site
+        // if the block consumes the tag, the parser will be on an END_TAG after returning
         block()
         if (parser.eventType == XmlPullParser.END_TAG) continue
 
