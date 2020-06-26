@@ -12,6 +12,7 @@ import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.ui.controller.TabController;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Styles;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 
 @UiThread
 public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLayout.OnTabSelectedListener {
-    private static final TabViewHolder[] EMPTY_TAB_VIEW_HOLDERS = new TabViewHolder[0];
+    private static final TabController[] EMPTY_TAB_VIEW_HOLDERS = new TabController[0];
 
     @BindView(R2.id.tabs)
     TabLayout mTabs;
@@ -40,8 +41,8 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     private boolean mBinding = false;
 
     @NonNull
-    private TabViewHolder[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
-    private final Pools.Pool<TabViewHolder> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
+    private TabController[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
+    private final Pools.Pool<TabController> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
 
     TabsViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         super(Tabs.class, parent, R.layout.tract_content_tabs, parentViewHolder);
@@ -67,7 +68,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
 
     @Override
     public void onTabSelected(@NonNull final TabLayout.Tab tab) {
-        final TabViewHolder holder = showTabContent(tab.getPosition());
+        final TabController holder = showTabContent(tab.getPosition());
         if (!mBinding) {
             holder.trackSelectedAnalyticsEvents();
         }
@@ -110,7 +111,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
             // create view holders for every tab
             mTabContentViewHolders = Stream.of(mModel.getTabs())
                     .map(this::bindTabContentViewHolder)
-                    .toArray(TabViewHolder[]::new);
+                    .toArray(TabController[]::new);
 
             // add all the tabs to the TabLayout
             for (final Tab tab : mModel.getTabs()) {
@@ -134,17 +135,17 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     }
 
     @NonNull
-    private TabViewHolder bindTabContentViewHolder(@Nullable final Tab tab) {
-        TabViewHolder holder = mRecycledTabViewHolders.acquire();
+    private TabController bindTabContentViewHolder(@Nullable final Tab tab) {
+        TabController holder = mRecycledTabViewHolders.acquire();
         if (holder == null) {
-            holder = new TabViewHolder(mTabContent, this);
+            holder = new TabController(mTabContent, this);
         }
         holder.bind(tab);
         return holder;
     }
 
-    private TabViewHolder showTabContent(final int position) {
-        final TabViewHolder holder = mTabContentViewHolders[position];
+    private TabController showTabContent(final int position) {
+        final TabController holder = mTabContentViewHolders[position];
         if (holder.mRoot.getParent() != mTabContent) {
             mTabContent.removeAllViews();
             mTabContent.addView(holder.mRoot);
