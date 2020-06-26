@@ -3,6 +3,7 @@ package org.cru.godtools.tract.viewmodel;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
+import org.cru.godtools.tract.ui.controller.ParagraphController;
 import org.cru.godtools.xml.model.Button;
 import org.cru.godtools.xml.model.Content;
 import org.cru.godtools.xml.model.Form;
@@ -33,7 +34,7 @@ public class ContentViewUtils {
         } else if (Link.class.equals(clazz)) {
             return new LinkViewHolder(parent, parentViewHolder);
         } else if (Paragraph.class.equals(clazz)) {
-            return new ParagraphViewHolder(parent, parentViewHolder);
+            return new ParagraphController(parent, parentViewHolder);
         } else if (Tabs.class.equals(clazz)) {
             return new TabsViewHolder(parent, parentViewHolder);
         } else if (Text.class.equals(clazz)) {
