@@ -4,7 +4,7 @@
         <import type="org.cru.godtools.xml.model.BaseModelKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
-        <variable name="holder" type="org.cru.godtools.tract.viewmodel.LinkViewHolder" />
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.LinkController" />
         <variable name="model" type="org.cru.godtools.xml.model.Link" />
     </data>
 
@@ -15,7 +15,7 @@
         android:gravity="center_vertical"
         android:minHeight="32dp"
         android:saveEnabled="false"
-        android:onClick="@{() -> holder.click(model)}"
+        android:onClick="@{() -> controller.click(model)}"
         android:text="@{model.text}"
         app:defaultTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
 </layout>
