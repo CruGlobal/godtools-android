@@ -3,7 +3,6 @@ package org.cru.godtools.tract.ui.controller
 import android.view.ViewGroup
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
-import org.cru.godtools.tract.viewmodel.FormViewHolder
 import org.cru.godtools.tract.viewmodel.InputViewHolder
 import org.cru.godtools.tract.viewmodel.TabsViewHolder
 import org.cru.godtools.xml.model.Button
@@ -21,7 +20,7 @@ import kotlin.reflect.KClass
 internal fun <T : Content> createController(clazz: KClass<T>, parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) =
     when (clazz) {
         Button::class -> ButtonController(parent, parentViewHolder)
-        Form::class -> FormViewHolder(parent, parentViewHolder)
+        Form::class -> FormController(parent, parentViewHolder)
         Image::class -> ImageController(parent, parentViewHolder)
         Input::class -> InputViewHolder(parent, parentViewHolder)
         Link::class -> LinkController(parent, parentViewHolder)
