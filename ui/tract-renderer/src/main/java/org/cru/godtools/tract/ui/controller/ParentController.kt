@@ -6,7 +6,6 @@ import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
-import org.cru.godtools.tract.viewmodel.ContentViewUtils
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Parent
 
@@ -47,7 +46,7 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
     private fun bindContent() {
         contentContainer.removeAllViews()
         children = model?.content?.mapNotNull {
-            ContentViewUtils.createViewHolder(it.javaClass, contentContainer, this)?.apply {
+            createController(it.javaClass.kotlin, contentContainer, this)?.apply {
                 bind(it)
                 contentContainer.addView(mRoot)
             }

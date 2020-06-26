@@ -35,7 +35,7 @@ import butterknife.OnTextChanged;
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 @UiThread
-final class InputViewHolder extends BaseViewHolder<Input> {
+public final class InputViewHolder extends BaseViewHolder<Input> {
     @Nullable
     @BindView(R2.id.label)
     TextView mLabelView;
@@ -50,7 +50,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     @Nullable
     private Text mPlaceholder;
 
-    InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
+    public InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
     }
 
