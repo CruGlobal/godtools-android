@@ -1,6 +1,6 @@
 package org.cru.godtools.xml.model
 
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -22,26 +22,17 @@ class Link internal constructor(parent: BaseModel, parser: XmlPullParser) : Cont
         // process any child elements
         var analyticsEvents: Collection<AnalyticsEvent> = emptyList()
         var text: Text? = null
-        parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
+        while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_ANALYTICS -> when (parser.name) {
-                    AnalyticsEvent.XML_EVENTS -> {
-                        analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
-                        continue@parsingChildren
-                    }
-                }
-                XMLNS_CONTENT -> when (parser.name) {
-                    Text.XML_TEXT -> {
-                        text = Text(this, parser)
-                        continue@parsingChildren
-                    }
-                }
+            val ns = parser.namespace
+            val name = parser.name
+            when {
+                ns == XMLNS_ANALYTICS && name == AnalyticsEvent.XML_EVENTS ->
+                    analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
+                ns == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(this, parser)
+                else -> parser.skipTag()
             }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser)
         }
         this.analyticsEvents = analyticsEvents
         this.text = text

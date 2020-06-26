@@ -1,12 +1,10 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.WorkerThread
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 
 private const val XML_EVENT = "event"
 private const val XML_ACTION = "action"
@@ -55,16 +53,14 @@ class AnalyticsEvent internal constructor(parser: XmlPullParser) {
 
             when (parser.namespace) {
                 XMLNS_ANALYTICS -> when (parser.name) {
-                    XML_ATTRIBUTE -> {
-                        put(
-                            parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
-                            parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
-                        )
-                    }
+                    XML_ATTRIBUTE -> put(
+                        parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
+                        parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
+                    )
                 }
             }
 
-            XmlPullParserUtils.skipTag(parser)
+            parser.skipTag()
         }
     }
 
@@ -72,12 +68,9 @@ class AnalyticsEvent internal constructor(parser: XmlPullParser) {
     fun isForSystem(system: AnalyticsSystem) = systems.contains(system)
 
     companion object {
-        // TODO: make internal
-        const val XML_EVENTS = "events"
+        internal const val XML_EVENTS = "events"
 
-        @JvmStatic
         @WorkerThread
-        @Throws(XmlPullParserException::class, IOException::class)
         fun fromEventsXml(parser: XmlPullParser): Collection<AnalyticsEvent> {
             parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENTS)
 
@@ -87,15 +80,11 @@ class AnalyticsEvent internal constructor(parser: XmlPullParser) {
 
                     when (parser.namespace) {
                         XMLNS_ANALYTICS -> when (parser.name) {
-                            XML_EVENT -> {
-                                add(AnalyticsEvent(parser))
-                                continue@parsingChildren
-                            }
+                            XML_EVENT -> add(AnalyticsEvent(parser))
+                            else -> parser.skipTag()
                         }
+                        else -> parser.skipTag()
                     }
-
-                    // skip unrecognized nodes
-                    XmlPullParserUtils.skipTag(parser)
                 }
             }
         }

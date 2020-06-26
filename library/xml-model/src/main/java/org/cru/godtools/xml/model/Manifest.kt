@@ -9,8 +9,8 @@ import androidx.annotation.WorkerThread
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
-import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
@@ -141,9 +141,9 @@ class Manifest : Base, Styles {
                     XML_CATEGORIES -> categoriesData = parseCategories(parser)
                     XML_PAGES -> pagesData = parsePages(parser, parseFile)
                     XML_RESOURCES -> resourcesData = parseResources(parser)
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
-                else -> XmlPullParserUtils.skipTag(parser)
+                else -> parser.skipTag()
             }
         }
         _title = title
@@ -197,9 +197,9 @@ class Manifest : Base, Styles {
                 when (parser.namespace) {
                     XMLNS_MANIFEST -> when (parser.name) {
                         Category.XML_CATEGORY -> add(Category(this@Manifest, parser))
-                        else -> XmlPullParserUtils.skipTag(parser)
+                        else -> parser.skipTag()
                     }
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
             }
         }
@@ -226,22 +226,22 @@ class Manifest : Base, Styles {
                             val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
                             val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
                             val position = pages.size
-                            XmlPullParserUtils.skipTag(parser)
+                            parser.skipTag()
 
                             if (srcFile != null)
                                 add(async { parseFile(srcFile).use { Page(this@Manifest, position, fileName, it) } })
                         }
-                        else -> XmlPullParserUtils.skipTag(parser)
+                        else -> parser.skipTag()
                     }
                     XMLNS_ARTICLE -> when (parser.name) {
                         XML_PAGES_AEM_IMPORT -> {
                             parser.getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)
                                 ?.let { result.aemImports.add(it) }
-                            XmlPullParserUtils.skipTag(parser)
+                            parser.skipTag()
                         }
-                        else -> XmlPullParserUtils.skipTag(parser)
+                        else -> parser.skipTag()
                     }
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
             }
         }.awaitAll()
@@ -259,9 +259,9 @@ class Manifest : Base, Styles {
                 when (parser.namespace) {
                     XMLNS_MANIFEST -> when (parser.name) {
                         Resource.XML_RESOURCE -> add(Resource(this@Manifest, parser))
-                        else -> XmlPullParserUtils.skipTag(parser)
+                        else -> parser.skipTag()
                     }
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
             }
         }.associateBy { it.name }

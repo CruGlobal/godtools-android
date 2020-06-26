@@ -3,7 +3,7 @@ package org.cru.godtools.xml.model
 import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -54,7 +54,7 @@ class Button : Content, Styles {
                 ns == XMLNS_ANALYTICS && name == AnalyticsEvent.XML_EVENTS ->
                     analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
                 ns == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(this, parser)
-                else -> XmlPullParserUtils.skipTag(parser)
+                else -> parser.skipTag()
             }
         }
         this.analyticsEvents = analyticsEvents

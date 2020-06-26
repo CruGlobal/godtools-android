@@ -2,7 +2,7 @@ package org.cru.godtools.xml.model
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
 
@@ -32,19 +32,12 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : Base(pa
 
             when (parser.namespace) {
                 XMLNS_TRACT -> when (parser.name) {
-                    XML_NUMBER -> {
-                        number = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_NUMBER)
-                        continue@parsingChildren
-                    }
-                    XML_TITLE -> {
-                        title = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_TITLE)
-                        continue@parsingChildren
-                    }
+                    XML_NUMBER -> number = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_NUMBER)
+                    XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_TITLE)
+                    else -> parser.skipTag()
                 }
+                else -> parser.skipTag()
             }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser)
         }
         this.number = number
         this.title = title

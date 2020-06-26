@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
@@ -74,9 +74,9 @@ class Input : Content {
                 XMLNS_CONTENT -> when (parser.name) {
                     XML_LABEL -> label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
                     XML_PLACEHOLDER -> placeholder = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_PLACEHOLDER)
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
-                else -> XmlPullParserUtils.skipTag(parser)
+                else -> parser.skipTag()
             }
         }
         this.label = label

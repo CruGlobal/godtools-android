@@ -1,7 +1,7 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.WorkerThread
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
@@ -30,20 +30,17 @@ class Category internal constructor(manifest: Manifest, parser: XmlPullParser) :
             parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        XML_LABEL -> {
-                            label = Text.fromNestedXml(this@Category, parser, XMLNS_MANIFEST, XML_LABEL)
-                            continue@parsingChildren
-                        }
+                val ns = parser.namespace
+                val name = parser.name
+                when {
+                    ns == XMLNS_MANIFEST && name == XML_LABEL ->
+                        label = Text.fromNestedXml(this@Category, parser, XMLNS_MANIFEST, XML_LABEL)
+                    ns == XMLNS_ARTICLE && name == XML_AEM_TAG -> {
+                        add(parser.getAttributeValue(null, XML_ID))
+                        parser.skipTag()
                     }
-                    XMLNS_ARTICLE -> when (parser.name) {
-                        XML_AEM_TAG -> add(parser.getAttributeValue(null, XML_ID))
-                    }
+                    else -> parser.skipTag()
                 }
-
-                // skip unrecognized nodes
-                XmlPullParserUtils.skipTag(parser)
             }
         }
         this.label = label
