@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
+        <variable name="hero" type="org.cru.godtools.xml.model.Hero" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/hero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horiz_margin_hero"
+        android:layout_marginRight="@dimen/horiz_margin_hero"
+        android:orientation="vertical"
+        app:visibleIf="@{hero != null}">
+
+        <TextView
+            android:id="@+id/hero_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:saveEnabled="false"
+            android:text="@{hero.heading}"
+            android:textIsSelectable="true"
+            android:textSize="@{@dimen/text_size_hero_heading}"
+            app:defaultTextColor="@{StylesKt.getPrimaryColor(hero)}"
+            app:visibleIf="@{hero.heading != null}"
+            tools:text="Knowing God Personally"
+            tools:textSize="@dimen/text_size_hero_heading" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:saveEnabled="false" />
+    </LinearLayout>
+</layout>

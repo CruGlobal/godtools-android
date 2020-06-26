@@ -13,6 +13,9 @@ import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.databinding.TractPageBinding;
+import org.cru.godtools.tract.ui.controller.HeroController;
+import org.cru.godtools.tract.ui.controller.HeroControllerKt;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
@@ -31,7 +34,7 @@ import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
 import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
 import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
 
-public class PageViewHolder extends ParentViewHolder<Page>
+public class PageViewHolder extends BaseViewHolder<Page>
         implements PageContentLayout.OnActiveCardListener, CardViewHolder.Callbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
     public interface Callbacks {
@@ -43,11 +46,11 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final Settings mSettings;
 
+    @NonNull
+    private final TractPageBinding mBinding;
+
     @BindView(R2.id.page_content_layout)
     PageContentLayout mPageContentLayout;
-
-    @BindView(R2.id.hero)
-    View mHero;
 
     private boolean mBindingCards = false;
     private boolean mNeedsCardsRebind = false;
@@ -56,7 +59,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     private Set<String> mVisibleCards = new ArraySet<>();
 
     @NonNull
-    private final HeroViewHolder mHeroViewHolder;
+    private final HeroController mHeroController;
     @Nullable
     private CardViewHolder mActiveCardViewHolder;
     @NonNull
@@ -67,31 +70,26 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Nullable
     private Callbacks mCallbacks;
 
-    PageViewHolder(@NonNull final View root) {
-        super(Page.class, root, null);
-        mSettings = Settings.Companion.getInstance(root.getContext());
+    public PageViewHolder(@NonNull final TractPageBinding binding) {
+        super(binding.getRoot(), null);
+        mBinding = binding;
+        mSettings = Settings.Companion.getInstance(binding.getRoot().getContext());
 
         mPageContentLayout.setActiveCardListener(this);
-        mHeroViewHolder = HeroViewHolder.forView(mHero, this);
-    }
-
-    @NonNull
-    public static PageViewHolder forView(@NonNull final View root) {
-        final PageViewHolder holder = forView(root, PageViewHolder.class);
-        return holder != null ? holder : new PageViewHolder(root);
+        mHeroController = HeroControllerKt.bindController(mBinding.hero, this);
     }
 
     // region Lifecycle Events
 
     @Override
-    void onBind() {
+    protected void onBind() {
         super.onBind();
-        mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
+        mHeroController.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();
     }
 
     @Override
-    void onVisible() {
+    protected void onVisible() {
         super.onVisible();
         mSettings.registerOnSharedPreferenceChangeListener(this);
 
@@ -99,7 +97,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         if (mActiveCardViewHolder != null) {
             mActiveCardViewHolder.markVisible();
         } else {
-            mHeroViewHolder.markVisible();
+            mHeroController.markVisible();
         }
 
         updateBounceAnimation();
@@ -175,7 +173,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     }
 
     @Override
-    void onHidden() {
+    protected void onHidden() {
         super.onHidden();
         mSettings.unregisterOnSharedPreferenceChangeListener(this);
 
@@ -183,7 +181,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         if (mActiveCardViewHolder != null) {
             mActiveCardViewHolder.markHidden();
         } else {
-            mHeroViewHolder.markHidden();
+            mHeroController.markHidden();
         }
 
         updateBounceAnimation();
@@ -326,13 +324,13 @@ public class PageViewHolder extends ParentViewHolder<Page>
             if (old != null) {
                 old.markHidden();
             } else {
-                mHeroViewHolder.markHidden();
+                mHeroController.markHidden();
             }
 
             if (mActiveCardViewHolder != null) {
                 mActiveCardViewHolder.markVisible();
             } else {
-                mHeroViewHolder.markVisible();
+                mHeroController.markVisible();
             }
         }
     }
@@ -362,7 +360,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         if (mActiveCardViewHolder != null) {
             mActiveCardViewHolder.onContentEvent(event);
         } else {
-            mHeroViewHolder.onContentEvent(event);
+            mHeroController.onContentEvent(event);
         }
     }
 

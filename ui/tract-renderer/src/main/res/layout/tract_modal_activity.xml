@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <org.ccci.gto.android.common.widget.HackyNestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <include
+            layout="@layout/tract_content_modal"
+            android:id="@+id/modal_layout" />
+    </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+</layout>

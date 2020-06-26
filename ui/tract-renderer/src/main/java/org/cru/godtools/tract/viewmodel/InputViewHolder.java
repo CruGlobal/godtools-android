@@ -35,7 +35,7 @@ import butterknife.OnTextChanged;
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 @UiThread
-final class InputViewHolder extends BaseViewHolder<Input> {
+public final class InputViewHolder extends BaseViewHolder<Input> {
     @Nullable
     @BindView(R2.id.label)
     TextView mLabelView;
@@ -50,12 +50,12 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     @Nullable
     private Text mPlaceholder;
 
-    InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
+    public InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
+        super(parent, R.layout.tract_content_input, parentViewHolder);
     }
 
     @Override
-    void onBind() {
+    protected void onBind() {
         super.onBind();
         if (mModel != null) {
             mLabel = mModel.getLabel();
@@ -94,7 +94,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     @Override
-    boolean onValidate() {
+    public boolean onValidate() {
         final String value = getValue();
         final Input.Error error = mModel != null ? mModel.validateValue(value) : null;
         final String msg = error == null ? null : error.msgId != INVALID_STRING_RES ?
@@ -104,7 +104,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     @Override
-    void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
+    public void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
         if (mModel != null) {
             final String value = getValue();
             if (mModel.getName() != null && value != null) {

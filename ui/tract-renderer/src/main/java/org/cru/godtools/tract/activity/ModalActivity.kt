@@ -3,15 +3,12 @@ package org.cru.godtools.tract.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
-import butterknife.BindView
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -24,8 +21,8 @@ import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.tract.Constants.EXTRA_MODAL
 import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
-import org.cru.godtools.tract.R2
-import org.cru.godtools.tract.viewmodel.ModalViewHolder
+import org.cru.godtools.tract.databinding.TractModalActivityBinding
+import org.cru.godtools.tract.ui.controller.bindController
 import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -42,11 +39,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
         .toBundle()
 )
 
-class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
-    @JvmField
-    @BindView(R2.id.modal_root)
-    var mModalView: View? = null
-
+class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
 
     // region Lifecycle
@@ -67,10 +60,9 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
         dataModel.modal.observe(this) { if (it == null) finish() }
     }
 
-    @CallSuper
-    override fun onContentChanged() {
-        super.onContentChanged()
-        setupModalViewHolder()
+    override fun onBindingChanged() {
+        binding.modalLayout.bindController()
+            .also { dataModel.modal.observe(this, it) }
     }
 
     override fun onResume() {
@@ -91,10 +83,6 @@ class ModalActivity : ImmersiveActivity(true, R.layout.activity_modal) {
     // endregion Lifecycle
 
     private fun validStartState() = dataModel.toolCode.value != null
-
-    private fun setupModalViewHolder() {
-        mModalView?.let { dataModel.modal.observe(this, ModalViewHolder.forView(it)) }
-    }
 
     private fun checkForDismissEvent(event: Event) {
         if (dataModel.modal.value?.dismissListeners?.contains(event.id) == true) finish()

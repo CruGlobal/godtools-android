@@ -29,7 +29,7 @@ import androidx.lifecycle.Observer;
 import butterknife.ButterKnife;
 
 @UiThread
-abstract class BaseViewHolder<T extends Base> implements Observer<T> {
+public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     private final Handler mHandler;
 
     @Nullable
@@ -37,24 +37,20 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @NonNull
     public final View mRoot;
 
-    @NonNull
-    final Class<T> mModelType;
     @Nullable
-    T mModel;
+    protected T mModel;
 
-    boolean mVisible = false;
+    protected boolean mVisible = false;
 
-    protected BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent,
-                             @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
-        this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
+    protected BaseViewHolder(@NonNull final ViewGroup parent, @LayoutRes final int layout,
+                             @Nullable final BaseViewHolder parentViewHolder) {
+        this(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
     }
 
-    protected BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
-                   @Nullable final BaseViewHolder parentViewHolder) {
+    protected BaseViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
         mHandler = new Handler(Looper.getMainLooper());
 
         mParentViewHolder = parentViewHolder;
-        mModelType = modelType;
         mRoot = root;
         ButterKnife.bind(this, mRoot);
         mRoot.setTag(R.id.view_holder, this);
@@ -84,25 +80,27 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     }
 
     @CallSuper
-    void onBind() {
+    protected void onBind() {
         updateLayoutDirection();
     }
 
     @CallSuper
-    void onVisible() {}
+    protected void onVisible() {}
 
-    boolean onValidate() {
+    // TODO: this should be internal
+    public boolean onValidate() {
         // default to being valid
         return true;
     }
 
-    void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
+    // TODO: this should be internal
+    public void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
 
     @CallSuper
     public void onContentEvent(@NonNull final Event event) {}
 
     @CallSuper
-    void onHidden() {}
+    protected void onHidden() {}
     // endregion Lifecycle
 
     @Nullable
@@ -174,8 +172,8 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
      * @return Any pending analytics events.
      */
     @NonNull
-    final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
-                                                final AnalyticsEvent.Trigger... types) {
+    protected final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
+                                                          final AnalyticsEvent.Trigger... types) {
         return Stream.of(events)
                 .filter(e -> e.isTriggerType(types))
                 .map(this::sendAnalyticsEvent)
@@ -195,7 +193,7 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
         return null;
     }
 
-    final void cancelPendingAnalyticsEvents(@NonNull final List<Runnable> pendingTasks) {
+    protected final void cancelPendingAnalyticsEvents(@NonNull final List<Runnable> pendingTasks) {
         Stream.of(pendingTasks)
                 .forEach(mHandler::removeCallbacks);
     }
@@ -203,11 +201,11 @@ abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     /**
      * @return true if the event has been built by a parent view holder.
      */
-    boolean buildEvent(@NonNull final Event.Builder builder) {
+    protected boolean buildEvent(@NonNull final Event.Builder builder) {
         return mParentViewHolder != null && mParentViewHolder.buildEvent(builder);
     }
 
-    boolean validate(@NonNull final Set<Event.Id> ids) {
+    protected boolean validate(@NonNull final Set<Event.Id> ids) {
         // navigate up hierarchy before performing validation
         if (mParentViewHolder != null) {
             return mParentViewHolder.validate(ids);

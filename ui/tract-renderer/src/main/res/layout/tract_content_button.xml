@@ -5,14 +5,14 @@
         <import type="org.cru.godtools.xml.model.ButtonKt" />
 
         <variable name="model" type="org.cru.godtools.xml.model.Button" />
-        <variable name="holder" type="org.cru.godtools.tract.viewmodel.ButtonViewHolder" />
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.ButtonController" />
     </data>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> holder.click()}"
+        android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
         app:backgroundTintCompat="@{ButtonKt.getButtonColor(model)}"

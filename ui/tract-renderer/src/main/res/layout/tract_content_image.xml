@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="holder" type="org.cru.godtools.tract.viewmodel.ImageViewHolder" />
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.ImageController" />
         <variable name="model" type="org.cru.godtools.xml.model.Image" />
     </data>
 
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
-        android:onClick="@{() -> holder.sendEvents(model.events)}"
+        android:onClick="@{() -> controller.sendEvents(model.events)}"
         android:saveEnabled="false"
         android:scaleType="centerCrop"
         app:picassoFile="@{model.resource}" />
