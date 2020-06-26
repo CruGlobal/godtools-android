@@ -19,7 +19,7 @@ import butterknife.BindView;
 @UiThread
 public final class FormViewHolder extends ParentController<Form> {
     public FormViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(Form.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
+        super(parent, R.layout.tract_content_paragraph, parentViewHolder);
     }
 
     @BindView(R2.id.content)

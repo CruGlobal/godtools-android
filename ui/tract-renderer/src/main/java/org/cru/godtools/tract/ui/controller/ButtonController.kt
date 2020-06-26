@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.EventBus
 internal class ButtonController private constructor(
     private val binding: TractContentButtonBinding,
     parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Button>(Button::class.java, binding.root, parentViewHolder) {
+) : BaseViewHolder<Button>(binding.root, parentViewHolder) {
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 

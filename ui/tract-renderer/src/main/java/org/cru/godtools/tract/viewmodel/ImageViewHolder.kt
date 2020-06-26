@@ -8,7 +8,7 @@ import org.cru.godtools.xml.model.Image
 
 @UiThread
 internal class ImageViewHolder(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
-    BaseViewHolder<Image>(Image::class.java, parent, R.layout.tract_content_image, parentViewHolder) {
+    BaseViewHolder<Image>(parent, R.layout.tract_content_image, parentViewHolder) {
     private val binding = TractContentImageBinding.bind(mRoot).also { it.holder = this }
 
     public override fun onBind() {

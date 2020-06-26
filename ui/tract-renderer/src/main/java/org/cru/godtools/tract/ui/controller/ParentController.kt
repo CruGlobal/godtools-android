@@ -10,12 +10,9 @@ import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Parent
 
 abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Parent {
-    protected constructor(modelType: Class<T>, parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
-        super(modelType, parent, layout, parentViewHolder)
-
-    protected constructor(modelType: Class<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
-        super(modelType, root, parentViewHolder)
-
+    protected constructor(root: View, parentViewHolder: BaseViewHolder<*>?) : super(root, parentViewHolder)
+    protected constructor(parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
+        super(parent, layout, parentViewHolder)
 
     // region Lifecycle
     @CallSuper

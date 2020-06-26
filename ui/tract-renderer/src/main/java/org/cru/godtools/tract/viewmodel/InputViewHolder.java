@@ -51,7 +51,7 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     private Text mPlaceholder;
 
     public InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
+        super(parent, R.layout.tract_content_input, parentViewHolder);
     }
 
     @Override

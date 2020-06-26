@@ -7,7 +7,7 @@ import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Hero
 
 class HeroController internal constructor(private val binding: TractPageHeroBinding, parentViewHolder: PageViewHolder) :
-    ParentController<Hero>(Hero::class.java, binding.root, parentViewHolder) {
+    ParentController<Hero>(binding.root, parentViewHolder) {
     override val contentContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Runnable>? = null
 

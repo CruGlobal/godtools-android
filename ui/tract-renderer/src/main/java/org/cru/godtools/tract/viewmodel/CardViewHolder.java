@@ -68,7 +68,7 @@ public final class CardViewHolder extends ParentController<Card> {
     private Callbacks mCallbacks;
 
     CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
-        super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
+        super(parent, R.layout.tract_content_card, pageViewHolder);
         if (pageViewHolder != null) {
             setCallbacks(pageViewHolder);
         }
