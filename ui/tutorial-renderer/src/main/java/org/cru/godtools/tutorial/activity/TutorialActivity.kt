@@ -167,6 +167,8 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         }
     }
     // endregion TutorialCallbacks
+
+    override fun supportNavigateUpTo(upIntent: Intent) = finish()
 }
 
 internal class TutorialPagerAdapter(activity: FragmentActivity, private val pages: List<Page>) :
