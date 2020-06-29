@@ -37,6 +37,13 @@ Press the About button to learn more about the tool.</string>
     <string name="tutorial_training_action_continue">Continue</string>
     <string name="tutorial_training_action_start">Start Using GodTools</string>
 
+    <!-- Live Share Tutorial -->
+    <eat-comment />
+    <string name="tutorial_live_share_description_headline">Share your screen</string>
+    <string name="tutorial_live_share_description_text">This option will send a link to this tool to a friend. When the link is opened it will start a screen sharing session.</string>
+    <string name="tutorial_live_share_action_continue">Continue</string>
+    <string name="tutorial_live_share_action_skip">Skip</string>
+
     <!-- Training Tutorial Banner -->
     <eat-comment />
     <string name="tutorial_training_banner_text">Show me a Tutorial</string>
