@@ -33,7 +33,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.setVariable(BR.callbacks, this)
         binding?.startAnimations()
     }
 
