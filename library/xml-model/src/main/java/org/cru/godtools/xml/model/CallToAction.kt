@@ -2,9 +2,7 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
-import org.ccci.gto.android.common.util.XmlPullParserUtils
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
 
@@ -35,24 +33,7 @@ class CallToAction : Base {
         events = parseEvents(parser, XML_EVENTS)
         _controlColor = parser.getAttributeValueAsColorOrNull(XML_CONTROL_COLOR)
 
-        // process any child elements
-        var label: Text? = null
-        parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
-
-            when (parser.namespace) {
-                XMLNS_CONTENT -> when (parser.name) {
-                    Text.XML_TEXT -> {
-                        label = Text(this, parser)
-                        continue@parsingChildren
-                    }
-                }
-            }
-
-            // skip unrecognized nodes
-            XmlPullParserUtils.skipTag(parser)
-        }
-        this.label = label
+        label = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_CALL_TO_ACTION)
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

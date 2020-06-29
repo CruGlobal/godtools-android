@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.xmlpull.v1.XmlPullParser
@@ -123,12 +123,12 @@ class Page : Base, Styles, Parent {
                     XMLNS_TRACT -> when (parser.name) {
                         Header.XML_HEADER -> header = Header(this, parser)
                         Hero.XML_HERO -> hero = Hero(this, parser)
-                        XML_CARDS -> cards = parseCardsXml(parser)
-                        XML_MODALS -> modals = parseModalsXml(parser)
+                        XML_CARDS -> cards = parser.parseCardsXml()
+                        XML_MODALS -> modals = parser.parseModalsXml()
                         CallToAction.XML_CALL_TO_ACTION -> callToAction = CallToAction(this, parser)
-                        else -> XmlPullParserUtils.skipTag(parser)
+                        else -> parser.skipTag()
                     }
-                    else -> XmlPullParserUtils.skipTag(parser)
+                    else -> parser.skipTag()
                 }
             }
         }
@@ -142,35 +142,35 @@ class Page : Base, Styles, Parent {
     fun findModal(id: String?) = modals.firstOrNull { it.id.equals(id, ignoreCase = true) }
 
     @OptIn(ExperimentalStdlibApi::class)
-    private fun parseCardsXml(parser: XmlPullParser) = buildList {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS)
+    private fun XmlPullParser.parseCardsXml() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS)
 
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_TRACT -> when (parser.name) {
-                    Card.XML_CARD -> add(Card(this@Page, size, parser))
-                    else -> XmlPullParserUtils.skipTag(parser)
+            when (namespace) {
+                XMLNS_TRACT -> when (name) {
+                    Card.XML_CARD -> add(Card(this@Page, size, this@parseCardsXml))
+                    else -> skipTag()
                 }
-                else -> XmlPullParserUtils.skipTag(parser)
+                else -> skipTag()
             }
         }
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    private fun parseModalsXml(parser: XmlPullParser) = buildList {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODALS)
+    private fun XmlPullParser.parseModalsXml() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODALS)
 
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_TRACT -> when (parser.name) {
-                    Modal.XML_MODAL -> add(Modal(this@Page, size, parser))
-                    else -> XmlPullParserUtils.skipTag(parser)
+            when (namespace) {
+                XMLNS_TRACT -> when (name) {
+                    Modal.XML_MODAL -> add(Modal(this@Page, size, this@parseModalsXml))
+                    else -> skipTag()
                 }
-                else -> XmlPullParserUtils.skipTag(parser)
+                else -> skipTag()
             }
         }
     }

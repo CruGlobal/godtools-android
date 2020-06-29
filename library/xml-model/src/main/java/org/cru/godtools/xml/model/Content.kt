@@ -1,6 +1,6 @@
 package org.cru.godtools.xml.model
 
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
@@ -44,12 +44,12 @@ abstract class Content : Base {
                     Input.XML_INPUT -> Input(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
                     else -> {
-                        if (consumeUnrecognizedTags) XmlPullParserUtils.skipTag(parser)
+                        if (consumeUnrecognizedTags) parser.skipTag()
                         null
                     }
                 }
                 else -> {
-                    if (consumeUnrecognizedTags) XmlPullParserUtils.skipTag(parser)
+                    if (consumeUnrecognizedTags) parser.skipTag()
                     null
                 }
             }

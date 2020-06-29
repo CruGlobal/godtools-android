@@ -4,7 +4,7 @@ import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
-import org.ccci.gto.android.common.util.XmlPullParserUtils
+import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
@@ -75,7 +75,7 @@ class Text : Content {
         internal const val XML_TEXT = "text"
 
         internal fun fromNestedXml(
-            parent: Base,
+            parent: BaseModel,
             parser: XmlPullParser,
             parentNamespace: String?,
             parentName: String
@@ -84,12 +84,14 @@ class Text : Content {
 
             // process any child elements
             var text: Text? = null
-            parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
+            while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace to parser.name) {
-                    XMLNS_CONTENT to XML_TEXT -> text = Text(parent, parser)
-                    else -> XmlPullParserUtils.skipTag(parser)
+                val ns = parser.namespace
+                val name = parser.name
+                when {
+                    ns == XMLNS_CONTENT && name == XML_TEXT -> text = Text(parent, parser)
+                    else -> parser.skipTag()
                 }
             }
             return text
