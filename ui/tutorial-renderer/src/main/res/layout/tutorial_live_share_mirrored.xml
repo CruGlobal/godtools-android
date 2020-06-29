@@ -34,6 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_live_share_mirrored_text"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"

@@ -47,17 +47,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/img_tutorial_live_share_people"
+            android:src="@drawable/img_tutorial_live_share_messages"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/textBottom" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_next"
+            android:id="@+id/action_live_share_finish"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> callbacks.nextPage()}"
-            android:text="@string/tutorial_live_share_action_continue"
+            android:onClick="@{callbacks::onTutorialAction}"
+            android:text="@string/tutorial_live_share_action_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
