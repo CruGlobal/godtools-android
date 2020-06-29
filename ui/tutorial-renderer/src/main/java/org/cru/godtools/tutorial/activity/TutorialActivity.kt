@@ -22,6 +22,7 @@ import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINI
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
+import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 
 private const val ARG_PAGE_SET = "pageSet"
 
@@ -34,10 +35,13 @@ fun Activity.startTutorialActivity(pageSet: PageSet = PageSet.DEFAULT) {
 class TutorialActivity : BaseActivity(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
+    private lateinit var binding: TutorialActivityBinding
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tutorial_activity)
+        binding = TutorialActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onContentChanged() {
@@ -62,7 +66,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        viewPager?.updateMenuVisibility()
+        binding.pages.updateMenuVisibility()
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -89,19 +93,17 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
     }
 
     // region ViewPager
-    private var viewPager: ViewPager2? = null
-
     private fun setupViewPager() {
-        viewPager = findViewById<ViewPager2>(R.id.tutorial_viewpager)?.also {
-            it.adapter = TutorialPagerAdapter(this, pageSet.pages)
-            it.setupAnalytics()
-            it.setupMenuVisibility()
-            it.setupIndicator()
+        binding.pages.apply {
+            adapter = TutorialPagerAdapter(this@TutorialActivity, pageSet.pages)
+            setupAnalytics()
+            setupMenuVisibility()
+            setupIndicator()
         }
     }
 
     private fun ViewPager2.setupIndicator() {
-        this@TutorialActivity.findViewById<CircleIndicator3>(R.id.on_boarding_indicator)?.let { indicator ->
+        binding.progressIndicator.let { indicator ->
             indicator.setViewPager(this)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) = updateIndicatorVisibility(indicator, position)
@@ -122,8 +124,8 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         })
     }
 
-    private fun trackScreenAnalytics(page: Int? = viewPager?.currentItem) {
-        if (page != null) eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
+    private fun trackScreenAnalytics(page: Int = binding.pages.currentItem) {
+        eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
     }
     // endregion Analytics
 
@@ -145,7 +147,7 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
 
     // region TutorialCallbacks
     override fun nextPage() {
-        viewPager?.apply {
+        with(binding.pages) {
             currentItem = (currentItem + 1).coerceAtMost(adapter?.itemCount ?: 0)
         }
     }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/tutorial_viewpager"
+        android:id="@+id/pages"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -19,7 +19,7 @@
         tools:menu="@menu/tutorial_onboarding_menu" />
 
     <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/on_boarding_indicator"
+        android:id="@+id/progress_indicator"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tutorial_indicator_height"
         android:layout_gravity="bottom"
