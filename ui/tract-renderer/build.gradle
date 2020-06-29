@@ -25,6 +25,7 @@ dependencies {
     implementation project(':library:xml-model')
 
     api project(':ui:base-tool')
+    api project(':ui:tutorial-renderer')
 
     implementation "androidx.activity:activity-ktx:${deps.androidX.activity}"
     implementation "androidx.cardview:cardview:${deps.androidX.cardView}"

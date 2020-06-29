@@ -1,6 +1,7 @@
 package org.cru.godtools.tutorial.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -26,11 +27,10 @@ import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 
 private const val ARG_PAGE_SET = "pageSet"
 
-fun Activity.startTutorialActivity(pageSet: PageSet = PageSet.DEFAULT) {
-    Intent(this, TutorialActivity::class.java)
-        .putExtra(ARG_PAGE_SET, pageSet)
-        .also { startActivity(it) }
-}
+fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, TutorialActivity::class.java)
+    .putExtra(ARG_PAGE_SET, pageSet)
+
+fun Activity.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
 
 class TutorialActivity : BaseActivity(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
@@ -80,7 +80,17 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
             finish()
             true
         }
+        R.id.action_live_share_skip -> {
+            setResult(RESULT_OK)
+            finish()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_CANCELED)
+        super.onBackPressed()
     }
     // endregion Lifecycle
 
@@ -163,12 +173,19 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
+            R.id.action_live_share_finish -> {
+                setResult(RESULT_OK)
+                finish()
+            }
             R.id.action_training_finish -> finish()
         }
     }
     // endregion TutorialCallbacks
 
-    override fun supportNavigateUpTo(upIntent: Intent) = finish()
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        setResult(RESULT_CANCELED)
+        finish()
+    }
 }
 
 internal class TutorialPagerAdapter(activity: FragmentActivity, private val pages: List<Page>) :
