@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
+
+        <include layout="@layout/tutorial_include_margins" />
+
+        <include layout="@layout/tutorial_live_share_include_positioning" />
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
+            android:text="@string/tutorial_live_share_mirrored_headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/tutorial_live_share_mirrored_text"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/img_tutorial_live_share_devices"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/textBottom" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> callbacks.nextPage()}"
+            android:text="@string/tutorial_live_share_action_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
