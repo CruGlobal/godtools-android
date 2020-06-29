@@ -225,7 +225,7 @@ class Manifest : Base, Styles {
                         XML_PAGES_PAGE -> {
                             val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
                             val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                            val position = pages.size
+                            val position = size
                             parser.skipTag()
 
                             if (srcFile != null)
