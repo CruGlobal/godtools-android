@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Install</string>
+    <string name="menu_share_tract">Send this tool</string>
 
     <string name="tract_card_previous">Previous</string>
     <string name="tract_card_next">Next</string>

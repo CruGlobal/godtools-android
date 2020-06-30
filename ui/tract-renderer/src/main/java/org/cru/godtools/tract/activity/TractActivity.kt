@@ -70,6 +70,8 @@ import javax.inject.Inject
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
 
+private val ENABLE_LIVE_SHARE = BuildConfig.DEBUG
+
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?) =
     startActivity(createTractActivityIntent(toolCode, *languages))
 
@@ -135,9 +137,13 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tract, menu)
 
+        if (ENABLE_LIVE_SHARE) {
+            menu.removeItem(R.id.action_share)
+            menuInflater.inflate(R.menu.activity_tract_live_share, menu)
+        }
+
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
-        menu.findItem(R.id.action_live_share_publish)?.isVisible = BuildConfig.DEBUG
     }
 
     override fun onStart() {
@@ -153,6 +159,12 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         item.itemId == R.id.action_live_share_publish -> {
             publisherController.started = true
             shareLiveShareLink()
+            true
+        }
+        // override default share action to support live share submenu
+        item.itemId == R.id.action_share && ENABLE_LIVE_SHARE -> true
+        item.itemId == R.id.action_share_tool -> {
+            shareCurrentTool()
             true
         }
         // handle close button if this is an instant app
