@@ -46,8 +46,6 @@ abstract class ImmersiveActivity<B : ViewDataBinding>(
 
     private fun updateSystemUi() {
         when {
-            // short-circuit for android versions that don't support full-screen/immersive mode
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT -> return
             !enableImmersive -> makeNonImmersive()
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode -> makeNonImmersive()
             else -> makeImmersive()
