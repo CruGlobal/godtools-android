@@ -1,10 +1,10 @@
 package org.cru.godtools.base.tool.activity
 
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import org.cru.godtools.base.ui.activity.BaseActivity
@@ -50,20 +50,25 @@ abstract class ImmersiveActivity<B : ViewDataBinding>(
             Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT -> return
             !enableImmersive -> makeNonImmersive()
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isInMultiWindowMode -> makeNonImmersive()
+            // TODO: re-evaluate this to determine the best way to handle display cutouts for the TractActivity
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && hasDisplayCutout() -> makeNonImmersive()
             else -> makeImmersive()
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun hasDisplayCutout() = !window.decorView.rootWindowInsets.displayCutout?.boundingRects.isNullOrEmpty()
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun makeImmersive() {
         // enable immersive mode
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_IMMERSIVE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_IMMERSIVE or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 
     private fun makeNonImmersive() {
