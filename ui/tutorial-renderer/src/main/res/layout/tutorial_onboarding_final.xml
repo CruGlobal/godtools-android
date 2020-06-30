@@ -14,7 +14,7 @@
         android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
-        <include layout="@layout/tutorial_onboarding_include_margins" />
+        <include layout="@layout/tutorial_include_margins" />
 
         <TextView
             android:id="@+id/prepare"

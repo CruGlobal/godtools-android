@@ -17,8 +17,17 @@
         <item name="android:textSize">32sp</item>
     </style>
 
+    <style name="TextAppearance.GodTools.Tutorial.Headline2" parent="TextAppearance.GodTools.Tutorial.Headline">
+        <item name="android:textSize">28sp</item>
+    </style>
+
     <style name="TextAppearance.GodTools.Tutorial.Subhead" parent="TextAppearance.GodTools.Subhead">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tutorial.Text" parent="TextAppearance.GodTools.Medium">
+        <item name="android:textColor">@color/gray_5A</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

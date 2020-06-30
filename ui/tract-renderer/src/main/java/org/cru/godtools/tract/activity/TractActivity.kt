@@ -56,6 +56,8 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.util.ViewUtils
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
@@ -69,6 +71,8 @@ import javax.inject.Inject
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
+
+private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
 
 private val ENABLE_LIVE_SHARE = BuildConfig.DEBUG
 
@@ -173,6 +177,14 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when {
+        requestCode == REQUEST_LIVE_SHARE_TUTORIAL && resultCode == Activity.RESULT_OK -> {
+            dataModel.liveShareTutorialShown = true
+            shareLiveShareLink()
+        }
+        else -> super.onActivityResult(requestCode, resultCode, data)
     }
 
     @CallSuper
@@ -450,12 +462,12 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
 
-    fun shareLiveShareLink() {
-        if (publisherController.publisherInfo.value == null) {
+    internal fun shareLiveShareLink() = when {
+        !dataModel.liveShareTutorialShown ->
+            startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
+        publisherController.publisherInfo.value == null ->
             LiveShareDialogFragment().show(supportFragmentManager, null)
-        } else {
-            shareCurrentTool()
-        }
+        else -> shareCurrentTool()
     }
 
     private fun sendLiveShareNavigationEvent(page: Page, card: Card?) {

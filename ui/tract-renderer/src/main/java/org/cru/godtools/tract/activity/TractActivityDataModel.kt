@@ -36,6 +36,7 @@ import java.util.Locale
 import javax.inject.Named
 
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
+private const val STATE_LIVE_SHARE_TUTORIAL_SHOWN = "liveShareTutorialShown"
 
 class TractActivityDataModel @AssistedInject constructor(
     private val dao: GodToolsDao,
@@ -139,6 +140,12 @@ class TractActivityDataModel @AssistedInject constructor(
     val visibleLocales =
         availableLocales.combineWith(state) { locales, state -> locales.filter { state[it] == ToolState.LOADED } }
     // endregion Language Switcher
+
+    var liveShareTutorialShown: Boolean
+        get() = savedState[STATE_LIVE_SHARE_TUTORIAL_SHOWN] ?: false
+        set(value) {
+            savedState[STATE_LIVE_SHARE_TUTORIAL_SHOWN] = value
+        }
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
         override fun create(key: TranslationKey): LiveData<Manifest?> {

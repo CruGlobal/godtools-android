@@ -19,5 +19,8 @@ internal enum class Page(
     TRAINING_WATCH(R.layout.tutorial_training_watch),
     TRAINING_PREPARE(R.layout.tutorial_training_prepare),
     TRAINING_TRY(R.layout.tutorial_training_try),
-    TRAINING_FINAL(R.layout.tutorial_training_final)
+    TRAINING_FINAL(R.layout.tutorial_training_final),
+    LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
+    LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
+    LIVE_SHARE_START(R.layout.tutorial_live_share_start, showMenu = false)
 }

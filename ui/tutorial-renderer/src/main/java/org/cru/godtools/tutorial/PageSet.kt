@@ -47,6 +47,17 @@ enum class PageSet(
             Locale.SIMPLIFIED_CHINESE,
             Locale("es")
         )
+    ),
+    LIVE_SHARE(
+        feature = Settings.FEATURE_TUTORIAL_LIVE_SHARE,
+        menu = R.menu.tutorial_live_share_menu,
+        // TODO: we probably need a better analytics base screen name
+        analyticsBaseScreenName = "tutorial-live-share",
+        pages = listOf(
+            Page.LIVE_SHARE_DESCRIPTION,
+            Page.LIVE_SHARE_MIRRORED,
+            Page.LIVE_SHARE_START
+        )
     );
 
     fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }

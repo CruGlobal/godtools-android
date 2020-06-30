@@ -4,8 +4,6 @@
 
     <data>
         <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
-        <variable name="isVisible" type="boolean" />
-        <variable name="lifecycleOwner2" type="androidx.lifecycle.LifecycleOwner" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,11 +15,7 @@
 
         <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_training_include_positioning" />
-
-        <include
-            layout="@layout/tutorial_training_include_navigation"
-            app:callbacks="@{callbacks}" />
+        <include layout="@layout/tutorial_live_share_include_positioning" />
 
         <TextView
             android:id="@+id/headline"
@@ -29,37 +23,43 @@
             android:layout_height="wrap_content"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="@string/tutorial_training_watch_headline"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
+            android:text="@string/tutorial_live_share_description_headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toTopOf="@id/headlinePosition" />
 
         <TextView
-            android:id="@+id/subhead"
+            android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="@string/tutorial_training_watch_subhead"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+            android:text="@string/tutorial_live_share_description_text"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
 
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/video"
+        <ImageView
+            android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:maxWidth="356dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/img_tutorial_live_share_messages"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/subheadBottom"
-            app:lifecycleOwner="@{lifecycleOwner2}"
-            app:pauseVideoWhen="@{!isVisible}"
-            app:useWebUi="true"
-            app:videoId="Us2psJs8izU" />
+            app:layout_constraintTop_toBottomOf="@id/textBottom" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_live_share_finish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{callbacks::onTutorialAction}"
+            android:text="@string/tutorial_live_share_action_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
