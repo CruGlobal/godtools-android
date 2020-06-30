@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Install</string>
+
     <string name="tract_card_previous">Previous</string>
     <string name="tract_card_next">Next</string>
 
     <!-- Live Sharing -->
     <eat-comment />
+    <string name="menu_live_share_publish">Share your screen</string>
     <string name="tract_live_share_starting">Starting Screen Sharing…</string>
     <string name="tract_live_share_unable_to_connect">Unable to connect to Screen Sharing</string>
 </resources>
