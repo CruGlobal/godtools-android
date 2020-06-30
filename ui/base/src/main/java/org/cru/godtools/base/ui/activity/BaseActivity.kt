@@ -9,6 +9,7 @@ import android.os.Message
 import android.os.Parcelable
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.AndroidInjection
+import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.cru.godtools.base.Settings
@@ -28,7 +30,8 @@ private const val EXTRA_FEATURE = "org.cru.godtools.BaseActivity.FEATURE"
 private const val EXTRA_FORCE = "org.cru.godtools.BaseActivity.FORCE"
 private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.launchingComponent"
 
-private const val MSG_FEATURE_DISCOVERY = 1
+@VisibleForTesting
+internal const val MSG_FEATURE_DISCOVERY = 1
 
 abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
     @Inject
@@ -73,11 +76,6 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.saveFeatureDiscoveryState()
-    }
-
-    override fun onDestroy() {
-        featureDiscoveryHandler.removeCallbacksAndMessages(null)
-        super.onDestroy()
     }
     // endregion Lifecycle
 
@@ -162,11 +160,14 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     }
 
     // region Delayed Dispatch
-    private val featureDiscoveryHandler by lazy {
+    @VisibleForTesting
+    internal val featureDiscoveryHandler by lazy {
         Handler(mainLooper, Handler.Callback { m -> showFeatureDiscovery(m) })
+            .apply { lifecycle.onDestroy { removeCallbacksAndMessages(null) } }
     }
 
-    protected fun dispatchDelayedFeatureDiscovery(feature: String, force: Boolean, delay: Long) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    fun dispatchDelayedFeatureDiscovery(feature: String, force: Boolean, delay: Long) {
         featureDiscoveryHandler.sendMessageDelayed(
             featureDiscoveryHandler.obtainMessage(MSG_FEATURE_DISCOVERY, feature).apply {
                 data = Bundle().apply {
