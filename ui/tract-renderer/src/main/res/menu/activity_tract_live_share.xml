@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:orderInCategory="200"
+        android:title="@string/menu_share_tool"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_share_tool"
+                android:orderInCategory="100"
+                android:title="@string/menu_share_tract" />
+            <item
+                android:id="@+id/action_live_share_publish"
+                android:orderInCategory="200"
+                android:title="@string/menu_live_share_publish" />
+        </menu>
+    </item>
+</menu>
