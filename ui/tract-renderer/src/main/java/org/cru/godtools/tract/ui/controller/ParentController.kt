@@ -4,15 +4,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.CallSuper
+import androidx.annotation.UiThread
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Parent
+import kotlin.reflect.KClass
 
 abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Parent {
-    protected constructor(root: View, parentViewHolder: BaseViewHolder<*>?) : super(root, parentViewHolder)
-    protected constructor(parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
-        super(parent, layout, parentViewHolder)
+    protected constructor(clazz: KClass<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
+        super(clazz.java, root, parentViewHolder)
+    protected constructor(clazz: Class<T>, parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
+        super(clazz, parent, layout, parentViewHolder)
 
     // region Lifecycle
     @CallSuper
@@ -40,6 +43,7 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
     protected abstract val contentContainer: LinearLayout
     private var children: List<BaseViewHolder<*>>? = null
 
+    @UiThread
     private fun bindContent() {
         contentContainer.removeAllViews()
         children = model?.content?.mapNotNull {

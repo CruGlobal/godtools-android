@@ -37,19 +37,23 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @NonNull
     public final View mRoot;
 
+    @NonNull
+    private final Class<T> mModelClass;
     @Nullable
     protected T mModel;
 
     protected boolean mVisible = false;
 
-    protected BaseViewHolder(@NonNull final ViewGroup parent, @LayoutRes final int layout,
-                             @Nullable final BaseViewHolder parentViewHolder) {
-        this(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
+    protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final ViewGroup parent,
+                             @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
+        this(clazz, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
     }
 
-    protected BaseViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
+    protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final View root,
+                             @Nullable final BaseViewHolder parentViewHolder) {
         mHandler = new Handler(Looper.getMainLooper());
 
+        mModelClass = clazz;
         mParentViewHolder = parentViewHolder;
         mRoot = root;
         ButterKnife.bind(this, mRoot);

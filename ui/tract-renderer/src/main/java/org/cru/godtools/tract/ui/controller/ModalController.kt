@@ -5,7 +5,7 @@ import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Modal
 
 class ModalController internal constructor(private val binding: TractContentModalBinding) :
-    ParentController<Modal>(binding.root, null) {
+    ParentController<Modal>(Modal::class, binding.root, null) {
     override val contentContainer get() = binding.content
 
     override fun onBind() {

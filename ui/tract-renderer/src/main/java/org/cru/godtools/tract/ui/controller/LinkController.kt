@@ -10,7 +10,7 @@ import org.cru.godtools.xml.model.Link
 internal class LinkController private constructor(
     private val binding: TractContentLinkBinding,
     parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Link>(binding.root, parentViewHolder) {
+) : BaseViewHolder<Link>(Link::class.java, binding.root, parentViewHolder) {
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentLinkBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 

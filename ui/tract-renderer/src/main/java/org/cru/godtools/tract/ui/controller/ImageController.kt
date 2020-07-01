@@ -9,7 +9,7 @@ import org.cru.godtools.xml.model.Image
 internal class ImageController private constructor(
     private val binding: TractContentImageBinding,
     parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Image>(binding.root, parentViewHolder) {
+) : BaseViewHolder<Image>(Image::class.java, binding.root, parentViewHolder) {
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentImageBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 

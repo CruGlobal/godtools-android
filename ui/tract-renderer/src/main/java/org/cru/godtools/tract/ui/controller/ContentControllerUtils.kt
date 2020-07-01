@@ -5,8 +5,8 @@ import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.tract.viewmodel.InputViewHolder
 import org.cru.godtools.tract.viewmodel.TabsViewHolder
+import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
-import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
@@ -17,7 +17,7 @@ import org.cru.godtools.xml.model.Text
 import timber.log.Timber
 import kotlin.reflect.KClass
 
-internal fun <T : Content> createController(clazz: KClass<T>, parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) =
+internal fun <T : Base> createController(clazz: KClass<T>, parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) =
     when (clazz) {
         Button::class -> ButtonController(parent, parentViewHolder)
         Form::class -> FormController(parent, parentViewHolder)
