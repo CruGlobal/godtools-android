@@ -8,6 +8,7 @@ import androidx.annotation.UiThread
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
 import kotlin.reflect.KClass
 
@@ -41,13 +42,18 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
 
     // region Child Content
     protected abstract val contentContainer: LinearLayout
-    private var children: List<BaseViewHolder<*>>? = null
+    private val childCache by lazy { UiControllerCache(contentContainer, this) }
+    private var children: List<BaseViewHolder<Content>>? = null
 
     @UiThread
     private fun bindContent() {
-        contentContainer.removeAllViews()
+        children?.forEach {
+            contentContainer.removeView(it.mRoot)
+            it.releaseTo(childCache)
+        }
+
         children = model?.content?.mapNotNull {
-            createController(it.javaClass.kotlin, contentContainer, this)?.apply {
+            childCache.acquire(it.javaClass.kotlin)?.apply {
                 bind(it)
                 contentContainer.addView(mRoot)
             }

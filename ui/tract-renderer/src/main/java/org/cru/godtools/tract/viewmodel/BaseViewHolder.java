@@ -11,6 +11,7 @@ import com.annimon.stream.Stream;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
+import org.cru.godtools.tract.ui.controller.UiControllerCache;
 import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.BaseKt;
@@ -106,6 +107,10 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @CallSuper
     protected void onHidden() {}
     // endregion Lifecycle
+
+    public final void releaseTo(final UiControllerCache cache) {
+        cache.release(mModelClass, this);
+    }
 
     @Nullable
     public final T getModel() {
