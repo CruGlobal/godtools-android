@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.databinding.TractContentCardBinding;
 import org.cru.godtools.tract.ui.controller.ParentController;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
@@ -44,6 +46,9 @@ public final class CardViewHolder extends ParentController<Card> {
         void onPreviousCard();
     }
 
+    @NonNull
+    private final TractContentCardBinding mBinding;
+
     @BindView(R2.id.background_image)
     SimpleScaledPicassoImageView mBackgroundView;
     @BindView(R2.id.card)
@@ -67,8 +72,10 @@ public final class CardViewHolder extends ParentController<Card> {
     @Nullable
     private Callbacks mCallbacks;
 
-    CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
-        super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
+    private CardViewHolder(@NonNull final TractContentCardBinding binding,
+                           @Nullable final PageViewHolder pageViewHolder) {
+        super(Card.class, binding.getRoot(), pageViewHolder);
+        mBinding = binding;
         if (pageViewHolder != null) {
             setCallbacks(pageViewHolder);
         }
@@ -77,7 +84,9 @@ public final class CardViewHolder extends ParentController<Card> {
     @NonNull
     public static CardViewHolder create(@NonNull final ViewGroup parent,
                                         @Nullable final PageViewHolder pageViewHolder) {
-        return new CardViewHolder(parent, pageViewHolder);
+        return new CardViewHolder(
+                TractContentCardBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                pageViewHolder);
     }
 
     // region Lifecycle Events
