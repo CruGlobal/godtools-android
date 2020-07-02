@@ -3,6 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.content.Context
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Space
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -58,6 +59,29 @@ class ParentControllerTest {
 
         controller.bind(null)
         assertEquals(0, controller.contentContainer.childCount)
+    }
+
+    @Test
+    fun verifyBindContentWithUnmanagedViews() {
+        controller.contentContainer.addView(Space(context))
+
+        controller.bind(Paragraph(manifest) { listOf(Text(it), Image(it)) })
+        assertEquals(3, controller.contentContainer.childCount)
+        assertThat(
+            controller.contentContainer.children.toList(),
+            contains(instanceOf(Space::class.java), instanceOf(TextView::class.java), instanceOf(ImageView::class.java))
+        )
+
+        controller.bind(Paragraph(manifest) { listOf(Image(it)) })
+        assertEquals(2, controller.contentContainer.childCount)
+        assertThat(
+            controller.contentContainer.children.toList(),
+            contains(instanceOf(Space::class.java), instanceOf(ImageView::class.java))
+        )
+
+        controller.bind(null)
+        assertEquals(1, controller.contentContainer.childCount)
+        assertThat(controller.contentContainer.children.toList(), contains(instanceOf(Space::class.java)))
     }
 
     class ConcreteParentController(public override val contentContainer: LinearLayout) :
