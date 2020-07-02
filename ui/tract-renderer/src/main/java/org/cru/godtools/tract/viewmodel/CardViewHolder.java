@@ -57,9 +57,6 @@ public final class CardViewHolder extends ParentController<Card> {
     @BindView(R2.id.previous_card)
     TextView mPreviousCardView;
 
-    @BindView(R2.id.content)
-    LinearLayout mContent;
-
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
     @Nullable
@@ -122,7 +119,7 @@ public final class CardViewHolder extends ParentController<Card> {
     @NonNull
     @Override
     protected LinearLayout getContentContainer() {
-        return mContent;
+        return mBinding.content;
     }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
