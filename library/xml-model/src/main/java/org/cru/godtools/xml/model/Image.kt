@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
@@ -14,6 +15,11 @@ class Image : Content {
         internal const val XML_IMAGE = "image"
     }
 
+    val events: Set<Event.Id>
+    @VisibleForTesting
+    internal val resourceName: String?
+    val resource get() = getResource(resourceName)
+
     @WorkerThread
     internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_IMAGE)
@@ -24,8 +30,9 @@ class Image : Content {
         parser.skipTag()
     }
 
-    val events: Set<Event.Id>
-    @VisibleForTesting
-    internal val resourceName: String?
-    val resource get() = getResource(resourceName)
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(parent: BaseModel) : super(parent) {
+        events = emptySet()
+        resourceName = null
+    }
 }
