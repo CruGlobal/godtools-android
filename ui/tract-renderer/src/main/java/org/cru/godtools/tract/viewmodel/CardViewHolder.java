@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
-import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
@@ -19,8 +18,6 @@ import org.cru.godtools.tract.ui.controller.ParentController;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.CardKt;
-import org.cru.godtools.xml.model.StylesKt;
-import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
 import java.util.Locale;
@@ -53,10 +50,6 @@ public final class CardViewHolder extends ParentController<Card> {
     SimpleScaledPicassoImageView mBackgroundView;
     @BindView(R2.id.card)
     CardView mCardView;
-    @BindView(R2.id.label)
-    TextView mLabel;
-    @BindView(R2.id.label_divider)
-    View mDivider;
     @BindView(R2.id.next_card)
     TextView mNextCardView;
     @BindView(R2.id.card_position)
@@ -95,8 +88,8 @@ public final class CardViewHolder extends ParentController<Card> {
     @CallSuper
     protected void onBind() {
         super.onBind();
+        mBinding.setModel(getModel());
         bindBackground();
-        bindLabel();
         bindCardNavigation();
     }
 
@@ -141,12 +134,6 @@ public final class CardViewHolder extends ParentController<Card> {
         ResourceViewUtilsKt.bindBackgroundImage(mBackgroundView, CardKt.getBackgroundImageResource(mModel),
                                                 CardKt.getBackgroundImageScaleType(mModel),
                                                 CardKt.getBackgroundImageGravity(mModel));
-    }
-
-    private void bindLabel() {
-        final Text label = mModel != null ? mModel.getLabel() : null;
-        TextViewUtils.bind(label, mLabel, R.dimen.text_size_card_label, StylesKt.getPrimaryColor(mModel));
-        mDivider.setBackgroundColor(StylesKt.getTextColor(mModel));
     }
 
     private void bindCardNavigation() {

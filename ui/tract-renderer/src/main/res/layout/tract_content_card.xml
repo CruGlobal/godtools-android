@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
+        <variable name="model" type="org.cru.godtools.xml.model.Card" />
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,6 +41,9 @@
                     android:layout_marginLeft="@dimen/card_margin_content_horiz"
                     android:layout_marginTop="@dimen/card_margin_content_top"
                     android:layout_marginRight="@dimen/card_margin_content_horiz"
+                    android:text="@{model.label}"
+                    android:textSize="@{@dimen/text_size_card_label}"
+                    app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -48,6 +56,7 @@
                     android:layout_marginLeft="@dimen/card_margin_content_horiz"
                     android:layout_marginTop="12dp"
                     android:layout_marginRight="@dimen/card_margin_content_horiz"
+                    android:background="@{StylesKt.getTextColor(model)}"
                     app:layout_constraintTop_toBottomOf="@id/label"
                     tools:background="#bebebe" />
 
