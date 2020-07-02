@@ -108,6 +108,10 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     protected void onHidden() {}
     // endregion Lifecycle
 
+    public final boolean supportsModel(final Base model) {
+        return mModelClass.isInstance(model);
+    }
+
     public final void releaseTo(final UiControllerCache cache) {
         cache.release(mModelClass, this);
     }

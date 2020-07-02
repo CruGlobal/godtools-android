@@ -46,17 +46,24 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
     private var children: List<BaseViewHolder<Content>>? = null
 
     @UiThread
+    @OptIn(ExperimentalStdlibApi::class)
     private fun bindContent() {
-        children?.forEach {
-            contentContainer.removeView(it.mRoot)
-            it.releaseTo(childCache)
+        val existing = children.orEmpty().toMutableList()
+
+        var next: BaseViewHolder<Content>? = null
+        children = model?.content?.mapNotNull { model ->
+            if (next == null) next = existing.removeFirstOrNull()
+
+            (next?.takeIf { it.supportsModel(model) }?.also { next = null }
+                ?: childCache.acquire(model.javaClass.kotlin)?.apply {
+                    contentContainer.addView(mRoot, contentContainer.indexOfChild(next?.mRoot))
+                })?.apply { bind(model) }
         }
 
-        children = model?.content?.mapNotNull {
-            childCache.acquire(it.javaClass.kotlin)?.apply {
-                bind(it)
-                contentContainer.addView(mRoot)
-            }
+        next?.let { existing.add(it) }
+        existing.forEach {
+            contentContainer.removeView(it.mRoot)
+            it.releaseTo(childCache)
         }
     }
     // endregion Child Content
