@@ -62,11 +62,6 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     }
 
     @Nullable
-    public static BaseViewHolder forView(@NonNull final View view) {
-        return forView(view, BaseViewHolder.class);
-    }
-
-    @Nullable
     public static <T extends BaseViewHolder> T forView(@Nullable final View view, @NonNull final Class<T> clazz) {
         if (view != null) {
             final Object holder = view.getTag(R.id.view_holder);
