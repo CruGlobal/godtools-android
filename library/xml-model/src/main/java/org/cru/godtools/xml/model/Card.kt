@@ -24,7 +24,8 @@ class Card : Base, Styles, Parent {
     val dismissListeners: Set<Event.Id>
     val analyticsEvents: Collection<AnalyticsEvent>
 
-    val backgroundImage: String?
+    private val _backgroundImage: String?
+    val backgroundImage get() = getResource(_backgroundImage)
     internal val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
@@ -51,7 +52,7 @@ class Card : Base, Styles, Parent {
         listeners = parseEvents(parser, XML_LISTENERS)
         dismissListeners = parseEvents(parser, XML_DISMISS_LISTENERS)
 
-        backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
+        _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
             parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
@@ -84,4 +85,5 @@ val Card?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT
 val Card?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
 // TODO: this should be an instance val
-val Card?.backgroundImageResource get() = this?.getResource(backgroundImage)
+@Deprecated("Use null safe access on instance property instead", ReplaceWith("this?.backgroundImage"))
+val Card?.backgroundImageResource get() = this?.backgroundImage
