@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.model.view.ResourceViewUtilsKt;
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
 import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.tract.R;
@@ -17,7 +16,6 @@ import org.cru.godtools.tract.databinding.TractContentCardBinding;
 import org.cru.godtools.tract.ui.controller.ParentController;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
-import org.cru.godtools.xml.model.CardKt;
 
 import java.util.List;
 import java.util.Locale;
@@ -86,7 +84,6 @@ public final class CardViewHolder extends ParentController<Card> {
     protected void onBind() {
         super.onBind();
         mBinding.setModel(getModel());
-        bindBackground();
         bindCardNavigation();
     }
 
@@ -124,13 +121,6 @@ public final class CardViewHolder extends ParentController<Card> {
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
-    }
-
-    private void bindBackground() {
-        mCardView.setCardBackgroundColor(CardKt.getBackgroundColor(mModel));
-        ResourceViewUtilsKt.bindBackgroundImage(mBackgroundView, CardKt.getBackgroundImageResource(mModel),
-                                                CardKt.getBackgroundImageScaleType(mModel),
-                                                CardKt.getBackgroundImageGravity(mModel));
     }
 
     private void bindCardNavigation() {

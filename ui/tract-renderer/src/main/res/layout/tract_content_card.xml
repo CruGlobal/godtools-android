@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.xml.model.CardKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="model" type="org.cru.godtools.xml.model.Card" />
@@ -25,6 +26,7 @@
             android:layout_marginTop="@dimen/card_margin_top"
             android:layout_marginRight="@dimen/card_margin_horiz"
             android:layout_marginBottom="@dimen/card_margin_bottom"
+            app:cardBackgroundColor="@{CardKt.getBackgroundColor(model)}"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:cardMaxElevation="@dimen/card_elevation">
@@ -70,14 +72,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
-                    android:id="@+id/background_image"
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="false"
                     app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
-                    app:layout_constraintTop_toTopOf="@id/content_scroll_view" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/content_scroll_view">
+
+                    <!-- We need the FrameLayout parent to handle image alignment when the image doesn't fill the entire background -->
+                    <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+                        android:id="@+id/background_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="false"
+                        app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
+                        app:picassoFile="@{model.backgroundImage}"
+                        app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />
+                </FrameLayout>
 
                 <org.ccci.gto.android.common.widget.HackyNestedScrollView
                     android:id="@+id/content_scroll_view"

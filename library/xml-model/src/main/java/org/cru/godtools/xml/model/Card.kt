@@ -83,7 +83,3 @@ class Card : Base, Styles, Parent {
 val Card?.backgroundColor get() = this?.backgroundColor ?: (null as Manifest?).backgroundColor
 val Card?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
 val Card?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-
-// TODO: this should be an instance val
-@Deprecated("Use null safe access on instance property instead", ReplaceWith("this?.backgroundImage"))
-val Card?.backgroundImageResource get() = this?.backgroundImage
