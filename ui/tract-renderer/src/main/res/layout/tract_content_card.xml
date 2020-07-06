@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.tract.R" />
         <import type="org.cru.godtools.xml.model.CardKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
@@ -122,15 +124,14 @@
                 <TextView
                     android:id="@+id/previous_card"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
-                    android:gravity="start"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="@dimen/card_margin_bottom"
-                    android:text="@string/tract_card_previous"
+                    android:gravity="start|center_vertical"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_previous), default=@string/tract_card_previous}"
                     android:textAlignment="viewStart"
                     android:textAllCaps="true"
+                    app:invisibleIf="@{model.hidden || model.visiblePosition == 0}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/card_position"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -138,8 +139,9 @@
                 <TextView
                     android:id="@+id/card_position"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/card_margin_bottom"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    app:invisibleIf="@{model.hidden}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/next_card"
                     app:layout_constraintStart_toEndOf="@id/previous_card"
@@ -148,15 +150,14 @@
                 <TextView
                     android:id="@+id/next_card"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="32dp"
-                    android:gravity="end|bottom"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="@dimen/card_margin_bottom"
-                    android:text="@string/tract_card_next"
+                    android:gravity="end|center_vertical"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_next), default=@string/tract_card_next}"
                     android:textAlignment="viewEnd"
                     android:textAllCaps="true"
+                    app:invisibleIf="@{model.hidden || model.visiblePosition + 1 >= model.page.visibleCards.size}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/card_position" />

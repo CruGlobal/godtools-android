@@ -1,16 +1,11 @@
 package org.cru.godtools.tract.viewmodel;
 
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView;
-import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentCardBinding;
 import org.cru.godtools.tract.ui.controller.ParentController;
@@ -24,7 +19,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -44,16 +38,8 @@ public final class CardViewHolder extends ParentController<Card> {
     @NonNull
     private final TractContentCardBinding mBinding;
 
-    @BindView(R2.id.background_image)
-    SimpleScaledPicassoImageView mBackgroundView;
-    @BindView(R2.id.card)
-    CardView mCardView;
-    @BindView(R2.id.next_card)
-    TextView mNextCardView;
     @BindView(R2.id.card_position)
     TextView mCardPositionView;
-    @BindView(R2.id.previous_card)
-    TextView mPreviousCardView;
 
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
@@ -129,33 +115,6 @@ public final class CardViewHolder extends ParentController<Card> {
         int cardCount = getCardCount();
         String positionText = String.format(locale, "%d/%d", cardPositionCount, cardCount);
         mCardPositionView.setText(positionText);
-        if (isCardHidden(mModel)) {
-            mPreviousCardView.setVisibility(View.INVISIBLE);
-            mPreviousCardView.setEnabled(false);
-            mCardPositionView.setVisibility(View.INVISIBLE);
-            mNextCardView.setVisibility(View.INVISIBLE);
-            mNextCardView.setEnabled(false);
-            return;
-        }
-        Context localContext = LocaleUtils.localizeContextIfPossible(mCardView.getContext(), locale);
-        if (cardPositionCount == 1) {
-            mPreviousCardView.setVisibility(View.INVISIBLE);
-            mPreviousCardView.setEnabled(false);
-        } else {
-            mPreviousCardView.setVisibility(View.VISIBLE);
-            mPreviousCardView.setEnabled(true);
-            mPreviousCardView.setText(localContext.getString(R.string.tract_card_previous));
-        }
-
-        if (cardPositionCount == cardCount) {
-            mNextCardView.setVisibility(View.INVISIBLE);
-            mNextCardView.setEnabled(false);
-        } else {
-            mNextCardView.setVisibility(View.VISIBLE);
-            mNextCardView.setEnabled(true);
-            mNextCardView.setText(localContext.getString(R.string.tract_card_next));
-        }
-
     }
 
     private boolean isCardHidden(Card card) {
