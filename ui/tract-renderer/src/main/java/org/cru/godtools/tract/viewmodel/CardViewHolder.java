@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentCardBinding;
 import org.cru.godtools.tract.ui.controller.ParentController;
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
@@ -17,8 +16,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import butterknife.OnClick;
-import butterknife.Optional;
 
 @UiThread
 public final class CardViewHolder extends ParentController<Card> {
@@ -44,6 +41,7 @@ public final class CardViewHolder extends ParentController<Card> {
                            @Nullable final PageViewHolder pageViewHolder) {
         super(Card.class, binding.getRoot(), pageViewHolder);
         mBinding = binding;
+        mBinding.setController(this);
         if (pageViewHolder != null) {
             setCallbacks(pageViewHolder);
         }
@@ -117,25 +115,19 @@ public final class CardViewHolder extends ParentController<Card> {
         }
     }
 
-    @Optional
-    @OnClick(R2.id.action_toggle)
-    void toggleCard() {
+    public void toggleCard() {
         if (mCallbacks != null) {
             mCallbacks.onToggleCard(this);
         }
     }
 
-    @Optional
-    @OnClick(R2.id.next_card)
-    void nextCard() {
+    public void nextCard() {
         if (mCallbacks != null) {
             mCallbacks.onNextCard();
         }
     }
 
-    @Optional
-    @OnClick(R2.id.previous_card)
-    void previousCard() {
+    public void previousCard() {
         if (mCallbacks != null) {
             mCallbacks.onPreviousCard();
         }

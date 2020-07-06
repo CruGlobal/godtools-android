@@ -8,6 +8,7 @@
         <import type="org.cru.godtools.xml.model.CardKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
+        <variable name="controller" type="org.cru.godtools.tract.viewmodel.CardViewHolder" />
         <variable name="model" type="org.cru.godtools.xml.model.Card" />
     </data>
 
@@ -65,10 +66,10 @@
                     tools:background="#bebebe" />
 
                 <View
-                    android:id="@+id/action_toggle"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_above="@id/label_divider"
+                    android:onClick="@{() -> controller.toggleCard()}"
                     app:layout_constraintBottom_toTopOf="@id/label_divider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +129,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="start|center_vertical"
+                    android:onClick="@{() -> controller.previousCard()}"
                     android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_previous), default=@string/tract_card_previous}"
                     android:textAlignment="viewStart"
                     android:textAllCaps="true"
@@ -155,6 +157,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="32dp"
                     android:gravity="end|center_vertical"
+                    android:onClick="@{() -> controller.nextCard()}"
                     android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_next), default=@string/tract_card_next}"
                     android:textAlignment="viewEnd"
                     android:textAllCaps="true"
