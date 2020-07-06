@@ -3,7 +3,6 @@ package org.cru.godtools.tract.viewmodel;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
@@ -13,13 +12,11 @@ import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.xml.model.Card;
 
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
@@ -37,9 +34,6 @@ public final class CardViewHolder extends ParentController<Card> {
 
     @NonNull
     private final TractContentCardBinding mBinding;
-
-    @BindView(R2.id.card_position)
-    TextView mCardPositionView;
 
     @Nullable
     private List<Runnable> mPendingAnalyticsEvents;
@@ -70,7 +64,6 @@ public final class CardViewHolder extends ParentController<Card> {
     protected void onBind() {
         super.onBind();
         mBinding.setModel(getModel());
-        bindCardNavigation();
     }
 
     @Override
@@ -107,34 +100,6 @@ public final class CardViewHolder extends ParentController<Card> {
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
-    }
-
-    private void bindCardNavigation() {
-        int cardPositionCount = mModel != null ? mModel.getPosition() + 1 : 1;
-        Locale locale = mModel != null ? mModel.getManifest().getLocale() : Locale.getDefault();
-        int cardCount = getCardCount();
-        String positionText = String.format(locale, "%d/%d", cardPositionCount, cardCount);
-        mCardPositionView.setText(positionText);
-    }
-
-    private boolean isCardHidden(Card card) {
-        if (card != null) {
-            return card.isHidden();
-        }
-        return false;
-    }
-
-    private int getCardCount() {
-        int count = 0;
-        if (mModel != null) {
-            for (Card card : mModel.getPage().getCards()) {
-                if (isCardHidden(card)) {
-                    continue;
-                }
-                count++;
-            }
-        }
-        return count;
     }
 
     private void checkForDismissEvent(@NonNull final Event event) {

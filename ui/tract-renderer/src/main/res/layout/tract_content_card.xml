@@ -141,6 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:gravity="center"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_position, model.visiblePosition + 1, model.page.visibleCards.size)}"
                     app:invisibleIf="@{model.hidden}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/next_card"

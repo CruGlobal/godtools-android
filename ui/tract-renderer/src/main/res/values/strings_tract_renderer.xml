@@ -5,6 +5,7 @@
 
     <string name="tract_card_previous">Previous</string>
     <string name="tract_card_next">Next</string>
+    <string name="tract_card_position" translatable="false">%1$d/%2$d</string>
 
     <!-- Live Sharing -->
     <eat-comment />
