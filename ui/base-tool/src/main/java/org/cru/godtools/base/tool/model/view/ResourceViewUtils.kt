@@ -1,6 +1,8 @@
 package org.cru.godtools.base.tool.model.view
 
+import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
@@ -47,6 +49,21 @@ fun ScaledPicassoImageView.bindBackgroundImage(resource: Resource?, scale: Image
     // update layout params
     view.layoutParams = view.layoutParams.apply {
         when (this) {
+            is FrameLayout.LayoutParams -> {
+                val horizontal = when {
+                    gravity.isStart -> Gravity.START
+                    gravity.isEnd -> Gravity.END
+                    gravity.isCenterX -> Gravity.CENTER_HORIZONTAL
+                    else -> Gravity.NO_GRAVITY
+                }
+                val vertical = when {
+                    gravity.isTop -> Gravity.TOP
+                    gravity.isBottom -> Gravity.BOTTOM
+                    gravity.isCenterY -> Gravity.CENTER_VERTICAL
+                    else -> Gravity.NO_GRAVITY
+                }
+                this.gravity = horizontal.or(vertical)
+            }
             is RelativeLayout.LayoutParams -> {
                 // set default layout for background image first
                 addRule(RelativeLayout.ALIGN_PARENT_START, 0)
