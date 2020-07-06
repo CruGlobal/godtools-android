@@ -38,6 +38,7 @@ class Page : Base, Styles, Parent {
     val header: Header?
     val hero: Hero?
     val cards: List<Card>
+    val visibleCards get() = cards.filter { !it.isHidden }
     val modals: List<Modal>
     val callToAction: CallToAction
 

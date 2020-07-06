@@ -18,6 +18,7 @@ class Card : Base, Styles, Parent {
 
     val id get() = "${page.id}-$position"
     val position: Int
+    val visiblePosition get() = page.visibleCards.indexOf(this).takeUnless { it == -1 }
 
     val isHidden: Boolean
     val listeners: Set<Event.Id>
