@@ -29,6 +29,8 @@ import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val TAG = "SnwplwAnalyticsService"
+
 private const val SNOWPLOW_NAMESPACE = "godtools-android"
 
 private const val CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3"
@@ -109,9 +111,9 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @Synchronized
     private fun Event.send(event: AnalyticsBaseEvent) {
         val subject = snowplowTracker.subject
-        Executor.execute { subject.populateUrl(event) }
+        Executor.execute(TAG) { subject.populateUrl(event) }
         snowplowTracker.track(this)
-        Executor.execute { subject.resetUrl() }
+        Executor.execute(TAG) { subject.resetUrl() }
     }
 
     private fun Subject.populateUrl(event: AnalyticsBaseEvent) {
