@@ -8,7 +8,7 @@
         <import type="org.cru.godtools.xml.model.CardKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
-        <variable name="controller" type="org.cru.godtools.tract.viewmodel.CardViewHolder" />
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.CardController" />
         <variable name="model" type="org.cru.godtools.xml.model.Card" />
     </data>
 

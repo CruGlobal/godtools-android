@@ -14,8 +14,6 @@ import kotlin.reflect.KClass
 abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Parent {
     protected constructor(clazz: KClass<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
         super(clazz.java, root, parentViewHolder)
-    protected constructor(clazz: Class<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
-        super(clazz, root, parentViewHolder)
 
     // region Lifecycle
     @CallSuper
