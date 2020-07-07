@@ -40,7 +40,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Input::class -> InputViewHolder(parent, parentViewHolder)
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
-            Tabs::class -> TabsViewHolder(parent, parentViewHolder)
+            Tabs::class -> TabsViewHolder.create(parent, parentViewHolder)
             Text::class -> TextController(parent, parentViewHolder)
             else -> {
                 val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")

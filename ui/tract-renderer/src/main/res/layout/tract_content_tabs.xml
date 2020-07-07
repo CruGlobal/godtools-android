@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        style="@style/Widget.GodTools.Tract.Content.Tabs"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />
-
-    <FrameLayout
-        android:id="@+id/tab"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tabs"
-        android:layout_marginTop="16dp" />
-</RelativeLayout>
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            style="@style/Widget.GodTools.Tract.Content.Tabs"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
+        <FrameLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tabs"
+            android:layout_marginTop="16dp" />
+    </RelativeLayout>
+</layout>

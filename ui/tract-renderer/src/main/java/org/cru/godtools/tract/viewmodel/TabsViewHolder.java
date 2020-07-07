@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -10,8 +11,8 @@ import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.databinding.TractContentTabsBinding;
 import org.cru.godtools.tract.ui.controller.TabController;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.model.BaseModelKt;
@@ -33,20 +34,31 @@ import butterknife.BindView;
 public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLayout.OnTabSelectedListener {
     private static final TabController[] EMPTY_TAB_VIEW_HOLDERS = new TabController[0];
 
+    private final TractContentTabsBinding mBinding;
+
     @BindView(R2.id.tabs)
     TabLayout mTabs;
     @BindView(R2.id.tab)
     FrameLayout mTabContent;
 
-    private boolean mBinding = false;
+    private boolean mBindingTabs = false;
 
     @NonNull
     private TabController[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
     private final Pools.Pool<TabController> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
 
-    public TabsViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(Tabs.class, parent, R.layout.tract_content_tabs, parentViewHolder);
+    private TabsViewHolder(@NonNull final TractContentTabsBinding binding,
+                           @Nullable final BaseViewHolder parentViewHolder) {
+        super(Tabs.class, binding.getRoot(), parentViewHolder);
+        mBinding = binding;
         setupTabs();
+    }
+
+    public static TabsViewHolder create(@NonNull final ViewGroup parent,
+                                        @Nullable final BaseViewHolder parentViewHolder) {
+        return new TabsViewHolder(
+                TractContentTabsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                parentViewHolder);
     }
 
     // region Lifecycle Events
@@ -69,7 +81,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     @Override
     public void onTabSelected(@NonNull final TabLayout.Tab tab) {
         final TabController holder = showTabContent(tab.getPosition());
-        if (!mBinding) {
+        if (!mBindingTabs) {
             holder.trackSelectedAnalyticsEvents();
         }
     }
@@ -88,7 +100,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     }
 
     private void bindTabs() {
-        mBinding = true;
+        mBindingTabs = true;
 
         // remove all the old tabs
         mTabs.removeAllTabs();
@@ -126,7 +138,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
             }
         }
 
-        mBinding = false;
+        mBindingTabs = false;
     }
 
     private void selectTab(@NonNull final Tab tab) {
