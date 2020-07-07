@@ -1,141 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    app:layout_card_padding_toTopOf="@+id/card"
-    app:layout_card_peek_toTopOf="@+id/label"
-    app:layout_card_stack_toTopOf="@+id/label_divider"
-    app:layout_childType="card">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.tract.R" />
+        <import type="org.cru.godtools.xml.model.CardKt" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card"
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.CardController" />
+        <variable name="model" type="org.cru.godtools.xml.model.Card" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/card_margin_horiz"
-        android:layout_marginTop="@dimen/card_margin_top"
-        android:layout_marginRight="@dimen/card_margin_horiz"
-        android:layout_marginBottom="@dimen/card_margin_bottom"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="@dimen/card_elevation"
-        app:cardMaxElevation="@dimen/card_elevation">
+        android:clipToPadding="false"
+        app:layout_card_padding_toTopOf="@+id/card"
+        app:layout_card_peek_toTopOf="@+id/label"
+        app:layout_card_stack_toTopOf="@+id/label_divider"
+        app:layout_childType="card">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false">
+            android:layout_marginLeft="@dimen/card_margin_horiz"
+            android:layout_marginTop="@dimen/card_margin_top"
+            android:layout_marginRight="@dimen/card_margin_horiz"
+            android:layout_marginBottom="@dimen/card_margin_bottom"
+            app:cardBackgroundColor="@{CardKt.getBackgroundColor(model)}"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardMaxElevation="@dimen/card_elevation">
 
-            <TextView
-                android:id="@+id/label"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/card_margin_content_horiz"
-                android:layout_marginTop="@dimen/card_margin_content_top"
-                android:layout_marginRight="@dimen/card_margin_content_horiz"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Card Label" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false">
 
-            <View
-                android:id="@+id/label_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/card_margin_content_horiz"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="@dimen/card_margin_content_horiz"
-                app:layout_constraintTop_toBottomOf="@id/label"
-                tools:background="#bebebe" />
-
-            <View
-                android:id="@+id/action_toggle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_above="@id/label_divider"
-                app:layout_constraintBottom_toTopOf="@id/label_divider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
-                android:id="@+id/background_image"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:cropToPadding="false"
-                app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
-                app:layout_constraintTop_toTopOf="@id/content_scroll_view" />
-
-            <org.ccci.gto.android.common.widget.HackyNestedScrollView
-                android:id="@+id/content_scroll_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="@dimen/card_margin_content_horiz"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="@dimen/card_margin_content_horiz"
-                android:fadingEdgeLength="24dp"
-                android:fillViewport="true"
-                android:requiresFadingEdge="vertical"
-                app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-                app:layout_constraintTop_toBottomOf="@id/label_divider">
-
-                <LinearLayout
-                    android:id="@+id/content"
+                <TextView
+                    android:id="@+id/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+                    android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                    android:layout_marginTop="@dimen/card_margin_content_top"
+                    android:layout_marginRight="@dimen/card_margin_content_horiz"
+                    android:text="@{model.label}"
+                    android:textSize="@{@dimen/text_size_card_label}"
+                    app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Card Label" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/bottom_nav"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:barrierDirection="top"
-                app:constraint_referenced_ids="previous_card,card_position,next_card" />
+                <View
+                    android:id="@+id/label_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="@dimen/card_margin_content_horiz"
+                    android:background="@{StylesKt.getTextColor(model)}"
+                    app:layout_constraintTop_toBottomOf="@id/label"
+                    tools:background="#bebebe" />
 
-            <TextView
-                android:id="@+id/previous_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="start"
-                android:paddingTop="8dp"
-                android:paddingBottom="@dimen/card_margin_bottom"
-                android:text="@string/tract_card_previous"
-                android:textAlignment="viewStart"
-                android:textAllCaps="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/card_position"
-                app:layout_constraintStart_toStartOf="parent" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_above="@id/label_divider"
+                    android:onClick="@{() -> controller.toggleCard()}"
+                    app:layout_constraintBottom_toTopOf="@id/label_divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/card_position"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_margin_bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/next_card"
-                app:layout_constraintStart_toEndOf="@id/previous_card"
-                tools:text="1/6" />
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/content_scroll_view">
 
-            <TextView
-                android:id="@+id/next_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="32dp"
-                android:gravity="end|bottom"
-                android:paddingTop="8dp"
-                android:paddingBottom="@dimen/card_margin_bottom"
-                android:text="@string/tract_card_next"
-                android:textAlignment="viewEnd"
-                android:textAllCaps="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/card_position" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</RelativeLayout>
+                    <!-- We need the FrameLayout parent to handle image alignment when the image doesn't fill the entire background -->
+                    <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+                        android:id="@+id/background_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="false"
+                        app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
+                        app:picassoFile="@{model.backgroundImage}"
+                        app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />
+                </FrameLayout>
+
+                <org.ccci.gto.android.common.widget.HackyNestedScrollView
+                    android:id="@+id/content_scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="@dimen/card_margin_content_horiz"
+                    android:fadingEdgeLength="24dp"
+                    android:fillViewport="true"
+                    android:requiresFadingEdge="vertical"
+                    app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+                    app:layout_constraintTop_toBottomOf="@id/label_divider">
+
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/bottom_nav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="top"
+                    app:constraint_referenced_ids="previous_card,card_position,next_card" />
+
+                <TextView
+                    android:id="@+id/previous_card"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="start|center_vertical"
+                    android:onClick="@{() -> controller.previousCard()}"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_previous), default=@string/tract_card_previous}"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    app:invisibleIf="@{model.hidden || model.visiblePosition == 0}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/card_position"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/card_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_position, model.visiblePosition + 1, model.page.visibleCards.size)}"
+                    app:invisibleIf="@{model.hidden}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/next_card"
+                    app:layout_constraintStart_toEndOf="@id/previous_card"
+                    tools:text="1/6" />
+
+                <TextView
+                    android:id="@+id/next_card"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:gravity="end|center_vertical"
+                    android:onClick="@{() -> controller.nextCard()}"
+                    android:text="@{ContextKt.getString(context, model.manifest.locale, R.string.tract_card_next), default=@string/tract_card_next}"
+                    android:textAlignment="viewEnd"
+                    android:textAllCaps="true"
+                    app:invisibleIf="@{model.hidden || model.visiblePosition + 1 >= model.page.visibleCards.size}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/card_position" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</layout>

@@ -18,13 +18,15 @@ class Card : Base, Styles, Parent {
 
     val id get() = "${page.id}-$position"
     val position: Int
+    val visiblePosition get() = page.visibleCards.indexOf(this).takeUnless { it == -1 }
 
     val isHidden: Boolean
     val listeners: Set<Event.Id>
     val dismissListeners: Set<Event.Id>
     val analyticsEvents: Collection<AnalyticsEvent>
 
-    val backgroundImage: String?
+    private val _backgroundImage: String?
+    val backgroundImage get() = getResource(_backgroundImage)
     internal val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
@@ -51,7 +53,7 @@ class Card : Base, Styles, Parent {
         listeners = parseEvents(parser, XML_LISTENERS)
         dismissListeners = parseEvents(parser, XML_DISMISS_LISTENERS)
 
-        backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
+        _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
             parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
@@ -82,6 +84,3 @@ class Card : Base, Styles, Parent {
 val Card?.backgroundColor get() = this?.backgroundColor ?: (null as Manifest?).backgroundColor
 val Card?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
 val Card?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-
-// TODO: this should be an instance val
-val Card?.backgroundImageResource get() = this?.getResource(backgroundImage)

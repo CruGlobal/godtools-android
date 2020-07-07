@@ -14,6 +14,7 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractPageBinding;
+import org.cru.godtools.tract.ui.controller.CardController;
 import org.cru.godtools.tract.ui.controller.HeroController;
 import org.cru.godtools.tract.ui.controller.HeroControllerKt;
 import org.cru.godtools.tract.widget.PageContentLayout;
@@ -35,7 +36,7 @@ import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
 import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
 
 public class PageViewHolder extends BaseViewHolder<Page>
-        implements PageContentLayout.OnActiveCardListener, CardViewHolder.Callbacks,
+        implements PageContentLayout.OnActiveCardListener, CardController.Callbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
@@ -61,11 +62,11 @@ public class PageViewHolder extends BaseViewHolder<Page>
     @NonNull
     private final HeroController mHeroController;
     @Nullable
-    private CardViewHolder mActiveCardViewHolder;
+    private CardController mActiveCardViewHolder;
     @NonNull
-    private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
+    private final Pools.Pool<CardController> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
     @NonNull
-    private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
+    private CardController[] mCardViewHolders = new CardController[0];
 
     @Nullable
     private Callbacks mCallbacks;
@@ -135,8 +136,8 @@ public class PageViewHolder extends BaseViewHolder<Page>
     @Override
     public void onActiveCardChanged(@Nullable final View activeCard) {
         if (!mBindingCards) {
-            final CardViewHolder old = mActiveCardViewHolder;
-            mActiveCardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
+            final CardController old = mActiveCardViewHolder;
+            mActiveCardViewHolder = BaseViewHolder.forView(activeCard, CardController.class);
             hideHiddenCardsThatArentActive();
             updateVisibleCard(old);
 
@@ -149,14 +150,14 @@ public class PageViewHolder extends BaseViewHolder<Page>
     }
 
     @Override
-    public void onDismissCard(@NonNull final CardViewHolder holder) {
+    public void onDismissCard(@NonNull final CardController holder) {
         if (holder.mRoot == mPageContentLayout.getActiveCard()) {
             mPageContentLayout.changeActiveCard(null, true);
         }
     }
 
     @Override
-    public void onToggleCard(@NonNull final CardViewHolder holder) {
+    public void onToggleCard(@NonNull final CardController holder) {
         mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED);
         mPageContentLayout
                 .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
@@ -229,9 +230,9 @@ public class PageViewHolder extends BaseViewHolder<Page>
         // map old view holders to new location
         final View invalid = mPageContentLayout; // We just need a non-null placeholder value that can't be a card view
         View activeCard = mPageContentLayout.getActiveCard() != null ? invalid : null;
-        final CardViewHolder[] holders = new CardViewHolder[mCards.length];
+        final CardController[] holders = new CardController[mCards.length];
         int lastNewPos = -1;
-        for (final CardViewHolder holder : mCardViewHolders) {
+        for (final CardController holder : mCardViewHolders) {
             final Card card = holder.getModel();
             final String id = card != null ? card.getId() : null;
             final int newPos = Stream.of(mCards).indexed()
@@ -269,7 +270,7 @@ public class PageViewHolder extends BaseViewHolder<Page>
             if (holders[pos] == null) {
                 holders[pos] = mRecycledCardViewHolders.acquire();
                 if (holders[pos] == null) {
-                    holders[pos] = CardViewHolder.create(mPageContentLayout, this);
+                    holders[pos] = new CardController(mPageContentLayout, this);
                 }
             }
 
@@ -318,7 +319,7 @@ public class PageViewHolder extends BaseViewHolder<Page>
         }
     }
 
-    private void updateVisibleCard(@Nullable final CardViewHolder old) {
+    private void updateVisibleCard(@Nullable final CardController old) {
         // update visibility state as necessary
         if (mVisible && old != mActiveCardViewHolder) {
             if (old != null) {
