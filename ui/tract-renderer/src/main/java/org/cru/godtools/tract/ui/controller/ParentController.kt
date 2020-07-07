@@ -4,15 +4,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.CallSuper
+import androidx.annotation.UiThread
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
+import kotlin.reflect.KClass
 
 abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Parent {
-    protected constructor(root: View, parentViewHolder: BaseViewHolder<*>?) : super(root, parentViewHolder)
-    protected constructor(parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
-        super(parent, layout, parentViewHolder)
+    protected constructor(clazz: KClass<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
+        super(clazz.java, root, parentViewHolder)
+    protected constructor(clazz: Class<T>, parent: ViewGroup, layout: Int, parentViewHolder: BaseViewHolder<*>?) :
+        super(clazz, parent, layout, parentViewHolder)
 
     // region Lifecycle
     @CallSuper
@@ -38,15 +42,28 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
 
     // region Child Content
     protected abstract val contentContainer: LinearLayout
-    private var children: List<BaseViewHolder<*>>? = null
+    private val childCache by lazy { UiControllerCache(contentContainer, this) }
+    private var children: List<BaseViewHolder<Content>>? = null
 
+    @UiThread
+    @OptIn(ExperimentalStdlibApi::class)
     private fun bindContent() {
-        contentContainer.removeAllViews()
-        children = model?.content?.mapNotNull {
-            createController(it.javaClass.kotlin, contentContainer, this)?.apply {
-                bind(it)
-                contentContainer.addView(mRoot)
-            }
+        val existing = children.orEmpty().toMutableList()
+
+        var next: BaseViewHolder<Content>? = null
+        children = model?.content?.mapNotNull { model ->
+            if (next == null) next = existing.removeFirstOrNull()
+
+            (next?.takeIf { it.supportsModel(model) }?.also { next = null }
+                ?: childCache.acquire(model.javaClass.kotlin)?.apply {
+                    contentContainer.addView(mRoot, contentContainer.indexOfChild(next?.mRoot))
+                })?.apply { bind(model) }
+        }
+
+        next?.let { existing.add(it) }
+        existing.forEach {
+            contentContainer.removeView(it.mRoot)
+            it.releaseTo(childCache)
         }
     }
     // endregion Child Content

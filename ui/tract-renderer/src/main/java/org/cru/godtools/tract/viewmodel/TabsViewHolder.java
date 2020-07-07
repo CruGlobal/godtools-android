@@ -45,7 +45,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     private final Pools.Pool<TabController> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
 
     public TabsViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(parent, R.layout.tract_content_tabs, parentViewHolder);
+        super(Tabs.class, parent, R.layout.tract_content_tabs, parentViewHolder);
         setupTabs();
     }
 

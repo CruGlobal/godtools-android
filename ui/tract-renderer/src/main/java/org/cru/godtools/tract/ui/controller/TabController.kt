@@ -10,7 +10,7 @@ import org.cru.godtools.xml.model.Tab
 class TabController private constructor(
     private val binding: TractContentParagraphBinding,
     parentViewHolder: BaseViewHolder<*>?
-) : ParentController<Tab>(binding.content, parentViewHolder) {
+) : ParentController<Tab>(Tab::class, binding.content, parentViewHolder) {
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 

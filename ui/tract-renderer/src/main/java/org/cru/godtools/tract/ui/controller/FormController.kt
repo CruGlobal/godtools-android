@@ -10,7 +10,7 @@ import org.cru.godtools.xml.model.Form
 class FormController private constructor(
     private val binding: TractContentParagraphBinding,
     parentViewHolder: BaseViewHolder<*>?
-) : ParentController<Form>(binding.content, parentViewHolder) {
+) : ParentController<Form>(Form::class, binding.content, parentViewHolder) {
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
     override val contentContainer get() = binding.content

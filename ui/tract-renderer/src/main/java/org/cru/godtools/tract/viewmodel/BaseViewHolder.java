@@ -11,6 +11,7 @@ import com.annimon.stream.Stream;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
+import org.cru.godtools.tract.ui.controller.UiControllerCache;
 import org.cru.godtools.xml.model.AnalyticsEvent;
 import org.cru.godtools.xml.model.Base;
 import org.cru.godtools.xml.model.BaseKt;
@@ -37,19 +38,23 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @NonNull
     public final View mRoot;
 
+    @NonNull
+    private final Class<T> mModelClass;
     @Nullable
     protected T mModel;
 
     protected boolean mVisible = false;
 
-    protected BaseViewHolder(@NonNull final ViewGroup parent, @LayoutRes final int layout,
-                             @Nullable final BaseViewHolder parentViewHolder) {
-        this(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
+    protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final ViewGroup parent,
+                             @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
+        this(clazz, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
     }
 
-    protected BaseViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
+    protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final View root,
+                             @Nullable final BaseViewHolder parentViewHolder) {
         mHandler = new Handler(Looper.getMainLooper());
 
+        mModelClass = clazz;
         mParentViewHolder = parentViewHolder;
         mRoot = root;
         ButterKnife.bind(this, mRoot);
@@ -102,6 +107,14 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     @CallSuper
     protected void onHidden() {}
     // endregion Lifecycle
+
+    public final boolean supportsModel(final Base model) {
+        return mModelClass.isInstance(model);
+    }
+
+    public final void releaseTo(final UiControllerCache cache) {
+        cache.release(mModelClass, this);
+    }
 
     @Nullable
     public final T getModel() {

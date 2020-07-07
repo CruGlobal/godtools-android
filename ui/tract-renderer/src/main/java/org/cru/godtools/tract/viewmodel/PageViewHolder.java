@@ -71,7 +71,7 @@ public class PageViewHolder extends BaseViewHolder<Page>
     private Callbacks mCallbacks;
 
     public PageViewHolder(@NonNull final TractPageBinding binding) {
-        super(binding.getRoot(), null);
+        super(Page.class, binding.getRoot(), null);
         mBinding = binding;
         mSettings = Settings.Companion.getInstance(binding.getRoot().getContext());
 
