@@ -2,14 +2,11 @@ package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -17,11 +14,8 @@ import org.ccci.gto.android.common.material.textfield.TextInputLayoutKt;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentInputBinding;
-import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.InputKt;
-import org.cru.godtools.xml.model.Styles;
-import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Text;
 import org.cru.godtools.xml.model.TextKt;
 
@@ -38,9 +32,6 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 public final class InputViewHolder extends BaseViewHolder<Input> {
     private final TractContentInputBinding mBinding;
 
-    @Nullable
-    @BindView(R2.id.label)
-    TextView mLabelView;
     @Nullable
     @BindView(R2.id.layout)
     TextInputLayout mInputLayout;
@@ -136,7 +127,7 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     private void bindPlaceholder() {
         // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
         Text hintText = mLabel;
-        if (mLabelView != null || hintText == null) {
+        if (hintText == null) {
             hintText = mPlaceholder;
         }
 
@@ -170,25 +161,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
                     break;
             }
             mInputView.setInputType(inputType);
-        }
-
-        // style the input view
-        final Styles stylesParent = BaseModelKt.getStylesParent(mModel);
-        if (mInputLayout != null) {
-            mInputLayout.setBoxStrokeColor(StylesKt.getPrimaryColor(stylesParent));
-        }
-        if (mInputView != null) {
-            mInputView.setTextColor(StylesKt.getTextColor(stylesParent));
-
-            // set the cursor color
-            // TODO: add support for older versions of Android by creating compat methods in GTO-Support for modifying
-            //       the TextCursorDrawable.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                final Drawable cursor = mInputView.getTextCursorDrawable();
-                if (cursor != null) {
-                    cursor.setTint(StylesKt.getPrimaryColor(stylesParent));
-                }
-            }
         }
     }
 

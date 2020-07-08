@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="org.cru.godtools.xml.model.BaseModelKt" />
         <import type="org.cru.godtools.xml.model.Input.Type" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="model" type="org.cru.godtools.xml.model.Input" />
     </data>
@@ -13,11 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:saveEnabled="false"
+        app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
         app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@{StylesKt.getTextColor(BaseModelKt.getStylesParent(model))}"
+            app:textCursorDrawableTint="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
     </com.google.android.material.textfield.TextInputLayout>
 </layout>
