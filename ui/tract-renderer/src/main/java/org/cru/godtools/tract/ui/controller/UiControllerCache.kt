@@ -50,12 +50,6 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
         } as BaseViewHolder<T>?
 
     @Deprecated(
-        "Used as a bridge method until TabsViewHolder is converted to Kotlin",
-        ReplaceWith("acquire(clazz.kotlin)")
-    )
-    fun <T : Base> acquire(clazz: Class<T>) = acquire(clazz.kotlin)
-
-    @Deprecated(
         "Used as a bridge method until BaseViewHolder is converted to Kotlin",
         ReplaceWith("release(clazz.kotlin, instance)")
     )
