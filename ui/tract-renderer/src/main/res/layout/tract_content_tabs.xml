@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.BaseModelKt" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
+        <variable name="model" type="org.cru.godtools.xml.model.Tabs" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabLayout
+        <androidx.appcompat.widget.AppCompatTabLayout
             android:id="@+id/tabs"
             style="@style/Widget.GodTools.Tract.Content.Tabs"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
+            app:tabSelectedTextColor="@{StylesKt.getPrimaryTextColor(BaseModelKt.getStylesParent(model))}"
+            app:tabTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
 
         <FrameLayout
             android:id="@+id/tab"

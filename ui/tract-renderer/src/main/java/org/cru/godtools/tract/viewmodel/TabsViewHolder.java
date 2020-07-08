@@ -14,9 +14,6 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentTabsBinding;
 import org.cru.godtools.tract.ui.controller.TabController;
-import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.xml.model.BaseModelKt;
-import org.cru.godtools.xml.model.Styles;
 import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Tab;
 import org.cru.godtools.xml.model.Tabs;
@@ -67,6 +64,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     @Override
     protected void onBind() {
         super.onBind();
+        mBinding.setModel(getModel());
         bindTabs();
     }
 
@@ -110,14 +108,6 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
                 .forEach(mRecycledTabViewHolders::release);
         mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
 
-        // change the tab styles
-        final Styles styles = BaseModelKt.getStylesParent(mModel);
-        final int primaryColor = StylesKt.getPrimaryColor(styles);
-        mTabs.setTabTextColors(primaryColor, StylesKt.getPrimaryTextColor(styles));
-
-        // update background tint
-        ViewUtils.setBackgroundTint(mTabs, primaryColor);
-
         // add all the current tabs
         if (mModel != null) {
             // create view holders for every tab
@@ -126,6 +116,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
                     .toArray(TabController[]::new);
 
             // add all the tabs to the TabLayout
+            final int primaryColor = StylesKt.getPrimaryColor(mModel.getStylesParent());
             for (final Tab tab : mModel.getTabs()) {
                 final Text label = tab.getLabel();
                 final TabLayout.Tab tab2 = mTabs.newTab()
