@@ -5,10 +5,8 @@ import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Tab
 
-class TabController internal constructor(
-    private val binding: TractContentTabBinding,
-    parentViewHolder: BaseViewHolder<*>?
-) : ParentController<Tab>(Tab::class, binding.content, parentViewHolder) {
+class TabController internal constructor(private val binding: TractContentTabBinding, tabsController: TabsController) :
+    ParentController<Tab>(Tab::class, binding.content, tabsController) {
     override val contentContainer get() = binding.content
 
     fun trackSelectedAnalyticsEvents() {
