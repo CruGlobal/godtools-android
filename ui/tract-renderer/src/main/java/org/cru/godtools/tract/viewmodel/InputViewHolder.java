@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -69,6 +68,7 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     @Override
     protected void onBind() {
         super.onBind();
+        mBinding.setModel(getModel());
         if (mModel != null) {
             mLabel = mModel.getLabel();
             mPlaceholder = mModel.getPlaceholder();
@@ -77,7 +77,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
             mPlaceholder = null;
         }
 
-        mRoot.setVisibility(mModel != null && mModel.getType() == Input.Type.HIDDEN ? View.GONE : View.VISIBLE);
         bindLabel();
         bindPlaceholder();
         bindInput();

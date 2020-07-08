@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.Input.Type" />
+
+        <variable name="model" type="org.cru.godtools.xml.model.Input" />
+    </data>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:saveEnabled="false">
+        android:saveEnabled="false"
+        app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input"
