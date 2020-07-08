@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:saveEnabled="false"
+        android:hint="@{(model.label ?? model.placeholder).text}"
         app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
         app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
 

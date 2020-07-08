@@ -125,19 +125,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     private void bindPlaceholder() {
-        // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
-        Text hintText = mLabel;
-        if (hintText == null) {
-            hintText = mPlaceholder;
-        }
-
-        // set the hint on the layout or the actual input (based on what's available)
-        if (mInputLayout != null) {
-            mInputLayout.setHint(TextKt.getText(hintText));
-        } else if (mInputView != null) {
-            mInputView.setHint(TextKt.getText(hintText));
-        }
-
         // update placeholder styles
         final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
         final int hintColor = TextKt.getTextColor(hintStyles);
