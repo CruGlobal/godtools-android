@@ -2,7 +2,6 @@ package org.cru.godtools.tract.viewmodel;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
@@ -10,7 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.material.tabs.TabLayoutKt;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentTabsBinding;
 import org.cru.godtools.tract.ui.controller.TabController;
 import org.cru.godtools.tract.ui.controller.UiControllerCache;
@@ -24,18 +22,12 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import butterknife.BindView;
 
 @UiThread
 public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLayout.OnTabSelectedListener {
     private static final TabController[] EMPTY_TAB_VIEW_HOLDERS = new TabController[0];
 
     private final TractContentTabsBinding mBinding;
-
-    @BindView(R2.id.tabs)
-    TabLayout mTabs;
-    @BindView(R2.id.tab)
-    FrameLayout mTabContent;
 
     private boolean mBindingTabs = false;
 
@@ -100,9 +92,9 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
         mBindingTabs = true;
 
         // remove all the old tabs
-        mTabs.removeAllTabs();
+        mBinding.tabs.removeAllTabs();
         Stream.of(mTabContentViewHolders)
-                .peek(vh -> mTabContent.removeView(vh.mRoot))
+                .peek(vh -> mBinding.tab.removeView(vh.mRoot))
                 .peek(vh -> vh.bind(null))
                 .forEach(c -> c.releaseTo(mTabCache));
         mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
@@ -118,13 +110,13 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
             final int primaryColor = StylesKt.getPrimaryColor(mModel.getStylesParent());
             for (final Tab tab : mModel.getTabs()) {
                 final Text label = tab.getLabel();
-                final TabLayout.Tab tab2 = mTabs.newTab()
+                final TabLayout.Tab tab2 = mBinding.tabs.newTab()
                         .setText(TextKt.getText(label));
 
                 // set the tab background
                 TabLayoutKt.setBackgroundTint(tab2, primaryColor);
 
-                mTabs.addTab(tab2);
+                mBinding.tabs.addTab(tab2);
             }
         }
 
@@ -132,7 +124,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     }
 
     private void selectTab(@NonNull final Tab tab) {
-        Optional.ofNullable(mTabs.getTabAt(tab.getPosition()))
+        Optional.ofNullable(mBinding.tabs.getTabAt(tab.getPosition()))
                 .ifPresent(TabLayout.Tab::select);
     }
 
@@ -145,15 +137,15 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
 
     private TabController showTabContent(final int position) {
         final TabController holder = mTabContentViewHolders[position];
-        if (holder.mRoot.getParent() != mTabContent) {
-            mTabContent.removeAllViews();
-            mTabContent.addView(holder.mRoot);
+        if (holder.mRoot.getParent() != mBinding.tab) {
+            mBinding.tab.removeAllViews();
+            mBinding.tab.addView(holder.mRoot);
         }
         return holder;
     }
 
     private void propagateEventToChildren(@NonNull final Event event) {
-        final int position = mTabs.getSelectedTabPosition();
+        final int position = mBinding.tabs.getSelectedTabPosition();
         if (position > -1) {
             mTabContentViewHolders[position].onContentEvent(event);
         }
