@@ -8,7 +8,6 @@ import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 
-import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.material.tabs.TabLayoutKt;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
@@ -94,8 +93,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     // endregion Lifecycle Events
 
     private void setupTabs() {
-        mTabs.addOnTabSelectedListener(this);
-        ViewCompat.setClipToOutline(mTabs, true);
+        mBinding.tabs.addOnTabSelectedListener(this);
     }
 
     private void bindTabs() {

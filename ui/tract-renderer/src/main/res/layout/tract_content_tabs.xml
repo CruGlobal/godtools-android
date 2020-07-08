@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
+            app:clipToOutline="@{true}"
             app:tabSelectedTextColor="@{StylesKt.getPrimaryTextColor(BaseModelKt.getStylesParent(model))}"
             app:tabTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
 
