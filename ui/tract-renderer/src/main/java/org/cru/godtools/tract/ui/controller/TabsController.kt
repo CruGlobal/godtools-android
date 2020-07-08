@@ -26,9 +26,10 @@ class TabsController private constructor(
     }
 
     private val tabCache = UiControllerCache(binding.tab, this)
+    private val tabController: TabController = (tabCache.acquire(Tab::class) as TabController)
+        .also { binding.tab.addView(it.mRoot) }
 
     private var bindingTabs = false
-    private var tabControllers = emptyList<TabController>()
 
     // region Lifecycle
     @UiThread
@@ -42,12 +43,12 @@ class TabsController private constructor(
     override fun onContentEvent(event: Event) {
         super.onContentEvent(event)
         checkForTabEvent(event)
-        propagateEventToChildren(event)
+        tabController.onContentEvent(event)
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        val holder = showTabContent(tab.position) ?: return
-        if (!bindingTabs) holder.trackSelectedAnalyticsEvents()
+        tabController.bind(model?.tabs?.getOrNull(tab.position))
+        if (!bindingTabs) tabController.trackSelectedAnalyticsEvents()
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) = Unit
@@ -57,22 +58,14 @@ class TabsController private constructor(
     private fun bindTabs() {
         bindingTabs = true
 
-        // update tab controllers
-        tabControllers.forEach {
-            binding.tab.removeView(it.mRoot)
-            it.bind(null)
-            it.releaseTo(tabCache)
-        }
-        tabControllers = model?.tabs?.map { bindTabContentViewHolder(it) }.orEmpty()
-
         // update tabs for the TabLayout
         val primaryColor = model?.stylesParent.primaryColor
         binding.tabs.removeAllTabs()
         model?.tabs?.forEach {
             with(binding.tabs) {
                 addTab(newTab().apply {
-                    text = it.label?.text
                     setBackgroundTint(primaryColor)
+                    text = it.label?.text
                 })
             }
         }
@@ -80,27 +73,9 @@ class TabsController private constructor(
         bindingTabs = false
     }
 
-    private fun selectTab(tab: Tab) {
-        binding.tabs.getTabAt(tab.position)?.select()
-    }
-
-    private fun bindTabContentViewHolder(tab: Tab?) =
-        tabCache.acquire(Tab::class).also { it?.bind(tab) } as TabController
-
-    private fun showTabContent(position: Int) = tabControllers[position].apply {
-        if (mRoot.parent !== binding.tab) {
-            binding.tab.removeAllViews()
-            binding.tab.addView(mRoot)
-        }
-    }
-
-    private fun propagateEventToChildren(event: Event) {
-        val position = binding.tabs.selectedTabPosition
-        if (position > -1) tabControllers[position].onContentEvent(event)
-    }
-
     private fun checkForTabEvent(event: Event) {
         model?.tabs?.firstOrNull { it.listeners.contains(event.id) }
-            ?.let { selectTab(it) }
+            ?.let { binding.tabs.getTabAt(it.position) }
+            ?.select()
     }
 }
