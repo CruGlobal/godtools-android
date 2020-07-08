@@ -2,9 +2,7 @@ package org.cru.godtools.tract.viewmodel;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
 
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.CallSuper;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -44,11 +41,6 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
     protected T mModel;
 
     protected boolean mVisible = false;
-
-    protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final ViewGroup parent,
-                             @LayoutRes final int layout, @Nullable final BaseViewHolder parentViewHolder) {
-        this(clazz, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
-    }
 
     protected BaseViewHolder(@NonNull final Class<T> clazz, @NonNull final View root,
                              @Nullable final BaseViewHolder parentViewHolder) {

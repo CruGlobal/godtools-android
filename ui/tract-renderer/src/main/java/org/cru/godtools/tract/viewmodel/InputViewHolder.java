@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -15,8 +16,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.ccci.gto.android.common.material.textfield.TextInputLayoutKt;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.databinding.TractContentInputBinding;
 import org.cru.godtools.xml.model.BaseModelKt;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.InputKt;
@@ -36,6 +37,8 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 @UiThread
 public final class InputViewHolder extends BaseViewHolder<Input> {
+    private final TractContentInputBinding mBinding;
+
     @Nullable
     @BindView(R2.id.label)
     TextView mLabelView;
@@ -50,8 +53,17 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     @Nullable
     private Text mPlaceholder;
 
-    public InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
+    private InputViewHolder(@NonNull final TractContentInputBinding binding,
+                           @Nullable final BaseViewHolder parentViewHolder) {
+        super(Input.class, binding.getRoot(), parentViewHolder);
+        mBinding = binding;
+    }
+
+    public static InputViewHolder create(@NonNull final ViewGroup parent,
+                                         @Nullable final BaseViewHolder parentViewHolder) {
+        return new InputViewHolder(
+                TractContentInputBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                parentViewHolder);
     }
 
     @Override

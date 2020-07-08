@@ -36,7 +36,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Button::class -> ButtonController(parent, parentViewHolder)
             Form::class -> FormController(parent, parentViewHolder)
             Image::class -> ImageController(parent, parentViewHolder)
-            Input::class -> InputViewHolder(parent, parentViewHolder)
+            Input::class -> InputViewHolder.create(parent, parentViewHolder)
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
             Tabs::class -> TabsController(parent, parentViewHolder)
