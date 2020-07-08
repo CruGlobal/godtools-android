@@ -8,25 +8,24 @@
         <variable name="model" type="org.cru.godtools.xml.model.Tabs" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTabLayout
             android:id="@+id/tabs"
             style="@style/Widget.GodTools.Tract.Content.Tabs"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
             app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
             app:clipToOutline="@{true}"
             app:tabSelectedTextColor="@{StylesKt.getPrimaryTextColor(BaseModelKt.getStylesParent(model))}"
             app:tabTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
 
-        <FrameLayout
+        <include
             android:id="@+id/tab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tabs"
-            android:layout_marginTop="16dp" />
-    </RelativeLayout>
+            layout="@layout/tract_content_tab" />
+    </LinearLayout>
 </layout>

@@ -1,22 +1,21 @@
 package org.cru.godtools.tract.ui.controller
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import org.cru.godtools.tract.databinding.TractContentParagraphBinding
+import org.cru.godtools.tract.databinding.TractContentTabBinding
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Tab
 
-class TabController private constructor(
-    private val binding: TractContentParagraphBinding,
+class TabController internal constructor(
+    private val binding: TractContentTabBinding,
     parentViewHolder: BaseViewHolder<*>?
 ) : ParentController<Tab>(Tab::class, binding.content, parentViewHolder) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
-        this(TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
-
     override val contentContainer get() = binding.content
 
     fun trackSelectedAnalyticsEvents() {
         model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT) }
     }
 }
+
+// TODO: this may change once I figure out what code pattern I want to use to create/bind controllers
+internal fun TractContentTabBinding.bindController(tabsController: TabsController) =
+    BaseViewHolder.forView(root, TabController::class.java) ?: TabController(this, tabsController)

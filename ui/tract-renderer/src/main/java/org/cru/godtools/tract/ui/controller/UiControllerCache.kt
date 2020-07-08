@@ -12,7 +12,6 @@ import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
-import org.cru.godtools.xml.model.Tab
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import timber.log.Timber
@@ -41,7 +40,6 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
             Tabs::class -> TabsController(parent, parentViewHolder)
-            Tab::class -> TabController(parent, parentViewHolder)
             Text::class -> TextController(parent, parentViewHolder)
             else -> {
                 val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")

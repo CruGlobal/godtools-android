@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentTabsBinding
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
-import org.cru.godtools.xml.model.Tab
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.primaryColor
 
@@ -21,15 +20,11 @@ class TabsController private constructor(
     internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
         this(TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 
+    private val tabController = binding.tab.bindController(this)
+
     init {
         binding.tabs.addOnTabSelectedListener(this)
     }
-
-    private val tabCache = UiControllerCache(binding.tab, this)
-    private val tabController: TabController = (tabCache.acquire(Tab::class) as TabController)
-        .also { binding.tab.addView(it.mRoot) }
-
-    private var bindingTabs = false
 
     // region Lifecycle
     @UiThread
@@ -55,6 +50,7 @@ class TabsController private constructor(
     override fun onTabReselected(tab: TabLayout.Tab) = Unit
     // endregion Lifecycle
 
+    private var bindingTabs = false
     private fun bindTabs() {
         bindingTabs = true
 
@@ -62,7 +58,7 @@ class TabsController private constructor(
         val primaryColor = model?.stylesParent.primaryColor
         binding.tabs.removeAllTabs()
         model?.tabs?.forEach {
-            with(binding.tabs) {
+            binding.tabs.apply {
                 addTab(newTab().apply {
                     setBackgroundTint(primaryColor)
                     text = it.label?.text
