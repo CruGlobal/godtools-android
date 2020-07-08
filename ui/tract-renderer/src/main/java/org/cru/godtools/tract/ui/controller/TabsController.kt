@@ -32,6 +32,7 @@ class TabsController private constructor(
         super.onBind()
         binding.model = model
         bindTabs()
+        bindTab()
     }
 
     @CallSuper
@@ -42,7 +43,7 @@ class TabsController private constructor(
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        tabController.bind(model?.tabs?.getOrNull(tab.position))
+        bindTab(tab.position)
         if (!bindingTabs) tabController.trackSelectedAnalyticsEvents()
     }
 
@@ -67,6 +68,10 @@ class TabsController private constructor(
         }
 
         bindingTabs = false
+    }
+
+    private fun bindTab(index: Int = binding.tabs.selectedTabPosition) {
+        tabController.bind(model?.tabs?.getOrNull(index))
     }
 
     private fun checkForTabEvent(event: Event) {
