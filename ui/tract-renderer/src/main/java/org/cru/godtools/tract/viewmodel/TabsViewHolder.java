@@ -7,9 +7,9 @@ import android.widget.FrameLayout;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutUtils;
 
 import org.ccci.gto.android.common.compat.view.ViewCompat;
+import org.ccci.gto.android.common.material.tabs.TabLayoutKt;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentTabsBinding;
@@ -132,7 +132,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
                         .setText(TextKt.getText(label));
 
                 // set the tab background
-                TabLayoutUtils.setBackgroundTint(tab2, primaryColor);
+                TabLayoutKt.setBackgroundTint(tab2, primaryColor);
 
                 mTabs.addTab(tab2);
             }

@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textfield.TextInputLayoutUtils;
 
+import org.ccci.gto.android.common.material.textfield.TextInputLayoutKt;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -118,7 +118,7 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     private void bindLabel() {
         final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
         if (mInputLayout != null) {
-            TextInputLayoutUtils.setFocusedTextColor(mInputLayout, TextKt.getTextColor(labelStyles));
+            TextInputLayoutKt.setFocusedTextColor(mInputLayout, TextKt.getTextColor(labelStyles));
         }
     }
 
