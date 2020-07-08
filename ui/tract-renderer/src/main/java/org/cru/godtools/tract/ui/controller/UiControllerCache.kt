@@ -13,6 +13,7 @@ import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.xml.model.Tab
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import timber.log.Timber
@@ -41,6 +42,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
             Tabs::class -> TabsViewHolder.create(parent, parentViewHolder)
+            Tab::class -> TabController(parent, parentViewHolder)
             Text::class -> TextController(parent, parentViewHolder)
             else -> {
                 val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
@@ -49,6 +51,12 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
                 null
             }
         } as BaseViewHolder<T>?
+
+    @Deprecated(
+        "Used as a bridge method until TabsViewHolder is converted to Kotlin",
+        ReplaceWith("acquire(clazz.kotlin)")
+    )
+    fun <T : Base> acquire(clazz: Class<T>) = acquire(clazz.kotlin)
 
     @Deprecated(
         "Used as a bridge method until BaseViewHolder is converted to Kotlin",

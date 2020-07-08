@@ -14,6 +14,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentTabsBinding;
 import org.cru.godtools.tract.ui.controller.TabController;
+import org.cru.godtools.tract.ui.controller.UiControllerCache;
 import org.cru.godtools.xml.model.StylesKt;
 import org.cru.godtools.xml.model.Tab;
 import org.cru.godtools.xml.model.Tabs;
@@ -24,7 +25,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.core.util.Pools;
 import butterknife.BindView;
 
 @UiThread
@@ -42,12 +42,13 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
 
     @NonNull
     private TabController[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
-    private final Pools.Pool<TabController> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
+    private final UiControllerCache mTabCache;
 
     private TabsViewHolder(@NonNull final TractContentTabsBinding binding,
                            @Nullable final BaseViewHolder parentViewHolder) {
         super(Tabs.class, binding.getRoot(), parentViewHolder);
         mBinding = binding;
+        mTabCache = new UiControllerCache(binding.tab, this);
         setupTabs();
     }
 
@@ -105,7 +106,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
         Stream.of(mTabContentViewHolders)
                 .peek(vh -> mTabContent.removeView(vh.mRoot))
                 .peek(vh -> vh.bind(null))
-                .forEach(mRecycledTabViewHolders::release);
+                .forEach(c -> c.releaseTo(mTabCache));
         mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
 
         // add all the current tabs
@@ -139,12 +140,9 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
 
     @NonNull
     private TabController bindTabContentViewHolder(@Nullable final Tab tab) {
-        TabController holder = mRecycledTabViewHolders.acquire();
-        if (holder == null) {
-            holder = new TabController(mTabContent, this);
-        }
-        holder.bind(tab);
-        return holder;
+        final TabController controller = (TabController) mTabCache.acquire(Tab.class);
+        controller.bind(tab);
+        return controller;
     }
 
     private TabController showTabContent(final int position) {
