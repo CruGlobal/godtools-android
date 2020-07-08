@@ -40,7 +40,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
-    implementation "com.android.installreferrer:installreferrer:2.0"
+    implementation "com.android.installreferrer:installreferrer:2.1"
     implementation "com.appsflyer:af-android-sdk:${deps.appsFlyer}"
     implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
