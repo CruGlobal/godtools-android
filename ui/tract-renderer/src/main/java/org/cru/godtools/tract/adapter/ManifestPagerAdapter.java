@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.annimon.stream.Optional;
@@ -10,10 +9,8 @@ import org.ccci.gto.android.common.support.v4.util.IdUtils;
 import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
 import org.cru.godtools.tract.databinding.TractPageBinding;
-import org.cru.godtools.tract.databinding.TractPageBindingImpl;
 import org.cru.godtools.tract.ui.controller.PageControllerKt;
 import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
@@ -111,8 +108,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     @NonNull
     @Override
     protected RVPageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
-        return new RVPageViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_page, parent, false));
+        return new RVPageViewHolder(TractPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -181,9 +177,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         @Nullable
         Page mPage;
 
-        RVPageViewHolder(@NonNull final View view) {
-            super(view);
-            mBinding = TractPageBindingImpl.bind(view);
+        RVPageViewHolder(@NonNull final TractPageBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
             mModelViewHolder = PageControllerKt.bindController(mBinding);
             mBinding.setController(mModelViewHolder);
             mBinding.setCallbacks(this);
