@@ -4,9 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
@@ -16,19 +13,12 @@ import org.cru.godtools.xml.model.Input;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import butterknife.BindView;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
 @UiThread
 public final class InputViewHolder extends BaseViewHolder<Input> {
     private final TractContentInputBinding mBinding;
-
-    @Nullable
-    @BindView(R2.id.layout)
-    TextInputLayout mInputLayout;
-    @BindView(R2.id.input)
-    EditText mInputView;
 
     private InputViewHolder(@NonNull final TractContentInputBinding binding,
                            @Nullable final BaseViewHolder parentViewHolder) {
@@ -57,20 +47,20 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     @OnTextChanged(value = R2.id.input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void onTextUpdated() {
         // only update if we are currently in an error state
-        if (mInputLayout != null && mInputLayout.isErrorEnabled()) {
+        if (mBinding.layout.isErrorEnabled()) {
             onValidate();
         }
     }
 
     @OnFocusChange(R2.id.input)
     void onFocusChanged(final boolean hasFocus) {
-        InputMethodManager keyboard = (InputMethodManager) mInputView.getContext()
+        InputMethodManager keyboard = (InputMethodManager) mBinding.input.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (!hasFocus) {
             onValidate();
-            keyboard.hideSoftInputFromWindow(mInputView.getWindowToken(), 0);
+            keyboard.hideSoftInputFromWindow(mBinding.input.getWindowToken(), 0);
         } else {
-            keyboard.showSoftInput(mInputView, 0);
+            keyboard.showSoftInput(mBinding.input, 0);
         }
     }
 
@@ -97,10 +87,8 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     private String getValue() {
         if (mModel != null && mModel.getType() == Input.Type.HIDDEN) {
             return mModel.getValue();
-        } else if (mInputView != null) {
-            return mInputView.getText().toString();
+        } else {
+            return mBinding.input.getText().toString();
         }
-
-        return null;
     }
 }
