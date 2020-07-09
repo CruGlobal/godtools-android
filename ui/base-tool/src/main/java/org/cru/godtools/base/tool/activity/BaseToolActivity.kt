@@ -151,9 +151,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @Layout
     protected open val shareLinkMessageRes get() = R.string.share_general_message
     protected open val shareLinkUri: String? get() = null
 
-    fun shareCurrentTool() {
+    fun shareCurrentTool(@StringRes message: Int = shareLinkMessageRes, shareUrl: String? = shareLinkUri) {
         // short-circuit if we don't have a share tool url
-        val shareUrl = shareLinkUri ?: return
+        if (shareUrl == null) return
 
         // track the share action
         eventBus.post(ShareActionEvent)
@@ -164,7 +164,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @Layout
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tool_subject, title))
-            putExtra(Intent.EXTRA_TEXT, getString(shareLinkMessageRes, shareUrl))
+            putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)))
     }
