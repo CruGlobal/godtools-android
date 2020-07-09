@@ -8,6 +8,7 @@
         <import type="org.cru.godtools.xml.model.StylesKt" />
         <import type="org.cru.godtools.xml.model.TextKt" />
 
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.InputController" />
         <variable name="model" type="org.cru.godtools.xml.model.Input" />
         <variable name="error" type="org.cru.godtools.xml.model.Input.Error" />
     </data>
@@ -29,7 +30,9 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:afterTextChanged="@{() -> controller.onTextUpdated()}"
             android:inputType="@{model.type}"
+            android:onFocusChange="@{(v, hasFocus) -> controller.onFocusChanged(hasFocus)}"
             android:saveEnabled="false"
             android:textColor="@{StylesKt.getTextColor(BaseModelKt.getStylesParent(model))}"
             app:textCursorDrawableTint="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
