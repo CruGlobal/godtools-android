@@ -151,7 +151,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @Layout
     protected open val shareLinkMessageRes get() = R.string.share_general_message
     protected open val shareLinkUri: String? get() = null
 
-    fun shareCurrentTool(@StringRes message: Int = shareLinkMessageRes, shareUrl: String? = shareLinkUri) {
+    protected fun shareCurrentTool(@StringRes message: Int = shareLinkMessageRes, shareUrl: String? = shareLinkUri) {
         // short-circuit if we don't have a share tool url
         if (shareUrl == null) return
 
