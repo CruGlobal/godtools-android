@@ -5,6 +5,7 @@
         <import type="org.cru.godtools.xml.model.BaseModelKt" />
         <import type="org.cru.godtools.xml.model.Input.Type" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.xml.model.TextKt" />
 
         <variable name="model" type="org.cru.godtools.xml.model.Input" />
     </data>
@@ -14,9 +15,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:saveEnabled="false"
         android:hint="@{(model.label ?? model.placeholder).text}"
+        android:saveEnabled="false"
+        android:textColorHint="@{TextKt.getTextColor(model.label ?? model.placeholder)}"
         app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
+        app:hintTextColor="@{TextKt.getTextColor(model.placeholder ?? model.label)}"
         app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
 
         <com.google.android.material.textfield.TextInputEditText

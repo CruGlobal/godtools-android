@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,14 +9,11 @@ import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.ccci.gto.android.common.material.textfield.TextInputLayoutKt;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentInputBinding;
 import org.cru.godtools.xml.model.Input;
 import org.cru.godtools.xml.model.InputKt;
-import org.cru.godtools.xml.model.Text;
-import org.cru.godtools.xml.model.TextKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,11 +34,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     @BindView(R2.id.input)
     EditText mInputView;
 
-    @Nullable
-    private Text mLabel;
-    @Nullable
-    private Text mPlaceholder;
-
     private InputViewHolder(@NonNull final TractContentInputBinding binding,
                            @Nullable final BaseViewHolder parentViewHolder) {
         super(Input.class, binding.getRoot(), parentViewHolder);
@@ -60,16 +51,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     protected void onBind() {
         super.onBind();
         mBinding.setModel(getModel());
-        if (mModel != null) {
-            mLabel = mModel.getLabel();
-            mPlaceholder = mModel.getPlaceholder();
-        } else {
-            mLabel = null;
-            mPlaceholder = null;
-        }
-
-        bindLabel();
-        bindPlaceholder();
         bindInput();
     }
 
@@ -116,24 +97,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     // endregion Lifecycle Events
-
-    private void bindLabel() {
-        final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
-        if (mInputLayout != null) {
-            TextInputLayoutKt.setFocusedTextColor(mInputLayout, TextKt.getTextColor(labelStyles));
-        }
-    }
-
-    private void bindPlaceholder() {
-        // update placeholder styles
-        final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
-        final int hintColor = TextKt.getTextColor(hintStyles);
-        if (mInputLayout != null) {
-            mInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(hintColor));
-        } else if (mInputView != null) {
-            mInputView.setHintTextColor(hintColor);
-        }
-    }
 
     private void bindInput() {
         // setup inputType
