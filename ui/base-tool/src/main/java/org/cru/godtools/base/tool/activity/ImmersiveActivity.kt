@@ -21,6 +21,7 @@ abstract class ImmersiveActivity<B : ViewDataBinding>(
 
     protected open fun onBindingChanged() = Unit
 
+    @Suppress("DEPRECATION") // TODO: Override the deprecated version of this method for API 24 & 25
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
         super.onMultiWindowModeChanged(isInMultiWindowMode)
         updateSystemUi()
