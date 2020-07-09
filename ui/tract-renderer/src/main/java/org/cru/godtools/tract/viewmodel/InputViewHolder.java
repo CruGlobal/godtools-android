@@ -22,8 +22,6 @@ import butterknife.BindView;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
-import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
-
 @UiThread
 public final class InputViewHolder extends BaseViewHolder<Input> {
     private final TractContentInputBinding mBinding;
@@ -50,6 +48,9 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     @Override
     protected void onBind() {
         super.onBind();
+        if (mBinding.getModel() != getModel()) {
+            mBinding.setError(null);
+        }
         mBinding.setModel(getModel());
         bindInput();
     }
@@ -78,11 +79,8 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
 
     @Override
     public boolean onValidate() {
-        final String value = getValue();
-        final Input.Error error = mModel != null ? mModel.validateValue(value) : null;
-        final String msg = error == null ? null : error.msgId != INVALID_STRING_RES ?
-                mRoot.getResources().getString(error.msgId, mModel.getName(), value) : error.msg;
-        showError(msg);
+        final Input.Error error = mModel != null ? mModel.validateValue(getValue()) : null;
+        mBinding.setError(error);
         return error == null;
     }
 
@@ -111,15 +109,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
                     break;
             }
             mInputView.setInputType(inputType);
-        }
-    }
-
-    private void showError(@Nullable final String error) {
-        if (mInputLayout != null) {
-            mInputLayout.setError(error);
-            mInputLayout.setErrorEnabled(error != null);
-        } else if (mInputView != null) {
-            mInputView.setError(error);
         }
     }
 
