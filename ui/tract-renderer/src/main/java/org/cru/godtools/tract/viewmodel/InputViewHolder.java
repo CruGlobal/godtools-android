@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -13,7 +12,6 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractContentInputBinding;
 import org.cru.godtools.xml.model.Input;
-import org.cru.godtools.xml.model.InputKt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,7 +50,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
             mBinding.setError(null);
         }
         mBinding.setModel(getModel());
-        bindInput();
     }
 
     // region Lifecycle Events
@@ -95,22 +92,6 @@ public final class InputViewHolder extends BaseViewHolder<Input> {
     }
 
     // endregion Lifecycle Events
-
-    private void bindInput() {
-        // setup inputType
-        if (mInputView != null) {
-            int inputType = InputType.TYPE_CLASS_TEXT;
-            switch (InputKt.getType(mModel)) {
-                case EMAIL:
-                    inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-                    break;
-                case PHONE:
-                    inputType = InputType.TYPE_CLASS_PHONE;
-                    break;
-            }
-            mInputView.setInputType(inputType);
-        }
-    }
 
     @Nullable
     private String getValue() {

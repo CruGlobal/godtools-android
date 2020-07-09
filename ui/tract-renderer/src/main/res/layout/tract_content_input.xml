@@ -29,6 +29,7 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="@{model.type}"
             android:saveEnabled="false"
             android:textColor="@{StylesKt.getTextColor(BaseModelKt.getStylesParent(model))}"
             app:textCursorDrawableTint="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
