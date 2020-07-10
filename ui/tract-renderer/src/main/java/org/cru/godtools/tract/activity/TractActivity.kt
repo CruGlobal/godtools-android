@@ -437,37 +437,42 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     // region Share Link Logic
     override fun hasShareLinkUri() = activeManifest != null
-    override val shareLinkUri
-        get() = activeManifest?.let {
-            URI_SHARE_BASE.buildUpon()
-                .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
-                .appendPath(it.code)
-                .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
-                .apply {
-                    val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return@apply
-                    appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
-                    dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
-                        ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
-                        ?.let { appendQueryParameter(PARAM_PRIMARY_LANGUAGE, it) }
-                    dataModel.parallelLocales.value?.takeUnless { it.isEmpty() }
-                        ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
-                        ?.let { appendQueryParameter(PARAM_PARALLEL_LANGUAGE, it) }
-                }
-                .appendQueryParameter("icid", "gtshare")
-                .build().toString()
-        }
+    override val shareLinkUri get() = buildShareLink()?.build()?.toString()
+    private fun buildShareLink() = activeManifest?.let {
+        URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
+            .appendPath(it.code)
+            .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
+            .appendQueryParameter("icid", "gtshare")
+    }
     // endregion Share Link Logic
 
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
 
-    internal fun shareLiveShareLink() = when {
-        !dataModel.liveShareTutorialShown ->
-            startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
-        publisherController.publisherInfo.value == null ->
-            LiveShareDialogFragment().show(supportFragmentManager, null)
-        else -> shareCurrentTool()
+    internal fun shareLiveShareLink() {
+        when {
+            !dataModel.liveShareTutorialShown ->
+                startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
+            publisherController.publisherInfo.value == null ->
+                LiveShareDialogFragment().show(supportFragmentManager, null)
+            else -> {
+                val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
+                val shareUrl = (buildShareLink() ?: return)
+                    .apply {
+                        dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
+                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.let { appendQueryParameter(PARAM_PRIMARY_LANGUAGE, it) }
+                        dataModel.parallelLocales.value?.takeUnless { it.isEmpty() }
+                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.let { appendQueryParameter(PARAM_PARALLEL_LANGUAGE, it) }
+                    }
+                    .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
+                    .build().toString()
+                shareCurrentTool(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
+            }
+        }
     }
 
     private fun sendLiveShareNavigationEvent(page: Page, card: Card?) {
