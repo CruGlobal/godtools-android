@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.BaseModelKt" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        style="@style/Widget.GodTools.Tract.Content.Tabs"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />
+        <variable name="model" type="org.cru.godtools.xml.model.Tabs" />
+    </data>
 
-    <FrameLayout
-        android:id="@+id/tab"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tabs"
-        android:layout_marginTop="16dp" />
-</RelativeLayout>
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTabLayout
+            android:id="@+id/tabs"
+            style="@style/Widget.GodTools.Tract.Content.Tabs"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
+            app:clipToOutline="@{true}"
+            app:tabSelectedTextColor="@{StylesKt.getPrimaryTextColor(BaseModelKt.getStylesParent(model))}"
+            app:tabTextColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
+
+        <include
+            android:id="@+id/tab"
+            layout="@layout/tract_content_tab" />
+    </LinearLayout>
+</layout>

@@ -5,7 +5,6 @@ import androidx.core.util.Pools
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.tract.viewmodel.InputViewHolder
-import org.cru.godtools.tract.viewmodel.TabsViewHolder
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Form
@@ -40,7 +39,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Input::class -> InputViewHolder(parent, parentViewHolder)
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
-            Tabs::class -> TabsViewHolder(parent, parentViewHolder)
+            Tabs::class -> TabsController(parent, parentViewHolder)
             Text::class -> TextController(parent, parentViewHolder)
             else -> {
                 val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
