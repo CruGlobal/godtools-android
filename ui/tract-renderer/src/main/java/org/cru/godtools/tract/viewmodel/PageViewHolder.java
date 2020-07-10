@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.viewmodel;
 
-import android.content.SharedPreferences;
 import android.view.View;
 
 import com.annimon.stream.IntPair;
@@ -10,7 +9,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.cru.godtools.api.model.NavigationEvent;
-import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractPageBinding;
@@ -31,24 +29,13 @@ import androidx.collection.ArraySet;
 import androidx.core.util.Pools;
 import butterknife.BindView;
 
-import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
-import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
-import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
-
-public class PageViewHolder extends BaseViewHolder<Page>
-        implements PageContentLayout.OnActiveCardListener, CardController.Callbacks,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+public abstract class PageViewHolder extends BaseViewHolder<Page>
+        implements PageContentLayout.OnActiveCardListener, CardController.Callbacks {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
 
         void goToNextPage();
     }
-
-    @NonNull
-    private final Settings mSettings;
-
-    @NonNull
-    private final TractPageBinding mBinding;
 
     @BindView(R2.id.page_content_layout)
     PageContentLayout mPageContentLayout;
@@ -73,11 +60,9 @@ public class PageViewHolder extends BaseViewHolder<Page>
 
     public PageViewHolder(@NonNull final TractPageBinding binding) {
         super(Page.class, binding.getRoot(), null);
-        mBinding = binding;
-        mSettings = Settings.Companion.getInstance(binding.getRoot().getContext());
 
         mPageContentLayout.setActiveCardListener(this);
-        mHeroController = HeroControllerKt.bindController(mBinding.hero, this);
+        mHeroController = HeroControllerKt.bindController(binding.hero, this);
     }
 
     // region Lifecycle Events
@@ -85,14 +70,12 @@ public class PageViewHolder extends BaseViewHolder<Page>
     @Override
     protected void onBind() {
         super.onBind();
-        mHeroController.bind(mModel != null ? mModel.getHero() : null);
         updateDisplayedCards();
     }
 
     @Override
     protected void onVisible() {
         super.onVisible();
-        mSettings.registerOnSharedPreferenceChangeListener(this);
 
         // cascade event to currently visible hero or card
         if (mActiveCardViewHolder != null) {
@@ -100,25 +83,12 @@ public class PageViewHolder extends BaseViewHolder<Page>
         } else {
             mHeroController.markVisible();
         }
-
-        updateBounceAnimation();
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-        switch (key) {
-            case PREF_FEATURE_DISCOVERED + FEATURE_TRACT_CARD_CLICKED:
-            case PREF_FEATURE_DISCOVERED + FEATURE_TRACT_CARD_SWIPED:
-                updateBounceAnimation();
-                break;
-        }
     }
 
     @Override
     @CallSuper
     public void onContentEvent(@NonNull final Event event) {
         super.onContentEvent(event);
-        checkForCardEvent(event);
         propagateEventToChildren(event);
     }
 
@@ -150,33 +120,8 @@ public class PageViewHolder extends BaseViewHolder<Page>
     }
 
     @Override
-    public void onDismissCard(@NonNull final CardController holder) {
-        if (holder.mRoot == mPageContentLayout.getActiveCard()) {
-            mPageContentLayout.changeActiveCard(null, true);
-        }
-    }
-
-    @Override
-    public void onToggleCard(@NonNull final CardController holder) {
-        mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED);
-        mPageContentLayout
-                .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
-    }
-
-    @Override
-    public void onNextCard() {
-        mPageContentLayout.changeActiveCard(mPageContentLayout.getActiveCardPosition() + 1, true);
-    }
-
-    @Override
-    public void onPreviousCard() {
-        mPageContentLayout.changeActiveCard(mPageContentLayout.getActiveCardPosition() - 1, true);
-    }
-
-    @Override
     protected void onHidden() {
         super.onHidden();
-        mSettings.unregisterOnSharedPreferenceChangeListener(this);
 
         // cascade event to currently visible hero or card
         if (mActiveCardViewHolder != null) {
@@ -184,8 +129,6 @@ public class PageViewHolder extends BaseViewHolder<Page>
         } else {
             mHeroController.markHidden();
         }
-
-        updateBounceAnimation();
     }
 
     // endregion Lifecycle Events
@@ -303,7 +246,7 @@ public class PageViewHolder extends BaseViewHolder<Page>
         }
     }
 
-    private void displayCard(@NonNull final Card card) {
+    protected void displayCard(@NonNull final Card card) {
         final String cardId = card.getId();
         if (card.isHidden()) {
             mVisibleCards.add(cardId);
@@ -363,21 +306,5 @@ public class PageViewHolder extends BaseViewHolder<Page>
         } else {
             mHeroController.onContentEvent(event);
         }
-    }
-
-    private void checkForCardEvent(@NonNull final Event event) {
-        // check for card display event
-        if (mModel != null) {
-            Stream.of(mModel.getCards())
-                    .filter(c -> c.getListeners().contains(event.id))
-                    .findFirst()
-                    .ifPresent(this::displayCard);
-        }
-    }
-
-    private void updateBounceAnimation() {
-        // we bounce the first card if the page is visible and the user hasn't opened a card before
-        mPageContentLayout.setBounceFirstCard(mVisible && !(mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
-                mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_SWIPED)));
     }
 }

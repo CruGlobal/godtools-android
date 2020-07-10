@@ -6,9 +6,9 @@
         <import type="org.cru.godtools.xml.model.PageKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
         <variable name="callbacks" type="org.cru.godtools.tract.viewmodel.PageViewHolder.Callbacks" />
-        <variable name="controller" type="org.cru.godtools.tract.viewmodel.PageViewHolder" />
     </data>
 
     <RelativeLayout

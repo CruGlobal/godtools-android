@@ -18,9 +18,9 @@ class CardController private constructor(
 
     interface Callbacks {
         fun onToggleCard(holder: CardController)
-        fun onDismissCard(holder: CardController)
-        fun onNextCard()
         fun onPreviousCard()
+        fun onNextCard()
+        fun onDismissCard(holder: CardController)
     }
 
     init {
