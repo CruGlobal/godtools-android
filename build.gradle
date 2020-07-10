@@ -71,7 +71,7 @@ buildscript {
         deps.firebase = [
                 core          : '17.4.4',
                 crashlytics   : '17.1.1',
-                inAppMessaging: '19.0.7',
+                inAppMessaging: '19.1.0',
                 messaging     : '20.2.3',
                 perf          : '19.0.7',
         ]
@@ -161,6 +161,10 @@ subprojects {
 
                 // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
                 substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6')
+
+                // HACK: firebase-config uses protobuf-lite which appears to have been renamed to protobuf-javalite.
+                //       Substitute the dependency until firebase-config is updated to use the newer dependency.
+                substitute module('com.google.protobuf:protobuf-lite') with module('com.google.protobuf:protobuf-javalite:3.11.0')
             }
 
             // HACK: Fix transitive auto-service dependency until robolectric contains https://github.com/robolectric/robolectric/pull/5432 fix
