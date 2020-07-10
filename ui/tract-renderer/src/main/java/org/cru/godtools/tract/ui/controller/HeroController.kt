@@ -1,13 +1,16 @@
 package org.cru.godtools.tract.ui.controller
 
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.tract.viewmodel.PageViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Hero
 
 class HeroController internal constructor(private val binding: TractPageHeroBinding, parentViewHolder: PageViewHolder) :
     ParentController<Hero>(Hero::class, binding.root, parentViewHolder) {
+    init {
+        binding.controller = this
+    }
+
     override val contentContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Runnable>? = null
 
@@ -26,6 +29,5 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
     // endregion Lifecycle
 }
 
-// TODO: this may change once I figure out what code pattern I want to use to create/bind controllers
 fun TractPageHeroBinding.bindController(pageController: PageViewHolder) =
-    BaseViewHolder.forView(root, HeroController::class.java) ?: HeroController(this, pageController)
+    controller ?: HeroController(this, pageController)
