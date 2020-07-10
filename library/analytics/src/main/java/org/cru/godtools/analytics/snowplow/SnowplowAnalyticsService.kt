@@ -105,7 +105,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
 
     @WorkerThread
     private fun <T : AbstractEvent.Builder<*>> T.populate(event: AnalyticsBaseEvent) =
-        apply { customContext(listOf(idContext(), event.contentScoringContext())) }
+        apply { contexts(listOf(idContext(), event.contentScoringContext())) }
 
     @WorkerThread
     @Synchronized
@@ -140,7 +140,6 @@ class SnowplowAnalyticsService @Inject internal constructor(
         }
     })
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun AnalyticsBaseEvent.contentScoringContext() = SelfDescribingJson(
         CONTEXT_SCHEMA_SCORING, mapOf(CONTEXT_ATTR_SCORING_URI to snowplowContentScoringUri.toString())
     )

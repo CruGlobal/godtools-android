@@ -16,9 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        app:layout_card_padding_toTopOf="@+id/card"
-        app:layout_card_peek_toTopOf="@+id/label"
-        app:layout_card_stack_toTopOf="@+id/label_divider"
+        app:layout_card_padding_toTopOf="@id/card"
+        app:layout_card_peek_toTopOf="@id/label"
+        app:layout_card_stack_toTopOf="@id/label_divider"
         app:layout_childType="card">
 
         <androidx.cardview.widget.CardView

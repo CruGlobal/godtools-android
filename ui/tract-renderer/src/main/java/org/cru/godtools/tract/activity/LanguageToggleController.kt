@@ -1,7 +1,7 @@
 package org.cru.godtools.tract.activity
 
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.setBackgroundTint
+import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest

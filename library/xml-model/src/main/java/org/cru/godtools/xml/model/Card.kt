@@ -39,7 +39,7 @@ class Card : Base, Styles, Parent {
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt
-    val backgroundColor get() = _backgroundColor ?: manifest.backgroundColor
+    internal val backgroundColor get() = _backgroundColor ?: manifest.backgroundColor
 
     val label: Text?
     override val content: List<Content>
@@ -81,6 +81,7 @@ class Card : Base, Styles, Parent {
 }
 
 // TODO: implement card-background-color on Page & Manifest
-val Card?.backgroundColor get() = this?.backgroundColor ?: (null as Manifest?).backgroundColor
+@get:ColorInt
+val Card?.backgroundColor get() = this?.backgroundColor ?: this?.manifest.backgroundColor
 val Card?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
 val Card?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
