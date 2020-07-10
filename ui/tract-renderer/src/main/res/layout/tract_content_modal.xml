@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.ModalController" />
         <variable name="modal" type="org.cru.godtools.xml.model.Modal" />
     </data>
 
