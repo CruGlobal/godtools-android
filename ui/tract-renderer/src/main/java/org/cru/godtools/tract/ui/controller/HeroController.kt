@@ -17,9 +17,8 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
     // region Lifecycle
     override fun onVisible() {
         super.onVisible()
-        model?.let {
-            pendingAnalyticsEvents = triggerAnalyticsEvents(it.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-        }
+        pendingAnalyticsEvents =
+            model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT) }
     }
 
     override fun onHidden() {
