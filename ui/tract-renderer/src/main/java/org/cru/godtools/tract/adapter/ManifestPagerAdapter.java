@@ -205,7 +205,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         }
 
         void onBroadcastEvent(@NonNull final NavigationEvent event) {
-            mPageController.onBroadcastEvent(event);
+            mPageController.onLiveShareNavigationEvent(event);
         }
 
         @Override

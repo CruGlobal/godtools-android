@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.ui.controller
 
 import android.content.SharedPreferences
+import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
@@ -8,6 +9,7 @@ import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.viewmodel.PageViewHolder
+import org.cru.godtools.xml.model.Card
 
 class PageController(private val binding: TractPageBinding) : PageViewHolder(binding), CardController.Callbacks,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -31,6 +33,15 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         updateBounceAnimation()
     }
 
+    fun onLiveShareNavigationEvent(event: NavigationEvent) {
+        if (model?.position != event.page) return
+
+        when (val card = event.card?.let { model?.cards?.getOrNull(it) }) {
+            null -> binding.pageContentLayout.changeActiveCard(null, true)
+            else -> displayCard(card)
+        }
+    }
+
     override fun onContentEvent(event: Event) {
         checkForCardEvent(event)
         super.onContentEvent(event)
@@ -50,11 +61,40 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     }
     // endregion Lifecycle
 
+    // region Cards
+    private var enabledHiddenCards = mutableSetOf<String>()
+    val activeCard get() = mActiveCardViewHolder?.model
+
+    override fun isCardVisible(card: Card) = !card.isHidden || card.id in enabledHiddenCards
+
+    private fun displayCard(card: Card) {
+        if (card.isHidden) {
+            enabledHiddenCards.add(card.id)
+            updateDisplayedCards()
+        }
+
+        // navigate to the specified card
+        val i = mCards.indexOfFirst { it.id == card.id }
+        if (i != -1) binding.pageContentLayout.changeActiveCard(i, true)
+    }
+
+    override fun hideHiddenCardsThatArentActive() {
+        if (enabledHiddenCards.isEmpty()) return
+        if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateDisplayedCards()
+    }
+
+    override fun updateVisibleCard(old: CardController?) {
+        if (!mVisible || old == mActiveCardViewHolder) return
+
+        old?.markHidden() ?: heroController.markHidden()
+        mActiveCardViewHolder?.markVisible() ?: heroController.markVisible()
+    }
+
     // region CardController.Callbacks
-    override fun onToggleCard(holder: CardController) {
+    override fun onToggleCard(controller: CardController) {
         settings.setFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED)
         binding.pageContentLayout.apply {
-            changeActiveCard(holder.mRoot.takeUnless { mRoot === activeCard }, true)
+            changeActiveCard(controller.mRoot.takeUnless { mRoot === activeCard }, true)
         }
     }
 
@@ -66,12 +106,13 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         binding.pageContentLayout.apply { changeActiveCard(activeCardPosition + 1, true) }
     }
 
-    override fun onDismissCard(holder: CardController) {
+    override fun onDismissCard(controller: CardController) {
         binding.pageContentLayout.apply {
-            if (activeCard == holder.mRoot) changeActiveCard(null, true)
+            if (activeCard == controller.mRoot) changeActiveCard(null, true)
         }
     }
     // endregion CardController.Callbacks
+    // endregion Cards
 
     // region Content Events
     private fun checkForCardEvent(event: Event) {

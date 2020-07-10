@@ -17,10 +17,10 @@ class CardController private constructor(
         this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageViewHolder)
 
     interface Callbacks {
-        fun onToggleCard(holder: CardController)
+        fun onToggleCard(controller: CardController)
         fun onPreviousCard()
         fun onNextCard()
-        fun onDismissCard(holder: CardController)
+        fun onDismissCard(controller: CardController)
     }
 
     init {
