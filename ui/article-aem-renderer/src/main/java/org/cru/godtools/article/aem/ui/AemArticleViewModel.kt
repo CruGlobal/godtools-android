@@ -48,11 +48,11 @@ internal class AemArticleViewModel @Inject constructor(
         }
         webView.webViewClient = webViewClient
 
-        article.observe(this) { article ->
-            if (article?.content == null) return@observe
-            if (article.contentUuid == webView.getTag(R.id.contentUuid)) return@observe
-            webView.loadDataWithBaseURL("${article.uri}.html", article.content, "text/html", null, null)
-            webView.setTag(R.id.contentUuid, article.contentUuid)
+        article.observe(this) {
+            val content = it?.content ?: return@observe
+            if (it.contentUuid == webView.getTag(R.id.contentUuid)) return@observe
+            webView.loadDataWithBaseURL("${it.uri}.html", content, "text/html", null, null)
+            webView.setTag(R.id.contentUuid, it.contentUuid)
         }
     }
     // endregion WebView
