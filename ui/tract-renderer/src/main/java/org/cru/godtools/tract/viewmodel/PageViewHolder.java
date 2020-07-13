@@ -6,17 +6,13 @@ import com.annimon.stream.IntPair;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
-import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.databinding.TractPageBinding;
 import org.cru.godtools.tract.ui.controller.CardController;
-import org.cru.godtools.tract.ui.controller.HeroController;
-import org.cru.godtools.tract.ui.controller.HeroControllerKt;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
 
-import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -39,8 +35,6 @@ public abstract class PageViewHolder extends BaseViewHolder<Page>
     @NonNull
     protected Card[] mCards = new Card[0];
 
-    @NonNull
-    private final HeroController mHeroController;
     @Nullable
     protected CardController mActiveCardViewHolder;
     @NonNull
@@ -55,7 +49,6 @@ public abstract class PageViewHolder extends BaseViewHolder<Page>
         super(Page.class, binding.getRoot(), null);
 
         mPageContentLayout.setActiveCardListener(this);
-        mHeroController = HeroControllerKt.bindController(binding.hero, this);
     }
 
     // region Lifecycle Events
@@ -64,25 +57,6 @@ public abstract class PageViewHolder extends BaseViewHolder<Page>
     protected void onBind() {
         super.onBind();
         updateDisplayedCards();
-    }
-
-    @Override
-    protected void onVisible() {
-        super.onVisible();
-
-        // cascade event to currently visible hero or card
-        if (mActiveCardViewHolder != null) {
-            mActiveCardViewHolder.markVisible();
-        } else {
-            mHeroController.markVisible();
-        }
-    }
-
-    @Override
-    @CallSuper
-    public void onContentEvent(@NonNull final Event event) {
-        super.onContentEvent(event);
-        propagateEventToChildren(event);
     }
 
     @Override
@@ -98,18 +72,6 @@ public abstract class PageViewHolder extends BaseViewHolder<Page>
                         .map(BaseViewHolder::getModel);
                 mCallbacks.onUpdateActiveCard(card.orElse(null));
             }
-        }
-    }
-
-    @Override
-    protected void onHidden() {
-        super.onHidden();
-
-        // cascade event to currently visible hero or card
-        if (mActiveCardViewHolder != null) {
-            mActiveCardViewHolder.markHidden();
-        } else {
-            mHeroController.markHidden();
         }
     }
 
@@ -224,12 +186,4 @@ public abstract class PageViewHolder extends BaseViewHolder<Page>
     protected abstract void updateVisibleCard(@Nullable final CardController old);
 
     protected abstract void hideHiddenCardsThatArentActive();
-
-    private void propagateEventToChildren(@NonNull final Event event) {
-        if (mActiveCardViewHolder != null) {
-            mActiveCardViewHolder.onContentEvent(event);
-        } else {
-            mHeroController.onContentEvent(event);
-        }
-    }
 }

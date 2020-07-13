@@ -30,6 +30,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     override fun onVisible() {
         settings.registerOnSharedPreferenceChangeListener(this)
         super.onVisible()
+        mActiveCardViewHolder?.markVisible() ?: heroController.markVisible()
         updateBounceAnimation()
     }
 
@@ -43,8 +44,9 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     }
 
     override fun onContentEvent(event: Event) {
-        checkForCardEvent(event)
         super.onContentEvent(event)
+        checkForCardEvent(event)
+        propagateEventToChildren(event)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -57,6 +59,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     override fun onHidden() {
         settings.unregisterOnSharedPreferenceChangeListener(this)
         super.onHidden()
+        mActiveCardViewHolder?.markHidden() ?: heroController.markHidden()
         updateBounceAnimation()
     }
     // endregion Lifecycle
@@ -118,6 +121,10 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     private fun checkForCardEvent(event: Event) {
         model?.cards?.firstOrNull { event.id in it.listeners }
             ?.let { displayCard(it) }
+    }
+
+    private fun propagateEventToChildren(event: Event) {
+        mActiveCardViewHolder?.onContentEvent(event) ?: heroController.onContentEvent(event)
     }
     // endregion Content Events
 
