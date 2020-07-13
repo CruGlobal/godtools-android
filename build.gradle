@@ -164,7 +164,7 @@ subprojects {
 
                 // HACK: firebase-config uses protobuf-lite which appears to have been renamed to protobuf-javalite.
                 //       Substitute the dependency until firebase-config is updated to use the newer dependency.
-                substitute module('com.google.protobuf:protobuf-lite') with module('com.google.protobuf:protobuf-javalite:3.11.0')
+                substitute module('com.google.protobuf:protobuf-lite') with module('com.google.protobuf:protobuf-javalite:3.12.2')
             }
 
             // HACK: Fix transitive auto-service dependency until robolectric contains https://github.com/robolectric/robolectric/pull/5432 fix
