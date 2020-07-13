@@ -7,7 +7,6 @@ import android.view.View;
 import com.annimon.stream.Stream;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
 import org.cru.godtools.tract.ui.controller.UiControllerCache;
 import org.cru.godtools.xml.model.AnalyticsEvent;
@@ -24,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.lifecycle.Observer;
-import butterknife.ButterKnife;
 
 @UiThread
 public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
@@ -49,20 +47,6 @@ public abstract class BaseViewHolder<T extends Base> implements Observer<T> {
         mModelClass = clazz;
         mParentViewHolder = parentViewHolder;
         mRoot = root;
-        ButterKnife.bind(this, mRoot);
-        mRoot.setTag(R.id.view_holder, this);
-    }
-
-    @Nullable
-    public static <T extends BaseViewHolder> T forView(@Nullable final View view, @NonNull final Class<T> clazz) {
-        if (view != null) {
-            final Object holder = view.getTag(R.id.view_holder);
-            if (clazz.isInstance(holder)) {
-                return clazz.cast(holder);
-            }
-        }
-
-        return null;
     }
 
     // region Lifecycle
