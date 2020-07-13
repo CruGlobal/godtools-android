@@ -21,6 +21,12 @@ abstract class BaseController<T : Base> protected constructor(
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
+    protected open val eventBus: EventBus
+        get() {
+            checkNotNull(parentController) { "No EventBus found in controller ancestors" }
+            return parentController.eventBus
+        }
+
     var model: T? = null
         set(value) {
             if (value == null) isVisible = false
@@ -77,7 +83,7 @@ abstract class BaseController<T : Base> protected constructor(
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
         // trigger an event for every id provided
-        ids.forEach { EventBus.getDefault().post(builder.id(it).build()) }
+        ids.forEach { eventBus.post(builder.id(it).build()) }
     }
 
     protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
@@ -85,7 +91,7 @@ abstract class BaseController<T : Base> protected constructor(
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
         if (event.delay > 0) delay(event.delay * 1000L)
-        EventBus.getDefault().post(ContentAnalyticsActionEvent(event))
+        eventBus.post(ContentAnalyticsActionEvent(event))
     }.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }

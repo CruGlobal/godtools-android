@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import android.view.View
 import androidx.annotation.UiThread
 import androidx.core.util.Pools
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
@@ -14,18 +16,25 @@ import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Page
+import org.greenrobot.eventbus.EventBus
 
-class PageController(private val binding: TractPageBinding) : BaseController<Page>(Page::class, binding.root),
-    CardController.Callbacks, PageContentLayout.OnActiveCardListener,
+class PageController @AssistedInject internal constructor(
+    @Assisted private val binding: TractPageBinding,
+    override val eventBus: EventBus,
+    private val settings: Settings
+) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     interface Callbacks {
         fun onUpdateActiveCard(card: Card?)
         fun goToNextPage()
     }
 
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(binding: TractPageBinding): PageController
+    }
+
     private val heroController = binding.hero.bindController(this)
-    // TODO: this should be injected via Dagger
-    private val settings = Settings.getInstance(binding.root.context)
 
     init {
         binding.controller = this
@@ -241,4 +250,4 @@ class PageController(private val binding: TractPageBinding) : BaseController<Pag
     }
 }
 
-fun TractPageBinding.bindController() = controller ?: PageController(this)
+fun TractPageBinding.bindController(factory: PageController.Factory) = controller ?: factory.create(this)

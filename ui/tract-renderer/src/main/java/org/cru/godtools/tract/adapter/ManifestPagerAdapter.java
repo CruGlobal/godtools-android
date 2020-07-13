@@ -41,13 +41,17 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         void onUpdateActiveCard(@NonNull Page page, @Nullable Card card);
     }
 
+    @NonNull
+    private final PageController.Factory mPageControllerFactory;
+
     @Nullable
     Callbacks mCallbacks;
 
     @Nullable
     private Manifest mManifest;
 
-    public ManifestPagerAdapter() {
+    public ManifestPagerAdapter(@NonNull final PageController.Factory factory) {
+        mPageControllerFactory = factory;
         setHasStableIds(true);
     }
 
@@ -181,7 +185,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             super(binding.getRoot());
             mBinding = binding;
             mBinding.setCallbacks(this);
-            mPageController = PageControllerKt.bindController(mBinding);
+            mPageController = PageControllerKt.bindController(mBinding, mPageControllerFactory);
             mPageController.setCallbacks(this);
         }
 
