@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -43,8 +42,8 @@ class Input : Content {
     }
 
     class Error internal constructor(
-        @JvmField @StringRes val msgId: Int = INVALID_STRING_RES,
-        @JvmField val msg: String = "Error!"
+        @StringRes val msgId: Int?,
+        val msg: String? = null
     )
 
     val type: Type

@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.core.util.Pools
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.viewmodel.BaseViewHolder
-import org.cru.godtools.tract.viewmodel.InputViewHolder
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Form
@@ -36,7 +35,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
             Button::class -> ButtonController(parent, parentViewHolder)
             Form::class -> FormController(parent, parentViewHolder)
             Image::class -> ImageController(parent, parentViewHolder)
-            Input::class -> InputViewHolder(parent, parentViewHolder)
+            Input::class -> InputController(parent, parentViewHolder)
             Link::class -> LinkController(parent, parentViewHolder)
             Paragraph::class -> ParagraphController(parent, parentViewHolder)
             Tabs::class -> TabsController(parent, parentViewHolder)
