@@ -13,7 +13,6 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
 import org.cru.godtools.tract.databinding.TractPageBinding;
 import org.cru.godtools.tract.ui.controller.PageController;
 import org.cru.godtools.tract.ui.controller.PageControllerKt;
-import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
@@ -170,7 +169,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     // endregion Lifecycle Events
 
-    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
+    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageController.Callbacks {
         private final PageController mPageController;
 
         private final TractPageBinding mBinding;

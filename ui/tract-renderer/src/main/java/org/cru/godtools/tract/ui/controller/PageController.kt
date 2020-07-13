@@ -11,11 +11,19 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
-import org.cru.godtools.tract.viewmodel.PageViewHolder
+import org.cru.godtools.tract.viewmodel.BaseViewHolder
+import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
+import org.cru.godtools.xml.model.Page
 
-class PageController(private val binding: TractPageBinding) : PageViewHolder(binding), CardController.Callbacks,
-    SharedPreferences.OnSharedPreferenceChangeListener {
+class PageController(private val binding: TractPageBinding) :
+    BaseViewHolder<Page>(Page::class.java, binding.root, null), CardController.Callbacks,
+    PageContentLayout.OnActiveCardListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    interface Callbacks {
+        fun onUpdateActiveCard(card: Card?)
+        fun goToNextPage()
+    }
+
     private val heroController = binding.hero.bindController(this)
     // TODO: this should be injected via Dagger
     private val settings = Settings.getInstance(binding.root.context)
@@ -35,7 +43,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     override fun onVisible() {
         settings.registerOnSharedPreferenceChangeListener(this)
         super.onVisible()
-        mActiveCardViewHolder?.markVisible() ?: heroController.markVisible()
+        activeCardController?.markVisible() ?: heroController.markVisible()
         updateBounceAnimation()
     }
 
@@ -64,7 +72,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     override fun onHidden() {
         settings.unregisterOnSharedPreferenceChangeListener(this)
         super.onHidden()
-        mActiveCardViewHolder?.markHidden() ?: heroController.markHidden()
+        activeCardController?.markHidden() ?: heroController.markHidden()
         updateBounceAnimation()
     }
     // endregion Lifecycle
@@ -73,7 +81,8 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     private var enabledHiddenCards = mutableSetOf<String>()
     private var visibleCards = emptyList<Card>()
     private var cardControllers = emptyList<CardController>()
-    val activeCard get() = mActiveCardViewHolder?.model
+    private var activeCardController: CardController? = null
+    val activeCard get() = activeCardController?.model
 
     private val recycledCardControllers = Pools.SimplePool<CardController>(3)
 
@@ -90,16 +99,16 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         if (i != -1) binding.pageContentLayout.changeActiveCard(i, true)
     }
 
-    override fun hideHiddenCardsThatArentActive() {
+    private fun hideHiddenCardsThatArentActive() {
         if (enabledHiddenCards.isEmpty()) return
         if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateVisibleCards()
     }
 
-    override fun updateVisibleCard(old: CardController?) {
-        if (!mVisible || old == mActiveCardViewHolder) return
+    private fun updateVisibleCard(old: CardController?) {
+        if (!mVisible || old == activeCardController) return
 
         old?.markHidden() ?: heroController.markHidden()
-        mActiveCardViewHolder?.markVisible() ?: heroController.markVisible()
+        activeCardController?.markVisible() ?: heroController.markVisible()
     }
 
     @UiThread
@@ -108,12 +117,13 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         bindCards()
     }
 
+    private var bindingCards = false
     private var cardsNeedRebind = false
 
     @UiThread
     private tailrec fun bindCards() {
         // short-circuit since we are already binding cards
-        if (mBindingCards) {
+        if (bindingCards) {
             cardsNeedRebind = true
             return
         }
@@ -122,7 +132,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         val invalid: View = parent // We just need a non-null placeholder value that can't be a card view
         var activeCard = if (parent.activeCard != null) invalid else null
         try {
-            mBindingCards = true
+            bindingCards = true
             cardsNeedRebind = false
 
             // map old view holders to new location
@@ -161,7 +171,7 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
             }
         } finally {
             // finished binding cards
-            mBindingCards = false
+            bindingCards = false
         }
 
         when {
@@ -174,6 +184,20 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
         // rebind cards if a request to bind happened while we were already binding
         if (cardsNeedRebind) bindCards()
     }
+
+    // region PageContentLayout.OnActiveCardListener
+    var callbacks: Callbacks? = null
+
+    override fun onActiveCardChanged(activeCard: View?) {
+        if (bindingCards) return
+
+        val old = activeCardController
+        activeCardController = activeCard?.let { cardControllers.firstOrNull { it.mRoot == activeCard } }
+        hideHiddenCardsThatArentActive()
+        updateVisibleCard(old)
+        callbacks?.onUpdateActiveCard(activeCardController?.model)
+    }
+    // endregion PageContentLayout.OnActiveCardListener
 
     // region CardController.Callbacks
     override fun onToggleCard(controller: CardController) {
@@ -206,9 +230,11 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
     }
 
     private fun propagateEventToChildren(event: Event) {
-        mActiveCardViewHolder?.onContentEvent(event) ?: heroController.onContentEvent(event)
+        activeCardController?.onContentEvent(event) ?: heroController.onContentEvent(event)
     }
     // endregion Content Events
+
+    override fun updateLayoutDirection() = Unit
 
     // TODO: move this into data binding and use LiveData once we attach the PageBinding to a LifecycleOwner
     private fun updateBounceAnimation() {

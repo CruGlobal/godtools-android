@@ -5,15 +5,14 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentCardBinding
-import org.cru.godtools.tract.viewmodel.PageViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
-    pageViewHolder: PageViewHolder?
+    pageViewHolder: PageController?
 ) : ParentController<Card>(Card::class, binding.root, pageViewHolder) {
-    constructor(parent: ViewGroup, pageViewHolder: PageViewHolder?) :
+    constructor(parent: ViewGroup, pageViewHolder: PageController?) :
         this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageViewHolder)
 
     interface Callbacks {
