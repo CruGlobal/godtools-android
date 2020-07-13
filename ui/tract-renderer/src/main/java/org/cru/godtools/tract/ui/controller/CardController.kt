@@ -10,10 +10,10 @@ import org.cru.godtools.xml.model.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
-    pageViewHolder: PageController?
-) : ParentController<Card>(Card::class, binding.root, pageViewHolder) {
-    constructor(parent: ViewGroup, pageViewHolder: PageController?) :
-        this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageViewHolder)
+    pageController: PageController?
+) : ParentController<Card>(Card::class, binding.root, pageController) {
+    constructor(parent: ViewGroup, pageController: PageController?) :
+        this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageController)
 
     interface Callbacks {
         fun onToggleCard(controller: CardController)
@@ -26,7 +26,7 @@ class CardController private constructor(
         binding.controller = this
     }
 
-    internal var callbacks: Callbacks? = pageViewHolder
+    private val callbacks: Callbacks? = pageController
     private var pendingAnalyticsEvents: List<Runnable>? = null
 
     // region Lifecycle
@@ -38,8 +38,7 @@ class CardController private constructor(
 
     override fun onVisible() {
         super.onVisible()
-        pendingAnalyticsEvents =
-            model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT) }
+        pendingAnalyticsEvents = triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
     }
 
     @CallSuper

@@ -9,16 +9,15 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentTabsBinding
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.primaryColor
 
 class TabsController private constructor(
     private val binding: TractContentTabsBinding,
-    parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Tabs>(Tabs::class.java, binding.root, parentViewHolder), OnTabSelectedListener {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
-        this(TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    parentController: BaseController<*>?
+) : BaseController<Tabs>(Tabs::class, binding.root, parentController), OnTabSelectedListener {
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     private val tabController = binding.tab.bindController(this)
 
@@ -71,7 +70,7 @@ class TabsController private constructor(
     }
 
     private fun bindTab(index: Int = binding.tabs.selectedTabPosition) {
-        tabController.bind(model?.tabs?.getOrNull(index))
+        tabController.model = model?.tabs?.getOrNull(index)
     }
 
     private fun checkForTabEvent(event: Event) {

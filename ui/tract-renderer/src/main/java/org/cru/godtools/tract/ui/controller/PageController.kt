@@ -11,14 +11,13 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Page
 
-class PageController(private val binding: TractPageBinding) :
-    BaseViewHolder<Page>(Page::class.java, binding.root, null), CardController.Callbacks,
-    PageContentLayout.OnActiveCardListener, SharedPreferences.OnSharedPreferenceChangeListener {
+class PageController(private val binding: TractPageBinding) : BaseController<Page>(Page::class, binding.root),
+    CardController.Callbacks, PageContentLayout.OnActiveCardListener,
+    SharedPreferences.OnSharedPreferenceChangeListener {
     interface Callbacks {
         fun onUpdateActiveCard(card: Card?)
         fun goToNextPage()
@@ -36,14 +35,14 @@ class PageController(private val binding: TractPageBinding) :
     // region Lifecycle
     override fun onBind() {
         super.onBind()
-        heroController.bind(model?.hero)
+        heroController.model = model?.hero
         updateVisibleCards()
     }
 
     override fun onVisible() {
         settings.registerOnSharedPreferenceChangeListener(this)
         super.onVisible()
-        activeCardController?.markVisible() ?: heroController.markVisible()
+        (activeCardController ?: heroController).isVisible = true
         updateBounceAnimation()
     }
 
@@ -72,7 +71,7 @@ class PageController(private val binding: TractPageBinding) :
     override fun onHidden() {
         settings.unregisterOnSharedPreferenceChangeListener(this)
         super.onHidden()
-        activeCardController?.markHidden() ?: heroController.markHidden()
+        (activeCardController ?: heroController).isVisible = false
         updateBounceAnimation()
     }
     // endregion Lifecycle
@@ -105,10 +104,10 @@ class PageController(private val binding: TractPageBinding) :
     }
 
     private fun updateVisibleCard(old: CardController?) {
-        if (!mVisible || old == activeCardController) return
+        if (!isVisible || old == activeCardController) return
 
-        old?.markHidden() ?: heroController.markHidden()
-        activeCardController?.markVisible() ?: heroController.markVisible()
+        (old ?: heroController).isVisible = false
+        (activeCardController ?: heroController).isVisible = true
     }
 
     @UiThread
@@ -142,21 +141,21 @@ class PageController(private val binding: TractPageBinding) :
                 when (val newPos = visibleCards.indexOfFirst { it.id == holder.model?.id }) {
                     -1 -> {
                         // recycle this view holder
-                        parent.removeView(holder.mRoot)
-                        holder.bind(null)
+                        parent.removeView(holder.root)
+                        holder.model = null
                         recycledCardControllers.release(holder)
                     }
                     else -> {
                         holders[newPos] = holder
 
                         // is this the active card? if so track it to restore it after we finish binding
-                        if (activeCard === invalid && parent.activeCard === holder.mRoot) {
-                            activeCard = holder.mRoot
+                        if (activeCard === invalid && parent.activeCard === holder.root) {
+                            activeCard = holder.root
                         }
 
                         when {
                             // remove this view for now, we will re-add it shortly
-                            lastNewPos > newPos -> parent.removeView(holder.mRoot)
+                            lastNewPos > newPos -> parent.removeView(holder.root)
                             else -> lastNewPos = newPos
                         }
                     }
@@ -166,8 +165,8 @@ class PageController(private val binding: TractPageBinding) :
             // create and bind any needed view holders
             cardControllers = holders.map { it ?: recycledCardControllers.acquire() ?: CardController(parent, this) }
             cardControllers.forEachIndexed { i, it ->
-                it.bind(visibleCards.getOrNull(i))
-                if (parent !== it.mRoot.parent) parent.addCard(it.mRoot, i)
+                it.model = visibleCards.getOrNull(i)
+                if (parent !== it.root.parent) parent.addCard(it.root, i)
             }
         } finally {
             // finished binding cards
@@ -192,7 +191,7 @@ class PageController(private val binding: TractPageBinding) :
         if (bindingCards) return
 
         val old = activeCardController
-        activeCardController = activeCard?.let { cardControllers.firstOrNull { it.mRoot == activeCard } }
+        activeCardController = activeCard?.let { cardControllers.firstOrNull { it.root == activeCard } }
         hideHiddenCardsThatArentActive()
         updateVisibleCard(old)
         callbacks?.onUpdateActiveCard(activeCardController?.model)
@@ -202,9 +201,7 @@ class PageController(private val binding: TractPageBinding) :
     // region CardController.Callbacks
     override fun onToggleCard(controller: CardController) {
         settings.setFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED)
-        binding.pageContentLayout.apply {
-            changeActiveCard(controller.mRoot.takeUnless { mRoot === activeCard }, true)
-        }
+        binding.pageContentLayout.apply { changeActiveCard(controller.root.takeUnless { root === activeCard }, true) }
     }
 
     override fun onPreviousCard() {
@@ -216,9 +213,7 @@ class PageController(private val binding: TractPageBinding) :
     }
 
     override fun onDismissCard(controller: CardController) {
-        binding.pageContentLayout.apply {
-            if (activeCard == controller.mRoot) changeActiveCard(null, true)
-        }
+        binding.pageContentLayout.apply { if (activeCard == controller.root) changeActiveCard(null, true) }
     }
     // endregion CardController.Callbacks
     // endregion Cards
@@ -240,7 +235,7 @@ class PageController(private val binding: TractPageBinding) :
     private fun updateBounceAnimation() {
         // we bounce the first card if the page is visible and the user hasn't opened a card before
         binding.pageContentLayout.setBounceFirstCard(
-            mVisible && !(settings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
+            isVisible && !(settings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
                 settings.isFeatureDiscovered(FEATURE_TRACT_CARD_SWIPED))
         )
     }

@@ -193,7 +193,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             }
             mPage = page;
             mBinding.setPage(mPage);
-            mPageController.bind(page);
+            mPageController.setModel(page);
         }
 
         void onContentEvent(@NonNull final Event event) {
@@ -237,11 +237,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         }
 
         void markVisible() {
-            mPageController.markVisible();
+            mPageController.setVisible(true);
         }
 
         void markHidden() {
-            mPageController.markHidden();
+            mPageController.setVisible(false);
         }
 
         @Override
