@@ -1,6 +1,9 @@
 package org.cru.godtools.tract.ui.controller
 
 import android.content.SharedPreferences
+import android.view.View
+import androidx.annotation.UiThread
+import androidx.core.util.Pools
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
@@ -19,12 +22,14 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
 
     init {
         binding.controller = this
+        binding.pageContentLayout.setActiveCardListener(this)
     }
 
     // region Lifecycle
     override fun onBind() {
         super.onBind()
         heroController.bind(model?.hero)
+        updateVisibleCards()
     }
 
     override fun onVisible() {
@@ -66,24 +71,28 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
 
     // region Cards
     private var enabledHiddenCards = mutableSetOf<String>()
+    private var visibleCards = emptyList<Card>()
+    private var cardControllers = emptyList<CardController>()
     val activeCard get() = mActiveCardViewHolder?.model
 
-    override fun isCardVisible(card: Card) = !card.isHidden || card.id in enabledHiddenCards
+    private val recycledCardControllers = Pools.SimplePool<CardController>(3)
+
+    private fun isCardVisible(card: Card) = !card.isHidden || card.id in enabledHiddenCards
 
     private fun displayCard(card: Card) {
         if (card.isHidden) {
             enabledHiddenCards.add(card.id)
-            updateDisplayedCards()
+            updateVisibleCards()
         }
 
         // navigate to the specified card
-        val i = mCards.indexOfFirst { it.id == card.id }
+        val i = visibleCards.indexOfFirst { it.id == card.id }
         if (i != -1) binding.pageContentLayout.changeActiveCard(i, true)
     }
 
     override fun hideHiddenCardsThatArentActive() {
         if (enabledHiddenCards.isEmpty()) return
-        if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateDisplayedCards()
+        if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateVisibleCards()
     }
 
     override fun updateVisibleCard(old: CardController?) {
@@ -91,6 +100,79 @@ class PageController(private val binding: TractPageBinding) : PageViewHolder(bin
 
         old?.markHidden() ?: heroController.markHidden()
         mActiveCardViewHolder?.markVisible() ?: heroController.markVisible()
+    }
+
+    @UiThread
+    private fun updateVisibleCards() {
+        visibleCards = model?.cards?.filter { isCardVisible(it) }.orEmpty()
+        bindCards()
+    }
+
+    private var cardsNeedRebind = false
+
+    @UiThread
+    private tailrec fun bindCards() {
+        // short-circuit since we are already binding cards
+        if (mBindingCards) {
+            cardsNeedRebind = true
+            return
+        }
+
+        val parent = binding.pageContentLayout
+        val invalid: View = parent // We just need a non-null placeholder value that can't be a card view
+        var activeCard = if (parent.activeCard != null) invalid else null
+        try {
+            mBindingCards = true
+            cardsNeedRebind = false
+
+            // map old view holders to new location
+            var lastNewPos = -1
+            val holders = arrayOfNulls<CardController>(visibleCards.size)
+            cardControllers.forEach { holder ->
+                when (val newPos = visibleCards.indexOfFirst { it.id == holder.model?.id }) {
+                    -1 -> {
+                        // recycle this view holder
+                        parent.removeView(holder.mRoot)
+                        holder.bind(null)
+                        recycledCardControllers.release(holder)
+                    }
+                    else -> {
+                        holders[newPos] = holder
+
+                        // is this the active card? if so track it to restore it after we finish binding
+                        if (activeCard === invalid && parent.activeCard === holder.mRoot) {
+                            activeCard = holder.mRoot
+                        }
+
+                        when {
+                            // remove this view for now, we will re-add it shortly
+                            lastNewPos > newPos -> parent.removeView(holder.mRoot)
+                            else -> lastNewPos = newPos
+                        }
+                    }
+                }
+            }
+
+            // create and bind any needed view holders
+            cardControllers = holders.map { it ?: recycledCardControllers.acquire() ?: CardController(parent, this) }
+            cardControllers.forEachIndexed { i, it ->
+                it.bind(visibleCards.getOrNull(i))
+                if (parent !== it.mRoot.parent) parent.addCard(it.mRoot, i)
+            }
+        } finally {
+            // finished binding cards
+            mBindingCards = false
+        }
+
+        when {
+            // restore the active card
+            activeCard !== invalid -> parent.changeActiveCard(activeCard, false)
+            // trigger onActiveCard in case the active card changed during binding
+            else -> onActiveCardChanged(parent.activeCard)
+        }
+
+        // rebind cards if a request to bind happened while we were already binding
+        if (cardsNeedRebind) bindCards()
     }
 
     // region CardController.Callbacks
