@@ -11,8 +11,8 @@ import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
 import org.cru.godtools.tract.databinding.TractPageBinding;
+import org.cru.godtools.tract.ui.controller.PageController;
 import org.cru.godtools.tract.ui.controller.PageControllerKt;
-import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
@@ -169,8 +169,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     // endregion Lifecycle Events
 
-    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
-        private final PageViewHolder mModelViewHolder;
+    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageController.Callbacks {
+        private final PageController mPageController;
 
         private final TractPageBinding mBinding;
 
@@ -180,10 +180,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
         RVPageViewHolder(@NonNull final TractPageBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            mModelViewHolder = PageControllerKt.bindController(mBinding);
-            mBinding.setController(mModelViewHolder);
             mBinding.setCallbacks(this);
-            mModelViewHolder.setCallbacks(this);
+            mPageController = PageControllerKt.bindController(mBinding);
+            mPageController.setCallbacks(this);
         }
 
         // region Lifecycle
@@ -194,18 +193,18 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
             }
             mPage = page;
             mBinding.setPage(mPage);
-            mModelViewHolder.bind(page);
+            mPageController.setModel(page);
         }
 
         void onContentEvent(@NonNull final Event event) {
-            mModelViewHolder.onContentEvent(event);
+            mPageController.onContentEvent(event);
             if (mPage != null) {
                 checkForModalEvent(event);
             }
         }
 
         void onBroadcastEvent(@NonNull final NavigationEvent event) {
-            mModelViewHolder.onBroadcastEvent(event);
+            mPageController.onLiveShareNavigationEvent(event);
         }
 
         @Override
@@ -234,15 +233,15 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
         @Nullable
         public Card getActiveCard() {
-            return mModelViewHolder.getActiveCard();
+            return mPageController.getActiveCard();
         }
 
         void markVisible() {
-            mModelViewHolder.markVisible();
+            mPageController.setVisible(true);
         }
 
         void markHidden() {
-            mModelViewHolder.markHidden();
+            mPageController.setVisible(false);
         }
 
         @Override

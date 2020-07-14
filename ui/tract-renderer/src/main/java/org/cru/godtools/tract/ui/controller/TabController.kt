@@ -13,7 +13,7 @@ class TabController internal constructor(private val binding: TractContentTabBin
     override val contentContainer get() = binding.content
 
     fun trackSelectedAnalyticsEvents() {
-        model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT) }
+        triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
     }
 }
 

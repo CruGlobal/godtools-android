@@ -6,14 +6,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentInputBinding
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Input
 
 class InputController private constructor(
     private val binding: TractContentInputBinding,
-    parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Input>(Input::class.java, binding.root, parentViewHolder) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
+    parentController: BaseController<*>?
+) : BaseController<Input>(Input::class, binding.root, parentController) {
+    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
         this(TractContentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
 
     init {

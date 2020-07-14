@@ -3,15 +3,14 @@ package org.cru.godtools.tract.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.cru.godtools.tract.databinding.TractContentTextBinding
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Text
 
 internal class TextController private constructor(
     private val binding: TractContentTextBinding,
-    parentViewHolder: BaseViewHolder<*>?
-) : BaseViewHolder<Text>(Text::class.java, binding.root, parentViewHolder) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseViewHolder<*>?) :
-        this(TractContentTextBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    parentController: BaseController<*>?
+) : BaseController<Text>(Text::class, binding.root, parentController) {
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentTextBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     public override fun onBind() {
         super.onBind()

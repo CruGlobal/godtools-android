@@ -5,16 +5,16 @@ import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.tract.viewmodel.BaseViewHolder
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
 import kotlin.reflect.KClass
 
-abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Parent {
-    protected constructor(clazz: KClass<T>, root: View, parentViewHolder: BaseViewHolder<*>?) :
-        super(clazz.java, root, parentViewHolder)
-
+abstract class ParentController<T> protected constructor(
+    clazz: KClass<T>,
+    root: View,
+    parentController: BaseController<*>?
+) : BaseController<T>(clazz, root, parentController) where T : Base, T : Parent {
     // region Lifecycle
     @CallSuper
     override fun onBind() {
@@ -40,26 +40,26 @@ abstract class ParentController<T> : BaseViewHolder<T> where T : Base, T : Paren
     // region Child Content
     protected abstract val contentContainer: LinearLayout
     private val childCache by lazy { UiControllerCache(contentContainer, this) }
-    private var children: List<BaseViewHolder<Content>>? = null
+    private var children: List<BaseController<Content>>? = null
 
     @UiThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun bindContent() {
         val existing = children.orEmpty().toMutableList()
 
-        var next: BaseViewHolder<Content>? = null
+        var next: BaseController<Content>? = null
         children = model?.content?.mapNotNull { model ->
             if (next == null) next = existing.removeFirstOrNull()
 
             (next?.takeIf { it.supportsModel(model) }?.also { next = null }
                 ?: childCache.acquire(model.javaClass.kotlin)?.apply {
-                    contentContainer.addView(mRoot, contentContainer.indexOfChild(next?.mRoot))
-                })?.apply { bind(model) }
+                    contentContainer.addView(root, contentContainer.indexOfChild(next?.root))
+                })?.also { it.model = model }
         }
 
         next?.let { existing.add(it) }
         existing.forEach {
-            contentContainer.removeView(it.mRoot)
+            contentContainer.removeView(it.root)
             it.releaseTo(childCache)
         }
     }

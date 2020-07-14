@@ -5,29 +5,28 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentCardBinding
-import org.cru.godtools.tract.viewmodel.PageViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
-    pageViewHolder: PageViewHolder?
-) : ParentController<Card>(Card::class, binding.root, pageViewHolder) {
-    constructor(parent: ViewGroup, pageViewHolder: PageViewHolder?) :
-        this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageViewHolder)
+    pageController: PageController?
+) : ParentController<Card>(Card::class, binding.root, pageController) {
+    constructor(parent: ViewGroup, pageController: PageController?) :
+        this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageController)
 
     interface Callbacks {
-        fun onToggleCard(holder: CardController)
-        fun onDismissCard(holder: CardController)
-        fun onNextCard()
+        fun onToggleCard(controller: CardController)
         fun onPreviousCard()
+        fun onNextCard()
+        fun onDismissCard(controller: CardController)
     }
 
     init {
         binding.controller = this
     }
 
-    internal var callbacks: Callbacks? = pageViewHolder
+    private val callbacks: Callbacks? = pageController
     private var pendingAnalyticsEvents: List<Runnable>? = null
 
     // region Lifecycle
@@ -39,8 +38,7 @@ class CardController private constructor(
 
     override fun onVisible() {
         super.onVisible()
-        pendingAnalyticsEvents =
-            model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT) }
+        pendingAnalyticsEvents = triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
     }
 
     @CallSuper

@@ -1,12 +1,11 @@
 package org.cru.godtools.tract.ui.controller
 
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
-import org.cru.godtools.tract.viewmodel.PageViewHolder
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Hero
 
-class HeroController internal constructor(private val binding: TractPageHeroBinding, parentViewHolder: PageViewHolder) :
-    ParentController<Hero>(Hero::class, binding.root, parentViewHolder) {
+class HeroController internal constructor(private val binding: TractPageHeroBinding, pageController: PageController) :
+    ParentController<Hero>(Hero::class, binding.root, pageController) {
     init {
         binding.controller = this
     }
@@ -17,8 +16,7 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
     // region Lifecycle
     override fun onVisible() {
         super.onVisible()
-        pendingAnalyticsEvents =
-            model?.let { triggerAnalyticsEvents(it.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT) }
+        pendingAnalyticsEvents = triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
     }
 
     override fun onHidden() {
@@ -28,5 +26,5 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
     // endregion Lifecycle
 }
 
-fun TractPageHeroBinding.bindController(pageController: PageViewHolder) =
+fun TractPageHeroBinding.bindController(pageController: PageController) =
     controller ?: HeroController(this, pageController)

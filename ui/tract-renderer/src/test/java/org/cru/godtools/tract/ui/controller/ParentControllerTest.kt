@@ -39,14 +39,14 @@ class ParentControllerTest {
 
     @Test
     fun verifyBindContent() {
-        controller.bind(Paragraph(manifest) { listOf(Text(it), Image(it)) })
+        controller.model = Paragraph(manifest) { listOf(Text(it), Image(it)) }
         assertEquals(2, controller.contentContainer.childCount)
         assertThat(
             controller.contentContainer.children.toList(),
             contains(instanceOf(TextView::class.java), instanceOf(ImageView::class.java))
         )
 
-        controller.bind(Paragraph(manifest) { listOf(Image(it), Text(it), Image(it)) })
+        controller.model = Paragraph(manifest) { listOf(Image(it), Text(it), Image(it)) }
         assertEquals(3, controller.contentContainer.childCount)
         assertThat(
             controller.contentContainer.children.toList(),
@@ -57,7 +57,7 @@ class ParentControllerTest {
             )
         )
 
-        controller.bind(null)
+        controller.model = null
         assertEquals(0, controller.contentContainer.childCount)
     }
 
@@ -65,21 +65,21 @@ class ParentControllerTest {
     fun verifyBindContentWithUnmanagedViews() {
         controller.contentContainer.addView(Space(context))
 
-        controller.bind(Paragraph(manifest) { listOf(Text(it), Image(it)) })
+        controller.model = Paragraph(manifest) { listOf(Text(it), Image(it)) }
         assertEquals(3, controller.contentContainer.childCount)
         assertThat(
             controller.contentContainer.children.toList(),
             contains(instanceOf(Space::class.java), instanceOf(TextView::class.java), instanceOf(ImageView::class.java))
         )
 
-        controller.bind(Paragraph(manifest) { listOf(Image(it)) })
+        controller.model = Paragraph(manifest) { listOf(Image(it)) }
         assertEquals(2, controller.contentContainer.childCount)
         assertThat(
             controller.contentContainer.children.toList(),
             contains(instanceOf(Space::class.java), instanceOf(ImageView::class.java))
         )
 
-        controller.bind(null)
+        controller.model = null
         assertEquals(1, controller.contentContainer.childCount)
         assertThat(controller.contentContainer.children.toList(), contains(instanceOf(Space::class.java)))
     }
