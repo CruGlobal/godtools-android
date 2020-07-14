@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 import com.annimon.stream.Optional;
 
 import org.ccci.gto.android.common.support.v4.util.IdUtils;
-import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
+import org.ccci.gto.android.common.viewpager.adapter.BaseDataBindingPagerAdapter;
+import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder;
 import org.cru.godtools.api.model.NavigationEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
@@ -31,8 +32,8 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements
-        DefaultLifecycleObserver, Observer<Manifest> {
+public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<TractPageBinding, RVPageViewHolder>
+        implements DefaultLifecycleObserver, Observer<Manifest> {
     public interface Callbacks {
         void goToPage(int position);
 
@@ -112,12 +113,18 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     @NonNull
     @Override
     protected RVPageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
-        return new RVPageViewHolder(TractPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        final TractPageBinding binding =
+                TractPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        final PageController controller = PageControllerKt.bindController(binding, mPageControllerFactory);
+        final RVPageViewHolder holder = new RVPageViewHolder(binding);
+        binding.setCallbacks(holder);
+        controller.setCallbacks(holder);
+        return holder;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final RVPageViewHolder holder, final int position) {
-        super.onBindViewHolder(holder, position);
+    protected void onBindViewDataBinding(@NonNull final RVPageViewHolder holder,
+                                         @NonNull final TractPageBinding binding, final int position) {
         assert mManifest != null;
         holder.onBind(mManifest.getPages().get(position));
     }
@@ -159,8 +166,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
     }
 
     @Override
-    protected void onViewHolderRecycled(@NonNull final RVPageViewHolder holder) {
-        super.onViewHolderRecycled(holder);
+    protected void onViewDataBindingRecycled(@NonNull final RVPageViewHolder holder,
+                                             @NonNull final TractPageBinding binding) {
         holder.onBind(null);
     }
 
@@ -173,20 +180,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
     // endregion Lifecycle Events
 
-    public class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageController.Callbacks {
-        private final PageController mPageController;
-
-        private final TractPageBinding mBinding;
-
+    public class RVPageViewHolder extends DataBindingViewHolder<TractPageBinding> implements PageController.Callbacks {
         @Nullable
         Page mPage;
 
         RVPageViewHolder(@NonNull final TractPageBinding binding) {
-            super(binding.getRoot());
-            mBinding = binding;
-            mBinding.setCallbacks(this);
-            mPageController = PageControllerKt.bindController(mBinding, mPageControllerFactory);
-            mPageController.setCallbacks(this);
+            super(binding);
         }
 
         // region Lifecycle
@@ -196,19 +195,19 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
                 return;
             }
             mPage = page;
-            mBinding.setPage(mPage);
-            mPageController.setModel(page);
+            getBinding().setPage(mPage);
+            getBinding().getController().setModel(page);
         }
 
         void onContentEvent(@NonNull final Event event) {
-            mPageController.onContentEvent(event);
+            getBinding().getController().onContentEvent(event);
             if (mPage != null) {
                 checkForModalEvent(event);
             }
         }
 
         void onBroadcastEvent(@NonNull final NavigationEvent event) {
-            mPageController.onLiveShareNavigationEvent(event);
+            getBinding().getController().onLiveShareNavigationEvent(event);
         }
 
         @Override
@@ -237,15 +236,15 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageVie
 
         @Nullable
         public Card getActiveCard() {
-            return mPageController.getActiveCard();
+            return getBinding().getController().getActiveCard();
         }
 
         void markVisible() {
-            mPageController.setVisible(true);
+            getBinding().getController().setVisible(true);
         }
 
         void markHidden() {
-            mPageController.setVisible(false);
+            getBinding().getController().setVisible(false);
         }
 
         @Override
