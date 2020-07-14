@@ -356,7 +356,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
         ManifestPagerAdapter(this, pageControllerFactory).also {
-            it.setCallbacks(this)
+            it.callbacks = this
             dataModel.activeManifest.observe(this, it)
         }
     }
@@ -373,7 +373,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
             // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
             //       This is normally handled by the pager adapter observer.
-            pagerAdapter.setManifest(it)
+            pagerAdapter.manifest = it
             pager.setCurrentItem(initialPage, false)
             initialPage = -1
         }

@@ -27,7 +27,7 @@ class PageController @AssistedInject internal constructor(
     SharedPreferences.OnSharedPreferenceChangeListener {
     interface Callbacks {
         fun onUpdateActiveCard(page: Page?, card: Card?)
-        fun showModal(page: Page, modal: Modal)
+        fun showModal(modal: Modal)
         fun goToNextPage()
     }
 
@@ -46,6 +46,7 @@ class PageController @AssistedInject internal constructor(
     // region Lifecycle
     override fun onBind() {
         super.onBind()
+        binding.page = model
         heroController.model = model?.hero
         updateVisibleCards()
     }
@@ -231,9 +232,8 @@ class PageController @AssistedInject internal constructor(
 
     // region Content Events
     private fun checkForModalEvent(event: Event) {
-        val page = model ?: return
-        page.modals.firstOrNull { event.id in it.listeners }
-            ?.let { callbacks?.showModal(page, it) }
+        model?.modals?.firstOrNull { event.id in it.listeners }
+            ?.let { callbacks?.showModal(it) }
     }
 
     private fun checkForCardEvent(event: Event) {
