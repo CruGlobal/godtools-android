@@ -26,14 +26,12 @@ import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.ShortcutModule
 import org.cru.godtools.sync.SyncModule
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.dagger.DatabaseModule
 import javax.inject.Singleton
 
 @Module(
     includes = [
         AnalyticsModule::class,
         ApiModule::class,
-        DatabaseModule::class,
         DownloadManagerModule::class,
         EagerModule::class,
         EventBusModule::class,

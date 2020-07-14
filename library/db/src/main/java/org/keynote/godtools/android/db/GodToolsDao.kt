@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.db
 
-import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.AnyThread
@@ -18,7 +17,6 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.StreamDao
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.base.util.SingletonHolder
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
 import org.cru.godtools.model.Followup
@@ -37,11 +35,12 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GodToolsDao private constructor(context: Context) :
-    AbstractDao(GodToolsDatabase.getInstance(context)), AsyncDao, LiveDataDao, StreamDao {
-    companion object : SingletonHolder<GodToolsDao, Context>(::GodToolsDao)
-
+@Singleton
+class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), AsyncDao,
+    LiveDataDao, StreamDao {
     override val liveDataRegistry = LiveDataRegistry()
 
     init {

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteException
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
-import org.cru.godtools.base.util.SingletonHolder
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
@@ -18,6 +17,8 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val DATABASE_NAME = "resource.db"
 private const val DATABASE_VERSION = 43
@@ -39,10 +40,9 @@ private const val DATABASE_VERSION = 43
  * 43: 2020-06-03
  */
 
-class GodToolsDatabase private constructor(private val context: Context) :
+@Singleton
+class GodToolsDatabase @Inject internal constructor(private val context: Context) :
     WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    companion object : SingletonHolder<GodToolsDatabase, Context>({ GodToolsDatabase(it.applicationContext) })
-
     override fun onCreate(db: SQLiteDatabase) {
         try {
             db.beginTransaction()
