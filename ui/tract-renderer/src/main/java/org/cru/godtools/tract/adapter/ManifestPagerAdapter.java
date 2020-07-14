@@ -152,7 +152,7 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
         // check for the event on the current page
         final RVPageViewHolder holder = getPrimaryItem();
         if (holder != null) {
-            holder.onContentEvent(event);
+            holder.getBinding().getController().onContentEvent(event);
         }
     }
 
@@ -199,13 +199,6 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
             getBinding().getController().setModel(page);
         }
 
-        void onContentEvent(@NonNull final Event event) {
-            getBinding().getController().onContentEvent(event);
-            if (mPage != null) {
-                checkForModalEvent(event);
-            }
-        }
-
         void onBroadcastEvent(@NonNull final NavigationEvent event) {
             getBinding().getController().onLiveShareNavigationEvent(event);
         }
@@ -217,17 +210,6 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
             }
         }
         // endregion Lifecycle
-
-        private void checkForModalEvent(@NonNull final Event event) {
-            assert mPage != null;
-            for (final Modal modal : mPage.getModals()) {
-                if (modal.getListeners().contains(event.id)) {
-                    if (mCallbacks != null) {
-                        mCallbacks.showModal(modal);
-                    }
-                }
-            }
-        }
 
         @Nullable
         public Page getPage() {
@@ -251,6 +233,13 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
         public void goToNextPage() {
             if (mCallbacks != null && mPage != null) {
                 mCallbacks.goToPage(mPage.getPosition() + 1);
+            }
+        }
+
+        @Override
+        public void showModal(@NonNull final Page page, @NonNull final Modal modal) {
+            if (mCallbacks != null && getPrimaryItem() == this) {
+                mCallbacks.showModal(modal);
             }
         }
     }

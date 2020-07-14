@@ -15,6 +15,7 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
+import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
 import org.greenrobot.eventbus.EventBus
 
@@ -26,6 +27,7 @@ class PageController @AssistedInject internal constructor(
     SharedPreferences.OnSharedPreferenceChangeListener {
     interface Callbacks {
         fun onUpdateActiveCard(card: Card?)
+        fun showModal(page: Page, modal: Modal)
         fun goToNextPage()
     }
 
@@ -65,7 +67,7 @@ class PageController @AssistedInject internal constructor(
     }
 
     override fun onContentEvent(event: Event) {
-        super.onContentEvent(event)
+        checkForModalEvent(event)
         checkForCardEvent(event)
         propagateEventToChildren(event)
     }
@@ -228,6 +230,12 @@ class PageController @AssistedInject internal constructor(
     // endregion Cards
 
     // region Content Events
+    private fun checkForModalEvent(event: Event) {
+        val page = model ?: return
+        page.modals.firstOrNull { event.id in it.listeners }
+            ?.let { callbacks?.showModal(page, it) }
+    }
+
     private fun checkForCardEvent(event: Event) {
         model?.cards?.firstOrNull { event.id in it.listeners }
             ?.let { displayCard(it) }
