@@ -1,12 +1,13 @@
 package org.cru.godtools.tract.ui.controller
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.annotation.UiThread
 import androidx.lifecycle.Observer
-import com.annimon.stream.Stream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
@@ -15,12 +16,17 @@ import org.cru.godtools.xml.model.layoutDirection
 import org.greenrobot.eventbus.EventBus
 import kotlin.reflect.KClass
 
-@UiThread
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
+    protected open val eventBus: EventBus
+        get() {
+            checkNotNull(parentController) { "No EventBus found in controller ancestors" }
+            return parentController.eventBus
+        }
+
     var model: T? = null
         set(value) {
             if (value == null) isVisible = false
@@ -77,31 +83,18 @@ abstract class BaseController<T : Base> protected constructor(
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
         // trigger an event for every id provided
-        ids.forEach { EventBus.getDefault().post(builder.id(it).build()) }
+        ids.forEach { eventBus.post(builder.id(it).build()) }
     }
 
     protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
         events?.filter { it.isTriggerType(*types) }?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
 
-    private val handler: Handler = Handler(Looper.getMainLooper())
-    private fun sendAnalyticsEvent(event: AnalyticsEvent): Runnable? {
-        if (event.delay > 0) {
-            val task = Runnable {
-                EventBus.getDefault().post(ContentAnalyticsActionEvent(event))
-            }
-            handler.postDelayed(task, event.delay * 1000.toLong())
-            return task
-        }
-        EventBus.getDefault().post(ContentAnalyticsActionEvent(event))
-        return null
-    }
+    private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
+        if (event.delay > 0) delay(event.delay * 1000L)
+        eventBus.post(ContentAnalyticsActionEvent(event))
+    }.takeUnless { it.isCompleted }
 
-    protected fun cancelPendingAnalyticsEvents(pendingTasks: List<Runnable>) {
-        Stream.of(pendingTasks)
-            .forEach { r: Runnable? ->
-                handler.removeCallbacks(r)
-            }
-    }
+    protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
 
     /**
      * @return true if the event has been built by a parent controller.

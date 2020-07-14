@@ -55,6 +55,7 @@ import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
+import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
@@ -350,9 +351,11 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // endregion Language Toggle
 
     // region Tool Pager
+    @Inject
+    internal lateinit var pageControllerFactory: PageController.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        ManifestPagerAdapter().also {
+        ManifestPagerAdapter(pageControllerFactory).also {
             it.setCallbacks(this)
             lifecycle.addObserver(it)
             dataModel.activeManifest.observe(this, it)

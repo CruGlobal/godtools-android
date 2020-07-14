@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.controller
 
+import kotlinx.coroutines.Job
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Hero
@@ -11,7 +12,7 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
     }
 
     override val contentContainer get() = binding.content
-    private var pendingAnalyticsEvents: List<Runnable>? = null
+    private var pendingAnalyticsEvents: List<Job>? = null
 
     // region Lifecycle
     override fun onVisible() {
@@ -21,7 +22,7 @@ class HeroController internal constructor(private val binding: TractPageHeroBind
 
     override fun onHidden() {
         super.onHidden()
-        pendingAnalyticsEvents?.let { cancelPendingAnalyticsEvents(it) }
+        pendingAnalyticsEvents?.cancelPendingAnalyticsEvents()
     }
     // endregion Lifecycle
 }

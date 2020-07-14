@@ -3,6 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import kotlinx.coroutines.Job
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentCardBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
@@ -27,7 +28,7 @@ class CardController private constructor(
     }
 
     private val callbacks: Callbacks? = pageController
-    private var pendingAnalyticsEvents: List<Runnable>? = null
+    private var pendingAnalyticsEvents: List<Job>? = null
 
     // region Lifecycle
     @CallSuper
@@ -49,7 +50,7 @@ class CardController private constructor(
 
     override fun onHidden() {
         super.onHidden()
-        pendingAnalyticsEvents?.let { cancelPendingAnalyticsEvents(it) }
+        pendingAnalyticsEvents?.cancelPendingAnalyticsEvents()
     }
     // endregion Lifecycle
 

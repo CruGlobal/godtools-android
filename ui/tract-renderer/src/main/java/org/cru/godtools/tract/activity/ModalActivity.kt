@@ -22,6 +22,7 @@ import org.cru.godtools.tract.Constants.EXTRA_MODAL
 import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
+import org.cru.godtools.tract.ui.controller.ModalController
 import org.cru.godtools.tract.ui.controller.bindController
 import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
@@ -41,6 +42,8 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
 
 class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
+    @Inject
+    internal lateinit var modalControllerFactory: ModalController.Factory
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +64,7 @@ class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layou
     }
 
     override fun onBindingChanged() {
-        binding.modalLayout.bindController()
+        binding.modalLayout.bindController(modalControllerFactory)
             .also { dataModel.modal.observe(this, it) }
     }
 
