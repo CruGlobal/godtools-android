@@ -26,7 +26,7 @@ class PageController @AssistedInject internal constructor(
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     interface Callbacks {
-        fun onUpdateActiveCard(card: Card?)
+        fun onUpdateActiveCard(page: Page?, card: Card?)
         fun showModal(page: Page, modal: Modal)
         fun goToNextPage()
     }
@@ -205,7 +205,7 @@ class PageController @AssistedInject internal constructor(
         activeCardController = activeCard?.let { cardControllers.firstOrNull { it.root == activeCard } }
         hideHiddenCardsThatArentActive()
         updateVisibleCard(old)
-        callbacks?.onUpdateActiveCard(activeCardController?.model)
+        callbacks?.onUpdateActiveCard(model, activeCardController?.model)
     }
     // endregion PageContentLayout.OnActiveCardListener
 

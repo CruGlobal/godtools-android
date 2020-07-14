@@ -33,7 +33,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
 public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<TractPageBinding, RVPageViewHolder>
-        implements DefaultLifecycleObserver, Observer<Manifest> {
+        implements PageController.Callbacks, DefaultLifecycleObserver, Observer<Manifest> {
     public interface Callbacks {
         void goToPage(int position);
 
@@ -51,9 +51,12 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
     @Nullable
     private Manifest mManifest;
 
-    public ManifestPagerAdapter(@NonNull final PageController.Factory factory) {
-        mPageControllerFactory = factory;
+    public ManifestPagerAdapter(@NonNull final LifecycleOwner lifecycleOwner,
+                                @NonNull final PageController.Factory factory) {
+        super(lifecycleOwner);
         setHasStableIds(true);
+        mPageControllerFactory = factory;
+        lifecycleOwner.getLifecycle().addObserver(this);
     }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
@@ -116,10 +119,9 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
         final TractPageBinding binding =
                 TractPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         final PageController controller = PageControllerKt.bindController(binding, mPageControllerFactory);
-        final RVPageViewHolder holder = new RVPageViewHolder(binding);
-        binding.setCallbacks(holder);
-        controller.setCallbacks(holder);
-        return holder;
+        binding.setCallbacks(this);
+        controller.setCallbacks(this);
+        return new RVPageViewHolder(binding);
     }
 
     @Override
@@ -161,7 +163,7 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
     public void onBroadcastEvent(@NonNull final NavigationEvent event) {
         final RVPageViewHolder holder = getPrimaryItem();
         if (holder != null) {
-            holder.onBroadcastEvent(event);
+            holder.getBinding().getController().onLiveShareNavigationEvent(event);
         }
     }
 
@@ -180,7 +182,34 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
 
     // endregion Lifecycle Events
 
-    public class RVPageViewHolder extends DataBindingViewHolder<TractPageBinding> implements PageController.Callbacks {
+    // region PageController.Callbacks
+    @Override
+    public void onUpdateActiveCard(@Nullable final Page page, @Nullable final Card card) {
+        final RVPageViewHolder holder = getPrimaryItem();
+        if (holder != null && page != null && holder.mPage == page) {
+            dispatchUpdateActiveCard(page, card);
+        }
+    }
+
+    @Override
+    public void showModal(@NonNull final Page page, @NonNull final Modal modal) {
+        final RVPageViewHolder holder = getPrimaryItem();
+        if (mCallbacks != null && holder != null && holder.mPage == page) {
+            mCallbacks.showModal(modal);
+        }
+    }
+
+    @Override
+    public void goToNextPage() {
+        if (mCallbacks != null) {
+            final RVPageViewHolder holder = getPrimaryItem();
+            final int position = holder != null ? holder.mPage.getPosition() + 1 : 0;
+            mCallbacks.goToPage(position);
+        }
+    }
+    // endregion PageController.Callbacks
+
+    public class RVPageViewHolder extends DataBindingViewHolder<TractPageBinding> {
         @Nullable
         Page mPage;
 
@@ -197,17 +226,6 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
             mPage = page;
             getBinding().setPage(mPage);
             getBinding().getController().setModel(page);
-        }
-
-        void onBroadcastEvent(@NonNull final NavigationEvent event) {
-            getBinding().getController().onLiveShareNavigationEvent(event);
-        }
-
-        @Override
-        public void onUpdateActiveCard(@Nullable final Card card) {
-            if (getPrimaryItem() == this && mPage != null) {
-                dispatchUpdateActiveCard(mPage, card);
-            }
         }
         // endregion Lifecycle
 
@@ -227,20 +245,6 @@ public final class ManifestPagerAdapter extends BaseDataBindingPagerAdapter<Trac
 
         void markHidden() {
             getBinding().getController().setVisible(false);
-        }
-
-        @Override
-        public void goToNextPage() {
-            if (mCallbacks != null && mPage != null) {
-                mCallbacks.goToPage(mPage.getPosition() + 1);
-            }
-        }
-
-        @Override
-        public void showModal(@NonNull final Page page, @NonNull final Modal modal) {
-            if (mCallbacks != null && getPrimaryItem() == this) {
-                mCallbacks.showModal(modal);
-            }
         }
     }
 }

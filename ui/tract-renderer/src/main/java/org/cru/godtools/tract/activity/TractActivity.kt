@@ -337,8 +337,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         // trigger analytics & live share publisher events
         // TODO: this should probably occur whenever the activeManifest changes language,
         //       but we need to make sure it executes after the pagerAdapter is updated
-        pagerAdapter.primaryItem?.let {
-            val page = it.page ?: return@let
+        pagerAdapter.primaryItem?.binding?.controller?.let {
+            val page = it.model ?: return@let
             val card = it.activeCard
             trackTractPage(page, card)
             sendLiveShareNavigationEvent(page, card)
@@ -355,9 +355,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     internal lateinit var pageControllerFactory: PageController.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        ManifestPagerAdapter(pageControllerFactory).also {
+        ManifestPagerAdapter(this, pageControllerFactory).also {
             it.setCallbacks(this)
-            lifecycle.addObserver(it)
             dataModel.activeManifest.observe(this, it)
         }
     }
