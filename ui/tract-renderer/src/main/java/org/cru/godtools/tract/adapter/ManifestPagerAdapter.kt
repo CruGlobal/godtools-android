@@ -6,6 +6,8 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.onStart
 import org.ccci.gto.android.common.androidx.lifecycle.onStop
 import org.ccci.gto.android.common.eventbus.lifecycle.register
@@ -25,11 +27,16 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class ManifestPagerAdapter(
-    lifecycleOwner: LifecycleOwner,
+class ManifestPagerAdapter @AssistedInject internal constructor(
+    @Assisted lifecycleOwner: LifecycleOwner,
     private val pageControllerFactory: PageController.Factory,
-    eventBus: EventBus = EventBus.getDefault()
+    eventBus: EventBus
 ) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(lifecycleOwner: LifecycleOwner): ManifestPagerAdapter
+    }
+
     interface Callbacks {
         fun onUpdateActiveCard(page: Page, card: Card?)
         fun showModal(modal: Modal)
