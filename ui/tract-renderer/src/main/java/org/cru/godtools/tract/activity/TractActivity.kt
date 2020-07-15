@@ -68,17 +68,19 @@ import javax.inject.Inject
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
+private const val EXTRA_SHOW_TIPS = "org.cru.godtools.tract.activity.TractActivity.SHOW_TIPS"
 
 private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
 
 private val ENABLE_LIVE_SHARE = BuildConfig.DEBUG
 
-fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?) =
-    startActivity(createTractActivityIntent(toolCode, *languages))
+fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
+    startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
 
-fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?) =
+fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
     Intent(this, TractActivity::class.java)
         .putExtras(Bundle().populateTractActivityExtras(toolCode, *languages))
+        .putExtra(EXTRA_SHOW_TIPS, showTips)
 
 private fun Bundle.populateTractActivityExtras(toolCode: String, vararg languages: Locale?) = apply {
     putString(EXTRA_TOOL, toolCode)
@@ -91,6 +93,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
+
+    private val showTips get() = intent?.getBooleanExtra(EXTRA_SHOW_TIPS, false) ?: false
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -360,6 +364,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     private val pagerAdapter by lazy {
         pagerAdapterFactory.create(this).also {
             it.callbacks = this
+            it.showTips = showTips
             dataModel.activeManifest.observe(this, it)
         }
     }

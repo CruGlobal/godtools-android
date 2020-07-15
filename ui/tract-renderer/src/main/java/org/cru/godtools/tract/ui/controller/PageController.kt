@@ -43,6 +43,7 @@ class PageController @AssistedInject internal constructor(
         set(value) {
             binding.callbacks = value
         }
+    override var showTips = false
 
     init {
         binding.controller = this

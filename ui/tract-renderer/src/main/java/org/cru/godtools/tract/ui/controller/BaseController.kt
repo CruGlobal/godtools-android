@@ -26,6 +26,7 @@ abstract class BaseController<T : Base> protected constructor(
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
         }
+    internal open val showTips: Boolean get() = parentController?.showTips ?: false
 
     var model: T? = null
         set(value) {
@@ -52,13 +53,9 @@ abstract class BaseController<T : Base> protected constructor(
     }
 
     protected open fun onVisible() = Unit
-
     internal open fun onValidate() = true
-
     internal open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
-
-    open fun onContentEvent(event: Event) = Unit
-
+    internal open fun onContentEvent(event: Event) = Unit
     protected open fun onHidden() = Unit
     // endregion Lifecycle
 

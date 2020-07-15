@@ -50,6 +50,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
             if (changed) notifyDataSetChanged()
         }
     var callbacks: Callbacks? = null
+    var showTips: Boolean = false
 
     init {
         setHasStableIds(true)
@@ -74,7 +75,10 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
     override fun onCreateViewDataBinding(parent: ViewGroup) =
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-            bindController(pageControllerFactory).callbacks = this@ManifestPagerAdapter
+            bindController(pageControllerFactory).also {
+                it.callbacks = this@ManifestPagerAdapter
+                it.showTips = showTips
+            }
         }
 
     override fun onBindViewDataBinding(
