@@ -165,7 +165,12 @@ class Manifest : BaseModel, Styles {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(code: String = "", locale: Locale = Locale.ENGLISH, type: Type = Type.DEFAULT) : super() {
+    constructor(
+        code: String = "",
+        locale: Locale = Locale.ENGLISH,
+        type: Type = Type.DEFAULT,
+        tips: ((Manifest) -> List<Tip>?)? = null
+    ) : super() {
         this.code = code
         this.locale = locale
         this.type = type
@@ -189,7 +194,7 @@ class Manifest : BaseModel, Styles {
         categories = emptyList()
         pages = emptyList()
         resources = emptyMap()
-        tips = emptyMap()
+        this.tips = tips?.invoke(this)?.associateBy { it.id }.orEmpty()
     }
 
     override val manifest get() = this

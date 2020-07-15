@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model.tips
 
+import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.Base
@@ -14,6 +15,7 @@ class InlineTip : Content {
     }
 
     val id: String?
+    val tip: Tip? get() = manifest.tips[id]
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
@@ -21,5 +23,10 @@ class InlineTip : Content {
         id = parser.getAttributeValue(null, XML_ID)
 
         parser.skipTag()
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(parent: Base, id: String? = null) : super(parent) {
+        this.id = id
     }
 }
