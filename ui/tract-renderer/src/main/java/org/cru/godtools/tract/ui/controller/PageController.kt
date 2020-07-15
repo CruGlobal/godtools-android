@@ -25,18 +25,23 @@ class PageController @AssistedInject internal constructor(
     private val settings: Settings
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(binding: TractPageBinding): PageController
+    }
+
     interface Callbacks {
         fun onUpdateActiveCard(page: Page?, card: Card?)
         fun showModal(modal: Modal)
         fun goToNextPage()
     }
 
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(binding: TractPageBinding): PageController
-    }
-
     private val heroController = binding.hero.bindController(this)
+    var callbacks: Callbacks?
+        get() = binding.callbacks
+        set(value) {
+            binding.callbacks = value
+        }
 
     init {
         binding.controller = this
@@ -197,8 +202,6 @@ class PageController @AssistedInject internal constructor(
     }
 
     // region PageContentLayout.OnActiveCardListener
-    var callbacks: Callbacks? = null
-
     override fun onActiveCardChanged(activeCard: View?) {
         if (bindingCards) return
 

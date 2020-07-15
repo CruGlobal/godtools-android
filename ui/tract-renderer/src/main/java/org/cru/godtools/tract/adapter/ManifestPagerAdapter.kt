@@ -74,7 +74,6 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
     override fun onCreateViewDataBinding(parent: ViewGroup) =
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-            callbacks = this@ManifestPagerAdapter
             bindController(pageControllerFactory).callbacks = this@ManifestPagerAdapter
         }
 
