@@ -77,7 +77,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
             bindController(pageControllerFactory).also {
                 it.callbacks = this@ManifestPagerAdapter
-                it.showTips = showTips
+                it.isTipsEnabled = showTips
             }
         }
 

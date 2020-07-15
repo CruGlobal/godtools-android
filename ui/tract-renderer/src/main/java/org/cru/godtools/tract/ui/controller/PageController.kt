@@ -43,7 +43,6 @@ class PageController @AssistedInject internal constructor(
         set(value) {
             binding.callbacks = value
         }
-    override var showTips = false
 
     init {
         binding.controller = this
@@ -252,6 +251,10 @@ class PageController @AssistedInject internal constructor(
         activeCardController?.onContentEvent(event) ?: heroController.onContentEvent(event)
     }
     // endregion Content Events
+
+    // region Tips
+    override var isTipsEnabled = false
+    // endregion Tips
 
     override fun updateLayoutDirection() = Unit
 

@@ -17,4 +17,8 @@
     <string name="tract_live_share_exit_dialog_message">Exit the remote sharing session now?</string>
     <string name="tract_live_share_exit_dialog_confirm">Exit</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancel</string>
+
+    <!-- Training Tips -->
+    <eat-comment />
+    <string name="tract_tips_action_open_inline">View Tip</string>
 </resources>

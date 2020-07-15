@@ -26,7 +26,6 @@ abstract class BaseController<T : Base> protected constructor(
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
         }
-    internal open val showTips: Boolean get() = parentController?.showTips ?: false
 
     var model: T? = null
         set(value) {
@@ -102,4 +101,8 @@ abstract class BaseController<T : Base> protected constructor(
         // navigate up hierarchy before performing validation
         return parentController?.validate(ids) != false
     }
+
+    // region Tips
+    internal open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+    // endregion Tips
 }
