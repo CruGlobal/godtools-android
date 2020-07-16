@@ -3,7 +3,7 @@ package org.cru.godtools.xml.model
 import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
-abstract class BaseModel : Base {
+abstract class BaseModel internal constructor(private val parent: Base? = null) : Base {
     internal companion object {
         internal const val XML_PRIMARY_COLOR = "primary-color"
         internal const val XML_PRIMARY_TEXT_COLOR = "primary-text-color"
@@ -17,32 +17,11 @@ abstract class BaseModel : Base {
         internal const val XML_DISMISS_LISTENERS = "dismiss-listeners"
     }
 
-    internal constructor() {
-        parent = this
-    }
-
-    internal constructor(parent: Base) {
-        this.parent = parent
-    }
-
-    private val parent: Base
-
-    override val stylesParent: Styles?
-        get() = when {
-            parent === this -> null
-            else -> (parent as? Styles) ?: parent.stylesParent
-        }
+    override val stylesParent: Styles? get() = parent as? Styles ?: parent.stylesParent
 
     override val manifest: Manifest
-        get() {
-            check(parent !== this) { "No manifest found in model ancestors" }
-            return parent.manifest
-        }
-    override val page: Page
-        get() {
-            check(parent !== this) { "No page found in model ancestors" }
-            return parent.page
-        }
+        get() = parent?.manifest ?: throw IllegalStateException("No manifest found in model ancestors")
+    override val page: Page get() = parent?.page ?: throw IllegalStateException("No page found in model ancestors")
 
     internal open fun getResource(name: String?): Resource? = manifest.getResource(name)
 
