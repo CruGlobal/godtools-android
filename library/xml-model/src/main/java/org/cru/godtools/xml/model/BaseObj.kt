@@ -3,7 +3,7 @@ package org.cru.godtools.xml.model
 import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
-abstract class BaseObj : BaseModel {
+abstract class BaseObj : Base {
     internal companion object {
         internal const val XML_PRIMARY_COLOR = "primary-color"
         internal const val XML_PRIMARY_TEXT_COLOR = "primary-text-color"
@@ -21,11 +21,11 @@ abstract class BaseObj : BaseModel {
         parent = this
     }
 
-    internal constructor(parent: BaseModel) {
+    internal constructor(parent: Base) {
         this.parent = parent
     }
 
-    private val parent: BaseModel
+    private val parent: Base
 
     override val stylesParent: Styles?
         get() = when {

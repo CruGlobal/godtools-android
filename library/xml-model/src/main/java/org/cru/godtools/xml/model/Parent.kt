@@ -2,7 +2,7 @@ package org.cru.godtools.xml.model
 
 import org.xmlpull.v1.XmlPullParser
 
-interface Parent : BaseModel {
+interface Parent : Base {
     val content: List<Content>
 }
 

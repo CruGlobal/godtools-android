@@ -21,13 +21,13 @@ class CallToAction : BaseObj {
     @get:ColorInt
     val controlColor get() = _controlColor ?: page.primaryColor
 
-    internal constructor(parent: BaseModel) : super(parent) {
+    internal constructor(parent: Base) : super(parent) {
         label = null
         events = emptySet()
         _controlColor = null
     }
 
-    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION)
 
         events = parseEvents(parser, XML_EVENTS)
@@ -38,7 +38,7 @@ class CallToAction : BaseObj {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
-        parent: BaseModel,
+        parent: Base,
         label: ((CallToAction) -> Text?)? = null,
         events: Set<Event.Id> = emptySet(),
         @ColorInt controlColor: Int? = null

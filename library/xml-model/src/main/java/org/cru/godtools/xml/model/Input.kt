@@ -55,7 +55,7 @@ class Input : Content {
     val placeholder: Text?
 
     @WorkerThread
-    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_INPUT)
 
         type = Type.parseOrNull(parser.getAttributeValue(null, XML_TYPE)) ?: Type.DEFAULT

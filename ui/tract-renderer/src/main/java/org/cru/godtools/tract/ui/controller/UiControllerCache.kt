@@ -3,7 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.view.ViewGroup
 import androidx.core.util.Pools
 import org.ccci.gto.android.common.app.ApplicationUtils
-import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
@@ -19,17 +19,17 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
     private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()
 
     @Suppress("UNCHECKED_CAST")
-    private val <T : BaseModel> KClass<T>.pool get() = pools[this] as? Pools.Pool<BaseController<T>>
+    private val <T : Base> KClass<T>.pool get() = pools[this] as? Pools.Pool<BaseController<T>>
             ?: Pools.SimplePool<BaseController<T>>(5).also { pools[this] = it as Pools.Pool<BaseController<*>> }
 
-    fun <T : BaseModel> acquire(clazz: KClass<T>): BaseController<T>? =
+    fun <T : Base> acquire(clazz: KClass<T>): BaseController<T>? =
         clazz.pool.acquire() ?: createController(clazz, parent, parentController)
-    fun <T : BaseModel> release(clazz: KClass<T>, instance: BaseController<T>) {
+    fun <T : Base> release(clazz: KClass<T>, instance: BaseController<T>) {
         instance.model = null
         clazz.pool.release(instance)
     }
 
-    private fun <T : BaseModel> createController(
+    private fun <T : Base> createController(
         clazz: KClass<T>,
         parent: ViewGroup,
         parentViewHolder: BaseController<*>?

@@ -3,7 +3,7 @@ package org.cru.godtools.xml.model
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
-class Form internal constructor(parent: BaseModel, parser: XmlPullParser) : Content(parent, parser), Parent {
+class Form internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser), Parent {
     companion object {
         internal const val XML_FORM = "form"
     }

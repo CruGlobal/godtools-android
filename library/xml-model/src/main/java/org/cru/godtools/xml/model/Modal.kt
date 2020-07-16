@@ -39,7 +39,7 @@ class Modal : BaseObj, Parent, Styles {
     override val textAlign get() = Text.Align.CENTER
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: BaseModel, position: Int) : super(parent) {
+    internal constructor(parent: Base, position: Int) : super(parent) {
         this.position = position
         title = null
         content = emptyList()
@@ -48,7 +48,7 @@ class Modal : BaseObj, Parent, Styles {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    internal constructor(parent: BaseModel, position: Int, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: Base, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODAL)

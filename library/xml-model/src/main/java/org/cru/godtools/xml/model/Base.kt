@@ -1,5 +1,16 @@
 package org.cru.godtools.xml.model
 
+import android.text.TextUtils
 import android.view.View
 
-val BaseModel?.layoutDirection get() = this?.layoutDirection ?: View.LAYOUT_DIRECTION_INHERIT
+interface Base {
+    val stylesParent: Styles?
+
+    val manifest: Manifest
+    val page: Page
+
+    val layoutDirection get() = TextUtils.getLayoutDirectionFromLocale(manifest.locale)
+}
+
+val Base?.stylesParent get() = this?.stylesParent
+val Base?.layoutDirection get() = this?.layoutDirection ?: View.LAYOUT_DIRECTION_INHERIT
