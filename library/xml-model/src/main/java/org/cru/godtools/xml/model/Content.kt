@@ -6,14 +6,14 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
 
-abstract class Content : Base {
+abstract class Content : BaseModel {
     private val restrictTo: Set<DeviceType>
 
-    protected constructor(parent: BaseModel) : super(parent) {
+    protected constructor(parent: Base) : super(parent) {
         restrictTo = DeviceType.ALL
     }
 
-    protected constructor(parent: BaseModel, parser: XmlPullParser) : super(parent) {
+    protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
         restrictTo = DeviceType.parse(
             types = parser.getAttributeValue(null, XML_RESTRICT_TO),
             defValue = DeviceType.ALL
@@ -27,7 +27,7 @@ abstract class Content : Base {
 
     companion object {
         internal fun fromXml(
-            parent: BaseModel,
+            parent: Base,
             parser: XmlPullParser,
             consumeUnrecognizedTags: Boolean = false
         ): Content? {

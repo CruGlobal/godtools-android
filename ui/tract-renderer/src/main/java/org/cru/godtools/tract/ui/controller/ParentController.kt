@@ -5,7 +5,6 @@ import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
 import kotlin.reflect.KClass
@@ -14,7 +13,7 @@ abstract class ParentController<T> protected constructor(
     clazz: KClass<T>,
     root: View,
     parentController: BaseController<*>?
-) : BaseController<T>(clazz, root, parentController) where T : Base, T : Parent {
+) : BaseController<T>(clazz, root, parentController) where T : Parent {
     // region Lifecycle
     @CallSuper
     override fun onBind() {

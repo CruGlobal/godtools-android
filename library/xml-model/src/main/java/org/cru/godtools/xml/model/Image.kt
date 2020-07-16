@@ -21,7 +21,7 @@ class Image : Content {
     val resource get() = getResource(resourceName)
 
     @WorkerThread
-    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_IMAGE)
 
         resourceName = parser.getAttributeValue(null, XML_RESOURCE)
@@ -31,7 +31,7 @@ class Image : Content {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(parent: BaseModel) : super(parent) {
+    constructor(parent: Base) : super(parent) {
         events = emptySet()
         resourceName = null
     }

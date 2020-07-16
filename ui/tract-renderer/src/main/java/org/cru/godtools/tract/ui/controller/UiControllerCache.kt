@@ -17,9 +17,9 @@ import kotlin.reflect.KClass
 
 internal class UiControllerCache(private val parent: ViewGroup, private val parentController: BaseController<*>?) {
     private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()
+
     @Suppress("UNCHECKED_CAST")
-    private val <T : Base> KClass<T>.pool
-        get() = pools[this] as? Pools.Pool<BaseController<T>>
+    private val <T : Base> KClass<T>.pool get() = pools[this] as? Pools.Pool<BaseController<T>>
             ?: Pools.SimplePool<BaseController<T>>(5).also { pools[this] = it as Pools.Pool<BaseController<*>> }
 
     fun <T : Base> acquire(clazz: KClass<T>): BaseController<T>? =
@@ -29,21 +29,24 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
         clazz.pool.release(instance)
     }
 
-    private fun <T : Base> createController(clazz: KClass<T>, parent: ViewGroup, parentViewHolder: BaseController<*>?) =
-        when (clazz) {
-            Button::class -> ButtonController(parent, parentViewHolder)
-            Form::class -> FormController(parent, parentViewHolder)
-            Image::class -> ImageController(parent, parentViewHolder)
-            Input::class -> InputController(parent, parentViewHolder)
-            Link::class -> LinkController(parent, parentViewHolder)
-            Paragraph::class -> ParagraphController(parent, parentViewHolder)
-            Tabs::class -> TabsController(parent, parentViewHolder)
-            Text::class -> TextController(parent, parentViewHolder)
-            else -> {
-                val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
-                if (ApplicationUtils.isDebuggable(parent.context)) throw e
-                Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
-                null
-            }
-        } as BaseController<T>?
+    private fun <T : Base> createController(
+        clazz: KClass<T>,
+        parent: ViewGroup,
+        parentViewHolder: BaseController<*>?
+    ) = when (clazz) {
+        Button::class -> ButtonController(parent, parentViewHolder)
+        Form::class -> FormController(parent, parentViewHolder)
+        Image::class -> ImageController(parent, parentViewHolder)
+        Input::class -> InputController(parent, parentViewHolder)
+        Link::class -> LinkController(parent, parentViewHolder)
+        Paragraph::class -> ParagraphController(parent, parentViewHolder)
+        Tabs::class -> TabsController(parent, parentViewHolder)
+        Text::class -> TextController(parent, parentViewHolder)
+        else -> {
+            val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
+            if (ApplicationUtils.isDebuggable(parent.context)) throw e
+            Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
+            null
+        }
+    } as BaseController<T>?
 }

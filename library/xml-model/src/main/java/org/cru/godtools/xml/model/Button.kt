@@ -34,7 +34,7 @@ class Button : Content, Styles {
         }
     }
 
-    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent, parser) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_BUTTON)
 
         type = Type.parseOrNull(parser.getAttributeValue(null, XML_TYPE)) ?: Type.DEFAULT
@@ -62,7 +62,7 @@ class Button : Content, Styles {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: BaseModel, text: ((Button) -> Text?)? = null) : super(parent) {
+    internal constructor(parent: Base, text: ((Button) -> Text?)? = null) : super(parent) {
         type = Type.DEFAULT
         events = emptySet()
         url = null

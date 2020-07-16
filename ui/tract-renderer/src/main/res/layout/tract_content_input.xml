@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
-        <import type="org.cru.godtools.xml.model.BaseModelKt" />
+        <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.Input.Type" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
         <import type="org.cru.godtools.xml.model.TextKt" />
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:hint="@{(model.label ?? model.placeholder).text}"
         android:textColorHint="@{TextKt.getTextColor(model.label ?? model.placeholder)}"
-        app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}"
+        app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}"
         app:error="@{error.msgId != null ? ContextKt.getString(context, model.manifest.locale, error.msgId, model.name, input.text) : error.msg}"
         app:errorEnabled="@{error != null}"
         app:hintTextColor="@{TextKt.getTextColor(model.placeholder ?? model.label)}"
@@ -34,7 +34,7 @@
             android:inputType="@{model.type}"
             android:onFocusChange="@{(v, hasFocus) -> controller.onFocusChanged(hasFocus)}"
             android:saveEnabled="false"
-            android:textColor="@{StylesKt.getTextColor(BaseModelKt.getStylesParent(model))}"
-            app:textCursorDrawableTint="@{StylesKt.getPrimaryColor(BaseModelKt.getStylesParent(model))}" />
+            android:textColor="@{StylesKt.getTextColor(BaseKt.getStylesParent(model))}"
+            app:textCursorDrawableTint="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}" />
     </com.google.android.material.textfield.TextInputLayout>
 </layout>

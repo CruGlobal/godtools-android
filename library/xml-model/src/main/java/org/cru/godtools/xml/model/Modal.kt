@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TITLE = "title"
 
-class Modal : Base, Parent, Styles {
+class Modal : BaseModel, Parent, Styles {
     companion object {
         internal const val XML_MODAL = "modal"
     }

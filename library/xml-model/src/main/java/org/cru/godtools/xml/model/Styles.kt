@@ -8,7 +8,7 @@ import org.cru.godtools.xml.R
 private val DEFAULT_TEXT_SIZE = R.dimen.text_size_base
 private val DEFAULT_TEXT_ALIGN = Text.Align.DEFAULT
 
-interface Styles : BaseModel {
+interface Styles : Base {
     @get:ColorInt
     val primaryColor: Int get() = stylesParent.primaryColor
 

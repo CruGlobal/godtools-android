@@ -12,7 +12,7 @@ private const val XML_BANNER = "banner"
 private const val XML_AEM_TAG = "aem-tag"
 
 @OptIn(ExperimentalStdlibApi::class)
-class Category internal constructor(manifest: Manifest, parser: XmlPullParser) : Base(manifest) {
+class Category internal constructor(manifest: Manifest, parser: XmlPullParser) : BaseModel(manifest) {
     val id: String?
     val label: Text?
     val aemTags: Set<String>
