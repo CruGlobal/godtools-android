@@ -55,7 +55,6 @@ import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
-import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
@@ -337,8 +336,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         // trigger analytics & live share publisher events
         // TODO: this should probably occur whenever the activeManifest changes language,
         //       but we need to make sure it executes after the pagerAdapter is updated
-        pagerAdapter.primaryItem?.let {
-            val page = it.page ?: return@let
+        pagerAdapter.primaryItem?.binding?.controller?.let {
+            val page = it.model ?: return@let
             val card = it.activeCard
             trackTractPage(page, card)
             sendLiveShareNavigationEvent(page, card)
@@ -352,12 +351,11 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     // region Tool Pager
     @Inject
-    internal lateinit var pageControllerFactory: PageController.Factory
+    internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        ManifestPagerAdapter(pageControllerFactory).also {
-            it.setCallbacks(this)
-            lifecycle.addObserver(it)
+        pagerAdapterFactory.create(this).also {
+            it.callbacks = this
             dataModel.activeManifest.observe(this, it)
         }
     }
@@ -374,7 +372,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
             // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
             //       This is normally handled by the pager adapter observer.
-            pagerAdapter.setManifest(it)
+            pagerAdapter.manifest = it
             pager.setCurrentItem(initialPage, false)
             initialPage = -1
         }

@@ -15,6 +15,7 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
+import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
 import org.greenrobot.eventbus.EventBus
 
@@ -24,17 +25,23 @@ class PageController @AssistedInject internal constructor(
     private val settings: Settings
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
-    interface Callbacks {
-        fun onUpdateActiveCard(card: Card?)
-        fun goToNextPage()
-    }
-
     @AssistedInject.Factory
     interface Factory {
         fun create(binding: TractPageBinding): PageController
     }
 
+    interface Callbacks {
+        fun onUpdateActiveCard(page: Page?, card: Card?)
+        fun showModal(modal: Modal)
+        fun goToNextPage()
+    }
+
     private val heroController = binding.hero.bindController(this)
+    var callbacks: Callbacks?
+        get() = binding.callbacks
+        set(value) {
+            binding.callbacks = value
+        }
 
     init {
         binding.controller = this
@@ -44,6 +51,7 @@ class PageController @AssistedInject internal constructor(
     // region Lifecycle
     override fun onBind() {
         super.onBind()
+        binding.page = model
         heroController.model = model?.hero
         updateVisibleCards()
     }
@@ -65,7 +73,7 @@ class PageController @AssistedInject internal constructor(
     }
 
     override fun onContentEvent(event: Event) {
-        super.onContentEvent(event)
+        checkForModalEvent(event)
         checkForCardEvent(event)
         propagateEventToChildren(event)
     }
@@ -194,8 +202,6 @@ class PageController @AssistedInject internal constructor(
     }
 
     // region PageContentLayout.OnActiveCardListener
-    var callbacks: Callbacks? = null
-
     override fun onActiveCardChanged(activeCard: View?) {
         if (bindingCards) return
 
@@ -203,7 +209,7 @@ class PageController @AssistedInject internal constructor(
         activeCardController = activeCard?.let { cardControllers.firstOrNull { it.root == activeCard } }
         hideHiddenCardsThatArentActive()
         updateVisibleCard(old)
-        callbacks?.onUpdateActiveCard(activeCardController?.model)
+        callbacks?.onUpdateActiveCard(model, activeCardController?.model)
     }
     // endregion PageContentLayout.OnActiveCardListener
 
@@ -228,6 +234,11 @@ class PageController @AssistedInject internal constructor(
     // endregion Cards
 
     // region Content Events
+    private fun checkForModalEvent(event: Event) {
+        model?.modals?.firstOrNull { event.id in it.listeners }
+            ?.let { callbacks?.showModal(it) }
+    }
+
     private fun checkForCardEvent(event: Event) {
         model?.cards?.firstOrNull { event.id in it.listeners }
             ?.let { displayCard(it) }
