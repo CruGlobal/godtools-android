@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_CONTROL_COLOR = "control-color"
 
-class CallToAction : BaseObj {
+class CallToAction : BaseModel {
     companion object {
         // TODO: make this internal
         const val XML_CALL_TO_ACTION = "call-to-action"

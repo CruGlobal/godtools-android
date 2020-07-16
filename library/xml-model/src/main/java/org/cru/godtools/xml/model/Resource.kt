@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser
 private const val XML_FILENAME = "filename"
 private const val XML_SRC = "src"
 
-class Resource : BaseObj {
+class Resource : BaseModel {
     internal companion object {
         internal const val XML_RESOURCE = "resource"
     }

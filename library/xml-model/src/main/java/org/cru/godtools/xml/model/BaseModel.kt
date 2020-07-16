@@ -3,7 +3,7 @@ package org.cru.godtools.xml.model
 import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
-abstract class BaseObj : Base {
+abstract class BaseModel : Base {
     internal companion object {
         internal const val XML_PRIMARY_COLOR = "primary-color"
         internal const val XML_PRIMARY_TEXT_COLOR = "primary-text-color"
