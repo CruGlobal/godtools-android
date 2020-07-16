@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_LABEL = "label"
 
-class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullParser) : Base(parent), Parent {
+class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullParser) : BaseObj(parent), Parent {
     companion object {
         internal const val XML_TAB = "tab"
     }

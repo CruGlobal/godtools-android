@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
-import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.layoutDirection
 import org.greenrobot.eventbus.EventBus
 import kotlin.reflect.KClass
 
-abstract class BaseController<T : Base> protected constructor(
+abstract class BaseController<T : BaseModel> protected constructor(
     private val modelClass: KClass<T>,
     internal val root: View,
     private val parentController: BaseController<*>? = null
@@ -62,7 +62,7 @@ abstract class BaseController<T : Base> protected constructor(
     protected open fun onHidden() = Unit
     // endregion Lifecycle
 
-    fun supportsModel(model: Base?) = modelClass.isInstance(model)
+    fun supportsModel(model: BaseModel?) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = cache.release(modelClass, this)
 
     protected open fun updateLayoutDirection() {

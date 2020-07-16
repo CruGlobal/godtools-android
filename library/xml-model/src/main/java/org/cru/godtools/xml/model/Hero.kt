@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_HEADING = "heading"
 
-class Hero internal constructor(parent: Base, parser: XmlPullParser) : Base(parent), Parent, Styles {
+class Hero internal constructor(parent: BaseModel, parser: XmlPullParser) : BaseObj(parent), Parent, Styles {
     companion object {
         internal const val XML_HERO = "hero"
     }

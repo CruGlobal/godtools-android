@@ -6,7 +6,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
 
-abstract class Content : Base {
+abstract class Content : BaseObj {
     private val restrictTo: Set<DeviceType>
 
     protected constructor(parent: BaseModel) : super(parent) {

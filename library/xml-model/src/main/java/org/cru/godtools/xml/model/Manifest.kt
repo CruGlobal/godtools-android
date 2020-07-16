@@ -39,7 +39,7 @@ private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
 @OptIn(ExperimentalStdlibApi::class)
-class Manifest : Base, Styles {
+class Manifest : BaseObj, Styles {
     companion object {
         @ColorInt
         val DEFAULT_PRIMARY_COLOR = Color.argb(255, 59, 164, 219)

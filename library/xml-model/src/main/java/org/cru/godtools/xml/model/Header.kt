@@ -9,7 +9,7 @@ import org.xmlpull.v1.XmlPullParser
 private const val XML_NUMBER = "number"
 private const val XML_TITLE = "title"
 
-class Header internal constructor(parent: Page, parser: XmlPullParser) : Base(parent), Styles {
+class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseObj(parent), Styles {
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt

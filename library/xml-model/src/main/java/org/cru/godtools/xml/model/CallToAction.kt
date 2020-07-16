@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_CONTROL_COLOR = "control-color"
 
-class CallToAction : Base {
+class CallToAction : BaseObj {
     companion object {
         // TODO: make this internal
         const val XML_CALL_TO_ACTION = "call-to-action"
@@ -21,13 +21,13 @@ class CallToAction : Base {
     @get:ColorInt
     val controlColor get() = _controlColor ?: page.primaryColor
 
-    internal constructor(parent: Base) : super(parent) {
+    internal constructor(parent: BaseModel) : super(parent) {
         label = null
         events = emptySet()
         _controlColor = null
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: BaseModel, parser: XmlPullParser) : super(parent) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION)
 
         events = parseEvents(parser, XML_EVENTS)
@@ -38,7 +38,7 @@ class CallToAction : Base {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
-        parent: Base,
+        parent: BaseModel,
         label: ((CallToAction) -> Text?)? = null,
         events: Set<Event.Id> = emptySet(),
         @ColorInt controlColor: Int? = null

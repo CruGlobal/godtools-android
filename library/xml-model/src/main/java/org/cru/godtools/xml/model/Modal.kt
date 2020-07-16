@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TITLE = "title"
 
-class Modal : Base, Parent, Styles {
+class Modal : BaseObj, Parent, Styles {
     companion object {
         internal const val XML_MODAL = "modal"
     }
@@ -39,7 +39,7 @@ class Modal : Base, Parent, Styles {
     override val textAlign get() = Text.Align.CENTER
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: Base, position: Int) : super(parent) {
+    internal constructor(parent: BaseModel, position: Int) : super(parent) {
         this.position = position
         title = null
         content = emptyList()
@@ -48,7 +48,7 @@ class Modal : Base, Parent, Styles {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    internal constructor(parent: Base, position: Int, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: BaseModel, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODAL)

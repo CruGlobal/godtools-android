@@ -19,7 +19,7 @@ private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
 
-class Page : Base, Styles, Parent {
+class Page : BaseObj, Styles, Parent {
     override val page get() = this
 
     val id get() = fileName ?: "${manifest.code}-$position"

@@ -11,7 +11,7 @@ private const val XML_HIDDEN = "hidden"
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
-class Card : Base, Styles, Parent {
+class Card : BaseObj, Styles, Parent {
     companion object {
         internal const val XML_CARD = "card"
     }
