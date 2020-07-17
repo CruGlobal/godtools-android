@@ -1,5 +1,5 @@
 <tip xmlns="https://mobile-content-api.cru.org/xmlns/training"
-    xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content" type="ask">
     <pages>
         <page>
             <content:text>Page 1</content:text>

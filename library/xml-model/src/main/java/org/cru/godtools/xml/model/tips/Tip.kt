@@ -7,17 +7,33 @@ import org.cru.godtools.xml.model.BaseModel
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TIP = "tip"
+private const val XML_TYPE = "type"
+private const val XML_TYPE_TIP = "tip"
+private const val XML_TYPE_ASK = "ask"
+private const val XML_TYPE_CONSIDER = "consider"
+private const val XML_TYPE_PREPARE = "prepare"
+private const val XML_TYPE_QUOTE = "quote"
 private const val XML_PAGES = "pages"
 
 @OptIn(ExperimentalStdlibApi::class)
 class Tip : BaseModel {
+    enum class Type {
+        ASK, CONSIDER, TIP, PREPARE, QUOTE;
+
+        companion object {
+            internal val DEFAULT = TIP
+        }
+    }
+
     val id: String?
+    val type: Type
     val pages: List<TipPage>
 
     constructor(base: Base, id: String?, parser: XmlPullParser) : super(base) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
 
         this.id = id
+        type = parser.getAttributeValue(null, XML_TYPE)?.toTypeOrNull() ?: Type.DEFAULT
         pages = buildList {
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
@@ -48,4 +64,13 @@ class Tip : BaseModel {
             }
         }
     }
+}
+
+private fun String.toTypeOrNull() = when (this) {
+    XML_TYPE_TIP -> Tip.Type.TIP
+    XML_TYPE_ASK -> Tip.Type.ASK
+    XML_TYPE_CONSIDER -> Tip.Type.CONSIDER
+    XML_TYPE_PREPARE -> Tip.Type.PREPARE
+    XML_TYPE_QUOTE -> Tip.Type.QUOTE
+    else -> null
 }
