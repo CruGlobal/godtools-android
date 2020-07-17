@@ -18,6 +18,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
         android:hint="@{(model.label ?? model.placeholder).text}"
         android:textColorHint="@{TextKt.getTextColor(model.label ?? model.placeholder)}"
         app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}"

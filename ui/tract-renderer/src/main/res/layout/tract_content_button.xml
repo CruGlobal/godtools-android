@@ -12,6 +12,8 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"

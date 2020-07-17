@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="horiz_margin_hero">32dp</dimen>
+    <dimen name="horiz_margin_hero">16dp</dimen>
     <dimen name="horiz_margin_call_to_action_label">32dp</dimen>
     <dimen name="horiz_margin_call_to_action_arrow">8dp</dimen>
-    <dimen name="horiz_margin_modal">32dp</dimen>
+    <dimen name="horiz_margin_modal">16dp</dimen>
+
+    <dimen name="tract_content_margin_horizontal">16dp</dimen>
 
     <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tool.AppBar" />
 </resources>
