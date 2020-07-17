@@ -5,6 +5,8 @@
     tools:context=".activity.TractActivity">
 
     <data>
+        <import type="org.cru.godtools.tract.util.TipTypeKt" />
+
         <variable name="enableTips" type="Boolean" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.tips.InlineTipController" />
         <variable name="model" type="org.cru.godtools.xml.model.tips.InlineTip" />
@@ -19,6 +21,6 @@
         android:text="@string/tract_tips_action_open_inline"
         android:textColor="@color/tract_tips_red"
         app:chipBackgroundColor="@color/white"
-        app:chipIcon="@drawable/ic_tips_tip"
+        app:chipIconResource="@{TipTypeKt.getDrawableRes(model.tip.type)}"
         app:visibleIf="@{enableTips}" />
 </layout>
