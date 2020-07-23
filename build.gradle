@@ -66,7 +66,7 @@ buildscript {
                 test              : '1.2.0',
                 testJUnit         : '1.1.1',
                 viewPager2        : '1.0.0',
-                work              : '2.3.4',
+                work              : '2.4.0',
         ]
         deps.firebase = [
                 core          : '17.4.4',
