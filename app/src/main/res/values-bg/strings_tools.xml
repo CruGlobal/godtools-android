@@ -25,6 +25,6 @@
     <string name="label_tools_about">За приложението</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d език</item>
-        <item quantity="other">%1$,d езици</item>
+        <item quantity="other">%1$,d езика</item>
     </plurals>
 </resources>

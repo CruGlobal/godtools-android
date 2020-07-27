@@ -4,11 +4,13 @@
     <string name="share_prompt">Изберете как искате да споделите</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Общи условия</string>
+    <string name="menu_heading_account">Акаунт</string>
     <string name="menu_heading_share">Споделете</string>
     <string name="menu_heading_legal">Правни условия</string>
     <string name="menu_about">За приложението</string>
     <string name="menu_help">Често задавани въпроси</string>
     <string name="menu_contact_us">Свържете се с нас</string>
+    <string name="menu_tutorial">Ръководство</string>
     <string name="menu_login">Вписване</string>
     <string name="menu_signup">Създаване на акаунт</string>
     <string name="menu_logout">Изход</string>
@@ -19,13 +21,13 @@
     <string name="menu_privacy_policy">Политика за поверителност</string>
     <string name="menu_copyright">Авторско право</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Чуйте как се движи Бог</string>
+    <string name="share_story_subject">GodTools истории</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Езика</string>
     <string name="menu_language_settings">Езикови настройки</string>
     <string name="menu_switch_language">Променете езика</string>
     <string name="title_language_settings">Езикови настройки</string>
-    <string name="title_language_primary">Главен език</string>
+    <string name="title_language_primary">Основен език</string>
     <string name="title_language_parallel">Успореден език</string>
     <string name="action_language_parallel_select">Изберете успореден език</string>
     <string name="text_language_parallel_description">Споделете God Tools с някой на неговия/нейния роден език.</string>

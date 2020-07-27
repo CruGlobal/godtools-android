@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">ຕິດຕັ້ງ</string>
     <string name="menu_share_tool">ແບ່ງປັນ</string>
-    <string name="menu_live_share_publish">ແບ່ງປັນໜ້າຈໍຂອງທ່ານ</string>
     <string name="share_tool_title">ແບ່ງປັນ “%1$s” ໃຊ້ງານ</string>
     <string name="tool_not_found">ບໍ່ພົບເຄື່ອງມືທີ່ທ່ານຂໍ</string>
     <string name="tool_loading">ເຄື່ອງມືທີ່ທ່ານຂໍກຳລັງໂຫຼດ…</string>

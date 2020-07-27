@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">इन्सटॉल करें</string>
     <string name="menu_share_tool">साझा करें</string>
-    <string name="menu_live_share_publish">अपनी स्क्रीन साझा करें</string>
     <string name="share_tool_title">“%1$s” को उपयोग करते हुए साझा करें</string>
     <string name="tool_not_found">अनुरोधित टूल नहीं मिला</string>
     <string name="tool_loading">अनुरोधित टूल लोड हो रहा है ...</string>

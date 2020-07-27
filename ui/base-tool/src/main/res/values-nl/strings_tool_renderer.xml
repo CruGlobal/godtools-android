@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Installeren</string>
     <string name="menu_share_tool">Delen</string>
-    <string name="menu_live_share_publish">Deel je scherm</string>
     <string name="share_tool_title">Deel “%1$s” via</string>
     <string name="tool_not_found">Het gewenste hulpmiddel kan niet gevonden worden</string>
     <string name="tool_loading">Het hulpmiddel dat je hebt opgevraagd wordt geladen…</string>

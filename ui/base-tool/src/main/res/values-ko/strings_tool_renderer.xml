@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">인스톨</string>
     <string name="menu_share_tool">공유</string>
-    <string name="menu_live_share_publish">화면 공유</string>
     <string name="share_tool_title">“%1$s” 사용 공유</string>
     <string name="tool_not_found">귀하가 요청한 툴을 찾을 수 없습니다</string>
     <string name="tool_loading">귀하가 요청한 툴을 로딩 중입니다...</string>

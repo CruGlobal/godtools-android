@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Akosile mi</string>
+    <string name="menu_profile">Ifisoju ise kaakiri Agbaye</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Ifisoju ise</string>
+    <string name="profile_global_activity_heading">%s Ifisoju ise kaakiri Agbaye</string>
+    <string name="profile_activity_unique_users">Awon Olulo ohun elo yii</string>
+    <string name="profile_activity_gospel_presentations">Awọn iwasu Ihinrere</string>
+    <string name="profile_activity_sessions">Awon akoko</string>
+    <string name="profile_activity_countries">Awon orile ede</string>
+</resources>

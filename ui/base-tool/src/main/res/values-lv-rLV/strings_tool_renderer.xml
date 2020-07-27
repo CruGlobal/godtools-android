@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instalēt</string>
     <string name="menu_share_tool">Dalīties</string>
-    <string name="menu_live_share_publish">Kopīgojiet savu ekrānu</string>
     <string name="share_tool_title">Koplietot “%1$s” izmantošanu</string>
     <string name="tool_not_found">Pieprasīto rīku neizdevās atrast</string>
     <string name="tool_loading">Jūsu pieprasītais rīks tiek ielādēts…</string>

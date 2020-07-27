@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Inštalovať</string>
     <string name="tract_card_previous">Predch.</string>
     <string name="tract_card_next">Ďalej</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Zdieľať vašu obrazovku</string>
 </resources>

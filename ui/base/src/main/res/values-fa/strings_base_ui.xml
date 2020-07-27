@@ -2,7 +2,7 @@
 <resources>
     <string name="toast_unable_to_launch_activity">نمی‌توان باز کرد %s</string>
     <!-- Tool Categories -->
-    <string name="tool_category_gospel">دعوتنامه گاسپل</string>
+    <string name="tool_category_gospel">دعوتنامه انجیل</string>
     <string name="tool_category_articles">مقاله‌ها</string>
     <string name="tool_category_conversation_starter">آغازگر مکالمه</string>
     <string name="tool_category_growth">کریستین گروث</string>

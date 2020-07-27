@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">સ્થાપિત કરો</string>
     <string name="menu_share_tool">વહેંચો</string>
     <string name="share_tool_title">%1$s નો ઉપયોગ કરી વહેંચો</string>
     <string name="tool_not_found">જે સાધન/ટુલ તમે માંગો છો તે જડતું નથી</string>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Моят профил</string>
+    <string name="menu_profile">Глобална активност</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Активност</string>
+    <string name="profile_global_activity_heading">%s глобална активност</string>
+    <string name="profile_activity_unique_users">Уникални потребители</string>
+    <string name="profile_activity_gospel_presentations">Презентации на Евангелието</string>
+    <string name="profile_activity_sessions">Сесии</string>
+    <string name="profile_activity_countries">Държави</string>
+</resources>

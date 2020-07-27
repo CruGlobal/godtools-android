@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">Fi sori ẹrọ re</string>
+    <string name="tract_card_previous">Isaju</string>
+    <string name="tract_card_next">Ti o tele</string>
+    <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Se ajopin oju iwo ero ilewo re</string>
+    <string name="tract_live_share_starting">Bibẹrẹ sise ajopin oju abala app naa…</string>
+    <string name="tract_live_share_unable_to_connect">O ni isoro lati ni asopo pelu abala sise ajopin</string>
+</resources>

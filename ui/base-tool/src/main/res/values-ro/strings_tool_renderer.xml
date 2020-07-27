@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instalează</string>
     <string name="menu_share_tool">Distribuie</string>
-    <string name="menu_live_share_publish">Partajează ecranul</string>
     <string name="share_tool_title">Distribuie “%1$s” folosind</string>
     <string name="tool_not_found">Instrumentul solicitat nu poate fi găsit</string>
     <string name="tool_loading">Instrumentul solicitat se încarcă...</string>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">ఇన్‌స్టాల్ చేయి</string>
     <string name="menu_share_tool">పంచుకోండి</string>
-    <string name="menu_live_share_publish">మీ స్క్రీన్ పంచుకోండి</string>
     <string name="share_tool_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>
     <string name="tool_not_found">మీరు అభ్యర్థించిన పరికరము కనుగొనబడలేదు</string>
     <string name="tool_loading">మీ అభ్యర్థించిన పరికరము లోడ్ అవుతున్నది…</string>

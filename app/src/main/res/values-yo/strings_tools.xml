@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_find_tools">Wa Awọn ohun elo</string>
+    <string name="nav_my_tools">Awon ohun elo mi</string>
+    <string name="nav_favorite_tools">Aayo</string>
+    <string name="nav_all_tools">Gbogbo awon ohun elo</string>
+    <string name="action_tools_about">Nipa</string>
+    <string name="action_tools_open">Sii</string>
+    <string name="title_add_new_tools">Ṣafikun Awọn ohun elo titun</string>
+    <string name="tools_list_remove_favorite_dialog_title">Yọ \"%1$s\" kuro ninu awon aayo?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Yoo kuro</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Paa re</string>
+    <string name="tools_list_favorites_banner_text">Lati je ki o ni anfani si ohun elo kan lai lo interneti te  aami okan eyiti yo ṣe afikun ohun elo naa si awọn aayo rẹ.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Mu kuro</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Fi kun oju iworan</string>
+    <string name="action_tools_open_tool">Si Ohun elo naa</string>
+    <string name="action_tools_add_favorite">Fi kun aayo</string>
+    <string name="action_tools_remove_favorite">Yo kuro ninu Aayo</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d Awọn iwo</item>
+    </plurals>
+    <string name="label_tools_about">Nipa</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d Awon ede</item>
+    </plurals>
+</resources>

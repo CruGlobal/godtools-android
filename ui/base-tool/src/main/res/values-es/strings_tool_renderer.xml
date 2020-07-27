@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instalar</string>
     <string name="menu_share_tool">Compartir</string>
-    <string name="menu_live_share_publish">Comparte tu pantalla</string>
     <string name="share_tool_title">Comparte “%1$s” mediante</string>
     <string name="tool_not_found">No se puede encontrar la herramienta que has solicitado</string>
     <string name="tool_loading">Se está cargando la herramienta que has solicitado...</string>
