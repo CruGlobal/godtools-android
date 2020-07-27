@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ഇൻസ്ടോൾ ചെയ്യുക</string>
     <string name="tract_card_previous">മുമ്പത്തെ</string>
     <string name="tract_card_next">അടുത്തത്</string>
     <!-- Live Sharing -->

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Asenna</string>
     <string name="menu_share_tool">Jaa</string>
-    <string name="menu_live_share_publish">Jaa näyttösi</string>
     <string name="share_tool_title">Jaa “%1$s”</string>
     <string name="tool_not_found">Haluamaasi työkalua ei löydy</string>
     <string name="tool_loading">Haluamaasi työkalua ladataan…</string>

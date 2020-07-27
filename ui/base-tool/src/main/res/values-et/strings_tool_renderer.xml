@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Installi</string>
     <string name="menu_share_tool">Jagamine</string>
-    <string name="menu_live_share_publish">Jaga ekraani</string>
     <string name="share_tool_title">Jaga “%1$s” jagamist</string>
     <string name="tool_not_found">Soovitud tööriista ei leitud</string>
     <string name="tool_loading">Soovitud tööriista laadimine ...</string>

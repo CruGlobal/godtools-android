@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">인스톨</string>
     <string name="tract_card_previous">이전</string>
     <string name="tract_card_next">다음</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">화면 공유</string>
 </resources>

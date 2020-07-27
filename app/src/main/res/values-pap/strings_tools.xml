@@ -11,6 +11,8 @@
     <string name="tools_list_remove_favorite_dialog_title">Kita “%1$s” for di lista di Faboritonan?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Kita</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Kanselá</string>
+    <string name="tools_list_favorites_banner_text">Hasi un hèrmènt aksesibel sin internèt dor di klek riba e boton di kurason i e lo bai den bo lista di faboritonan.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Deskartá</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Agregá na bo Pantaya prinsipal</string>
     <string name="action_tools_open_tool">Habri e Hèrmènt</string>

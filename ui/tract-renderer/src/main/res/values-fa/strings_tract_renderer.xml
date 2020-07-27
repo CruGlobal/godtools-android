@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">نصب</string>
+    <string name="menu_share_tract">ارسال این ابزار</string>
     <string name="tract_card_previous">قبلی</string>
     <string name="tract_card_next">بعدی</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">صفحه نمایش خود را به اشتراک بگذارید</string>
+    <string name="tract_live_share_starting">شروع اشتراک گذاری صفحه</string>
+    <string name="tract_live_share_unable_to_connect">عدم  اشتراک گذاری صفحه</string>
 </resources>

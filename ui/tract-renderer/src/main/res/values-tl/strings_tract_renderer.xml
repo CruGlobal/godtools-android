@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">I-install</string>
     <string name="tract_card_previous">Nauna</string>
     <string name="tract_card_next">Susunod</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Ibahagi ang iyong screen</string>
 </resources>

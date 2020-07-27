@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ਇੰਸਟਾਲ ਕਰੋ</string>
     <string name="tract_card_previous">ਪਿਛਲਾ</string>
     <string name="tract_card_next">ਅਗਲਾ</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">ਆਪਣੀ ਸਕਰੀਨ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
 </resources>

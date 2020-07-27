@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Pasang</string>
     <string name="menu_share_tool">Berbagi</string>
-    <string name="menu_live_share_publish">Bagikan layar Anda</string>
     <string name="share_tool_title">Berbagi \"%1$s\" menggunakan</string>
     <string name="tool_not_found">Alat yang Anda minta tidak tersedia</string>
     <string name="tool_loading">Alat yang Anda minta sedang dimuat....</string>

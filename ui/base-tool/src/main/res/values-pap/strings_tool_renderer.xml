@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instalá</string>
     <string name="menu_share_tool">Kompartí</string>
     <string name="share_tool_title">Kompartí “%1$s” uzando</string>
+    <string name="share_tool_message_article">Mi ke a kompartí e artíkulo aki ku bo i lo mi ke tende ki bo ta pensa di dje.\n\n%1$s</string>
     <string name="tool_not_found">No por haña e hèrmènt ku bo ta buska</string>
     <string name="tool_loading">E hèrmènt ku bo a pidi ta kargando...</string>
+    <string name="tool_offline">E hèrmènt ku bo a pidi tin mester di konekshon di internèt pa e habri</string>
     <string name="feature_discovery_title_share_tool">Kompartí un lenk</string>
     <string name="feature_discovery_desc_share_tool">Manda e hèrmènt aki pa un amigu dor di primi riba e boton aki</string>
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">O n ni isoro lati ṣii %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Ipe si ihinrere</string>
+    <string name="tool_category_articles">Awon akosile</string>
+    <string name="tool_category_conversation_starter">Ipinle ibaraeni soro</string>
+    <string name="tool_category_growth">Idagbasoke Kristieni</string>
+    <string name="tool_category_training">Idanileko</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Adiresi ayelujara yii yoo mu ọ lọ si eda ori alatagba ohun ti a sọrọ nipa loni: %1$s\n\ n
+
+O le se  igbasilẹ app yi lati https://godtoolsapp.com\n\n
+
+Jẹ ki a so ọrọ diẹ sii!</string>
+</resources>

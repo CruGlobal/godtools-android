@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Инсталирај</string>
     <string name="menu_share_tool">Подели</string>
-    <string name="menu_live_share_publish">Подели екран</string>
     <string name="share_tool_title">Подели “%1$s” користећи</string>
     <string name="tool_not_found">Алатка коју сте тражили није могуће пронаћи</string>
     <string name="tool_loading">Алатка коју сте тражили се учитава…</string>

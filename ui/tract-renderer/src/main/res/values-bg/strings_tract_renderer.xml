@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Инсталиране</string>
+    <string name="menu_share_tract">Изпратете този инструмент</string>
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Напред</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Сподели екрана си</string>
+    <string name="tract_live_share_starting">Започва споделяне на екрана...</string>
+    <string name="tract_live_share_unable_to_connect">Не може да се свърже със Споделяне на екрана</string>
 </resources>

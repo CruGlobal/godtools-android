@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">ইনস্টল করুন</string>
     <string name="menu_share_tool">শেয়ার করুন</string>
     <string name="share_tool_title">"\"%1$s\" ব্যবহার করে শেয়ার করুন "</string>
     <string name="tool_not_found">আপনি যা সরঞ্জাম খুজছেন তা পাওয়া যাচ্ছে না</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ይጫኑ</string>
     <string name="tract_card_previous">ቀዳሚ።</string>
     <string name="tract_card_next">ቀጣይ</string>
     <!-- Live Sharing -->

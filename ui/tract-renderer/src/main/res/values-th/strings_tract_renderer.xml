@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">ติดตั้ง</string>
     <string name="tract_card_previous">ก่อนหน้า</string>
     <string name="tract_card_next">ถัดไป</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">แชร์หน้าจอของคุณ</string>
 </resources>

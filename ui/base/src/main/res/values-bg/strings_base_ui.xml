@@ -2,7 +2,7 @@
 <resources>
     <string name="toast_unable_to_launch_activity">Неуспешно отваряне %s</string>
     <!-- Tool Categories -->
-    <string name="tool_category_gospel">Покана за евангелието</string>
+    <string name="tool_category_gospel">Презентация на Евангелието</string>
     <string name="tool_category_articles">Статии</string>
     <string name="tool_category_conversation_starter">Започване на разговор</string>
     <string name="tool_category_growth">Християнско израстване</string>

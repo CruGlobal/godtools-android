@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">इन्स्टाॅल करा.</string>
     <string name="menu_share_tool">"सांगा
        "</string>
-    <string name="menu_live_share_publish">आपली स्क्रीन शेअर करा</string>
     <string name="share_tool_title">सांगा “%1$s” उपयोग करून</string>
     <string name="tool_not_found">आपण विनंती केलेले साधन आढळले नाही</string>
     <string name="tool_loading">आपण विनंती केलेले साधन लोड होत आहे</string>

@@ -3,11 +3,14 @@
     <string name="toast_unable_to_launch_activity">Inkapás pa habri %s</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">Invitashon di e Evangelio</string>
+    <string name="tool_category_articles">Artíkulonan</string>
+    <string name="tool_category_conversation_starter">Start un kombersashon</string>
+    <string name="tool_category_growth">Kresementu komo Kristian</string>
     <string name="tool_category_training">Entrenamentu</string>
     <!-- Sharing -->
-    <string name="share_general_message">At\'akí e lenk pa deskargá e app ku nos tabata wak awe: https://godtoolsapp.com \n\n
+    <string name="share_general_message">E lenk aki lo hiba bo na e wèpsait di loke nos tabata papia: %1$s \n\n
 
-At\'akí e lenk pa e vershon di e app riba wèb %1$s \n\n
+Bo por baha e app na: https://godtoolsapp.com \n\n
 
-Laga nos papia mas!</string>
+Laga nos papia un tiki mas!</string>
 </resources>

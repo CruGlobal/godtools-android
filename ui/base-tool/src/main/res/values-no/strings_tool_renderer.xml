@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Installer</string>
     <string name="menu_share_tool">Del</string>
-    <string name="menu_live_share_publish">Del skjermen din</string>
     <string name="share_tool_title">Del «%1$s» med</string>
     <string name="tool_not_found">Vi kunne ikke finne det forespurte verktøyet</string>
     <string name="tool_loading">Verktøyet du forespurte lastes inn …</string>

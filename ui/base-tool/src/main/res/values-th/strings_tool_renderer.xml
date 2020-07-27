@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">ติดตั้ง</string>
     <string name="menu_share_tool">แชร์</string>
-    <string name="menu_live_share_publish">แชร์หน้าจอของคุณ</string>
     <string name="share_tool_title">แชร์การใช้ “%1$s”</string>
     <string name="tool_not_found">ไม่พบเครื่องมือที่คุณร้องขอ</string>
     <string name="tool_loading">กำลังโหลดเครื่องมือที่คุณร้องขอ…</string>

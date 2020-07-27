@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Cài đặt</string>
     <string name="menu_share_tool">Chia sẻ</string>
-    <string name="menu_live_share_publish">Chia sẻ màn hình của bạn</string>
     <string name="share_tool_title">Chia sẻ “%1$s” sử dụng</string>
     <string name="tool_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
     <string name="tool_loading">Công cụ bạn yêu cầu đang tải...</string>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instaliraj</string>
     <string name="menu_share_tool">Podijeli</string>
-    <string name="menu_live_share_publish">Podijelite svoj zaslon</string>
     <string name="share_tool_title">Podijeli “%1$s” uporabom</string>
     <string name="tool_not_found">Alat koji ste tražili nije moguće pronaći</string>
     <string name="tool_loading">Alat koji ste tražili se učitava...</string>

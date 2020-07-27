@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Simika</string>
     <string name="tract_card_previous">Iliyopita</string>
     <string name="tract_card_next">Ifuatayo</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Onyeshana skrini yako</string>
 </resources>

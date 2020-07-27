@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">התקן</string>
     <string name="menu_share_tool">שתף</string>
-    <string name="menu_live_share_publish">שתף את המסך שלך</string>
     <string name="share_tool_title">שתפו את \"%1$s\" בעזרת</string>
     <string name="tool_not_found">לא ניתן למצוא את הכלי שביקשת</string>
     <string name="tool_loading">הכלי שביקשת נטען...</string>
