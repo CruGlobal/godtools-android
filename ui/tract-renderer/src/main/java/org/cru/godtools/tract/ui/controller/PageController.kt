@@ -216,7 +216,7 @@ class PageController @AssistedInject internal constructor(
     // region CardController.Callbacks
     override fun onToggleCard(controller: CardController) {
         settings.setFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED)
-        binding.pageContentLayout.apply { changeActiveCard(controller.root.takeUnless { root === activeCard }, true) }
+        binding.pageContentLayout.apply { changeActiveCard(controller.root.takeUnless { it === activeCard }, true) }
     }
 
     override fun onPreviousCard() {
