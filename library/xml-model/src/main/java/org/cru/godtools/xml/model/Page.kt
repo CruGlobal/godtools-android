@@ -65,7 +65,12 @@ class Page : BaseModel, Styles, Parent {
     override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(manifest: Manifest, position: Int, fileName: String? = null) : super(manifest) {
+    constructor(
+        manifest: Manifest,
+        position: Int = 0,
+        fileName: String? = null,
+        cards: ((Page) -> List<Card>?)? = null
+    ) : super(manifest) {
         this.position = position
         this.fileName = fileName
 
@@ -83,7 +88,7 @@ class Page : BaseModel, Styles, Parent {
 
         header = null
         hero = null
-        cards = emptyList()
+        this.cards = cards?.invoke(this).orEmpty()
         modals = emptyList()
         callToAction = CallToAction(this)
     }
