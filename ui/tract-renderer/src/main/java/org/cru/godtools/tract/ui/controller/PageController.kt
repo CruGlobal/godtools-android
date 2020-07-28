@@ -3,6 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.content.SharedPreferences
 import android.view.View
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
 import androidx.core.util.Pools
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -96,7 +97,9 @@ class PageController @AssistedInject internal constructor(
     // region Cards
     private var enabledHiddenCards = mutableSetOf<String>()
     private var visibleCards = emptyList<Card>()
-    private var cardControllers = emptyList<CardController>()
+    @VisibleForTesting
+    internal var cardControllers = emptyList<CardController>()
+        private set
     private var activeCardController: CardController? = null
     val activeCard get() = activeCardController?.model
 
@@ -216,7 +219,7 @@ class PageController @AssistedInject internal constructor(
     // region CardController.Callbacks
     override fun onToggleCard(controller: CardController) {
         settings.setFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED)
-        binding.pageContentLayout.apply { changeActiveCard(controller.root.takeUnless { root === activeCard }, true) }
+        binding.pageContentLayout.apply { changeActiveCard(controller.root.takeUnless { it === activeCard }, true) }
     }
 
     override fun onPreviousCard() {

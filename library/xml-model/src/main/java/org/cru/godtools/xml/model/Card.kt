@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_TRACT
@@ -77,6 +78,26 @@ class Card : BaseModel, Styles, Parent {
         }
         this.analyticsEvents = analyticsEvents.orEmpty()
         this.label = label
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(parent: Page, position: Int = 0) : super(parent) {
+        this.position = position
+
+        isHidden = false
+        listeners = emptySet()
+        dismissListeners = emptySet()
+        analyticsEvents = emptySet()
+
+        _backgroundColor = null
+        _backgroundImage = null
+        backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
+        backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        _textColor = null
+
+        label = null
+        content = emptyList()
     }
 }
 
