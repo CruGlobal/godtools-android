@@ -2,6 +2,7 @@ package org.cru.godtools.base
 
 import android.app.Activity
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -28,5 +29,16 @@ class SettingsTest {
         assertTrue(settings.isFeatureDiscovered(FEATURE_TEST))
         settings.setFeatureDiscovered(FEATURE_TEST)
         assertTrue(settings.isFeatureDiscovered(FEATURE_TEST))
+    }
+
+    @Test
+    fun verifyFeatureDiscoveryTutorialOnboardingUpgrade() {
+        settings.firstLaunchVersion = 1
+        assertTrue(settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING))
+    }
+
+    @Test
+    fun verifyFeatureDiscoveryTutorialOnboardingNewInstall() {
+        assertFalse(settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING))
     }
 }

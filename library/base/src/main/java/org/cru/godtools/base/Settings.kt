@@ -132,10 +132,11 @@ class Settings @VisibleForTesting internal constructor(private val context: Cont
     // endregion Campaign Tracking
 
     // region Launch tracking
-    private var firstLaunchVersion
+    @VisibleForTesting
+    internal var firstLaunchVersion
         get() = prefs.getInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE)
         set(value) = prefs.edit { putInt(PREF_VERSION_FIRST_LAUNCH, value) }
-    var lastLaunchVersion
+    private var lastLaunchVersion
         get() = prefs.getInt(PREF_VERSION_LAST_LAUNCH, -1).takeUnless { it == -1 }
         private set(value) = prefs.edit { putInt(PREF_VERSION_LAST_LAUNCH, value ?: BuildConfig.VERSION_CODE) }
     var launches
