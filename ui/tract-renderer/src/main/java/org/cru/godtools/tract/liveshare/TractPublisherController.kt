@@ -51,6 +51,7 @@ class TractPublisherController @AssistedInject constructor(
             if (value) stateMachine.transition(Event.Start) else stateMachine.transition(Event.Stop)
         }
 
+    internal val state = MutableLiveData<State>(State.Off)
     private val stateMachine = StateMachine.create<State, Event, Unit> {
         initialState(State.Off)
         state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
@@ -99,6 +100,8 @@ class TractPublisherController @AssistedInject constructor(
                 referenceLifecycle.release(this@TractPublisherController)
             }
         }
+
+        onTransition { if (it is StateMachine.Transition.Valid) state.value = it.toState }
     }
 
     init {

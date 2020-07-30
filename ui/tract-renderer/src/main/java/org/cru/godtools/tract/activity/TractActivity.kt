@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
@@ -42,9 +43,11 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
+import org.cru.godtools.tract.liveshare.State
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
+import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
@@ -107,6 +110,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
         setupDataModel()
         setupActiveTranslationManagement()
+        attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary()
     }
 
@@ -490,5 +494,16 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         event.page?.let { goToPage(it) }
         eventBus.post(event)
     }
+
+    // region Exit Live Share Publishing
+    private fun attachLiveSharePublishExitBehavior() {
+        onBackPressedDispatcher.addCallback(this, false) { showExitLiveShareDialog() }
+            .also { c -> publisherController.state.observe(this) { c.isEnabled = it == State.On } }
+    }
+
+    private fun showExitLiveShareDialog() {
+        LiveShareExitDialogFragment().show(supportFragmentManager, null)
+    }
+    // endregion Exit Live Share Publishing
     // endregion Live Share Logic
 }
