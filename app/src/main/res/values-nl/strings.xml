@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ talen</string>
     <string name="menu_language_settings">Taal Instellingen</string>
-    <string name="menu_switch_language">Veranderen van Taal</string>
     <string name="title_language_settings">Taal Instellingen</string>
     <string name="title_language_primary">Hoofdtaal</string>
     <string name="title_language_parallel">Parallelle Taal</string>

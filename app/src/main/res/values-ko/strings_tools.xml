@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">도구 찾기</string>
-    <string name="nav_my_tools">내 도구</string>
     <string name="nav_favorite_tools">즐겨찾기</string>
     <string name="nav_all_tools">모든 도구</string>
     <string name="action_tools_about">정보</string>
     <string name="action_tools_open">열기</string>
-    <string name="title_add_new_tools">새 툴 추가</string>
     <string name="tools_list_remove_favorite_dialog_title">즐겨찾기에서 “%1$s”을(를) 제거할까요?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">제거</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">취소</string>

@@ -2,13 +2,10 @@
 <resources>
     <!-- Tools List UI -->
     <eat-comment />
-    <string name="nav_find_tools">Find Tools</string>
-    <string name="nav_my_tools">My Tools</string>
     <string name="nav_favorite_tools">Favorites</string>
     <string name="nav_all_tools">All Tools</string>
     <string name="action_tools_about">About</string>
     <string name="action_tools_open">Open</string>
-    <string name="title_add_new_tools">Add New Tools</string>
     <string name="tools_list_remove_favorite_dialog_title">Remove “%1$s” from Favorites?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Remove</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancel</string>

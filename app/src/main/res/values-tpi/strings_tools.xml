@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Painim Ol Tul</string>
-    <string name="nav_my_tools">Ol Tul bilong mi</string>
     <!-- Tool Details UI -->
 </resources>

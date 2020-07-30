@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Vind hulpmiddels</string>
-    <string name="nav_my_tools">My hulpmiddels</string>
     <string name="nav_favorite_tools">Gunstelinge</string>
     <string name="nav_all_tools">Alle hulpmiddels</string>
     <string name="action_tools_about">Aangaande</string>
     <string name="action_tools_open">Maak oop</string>
-    <string name="title_add_new_tools">Voeg nuwe Hulpmiddels by</string>
     <string name="tools_list_remove_favorite_dialog_title">Verwyder \"%1$s\" van Gunstelinge?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Verwyder</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Kanselleer</string>

@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+Tale</string>
     <string name="menu_language_settings">Taalinstellings</string>
-    <string name="menu_switch_language">Verander taal</string>
     <string name="title_language_settings">Taalinstellings</string>
     <string name="title_language_primary">Primêre taal</string>
     <string name="title_language_parallel">Parallele taal</string>

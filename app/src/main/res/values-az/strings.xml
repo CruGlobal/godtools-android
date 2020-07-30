@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ dil</string>
     <string name="menu_language_settings">Dil parametrləri</string>
-    <string name="menu_switch_language">Dili dəyiş</string>
     <string name="title_language_settings">Dil parametrləri</string>
     <string name="title_language_primary">Əsas dil</string>
     <string name="title_language_parallel">Paralel dil</string>

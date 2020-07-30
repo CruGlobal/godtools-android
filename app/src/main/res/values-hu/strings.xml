@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ nyelv</string>
     <string name="menu_language_settings">Nyelvbeállítások</string>
-    <string name="menu_switch_language">Nyelv váltása</string>
     <string name="title_language_settings">Nyelvbeállítások</string>
     <string name="title_language_primary">Elsődleges nyelv</string>
     <string name="title_language_parallel">Párhuzamos nyelv</string>

@@ -24,7 +24,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Idioma</string>
     <string name="menu_language_settings">Ahuste di Idioma</string>
-    <string name="menu_switch_language">Kambia di Idioma</string>
     <string name="title_language_settings">Ahuste di Idioma</string>
     <string name="title_language_primary">Idioma Primario</string>
     <string name="title_language_parallel">Idioma Paralelo</string>

@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Bahasa</string>
     <string name="menu_language_settings">Pengaturan Bahasa</string>
-    <string name="menu_switch_language">Ganti Bahasa</string>
     <string name="title_language_settings">Pengaturan Bahasa</string>
     <string name="title_language_primary">Bahasa Utama</string>
     <string name="title_language_parallel">Bahasa Paralel</string>

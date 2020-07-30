@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Wa Awọn ohun elo</string>
-    <string name="nav_my_tools">Awon ohun elo mi</string>
     <string name="nav_favorite_tools">Aayo</string>
     <string name="nav_all_tools">Gbogbo awon ohun elo</string>
     <string name="action_tools_about">Nipa</string>
     <string name="action_tools_open">Sii</string>
-    <string name="title_add_new_tools">Ṣafikun Awọn ohun elo titun</string>
     <string name="tools_list_remove_favorite_dialog_title">Yọ \"%1$s\" kuro ninu awon aayo?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Yoo kuro</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Paa re</string>

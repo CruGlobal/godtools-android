@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Tìm Công cụ</string>
-    <string name="nav_my_tools">Công cụ của Tôi</string>
     <string name="nav_favorite_tools">Ưa thích</string>
     <string name="nav_all_tools">Tất cả Công cụ</string>
     <string name="action_tools_about">Giới thiệu về</string>
     <string name="action_tools_open">Mở</string>
-    <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
     <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" khỏi Ưa thích?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>

@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Понад 80 мов</string>
     <string name="menu_language_settings">Налаштування мови</string>
-    <string name="menu_switch_language">Змінити мову</string>
     <string name="title_language_settings">Налаштування мови</string>
     <string name="title_language_primary">Основна мова</string>
     <string name="title_language_parallel">Додаткова мова</string>

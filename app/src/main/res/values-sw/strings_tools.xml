@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Pata Zana</string>
-    <string name="nav_my_tools">Zana Zangu</string>
     <string name="nav_favorite_tools">Vipendwa</string>
     <string name="nav_all_tools">Zana Zote</string>
     <string name="action_tools_about">Kuhusu</string>
     <string name="action_tools_open">Fungua</string>
-    <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
     <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>

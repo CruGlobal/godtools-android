@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၈၀  ကျော်</string>
     <string name="menu_language_settings">"ဘာသာစကား၏ ဆက်တင်များ "</string>
-    <string name="menu_switch_language">ဘာသာ စကားကို ပြောင်းရန်</string>
     <string name="title_language_settings">ဘာသာစကားကို ဆက်တင်ချပါ</string>
     <string name="title_language_primary">အဓိကအသုံးပြု သောဘာသာစကား</string>
     <string name="title_language_parallel">ယှဉ်တွဲ အသုံးပြုနိုင် သောဘာသာစကား</string>

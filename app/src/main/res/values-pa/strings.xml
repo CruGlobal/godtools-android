@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ ਭਾਸ਼ਾਵਾਂ</string>
     <string name="menu_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
-    <string name="menu_switch_language">ਭਾਸ਼ਾ ਨੂੰ ਬਦਲੋ</string>
     <string name="title_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
     <string name="title_language_primary">ਮੂਲ ਭਾਸ਼ਾ</string>
     <string name="title_language_parallel">ਸਮਾਨੰਤਰ ਭਾਸ਼ਾ</string>

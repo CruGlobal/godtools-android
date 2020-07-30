@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Lugha Themanini na Zaidi</string>
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
-    <string name="menu_switch_language">Badilisha lugha</string>
     <string name="title_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_primary">Lugha ya Msingi</string>
     <string name="title_language_parallel">Lugha Sambamba</string>

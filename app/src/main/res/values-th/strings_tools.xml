@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">ค้นหาเครื่องมือ</string>
-    <string name="nav_my_tools">เครื่องมือของฉัน</string>
     <string name="nav_favorite_tools">รายการโปรด</string>
     <string name="nav_all_tools">เครื่องมือทั้งหมด</string>
     <string name="action_tools_about">เกี่ยวกับ</string>
     <string name="action_tools_open">เปิด</string>
-    <string name="title_add_new_tools">เพิ่มเครื่องมือใหม่</string>
     <string name="tools_list_remove_favorite_dialog_title">ลบ “%1$s\" จากรายการโปรด</string>
     <string name="tools_list_remove_favorite_dialog_confirm">ลบ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">ยกเลิก</string>

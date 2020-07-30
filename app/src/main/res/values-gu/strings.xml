@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સુયોજન</string>
-    <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
     <string name="title_language_settings">ભાષા સુયોજન</string>
     <string name="title_language_primary">પ્રાથમિક ભાષા</string>
     <string name="title_language_parallel">સમાંતર ભાષા</string>

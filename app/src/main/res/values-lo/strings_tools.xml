@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">ຫາເຄື່ອງມື</string>
-    <string name="nav_my_tools">ເຄື່ອງມືຂອງຂ້ອຍ</string>
     <string name="nav_favorite_tools">ລາຍການທີ່ມັກ</string>
     <string name="nav_all_tools">ເຄື່ອງມືທັງໝົດ</string>
     <string name="action_tools_about">ກ່ຽວກັບ</string>
     <string name="action_tools_open">ເປີດ</string>
-    <string name="title_add_new_tools">ເພິ່ມເຄື່ອງມືໃໝ່</string>
     <string name="tools_list_remove_favorite_dialog_title">ລຶບ “%1$s” ອອກຈາກລາຍການທີ່ມັກບໍ?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">ລຶບ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">ຍົກເລີກ</string>

@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">"70+ भाषाहरु "</string>
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>
-    <string name="menu_switch_language">"भाषा बदल्नु होस् "</string>
     <string name="title_language_settings">बहसलाई चुन्नुहोस</string>
     <string name="title_language_primary">मुख्य भाषा</string>
     <string name="title_language_parallel">समान्तर भाषा</string>

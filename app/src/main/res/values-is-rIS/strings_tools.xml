@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Finna tól</string>
-    <string name="nav_my_tools">Mín tól</string>
     <string name="nav_favorite_tools">Uppáhalds</string>
     <string name="nav_all_tools">Öll tól</string>
     <string name="action_tools_about">Um</string>
     <string name="action_tools_open">Opna</string>
-    <string name="title_add_new_tools">Bæta við nýjum tólum</string>
     <string name="tools_list_remove_favorite_dialog_title">Fjarlægja \"%1$s\" úr Uppáhalds?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Fjarlægja</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Hætta við</string>

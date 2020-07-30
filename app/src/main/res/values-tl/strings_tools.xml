@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Makahanap ng Mga Tool</string>
-    <string name="nav_my_tools">Mga Tool Ko</string>
     <string name="nav_favorite_tools">Mga Paborito</string>
     <string name="nav_all_tools">Lahat ng Tool</string>
     <string name="action_tools_about">Tungkol dito</string>
     <string name="action_tools_open">Buksan</string>
-    <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
     <string name="tools_list_remove_favorite_dialog_title">Alisin ang “%1$s” sa Mga Paborito?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Alisin</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Kanselahin</string>

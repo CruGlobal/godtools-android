@@ -24,7 +24,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80多种语言</string>
     <string name="menu_language_settings">语言设置</string>
-    <string name="menu_switch_language">切换语言</string>
     <string name="title_language_settings">语言设置</string>
     <string name="title_language_primary">主要语言</string>
     <string name="title_language_parallel">同步语言</string>

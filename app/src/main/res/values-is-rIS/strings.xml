@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ tungumál</string>
     <string name="menu_language_settings">Tungumálastillingar</string>
-    <string name="menu_switch_language">Skipta um tungumál</string>
     <string name="title_language_settings">Tungumálastillingar</string>
     <string name="title_language_primary">Aðaltungumál</string>
     <string name="title_language_parallel">Hliðstætt tungumál</string>

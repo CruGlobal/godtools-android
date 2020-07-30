@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ከ 70 በላይ ቋንቋዎች</string>
     <string name="menu_language_settings">የቋንቋ ማስተካከያ</string>
-    <string name="menu_switch_language">ቋንቋ ይቀይሩ</string>
     <string name="title_language_settings">የቋንቋ ማስተካከያ</string>
     <string name="title_language_primary">ዋና ቋንቋ</string>
     <string name="title_language_parallel">ሁለት ቋንቋ</string>

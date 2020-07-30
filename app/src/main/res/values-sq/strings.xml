@@ -20,7 +20,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ gjuhët</string>
     <string name="menu_language_settings">Kushtet e gjuhës</string>
-    <string name="menu_switch_language">Ndërro gjuhë</string>
     <string name="title_language_settings">Kushtet e gjuhës</string>
     <string name="title_language_primary">Gjuha kryesore</string>
     <string name="title_language_parallel">Gjuha paralele</string>

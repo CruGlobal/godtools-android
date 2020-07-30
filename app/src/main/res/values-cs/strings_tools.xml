@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Najít nástroje</string>
-    <string name="nav_my_tools">Moje nástroje</string>
     <string name="nav_favorite_tools">Oblíbené</string>
     <string name="nav_all_tools">Všechny nástroje</string>
     <string name="action_tools_about">O nás</string>
     <string name="action_tools_open">Otevřít</string>
-    <string name="title_add_new_tools">Přidat nové nástroje</string>
     <string name="tools_list_remove_favorite_dialog_title">Odstranit \"%1$s” z Oblíbených?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Odstranit</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Zrušit</string>

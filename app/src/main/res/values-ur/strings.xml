@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ زبانیں</string>
     <string name="menu_language_settings">زبان سیٹِنگز</string>
-    <string name="menu_switch_language">زبان سوئچ کریں</string>
     <string name="title_language_settings">زبان سیٹِنگز</string>
     <string name="title_language_primary">بنیادی زبان</string>
     <string name="title_language_parallel">متوازی زبان</string>

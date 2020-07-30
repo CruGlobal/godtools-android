@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Oltre 80 lingue</string>
     <string name="menu_language_settings">Impostazioni della lingua</string>
-    <string name="menu_switch_language">Cambia lingua</string>
     <string name="title_language_settings">Impostazioni della lingua</string>
     <string name="title_language_primary">Lingua principale</string>
     <string name="title_language_parallel">Lingua parallela</string>

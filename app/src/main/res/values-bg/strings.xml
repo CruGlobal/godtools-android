@@ -25,7 +25,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Езика</string>
     <string name="menu_language_settings">Езикови настройки</string>
-    <string name="menu_switch_language">Променете езика</string>
     <string name="title_language_settings">Езикови настройки</string>
     <string name="title_language_primary">Основен език</string>
     <string name="title_language_parallel">Успореден език</string>

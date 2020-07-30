@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ valodas</string>
     <string name="menu_language_settings">Valodas iestatījumi</string>
-    <string name="menu_switch_language">Mainīt valodu</string>
     <string name="title_language_settings">Valodas iestatījumi</string>
     <string name="title_language_primary">Pirmā valoda</string>
     <string name="title_language_parallel">Otrā valoda</string>

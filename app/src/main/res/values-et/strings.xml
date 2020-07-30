@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
-    <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_language_settings">Keeleseaded</string>
     <string name="title_language_primary">Põhikeel</string>
     <string name="title_language_parallel">Teine keel</string>

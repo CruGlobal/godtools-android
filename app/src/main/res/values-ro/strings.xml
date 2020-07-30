@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 80 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
-    <string name="menu_switch_language">Schimbă limba</string>
     <string name="title_language_settings">Setări de limbă</string>
     <string name="title_language_primary">Limba principală</string>
     <string name="title_language_parallel">Limbă secundară</string>
