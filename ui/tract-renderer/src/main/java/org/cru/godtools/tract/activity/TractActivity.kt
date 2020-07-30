@@ -506,4 +506,12 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     }
     // endregion Exit Live Share Publishing
     // endregion Live Share Logic
+
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        if (publisherController.state.value == State.On) {
+            showExitLiveShareDialog()
+            return
+        }
+        super.supportNavigateUpTo(upIntent)
+    }
 }
