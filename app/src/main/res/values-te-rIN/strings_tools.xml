@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">సాధనాలను కనుగొనండి</string>
-    <string name="nav_my_tools">నా సాధనాలు</string>
     <string name="nav_favorite_tools">ఇష్టాలు</string>
     <string name="nav_all_tools">అన్ని పరికరాలు</string>
     <string name="action_tools_about">గురించి</string>
     <string name="action_tools_open">తెరవండి</string>
-    <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
     <string name="tools_list_remove_favorite_dialog_title">ఇష్టాల నుంచి “%1$s” తొలగించేదా?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">తొలగించండి</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">రద్దు చేయండి</string>

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Araçlar Bul</string>
-    <string name="nav_my_tools">Araçlarım</string>
     <string name="nav_favorite_tools">Favoriler</string>
     <string name="nav_all_tools">Tüm Araçlar</string>
     <string name="action_tools_about">Hakkında</string>
     <string name="action_tools_open">Aç</string>
-    <string name="title_add_new_tools">Yeni Araçlar Ekle</string>
     <string name="tools_list_remove_favorite_dialog_title">“%1$s” Favorilerden Kaldırılsın mı?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Kaldır</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">İptal</string>

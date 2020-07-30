@@ -33,7 +33,6 @@
     <string name="feature_discovery_title_language_settings">80+ Languages</string>
     <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
     <string name="menu_language_settings">Language Settings</string>
-    <string name="menu_switch_language">Switch Language</string>
     <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>

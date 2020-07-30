@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Hikaroka Fitaovana</string>
-    <string name="nav_my_tools">Ireo Fitaovana</string>
-    <string name="title_add_new_tools">Hanampy Fitaovana Hafa</string>
     <!-- Tool Details UI -->
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Hita</item>

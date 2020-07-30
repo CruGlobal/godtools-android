@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ భాషలు</string>
     <string name="menu_language_settings">భాష సెట్టింగ్స్</string>
-    <string name="menu_switch_language">భాషను మార్చండి</string>
     <string name="title_language_settings">భాష సెట్టింగ్స్</string>
     <string name="title_language_primary">ప్రాథమిక భాష</string>
     <string name="title_language_parallel">సమాంతర భాష</string>

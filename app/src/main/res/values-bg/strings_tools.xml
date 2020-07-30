@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Намиране на инструменти</string>
-    <string name="nav_my_tools">Моите инструменти</string>
     <string name="nav_favorite_tools">Любими</string>
     <string name="nav_all_tools">Всички инструменти</string>
     <string name="action_tools_about">Подробности</string>
     <string name="action_tools_open">Отвори</string>
-    <string name="title_add_new_tools">Добавете нови инструменти</string>
     <string name="tools_list_remove_favorite_dialog_title">Премахване на “%1$s” от любимите?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Премахни</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Отмени</string>

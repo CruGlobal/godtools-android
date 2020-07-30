@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">إيجاد أدوات</string>
-    <string name="nav_my_tools">أدواتي</string>
     <string name="nav_favorite_tools">المفضلة</string>
     <string name="nav_all_tools">كل الأدوات</string>
     <string name="action_tools_about">حول</string>
     <string name="action_tools_open">فتح</string>
-    <string name="title_add_new_tools">إضافة مزيد من الأدوات</string>
     <string name="tools_list_remove_favorite_dialog_title">إزالة “%1$s” من المفضلة؟</string>
     <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>

@@ -24,7 +24,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Awọn ede ti o le ni ogorin</string>
     <string name="menu_language_settings">Eto Ede</string>
-    <string name="menu_switch_language">Yiyi Ede pada</string>
     <string name="title_language_settings">Eto Ede</string>
     <string name="title_language_primary">Ede akoko</string>
     <string name="title_language_parallel">Ede Ti o jọra</string>

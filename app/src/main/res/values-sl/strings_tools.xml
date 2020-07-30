@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Dodaj orodje</string>
-    <string name="nav_my_tools">Moja orodja</string>
     <string name="nav_favorite_tools">Priljubljene</string>
     <string name="nav_all_tools">Vsa orodja</string>
     <string name="action_tools_about">O tej aplikaciji</string>
     <string name="action_tools_open">Odpri</string>
-    <string name="title_add_new_tools">Dodaj orodja</string>
     <string name="tools_list_remove_favorite_dialog_title">Odstrani “%1$s” iz priljubljenih?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Odstrani</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Prekliči</string>

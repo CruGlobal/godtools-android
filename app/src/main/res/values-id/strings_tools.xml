@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Cari Alat</string>
-    <string name="nav_my_tools">Alat Saya</string>
     <string name="nav_favorite_tools">Favorit</string>
     <string name="nav_all_tools">Semua Alat</string>
     <string name="action_tools_about">Tentang</string>
     <string name="action_tools_open">Buka</string>
-    <string name="title_add_new_tools">Tambah Alat Baru</string>
     <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>

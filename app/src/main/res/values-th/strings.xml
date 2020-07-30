@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">กว่า 80 ภาษา</string>
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
-    <string name="menu_switch_language">เปลี่ยนภาษา</string>
     <string name="title_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_primary">ภาษาหลัก</string>
     <string name="title_language_parallel">ภาษาพาราเลล</string>

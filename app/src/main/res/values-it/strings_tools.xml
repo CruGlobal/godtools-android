@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Trova strumenti</string>
-    <string name="nav_my_tools">I miei strumenti</string>
     <string name="nav_favorite_tools">Preferiti</string>
     <string name="nav_all_tools">Tutti gli strumenti</string>
     <string name="action_tools_about">Informazioni</string>
     <string name="action_tools_open">Apri</string>
-    <string name="title_add_new_tools">Aggiungi nuovi strumenti</string>
     <string name="tools_list_remove_favorite_dialog_title">Eliminare “%1$s” dai Preferiti?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Elimina</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Annulla</string>

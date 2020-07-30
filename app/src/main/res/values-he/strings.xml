@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ שפות</string>
     <string name="menu_language_settings">הגדרות שפה</string>
-    <string name="menu_switch_language">שנה שפה</string>
     <string name="title_language_settings">הגדרות שפה</string>
     <string name="title_language_primary">שפה ראשית</string>
     <string name="title_language_parallel">שפה מקבילה</string>

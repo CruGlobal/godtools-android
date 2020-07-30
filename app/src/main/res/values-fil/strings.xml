@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ na Wika</string>
     <string name="menu_language_settings">Mga Setting ng Wika</string>
-    <string name="menu_switch_language">Magpalit ng Wika</string>
     <string name="title_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_primary">Pangunahing Wika</string>
     <string name="title_language_parallel">Parallel na Wika</string>

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Другие</string>
-    <string name="nav_my_tools">Мои инструменты</string>
     <string name="nav_favorite_tools">Избранное</string>
     <string name="nav_all_tools">Все инструменты</string>
     <string name="action_tools_about">О приложении</string>
     <string name="action_tools_open">Открыть</string>
-    <string name="title_add_new_tools">Добавить инструменты</string>
     <string name="tools_list_remove_favorite_dialog_title">Удалить «%1$s» из избранного?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Удалить</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Отмена</string>

@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">超過 80 種語言</string>
     <string name="menu_language_settings">語言選項</string>
-    <string name="menu_switch_language">切換語言</string>
     <string name="title_language_settings">語言選項</string>
     <string name="title_language_primary">主要語言</string>
     <string name="title_language_parallel">平行語言</string>

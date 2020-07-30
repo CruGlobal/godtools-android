@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Hơn 80 Ngôn ngữ</string>
     <string name="menu_language_settings">Các thiết lập Ngôn ngữ</string>
-    <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập Ngôn ngữ</string>
     <string name="title_language_primary">Ngôn ngữ Chính</string>
     <string name="title_language_parallel">Ngôn ngữ Tương đương</string>

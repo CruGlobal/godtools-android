@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kalbų</string>
     <string name="menu_language_settings">Kalbos nustatymai</string>
-    <string name="menu_switch_language">Pakeisti kalbą</string>
     <string name="title_language_settings">Kalbos nustatymai</string>
     <string name="title_language_primary">Pagrindinė kalba</string>
     <string name="title_language_parallel">Paralelinė kalba</string>

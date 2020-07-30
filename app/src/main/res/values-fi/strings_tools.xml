@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Etsi työkaluja</string>
-    <string name="nav_my_tools">Omat työkalut</string>
     <string name="nav_favorite_tools">Suosikit</string>
     <string name="nav_all_tools">Kaikki työkalut</string>
     <string name="action_tools_about">Info</string>
     <string name="action_tools_open">Avaa</string>
-    <string name="title_add_new_tools">Lisää uusia työkaluja</string>
     <string name="tools_list_remove_favorite_dialog_title">Poistetaanko “%1$s” suosikeista?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Poista</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Peruuta</string>

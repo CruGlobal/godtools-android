@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 80 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
-    <string name="menu_switch_language">Bytt språk</string>
     <string name="title_language_settings">Språkinnstillinger</string>
     <string name="title_language_primary">Hovedspråk</string>
     <string name="title_language_parallel">Parallellspråk</string>

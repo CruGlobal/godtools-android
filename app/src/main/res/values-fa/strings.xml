@@ -25,7 +25,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+80 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>
-    <string name="menu_switch_language">تغییر زبان</string>
     <string name="title_language_settings">تنظیمات زبان</string>
     <string name="title_language_primary">زبان اصلی</string>
     <string name="title_language_parallel">زبان موازی</string>

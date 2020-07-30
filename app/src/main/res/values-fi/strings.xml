@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ kieltä</string>
     <string name="menu_language_settings">Kieliasetukset</string>
-    <string name="menu_switch_language">Vaihda kieltä</string>
     <string name="title_language_settings">Kieliasetukset</string>
     <string name="title_language_primary">Ensisijainen kieli</string>
     <string name="title_language_parallel">Rinnakkaiskieli</string>

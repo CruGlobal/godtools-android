@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">преко 80 језика</string>
     <string name="menu_language_settings">Подешавање језика</string>
-    <string name="menu_switch_language">Пребаците језик</string>
     <string name="title_language_settings">Подешавање језика</string>
     <string name="title_language_primary">Примарни језик</string>
     <string name="title_language_parallel">Паралелни језик</string>

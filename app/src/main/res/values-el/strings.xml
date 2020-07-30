@@ -23,7 +23,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ Γλώσσες</string>
     <string name="menu_language_settings">Ρυθμίσεις Γλώσσας</string>
-    <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
     <string name="title_language_settings">Ρυθμίσεις Γλώσσας</string>
     <string name="title_language_primary">Κύρια Γλώσσα</string>
     <string name="title_language_parallel">Παράλληλη Γλώσσα</string>

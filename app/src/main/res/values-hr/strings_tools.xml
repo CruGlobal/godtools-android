@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">Pronađi alate</string>
-    <string name="nav_my_tools">Moji alati</string>
     <string name="nav_favorite_tools">Favoriti</string>
     <string name="nav_all_tools">Svi alati</string>
     <string name="action_tools_about">O nama</string>
     <string name="action_tools_open">Otvori</string>
-    <string name="title_add_new_tools">Dodajte nove alate</string>
     <string name="tools_list_remove_favorite_dialog_title">Ukloniti “%1$s” iz favorita?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Ukloni</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Odustani</string>

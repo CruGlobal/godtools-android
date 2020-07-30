@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
-    <string name="nav_find_tools">ٹُولز نکالیں</string>
-    <string name="nav_my_tools">میرے ٹُولز</string>
     <string name="nav_favorite_tools">پسندیدگان</string>
     <string name="nav_all_tools">تمام ٹولز</string>
     <string name="action_tools_about">ہمارے متعلق</string>
     <string name="action_tools_open">کھولیں</string>
-    <string name="title_add_new_tools">نئے ٹُولز ایڈ کریں</string>
     <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
     <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>

@@ -22,7 +22,6 @@
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">৭০+ ভাষা</string>
     <string name="menu_language_settings">ভাষা ব্যাবস্থা</string>
-    <string name="menu_switch_language">ভাষা বদলান</string>
     <string name="title_language_settings">ভাষা ব্যাবস্থা</string>
     <string name="title_language_primary">প্রাথমিক ভাষা</string>
     <string name="title_language_parallel">সমান্তরাল ভাষা</string>
