@@ -49,7 +49,6 @@ enum class PageSet(
         )
     ),
     LIVE_SHARE(
-        feature = Settings.FEATURE_TUTORIAL_LIVE_SHARE,
         menu = R.menu.tutorial_live_share_menu,
         // TODO: we probably need a better analytics base screen name
         analyticsBaseScreenName = "tutorial-live-share",

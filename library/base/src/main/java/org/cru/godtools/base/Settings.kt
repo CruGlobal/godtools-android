@@ -47,7 +47,7 @@ class Settings @VisibleForTesting internal constructor(
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding"
         const val FEATURE_TUTORIAL_TRAINING = "tutorialTraining"
-        const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare"
+        const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare."
 
         @JvmStatic
         val defaultLanguage: Locale get() = Locale.ENGLISH
