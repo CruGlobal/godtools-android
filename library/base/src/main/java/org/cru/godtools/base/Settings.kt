@@ -2,6 +2,7 @@ package org.cru.godtools.base
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -23,7 +24,7 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 private const val VERSION_5_1_4 = 4033503
 private const val VERSION_5_2_0 = 4035089
 
-class Settings private constructor(private val context: Context) {
+class Settings @VisibleForTesting internal constructor(private val context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object : SingletonHolder<Settings, Context>({ Settings(it.applicationContext) }) {
