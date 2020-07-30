@@ -9,6 +9,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import me.thekey.android.TheKey
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
@@ -34,6 +35,7 @@ class Settings @VisibleForTesting internal constructor(
         const val PREF_PRIMARY_LANGUAGE = "languagePrimary"
         const val PREF_PARALLEL_LANGUAGE = "languageParallel"
         const val PREF_FEATURE_DISCOVERED = "feature_discovered."
+        const val PREF_FEATURE_DISCOVERED_COUNT = "feature_discovered_count."
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
@@ -85,7 +87,10 @@ class Settings @VisibleForTesting internal constructor(
     // endregion Language Settings
 
     // region Feature Discovery Tracking
-    fun setFeatureDiscovered(feature: String) = prefs.edit { putBoolean("$PREF_FEATURE_DISCOVERED$feature", true) }
+    fun setFeatureDiscovered(feature: String) = prefs.edit {
+        putBoolean("$PREF_FEATURE_DISCOVERED$feature", true)
+        putInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", prefs.getInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0) + 1)
+    }
 
     fun isFeatureDiscovered(feature: String): Boolean {
         val discovered = isFeatureDiscoveredInt(feature)
@@ -117,10 +122,22 @@ class Settings @VisibleForTesting internal constructor(
         return discovered
     }
 
+    fun getFeatureDiscoveredCount(feature: String): Int {
+        // perform a simple lookup to initialize the feature when necessary
+        isFeatureDiscovered(feature)
+        return prefs.getInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0)
+    }
+
     fun isFeatureDiscoveredLiveData(feature: String): LiveData<Boolean> {
         // perform a simple lookup to initialize the feature when necessary
         isFeatureDiscovered(feature)
         return prefs.getBooleanLiveData("$PREF_FEATURE_DISCOVERED$feature", false).distinctUntilChanged()
+    }
+
+    fun getFeatureDiscoveredCountLiveData(feature: String): LiveData<Int> {
+        // perform a simple lookup to initialize the feature when necessary
+        isFeatureDiscovered(feature)
+        return prefs.getIntLiveData("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0).distinctUntilChanged()
     }
 
     private fun isFeatureDiscoveredInt(feature: String) = prefs.getBoolean("$PREF_FEATURE_DISCOVERED$feature", false)

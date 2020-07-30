@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import me.thekey.android.TheKey
 import org.cru.godtools.base.Settings.Companion.FEATURE_LOGIN
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -32,10 +33,13 @@ class SettingsTest {
     @Test
     fun verifyFeatureDiscovery() {
         assertFalse(settings.isFeatureDiscovered(FEATURE_TEST))
+        assertEquals(0, settings.getFeatureDiscoveredCount(FEATURE_TEST))
         settings.setFeatureDiscovered(FEATURE_TEST)
         assertTrue(settings.isFeatureDiscovered(FEATURE_TEST))
+        assertEquals(1, settings.getFeatureDiscoveredCount(FEATURE_TEST))
         settings.setFeatureDiscovered(FEATURE_TEST)
         assertTrue(settings.isFeatureDiscovered(FEATURE_TEST))
+        assertEquals(2, settings.getFeatureDiscoveredCount(FEATURE_TEST))
     }
 
     @Test
