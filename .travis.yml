@@ -1,6 +1,8 @@
 language: android
 dist: trusty
 jdk: oraclejdk8
+git:
+  depth: false
 env:
   global:
     - GRADLE_OPTS="-Xmx3072m"
@@ -78,8 +80,6 @@ jobs:
     stage: deploy
 
     install:
-    # Fetch the entire git history to correctly generate version codes
-    - git fetch --unshallow
     # configure the keystore
     - echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
     - echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
