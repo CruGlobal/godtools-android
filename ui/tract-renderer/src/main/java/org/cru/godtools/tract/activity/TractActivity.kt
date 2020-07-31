@@ -175,11 +175,15 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when {
-        requestCode == REQUEST_LIVE_SHARE_TUTORIAL && resultCode == Activity.RESULT_OK -> {
-            dataModel.liveShareTutorialShown = true
-            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
-            shareLiveShareLink()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
+        REQUEST_LIVE_SHARE_TUTORIAL -> when (resultCode) {
+            Activity.RESULT_OK -> {
+                dataModel.liveShareTutorialShown = true
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                shareLiveShareLink()
+            }
+            Activity.RESULT_CANCELED -> publisherController.started = false
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
         else -> super.onActivityResult(requestCode, resultCode, data)
     }
