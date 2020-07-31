@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Onboarding Tutorial -->
-    <eat-comment />
-    <string name="tutorial_onboarding_welcome">Welcome</string>
-    <string name="tutorial_onboarding_welcome_2">Helping You Share Your Faith</string>
-    <string name="tutorial_onboarding_others_headline">Share With Others</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools is built to guide your faith conversations</string>
-    <string name="tutorial_onboarding_tools_headline">Choose Your Tools</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools helps you before, during, and after a spiritual conversation</string>
-    <string name="tutorial_onboarding_ready_headline">Always Ready</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools is here to help and is ready when you are</string>
-    <string name="tutorial_onboarding_final_prepare">Prepare for any conversation</string>
-    <string name="tutorial_onboarding_final_gospel">Walk someone through the gospel</string>
-    <string name="tutorial_onboarding_final_parallel_languages">View two languages side by side</string>
-    <string name="tutorial_onboarding_final_languages">Choose from over 80 languages</string>
-    <string name="tutorial_onboarding_final_help_others">Help someone get started as a Christian</string>
-    <string name="tutorial_onboarding_final_action_show_more">Show Me More</string>
-    <string name="tutorial_onboarding_final_action_start">Get Started</string>
-    <string name="tutorial_onboarding_action_begin">Begin</string>
-    <string name="tutorial_onboarding_action_continue">Continue</string>
-    <string name="tutorial_onboarding_action_skip">Skip</string>
-
     <!-- Training Tutorial -->
     <eat-comment />
     <string name="tutorial_training_watch_headline">Watch</string>
