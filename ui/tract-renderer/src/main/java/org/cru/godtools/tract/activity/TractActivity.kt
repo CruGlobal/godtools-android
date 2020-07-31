@@ -52,6 +52,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
+import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
@@ -61,6 +62,7 @@ import org.cru.godtools.xml.model.Page
 import org.cru.godtools.xml.model.backgroundColor
 import org.cru.godtools.xml.model.navBarColor
 import org.cru.godtools.xml.model.navBarControlColor
+import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
@@ -397,6 +399,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     override fun showModal(modal: Modal) = startModalActivity(modal)
+    override fun showTip(tip: Tip) = TipBottomSheetDialogFragment(tip).show(supportFragmentManager, null)
     // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI

@@ -18,6 +18,7 @@
         android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
         android:layout_marginRight="@dimen/tract_content_margin_horizontal"
         android:elevation="@dimen/tract_tips_elevation"
+        android:onClick="@{() -> controller.showTip(model.tip)}"
         android:text="@string/tract_tips_action_open_inline"
         android:textColor="@color/tract_tips_red"
         app:chipBackgroundColor="@color/white"
