@@ -13,4 +13,7 @@
     <string name="share_tool_message_tract_live_share">Hi, Follow along with me in GodTools via screen sharing. Here\'s the link: %1$s\n\nIf you don\'t get this until later, the link may not still work. We can try again at another time.</string>
     <string name="tract_live_share_starting">Starting Screen Sharing…</string>
     <string name="tract_live_share_unable_to_connect">Unable to connect to Screen Sharing</string>
+    <string name="tract_live_share_exit_dialog_message">Exit the remote sharing session now?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Exit</string>
+    <string name="tract_live_share_exit_dialog_cancel">Cancel</string>
 </resources>

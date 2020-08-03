@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -10,30 +9,22 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.delay
-import org.ccci.gto.android.common.androidx.fragment.app.BaseDialogFragment
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.ccci.gto.android.common.util.findListener
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
@@ -53,9 +44,12 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
+import org.cru.godtools.tract.liveshare.State
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
+import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
+import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
@@ -117,6 +111,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
         setupDataModel()
         setupActiveTranslationManagement()
+        attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary()
     }
 
@@ -460,7 +455,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
                 startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
             publisherController.publisherInfo.value == null ->
-                LiveShareDialogFragment().show(supportFragmentManager, null)
+                LiveShareStartingDialogFragment().show(supportFragmentManager, null)
             else -> {
                 val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
                 val shareUrl = (buildShareLink() ?: return)
@@ -502,42 +497,24 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         event.page?.let { goToPage(it) }
         eventBus.post(event)
     }
+
+    // region Exit Live Share Publishing
+    private fun attachLiveSharePublishExitBehavior() {
+        onBackPressedDispatcher.addCallback(this, false) { showExitLiveShareDialog() }
+            .also { c -> publisherController.state.observe(this) { c.isEnabled = it == State.On } }
+    }
+
+    private fun showExitLiveShareDialog() {
+        LiveShareExitDialogFragment().show(supportFragmentManager, null)
+    }
+    // endregion Exit Live Share Publishing
     // endregion Live Share Logic
-}
 
-class LiveShareDialogFragment : BaseDialogFragment() {
-    private val publisherController: TractPublisherController by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startAutoDismissObservers()
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.tract_live_share_starting)
-            .setView(R.layout.tract_live_share_dialog)
-            .create()
-    }
-
-    private fun startAutoDismissObservers() {
-        // auto-dismiss dialog when we have publisherInfo
-        publisherController.publisherInfo.let {
-            liveData {
-                emit(it.value)
-                delay(2_000)
-                emitSource(it)
-            }.notNull().observe(this@LiveShareDialogFragment) {
-                findListener<TractActivity>()?.shareLiveShareLink()
-                dismissAllowingStateLoss()
-            }
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        if (publisherController.state.value == State.On) {
+            showExitLiveShareDialog()
+            return
         }
-
-        // auto-dismiss dialog if we are unable to connect after 10 seconds
-        lifecycleScope.launchWhenResumed {
-            delay(10_000)
-            context?.let { Toast.makeText(it, R.string.tract_live_share_unable_to_connect, LENGTH_LONG).show() }
-            dismissAllowingStateLoss()
-        }
+        super.supportNavigateUpTo(upIntent)
     }
 }
