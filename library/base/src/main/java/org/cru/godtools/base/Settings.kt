@@ -2,12 +2,14 @@ package org.cru.godtools.base
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import me.thekey.android.TheKey
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
@@ -23,13 +25,17 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 private const val VERSION_5_1_4 = 4033503
 private const val VERSION_5_2_0 = 4035089
 
-class Settings private constructor(private val context: Context) {
+class Settings @VisibleForTesting internal constructor(
+    private val context: Context,
+    private val theKey: TheKey = TheKey.getInstance(context)
+) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object : SingletonHolder<Settings, Context>({ Settings(it.applicationContext) }) {
         const val PREF_PRIMARY_LANGUAGE = "languagePrimary"
         const val PREF_PARALLEL_LANGUAGE = "languageParallel"
         const val PREF_FEATURE_DISCOVERED = "feature_discovered."
+        const val PREF_FEATURE_DISCOVERED_COUNT = "feature_discovered_count."
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
@@ -41,7 +47,7 @@ class Settings private constructor(private val context: Context) {
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding"
         const val FEATURE_TUTORIAL_TRAINING = "tutorialTraining"
-        const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare"
+        const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare."
 
         @JvmStatic
         val defaultLanguage: Locale get() = Locale.ENGLISH
@@ -81,7 +87,10 @@ class Settings private constructor(private val context: Context) {
     // endregion Language Settings
 
     // region Feature Discovery Tracking
-    fun setFeatureDiscovered(feature: String) = prefs.edit { putBoolean("$PREF_FEATURE_DISCOVERED$feature", true) }
+    fun setFeatureDiscovered(feature: String) = prefs.edit {
+        putBoolean("$PREF_FEATURE_DISCOVERED$feature", true)
+        putInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", prefs.getInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0) + 1)
+    }
 
     fun isFeatureDiscovered(feature: String): Boolean {
         val discovered = isFeatureDiscoveredInt(feature)
@@ -98,7 +107,7 @@ class Settings private constructor(private val context: Context) {
                     setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
                     changed = true
                 }
-                FEATURE_LOGIN -> if (TheKey.getInstance(context).defaultSessionGuid != null) {
+                FEATURE_LOGIN -> if (theKey.defaultSessionGuid != null) {
                     setFeatureDiscovered(FEATURE_LOGIN)
                     changed = true
                 }
@@ -113,10 +122,22 @@ class Settings private constructor(private val context: Context) {
         return discovered
     }
 
+    fun getFeatureDiscoveredCount(feature: String): Int {
+        // perform a simple lookup to initialize the feature when necessary
+        isFeatureDiscovered(feature)
+        return prefs.getInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0)
+    }
+
     fun isFeatureDiscoveredLiveData(feature: String): LiveData<Boolean> {
         // perform a simple lookup to initialize the feature when necessary
         isFeatureDiscovered(feature)
         return prefs.getBooleanLiveData("$PREF_FEATURE_DISCOVERED$feature", false).distinctUntilChanged()
+    }
+
+    fun getFeatureDiscoveredCountLiveData(feature: String): LiveData<Int> {
+        // perform a simple lookup to initialize the feature when necessary
+        isFeatureDiscovered(feature)
+        return prefs.getIntLiveData("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0).distinctUntilChanged()
     }
 
     private fun isFeatureDiscoveredInt(feature: String) = prefs.getBoolean("$PREF_FEATURE_DISCOVERED$feature", false)
@@ -131,10 +152,11 @@ class Settings private constructor(private val context: Context) {
     // endregion Campaign Tracking
 
     // region Launch tracking
-    private var firstLaunchVersion
+    @VisibleForTesting
+    internal var firstLaunchVersion
         get() = prefs.getInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE)
         set(value) = prefs.edit { putInt(PREF_VERSION_FIRST_LAUNCH, value) }
-    var lastLaunchVersion
+    private var lastLaunchVersion
         get() = prefs.getInt(PREF_VERSION_LAST_LAUNCH, -1).takeUnless { it == -1 }
         private set(value) = prefs.edit { putInt(PREF_VERSION_LAST_LAUNCH, value ?: BuildConfig.VERSION_CODE) }
     var launches

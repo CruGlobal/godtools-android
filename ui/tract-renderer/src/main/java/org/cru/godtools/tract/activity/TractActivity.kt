@@ -39,6 +39,7 @@ import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
@@ -182,6 +183,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when {
         requestCode == REQUEST_LIVE_SHARE_TUTORIAL && resultCode == Activity.RESULT_OK -> {
             dataModel.liveShareTutorialShown = true
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
             shareLiveShareLink()
         }
         else -> super.onActivityResult(requestCode, resultCode, data)
@@ -454,7 +456,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
 
     internal fun shareLiveShareLink() {
         when {
-            !dataModel.liveShareTutorialShown ->
+            !dataModel.liveShareTutorialShown &&
+                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
                 startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
             publisherController.publisherInfo.value == null ->
                 LiveShareDialogFragment().show(supportFragmentManager, null)
