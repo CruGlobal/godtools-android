@@ -19,7 +19,7 @@ private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
 
-class Page : BaseModel, Styles, Parent {
+class Page : BaseModel, Styles {
     override val page get() = this
 
     val id get() = fileName ?: "${manifest.code}-$position"
@@ -61,8 +61,6 @@ class Page : BaseModel, Styles, Parent {
     private val _cardTextColor: Int?
     @get:ColorInt
     val cardTextColor get() = _cardTextColor ?: textColor
-
-    override val content get() = emptyList<Content>()
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
