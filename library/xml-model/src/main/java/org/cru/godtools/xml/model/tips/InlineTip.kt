@@ -17,6 +17,8 @@ class InlineTip : Content {
     val id: String?
     val tip: Tip? get() = manifest.tips[id]
 
+    override val tips get() = listOfNotNull(tip)
+
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
 

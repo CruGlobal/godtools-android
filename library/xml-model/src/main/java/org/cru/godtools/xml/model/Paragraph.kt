@@ -10,6 +10,7 @@ class Paragraph : Content, Parent {
     }
 
     override val content: List<Content>
+    override val tips get() = contentTips
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_PARAGRAPH)

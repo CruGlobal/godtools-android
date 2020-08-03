@@ -4,6 +4,7 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.tips.InlineTip
+import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
@@ -26,6 +27,8 @@ abstract class Content : BaseModel {
      * @return true if this content element should be completely ignored.
      */
     val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
+
+    open val tips get() = emptyList<Tip>()
 
     companion object {
         internal fun fromXml(

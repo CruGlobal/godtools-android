@@ -15,7 +15,9 @@ class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullP
     val analyticsEvents: Collection<AnalyticsEvent>
     val listeners: Set<Event.Id>
     val label: Text?
+
     override val content: List<Content>
+    val tips get() = contentTips
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TAB)

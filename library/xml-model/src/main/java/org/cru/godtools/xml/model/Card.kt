@@ -44,6 +44,7 @@ class Card : BaseModel, Styles, Parent {
 
     val label: Text?
     override val content: List<Content>
+    val tips get() = contentTips
 
     internal constructor(parent: Page, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
