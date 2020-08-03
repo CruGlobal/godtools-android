@@ -81,7 +81,7 @@ class Card : BaseModel, Styles, Parent {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(parent: Page, position: Int = 0) : super(parent) {
+    constructor(parent: Page, position: Int = 0, content: ((Card) -> List<Content>?)? = null) : super(parent) {
         this.position = position
 
         isHidden = false
@@ -97,7 +97,7 @@ class Card : BaseModel, Styles, Parent {
         _textColor = null
 
         label = null
-        content = emptyList()
+        this.content = content?.invoke(this).orEmpty()
     }
 }
 

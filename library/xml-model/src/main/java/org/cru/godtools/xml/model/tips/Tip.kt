@@ -1,9 +1,10 @@
 package org.cru.godtools.xml.model.tips
 
+import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_TRAINING
-import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Manifest
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TIP = "tip"
@@ -29,7 +30,7 @@ class Tip : BaseModel {
     val type: Type
     val pages: List<TipPage>
 
-    constructor(base: Base, id: String?, parser: XmlPullParser) : super(base) {
+    internal constructor(manifest: Manifest, id: String?, parser: XmlPullParser) : super(manifest) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
 
         this.id = id
@@ -47,6 +48,13 @@ class Tip : BaseModel {
                 }
             }
         }
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(manifest: Manifest? = null, id: String? = null, type: Type = Type.DEFAULT) : super(manifest) {
+        this.id = id
+        this.type = type
+        pages = emptyList()
     }
 
     private fun XmlPullParser.parsePages() = buildList {
