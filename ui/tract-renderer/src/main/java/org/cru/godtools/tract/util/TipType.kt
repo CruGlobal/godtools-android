@@ -1,9 +1,12 @@
 package org.cru.godtools.tract.util
 
+import android.content.Context
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.tips.Tip
 
+fun Tip.Type?.getDrawable(context: Context) = ContextCompat.getDrawable(context, drawableRes)
 @get:DrawableRes
 val Tip.Type?.drawableRes get() = when (this) {
     Tip.Type.ASK -> R.drawable.ic_tips_ask

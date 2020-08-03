@@ -11,9 +11,9 @@ import org.cru.godtools.xml.model.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
-    pageController: PageController?
+    pageController: PageController
 ) : ParentController<Card>(Card::class, binding.root, pageController) {
-    constructor(parent: ViewGroup, pageController: PageController?) :
+    constructor(parent: ViewGroup, pageController: PageController) :
         this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageController)
 
     interface Callbacks {
@@ -25,6 +25,7 @@ class CardController private constructor(
 
     init {
         binding.controller = this
+        binding.enableTips = pageController.isTipsEnabled
     }
 
     private val callbacks: Callbacks? = pageController
