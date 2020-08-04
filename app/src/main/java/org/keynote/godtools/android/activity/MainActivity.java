@@ -45,7 +45,7 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
-import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
@@ -226,7 +226,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    eventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
+                    eventBus.post(new AnalyticsScreenEvent(SCREEN_ALL_TOOLS));
                     break;
                 case STATE_MY_TOOLS:
                 default:
