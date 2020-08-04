@@ -6,6 +6,8 @@ interface Parent : Base {
     val content: List<Content>
 }
 
+internal inline val Parent.contentTips get() = content.flatMap { it.tips }
+
 /**
  * @param block Custom parsing logic, if the block processes the current tag, it should advance the parser to the END_TAG event.
  */

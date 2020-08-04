@@ -11,6 +11,7 @@ class Tabs : Content {
     }
 
     val tabs: List<Tab>
+    override val tips get() = tabs.flatMap { it.tips }
 
     @VisibleForTesting
     internal constructor(parent: Base, tabs: List<Tab>) : super(parent) {

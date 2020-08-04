@@ -9,6 +9,7 @@ class Form internal constructor(parent: Base, parser: XmlPullParser) : Content(p
     }
 
     override val content: List<Content>
+    override val tips get() = contentTips
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_FORM)
