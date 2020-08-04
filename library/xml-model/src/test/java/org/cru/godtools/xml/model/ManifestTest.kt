@@ -35,6 +35,6 @@ class ManifestTest {
         assertEquals(0, manifest.pages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(1, manifest.tips.size)
-        assertEquals("tip1", manifest.tips["tip1"]!!.id)
+        assertEquals("tip1", manifest.findTip("tip1")!!.id)
     }
 }

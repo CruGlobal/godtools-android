@@ -202,6 +202,7 @@ class Manifest : BaseModel, Styles {
 
     fun findCategory(category: String?) = categories.firstOrNull { it.id == category }
     fun findPage(id: String?) = pages.firstOrNull { it.id.equals(id, ignoreCase = true) }
+    fun findTip(id: String?) = tips[id]
 
     @WorkerThread
     private fun parseCategories(parser: XmlPullParser): List<Category> {

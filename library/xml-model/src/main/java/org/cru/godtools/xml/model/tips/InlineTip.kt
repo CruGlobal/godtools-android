@@ -15,7 +15,7 @@ class InlineTip : Content {
     }
 
     val id: String?
-    val tip: Tip? get() = manifest.tips[id]
+    val tip: Tip? get() = manifest.findTip(id)
 
     override val tips get() = listOfNotNull(tip)
 
