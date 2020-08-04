@@ -27,6 +27,7 @@ import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.ui.tools.ToolsFragment;
+import org.cru.godtools.ui.tools.analytics.model.AboutToolButton;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
@@ -163,6 +164,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     public void onToolInfo(@Nullable final String code) {
         if (code != null) {
             ToolDetailsActivityKt.startToolDetailsActivity(this, code);
+            eventBus.post(AboutToolButton.INSTANCE);
         }
     }
 
