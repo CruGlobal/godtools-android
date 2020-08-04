@@ -18,6 +18,7 @@
     <string name="action_tools_open_tool">Open Tool</string>
     <string name="action_tools_add_favorite">Add to Favorites</string>
     <string name="action_tools_remove_favorite">Remove from Favorites</string>
+    <string name="action_tool_training">Learn to share this tool</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d View</item>
         <item quantity="other">%1$,d Views</item>
