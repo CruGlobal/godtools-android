@@ -35,6 +35,7 @@ class TractSubscriberController @Inject internal constructor(
         }
     private val identifier get() = Identifier(CHANNEL_SUBSCRIBER, mapOf(PARAM_CHANNEL_ID to channelId))
 
+    internal val state = MutableLiveData<State>(State.Off)
     private val stateMachine = StateMachine.create<State, Event, Unit> {
         initialState(State.Off)
         state<State.Off> { on<Event.Start> { transitionTo(State.On) } }
@@ -77,6 +78,8 @@ class TractSubscriberController @Inject internal constructor(
                 referenceLifecycle.release(this@TractSubscriberController)
             }
         }
+
+        onTransition { if (it is StateMachine.Transition.Valid) state.value = it.toState }
     }
 
     val receivedEvent = MutableLiveData<NavigationEvent?>()

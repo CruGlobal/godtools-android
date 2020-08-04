@@ -14,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
@@ -140,6 +142,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         if (ENABLE_LIVE_SHARE) {
             menu.removeItem(R.id.action_share)
             menuInflater.inflate(R.menu.activity_tract_live_share, menu)
+            menu.setupLiveShareMenuItemVisibility()
         }
 
         // Adjust visibility of menu items
@@ -175,11 +178,15 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when {
-        requestCode == REQUEST_LIVE_SHARE_TUTORIAL && resultCode == Activity.RESULT_OK -> {
-            dataModel.liveShareTutorialShown = true
-            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
-            shareLiveShareLink()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
+        REQUEST_LIVE_SHARE_TUTORIAL -> when (resultCode) {
+            Activity.RESULT_OK -> {
+                dataModel.liveShareTutorialShown = true
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                shareLiveShareLink()
+            }
+            Activity.RESULT_CANCELED -> publisherController.started = false
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
         else -> super.onActivityResult(requestCode, resultCode, data)
     }
@@ -448,6 +455,23 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.trac
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
+
+    private val liveShareState: LiveData<Pair<State, State>> by lazy {
+        publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
+    }
+    private var menuObserver: Observer<Pair<State, State>>? = null
+    private fun Menu.setupLiveShareMenuItemVisibility() {
+        menuObserver?.let { liveShareState.removeObserver(it) }
+        menuObserver = liveShareState.observe(this@TractActivity) { (publisherState, subscriberState) ->
+            findItem(R.id.action_live_share_active)?.isVisible =
+                publisherState == State.On || subscriberState == State.On
+
+            findItem(R.id.action_share)?.apply {
+                isVisible = subscriberState == State.Off
+                isEnabled = subscriberState == State.Off
+            }
+        }
+    }
 
     internal fun shareLiveShareLink() {
         when {
