@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<manifest xmlns="https://mobile-content-api.cru.org/xmlns/manifest">
+    <tips>
+        <tip id="tip1" src="tips/tip.xml" />
+    </tips>
+</manifest>

@@ -2,6 +2,9 @@ package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
+import org.cru.godtools.xml.XMLNS_TRAINING
+import org.cru.godtools.xml.model.tips.InlineTip
+import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
@@ -25,6 +28,8 @@ abstract class Content : BaseModel {
      */
     val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
 
+    open val tips get() = emptyList<Tip>()
+
     companion object {
         internal fun fromXml(
             parent: Base,
@@ -43,6 +48,13 @@ abstract class Content : BaseModel {
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
+                    else -> {
+                        if (consumeUnrecognizedTags) parser.skipTag()
+                        null
+                    }
+                }
+                XMLNS_TRAINING -> when (parser.name) {
+                    InlineTip.XML_TIP -> InlineTip(parent, parser)
                     else -> {
                         if (consumeUnrecognizedTags) parser.skipTag()
                         null
