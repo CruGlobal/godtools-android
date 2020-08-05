@@ -123,7 +123,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         }
     }
 
-    fun openTraining(toolCode: String?){
+    fun openTraining(toolCode: String?) {
         // TODO: Open training activity
     }
     // endregion Data Binding
