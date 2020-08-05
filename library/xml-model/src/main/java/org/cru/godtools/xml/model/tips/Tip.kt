@@ -2,9 +2,11 @@ package org.cru.godtools.xml.model.tips
 
 import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.xmlpull.skipTag
+import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Styles
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TIP = "tip"
@@ -17,7 +19,7 @@ private const val XML_TYPE_QUOTE = "quote"
 private const val XML_PAGES = "pages"
 
 @OptIn(ExperimentalStdlibApi::class)
-class Tip : BaseModel {
+class Tip : BaseModel, Styles {
     enum class Type {
         ASK, CONSIDER, TIP, PREPARE, QUOTE;
 
@@ -28,6 +30,12 @@ class Tip : BaseModel {
 
     val id: String
     val type: Type
+
+    override val primaryColor get() = Manifest.DEFAULT_PRIMARY_COLOR
+    override val primaryTextColor get() = Manifest.DEFAULT_PRIMARY_TEXT_COLOR
+    override val textColor get() = Manifest.DEFAULT_TEXT_COLOR
+    override val textSize get() = R.dimen.text_size_tip_content
+
     val pages: List<TipPage>
 
     internal constructor(manifest: Manifest, id: String, parser: XmlPullParser) : super(manifest) {
@@ -73,6 +81,8 @@ class Tip : BaseModel {
         }
     }
 }
+
+val Tip?.textColor get() = this?.textColor ?: Manifest.DEFAULT_TEXT_COLOR
 
 private fun String.toTypeOrNull() = when (this) {
     XML_TYPE_TIP -> Tip.Type.TIP

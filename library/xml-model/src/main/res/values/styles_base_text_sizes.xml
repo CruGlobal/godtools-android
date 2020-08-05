@@ -9,4 +9,5 @@
     <dimen name="text_size_card_label">18sp</dimen>
     <dimen name="text_size_modal">18sp</dimen>
     <dimen name="text_size_modal_title">54sp</dimen>
+    <dimen name="text_size_tip_content">16sp</dimen>
 </resources>
