@@ -28,6 +28,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     private val shortcutManager: GodToolsShortcutManager
 ) : ViewModel() {
     val toolCode = MutableLiveData<String>()
+    val hasTraining = MutableLiveData<Boolean>(false)
     private val distinctToolCode: LiveData<String> = toolCode.distinctUntilChanged()
 
     val tool = distinctToolCode.switchMap { dao.findLiveData<Tool>(it) }

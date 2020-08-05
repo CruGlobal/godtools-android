@@ -57,6 +57,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         super.onBindingCreated(binding, savedInstanceState)
         binding.fragment = this
         binding.tool = dataModel.tool
+        binding.hasTraining = dataModel.hasTraining
         binding.setBanner(dataModel.banner)
         binding.primaryTranslation = dataModel.primaryTranslation
         binding.parallelTranslation = dataModel.parallelTranslation
@@ -120,6 +121,10 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage)
             }
         }
+    }
+
+    fun openTraining(toolCode: String?){
+        // TODO: Open training activity
     }
     // endregion Data Binding
 
