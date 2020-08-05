@@ -73,7 +73,7 @@ class Tip : BaseModel, Styles {
 
             when (namespace) {
                 XMLNS_TRAINING -> when (name) {
-                    TipPage.XML_PAGE -> add(TipPage(this@Tip, this@parsePages))
+                    TipPage.XML_PAGE -> add(TipPage(this@Tip, size, this@parsePages))
                     else -> skipTag()
                 }
                 else -> skipTag()
