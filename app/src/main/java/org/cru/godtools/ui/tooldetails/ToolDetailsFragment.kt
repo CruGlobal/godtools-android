@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -57,7 +58,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         super.onBindingCreated(binding, savedInstanceState)
         binding.fragment = this
         binding.tool = dataModel.tool
-        binding.hasTraining = dataModel.hasTraining
+        binding.hasTraining = dataModel.primaryManifest.map { !it?.tips.isNullOrEmpty() }
         binding.setBanner(dataModel.banner)
         binding.primaryTranslation = dataModel.primaryTranslation
         binding.parallelTranslation = dataModel.parallelTranslation
@@ -123,8 +124,14 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         }
     }
 
-    fun openTraining(toolCode: String?) {
+    fun openTraining(tool: Tool?, primaryTranslation: Translation?) {
         // TODO: Open training activity
+        tool?.code?.let { code ->
+            val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
+
+            manifestManager.get().getLatestPublishedManifestLiveData(code, primaryLanguage)
+            requireActivity().openToolActivity(code, tool.type, primaryLanguage) // Add True when other PR finished
+        }
     }
     // endregion Data Binding
 

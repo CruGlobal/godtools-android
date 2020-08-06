@@ -104,8 +104,7 @@ class Manifest : BaseModel, Styles {
 
     @VisibleForTesting
     internal val resources: Map<String?, Resource>
-    @VisibleForTesting
-    internal val tips: Map<String?, Tip>
+    val tips: Map<String?, Tip>
 
     internal constructor(
         code: String,
