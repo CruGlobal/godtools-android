@@ -17,6 +17,7 @@ val Tip.Type?.drawableRes get() = when (this) {
     Tip.Type.TIP, null -> R.drawable.ic_tips_tip
 }
 
+fun Tip.Type?.getDoneDrawable(context: Context) = ContextCompat.getDrawable(context, doneDrawableRes)
 @get:DrawableRes
 val Tip.Type?.doneDrawableRes get() = when (this) {
     Tip.Type.ASK -> R.drawable.ic_tips_ask_done
