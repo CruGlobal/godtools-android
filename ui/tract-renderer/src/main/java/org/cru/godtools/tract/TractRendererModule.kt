@@ -36,6 +36,11 @@ abstract class TractRendererModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(ModalActivityDataModel::class)
+    internal abstract fun modalActivityDataModel(dataModel: ModalActivityDataModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(TractPublisherController::class)
     abstract fun tractPublisherController(f: TractPublisherController.Factory):
         AssistedSavedStateViewModelFactory<out ViewModel>
@@ -44,11 +49,6 @@ abstract class TractRendererModule {
     @IntoMap
     @ViewModelKey(TractSubscriberController::class)
     abstract fun tractSubscriberController(controller: TractSubscriberController): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(ModalActivityDataModel::class)
-    internal abstract fun modalActivityDataModel(dataModel: ModalActivityDataModel): ViewModel
 
     companion object {
         @IntoSet
