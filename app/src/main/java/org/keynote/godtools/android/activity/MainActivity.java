@@ -156,7 +156,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         // start pre-loading the tool in the first language
         mManifestManager.get().preloadLatestPublishedManifest(code, languages[0]);
 
-        ActivityUtilsKt.openToolActivity(this, code, type, languages);
+        ActivityUtilsKt.openToolActivity(this, code, type, languages, false);
     }
 
     @Override

@@ -252,6 +252,10 @@ class PageController @AssistedInject internal constructor(
     }
     // endregion Content Events
 
+    // region Tips
+    override var isTipsEnabled = false
+    // endregion Tips
+
     override fun updateLayoutDirection() = Unit
 
     // TODO: move this into data binding and use LiveData once we attach the PageBinding to a LifecycleOwner
