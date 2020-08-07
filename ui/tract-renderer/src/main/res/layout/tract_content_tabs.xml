@@ -18,6 +18,8 @@
             style="@style/Widget.GodTools.Tract.Content.Tabs"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+            android:layout_marginRight="@dimen/tract_content_margin_horizontal"
             android:layout_marginBottom="16dp"
             app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}"
             app:clipToOutline="@{true}"

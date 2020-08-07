@@ -6,8 +6,9 @@ import org.cru.godtools.model.Tool.Type
 import org.cru.godtools.tract.activity.startTractActivity
 import java.util.Locale
 
-fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale) = when (type) {
-    Type.TRACT -> startTractActivity(code, *languages)
-    Type.ARTICLE -> startCategoriesActivity(code, languages[0])
-    Type.UNKNOWN -> Unit
-}
+fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale, showTips: Boolean = false) =
+    when (type) {
+        Type.TRACT -> startTractActivity(code, *languages, showTips = showTips)
+        Type.ARTICLE -> startCategoriesActivity(code, languages[0])
+        Type.UNKNOWN -> Unit
+    }

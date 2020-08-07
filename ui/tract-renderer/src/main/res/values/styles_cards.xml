@@ -9,7 +9,6 @@
     <dimen name="card_margin_top">4dp</dimen><!--16dp - 12dp-->
     <dimen name="card_margin_bottom">4dp</dimen><!--16dp - 12dp-->
 
-    <dimen name="card_margin_content_horiz">16dp</dimen>
     <dimen name="card_margin_content_top">16dp</dimen>
     <dimen name="card_margin_content_bottom">4dp</dimen>
 

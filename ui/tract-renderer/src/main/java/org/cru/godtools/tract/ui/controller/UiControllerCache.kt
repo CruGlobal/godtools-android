@@ -3,6 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.view.ViewGroup
 import androidx.core.util.Pools
 import org.ccci.gto.android.common.app.ApplicationUtils
+import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Form
@@ -12,6 +13,7 @@ import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.tips.InlineTip
 import timber.log.Timber
 import kotlin.reflect.KClass
 
@@ -20,28 +22,24 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
 
     @Suppress("UNCHECKED_CAST")
     private val <T : Base> KClass<T>.pool get() = pools[this] as? Pools.Pool<BaseController<T>>
-            ?: Pools.SimplePool<BaseController<T>>(5).also { pools[this] = it as Pools.Pool<BaseController<*>> }
+        ?: Pools.SimplePool<BaseController<T>>(5).also { pools[this] = it as Pools.Pool<BaseController<*>> }
 
-    fun <T : Base> acquire(clazz: KClass<T>): BaseController<T>? =
-        clazz.pool.acquire() ?: createController(clazz, parent, parentController)
+    fun <T : Base> acquire(clazz: KClass<T>) = clazz.pool.acquire() ?: createController(clazz)
     fun <T : Base> release(clazz: KClass<T>, instance: BaseController<T>) {
         instance.model = null
         clazz.pool.release(instance)
     }
 
-    private fun <T : Base> createController(
-        clazz: KClass<T>,
-        parent: ViewGroup,
-        parentViewHolder: BaseController<*>?
-    ) = when (clazz) {
-        Button::class -> ButtonController(parent, parentViewHolder)
-        Form::class -> FormController(parent, parentViewHolder)
-        Image::class -> ImageController(parent, parentViewHolder)
-        Input::class -> InputController(parent, parentViewHolder)
-        Link::class -> LinkController(parent, parentViewHolder)
-        Paragraph::class -> ParagraphController(parent, parentViewHolder)
-        Tabs::class -> TabsController(parent, parentViewHolder)
-        Text::class -> TextController(parent, parentViewHolder)
+    private fun <T : Base> createController(clazz: KClass<T>) = when (clazz) {
+        Button::class -> ButtonController(parent, parentController)
+        Form::class -> FormController(parent, parentController)
+        Image::class -> ImageController(parent, parentController)
+        InlineTip::class -> InlineTipController(parent, parentController)
+        Input::class -> InputController(parent, parentController)
+        Link::class -> LinkController(parent, parentController)
+        Paragraph::class -> ParagraphController(parent, parentController)
+        Tabs::class -> TabsController(parent, parentController)
+        Text::class -> TextController(parent, parentController)
         else -> {
             val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
             if (ApplicationUtils.isDebuggable(parent.context)) throw e

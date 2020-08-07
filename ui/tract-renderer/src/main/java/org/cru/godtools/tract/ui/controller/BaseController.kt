@@ -52,13 +52,9 @@ abstract class BaseController<T : Base> protected constructor(
     }
 
     protected open fun onVisible() = Unit
-
     internal open fun onValidate() = true
-
     internal open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
-
-    open fun onContentEvent(event: Event) = Unit
-
+    internal open fun onContentEvent(event: Event) = Unit
     protected open fun onHidden() = Unit
     // endregion Lifecycle
 
@@ -105,4 +101,8 @@ abstract class BaseController<T : Base> protected constructor(
         // navigate up hierarchy before performing validation
         return parentController?.validate(ids) != false
     }
+
+    // region Tips
+    internal open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+    // endregion Tips
 }
