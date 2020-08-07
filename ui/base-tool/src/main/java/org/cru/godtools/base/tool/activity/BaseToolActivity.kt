@@ -42,8 +42,8 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
-abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @LayoutRes contentLayoutId: Int) :
-    ImmersiveActivity<B>(immersive, contentLayoutId) {
+abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+    ImmersiveActivity<B>(contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject

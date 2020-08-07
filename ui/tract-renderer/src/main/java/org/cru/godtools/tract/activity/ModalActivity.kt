@@ -40,7 +40,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
         .toBundle()
 )
 
-class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(true, R.layout.tract_modal_activity) {
+class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
     @Inject
     internal lateinit var modalControllerFactory: ModalController.Factory
