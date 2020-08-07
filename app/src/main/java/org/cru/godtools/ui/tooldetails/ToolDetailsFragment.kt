@@ -17,6 +17,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import dagger.Lazy
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.ccci.gto.android.common.material.tabs.notifyChanged
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -125,12 +126,10 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     }
 
     fun openTraining(tool: Tool?, primaryTranslation: Translation?) {
-        // TODO: Open training activity
         tool?.code?.let { code ->
             val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
 
-            manifestManager.get().getLatestPublishedManifestLiveData(code, primaryLanguage)
-            requireActivity().openToolActivity(code, tool.type, primaryLanguage) // Add True when other PR finished
+            requireActivity().openToolActivity(code, tool.type, primaryLanguage, showTips = true)
         }
     }
     // endregion Data Binding
