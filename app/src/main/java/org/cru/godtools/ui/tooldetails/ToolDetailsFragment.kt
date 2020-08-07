@@ -60,7 +60,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         super.onBindingCreated(binding, savedInstanceState)
         binding.fragment = this
         binding.tool = dataModel.tool
-        binding.hasTraining = dataModel.primaryManifest.map { !it?.tips.isNullOrEmpty() && BuildConfig.DEBUG }
         binding.manifest = dataModel.primaryManifest
         binding.setBanner(dataModel.banner)
         binding.primaryTranslation = dataModel.primaryTranslation
