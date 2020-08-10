@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.ccci.gto.android.common.compat.view.ProgressBarCompat" />
+        <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.tract.util.TipTypeKt" />
+        <import type="org.cru.godtools.xml.model.tips.TipKt" />
+
+        <variable name="callbacks" type="org.cru.godtools.tract.ui.tips.TipCallbacks" />
+        <variable name="tip" type="org.cru.godtools.xml.model.tips.Tip" />
+        <variable name="isComplete" type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="400dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="64dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:onClick="@{() -> callbacks.closeTip()}"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/appbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="@color/gt_blue" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.GodTools.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:max="@{tip.pages.size, default=1}"
+            android:progress="1"
+            android:progressDrawable="@drawable/tips_progress_bar"
+            app:layout_constraintBottom_toBottomOf="@id/appbar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:max="2" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/icon_background"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/tract_tip_margin_horiz"
+            android:layout_marginTop="8dp"
+            android:elevation="@dimen/tract_tips_tip_icon_elevation"
+            android:src="@{isComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip, default=@drawable/bkg_tips_tip}"
+            app:cornerFamily="rounded"
+            app:cornerSize="@dimen/tract_tips_tip_icon_bkg_corner_radius"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:elevation="@dimen/tract_tips_tip_icon_elevation"
+            android:src="@{isComplete ? TipTypeKt.getDoneDrawable(tip.type, context) : TipTypeKt.getDrawable(tip.type, context)}"
+            app:layout_constraintBottom_toBottomOf="@id/icon_background"
+            app:layout_constraintEnd_toEndOf="@id/icon_background"
+            app:layout_constraintStart_toStartOf="@id/icon_background"
+            app:layout_constraintTop_toTopOf="@id/icon_background"
+            tools:src="@drawable/ic_tips_tip" />
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="@dimen/tract_tip_margin_horiz"
+            android:text="@{ContextKt.getString(context, tip.manifest.locale, TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
+            android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
+            android:textSize="@dimen/text_size_tip_label"
+            app:layout_constraintBottom_toBottomOf="@id/icon_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon_background"
+            app:layout_constraintTop_toTopOf="@id/icon_background" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/header_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="icon_background,label" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pages"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header_bottom"
+            app:onPageSelected="@{(p) -> ProgressBarCompat.setProgress(progress, p + 1, true)}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

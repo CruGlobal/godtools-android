@@ -17,6 +17,8 @@ import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.activity.TractActivityDataModel
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
+import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
+import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragmentDataModel
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @AssistedModule
@@ -38,6 +40,14 @@ abstract class TractRendererModule {
     @IntoMap
     @ViewModelKey(ModalActivityDataModel::class)
     internal abstract fun modalActivityDataModel(dataModel: ModalActivityDataModel): ViewModel
+
+    @ContributesAndroidInjector
+    internal abstract fun tipBottomSheetDialogFragmentInjector(): TipBottomSheetDialogFragment
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TipBottomSheetDialogFragmentDataModel::class)
+    internal abstract fun tipBottomSheetDialogDataModel(dataModel: TipBottomSheetDialogFragmentDataModel): ViewModel
 
     @Binds
     @IntoMap

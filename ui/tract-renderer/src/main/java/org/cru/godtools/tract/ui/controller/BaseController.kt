@@ -13,6 +13,7 @@ import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.layoutDirection
+import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 import kotlin.reflect.KClass
 
@@ -104,5 +105,9 @@ abstract class BaseController<T : Base> protected constructor(
 
     // region Tips
     internal open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+
+    open fun showTip(tip: Tip?) {
+        parentController?.showTip(tip)
+    }
     // endregion Tips
 }

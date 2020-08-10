@@ -23,6 +23,7 @@ import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -40,6 +41,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     interface Callbacks {
         fun onUpdateActiveCard(page: Page, card: Card?)
         fun showModal(modal: Modal)
+        fun showTip(tip: Tip)
         fun goToPage(position: Int)
     }
 
@@ -128,6 +130,10 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
     override fun showModal(modal: Modal) {
         if (primaryItemPage == modal.page) callbacks?.showModal(modal)
+    }
+
+    override fun showTip(tip: Tip) {
+        callbacks?.showTip(tip)
     }
 
     override fun goToNextPage() {

@@ -37,6 +37,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
@@ -44,11 +45,13 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 

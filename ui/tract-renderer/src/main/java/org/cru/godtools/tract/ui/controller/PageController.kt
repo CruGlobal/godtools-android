@@ -18,6 +18,7 @@ import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 
 class PageController @AssistedInject internal constructor(
@@ -34,6 +35,7 @@ class PageController @AssistedInject internal constructor(
     interface Callbacks {
         fun onUpdateActiveCard(page: Page?, card: Card?)
         fun showModal(modal: Modal)
+        fun showTip(tip: Tip)
         fun goToNextPage()
     }
 
@@ -254,6 +256,9 @@ class PageController @AssistedInject internal constructor(
 
     // region Tips
     override var isTipsEnabled = false
+    override fun showTip(tip: Tip?) {
+        tip?.let { callbacks?.showTip(tip) }
+    }
     // endregion Tips
 
     override fun updateLayoutDirection() = Unit

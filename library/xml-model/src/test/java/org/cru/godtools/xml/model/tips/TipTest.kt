@@ -17,7 +17,9 @@ class TipTest {
         assertEquals("name", tip.id)
         assertEquals(Tip.Type.ASK, tip.type)
         assertEquals(2, tip.pages.size)
+        assertEquals(0, tip.pages[0].position)
         assertEquals("Page 1", (tip.pages[0].content[0] as Text).text)
+        assertEquals(1, tip.pages[1].position)
         assertEquals("Page 2", (tip.pages[1].content[0] as Text).text)
     }
 }

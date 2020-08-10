@@ -21,4 +21,14 @@
     <!-- Training Tips -->
     <eat-comment />
     <string name="tract_tips_action_open_inline">View Tip</string>
+    <string name="tract_tips_tip_action_next">Next</string>
+    <string name="tract_tips_tip_action_close">Close</string>
+
+    <!-- Tip Types -->
+    <eat-comment />
+    <string name="tract_tips_type_ask">Ask</string>
+    <string name="tract_tips_type_consider">Consider</string>
+    <string name="tract_tips_type_prepare">Prepare</string>
+    <string name="tract_tips_type_quote">Quote</string>
+    <string name="tract_tips_type_tip">Tip</string>
 </resources>
