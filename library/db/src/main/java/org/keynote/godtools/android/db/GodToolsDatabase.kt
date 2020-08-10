@@ -14,6 +14,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LegacyTables
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import timber.log.Timber
@@ -21,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 43
+private const val DATABASE_VERSION = 44
 
 /*
  * Version history
@@ -35,9 +36,11 @@ private const val DATABASE_VERSION = 43
  * v5.0.19 - v5.1.4
  * 40: 2019-11-12
  * 41: 2020-01-23
- * v5.1.5 - v5.2.1
+ * v5.1.5 - v5.2.1.1
  * 42: 2020-05-04
  * 43: 2020-06-03
+ * v5.3.0
+ * 44: 2020-08-10
  */
 
 @Singleton
@@ -55,6 +58,7 @@ class GodToolsDatabase @Inject internal constructor(private val context: Context
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_CREATE_TABLE)
+            db.execSQL(TrainingTipTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -80,6 +84,7 @@ class GodToolsDatabase @Inject internal constructor(private val context: Context
                         db.execSQL(ToolTable.SQL_V42_POPULATE_DEFAULT_ORDER)
                     }
                     43 -> db.execSQL(ToolTable.SQL_V43_ALTER_CATEGORY)
+                    44 -> db.execSQL(TrainingTipTable.SQL_V44_CREATE_TRAINING_TIPS)
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
@@ -112,6 +117,7 @@ class GodToolsDatabase @Inject internal constructor(private val context: Context
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)
+            db.execSQL(TrainingTipTable.SQL_DELETE_TABLE)
 
             // legacy tables
             db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS)

@@ -11,6 +11,7 @@ import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.TrainingTip;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
 
@@ -355,6 +356,38 @@ public final class Contract extends BaseContract {
         static final String SQL_V41_CREATE_GLOBAL_ANALYTICS =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
                        SQL_COLUMN_GOSPEL_PRESENTATIONS);
+        // endregion DB Migrations
+    }
+
+    public static class TrainingTipTable implements Base, ToolCode, LanguageCode {
+        static final String TABLE_NAME = "training_tips";
+        private static final Table<TrainingTip> TABLE = Table.forClass(TrainingTip.class);
+
+        static final String COLUMN_TIP_ID = "tipId";
+        static final String COLUMN_IS_COMPLETED = "isCompleted";
+
+        private static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
+        private static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
+        private static final Field FIELD_TIP_ID = TABLE.field(COLUMN_TIP_ID);
+
+        static final String[] PROJECTION_ALL = {COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID, COLUMN_IS_COMPLETED};
+
+        private static final String SQL_COLUMN_TIP_ID = COLUMN_TIP_ID + " TEXT";
+        private static final String SQL_COLUMN_IS_COMPLETE = COLUMN_IS_COMPLETED + " INTEGER";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY =
+                FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind())).and(FIELD_TIP_ID.eq(bind()));
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_TIP_ID, SQL_COLUMN_IS_COMPLETE,
+                       SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        // region DB Migrations
+        static final String SQL_V44_CREATE_TRAINING_TIPS =
+                create(TABLE_NAME, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_TIP_ID, SQL_COLUMN_IS_COMPLETE,
+                       SQL_PRIMARY_KEY);
         // endregion DB Migrations
     }
 }
