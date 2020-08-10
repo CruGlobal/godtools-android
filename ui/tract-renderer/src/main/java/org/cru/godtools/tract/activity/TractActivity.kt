@@ -88,7 +88,7 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
-class TractActivity : BaseToolActivity<TractActivityBinding>(true, R.layout.tract_activity),
+class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
     TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject

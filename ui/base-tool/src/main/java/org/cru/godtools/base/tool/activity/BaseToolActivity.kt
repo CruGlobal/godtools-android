@@ -1,10 +1,12 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -18,6 +20,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
@@ -42,8 +45,8 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
-abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @LayoutRes contentLayoutId: Int) :
-    ImmersiveActivity<B>(immersive, contentLayoutId) {
+abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+    ImmersiveActivity<B>(contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
@@ -53,6 +56,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @Layout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
+        setupStatusBar()
     }
 
     @CallSuper
@@ -94,6 +98,17 @@ abstract class BaseToolActivity<B : ViewDataBinding>(immersive: Boolean, @Layout
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
     protected val activeManifest get() = activeManifestLiveData.value
+
+    private fun setupStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.apply {
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                activeManifestLiveData.observe(this@BaseToolActivity) {
+                    statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
+                }
+            }
+        }
+    }
 
     // region Toolbar update logic
     private var toolbarMenu: Menu? = null

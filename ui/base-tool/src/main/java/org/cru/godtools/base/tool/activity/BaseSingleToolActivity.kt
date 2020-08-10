@@ -17,11 +17,10 @@ import org.cru.godtools.xml.model.Manifest
 import java.util.Locale
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
-    immersive: Boolean,
     @LayoutRes contentLayoutId: Int,
     private val requireTool: Boolean = true,
     private val supportedType: Manifest.Type? = null
-) : BaseToolActivity<B>(immersive, contentLayoutId) {
+) : BaseToolActivity<B>(contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
     private val dataModel: BaseSingleToolActivityDataModel by viewModels()
