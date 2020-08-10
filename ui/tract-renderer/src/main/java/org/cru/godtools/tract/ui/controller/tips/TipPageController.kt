@@ -4,6 +4,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.controller.ParentController
+import org.cru.godtools.tract.ui.tips.TipCallbacks
 import org.cru.godtools.xml.model.tips.TipPage
 import org.greenrobot.eventbus.EventBus
 
@@ -16,16 +17,11 @@ class TipPageController @AssistedInject internal constructor(
         fun create(binding: TractTipPageBinding): TipPageController
     }
 
-    interface Callbacks {
-        fun goToNextPage()
-        fun closeTip()
-    }
-
     init {
         binding.controller = this
     }
 
-    var callbacks: Callbacks?
+    var callbacks: TipCallbacks?
         get() = binding.callbacks
         set(value) {
             binding.callbacks = value

@@ -6,7 +6,7 @@
         <import type="org.cru.godtools.xml.model.StylesKt" />
         <import type="org.cru.godtools.tract.R" />
 
-        <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.tips.TipPageController.Callbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tract.ui.tips.TipCallbacks" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.tips.TipPageController" />
         <variable name="page" type="org.cru.godtools.xml.model.tips.TipPage" />
     </data>

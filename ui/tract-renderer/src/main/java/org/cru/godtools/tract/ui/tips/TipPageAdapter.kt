@@ -15,13 +15,13 @@ import org.cru.godtools.xml.model.tips.Tip
 class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     private val controllerFactory: TipPageController.Factory
-) : SimpleDataBindingAdapter<TractTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipPageController.Callbacks {
+) : SimpleDataBindingAdapter<TractTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
     @AssistedInject.Factory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner): TipPageAdapter
     }
 
-    var callbacks: TipPageController.Callbacks? = null
+    var callbacks: TipCallbacks? = null
 
     var tip: Tip? = null
         set(value) {

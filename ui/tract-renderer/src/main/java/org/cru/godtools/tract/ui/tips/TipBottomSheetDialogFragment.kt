@@ -16,13 +16,12 @@ import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractTipBinding
-import org.cru.godtools.tract.ui.controller.tips.TipPageController
 import org.cru.godtools.xml.model.tips.Tip
 import splitties.fragmentargs.arg
 import java.util.Locale
 import javax.inject.Inject
 
-class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBinding>(), TipPageController.Callbacks {
+class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBinding>(), TipCallbacks {
     internal constructor(tip: Tip) : this() {
         tool = tip.manifest.code
         locale = tip.manifest.locale
