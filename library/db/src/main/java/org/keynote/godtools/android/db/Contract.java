@@ -40,7 +40,12 @@ public final class Contract extends BaseContract {
     @SuppressWarnings("checkstyle:InterfaceIsType")
     interface ToolCode {
         String COLUMN_TOOL = "tool";
-        String SQL_COLUMN_TOOL = COLUMN_TOOL + " TEXT";
+        String SQL_COLUMN_TOOL = COLUMN_TOOL + " TEXT NOT NULL";
+    }
+
+    interface LanguageCode {
+        String COLUMN_LANGUAGE = "language";
+        String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
     }
 
     public static class LanguageTable extends BaseTable {
@@ -147,11 +152,10 @@ public final class Contract extends BaseContract {
         static final String SQL_V43_ALTER_CATEGORY = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CATEGORY;
     }
 
-    public static class TranslationTable extends BaseTable implements ToolCode {
+    public static class TranslationTable extends BaseTable implements ToolCode, LanguageCode {
         static final String TABLE_NAME = "translations";
         public static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
-        public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
@@ -173,7 +177,6 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
                         COLUMN_TAGLINE, COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED, COLUMN_LAST_ACCESSED};
 
-        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
