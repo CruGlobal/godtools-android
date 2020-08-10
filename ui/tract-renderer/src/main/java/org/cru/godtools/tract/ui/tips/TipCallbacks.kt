@@ -2,5 +2,5 @@ package org.cru.godtools.tract.ui.tips
 
 interface TipCallbacks {
     fun goToNextPage()
-    fun closeTip()
+    fun closeTip(completed: Boolean)
 }

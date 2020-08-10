@@ -364,7 +364,7 @@ public final class Contract extends BaseContract {
         private static final Table<TrainingTip> TABLE = Table.forClass(TrainingTip.class);
 
         static final String COLUMN_TIP_ID = "tipId";
-        static final String COLUMN_IS_COMPLETED = "isCompleted";
+        public static final String COLUMN_IS_COMPLETED = "isCompleted";
 
         private static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
         private static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);

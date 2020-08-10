@@ -14,9 +14,12 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
+import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractTipBinding
 import org.cru.godtools.xml.model.tips.Tip
+import org.keynote.godtools.android.db.Contract.TrainingTipTable
+import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 import java.util.Locale
 import javax.inject.Inject
@@ -31,6 +34,9 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     private var tool: String by arg()
     private var locale: Locale by arg()
     private var tip: String by arg()
+
+    @Inject
+    internal lateinit var dao: GodToolsDao
 
     private val dataModel: TipBottomSheetDialogFragmentDataModel by viewModels()
 
@@ -82,7 +88,11 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         binding?.apply { pages.currentItem += 1 }
     }
 
-    override fun closeTip() {
+    override fun closeTip(completed: Boolean) {
+        if (completed) dao.updateOrInsertAsync(
+            TrainingTip(tool, locale, tip).apply { isCompleted = true },
+            TrainingTipTable.COLUMN_IS_COMPLETED
+        )
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
