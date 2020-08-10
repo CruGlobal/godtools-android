@@ -5,9 +5,11 @@
     <data>
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
         <import type="org.cru.godtools.tract.R" />
+        <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.CardKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
+        <variable name="enableTips" type="Boolean" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.CardController" />
         <variable name="model" type="org.cru.godtools.xml.model.Card" />
     </data>
@@ -41,18 +43,39 @@
 
                 <TextView
                     android:id="@+id/label"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+                    android:layout_marginStart="@dimen/tract_content_margin_horizontal"
                     android:layout_marginTop="@dimen/card_margin_content_top"
-                    android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="12dp"
                     android:text="@{model.label}"
-                    android:textSize="@{@dimen/text_size_card_label}"
+                    android:textSize="@{@dimen/text_size_card_label, default=@dimen/text_size_card_label}"
                     app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/containsTip"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginEnd="@dimen/tract_content_margin_horizontal"
                     tools:text="Card Label" />
+
+                <ImageView
+                    android:id="@+id/containsTip"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="@dimen/card_margin_content_top"
+                    android:layout_marginEnd="@dimen/tract_content_margin_horizontal"
+                    android:src="@{TipTypeKt.getDrawable(model.tips[0].type, context)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:visibleIf="@{enableTips &amp;&amp; !model.tips.isEmpty}"
+                    tools:src="@drawable/ic_tips_tip" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/card_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="label,containsTip" />
 
                 <View
                     android:id="@+id/label_divider"
@@ -62,7 +85,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginRight="@dimen/tract_content_margin_horizontal"
                     android:background="@{StylesKt.getTextColor(model)}"
-                    app:layout_constraintTop_toBottomOf="@id/label"
+                    app:layout_constraintTop_toBottomOf="@id/card_header"
                     tools:background="#bebebe" />
 
                 <View
