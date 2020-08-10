@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
+import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
@@ -64,6 +68,7 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     override fun onBindingCreated(binding: TractTipBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         dataModel.tip.observe(viewLifecycleOwner) { binding.tip = it }
+        binding.isComplete = dataModel.isCompleted
         binding.setupPages()
     }
     // endregion Lifecycle
@@ -111,9 +116,17 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     }
 }
 
-internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(manifestManager: ManifestManager) :
-    LatestPublishedManifestDataModel(manifestManager) {
+internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
+    dao: GodToolsDao,
+    manifestManager: ManifestManager
+) : LatestPublishedManifestDataModel(manifestManager) {
     val tipId = MutableLiveData<String>()
 
     val tip = manifest.combineWith(tipId.distinctUntilChanged()) { m, t -> m?.findTip(t) }
+    val isCompleted = toolCode.switchCombineWith(locale, tipId) { tool, locale, tipId ->
+        when {
+            tool == null || locale == null || tipId == null -> emptyLiveData()
+            else -> dao.findLiveData<TrainingTip>(tool, locale, tipId)
+        }
+    }.map { it?.isCompleted == true }
 }
