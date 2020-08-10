@@ -26,11 +26,11 @@ class Tip : BaseModel {
         }
     }
 
-    val id: String?
+    val id: String
     val type: Type
     val pages: List<TipPage>
 
-    internal constructor(manifest: Manifest, id: String?, parser: XmlPullParser) : super(manifest) {
+    internal constructor(manifest: Manifest, id: String, parser: XmlPullParser) : super(manifest) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRAINING, XML_TIP)
 
         this.id = id
@@ -51,7 +51,7 @@ class Tip : BaseModel {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(manifest: Manifest? = null, id: String? = null, type: Type = Type.DEFAULT) : super(manifest) {
+    constructor(manifest: Manifest? = null, id: String, type: Type = Type.DEFAULT) : super(manifest) {
         this.id = id
         this.type = type
         pages = emptyList()

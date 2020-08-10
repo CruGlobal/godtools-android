@@ -37,4 +37,14 @@ class ManifestTest {
         assertEquals(1, manifest.tips.size)
         assertEquals("tip1", manifest.findTip("tip1")!!.id)
     }
+
+    @Test
+    fun verifyParseManifestWithInvalidTips() {
+        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips_invalid.xml")) {
+            getXmlParserForResource(it)
+        }
+        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.resources.size)
+        assertEquals(0, manifest.tips.size)
+    }
 }
