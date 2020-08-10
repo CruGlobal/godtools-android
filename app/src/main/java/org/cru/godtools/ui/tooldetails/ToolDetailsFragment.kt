@@ -27,6 +27,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.util.openToolActivity
+import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
 import java.util.Locale
 import javax.inject.Inject
@@ -57,6 +58,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         super.onBindingCreated(binding, savedInstanceState)
         binding.fragment = this
         binding.tool = dataModel.tool
+        binding.manifest = dataModel.primaryManifest
         binding.setBanner(dataModel.banner)
         binding.primaryTranslation = dataModel.primaryTranslation
         binding.parallelTranslation = dataModel.parallelTranslation
@@ -119,6 +121,12 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
             } else {
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage)
             }
+        }
+    }
+
+    fun openTraining(manifest: Manifest) {
+        if (manifest.type == Manifest.Type.TRACT) {
+            requireActivity().openToolActivity(manifest.code, Tool.Type.TRACT, manifest.locale, showTips = true)
         }
     }
     // endregion Data Binding
