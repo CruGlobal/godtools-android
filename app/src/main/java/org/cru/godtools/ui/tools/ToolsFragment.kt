@@ -35,6 +35,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.ADOBE_TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
+import org.cru.godtools.ui.tools.analytics.model.ToolOpenTap
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
@@ -150,8 +151,15 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
     // region ToolsAdapterCallbacks
     override fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
-        if (tool != null) findListener<Callbacks>()
-            ?.onToolSelect(tool.code, tool.type, primaryTranslation?.languageCode, parallelTranslation?.languageCode)
+        if (tool != null) {
+            findListener<Callbacks>()?.onToolSelect(
+                tool.code,
+                tool.type,
+                primaryTranslation?.languageCode,
+                parallelTranslation?.languageCode
+            )
+            eventBus.post(ToolOpenTap)
+        }
     }
 
     override fun addTool(code: String?) {
