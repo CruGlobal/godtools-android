@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Deel jou skerm</string>
+    <string name="tutorial_live_share_description_text">Hierdie opsie sal \'n skakel van hierdie werkstuk na \'n vriend stuur. Wanneer die skakel oopgemaak word, sal die skermdelingsessie begin.</string>
+    <string name="tutorial_live_share_mirrored_headline">Weerkaatsde ondervinding</string>
+    <string name="tutorial_live_share_mirrored_text">Terwyl jy die werkstuk op jou foon blaai, sal jou vriend se foon op dieselfde manier reageer. Dit laat jou toe om die werkstuk saam op 2 toestelle op dieselfde tyd te verken.</string>
+    <string name="tutorial_live_share_start_headline">Kom ons begin</string>
+    <string name="tutorial_live_share_start_text">Stuur die skakel na een of meer mense om nou \'n skermdeelsessie te begin.
+
+Hierdie ondervinding vereis tans dat alle deelnemers die GodTools-toep op hulle toestel aflaai.</string>
+    <string name="tutorial_live_share_action_continue">Gaan voort</string>
+    <string name="tutorial_live_share_action_skip">Slaan oor</string>
+    <string name="tutorial_live_share_action_start">Deel \'n skakel</string>
+</resources>

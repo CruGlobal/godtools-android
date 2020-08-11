@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ติดตั้ง</string>
+    <string name="menu_share_tract">ส่งเครื่องมือนี้</string>
     <string name="tract_card_previous">ก่อนหน้า</string>
     <string name="tract_card_next">ถัดไป</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">แชร์หน้าจอของคุณ</string>
+    <string name="share_tool_message_tract_live_share">สวัสดี ติดตามไปกับฉันใน GodTools ผ่านการแชร์หน้าจอ นี่คือลิงค์: %1$s\n\nหากคุณไม่ได้รับข้อความนี้หลังจากผ่านไปสักพัก ลิงก์อาจยังใช้งานไม่ได้ เราสามารถลองอีกครั้งในภายหลัง</string>
+    <string name="tract_live_share_starting">กำลังเริ่มการแชร์หน้าจอ...</string>
+    <string name="tract_live_share_unable_to_connect">ไม่สามารถเชื่อมต่อกับการแชร์หน้าจอ</string>
+    <string name="tract_live_share_exit_dialog_message">ออกจากเซสชันการแชร์ทางไกลตอนนี้หรือไม่</string>
+    <string name="tract_live_share_exit_dialog_confirm">ออก</string>
+    <string name="tract_live_share_exit_dialog_cancel">ยกเลิก</string>
 </resources>

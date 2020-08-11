@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <!-- Navigation Menu -->
+    <string name="menu_heading_share">ХУВААЛЦ</string>
+    <string name="menu_privacy_policy">Нууцлалын бодлого</string>
+    <!-- Share a story -->
+    <!-- Language Selection UI -->
+</resources>

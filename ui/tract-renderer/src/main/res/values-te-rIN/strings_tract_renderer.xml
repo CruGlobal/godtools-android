@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ఇన్‌స్టాల్ చేయి</string>
+    <string name="menu_share_tract">ఈ పరికరంను పంపండి</string>
     <string name="tract_card_previous">మునుపటి</string>
     <string name="tract_card_next">తదుపరి</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">మీ స్క్రీన్ పంచుకోండి</string>
+    <string name="share_tool_message_tract_live_share">హాయ్, స్క్రీన్ పంచుకోవడం ద్వారా GodTools లో నాతో పాటు అనుసరించండి. లింక్ ఇక్కడ ఉన్నది: %1$s\n\nఇంకనూ తరువాత ఈ సందేశమును ఒకవేళ మీరు అందుకోకుంటే, లింక్ ఇంకనూ పనిచేయక పోవచ్చు. మరొక సమయంలో మనము మళ్ళీ ప్రయత్నించవచ్చు.</string>
+    <string name="tract_live_share_starting">స్క్రీన్ పంచుకోవడంను ప్రారంభిస్తున్నా…</string>
+    <string name="tract_live_share_unable_to_connect">స్క్రన్ పంచుకోవడంకు కనెక్ట్ చేయలేకపోయాను</string>
+    <string name="tract_live_share_exit_dialog_message">ఇప్పుడే సుదూర పంచుకునే సెషన్ నుండి నిష్క్రమించేదా?</string>
+    <string name="tract_live_share_exit_dialog_confirm">నిష్క్రమించండి</string>
+    <string name="tract_live_share_exit_dialog_cancel">రద్దు చేయండి</string>
 </resources>

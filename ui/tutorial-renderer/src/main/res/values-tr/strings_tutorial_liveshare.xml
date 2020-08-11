@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Ekranını paylaş</string>
+    <string name="tutorial_live_share_description_text">Bu seçenek, bu aracın bağlantısını bir arkadaşına gönderir. Bağlantı açıldığında bir ekran paylaşımı oturumu başlatır.</string>
+    <string name="tutorial_live_share_mirrored_headline">Yansıtmalı deneyim</string>
+    <string name="tutorial_live_share_mirrored_text">Aracı telefonunda kaydırırken arkadaşının ekranı da aynı biçimde tepki verir. Bu, aynı anda 2 cihazda bir aracın özellikleri üzerinden geçmene olanak tanır.</string>
+    <string name="tutorial_live_share_start_headline">Başlayın</string>
+    <string name="tutorial_live_share_start_text">Şimdi bir ekran paylaşma oturumu başlatmak için bağlantıyı bir veya daha fazla kişiye gönder.
+
+Bu deneyim, şu anda tüm katılımcıların GodTools uygulamasını cihazlarına indirmiş olmalarını gerektirir.</string>
+    <string name="tutorial_live_share_action_continue">devam</string>
+    <string name="tutorial_live_share_action_skip">atla</string>
+    <string name="tutorial_live_share_action_start">Bir bağlantı paylaş</string>
+</resources>

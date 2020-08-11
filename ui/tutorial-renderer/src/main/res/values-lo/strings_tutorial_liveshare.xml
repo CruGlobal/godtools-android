@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">ແບ່ງປັນໜ້າຈໍຂອງທ່ານ</string>
+    <string name="tutorial_live_share_description_text">ຕົວເລືອກນີ້ຈະສົ່ງລິ້ງໄປຫາເຄື່ອງມືນີ້ເພື່ອໄປຫາໝູ່. ເມື່ອລິ້ງຖຶກເປີດ ມັນກໍຈະເລີ່ມເຊດຊັນແບ່ງປັນໜ້າຈໍ.</string>
+    <string name="tutorial_live_share_mirrored_headline">ປະສົບການທີ່ຖືກສະທ້ອນກັບ</string>
+    <string name="tutorial_live_share_mirrored_text">ໃນຂະນະທີ່ທ່ານເລື່ອນເຄື່ອງມືຢູ່ໂທລະສັບຂອງທ່ານ, ໜ້າຈໍຂອງໝູ່ຂອງທ່ານກໍຈະຕອບສະໜອງໃນທາງດຽວກັນ. ສິ່ງນີ້ເຮັດໃຫ້ທ່ານເບິ່ງຜ່ານເຄື່ອງມືພ້ອມກັນຢູ່ອຸປະກອນ 2 ເຄື່ອງໃນເວລາດຽວກັນ.</string>
+    <string name="tutorial_live_share_start_headline">ເລີ່ມເລີຍ</string>
+    <string name="tutorial_live_share_start_text">ສົ່ງລິ້ງໄປຫາໜຶ່ງຄົນ ຫຼື ຫຼາຍກວ່າໜຶ່ງຄົນເພື່ອເລີ່ມເຊດຊັນແບ່ງປັນທາງໄກດຽວນີ້.
+
+ຄົນເຂົ້າຮ່ວມທຸກຄົນຕ້ອງໄດ້ດາວໂຫຼດແອັບ GodTools ໃສ່ອຸປະກອນຂອງພວກເຂົາເພື່ອໄດ້ຮັບປະສົບການໃນປັດຈຸບັນນີ້.</string>
+    <string name="tutorial_live_share_action_continue">ສືບຕໍ່</string>
+    <string name="tutorial_live_share_action_skip">ຂ້າມ</string>
+    <string name="tutorial_live_share_action_start">ແບ່ງປັນລິ້ງ</string>
+</resources>

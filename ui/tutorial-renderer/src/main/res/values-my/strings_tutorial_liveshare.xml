@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">သင်၏မျက်နှာပြင်ကိုမျှဝေပါ</string>
+    <string name="tutorial_live_share_description_text">ဤရွေးချယ်မှုသည် ဤကိရိယာသို့ လင့်ခ်ကို မိတ်ဆွေတစ်ဦးထံ ပေးပို့မည်။ လင့်ခ်ကို ဖွင့်ချိန်တွင် မျက်နှာပြင် မျှဝေခြင်း အပိုင်း စတင်ပါမည်။</string>
+    <string name="tutorial_live_share_mirrored_headline">အခြားစက်ပေါ်တွင် မျက်နှာပြင် ပြသခြင်း အတွေ့အကြုံ</string>
+    <string name="tutorial_live_share_mirrored_text">သင့်ဖုန်းတွင် ကိရိယာကို လှိမ့်လျှင် သင့်မိတ်ဆွေ၏ မျက်နှာပြင်သည် ထိုသို့ တုံ့ပြန်ပါမည်။ ၎င်းသည် သင့်အား တစ်ချိန်တည်းတွင် စက် ၂ လုံးပေါ်၌ ကိရိယာကို ကြည့်ခွင့်ပေးပါသည်။</string>
+    <string name="tutorial_live_share_start_headline">စတင်ရန်</string>
+    <string name="tutorial_live_share_start_text">မျက်နှာပြင် မျှဝေသည့် အပိုင်းကို ယခု စတင်ရန် တစ်ဦး သို့မဟုတ် တစ်ဦးထက်ပိုသော လူများထံ လင့်ခ်ကို ပို့ပေးပါ။
+
+ဤအတွေ့အကြုံသည် လက်ရှိတွင် ပါဝင်သူအားလုံးက GodTools အက်ပ်ကို ၎င်းတို့၏ စက်တွင် ဒေါင်းလုဒ်လုပ်ထားရန် လိုအပ်သည်။</string>
+    <string name="tutorial_live_share_action_continue">ဆက်လုပ်ရန်</string>
+    <string name="tutorial_live_share_action_skip">ကျော်ရန်</string>
+    <string name="tutorial_live_share_action_start">လင့်ခ်တစ်ခုကို မျှဝေပါ</string>
+</resources>

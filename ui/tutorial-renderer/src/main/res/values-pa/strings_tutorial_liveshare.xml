@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">ਆਪਣੀ ਸਕਰੀਨ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
+    <string name="tutorial_live_share_description_text">ਇਹ ਵਿਕਲਪ ਇਸ ਟੂਲ ਦਾ ਲਿੰਕ ਇੱਕ ਦੋਸਤ ਨੂੰ ਭੇਜ ਦੇਵੇਗਾ। ਜਦੋਂ ਲਿੰਕ ਖੋਲ੍ਹਿਆ ਜਾਵੇਗਾ ਤਾਂ ਇਹ ਸਕ੍ਰੀਨ ਸ਼ੇਅਰਿੰਗ ਸੈਸ਼ਨ ਸ਼ੁਰੂ ਕਰੇਗਾ।</string>
+    <string name="tutorial_live_share_mirrored_headline">ਮਿਰਰਡ ਤਜ਼ਰਬਾ</string>
+    <string name="tutorial_live_share_mirrored_text">ਜਿਵੇਂ ਤੁਸੀਂ ਆਪਣੇ ਫੋਨ ਤੇ ਟੂਲ ਨੂੰ ਸਕ੍ਰੌਲ ਕਰਦੇ ਹੋ, ਤਾਂ ਤੁਹਾਡੇ ਦੋਸਤ ਦੀ ਸਕ੍ਰੀਨ ਵੀ ਉਸੇ ਤਰ੍ਹਾਂ ਜਵਾਬ ਦੇਵੇਗੀ। ਇਹ ਤੁਹਾਨੂੰ ਇੱਕੋ ਸਮੇਂ ਇੱਕ ਟੂਲ ਦੇ ਨਾਲ 2 ਡਿਵਾਈਸਾਂ ਤੇ ਇਕੱਠੇ ਚੱਲਣ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ।</string>
+    <string name="tutorial_live_share_start_headline">ਅਰੰਭ ਕਰੋ</string>
+    <string name="tutorial_live_share_start_text">ਹੁਣੇ ਇੱਕ ਸਕ੍ਰੀਨ ਸ਼ੇਅਰਿੰਗ ਸੈਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਜਾਂ ਵਧੇਰੇ ਲੋਕਾਂ ਨੂੰ ਲਿੰਕ ਭੇਜੋ।
+
+ਇਸ ਤਜ਼ਰਬੇ ਲਈ ਇਸ ਵੇਲੇ ਸਾਰੇ ਭਾਗੀਦਾਰਾਂ ਨੂੰ ਉਨ੍ਹਾਂ ਦੇ ਡਿਵਾਈਸਾਂ ਤੇ GodTools ਐਪ ਡਾਉਨਲੋਡ ਕੀਤੀ ਹੋਣ ਦੀ ਜ਼ਰੂਰਤ ਹੈ।</string>
+    <string name="tutorial_live_share_action_continue">ਜਾਰੀ ਰੱਖੋ</string>
+    <string name="tutorial_live_share_action_skip">ਛੱਡੋ</string>
+    <string name="tutorial_live_share_action_start">ਇੱਕ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
+</resources>

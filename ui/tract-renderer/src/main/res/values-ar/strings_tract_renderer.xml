@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">تثبيت</string>
+    <string name="menu_share_tract">أرسل هذه الأداة</string>
     <string name="tract_card_previous">السابق</string>
     <string name="tract_card_next">التالي</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">مشاركة الشاشة</string>
+    <string name="share_tool_message_tract_live_share">مرحباً، تابعني في GodTools عبر مشاركة الشاشة. إليك الرابط: %1$s\n\nإذا لم تتلق هذه الرسالة حتى وقت لاحق، فقد لا يعمل الرابط. يمكننا المحاولة مرة أخرى في وقت آخر.</string>
+    <string name="tract_live_share_starting">بدء مشاركة الشاشة جارٍ...</string>
+    <string name="tract_live_share_unable_to_connect">تعذر الاتصال بمشاركة الشاشة</string>
+    <string name="tract_live_share_exit_dialog_message">الخروج من جلسة المشاركة عن بُعد الآن؟</string>
+    <string name="tract_live_share_exit_dialog_confirm">خروج</string>
+    <string name="tract_live_share_exit_dialog_cancel">إلغاء</string>
 </resources>

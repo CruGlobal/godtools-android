@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Ibahagi ang iyong screen</string>
+    <string name="tutorial_live_share_description_text">Ang opsyong ito ay magpapadala sa isang kaibigan ng link sa tool na ito. Kapag binuksan ang link, magsisimula ito ng session ng pagbabahagi ng screen.</string>
+    <string name="tutorial_live_share_mirrored_headline">Parehong karanasan</string>
+    <string name="tutorial_live_share_mirrored_text">Habang ini-scroll mo ang tool sa iyong telepono, tutugon ang screen ng kaibigan mo sa parehong paraan. Bibigyang-daan ka nito para sabay ninyong masiyasat ang tool sa 2 device.</string>
+    <string name="tutorial_live_share_start_headline">Magsimula</string>
+    <string name="tutorial_live_share_start_text">Ipadala ang link sa isa o higit pang tao para simulan ngayon ang session ng pagbabahagi ng screen.
+
+Ang karanasang ito ay kasalukuyang kinakailangan ang lahat ng kalahok na mag-download ng GodTools app sa kanilang device.</string>
+    <string name="tutorial_live_share_action_continue">Magpatuloy</string>
+    <string name="tutorial_live_share_action_skip">Laktawan</string>
+    <string name="tutorial_live_share_action_start">Magbahagi ng link</string>
+</resources>

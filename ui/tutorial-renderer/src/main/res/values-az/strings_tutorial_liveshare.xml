@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Ekranını paylaş</string>
+    <string name="tutorial_live_share_description_text">Bu seçim bu alətə keçidi dosta göndərəcək. Keçid açıldıqda ekran paylaşma sessiyası başladılacaq.</string>
+    <string name="tutorial_live_share_mirrored_headline">Əks olunan təcrübə</string>
+    <string name="tutorial_live_share_mirrored_text">Aləti telefonunuzda sürüşdürdükdə dostunuzum ekranı da eyni reaksiyanı verəcək. Bu, sizə eyni vaxtda iki cihazda aləti birgə nəzərdən keçirməyə imkan verir.</string>
+    <string name="tutorial_live_share_start_headline">Başla</string>
+    <string name="tutorial_live_share_start_text">Ekran paylaşma sessiyasını indi başlatmaq üçün keçidi bir və ya daha çox nəfərə göndər.
+
+Bu təcrübə hal-hazırda bütün iştirakçıların cihazlarında yüklənmiş GodTools tətbiqinin olmasını tələb edir.</string>
+    <string name="tutorial_live_share_action_continue">Davam et</string>
+    <string name="tutorial_live_share_action_skip">Burax</string>
+    <string name="tutorial_live_share_action_start">Keçidi paylaş</string>
+</resources>

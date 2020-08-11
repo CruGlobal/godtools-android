@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Instaliraj</string>
+    <string name="menu_share_tract">Pošaljite ovaj alat</string>
     <string name="tract_card_previous">Prethodni</string>
     <string name="tract_card_next">Sljedeći</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Podijelite svoj zaslon</string>
+    <string name="share_tool_message_tract_live_share">Pozdrav, pratite sesiju iz aplikacije GodTools sa mnom putem značajke dijeljenja zaslona. Evo veze: %1$s\n\nAko ovu poruku pročitate kasnije, veza možda više neće vrijediti. Možemo pokušati ponovno drugom prilikom.</string>
+    <string name="tract_live_share_starting">Pokretanje dijeljenja zaslona...</string>
+    <string name="tract_live_share_unable_to_connect">Povezivanje sa značajkom dijeljenja zaslona nije moguće</string>
+    <string name="tract_live_share_exit_dialog_message">Želite li odmah napustiti sesiju udaljenog dijeljenja?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Izlaz</string>
+    <string name="tract_live_share_exit_dialog_cancel">Odustani</string>
 </resources>

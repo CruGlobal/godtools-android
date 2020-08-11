@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Wak</string>
+    <string name="tutorial_training_watch_subhead">Wak kiko e app ta ofresé den nos video di demonstrashon
+
+(Klek riba e video pa bo haña e ahustenan pa subtítulo)</string>
+    <string name="tutorial_training_prepare_headline">Prepará</string>
+    <string name="tutorial_training_prepare_subhead">Sera konosí ku algun di bo hèrmèntnan. \"Siñami Kon Pa Kompartí\" ta un bon kaminda pa kuminsá.
+
+Primi riba e boton di Tokante pa mas informashon di e hèrmènt.</string>
+    <string name="tutorial_training_try_headline">Purba</string>
+    <string name="tutorial_training_try_subhead">Tur hende ta kuminsá komo un prinsipiante. Purba uza un hèrmènt den un kombersashon i wak kiko bo ta siña.</string>
+    <string name="tutorial_training_final_headline">E demonstrashon aki lo ta dísponibel den e menu pa bo wak atrobe</string>
+    <string name="tutorial_training_action_continue">Kontinua</string>
+    <string name="tutorial_training_action_start">Kuminsá uza GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Duna mi un Demonstrashon</string>
+    <string name="tutorial_training_banner_action_open">Habri Demonstrashon</string>
+    <string name="tutorial_training_banner_action_dismiss">Rechasá</string>
+</resources>

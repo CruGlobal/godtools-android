@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">インストール</string>
+    <string name="menu_share_tract">ツールを送信する</string>
     <string name="tract_card_previous">前</string>
     <string name="tract_card_next">次</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">画面を共有する</string>
+    <string name="share_tool_message_tract_live_share">こんにちは。画面共有を通してGodToolsを一緒に見てみましょう。リンクはこちらです: %1$s\n\nこのメッセージが後から届いた場合、リンクが使用できなくなっている場合があります。その場合は、またの機会に試しましょう。</string>
+    <string name="tract_live_share_starting">「画面共有」を開始しています…</string>
+    <string name="tract_live_share_unable_to_connect">「画面共有」に接続できません</string>
+    <string name="tract_live_share_exit_dialog_message">遠隔共有セッションを今すぐ終了しますか？</string>
+    <string name="tract_live_share_exit_dialog_confirm">終了</string>
+    <string name="tract_live_share_exit_dialog_cancel">キャンセル</string>
 </resources>

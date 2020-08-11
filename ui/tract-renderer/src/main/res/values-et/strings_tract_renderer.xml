@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Installi</string>
+    <string name="menu_share_tract">Saada see tööriist</string>
     <string name="tract_card_previous">Eelmine</string>
     <string name="tract_card_next">Järgmine</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Jaga ekraani</string>
+    <string name="share_tool_message_tract_live_share">Hei! Jälgi mind rakenduses GoodTools, jagades minuga ekraanikuva. Kasuta seda linki: %1$s\n\nKui saad selle sõnumi hiljem, et pruugi link töötada. Sel juhul võime mõni teine kord uuesti proovida.</string>
+    <string name="tract_live_share_starting">Ekraanikuva jagamise alustamine...</string>
+    <string name="tract_live_share_unable_to_connect">Ei saanud ekraanikuva jagamisega ühendust</string>
+    <string name="tract_live_share_exit_dialog_message">Kas lõpetada ekraanikuva kaugjagamine kohe?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Välju</string>
+    <string name="tract_live_share_exit_dialog_cancel">Tühista</string>
 </resources>

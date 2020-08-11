@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Zainstaluj</string>
+    <string name="menu_share_tract">Wyślij to narzędzie</string>
     <string name="tract_card_previous">Poprzedni</string>
     <string name="tract_card_next">Następny</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Udostępnij swój ekran</string>
+    <string name="share_tool_message_tract_live_share">Witaj, obserwuj mnie w GodTools za pośrednictwem udostępniania ekranu. Oto link: %1$s\n\nJeżeli otrzymasz tę wiadomość po czasie, link może nie działać. W takim przypadku spróbujemy innym razem.</string>
+    <string name="tract_live_share_starting">Rozpoczynanie udostępniania ekranu...</string>
+    <string name="tract_live_share_unable_to_connect">Nie można połączyć z udostępnianym ekranem</string>
+    <string name="tract_live_share_exit_dialog_message">Opuścić zdalną sesję udostępniania?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Wyjdź</string>
+    <string name="tract_live_share_exit_dialog_cancel">Anuluj</string>
 </resources>

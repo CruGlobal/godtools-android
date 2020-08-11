@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Kopīgojiet savu ekrānu</string>
+    <string name="tutorial_live_share_description_text">Šī opcija nosūtīs saiti uz šo rīku draugam. Ekrāna koplietošanas sesija tiks sakta pēc saites atvēršanas.</string>
+    <string name="tutorial_live_share_mirrored_headline">Kopīga pieredze</string>
+    <string name="tutorial_live_share_mirrored_text">Ritinot rīku jūsu tālrunī, jūsu drauga ekrānā notiks tas pats. Šī funkcija ļauj jums vienlaicīgi izmantot vienu rīku 2 dažādās ierīcēs.</string>
+    <string name="tutorial_live_share_start_headline">Sākt</string>
+    <string name="tutorial_live_share_start_text">Nosūtiet saiti vienam vai vairākiem cilvēkiem, lai sāktu ekrāna koplietošanas sesiju.
+
+Šīs funkcijas darbībai ir nepieciešams, lai visu dalībnieku ierīcēs būtu instalēta lietotne GodTools.</string>
+    <string name="tutorial_live_share_action_continue">Turpināt</string>
+    <string name="tutorial_live_share_action_skip">Izlaist</string>
+    <string name="tutorial_live_share_action_start">Kopīgojiet saiti</string>
+</resources>

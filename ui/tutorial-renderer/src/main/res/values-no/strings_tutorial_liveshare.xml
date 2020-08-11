@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Del skjermen din</string>
+    <string name="tutorial_live_share_description_text">Velger du dette alternativet, sendes en lenke til dette verktøyet til en venn. Når lenken åpnes starer skjermdelingsøkten.</string>
+    <string name="tutorial_live_share_mirrored_headline">Speilet opplevelse</string>
+    <string name="tutorial_live_share_mirrored_text">Når du blar gjennom verktøyet på telefonen din, vil skjermen til vennen reagere på samme måte. Dette lar deg gå gjennom et verktøy sammen på 2 enheter samtidig.</string>
+    <string name="tutorial_live_share_start_headline">Kom i gang</string>
+    <string name="tutorial_live_share_start_text">Send koblingen til én eller flere personer for å starte en skjermdelingsøkt nå.
+
+For å gjøre dette (for øyeblikket) må alle deltakerne ha lastet ned GodTools-appen på enheten deres.</string>
+    <string name="tutorial_live_share_action_continue">Fortsett</string>
+    <string name="tutorial_live_share_action_skip">Hopp over</string>
+    <string name="tutorial_live_share_action_start">Del en kobling</string>
+</resources>

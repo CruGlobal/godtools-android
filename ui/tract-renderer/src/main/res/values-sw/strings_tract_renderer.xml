@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Simika</string>
+    <string name="menu_share_tract">Tuma zana hii</string>
     <string name="tract_card_previous">Iliyopita</string>
     <string name="tract_card_next">Ifuatayo</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Onyeshana skrini yako</string>
+    <string name="share_tool_message_tract_live_share">Jambo, Fuatana na mimi kwenye GodTools kupitia kuchangia kupitia skrini.\nKiungo ni hiki: %1$s\n\nKama hutapokea ujumbe huu hadi baadaye, kiungo kinaweza kukosa kufanya kazi. Tunaweza kujaribu wakati mwingine.</string>
+    <string name="tract_live_share_starting">Anza Kuchangia kupitia kuonyesha Skrini...</string>
+    <string name="tract_live_share_unable_to_connect">Imeshindwa kuunganisha kwa Kuchangia kupitia Skrini</string>
+    <string name="tract_live_share_exit_dialog_message">Ondoka sasa kutoka kipindi cha kuchangia ukiwa mbali?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Ondoka</string>
+    <string name="tract_live_share_exit_dialog_cancel">Ghairi</string>
 </resources>

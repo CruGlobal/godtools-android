@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Compartilhe a sua tela</string>
+    <string name="tutorial_live_share_description_text">Esta opção irá enviar a um amigo uma ligação para essa ferramenta. Quando a ligação for aberta, irá iniciar uma sessão de compartilhamento de tela.</string>
+    <string name="tutorial_live_share_mirrored_headline">Experiência espelhada</string>
+    <string name="tutorial_live_share_mirrored_text">Quando você navega na ferramenta no seu telemóvel, a tela do seu amigo fará o mesmo. Isso permite que naveguem na ferramenta juntos, em dois dispositivos em simultâneo.</string>
+    <string name="tutorial_live_share_start_headline">Começar</string>
+    <string name="tutorial_live_share_start_text">Envie a ligação para uma ou mais pessoas para iniciar agora uma sessão de compartilhamento de tela.
+
+Atualmente, esta experiência requer que todos os participantes tenham baixado o aplicativo GodTools para os respetivos dispositivos.</string>
+    <string name="tutorial_live_share_action_continue">Continuar</string>
+    <string name="tutorial_live_share_action_skip">Ignorar</string>
+    <string name="tutorial_live_share_action_start">Compartilhar uma ligação</string>
+</resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Installeren</string>
+    <string name="menu_share_tract">Dit hulpprogramma versturen</string>
     <string name="tract_card_previous">Vorige</string>
     <string name="tract_card_next">Volgende</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Deel je scherm</string>
+    <string name="share_tool_message_tract_live_share">Hallo, lees met me mee in GodTools via een gedeeld scherm. Hier is de koppeling: %1$s\n\nAls je dit bericht pas later ontvangt, kan het zijn dat de koppeling niet meer werkt. Dan proberen we het een andere keer gewoon opnieuw.</string>
+    <string name="tract_live_share_starting">Scherm delen starten…</string>
+    <string name="tract_live_share_unable_to_connect">Kan niet verbinden met Scherm delen</string>
+    <string name="tract_live_share_exit_dialog_message">De deelsessie afsluiten?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Afsluiten</string>
+    <string name="tract_live_share_exit_dialog_cancel">Annuleren</string>
 </resources>

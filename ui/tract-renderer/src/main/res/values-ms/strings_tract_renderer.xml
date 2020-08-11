@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Pasang</string>
+    <string name="menu_share_tract">Hantar alat ini</string>
     <string name="tract_card_previous">Sebelumnya</string>
     <string name="tract_card_next">Seterusnya</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Kongsi paparan anda</string>
+    <string name="share_tool_message_tract_live_share">Hai, ikut saya dalam GodTools melalui perkongsian skrin. Ini pautannya: %1$s\n\nJika selepas ini, anda tidak menerima mesej ini, pautan tersebut mungkin masih belum berfungsi. Kita boleh mencuba sekali lagi pada lain kali.</string>
+    <string name="tract_live_share_starting">Memulakan Perkongsian Skrin...</string>
+    <string name="tract_live_share_unable_to_connect">Tidak dapat menyambung ke Perkongsian Skrin</string>
+    <string name="tract_live_share_exit_dialog_message">Keluar daripada sesi perkongsian jauh sekarang?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Keluar</string>
+    <string name="tract_live_share_exit_dialog_cancel">Batal</string>
 </resources>

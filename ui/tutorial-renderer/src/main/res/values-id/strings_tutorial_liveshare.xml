@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Bagikan layar Anda</string>
+    <string name="tutorial_live_share_description_text">Opsi ini akan mengirim tautan ke alat ini ke teman. Ketika tautan dibuka, maka akan memulai sesi berbagi layar.</string>
+    <string name="tutorial_live_share_mirrored_headline">Pengalaman dicerminkan</string>
+    <string name="tutorial_live_share_mirrored_text">Saat Anda menggulir alat di ponsel Anda, layar teman Anda akan merespons dengan cara yang sama. Ini memungkinkan Anda untuk berjalan melalui alat bersama di 2 perangkat sekaligus.</string>
+    <string name="tutorial_live_share_start_headline">Mari Mulai</string>
+    <string name="tutorial_live_share_start_text">Kirim tautan ke satu atau lebih orang untuk memulai sesi berbagi layar sekarang.
+
+Pengalaman ini saat ini mengharuskan semua peserta untuk mengunduh aplikasi GodTools di perangkat mereka.</string>
+    <string name="tutorial_live_share_action_continue">Lanjutkan</string>
+    <string name="tutorial_live_share_action_skip">Lewati</string>
+    <string name="tutorial_live_share_action_start">Bagikan tautan</string>
+</resources>

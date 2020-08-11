@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">安裝</string>
+    <string name="menu_share_tract">傳送此工具</string>
     <string name="tract_card_previous">前一頁</string>
     <string name="tract_card_next">下一頁</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">分享你的螢幕</string>
+    <string name="share_tool_message_tract_live_share">你好，歡迎與我一同在 GodTools 中參加螢幕分享會。連結為：%1$s\n\n如果你稍後才收到此訊息，該連結可能已經失效。我們可以改天再試一次。</string>
+    <string name="tract_live_share_starting">正在開始進行螢幕分享……</string>
+    <string name="tract_live_share_unable_to_connect">無法連接到螢幕分享</string>
+    <string name="tract_live_share_exit_dialog_message">確定要現在離開遠端分享會？</string>
+    <string name="tract_live_share_exit_dialog_confirm">離開</string>
+    <string name="tract_live_share_exit_dialog_cancel">取消</string>
 </resources>

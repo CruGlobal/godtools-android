@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Wo o</string>
+    <string name="tutorial_training_watch_subhead">Wo awon  anfani ti ohun elo yi ni ninu fidio asapere wa
+
+(Te fidio naa lati gbe awọn ilana fun awọn atunkọ silẹ jade)</string>
+    <string name="tutorial_training_prepare_headline">Gbaradi</string>
+    <string name="tutorial_training_prepare_subhead">Ni imo daradara nipa die ninu awọn ohun elo rẹ. Ohun elo“Kọ́ mi lati Se Ajopin” je eyi ti o dara lati bẹrẹ pelu.
+
+Tẹ bọtini Nipa lati ni imọ siwaju sii nipa ohun elo naa.</string>
+    <string name="tutorial_training_try_headline">Gbiyanju</string>
+    <string name="tutorial_training_try_subhead">Gbogbo eniyan bẹrẹ gege  bi alakobere. Gbiyanju lilo ohun elo kan ninu ibaraẹni sọrọ, yi o ya o lenu ohun ti o kọ.</string>
+    <string name="tutorial_training_final_headline">O tun le ri idanileko yii lẹẹkansi ni mẹnu</string>
+    <string name="tutorial_training_action_continue">Tesiwaju</string>
+    <string name="tutorial_training_action_start">Bere si lo GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Fi itoni han mi</string>
+    <string name="tutorial_training_banner_action_open">Si itoni</string>
+    <string name="tutorial_training_banner_action_dismiss">Mu kuro</string>
+</resources>

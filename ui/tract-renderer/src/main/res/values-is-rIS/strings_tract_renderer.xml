@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Setja upp</string>
+    <string name="menu_share_tract">Senda þetta tól</string>
     <string name="tract_card_previous">Fyrri</string>
     <string name="tract_card_next">Næsta</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Deildu þínum skjá</string>
+    <string name="share_tool_message_tract_live_share">Hæ, fylgdu mér á GodTools í gegnum skjádeilingu.\nHér er tengillinn: %1$s\n\nEf þú færð ekki þessi skilaboð fyrr en síðar, gæti tengilinn ekki verið virkur enn. Við getum prófað aftur seinna.</string>
+    <string name="tract_live_share_starting">Byrja skjádeilingu...</string>
+    <string name="tract_live_share_unable_to_connect">Gat ekki tengst við skjádeilingu</string>
+    <string name="tract_live_share_exit_dialog_message">Fara úr lotu fyrir fjardeilingu núna?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Hætta</string>
+    <string name="tract_live_share_exit_dialog_cancel">Hætta við</string>
 </resources>

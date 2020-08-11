@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Jaa näyttösi</string>
+    <string name="tutorial_live_share_description_text">Tämä toiminto lähettää tämän työkalun linkin ystävällesi. Näytönjako alkaa linkin avaamisen jälkeen.</string>
+    <string name="tutorial_live_share_mirrored_headline">Heijastettu käyttökokemus</string>
+    <string name="tutorial_live_share_mirrored_text">Liikkueassasi työkalussa puhelimellasi myös ystäväsi näyttö toimii samalla tavoin. Täten työkalun käyttöön voi perehdyttää kahdella laitteella yhtäaikaisesti.</string>
+    <string name="tutorial_live_share_start_headline">Aloittaminen</string>
+    <string name="tutorial_live_share_start_text">Lähetä linkki vähintään yhdelle henkilölle aloittaaksesi näytönjaon.
+
+Tämän ominaisuuden käytön mahdollistamiseksi jokaisella osallistujalla on oltava GodTools-sovellus ladattuna laitteelleen.</string>
+    <string name="tutorial_live_share_action_continue">Jatka</string>
+    <string name="tutorial_live_share_action_skip">Ohita</string>
+    <string name="tutorial_live_share_action_start">Jaa linkki</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">صفحه نمایش خود را به اشتراک بگذارید</string>
+    <string name="tutorial_live_share_description_text">این گزینه پیوندی را به این ابزار برای یک دوست ارسال می‌کند. زمانی که پیوند باز شود، یک جلسه اشتراک‌گذاری صفحه شروع خواهد شد.</string>
+    <string name="tutorial_live_share_mirrored_headline">تجربه انعکاسی</string>
+    <string name="tutorial_live_share_mirrored_text">زمانی که ابزار را در تلفنتان پیمایش می‌کنید، صفحه دوستتان به همان صورت پاسخ خواهد داد. این امر به شما امکان می‌دهد تا از طریق یک ابزار روی 2 دستگاه در زمان یکسان پیش بروید.</string>
+    <string name="tutorial_live_share_start_headline">شروع کنید</string>
+    <string name="tutorial_live_share_start_text">اکنون لینک را به یک یا چندین نفر برای شروع جلسه اشتراک‌گذاری صفحه ارسال کنید.</string>
+    <string name="tutorial_live_share_action_continue">ادامه</string>
+    <string name="tutorial_live_share_action_skip">ردکردن</string>
+    <string name="tutorial_live_share_action_start">اشتراک‌گذاری یک پیوند</string>
+</resources>

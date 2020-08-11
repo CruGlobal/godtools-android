@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Покажите свой экран</string>
+    <string name="tutorial_live_share_description_text">Данная опция позволит отправить ссылку на этот инструмент другу. При открытии ссылки запустится сеанс трансляции экрана.</string>
+    <string name="tutorial_live_share_mirrored_headline">Зеркальный интерфейс</string>
+    <string name="tutorial_live_share_mirrored_text">Когда вы будете пролистывать инструмент на своем телефоне, на экране вашего друга будет происходить то же самое. Это позволит вам изучать инструмент вместе на 2 устройствах одновременно.</string>
+    <string name="tutorial_live_share_start_headline">Начать работу</string>
+    <string name="tutorial_live_share_start_text">Отправьте ссылку хотя бы одному человеку, чтобы запустить сеанс трансляции экрана.
+
+Для данного интерфейса требуется, чтобы на устройствах всех участников было установлено приложение GodTools.</string>
+    <string name="tutorial_live_share_action_continue">Продолжить</string>
+    <string name="tutorial_live_share_action_skip">Пропустить</string>
+    <string name="tutorial_live_share_action_start">Поделитесь ссылкой</string>
+</resources>

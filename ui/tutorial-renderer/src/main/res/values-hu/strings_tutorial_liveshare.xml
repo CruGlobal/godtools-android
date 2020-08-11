@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Képernyő megosztása</string>
+    <string name="tutorial_live_share_description_text">Ezzel az opció az eszközhöz egy link küldhető egy ismerősnek. A hivatkozás megnyitása egy képernyőmegosztó munkamenetet indít el.</string>
+    <string name="tutorial_live_share_mirrored_headline">Mirrored-élmény</string>
+    <string name="tutorial_live_share_mirrored_text">Miközben az eszközt görgeted a telefonodon, az ismerősöd ugyanilyen módon reagál. Ez lehetővé teszi, hogy 2 készüléken egyidejűleg közösen végigjárjátok az eszközt.</string>
+    <string name="tutorial_live_share_start_headline">Első lépések</string>
+    <string name="tutorial_live_share_start_text">Küldd el a hivatkozást egy-két embernek, hogy elindíthass egy képernyőmegosztó munkamenetet.
+
+Ennek az élménynek jelenleg előfeltétele minden résztvevőnél a GodTools app letöltése saját eszközére.</string>
+    <string name="tutorial_live_share_action_continue">Folytasd</string>
+    <string name="tutorial_live_share_action_skip">Átugrás</string>
+    <string name="tutorial_live_share_action_start">Hivatkozás megosztása</string>
+</resources>

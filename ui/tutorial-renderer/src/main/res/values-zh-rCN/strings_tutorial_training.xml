@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">观看</string>
+    <string name="tutorial_training_watch_subhead">在我们的演示视频中观看GodTools可以发挥的作用
+
+(点击视频，设置字幕)</string>
+    <string name="tutorial_training_prepare_headline">准备</string>
+    <string name="tutorial_training_prepare_subhead">熟悉一些工具。“教我分享”工具是很好的起点。</string>
+    <string name="tutorial_training_try_headline">尝试</string>
+    <string name="tutorial_training_try_subhead">人人都是从初学者开始的。尝试在对话中使用工具，看看自己学到了什么。</string>
+    <string name="tutorial_training_final_headline">可以在菜单中再次查看本教程</string>
+    <string name="tutorial_training_action_continue">继续</string>
+    <string name="tutorial_training_action_start">开始使用GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">给我看教程</string>
+    <string name="tutorial_training_banner_action_open">打开教程</string>
+    <string name="tutorial_training_banner_action_dismiss">取消</string>
+</resources>

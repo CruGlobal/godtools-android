@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">আপনার স্ক্রিন শেয়ার করুন</string>
+    <string name="tutorial_live_share_description_text">এই বিকল্পটি কোনো বন্ধুকে এই সাধনীর একটি লিঙ্ক পাঠাবে। একবার লিঙ্কটি খোলা হলে তা একটি স্ক্রিন শেয়ার করার সত্র শুরু করবে।</string>
+    <string name="tutorial_live_share_mirrored_headline">আয়নার অভিজ্ঞতা</string>
+    <string name="tutorial_live_share_mirrored_text">যখন আপনি আপনার স্ক্রিনে সাধনীটি স্ক্রল করবেন, আপনার বন্ধুর স্ক্রিনটি তখন একইভাবে প্রতিক্রিয়া দেবে। এর ফলে আপনি একই সময়ে 2টি ডিভাইসে সাধনীটি নিয়ে একসাথে কাজ করতে পারবেন।</string>
+    <string name="tutorial_live_share_start_headline">শুরু করুন</string>
+    <string name="tutorial_live_share_start_text">একটি স্ক্রিন শেয়ার করার সত্র এখন শুরু করার জন্য এক বা তার বেশি ব্যক্তিকে একটি লিঙ্ক পাঠান।
+
+অভিজ্ঞতাটির বর্তমানে প্রয়োজনীয়তা হল যে সব অংশগ্রহণকারীদের তাদের ডিভাইসে GodTools অ্যাপ ডাউনলোড করতে হবে।</string>
+    <string name="tutorial_live_share_action_continue">অগ্রসর হন</string>
+    <string name="tutorial_live_share_action_skip">বাদ দিয়ে যান</string>
+    <string name="tutorial_live_share_action_start">লিঙ্ক শেয়ার করুন</string>
+</resources>

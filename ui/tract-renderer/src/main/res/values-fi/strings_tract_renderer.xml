@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Asenna</string>
+    <string name="menu_share_tract">Lähetä tämä työkalu</string>
     <string name="tract_card_previous">Edellinen</string>
     <string name="tract_card_next">Seuraava</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Jaa näyttösi</string>
+    <string name="share_tool_message_tract_live_share">Hei, voit käyttää GodToolsia kanssani näytönjaon avulla. Tässä linkki: %1$s\n\nLinkki voi yhä olla toiminnassa, vaikka saisitkin tämän viestin myöhemmin. Voimme yrittää uudelleen toisen kerran.</string>
+    <string name="tract_live_share_starting">Näytönjakoa käynnistetään…</string>
+    <string name="tract_live_share_unable_to_connect">Näytönjakoon ei saatu yhteyttä</string>
+    <string name="tract_live_share_exit_dialog_message">Haluatko poistua etäjaosta?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Poistu</string>
+    <string name="tract_live_share_exit_dialog_cancel">Peruuta</string>
 </resources>

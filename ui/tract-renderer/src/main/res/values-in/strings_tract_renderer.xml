@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Pasang</string>
+    <string name="menu_share_tract">Kirim alat ini</string>
     <string name="tract_card_previous">Sebelumnya</string>
     <string name="tract_card_next">Berikutnya</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Bagikan layar Anda</string>
+    <string name="share_tool_message_tract_live_share">Hai, Ikut bersama saya di GodTools melalui berbagi layar. Inilah tautannya: %1$s\n\nJika Anda tidak menerima pesan ini hingga nanti, tautannya mungkin masih belum berfungsi. Kita dapat mencoba lagi di lain waktu.</string>
+    <string name="tract_live_share_starting">Memulai Berbagi Layar...</string>
+    <string name="tract_live_share_unable_to_connect">Tidak dapat terhubung ke Berbagi Layar</string>
+    <string name="tract_live_share_exit_dialog_message">Keluar dari sesi berbagi jarak jauh sekarang?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Keluar</string>
+    <string name="tract_live_share_exit_dialog_cancel">Batal</string>
 </resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Yükle</string>
+    <string name="menu_share_tract">Bu aracı gönder</string>
     <string name="tract_card_previous">Önceki</string>
     <string name="tract_card_next">Sonraki</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Ekranını paylaş</string>
+    <string name="share_tool_message_tract_live_share">Merhaba, ekran paylaşımıyla GodTools\'da benim yaptıklarımı takip et. İşte bağlantı burada: %1$s\n\nBu mesajı kısa süre içinde almazsan, bağlantı hâlâ çalışmıyor olabilir. Başka bir zaman bunu yeniden deneyebiliriz.</string>
+    <string name="tract_live_share_starting">Ekran Paylaşma Başlatılıyor...</string>
+    <string name="tract_live_share_unable_to_connect">Ekran Paylaşmaya Bağlanılamıyor</string>
+    <string name="tract_live_share_exit_dialog_message">Uzaktan paylaşım oturumundan şimdi çıkılsın mı?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Çık</string>
+    <string name="tract_live_share_exit_dialog_cancel">İptal</string>
 </resources>

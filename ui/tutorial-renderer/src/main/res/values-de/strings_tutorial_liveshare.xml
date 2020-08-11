@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Teile deinen Bildschirm</string>
+    <string name="tutorial_live_share_description_text">Über diese Option wird ein Link zu diesem Tool an einen Freund gesendet. Sobald der Link geöffnet wird, wird eine Bildschirmfreigabe-Sitzung gestartet.</string>
+    <string name="tutorial_live_share_mirrored_headline">Bildschirm spiegeln</string>
+    <string name="tutorial_live_share_mirrored_text">Wenn du das Tool auf deinem Telefon scrollst, reagiert der Bildschirm deines Freundes auf die gleiche Weise. So könnt ihr 1 Tool auf 2 Geräten gleichzeitig durchgehen.</string>
+    <string name="tutorial_live_share_start_headline">Erste Schritte</string>
+    <string name="tutorial_live_share_start_text">Sende den Link an eine oder mehrere Personen, um jetzt eine Bildschirmfreigabe zu starten. 
+
+Für diese Erfahrung müssen derzeit alle Teilnehmer die GodTools-App auf ihr Gerät herunterladen.</string>
+    <string name="tutorial_live_share_action_continue">Weiter</string>
+    <string name="tutorial_live_share_action_skip">überspringen</string>
+    <string name="tutorial_live_share_action_start">Einen Link teilen</string>
+</resources>

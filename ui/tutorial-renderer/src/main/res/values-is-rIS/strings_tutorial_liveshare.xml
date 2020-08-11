@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Deildu þínum skjá</string>
+    <string name="tutorial_live_share_description_text">Þessi valkostur mun senda tengil á þetta tól til vinar. Þegar tengillinn er opnaður hefst lota skjádeilingar.</string>
+    <string name="tutorial_live_share_mirrored_headline">Spegluð upplifun</string>
+    <string name="tutorial_live_share_mirrored_text">Þegar þú flettir í tólinu í síma þínum, mun skjár vinar þíns bregðast eins við. Þetta leyfir ykkur að skoða tól saman á 2 tækjum á sama tíma.</string>
+    <string name="tutorial_live_share_start_headline">Byrja</string>
+    <string name="tutorial_live_share_start_text">Sendu tengilinn til eins eða fleiri aðila til að byrja lotu fyrir skjádeilingu núna.
+
+Þessi upplifun þarfnast þess sem stendur að allir þátttakendur hafi sótt GodTools appið á sínu tæki.</string>
+    <string name="tutorial_live_share_action_continue">Halda áfram</string>
+    <string name="tutorial_live_share_action_skip">Sleppa</string>
+    <string name="tutorial_live_share_action_start">Deila tengli</string>
+</resources>

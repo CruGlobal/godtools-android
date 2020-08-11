@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Подели екран</string>
+    <string name="tutorial_live_share_description_text">Ова опција ће послати везу са овом алатком пријатељу. По отварању везе, започеће сесија дељења екрана.</string>
+    <string name="tutorial_live_share_mirrored_headline">Искуство пресликавања</string>
+    <string name="tutorial_live_share_mirrored_text">Док померате алатку на свом телефону, екран вашег пријатеља ће реаговати на исти начин. Ово вам омогућава да истовремено заједно пређете преко алатке на 2 уређаја.</string>
+    <string name="tutorial_live_share_start_headline">Започни</string>
+    <string name="tutorial_live_share_start_text">Пошаљите везу једној или више особа да бисте одмах започели сесију дељења екрана.
+
+Ово искуство тренутно захтева од свих учесника да преузму апликацију GodTools на своје уређаје.</string>
+    <string name="tutorial_live_share_action_continue">Настави</string>
+    <string name="tutorial_live_share_action_skip">Прескочи</string>
+    <string name="tutorial_live_share_action_start">Подели везу</string>
+</resources>

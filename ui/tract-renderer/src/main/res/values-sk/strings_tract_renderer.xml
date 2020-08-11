@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Inštalovať</string>
+    <string name="menu_share_tract">Poslať nástroj</string>
     <string name="tract_card_previous">Predch.</string>
     <string name="tract_card_next">Ďalej</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Zdieľať vašu obrazovku</string>
+    <string name="share_tool_message_tract_live_share">Ahoj, sleduj ma v GodTools cez zdieľanú obrazovku. Tu je odkaz: %1$s\n\nAk ti táto správa do určitého času nepríde, odkaz možno ešte nefunguje. Môžeme to znovu skúsiť inokedy.</string>
+    <string name="tract_live_share_starting">Začína sa zdieľanie obrazovky...</string>
+    <string name="tract_live_share_unable_to_connect">Nepodarilo sa pripojiť k zdieľaniu obrazovky</string>
+    <string name="tract_live_share_exit_dialog_message">Ukončiť reláciu zdieľania na diaľku?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Ukončiť</string>
+    <string name="tract_live_share_exit_dialog_cancel">Zrušiť</string>
 </resources>

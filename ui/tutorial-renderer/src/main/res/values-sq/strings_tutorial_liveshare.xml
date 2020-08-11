@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_action_continue">vazhdo</string>
+    <string name="tutorial_live_share_action_start">Tregoju të tjerëve</string>
+</resources>
