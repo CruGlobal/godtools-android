@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Quraşdır</string>
+    <string name="menu_share_tract">Bu aləti göndər</string>
     <string name="tract_card_previous">Əvvəlki</string>
     <string name="tract_card_next">Növbəti</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Ekranınızı paylaşın</string>
+    <string name="share_tool_message_tract_live_share">Salam. Ektan paylaşma vasitəsilə GodTools-da məni izləyin. Keçid: %1$s\n\nSon anadək bu mesajı almasanız, daha sonra keçid işləməyə bilər. Başqa vaxt təkrar cəhd edə bilərik.\n</string>
+    <string name="tract_live_share_starting">Ekran paylaşma başladılır...</string>
+    <string name="tract_live_share_unable_to_connect">Ekran paylaşmaya qoşula bilmir</string>
+    <string name="tract_live_share_exit_dialog_message">Uzaq paylaşma sessiyasından indi çıxılsın?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Çıx</string>
+    <string name="tract_live_share_exit_dialog_cancel">Ləğv et</string>
 </resources>

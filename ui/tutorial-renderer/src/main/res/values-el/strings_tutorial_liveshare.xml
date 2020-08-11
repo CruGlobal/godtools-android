@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Κοινοποίηση της οθόνης σας</string>
+    <string name="tutorial_live_share_description_text">Αυτή η επιλογή θα στείλει έναν σύνδεσμο σε αυτό το εργαλείο σε έναν φίλο. Όταν ανοίξει ο σύνδεσμος, θα ξεκινήσει μια συνεδρία κοινής χρήσης οθόνης.</string>
+    <string name="tutorial_live_share_mirrored_headline">Εμπειρία καθρεφτίσματος</string>
+    <string name="tutorial_live_share_mirrored_text">Καθώς μετακινείτε το εργαλείο στο τηλέφωνό σας, η οθόνη του φίλου σας θα ανταποκρίνεται με τον ίδιο τρόπο. Αυτό σας επιτρέπει να χρησιμοποιήσετε ένα εργαλείο μαζί σε 2 συσκευές ταυτόχρονα.</string>
+    <string name="tutorial_live_share_start_headline">Αρχίστε</string>
+    <string name="tutorial_live_share_start_text">Στείλτε τον σύνδεσμο σε ένα ή περισσότερα άτομα για να ξεκινήσετε μια συνεδρία κοινής χρήσης οθόνης τώρα.
+
+Αυτή η εμπειρία απαιτεί από όλους τους συμμετέχοντες να έχουν κατεβάσει την εφαρμογή GodTools στη συσκευή τους.</string>
+    <string name="tutorial_live_share_action_continue">Συνέχεια</string>
+    <string name="tutorial_live_share_action_skip">Παράλειψη</string>
+    <string name="tutorial_live_share_action_start">Μοιραστείτε έναν σύνδεσμο</string>
+</resources>

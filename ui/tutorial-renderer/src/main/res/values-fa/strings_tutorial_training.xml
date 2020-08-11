@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">تماشا کردن</string>
+    <string name="tutorial_training_watch_subhead">دراین ویدبو آنچه را که این برنامه ارائه می دهد را ببینید.</string>
+    <string name="tutorial_training_prepare_headline">آماده کردن</string>
+    <string name="tutorial_training_prepare_subhead">آشنایی با امکانات دیگر ابزار</string>
+    <string name="tutorial_training_try_headline">سعی کردن</string>
+    <string name="tutorial_training_try_subhead">همه به عنوان مبتدی شروع می کنند. با دیگران به اشتراک بگذارید و از تجربیات خود بیاموزید.</string>
+    <string name="tutorial_training_final_headline">این بخش آموزشی  برای مشاهده دوباره در منو موجود است.</string>
+    <string name="tutorial_training_action_continue">ادامه</string>
+    <string name="tutorial_training_action_start">استفاده از GodTools را شروع کنید</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">نشان دادن آمورش</string>
+    <string name="tutorial_training_banner_action_open">باز کردن آموزش</string>
+    <string name="tutorial_training_banner_action_dismiss">رد کردن</string>
+</resources>

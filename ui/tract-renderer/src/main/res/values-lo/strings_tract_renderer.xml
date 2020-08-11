@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ຕິດຕັ້ງ</string>
+    <string name="menu_share_tract">ສົ່ງເຄື່ອງມືນີ້</string>
     <string name="tract_card_previous">ກ່ອນ</string>
     <string name="tract_card_next">ຕໍ່ໄປ</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">ແບ່ງປັນໜ້າຈໍຂອງທ່ານ</string>
+    <string name="share_tool_message_tract_live_share">ສະບາຍດີ, ຕິດຕາມຂ້ອຍໃນ GodTools ຜ່ານການແບ່ງປັນໜ້າຈໍ. ນີ້ແມ່ນລິ້ງ: %1$s\n\nຖ້າທ່ານບໍ່ໄດ້ຮັບຂໍ້ຄວາມນີ້ຈົນຮອດພາຍຫຼັງ, ລິ້ງອາດຈະຍັງໃຊ້ບໍ່ໄດ້. ພວກເຮົາສາມາດລອງໃໝ່ອີກຄັ້ງໃນເວລາອື່ນ.</string>
+    <string name="tract_live_share_starting">ເລີ່ມແບ່ງປັນໜ້າຈໍ...</string>
+    <string name="tract_live_share_unable_to_connect">ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບການແບ່ງປັນໜ້າຈໍ</string>
+    <string name="tract_live_share_exit_dialog_message">ອອກຈາກເຊດຊັນແບ່ງປັນທາງໄກດຽວນີ້ບໍ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">ອອກ</string>
+    <string name="tract_live_share_exit_dialog_cancel">ຍົກເລີກ</string>
 </resources>

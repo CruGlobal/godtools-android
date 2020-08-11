@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Condividi il tuo schermo</string>
+    <string name="tutorial_live_share_description_text">L\'opzione invierà al tuo amico un link a questo strumento. Una volta aperto il link, avrà inizio la sessione di condivisione di schermo.</string>
+    <string name="tutorial_live_share_mirrored_headline">Esperienza di mirroring</string>
+    <string name="tutorial_live_share_mirrored_text">Se fai scorrere lo schermo del tuo telefono, la stessa cosa succederà sullo schermo del tuo amico. Ciò consente di esaminare uno strumento su 2 dispositivi alla volta.</string>
+    <string name="tutorial_live_share_start_headline">Per iniziare</string>
+    <string name="tutorial_live_share_start_text">Invia il link a una o più persone per iniziare subito una sessione di condivisione di schermo.
+
+Attualmente, questa funzionalità richiede a tutti i partecipanti l\'uso dell\'app GodTools sui propri dispositivi.</string>
+    <string name="tutorial_live_share_action_continue">continua</string>
+    <string name="tutorial_live_share_action_skip">salta</string>
+    <string name="tutorial_live_share_action_start">Condividi un link</string>
+</resources>

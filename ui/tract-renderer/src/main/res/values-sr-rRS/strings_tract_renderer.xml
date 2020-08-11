@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Инсталирај</string>
+    <string name="menu_share_tract">Пошаљи ову алатку</string>
     <string name="tract_card_previous">Претходно</string>
     <string name="tract_card_next">Следеће</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Подели екран</string>
+    <string name="share_tool_message_tract_live_share">Здраво, пратите заједно са мном у апликацији GodTools преко дељења екрана. Ево везе: %1$s\n\nАко ову поруку не примите до касније, веза можда неће радити. Можемо да пробамо поново други пут.</string>
+    <string name="tract_live_share_starting">Почетак дељења екрана...</string>
+    <string name="tract_live_share_unable_to_connect">Повезивање са дељењем екрана није могуће</string>
+    <string name="tract_live_share_exit_dialog_message">Изађите из сесије даљинског дељења одмах?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Излаз</string>
+    <string name="tract_live_share_exit_dialog_cancel">Откажи</string>
 </resources>

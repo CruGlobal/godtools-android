@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Instalēt</string>
+    <string name="menu_share_tract">Nosūtīt šo rīku</string>
     <string name="tract_card_previous">Iepriekšējais</string>
     <string name="tract_card_next">Tālāk</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Kopīgojiet savu ekrānu</string>
+    <string name="share_tool_message_tract_live_share">Sveiki, pievienojies man lietotnē GodTools, izmantojot ekrāna koplietošanas funkciju. Lūk saite: %1$s\n\nJa saņēmi šo ziņojumu novēloti, iespējams, ka saite vairs nedarbojas. Mēs varam pamēģināt vēlreiz citreiz.</string>
+    <string name="tract_live_share_starting">Sāk ekrāna koplietošanu...</string>
+    <string name="tract_live_share_unable_to_connect">Nevar izveidot ekrāna koplietošanas savienojumu</string>
+    <string name="tract_live_share_exit_dialog_message">Iziet no attālinātās koplietošanas sesijas?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Iziet</string>
+    <string name="tract_live_share_exit_dialog_cancel">Atcelt</string>
 </resources>

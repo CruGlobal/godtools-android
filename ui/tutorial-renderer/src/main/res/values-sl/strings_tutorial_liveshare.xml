@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Deli svoj zaslon</string>
+    <string name="tutorial_live_share_description_text">S to možnostjo pošljete povezavo za to orodje prijatelju. Ko odpre povezavo, se začne seja deljenja zaslona.</string>
+    <string name="tutorial_live_share_mirrored_headline">Zrcaljena izkušnja</string>
+    <string name="tutorial_live_share_mirrored_text">Ko se pomikate po orodju na vašem telefonu, se bo telefon prijatelja odzival enako. Tako se lahko sprehodite po orodju na 2 napravah naenkrat.</string>
+    <string name="tutorial_live_share_start_headline">Začetek</string>
+    <string name="tutorial_live_share_start_text">Pošlji povezavo eni ali več osebam za začetek seje deljenja zaslona zdaj.
+
+Za to izkušnjo morajo vsi udeleženci trenutno na napravi imeti nameščeno aplikacijo GodTools.</string>
+    <string name="tutorial_live_share_action_continue">Nadaljuj</string>
+    <string name="tutorial_live_share_action_skip">Preskoči</string>
+    <string name="tutorial_live_share_action_start">Deli povezavo</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Partajează ecranul</string>
+    <string name="tutorial_live_share_description_text">Această opțiune va trimite unui prieten un link către acest instrument. Când linkul este deschis, va începe o sesiune de partajare a ecranului.</string>
+    <string name="tutorial_live_share_mirrored_headline">Experiență în oglindă</string>
+    <string name="tutorial_live_share_mirrored_text">Pe măsură ce derulezi instrumentul pe telefonul tău, ecranul prietenului tău va răspunde la fel. Acest lucru vă permite să folosiți un instrument împreună pe 2 dispozitive în același timp.</string>
+    <string name="tutorial_live_share_start_headline">Să începem</string>
+    <string name="tutorial_live_share_start_text">Trimite linkul către una sau mai multe persoane pentru a începe o sesiune de partajare ecran acum.
+
+Această experiență impune ca toți participanții să aibă aplicația GodTools descărcată pe dispozitiv.</string>
+    <string name="tutorial_live_share_action_continue">Continuaţi</string>
+    <string name="tutorial_live_share_action_skip">Omite</string>
+    <string name="tutorial_live_share_action_start">Partajează un link</string>
+</resources>

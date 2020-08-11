@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Installa</string>
+    <string name="menu_share_tract">Invia questo strumento</string>
     <string name="tract_card_previous">Precedente</string>
     <string name="tract_card_next">Succ.</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Condividi il tuo schermo</string>
+    <string name="share_tool_message_tract_live_share">Ciao, seguimi su GodTools tramite la condivisione dello schermo. Ecco il link: %1$s\n\nSe non ricevi questo messaggio immediatamente, il collegamento potrebbe non funzionare. Possiamo riprovare tra un po\' di tempo.</string>
+    <string name="tract_live_share_starting">Invio di condivisione di schermata in corso</string>
+    <string name="tract_live_share_unable_to_connect">Impossibile collegarsi alla Condivisione di schermo</string>
+    <string name="tract_live_share_exit_dialog_message">Uscire subito dalla sessione di condivisione remota?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Esci</string>
+    <string name="tract_live_share_exit_dialog_cancel">Annulla</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Deel je scherm</string>
+    <string name="tutorial_live_share_description_text">Deze optie verstuurt een koppeling naar dit hulpprogramma naar een vriend. Wanneer de koppeling wordt geopend, begint het delen van het scherm.</string>
+    <string name="tutorial_live_share_mirrored_headline">Gespiegelde ervaring</string>
+    <string name="tutorial_live_share_mirrored_text">Terwijl je met het hulpprogramma door je telefoon scrolt, reageert het scherm van je vriend op dezelfde manier. Op deze manier kun je op 2 apparaten tegelijkertijd door het programma gaan.</string>
+    <string name="tutorial_live_share_start_headline">Aan de slag</string>
+    <string name="tutorial_live_share_start_text">Stuur de koppeling naar een of meer mensen om het delen van het scherm te starten.
+
+Voor deze ervaring moeten deelnemers momenteel de GodTools-app op hun apparaat hebben gedownload.</string>
+    <string name="tutorial_live_share_action_continue">doorgaan</string>
+    <string name="tutorial_live_share_action_skip">Overslaan</string>
+    <string name="tutorial_live_share_action_start">Een koppeling delen</string>
+</resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ਇੰਸਟਾਲ ਕਰੋ</string>
+    <string name="menu_share_tract">ਇਸ ਟੂਲ ਨੂੰ ਭੇਜੋ</string>
     <string name="tract_card_previous">ਪਿਛਲਾ</string>
     <string name="tract_card_next">ਅਗਲਾ</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">ਆਪਣੀ ਸਕਰੀਨ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
+    <string name="share_tool_message_tract_live_share">ਨਮਸਕਾਰ, ਸਕ੍ਰੀਨ ਸ਼ੇਅਰਿੰਗ ਦੇ ਜ਼ਰੀਏ GodTools ਵਿੱਚ ਮੇਰੇ ਨਾਲ ਚੱਲੋ। ਲਿੰਕ ਇਹ ਹੈ:\n%1$s\n\nਜੇ ਤੁਸੀਂ ਬਾਅਦ ਤੱਕ ਇਹ ਸੰਦੇਸ਼ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕਰਦੇ, ਤਾਂ ਸ਼ਾਇਦ ਲਿੰਕ ਕੰਮ ਨਹੀਂ ਕਰੇਗਾ। ਅਸੀਂ ਕਿਸੇ ਹੋਰ ਸਮੇਂ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰ ਸਕਦੇ ਹਾਂ।</string>
+    <string name="tract_live_share_starting">ਸਕ੍ਰੀਨ ਸ਼ੇਅਰਿੰਗ ਸ਼ੁਰੂ ਕਰ ਰਹੇ ਹਾਂ…</string>
+    <string name="tract_live_share_unable_to_connect">ਸਕ੍ਰੀਨ ਸ਼ੇਅਰਿੰਗ ਨਾਲ ਕਨੈਕਟ ਕਰਨ ਵਿੱਚ ਅਸਮਰੱਥ</string>
+    <string name="tract_live_share_exit_dialog_message">ਕੀ ਹੁਣ ਰਿਮੋਟ ਸ਼ੇਅਰਿੰਗ ਸੈਸ਼ਨ ਤੋਂ ਨਿਕਾਸ ਕਰਨਾ ਹੈ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">ਨਿਕਾਸ ਕਰੋ</string>
+    <string name="tract_live_share_exit_dialog_cancel">ਰੱਦ ਕਰੋ</string>
 </resources>

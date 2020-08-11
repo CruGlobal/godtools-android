@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Jaga oma ekraanikuva</string>
+    <string name="tutorial_live_share_description_text">Suvandi kasutamisel saadetakse see tööriist su sõbrale. Ekraanikuva jagamine algab lingi avamisel.</string>
+    <string name="tutorial_live_share_mirrored_headline">Peegeldatud kogemus</string>
+    <string name="tutorial_live_share_mirrored_text">Kui kerid oma telefonis tööriista kuva, näeb seda ka su sõber. Nii saad tööriistaga tutvuda korraga 2 seadmel.</string>
+    <string name="tutorial_live_share_start_headline">Alustamine</string>
+    <string name="tutorial_live_share_start_text">Saada link ühele või mitmele inimesele, et kohe ekraanikuva jagamist alustada.</string>
+    <string name="tutorial_live_share_action_continue">Jätka</string>
+    <string name="tutorial_live_share_action_skip">Jäta vahele</string>
+    <string name="tutorial_live_share_action_start">Jaga linki</string>
+</resources>

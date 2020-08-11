@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">แชร์หน้าจอของคุณ</string>
+    <string name="tutorial_live_share_description_text">ตัวเลือกนี้จะส่งลิงก์ไปยังเครื่องมือนี้ให้กับเพื่อน เมื่อเปิดลิงก์ขึ้นมาจะเริ่มเซสชันการแชร์หน้าจอ</string>
+    <string name="tutorial_live_share_mirrored_headline">การสะท้อนหน้าจอ (Mirror)</string>
+    <string name="tutorial_live_share_mirrored_text">เมื่อคุณเลื่อนเครื่องมือขึ้นลงบนโทรศัพท์ หน้าจอของเพื่อนจะตอบสนองในลักษณะเดียวกัน สิ่งนี้ช่วยให้คุณสามารถดูเครื่องมือพร้อมกันบนอุปกรณ์ 2 เครื่องในเวลาเดียวกัน</string>
+    <string name="tutorial_live_share_start_headline">เริ่มต้นใช้งาน</string>
+    <string name="tutorial_live_share_start_text">ส่งลิงก์ไปยังบุคคลตั้งแต่หนึ่งคนขึ้นไปเพื่อเริ่มเซสชันการแชร์หน้าจอทันที
+
+ปัจจุบันประสบการณ์นี้กำหนดให้ผู้เข้าร่วมทุกคนต้องดาวน์โหลดแอป GodTools บนอุปกรณ์ของตน</string>
+    <string name="tutorial_live_share_action_continue">ต่อไป</string>
+    <string name="tutorial_live_share_action_skip">ข้าม</string>
+    <string name="tutorial_live_share_action_start">แชร์ลิงค์</string>
+</resources>

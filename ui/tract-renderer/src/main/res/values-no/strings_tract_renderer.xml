@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Installer</string>
+    <string name="menu_share_tract">Send dette verktøyet</string>
     <string name="tract_card_previous">Forrige</string>
     <string name="tract_card_next">Neste</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Del skjermen din</string>
+    <string name="share_tool_message_tract_live_share">Hei, følg med meg i GodTools via skjermdeling. Her er lenken: %1$s\n\nHvis du ikke mottar denne meldingen før senere, kan det hende at lenken ikke virker. Vi kan prøve igjen på et annet tidspunkt.</string>
+    <string name="tract_live_share_starting">Start skjermdeling …</string>
+    <string name="tract_live_share_unable_to_connect">Kan ikke koble til skjermdeling</string>
+    <string name="tract_live_share_exit_dialog_message">Vil du avslutte den eksterne delingsøkten nå?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Avslutt</string>
+    <string name="tract_live_share_exit_dialog_cancel">Avbryt</string>
 </resources>

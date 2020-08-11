@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">שתף את המסך שלך</string>
+    <string name="tutorial_live_share_description_text">אפשרות זו תשלח קישור עבור כלי זה לחבר. עם פתיחת הקישור הוא יתחיל את שיתוף המסך.</string>
+    <string name="tutorial_live_share_mirrored_headline">חוויה משותפת</string>
+    <string name="tutorial_live_share_mirrored_text">כאשר אתה גולל את הכלי בטלפון, המסך של חברך יגיב באותה צורה. זה מאפשר לכם לעבור על הכלי יחד בשני מכשירים בו זמנית.</string>
+    <string name="tutorial_live_share_start_headline">בואו נתחיל</string>
+    <string name="tutorial_live_share_start_text">שלח את הקישור לאדם אחד או יותר כדי להתחיל את שיתוף המסך עכשיו.
+
+ניסיון זה מחייב כרגע מכל המשתתפים להוריד את האפליקציה GodTools למכשיר שלהם.</string>
+    <string name="tutorial_live_share_action_continue">המשך</string>
+    <string name="tutorial_live_share_action_skip">דלג</string>
+    <string name="tutorial_live_share_action_start">שתף קישור</string>
+</resources>

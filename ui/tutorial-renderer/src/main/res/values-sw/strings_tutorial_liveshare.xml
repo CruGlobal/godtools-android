@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Onyeshana skrini yako</string>
+    <string name="tutorial_live_share_description_text">Chaguo hili litatuma kiungo cha zana hii kwa rafiki. Kiungo kitakapofunguliwa kitaanza kipindi cha kuchangia kupitia skrini.</string>
+    <string name="tutorial_live_share_mirrored_headline">Tukio linaloonekana</string>
+    <string name="tutorial_live_share_mirrored_text">Unavyobiringiza zana kwenye simu yako, skrini ya rafiki yako itaanza kujibu kwa njia iyo hiyo. Hili litakuwezesha kutembea kwenye zana moja pamoja kupitia vifaa viwili kwa wakati mmoja.</string>
+    <string name="tutorial_live_share_start_headline">Anza</string>
+    <string name="tutorial_live_share_start_text">Tuma kiungo kwa mtu mmoja ama zaidi ili kuanza sasa kipindi cha kuchangia kupitia kuonyesha skrini.
+
+Tukio hili linahitaji washiriki wote wawe na programu ya GodTools tayari imepakuliwa kwenye vifaa vyao.</string>
+    <string name="tutorial_live_share_action_continue">Endelea</string>
+    <string name="tutorial_live_share_action_skip">Ruka</string>
+    <string name="tutorial_live_share_action_start">Shirikisha wengine na kiungo</string>
+</resources>

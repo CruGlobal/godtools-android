@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Partagez votre écran</string>
+    <string name="tutorial_live_share_description_text">Cette option enverra un lien vers cet outil à un ami. Lorsque le lien est ouvert, une session de partage d\'écran débutera.</string>
+    <string name="tutorial_live_share_mirrored_headline">Expérience miroir</string>
+    <string name="tutorial_live_share_mirrored_text">Lorsque vous faites défiler l\'outil sur votre téléphone, l\'écran de votre ami fera la même chose. Ceci vous permet d\'explorer un outil ensemble sur 2 appareils à la fois.</string>
+    <string name="tutorial_live_share_start_headline">Commencer</string>
+    <string name="tutorial_live_share_start_text">Envoyez le lien à une personne ou plus pour débuter une session de partage d\'écran maintenant.
+
+Cette expérience nécessite présentement que tous les participants aient l\'application GodTools sur leur appareil.</string>
+    <string name="tutorial_live_share_action_continue">Continuer</string>
+    <string name="tutorial_live_share_action_skip">Sauter</string>
+    <string name="tutorial_live_share_action_start">Partagez un lien</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Сподели екрана си</string>
+    <string name="tutorial_live_share_description_text">Тази опция е за изпращане на връзка към този инструмент на приятел. При отваряне на връзката ще започне сесия за отдалечено споделяне на екран.</string>
+    <string name="tutorial_live_share_mirrored_headline">Огледално преживяване</string>
+    <string name="tutorial_live_share_mirrored_text">Когато превърташ екрана на приложението на смартфона си, същото ще се случва и на екрана на другия човек. Това позволява да използваш приложение на 2 устройства едновременно.</string>
+    <string name="tutorial_live_share_start_headline">Започнете</string>
+    <string name="tutorial_live_share_start_text">Изпрати връзката до един или повече хора, за да започнеш сесия за отдалечено споделяне сега.
+
+За това е нужно всички участници да имат приложението GodTools на техните устройства.</string>
+    <string name="tutorial_live_share_action_continue">Продължете</string>
+    <string name="tutorial_live_share_action_skip">Пропуснете</string>
+    <string name="tutorial_live_share_action_start">Споделете връзка</string>
+</resources>

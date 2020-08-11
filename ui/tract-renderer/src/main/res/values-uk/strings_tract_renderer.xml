@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Встановити</string>
+    <string name="menu_share_tract">Відправити інструмент</string>
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Далі</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Поділитися екраном</string>
+    <string name="share_tool_message_tract_live_share">Вітаю! Зайдіть у програму GodTools, щоб бачити мій екран за посиланням: %1$s\n\nЯкщо ви пізно отримали це повідомлення, посилання може бути застарілим. Спробуймо іншим разом.</string>
+    <string name="tract_live_share_starting">Розпочинається демонстрація екрану...</string>
+    <string name="tract_live_share_unable_to_connect">Помилка підключення до демонстрації екрану</string>
+    <string name="tract_live_share_exit_dialog_message">Закінчити віддалений сеанс демонстрації?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Закінчити</string>
+    <string name="tract_live_share_exit_dialog_cancel">Скасувати</string>
 </resources>

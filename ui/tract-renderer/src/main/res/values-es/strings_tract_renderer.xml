@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Instalar</string>
+    <string name="menu_share_tract">Enviar esta herramienta</string>
     <string name="tract_card_previous">Anterior</string>
     <string name="tract_card_next">Siguiente</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Comparte tu pantalla</string>
+    <string name="share_tool_message_tract_live_share">¡Hola! Acompáñame en GodTools con la pantalla compartida. Aquí tienes el enlace: %1$s\n\nSi no recibes este mensaje en un tiempo, puede que el enlace ya no funcione. Podemos volver a intentarlo en otro momento.</string>
+    <string name="tract_live_share_starting">Iniciando pantalla compartida...</string>
+    <string name="tract_live_share_unable_to_connect">No se puede conectar a la pantalla compartida</string>
+    <string name="tract_live_share_exit_dialog_message">¿Salir ahora de la sesión de pantalla compartida?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Salir</string>
+    <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
 </resources>

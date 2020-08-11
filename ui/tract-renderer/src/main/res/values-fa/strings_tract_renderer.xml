@@ -6,6 +6,10 @@
     <string name="tract_card_next">بعدی</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">صفحه نمایش خود را به اشتراک بگذارید</string>
+    <string name="share_tool_message_tract_live_share">سلام، از طریق اشتراک‌گذاری صفحه در GodTools با من همراه باشید.\nلینک اینجاست: %1$s\n\nاگر این پیام را دریافت نمی‌کنید، ممکن است لینک هنوز کار نمی‌کند. می‌توانید بعداً دوباره امتحان کنیم.</string>
     <string name="tract_live_share_starting">شروع اشتراک گذاری صفحه</string>
     <string name="tract_live_share_unable_to_connect">عدم  اشتراک گذاری صفحه</string>
+    <string name="tract_live_share_exit_dialog_message">اکنون از جلسه اشتراک‌گذاری راه‌دور خارج می‌شوید؟</string>
+    <string name="tract_live_share_exit_dialog_confirm">خروج</string>
+    <string name="tract_live_share_exit_dialog_cancel">لغو</string>
 </resources>

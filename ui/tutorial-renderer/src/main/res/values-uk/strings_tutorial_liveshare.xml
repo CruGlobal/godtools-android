@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Поділитися екраном</string>
+    <string name="tutorial_live_share_description_text">Ви можете надіслати другу чи подрузі посилання на цей інструмент. Коли він чи вона відкриє посилання, розпочнеться демонстрація екрану.</string>
+    <string name="tutorial_live_share_mirrored_headline">Функція віддзеркалення</string>
+    <string name="tutorial_live_share_mirrored_text">На екрані вашого друга буде показуватися те, що ви переглядаєте в інструменті на вашому телефоні. Це дозволить зробити огляд інструменту одночасно на двох пристроях.</string>
+    <string name="tutorial_live_share_start_headline">Початок</string>
+    <string name="tutorial_live_share_start_text">Відправте посилання людям, з якими ви хочете розпочати сеанс демонстрації екрану.
+
+Для участі в сеансі, необхідно, щоб в учасників була встановлена програма GodTools на їхніх пристроях.</string>
+    <string name="tutorial_live_share_action_continue">Продовжити</string>
+    <string name="tutorial_live_share_action_skip">Пропустити</string>
+    <string name="tutorial_live_share_action_start">Поширте посилання</string>
+</resources>

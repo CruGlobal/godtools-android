@@ -6,6 +6,10 @@
     <string name="tract_card_next">Напред</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Сподели екрана си</string>
+    <string name="share_tool_message_tract_live_share">Здравей, последвай ме в GodTools чрез споделяне на екрана. Ето връзката: %1$s\n\nАко получиш това съобщение твърде късно, връзката може вече да не работи. Можем да опитаме пак друг път.</string>
     <string name="tract_live_share_starting">Започва споделяне на екрана...</string>
     <string name="tract_live_share_unable_to_connect">Не може да се свърже със Споделяне на екрана</string>
+    <string name="tract_live_share_exit_dialog_message">Искаш ли да прекратиш сесията за отдалечено споделяне сега?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Изход</string>
+    <string name="tract_live_share_exit_dialog_cancel">Отмяна</string>
 </resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">نصب کریں</string>
+    <string name="menu_share_tract">یہ ٹول ارسال کریں</string>
     <string name="tract_card_previous">پیچھے</string>
     <string name="tract_card_next">آگے</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">اپنی اسکرین کا اشتراک کریں</string>
+    <string name="share_tool_message_tract_live_share">ہیلو، GodTools میں سکرین شیئرنگ کے ذریعے میری پیروی کریں۔ ربط یہ رہا: %1$s\n\nاگر آپ کو دیر تک یہ پیغام موصول نہیں ہوتا تو شاید ربط بھی کام نہ کرتا ہو۔ ہم کسی اور وقت دوبارہ کوشش کر سکتے ہیں۔</string>
+    <string name="tract_live_share_starting">سکرین شیئرنگ شروع ہو رہی ہے۔۔۔</string>
+    <string name="tract_live_share_unable_to_connect">سکرین شیئرنگ سے مربوط کرنے سے قاصر</string>
+    <string name="tract_live_share_exit_dialog_message">ابھی ریموٹ سکرین شیئرنگ سیشن سے نکلیں؟</string>
+    <string name="tract_live_share_exit_dialog_confirm">خروج</string>
+    <string name="tract_live_share_exit_dialog_cancel">منسوخ کریں</string>
 </resources>

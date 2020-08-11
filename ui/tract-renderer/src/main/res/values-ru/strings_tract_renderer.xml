@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Установка</string>
+    <string name="menu_share_tract">Отправить этот инструмент</string>
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Далее</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Покажите свой экран</string>
+    <string name="share_tool_message_tract_live_share">Привет, пройди этот путь вместе со мной в GodTools с помощью трансляции экрана. Вот ссылка: %1$s\n\nЕсли это сообщение придет слишком поздно, ссылка может уже не работать. Мы можем попробовать еще раз в другое время.</string>
+    <string name="tract_live_share_starting">Запуск трансляции экрана…</string>
+    <string name="tract_live_share_unable_to_connect">Невозможно подключиться к трансляции экрана</string>
+    <string name="tract_live_share_exit_dialog_message">Выйти из сеанса удаленной трансляции?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Выход</string>
+    <string name="tract_live_share_exit_dialog_cancel">Отмена</string>
 </resources>

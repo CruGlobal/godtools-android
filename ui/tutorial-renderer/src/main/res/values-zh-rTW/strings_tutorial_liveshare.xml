@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">分享你的螢幕</string>
+    <string name="tutorial_live_share_description_text">此選項會將此工具的連結傳送給一名好友。開啟連結後螢幕分享會將隨即開始。</string>
+    <string name="tutorial_live_share_mirrored_headline">鏡像體驗</string>
+    <string name="tutorial_live_share_mirrored_text">當你在手機上捲動工具時，好友的螢幕畫面也會隨之捲動。因此，你們可以同時在 2 個裝置上一起瀏覽工具。</string>
+    <string name="tutorial_live_share_start_headline">開始使用</string>
+    <string name="tutorial_live_share_start_text">將連結傳送給一人或多人，以立即開始螢幕分享會。
+
+目前此體驗需要所有參加者在裝置中下載 GodsTools 應用程式才能進行。</string>
+    <string name="tutorial_live_share_action_continue">繼續</string>
+    <string name="tutorial_live_share_action_skip">跳過</string>
+    <string name="tutorial_live_share_action_start">分享連結</string>
+</resources>

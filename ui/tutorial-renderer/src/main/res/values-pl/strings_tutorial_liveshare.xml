@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Udostępnij swój ekran</string>
+    <string name="tutorial_live_share_description_text">Ta opcja wyśle link do tego narzędzia twojemu znajomemu. Po otwarciu linku osoba przyłączy się do sesji udostępniania ekranu.</string>
+    <string name="tutorial_live_share_mirrored_headline">Lustrzane odbicie</string>
+    <string name="tutorial_live_share_mirrored_text">Przy przewijaniu tekstu w narzędziu, to samo będzie się działo na drugim telefonie. Pozwala to na wspólne korzystanie z narzędzia na dwóch urządzeniach jednocześnie.</string>
+    <string name="tutorial_live_share_start_headline">Rozpocznij</string>
+    <string name="tutorial_live_share_start_text">Wyślij link do jednej lub więcej osób, aby rozpocząć sesję udostępniania ekranu.
+
+Do wzięcia udziału w sesji wszyscy uczestnicy będą musieli mieć zainstalowane GodTools na swoim urządzeniu.</string>
+    <string name="tutorial_live_share_action_continue">kontynuować</string>
+    <string name="tutorial_live_share_action_skip">Pomiń</string>
+    <string name="tutorial_live_share_action_start">Udostępnij link</string>
+</resources>

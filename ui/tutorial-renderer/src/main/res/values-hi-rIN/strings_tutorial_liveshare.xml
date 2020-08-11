@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">अपनी स्क्रीन साझा करें</string>
+    <string name="tutorial_live_share_description_text">यह विकल्प इस टूल की लिंक एक दोस्त को भेजेगा। लिंक खोलने पर एक स्क्रीन साझाकरण सत्र शुरू हो जाएगा।</string>
+    <string name="tutorial_live_share_mirrored_headline">प्रतिबिंब अनुभव</string>
+    <string name="tutorial_live_share_mirrored_text">जब आप अपने फोन पर टूल को स्क्रॉल करेंगे, तब आपके दोस्त की स्क्रीन भी उसी तरह स्क्रॉल होगी। इस तरह आप एक साथ 2 उपकरणों पर टूल की जानकारी साथ-साथ दे सकेंगे।</string>
+    <string name="tutorial_live_share_start_headline">शुरू करें</string>
+    <string name="tutorial_live_share_start_text">स्क्रीन साझाकरण सत्र शुरू करने के लिए लिंक एक या अधिक लोगों को भेजें।
+
+वर्तमान में यह अनुभव लेने के लिए आवश्यक है कि सभी सहभागी अपने उपकरण पर GodTools ऐप डाउनलोड करें।</string>
+    <string name="tutorial_live_share_action_continue">जारी रखें</string>
+    <string name="tutorial_live_share_action_skip">छोड़ें</string>
+    <string name="tutorial_live_share_action_start">लिंक साझा करें</string>
+</resources>

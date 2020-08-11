@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">画面を共有する</string>
+    <string name="tutorial_live_share_description_text">このオプションは、このツールへのリンクを友達に送信します。リンクが開かれると、画面共有セッションが開始します。</string>
+    <string name="tutorial_live_share_mirrored_headline">ミラーリング機能</string>
+    <string name="tutorial_live_share_mirrored_text">お使いのスマートフォンでツールをスクロールすると、お友達の画面も同様に動作します。これにより、2つのデバイス上で同時にツールの使い方を見せることができます。</string>
+    <string name="tutorial_live_share_start_headline">始める</string>
+    <string name="tutorial_live_share_start_text">リンクを1人またはそれ以上の人々に送信して、画面共有セッションを今すぐ開始しましょう。
+
+この機能をご利用いただくためには、すべての参加者の使用デバイスにGodToolsアプリがダウンロードされている必要があります。</string>
+    <string name="tutorial_live_share_action_continue">続行</string>
+    <string name="tutorial_live_share_action_skip">スキップ</string>
+    <string name="tutorial_live_share_action_start">リンクをシェア</string>
+</resources>

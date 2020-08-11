@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">اپنی اسکرین کا اشتراک کریں</string>
+    <string name="tutorial_live_share_description_text">یہ اختیار اس ٹول کا ربط ایک دوست کو ارسال کرے گا۔ جب ربط کو کھولا گیا تو یہ ایک سکرین شیئرنگ سیشن شروع کرے گا۔</string>
+    <string name="tutorial_live_share_mirrored_headline">عکسی تجربہ</string>
+    <string name="tutorial_live_share_mirrored_text">جب آپ اپنے فون پر ٹول کو سکرول کرتے ہیں تو آپ کے دوست کی سکرین بھی اسی طرح ردعمل ظاہر کرے گی۔ یہ آپ کو ایک ہی وقت میں 2 آلات پر ایک ٹول میں سے اکٹھے گزرنے کی سہولت دیتا ہے۔</string>
+    <string name="tutorial_live_share_start_headline">شروع کریں</string>
+    <string name="tutorial_live_share_start_text">ابھی سکرین شیئرنگ سیشن شروع کرنے کے لیے ایک یا زیادہ افراد کو ربط ارسال کریں۔
+
+اس وقت اس تجربے کے لیے ضروری ہے کہ تمام شرکاء کے پاس اپنے آلے میں GodTools ایپ ڈاؤن لوڈ کی گئی ہو۔</string>
+    <string name="tutorial_live_share_action_continue">جاری</string>
+    <string name="tutorial_live_share_action_skip">چھوڑیں</string>
+    <string name="tutorial_live_share_action_start">ایک لنک شیئر کریں</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Zdieľať vašu obrazovku</string>
+    <string name="tutorial_live_share_description_text">Táto možnosť odošle odkaz na nástroj kamarátovi. Po otvorení odkazu sa začne relácia zdieľania obrazovky.</string>
+    <string name="tutorial_live_share_mirrored_headline">Zrkadlové zobrazenie</string>
+    <string name="tutorial_live_share_mirrored_text">Počas prechádzania nástroja v telefóne bude kamarátov telefón reagovať rovnako. To vám umožní spoločne prechádzať nástrojom na 2 zariadeniach naraz.</string>
+    <string name="tutorial_live_share_start_headline">Začíname</string>
+    <string name="tutorial_live_share_start_text">Pošli odkaz jednému alebo viacerým ľuďom a spusti reláciu zdieľania obrazovky.
+
+Všetci účastníci si na to musia do zariadenia stiahnuť aplikáciu GodTools.</string>
+    <string name="tutorial_live_share_action_continue">Pokračovať</string>
+    <string name="tutorial_live_share_action_skip">Preskočiť</string>
+    <string name="tutorial_live_share_action_start">Zdieľajte odkaz</string>
+</resources>
