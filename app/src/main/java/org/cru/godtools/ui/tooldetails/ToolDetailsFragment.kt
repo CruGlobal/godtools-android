@@ -26,7 +26,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenButton
+import org.cru.godtools.ui.tools.analytics.model.ToolOpenButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 import java.util.Locale
@@ -121,7 +121,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage)
             }
         }
-        eventBus.post(ToolOpenButton)
+        eventBus.post(ToolOpenButtonAnalyticsActionEvent)
     }
     // endregion Data Binding
 

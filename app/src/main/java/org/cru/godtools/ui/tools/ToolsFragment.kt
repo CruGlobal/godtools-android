@@ -35,7 +35,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.ADOBE_TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenTap
+import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
@@ -158,7 +158,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
                 primaryTranslation?.languageCode,
                 parallelTranslation?.languageCode
             )
-            eventBus.post(ToolOpenTap)
+            eventBus.post(ToolOpenTapAnalyticsActionEvent)
         }
     }
 
