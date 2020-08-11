@@ -26,9 +26,9 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
-import org.cru.godtools.base.tool.analytics.model.FirstToolOpened
+import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
-import org.cru.godtools.base.tool.analytics.model.ToolOpened
+import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.base.ui.util.tint
@@ -305,7 +305,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))
 
-        eventBus.post(if (settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)) ToolOpened else FirstToolOpened)
+        eventBus.post(
+            when {
+                settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) -> ToolOpenedAnalyticsActionEvent
+                else -> FirstToolOpenedAnalyticsActionEvent
+            }
+        )
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
 
         dao.updateSharesDeltaAsync(tool, 1)
