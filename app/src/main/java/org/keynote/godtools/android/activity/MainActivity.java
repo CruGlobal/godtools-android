@@ -27,6 +27,7 @@ import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.ui.tools.ToolsFragment;
+import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent;
 import org.cru.godtools.util.ActivityUtilsKt;
 
 import java.util.Locale;
@@ -45,7 +46,7 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
-import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
@@ -163,6 +164,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     public void onToolInfo(@Nullable final String code) {
         if (code != null) {
             ToolDetailsActivityKt.startToolDetailsActivity(this, code);
+            eventBus.post(AboutToolButtonAnalyticsActionEvent.INSTANCE);
         }
     }
 
@@ -226,7 +228,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    eventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
+                    eventBus.post(new AnalyticsScreenEvent(SCREEN_ALL_TOOLS));
                     break;
                 case STATE_MY_TOOLS:
                 default:

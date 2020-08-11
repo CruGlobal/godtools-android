@@ -15,8 +15,8 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
     AnalyticsBaseEvent(locale) {
     companion object {
         /* Screen event names */
-        const val SCREEN_HOME = "Home"
-        const val SCREEN_FIND_TOOLS = "Find Tools"
+        const val SCREEN_HOME = "Favorites"
+        const val SCREEN_ALL_TOOLS = "All Tools"
         const val SCREEN_LANGUAGE_SETTINGS = "Language Settings"
         const val SCREEN_LANGUAGE_SELECTION = "Select Language"
         const val SCREEN_MENU = "Menu"
@@ -36,7 +36,7 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
 
     override val adobeSiteSection
         get() = when (screen) {
-            SCREEN_FIND_TOOLS -> ADOBE_SITE_SECTION_TOOLS
+            SCREEN_ALL_TOOLS -> ADOBE_SITE_SECTION_TOOLS
             SCREEN_LANGUAGE_SETTINGS,
             SCREEN_LANGUAGE_SELECTION,
             SCREEN_ABOUT, SCREEN_HELP,
