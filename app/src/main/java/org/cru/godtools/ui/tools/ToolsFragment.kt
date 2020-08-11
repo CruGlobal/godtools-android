@@ -150,14 +150,9 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     // endregion Data Model
 
     // region ToolsAdapterCallbacks
-    override fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         if (tool != null) {
-            findListener<Callbacks>()?.onToolSelect(
-                tool.code,
-                tool.type,
-                primaryTranslation?.languageCode,
-                parallelTranslation?.languageCode
-            )
+            findListener<Callbacks>()?.onToolSelect(tool.code, tool.type, primary?.languageCode, parallel?.languageCode)
             eventBus.post(ToolOpenTapAnalyticsActionEvent)
         }
     }
