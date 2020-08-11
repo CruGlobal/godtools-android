@@ -44,6 +44,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
+import timber.log.Timber
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.Locale
@@ -222,7 +223,7 @@ class GodToolsShortcutManager @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) =
+    private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) = try {
         withContext(Dispatchers.IO) {
             shortcutManager?.dynamicShortcuts = Query.select<Tool>()
                 .where(ToolTable.FIELD_ADDED.eq(true))
@@ -231,6 +232,9 @@ class GodToolsShortcutManager @Inject constructor(
                 .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
                 .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
         }
+    } catch (e: IllegalStateException) {
+        Timber.tag("GodToolsShortcutManager").e(e, "Error updating dynamic shortcuts")
+    }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     private fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
