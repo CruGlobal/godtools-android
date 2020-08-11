@@ -80,7 +80,7 @@ class GodToolsDatabase @Inject internal constructor(private val context: Context
                         db.execSQL(ToolTable.SQL_V42_POPULATE_DEFAULT_ORDER)
                     }
                     43 -> db.execSQL(ToolTable.SQL_V43_ALTER_CATEGORY)
-                    else -> throw SQLiteException("Unrecognized database version")
+                    else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
                 // perform next upgrade increment
