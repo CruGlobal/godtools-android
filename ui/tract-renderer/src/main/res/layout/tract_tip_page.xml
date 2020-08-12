@@ -40,7 +40,7 @@
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             android:layout_marginBottom="16dp"
-            android:onClick="@{() -> page.isLastPage ? callbacks.closeTip() : callbacks.goToNextPage()}"
+            android:onClick="@{() -> page.isLastPage ? callbacks.closeTip(true) : callbacks.goToNextPage()}"
             android:saveEnabled="false"
             android:text="@{ContextKt.getString(context, page.manifest.locale, page.isLastPage ? R.string.tract_tips_tip_action_close : R.string.tract_tips_tip_action_next), default=@string/tract_tips_tip_action_next}"
             android:textColor="@{StylesKt.getPrimaryTextColor(page.stylesParent)}"

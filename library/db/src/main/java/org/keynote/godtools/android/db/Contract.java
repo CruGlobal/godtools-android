@@ -11,6 +11,7 @@ import org.cru.godtools.model.GlobalActivityAnalytics;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.TrainingTip;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
 
@@ -40,7 +41,12 @@ public final class Contract extends BaseContract {
     @SuppressWarnings("checkstyle:InterfaceIsType")
     interface ToolCode {
         String COLUMN_TOOL = "tool";
-        String SQL_COLUMN_TOOL = COLUMN_TOOL + " TEXT";
+        String SQL_COLUMN_TOOL = COLUMN_TOOL + " TEXT NOT NULL";
+    }
+
+    interface LanguageCode {
+        String COLUMN_LANGUAGE = "language";
+        String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
     }
 
     public static class LanguageTable extends BaseTable {
@@ -147,11 +153,10 @@ public final class Contract extends BaseContract {
         static final String SQL_V43_ALTER_CATEGORY = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CATEGORY;
     }
 
-    public static class TranslationTable extends BaseTable implements ToolCode {
+    public static class TranslationTable extends BaseTable implements ToolCode, LanguageCode {
         static final String TABLE_NAME = "translations";
         public static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
-        public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
@@ -173,7 +178,6 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
                         COLUMN_TAGLINE, COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED, COLUMN_LAST_ACCESSED};
 
-        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
@@ -352,6 +356,38 @@ public final class Contract extends BaseContract {
         static final String SQL_V41_CREATE_GLOBAL_ANALYTICS =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_USERS, SQL_COLUMN_COUNTRIES, SQL_COLUMN_LAUNCHES,
                        SQL_COLUMN_GOSPEL_PRESENTATIONS);
+        // endregion DB Migrations
+    }
+
+    public static class TrainingTipTable implements Base, ToolCode, LanguageCode {
+        static final String TABLE_NAME = "training_tips";
+        private static final Table<TrainingTip> TABLE = Table.forClass(TrainingTip.class);
+
+        static final String COLUMN_TIP_ID = "tipId";
+        public static final String COLUMN_IS_COMPLETED = "isCompleted";
+
+        private static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
+        private static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
+        private static final Field FIELD_TIP_ID = TABLE.field(COLUMN_TIP_ID);
+
+        static final String[] PROJECTION_ALL = {COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID, COLUMN_IS_COMPLETED};
+
+        private static final String SQL_COLUMN_TIP_ID = COLUMN_TIP_ID + " TEXT";
+        private static final String SQL_COLUMN_IS_COMPLETE = COLUMN_IS_COMPLETED + " INTEGER";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY =
+                FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind())).and(FIELD_TIP_ID.eq(bind()));
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_TIP_ID, SQL_COLUMN_IS_COMPLETE,
+                       SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        // region DB Migrations
+        static final String SQL_V44_CREATE_TRAINING_TIPS =
+                create(TABLE_NAME, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_TIP_ID, SQL_COLUMN_IS_COMPLETE,
+                       SQL_PRIMARY_KEY);
         // endregion DB Migrations
     }
 }

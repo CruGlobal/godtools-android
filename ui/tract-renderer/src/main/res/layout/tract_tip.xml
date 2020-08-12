@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.ccci.gto.android.common.compat.view.ProgressBarCompat" />
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
@@ -10,7 +11,7 @@
 
         <variable name="callbacks" type="org.cru.godtools.tract.ui.tips.TipCallbacks" />
         <variable name="tip" type="org.cru.godtools.xml.model.tips.Tip" />
-        <variable name="isComplete" type="Boolean" />
+        <variable name="isComplete" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +30,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:onClick="@{() -> callbacks.closeTip()}"
+            android:onClick="@{() -> callbacks.closeTip(false)}"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="@id/appbar"
             app:layout_constraintStart_toStartOf="parent"

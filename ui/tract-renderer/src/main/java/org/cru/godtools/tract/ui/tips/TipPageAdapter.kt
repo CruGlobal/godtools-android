@@ -53,8 +53,8 @@ class TipPageAdapter @AssistedInject internal constructor(
         callbacks?.goToNextPage()
     }
 
-    override fun closeTip() {
-        callbacks?.closeTip()
+    override fun closeTip(completed: Boolean) {
+        callbacks?.closeTip(completed)
     }
     // endregion TipPageController.Callbacks
 }
