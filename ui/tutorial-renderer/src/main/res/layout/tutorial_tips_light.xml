@@ -34,26 +34,27 @@
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toTopOf="@id/headlinePosition"
-            app:srcCompat="@drawable/img_tutorial_tips_learn" />
+            app:srcCompat="@drawable/img_tutorial_tips_light" />
 
 
         <TextView
             android:id="@+id/tips_text_light_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
+            android:paddingTop="64dp"
             android:text="Tips to light the way"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/tips_light_img" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tips_light_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:text="On select screens of this training, you'll see one of the icons above. Press the icon to reveal a tip that will help you talk about the content of the screen."
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
@@ -64,7 +65,7 @@
             android:id="@+id/tips_light_text2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:text="If a screen has no icon, then the tip is to just read through the content and discuss as needed."
             app:layout_constraintBottom_toTopOf="@+id/include"

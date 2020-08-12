@@ -26,7 +26,7 @@
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_tutorial_training_menu"
+            android:src="@drawable/img_tutorial_tips_start"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toTopOf="@id/headlinePosition" />
