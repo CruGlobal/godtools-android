@@ -36,7 +36,6 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
-import org.cru.godtools.tract.BuildConfig
 import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
@@ -73,8 +72,6 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 private const val EXTRA_SHOW_TIPS = "org.cru.godtools.tract.activity.TractActivity.SHOW_TIPS"
 
 private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
-
-private val ENABLE_LIVE_SHARE = BuildConfig.DEBUG
 
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
     startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
@@ -143,13 +140,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
+        menu.removeItem(R.id.action_share)
         menuInflater.inflate(R.menu.activity_tract, menu)
-
-        if (ENABLE_LIVE_SHARE) {
-            menu.removeItem(R.id.action_share)
-            menuInflater.inflate(R.menu.activity_tract_live_share, menu)
-            menu.setupLiveShareMenuItemVisibility()
-        }
+        menuInflater.inflate(R.menu.activity_tract_live_share, menu)
+        menu.setupLiveShareMenuItemVisibility()
 
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
@@ -171,7 +165,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             true
         }
         // override default share action to support live share submenu
-        item.itemId == R.id.action_share && ENABLE_LIVE_SHARE -> true
+        item.itemId == R.id.action_share -> true
         item.itemId == R.id.action_share_tool -> {
             shareCurrentTool()
             true
