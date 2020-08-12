@@ -34,6 +34,7 @@ import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
@@ -59,6 +60,7 @@ import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
@@ -121,6 +123,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary()
+        startTipsTutorialIfNecessary()
+
     }
 
     override fun onBindingChanged() {
@@ -534,6 +538,13 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         subscriberController.channelId = streamId
         subscriberController.receivedEvent.notNull().distinctUntilChanged()
             .observe(this) { navigateToLiveShareEvent(it) }
+    }
+
+    private fun startTipsTutorialIfNecessary() {
+        if (showTips && settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TIPS)) {
+            return
+        }
+        startTutorialActivity(PageSet.TIPS)
     }
 
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
