@@ -124,7 +124,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary()
         startTipsTutorialIfNecessary()
-
     }
 
     override fun onBindingChanged() {
