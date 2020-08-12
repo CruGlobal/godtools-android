@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="callbacks"
+            type="org.cru.godtools.tutorial.TutorialCallbacks" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
+
+        <include layout="@layout/tutorial_include_margins" />
+
+        <include layout="@layout/tutorial_training_include_positioning" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/tutorial_training_include_navigation"
+            app:callbacks="@{callbacks}" />
+
+        <ImageView
+            android:id="@+id/tips_light_img"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="TODO"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toTopOf="@id/headlinePosition"
+            app:srcCompat="@drawable/img_tutorial_tips_learn" />
+
+
+        <TextView
+            android:id="@+id/tips_text_light_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="Tips to light the way"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/tips_light_img" />
+
+        <TextView
+            android:id="@+id/tips_light_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="On select screens of this training, you'll see one of the icons above. Press the icon to reveal a tip that will help you talk about the content of the screen."
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@+id/tips_text_light_title" />
+
+        <TextView
+            android:id="@+id/tips_light_text2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="If a screen has no icon, then the tip is to just read through the content and discuss as needed."
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@+id/tips_light_text" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
