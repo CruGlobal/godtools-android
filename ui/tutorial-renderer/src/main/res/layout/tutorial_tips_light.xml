@@ -30,10 +30,11 @@
             android:id="@+id/tips_light_img"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:contentDescription="TODO"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toTopOf="@id/headlinePosition"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/img_tutorial_tips_light" />
 
 
@@ -42,13 +43,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:paddingTop="64dp"
             android:text="Tips to light the way"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tips_light_img" />
 
         <TextView
             android:id="@+id/tips_light_text"

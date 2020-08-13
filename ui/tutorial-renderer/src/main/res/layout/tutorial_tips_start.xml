@@ -29,7 +29,7 @@
             android:src="@drawable/img_tutorial_tips_start"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/headline"
