@@ -10,6 +10,7 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsActivity
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tips.Tip
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeFalse
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
@@ -29,27 +30,41 @@ class ToolDetailsFragmentBindingTest {
     }
 
     @Test
-    fun verifyWithTips() {
-        val manifest = Manifest(tips = { listOf(Tip(it, "test1")) })
-        binding.manifest = MutableLiveData<Manifest>(manifest)
+    fun verifyTrainingHiddenForReleaseBuilds() {
+        assumeFalse("This test only applies to release builds", BuildConfig.DEBUG)
+
+        binding.manifest = MutableLiveData(Manifest(tips = { listOf(Tip(it, "test1")) }))
+        binding.executePendingBindings()
+        assertEquals(View.GONE, binding.actionToolTraining.visibility)
+        binding.manifest = MutableLiveData(Manifest())
+        binding.executePendingBindings()
+        assertEquals(View.GONE, binding.actionToolTraining.visibility)
+        binding.manifest = MutableLiveData(null)
+        binding.executePendingBindings()
+        assertEquals(View.GONE, binding.actionToolTraining.visibility)
+    }
+
+    @Test
+    fun verifyTrainingVisibleWhenToolHasTips() {
+        assumeTrue("Training is currently disabled for non-debug builds", BuildConfig.DEBUG)
+
+        binding.manifest = MutableLiveData(Manifest(tips = { listOf(Tip(it, "test1")) }))
         binding.executePendingBindings()
 
-        assumeTrue(BuildConfig.DEBUG)
         assertEquals(View.VISIBLE, binding.actionToolTraining.visibility)
     }
 
     @Test
-    fun verifyNoTips() {
-        val manifest = Manifest()
-        binding.manifest = MutableLiveData<Manifest>(manifest)
+    fun verifyTrainingHiddenWhenToolHasNoTips() {
+        binding.manifest = MutableLiveData(Manifest())
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.actionToolTraining.visibility)
     }
 
     @Test
-    fun verifyEmptyManifest() {
-        binding.manifest = MutableLiveData<Manifest>()
+    fun verifyTrainingHiddenWhenManifestIsntAvailable() {
+        binding.manifest = MutableLiveData(null)
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.actionToolTraining.visibility)
