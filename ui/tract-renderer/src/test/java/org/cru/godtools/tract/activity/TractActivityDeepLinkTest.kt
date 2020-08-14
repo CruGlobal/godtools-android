@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
+import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 class TractActivityDeepLinkTest {
@@ -50,6 +51,30 @@ class TractActivityDeepLinkTest {
             assertNull(Uri.parse("https://knowgod.com/en/kgp/asdf").extractPageFromDeepLink())
             assertEquals(1, Uri.parse("https://knowgod.com/en/kgp/1").extractPageFromDeepLink())
             assertEquals(15, Uri.parse("https://knowgod.com/en/kgp/15").extractPageFromDeepLink())
+        }
+    }
+
+    @Test
+    fun verifyExtractLanguagesFromDeepLink() {
+        Uri.parse("https://knowgod.com/en/kgp")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH), emptyList())
+        Uri.parse("https://knowgod.com/en-CA/kgp")
+            .assertExtractedLanguages(listOf(Locale.CANADA, Locale.ENGLISH), emptyList())
+        Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH), emptyList())
+        Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH, Locale.FRENCH), emptyList())
+        Uri.parse("https://knowgod.com/fr/kgp?parallelLanguage=en")
+            .assertExtractedLanguages(listOf(Locale.FRENCH), listOf(Locale.ENGLISH))
+        Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&parallelLanguage=fr")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH), listOf(Locale.FRENCH))
+    }
+
+    private fun Uri.assertExtractedLanguages(expectedPrimary: List<Locale>, expectedParallel: List<Locale>) {
+        with(activity) {
+            val (primary, parallel) = extractLanguagesFromDeepLink()
+            assertEquals(expectedPrimary, primary)
+            assertEquals(expectedParallel, parallel)
         }
     }
 }
