@@ -68,6 +68,10 @@ class TractActivityDeepLinkTest {
             .assertExtractedLanguages(listOf(Locale.FRENCH), listOf(Locale.ENGLISH))
         Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&parallelLanguage=fr")
             .assertExtractedLanguages(listOf(Locale.ENGLISH), listOf(Locale.FRENCH))
+        Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=fr")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH), listOf(Locale.FRENCH))
+        Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=fr-CA")
+            .assertExtractedLanguages(listOf(Locale.ENGLISH), listOf(Locale.CANADA_FRENCH, Locale.FRENCH))
     }
 
     private fun Uri.assertExtractedLanguages(expectedPrimary: List<Locale>, expectedParallel: List<Locale>) {

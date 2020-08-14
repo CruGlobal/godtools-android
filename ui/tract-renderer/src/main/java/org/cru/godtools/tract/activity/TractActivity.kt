@@ -249,16 +249,20 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     @VisibleForTesting
     fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
 
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
-        val primary = LocaleUtils.getFallbacks(*buildList<Locale> {
-            if (!getQueryParameter(PARAM_USE_DEVICE_LANGUAGE).isNullOrEmpty()) add(Locale.getDefault())
-            addAll(extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE))
-            add(LocaleCompat.forLanguageTag(pathSegments[0]))
-        }.toTypedArray())
+    @VisibleForTesting
+    internal fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
+        val pathParam = LocaleCompat.forLanguageTag(pathSegments[0])
+        val primary = LinkedHashSet<Locale>()
+        val parallel = LinkedHashSet<Locale>()
 
-        val parallel =
-            LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+        if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
+            primary += LocaleUtils.getFallbacks(Locale.getDefault())
+        }
+        primary += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).toTypedArray())
+        parallel += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+
+        if (pathParam !in primary && pathParam !in parallel) primary += LocaleUtils.getFallbacks(pathParam)
+
         return Pair(primary.toList(), parallel.toList())
     }
 
