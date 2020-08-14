@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivity
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tips.Tip
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,6 +34,7 @@ class ToolDetailsFragmentBindingTest {
         binding.manifest = MutableLiveData<Manifest>(manifest)
         binding.executePendingBindings()
 
+        assumeTrue(BuildConfig.DEBUG)
         assertEquals(View.VISIBLE, binding.actionToolTraining.visibility)
     }
 
