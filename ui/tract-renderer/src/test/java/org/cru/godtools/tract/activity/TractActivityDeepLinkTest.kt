@@ -22,15 +22,16 @@ class TractActivityDeepLinkTest {
 
     @Test
     fun verifyIsDeepLinkValid() {
-        assertFalse(activity.isDeepLinkValid(null))
-        assertFalse(activity.isDeepLinkValid(Uri.parse("wss://knowgod.com/en/kgp")))
-        assertFalse(activity.isDeepLinkValid(Uri.parse("https://example.com/en/kgp")))
-        assertFalse(activity.isDeepLinkValid(Uri.parse("https://knowgod.com/en")))
-        assertTrue(activity.isDeepLinkValid(Uri.parse("http://knowgod.com/en/kgp")))
-        assertTrue(activity.isDeepLinkValid(Uri.parse("https://knowgod.com/en/kgp")))
-        assertTrue(activity.isDeepLinkValid(Uri.parse("https://www.knowgod.com/en/kgp")))
-        assertTrue(activity.isDeepLinkValid(Uri.parse("https://knowgod.com/en/fourlaws")))
-        assertTrue(activity.isDeepLinkValid(Uri.parse("https://knowgod.com/en/kgp/2")))
+        with(activity) {
+            assertFalse(Uri.parse("wss://knowgod.com/en/kgp").isDeepLinkValid())
+            assertFalse(Uri.parse("https://example.com/en/kgp").isDeepLinkValid())
+            assertFalse(Uri.parse("https://knowgod.com/en").isDeepLinkValid())
+            assertTrue(Uri.parse("http://knowgod.com/en/kgp").isDeepLinkValid())
+            assertTrue(Uri.parse("https://knowgod.com/en/kgp").isDeepLinkValid())
+            assertTrue(Uri.parse("https://www.knowgod.com/en/kgp").isDeepLinkValid())
+            assertTrue(Uri.parse("https://knowgod.com/en/fourlaws").isDeepLinkValid())
+            assertTrue(Uri.parse("https://knowgod.com/en/kgp/2").isDeepLinkValid())
+        }
     }
 
     @Test

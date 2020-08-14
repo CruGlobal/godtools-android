@@ -223,7 +223,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
-        if (intent?.action == Intent.ACTION_VIEW && data != null && isDeepLinkValid(data)) {
+        if (intent?.action == Intent.ACTION_VIEW && data?.isDeepLinkValid() == true) {
             dataModel.tool.value = data.extractToolFromDeepLink()
             val (primary, parallel) = data.extractLanguagesFromDeepLink()
             dataModel.primaryLocales.value = primary
@@ -241,11 +241,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     @VisibleForTesting
-    fun isDeepLinkValid(data: Uri?) = data != null &&
-        ("http".equals(data.scheme, true) || "https".equals(data.scheme, true)) &&
-        (getString(R.string.tract_deeplink_host_1).equals(data.host, true) ||
-            getString(R.string.tract_deeplink_host_2).equals(data.host, true)) &&
-        data.pathSegments.size >= 2
+    internal fun Uri.isDeepLinkValid() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
+        (getString(R.string.tract_deeplink_host_1).equals(host, true) ||
+            getString(R.string.tract_deeplink_host_2).equals(host, true)) &&
+        pathSegments.size >= 2
 
     @VisibleForTesting
     fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
