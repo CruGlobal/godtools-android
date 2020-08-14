@@ -223,12 +223,15 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
-        if (intent?.action == Intent.ACTION_VIEW && data != null && isDeepLinkValid(data)) {
-            dataModel.tool.value = data.extractToolFromDeepLink()
-            val (primary, parallel) = data.extractLanguagesFromDeepLink()
+        if (intent?.action == Intent.ACTION_VIEW && data?.isDeepLinkValid == true) {
+            dataModel.tool.value = data.deepLinkTool
+            val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
-            if (savedInstanceState == null) data.extractPageFromDeepLink()?.let { initialPage = it }
+            if (savedInstanceState == null) {
+                dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
+                data.deepLinkPage?.let { initialPage = it }
+            }
         } else if (extras != null) {
             dataModel.tool.value = extras.getString(EXTRA_TOOL, dataModel.tool.value)
             val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
@@ -241,25 +244,32 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     @VisibleForTesting
-    fun isDeepLinkValid(data: Uri?) = data != null &&
-        ("http".equals(data.scheme, true) || "https".equals(data.scheme, true)) &&
-        (getString(R.string.tract_deeplink_host_1).equals(data.host, true) ||
-            getString(R.string.tract_deeplink_host_2).equals(data.host, true)) &&
-        data.pathSegments.size >= 2
+    internal val Uri.isDeepLinkValid get() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
+        (getString(R.string.tract_deeplink_host_1).equals(host, true) ||
+            getString(R.string.tract_deeplink_host_2).equals(host, true)) &&
+        pathSegments.size >= 2
 
     @VisibleForTesting
-    fun Uri.extractToolFromDeepLink() = pathSegments.getOrNull(1)
+    internal val Uri.deepLinkSelectedLanguage get() = LocaleCompat.forLanguageTag(pathSegments[0])
+    @VisibleForTesting
+    internal val Uri.deepLinkTool get() = pathSegments[1]
+    @VisibleForTesting
+    internal val Uri.deepLinkPage get() = pathSegments.getOrNull(2)?.toIntOrNull()
 
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun Uri.extractLanguagesFromDeepLink(): Pair<List<Locale>, List<Locale>> {
-        val primary = LocaleUtils.getFallbacks(*buildList<Locale> {
-            if (!getQueryParameter(PARAM_USE_DEVICE_LANGUAGE).isNullOrEmpty()) add(Locale.getDefault())
-            addAll(extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE))
-            add(LocaleCompat.forLanguageTag(pathSegments[0]))
-        }.toTypedArray())
+    @VisibleForTesting
+    internal val Uri.deepLinkLanguages: Pair<List<Locale>, List<Locale>> get() {
+        val primary = LinkedHashSet<Locale>()
+        val parallel = LinkedHashSet<Locale>()
+        val selected = deepLinkSelectedLanguage
 
-        val parallel =
-            LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+        if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
+            primary += LocaleUtils.getFallbacks(Locale.getDefault())
+        }
+        primary += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).toTypedArray())
+        parallel += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+
+        if (selected !in primary && selected !in parallel) primary += LocaleUtils.getFallbacks(selected)
+
         return Pair(primary.toList(), parallel.toList())
     }
 
@@ -267,9 +277,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { LocaleCompat.forLanguageTag(it) }
-
-    @VisibleForTesting
-    fun Uri.extractPageFromDeepLink() = pathSegments.getOrNull(2)?.toIntOrNull()
     // endregion Intent Processing
 
     private fun validStartState() = dataModel.tool.value != null &&
