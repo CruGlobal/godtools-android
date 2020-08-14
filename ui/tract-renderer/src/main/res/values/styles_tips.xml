@@ -5,9 +5,13 @@
 
     <dimen name="tract_tip_margin_horiz">32dp</dimen>
 
-    <dimen name="tract_tips_elevation">4dp</dimen>
-    <dimen name="tract_tips_tip_icon_elevation">4dp</dimen>
-    <dimen name="tract_tips_tip_icon_bkg_corner_radius">6dp</dimen>
+    <dimen name="tract_tips_tip_elevation">4dp</dimen>
+    <dimen name="tract_tips_tip_corner_radius">6dp</dimen>
 
     <bool name="tract_tips_show_full_height">true</bool>
+
+    <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
+    </style>
 </resources>
