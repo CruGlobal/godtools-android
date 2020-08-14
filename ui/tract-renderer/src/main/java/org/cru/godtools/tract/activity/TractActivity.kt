@@ -228,7 +228,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
-            if (savedInstanceState == null) data.deepLinkPage?.let { initialPage = it }
+            if (savedInstanceState == null) {
+                dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
+                data.deepLinkPage?.let { initialPage = it }
+            }
         } else if (extras != null) {
             dataModel.tool.value = extras.getString(EXTRA_TOOL, dataModel.tool.value)
             val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
@@ -247,15 +250,17 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         pathSegments.size >= 2
 
     @VisibleForTesting
-    internal val Uri.deepLinkTool get() = pathSegments.getOrNull(1)
+    internal val Uri.deepLinkSelectedLanguage get() = LocaleCompat.forLanguageTag(pathSegments[0])
+    @VisibleForTesting
+    internal val Uri.deepLinkTool get() = pathSegments[1]
     @VisibleForTesting
     internal val Uri.deepLinkPage get() = pathSegments.getOrNull(2)?.toIntOrNull()
 
     @VisibleForTesting
     internal val Uri.deepLinkLanguages: Pair<List<Locale>, List<Locale>> get() {
-        val pathParam = LocaleCompat.forLanguageTag(pathSegments[0])
         val primary = LinkedHashSet<Locale>()
         val parallel = LinkedHashSet<Locale>()
+        val selected = deepLinkSelectedLanguage
 
         if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
             primary += LocaleUtils.getFallbacks(Locale.getDefault())
@@ -263,7 +268,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         primary += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).toTypedArray())
         parallel += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
 
-        if (pathParam !in primary && pathParam !in parallel) primary += LocaleUtils.getFallbacks(pathParam)
+        if (selected !in primary && selected !in parallel) primary += LocaleUtils.getFallbacks(selected)
 
         return Pair(primary.toList(), parallel.toList())
     }

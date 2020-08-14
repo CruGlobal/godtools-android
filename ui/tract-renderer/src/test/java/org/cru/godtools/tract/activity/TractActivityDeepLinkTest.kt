@@ -36,9 +36,16 @@ class TractActivityDeepLinkTest {
     }
 
     @Test
+    fun verifyDeepLinkSelectedLanguage() {
+        with(activity) {
+            assertEquals(Locale.ENGLISH, Uri.parse("https://knowgod.com/en/kgp").deepLinkSelectedLanguage)
+            assertEquals(Locale.ENGLISH, Uri.parse("https://knowgod.com/en/kgp/1").deepLinkSelectedLanguage)
+        }
+    }
+
+    @Test
     fun verifyDeepLinkTool() {
         with(activity) {
-            assertNull(Uri.parse("https://knowgod.com/en").deepLinkTool)
             assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp").deepLinkTool)
             assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp/1").deepLinkTool)
         }
