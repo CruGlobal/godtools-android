@@ -48,6 +48,7 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
@@ -342,8 +343,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final View oldActiveCard = mActiveCard;
         mActiveCard = view;
         if (mActiveCard != null) {
-            final LayoutParams lp = (LayoutParams) mActiveCard.getLayoutParams();
-            if (lp.childType != CHILD_TYPE_CARD) {
+            if (getChildType(mActiveCard) != CHILD_TYPE_CARD) {
                 mActiveCard = null;
             }
         }
@@ -397,6 +397,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return mActiveCardPosition;
     }
 
+    private int getChildType(final View view) {
+        final ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp instanceof LayoutParams) {
+            return ((LayoutParams) lp).childType;
+        }
+        return CHILD_TYPE_UNKNOWN;
+    }
+
     @NonNull
     private Animator buildAnimation() {
         // build individual animations
@@ -405,8 +413,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
+            switch (getChildType(child)) {
                 case CHILD_TYPE_HERO:
                 case CHILD_TYPE_CARD:
                     // position offset animation only
@@ -478,8 +485,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // animate the first card child
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
+            switch (getChildType(child)) {
                 case CHILD_TYPE_CARD:
                     mAnimation = buildBounceAnimation(child);
                     mAnimation.start();
@@ -542,8 +548,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION) {
                     // measure and track the call to action height
                     measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
                     callToActionHeight = child.getMeasuredHeight();
@@ -754,8 +759,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private float getChildTargetAlpha(@Nullable final View child) {
         if (child != null) {
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+            if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION) {
                 return mActiveCardPosition + 1 >= mTotalCards ? 1 : 0;
             }
         }
@@ -771,8 +775,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 final View child = getChildAt(i);
                 child.setY(getChildTargetY(i));
 
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION) {
                     child.setAlpha(getChildTargetAlpha(child));
                 }
             }
