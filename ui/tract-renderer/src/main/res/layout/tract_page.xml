@@ -8,6 +8,7 @@
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="enableTips" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
     </data>
 
