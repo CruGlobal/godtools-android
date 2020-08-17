@@ -5,9 +5,11 @@
             <enum name="hero" value="1" />
             <enum name="card" value="2" />
             <enum name="call_to_action" value="3" />
+            <enum name="call_to_action_tip" value="4" />
         </attr>
         <attr name="layout_card_padding_toTopOf" format="reference" />
         <attr name="layout_card_peek_toTopOf" format="reference" />
         <attr name="layout_card_stack_toTopOf" format="reference" />
+        <attr name="android:layout_above" format="reference" />
     </declare-styleable>
 </resources>
