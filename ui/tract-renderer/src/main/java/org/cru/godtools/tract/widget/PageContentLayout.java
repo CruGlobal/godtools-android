@@ -98,6 +98,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Nullable
     private View mActiveCard;
     private int mActiveCardPosition = 0;
+    private int mTotalCards = 0;
 
     @Nullable
     Animator mAnimation;
@@ -197,6 +198,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
+        if (getChildType(child) == CHILD_TYPE_CARD) {
+            mTotalCards++;
+        }
         updateActiveCardPosition(false);
         updateChildrenOffsetsAndAlpha();
     }
@@ -204,6 +208,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public void onViewRemoved(final View child) {
         super.onViewRemoved(child);
+        if (getChildType(child) == CHILD_TYPE_CARD) {
+            mTotalCards--;
+        }
         if (mActiveCard != child) {
             updateActiveCardPosition(false);
             updateChildrenOffsetsAndAlpha();
@@ -749,7 +756,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         if (child != null) {
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
             if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
-                return mActiveCardPosition + mCardPositionOffset >= getChildCount() - 1 ? 1 : 0;
+                return mActiveCardPosition + 1 >= mTotalCards ? 1 : 0;
             }
         }
         return 1;
