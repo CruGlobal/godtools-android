@@ -14,4 +14,30 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
     </style>
+
+    <!-- region Arrow -->
+    <dimen name="tract_tips_arrow_height">38dp</dimen>
+    <dimen name="tract_tips_arrow_width">32dp</dimen>
+    <dimen name="tract_tips_arrow_size">9dp</dimen>
+
+    <style name="Widget.GodTools.Tip.Arrow" parent="Base">
+        <item name="backgroundFillColor">@color/white</item>
+        <item name="elevation">@dimen/tract_tips_tip_elevation</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Arrow</item>
+    </style>
+
+    <style name="Widget.GodTools.Tip.Arrow.Down">
+        <item name="android:layout_width">@dimen/tract_tips_arrow_width</item>
+        <item name="android:layout_height">@dimen/tract_tips_arrow_height</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="ShapeAppearance.GodTools.Tip.Arrow" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
+    </style>
+    <!-- endregion Arrow -->
 </resources>
