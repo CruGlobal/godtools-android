@@ -223,7 +223,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
     // endregion Lifecycle
 
