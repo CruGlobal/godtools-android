@@ -540,7 +540,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     private fun startTipsTutorialIfNecessary() {
-        if (showTips && settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TIPS)) {
+        if (!showTips || settings.isFeatureDiscovered(Settings.FEATURE_TUTORIAL_TIPS)) {
             return
         }
         startTutorialActivity(PageSet.TIPS)
