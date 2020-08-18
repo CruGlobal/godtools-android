@@ -407,6 +407,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @NonNull
+    @SuppressWarnings("checkstyle:AvoidNestedBlocks")
     private Animator buildAnimation() {
         // build individual animations
         final List<Animator> offset = new ArrayList<>();
