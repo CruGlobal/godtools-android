@@ -5,13 +5,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.util.EnumSet
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
-import java.util.EnumSet
 
 @RunWith(AndroidJUnit4::class)
 class ActivityToolMissingBindingTest {

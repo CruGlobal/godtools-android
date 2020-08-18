@@ -3,6 +3,8 @@ package org.cru.godtools.tract.service
 import android.os.AsyncTask
 import androidx.annotation.WorkerThread
 import dagger.Lazy
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.model.Followup
 import org.cru.godtools.sync.GodToolsSyncService
@@ -10,8 +12,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val FIELD_NAME = "name"
 private const val FIELD_EMAIL = "email"

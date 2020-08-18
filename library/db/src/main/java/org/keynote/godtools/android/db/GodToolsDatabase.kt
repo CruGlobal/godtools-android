@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
@@ -18,8 +20,6 @@ import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val DATABASE_NAME = "resource.db"
 private const val DATABASE_VERSION = 44

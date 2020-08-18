@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
+import java.util.Locale
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import splitties.fragmentargs.arg
-import java.util.Locale
 
 abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int) :
     BaseFragment<B>(contentLayoutId) {

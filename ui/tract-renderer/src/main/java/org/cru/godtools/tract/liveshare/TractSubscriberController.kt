@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
@@ -19,7 +20,6 @@ import org.cru.godtools.api.TractShareService.Companion.CHANNEL_SUBSCRIBER
 import org.cru.godtools.api.TractShareService.Companion.PARAM_CHANNEL_ID
 import org.cru.godtools.api.model.NavigationEvent
 import timber.log.Timber
-import javax.inject.Inject
 
 private const val TAG = "TractSubscribrControllr"
 

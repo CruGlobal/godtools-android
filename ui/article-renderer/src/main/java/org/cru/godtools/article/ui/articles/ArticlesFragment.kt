@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
+import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -23,8 +25,6 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
-import java.util.Locale
-import javax.inject.Inject
 
 private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 

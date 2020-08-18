@@ -1,9 +1,9 @@
 package org.cru.godtools.tutorial
 
+import java.util.Locale
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
-import java.util.Locale
 
 enum class PageSet(
     internal val feature: String? = null,

@@ -7,6 +7,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
+import java.util.Locale
 import me.thekey.android.TheKey
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
@@ -14,7 +15,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.cru.godtools.base.util.SingletonHolder
-import java.util.Locale
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."

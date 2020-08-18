@@ -6,10 +6,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import org.cru.godtools.model.Language
-import org.cru.godtools.model.Translation
 import java.util.Locale
 import javax.annotation.concurrent.Immutable
+import org.cru.godtools.model.Language
+import org.cru.godtools.model.Translation
 
 fun Translation?.toTranslationRefKey(): TranslationRef.Key? {
     return this?.run {

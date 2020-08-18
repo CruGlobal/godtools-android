@@ -3,6 +3,9 @@ package org.cru.godtools.init.content.task
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import dagger.Reusable
+import java.io.IOException
+import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
@@ -29,9 +32,6 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
-import java.io.IOException
-import java.util.Locale
-import javax.inject.Inject
 
 private const val TAG = "InitialContentTasks"
 

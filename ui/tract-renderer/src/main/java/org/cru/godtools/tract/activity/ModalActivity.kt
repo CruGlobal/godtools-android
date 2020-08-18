@@ -9,6 +9,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -27,7 +28,6 @@ import org.cru.godtools.tract.ui.controller.bindController
 import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import javax.inject.Inject
 
 internal fun Activity.startModalActivity(modal: Modal) = startActivity(
     Intent(this, ModalActivity::class.java).putExtras(Bundle(4).apply {

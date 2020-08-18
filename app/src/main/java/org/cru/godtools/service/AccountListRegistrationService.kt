@@ -3,6 +3,9 @@ package org.cru.godtools.service
 import android.os.AsyncTask
 import androidx.annotation.WorkerThread
 import dagger.Lazy
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.LoginEvent
 import org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_ID
@@ -12,9 +15,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class AccountListRegistrationService @Inject internal constructor(

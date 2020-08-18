@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 import java.util.Date
+import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 
 private const val STALE_AGE = DAY_IN_MS
 

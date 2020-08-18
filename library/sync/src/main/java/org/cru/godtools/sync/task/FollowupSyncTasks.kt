@@ -1,5 +1,8 @@
 package org.cru.godtools.sync.task
 
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -12,9 +15,6 @@ import org.cru.godtools.api.FollowupApi
 import org.cru.godtools.model.Followup
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class FollowupSyncTasks @Inject internal constructor(

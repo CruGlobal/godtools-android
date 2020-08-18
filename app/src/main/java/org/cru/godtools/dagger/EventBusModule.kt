@@ -6,13 +6,13 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
 import dagger.multibindings.Multibinds
+import javax.inject.Singleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.ccci.gto.android.common.eventbus.TimberLogger
 import org.cru.godtools.AppEventBusIndex
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
-import javax.inject.Singleton
 
 @Module
 abstract class EventBusModule {

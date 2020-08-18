@@ -1,7 +1,7 @@
 package org.cru.godtools.base.tool.analytics.model
 
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import java.util.Locale
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 
 const val SCREEN_CATEGORIES = "Categories"
 

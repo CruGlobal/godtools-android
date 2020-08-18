@@ -3,6 +3,7 @@ package org.cru.godtools.article.ui.articles
 import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.commit
+import java.util.Locale
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.model.Article
@@ -12,7 +13,6 @@ import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenE
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
-import java.util.Locale
 
 fun Activity.startArticlesActivity(toolCode: String, language: Locale, category: String?) {
     val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {

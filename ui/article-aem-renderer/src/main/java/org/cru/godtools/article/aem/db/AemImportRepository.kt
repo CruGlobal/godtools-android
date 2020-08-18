@@ -3,10 +3,10 @@ package org.cru.godtools.article.aem.db
 import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Transaction
+import java.util.Date
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
-import java.util.Date
 
 @Dao
 abstract class AemImportRepository internal constructor(private val db: ArticleRoomDatabase) {

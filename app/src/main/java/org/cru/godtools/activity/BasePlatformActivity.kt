@@ -19,6 +19,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
+import java.util.Locale
+import javax.inject.Inject
 import me.thekey.android.TheKey
 import me.thekey.android.livedata.defaultSessionGuidLiveData
 import me.thekey.android.view.dialog.LoginDialogFragment
@@ -53,8 +55,6 @@ import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.activity.MainActivity
-import java.util.Locale
-import javax.inject.Inject
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")

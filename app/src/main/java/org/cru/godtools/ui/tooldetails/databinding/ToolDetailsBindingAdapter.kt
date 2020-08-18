@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.adapters.TextViewBindingAdapter
-import org.cru.godtools.base.util.getDisplayName
 import java.util.Locale
+import org.cru.godtools.base.util.getDisplayName
 
 @BindingAdapter("languages")
 @SuppressLint("RestrictedApi")

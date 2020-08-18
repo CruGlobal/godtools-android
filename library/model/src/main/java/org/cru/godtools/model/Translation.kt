@@ -1,10 +1,10 @@
 package org.cru.godtools.model
 
+import java.util.Date
+import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
-import java.util.Date
-import java.util.Locale
 
 private const val JSON_API_TYPE_TRANSLATION = "translation"
 

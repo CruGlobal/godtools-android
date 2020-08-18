@@ -17,13 +17,13 @@ import androidx.lifecycle.Lifecycle
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.AndroidInjection
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
-import javax.inject.Inject
 
 private const val EXTRA_FEATURE_DISCOVERY = "org.cru.godtools.BaseActivity.FEATURE_DISCOVERY"
 private const val EXTRA_FEATURE = "org.cru.godtools.BaseActivity.FEATURE"

@@ -17,6 +17,8 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
+import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -40,8 +42,6 @@ import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrDefault
-import java.util.Locale
-import javax.inject.Inject
 
 class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
     companion object {

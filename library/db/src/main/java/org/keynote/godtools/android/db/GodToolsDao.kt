@@ -7,6 +7,9 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.AsyncDao
@@ -36,9 +39,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
-import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), AsyncDao,

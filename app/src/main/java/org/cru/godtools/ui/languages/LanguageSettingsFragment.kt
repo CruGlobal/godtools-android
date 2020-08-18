@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
@@ -12,7 +13,6 @@ import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.GodToolsDao
-import javax.inject.Inject
 
 class LanguageSettingsFragment :
     BasePlatformFragment<LanguageSettingsFragmentBinding>(R.layout.language_settings_fragment),

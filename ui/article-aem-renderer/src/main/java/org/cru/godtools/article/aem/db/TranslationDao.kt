@@ -6,9 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import java.util.Locale
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.TranslationRef.TranslationAemImport
-import java.util.Locale
 
 private const val TRANSLATION_KEY = "tool = :tool AND language = :language AND version = :version"
 

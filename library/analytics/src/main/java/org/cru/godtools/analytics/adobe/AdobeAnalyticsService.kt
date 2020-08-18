@@ -12,6 +12,10 @@ import com.adobe.mobile.Config
 import com.adobe.mobile.Visitor
 import com.adobe.mobile.VisitorID.VisitorIDAuthenticationState
 import com.karumi.weak.weak
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 import me.thekey.android.Attributes
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.TheKeyEvent
@@ -24,10 +28,6 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /* Property Keys */
 private const val ADOBE_ATTR_APP_NAME = "cru.appname"

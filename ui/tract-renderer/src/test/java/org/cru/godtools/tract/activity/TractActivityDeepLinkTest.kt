@@ -2,6 +2,7 @@ package org.cru.godtools.tract.activity
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -10,7 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
-import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 class TractActivityDeepLinkTest {

@@ -9,6 +9,9 @@ import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import java.util.concurrent.TimeUnit
+import javax.inject.Named
+import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
@@ -39,9 +42,6 @@ import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module(includes = [OkHttp3Module::class])
 object ApiModule {

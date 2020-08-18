@@ -14,6 +14,7 @@ import com.nhaarman.mockitokotlin2.nullableArgumentCaptor
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -32,7 +33,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
 
 private const val TOOL = "kgp"
 

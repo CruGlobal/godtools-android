@@ -3,6 +3,9 @@ package org.cru.godtools.sync.task
 import android.os.Bundle
 import androidx.annotation.AnyThread
 import androidx.collection.SimpleArrayMap
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -22,9 +25,6 @@ import org.cru.godtools.model.Translation
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS

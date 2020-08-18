@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.EnumSet
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
@@ -15,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.EnumSet
 
 @RunWith(AndroidJUnit4::class)
 class GodToolsShortcutManagerTest {

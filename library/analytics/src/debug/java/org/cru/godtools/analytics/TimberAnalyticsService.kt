@@ -1,6 +1,8 @@
 package org.cru.godtools.analytics
 
 import androidx.annotation.MainThread
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.model.Event
@@ -8,8 +10,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val TAG = "AnalyticsService"
 

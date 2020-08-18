@@ -2,6 +2,8 @@ package org.cru.godtools.sync.task
 
 import android.os.Bundle
 import androidx.annotation.RestrictTo
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -10,8 +12,6 @@ import org.ccci.gto.android.common.base.TimeConstants
 import org.cru.godtools.api.AnalyticsApi
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val SYNC_TIME_GLOBAL_ACTIVITY = "last_synced.global_activity"
 private const val STALE_DURATION_GLOBAL_ACTIVITY = TimeConstants.DAY_IN_MS

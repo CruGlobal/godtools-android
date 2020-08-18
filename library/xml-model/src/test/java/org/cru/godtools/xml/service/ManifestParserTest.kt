@@ -3,6 +3,9 @@ package org.cru.godtools.xml.service
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.util.Locale
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.xml.model.TOOL_CODE
@@ -12,9 +15,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.Locale
 
 private const val MANIFEST = "manifest.xml"
 

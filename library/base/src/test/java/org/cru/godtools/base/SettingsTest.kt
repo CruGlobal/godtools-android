@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.UUID
 import me.thekey.android.TheKey
 import org.cru.godtools.base.Settings.Companion.FEATURE_LOGIN
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
@@ -14,7 +15,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
-import java.util.UUID
 
 private const val FEATURE_TEST = "testFeature"
 
