@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
         <include
@@ -22,14 +21,23 @@
 
         <include layout="@layout/tutorial_training_include_positioning" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/inset_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:src="@drawable/img_tutorial_tips_start"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/inset_top"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/headline"
@@ -45,10 +53,11 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:text="When a tip lights up, you’ve completed that piece of training. Practice using as many tips as you need to feel confident explaining the tool."
-            app:layout_constraintBottom_toTopOf="@+id/action_training_finish"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/headline" />

@@ -26,15 +26,22 @@
             layout="@layout/tutorial_training_include_navigation"
             app:callbacks="@{callbacks}" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/inset_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
+
         <ImageView
             android:id="@+id/tips_light_img"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:contentDescription="TODO"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inset_top"
+            app:layout_constraintVertical_chainStyle="packed"
             app:srcCompat="@drawable/img_tutorial_tips_light" />
 
 
@@ -53,7 +60,7 @@
             android:id="@+id/tips_light_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:text="On select screens of this training, you'll see one of the icons above. Press the icon to reveal a tip that will help you talk about the content of the screen."
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
