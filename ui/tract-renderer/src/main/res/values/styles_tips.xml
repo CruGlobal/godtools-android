@@ -26,13 +26,21 @@
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Arrow</item>
     </style>
 
-    <style name="Widget.GodTools.Tip.Arrow.Down">
+    <style name="Widget.GodTools.Tip.Arrow.Vertical">
         <item name="android:layout_width">@dimen/tract_tips_arrow_width</item>
         <item name="android:layout_height">@dimen/tract_tips_arrow_height</item>
         <item name="android:paddingLeft">4dp</item>
         <item name="android:paddingRight">4dp</item>
+    </style>
+
+    <style name="Widget.GodTools.Tip.Arrow.Down" parent="Widget.GodTools.Tip.Arrow.Vertical">
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="Widget.GodTools.Tip.Arrow.Up" parent="Widget.GodTools.Tip.Arrow.Vertical">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Arrow" parent="ShapeAppearance.MaterialComponents">
