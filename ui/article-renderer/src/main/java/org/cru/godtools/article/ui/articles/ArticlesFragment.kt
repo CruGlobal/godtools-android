@@ -1,7 +1,6 @@
 package org.cru.godtools.article.ui.articles
 
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -28,8 +27,7 @@ import splitties.fragmentargs.argOrNull
 
 private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
 
-class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks,
-    SwipeRefreshLayout.OnRefreshListener {
+class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
     constructor(code: String, locale: Locale, category: String? = null) :
         super(R.layout.fragment_articles, code, locale) {
@@ -43,7 +41,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     private var category by argOrNull<String>()
 
     @JvmField
-    @BindView(R2.id.article_swipe_container)
+    @BindView(R2.id.refresh)
     internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
     // region Lifecycle
@@ -52,18 +50,12 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
         setupDataModel()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupSwipeRefresh()
-    }
-
     override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.manifest = toolDataModel.manifest
         binding.setupArticlesView()
+        binding.setupSwipeRefresh()
     }
-
-    override fun onRefresh() = syncData(true)
 
     /**
      * This is the callback method from ArticleAdapter that will handle the functionality of an article being selected
@@ -113,7 +105,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     }
     // endregion ArticlesView
 
-    private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)
+    private fun FragmentArticlesBinding.setupSwipeRefresh() = refresh.setOnRefreshListener { syncData(true) }
     // endregion View Logic
 }
 
