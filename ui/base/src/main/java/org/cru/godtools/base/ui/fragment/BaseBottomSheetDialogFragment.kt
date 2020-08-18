@@ -8,8 +8,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
-import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import javax.inject.Inject
+import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialogFragment() {
     // region Lifecycle

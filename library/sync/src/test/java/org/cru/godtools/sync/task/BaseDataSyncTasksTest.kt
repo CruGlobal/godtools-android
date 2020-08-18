@@ -11,6 +11,7 @@ import com.nhaarman.mockitokotlin2.same
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.Locale
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.model.Language
@@ -20,7 +21,6 @@ import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
 
 class BaseDataSyncTasksTest {
     private lateinit var dao: GodToolsDao

@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -14,7 +15,6 @@ import org.cru.godtools.base.Constants
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
-import java.util.Locale
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,

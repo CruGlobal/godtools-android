@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +18,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.stubbing.OngoingStubbing
 import org.robolectric.annotation.Config
-import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)

@@ -8,6 +8,8 @@ import androidx.annotation.MainThread
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.karumi.weak.weak
+import javax.inject.Inject
+import javax.inject.Singleton
 import me.thekey.android.TheKey
 import me.thekey.android.eventbus.event.TheKeyEvent
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -17,8 +19,6 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"

@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
+import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -18,8 +20,6 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_AVAILABLE
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
-import javax.inject.Inject
 
 class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, settings: Settings) : ViewModel() {
     val mode = MutableLiveData(MODE_ADDED)

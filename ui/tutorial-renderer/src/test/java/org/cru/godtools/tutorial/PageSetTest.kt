@@ -2,6 +2,7 @@ package org.cru.godtools.tutorial
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.util.Locale
 import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -9,7 +10,6 @@ import org.junit.Assume.assumeThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [17, 21, 28])

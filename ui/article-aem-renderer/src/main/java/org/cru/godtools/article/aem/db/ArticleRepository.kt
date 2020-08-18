@@ -1,8 +1,8 @@
 package org.cru.godtools.article.aem.db
 
+import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Transaction
-import androidx.annotation.WorkerThread
 import org.cru.godtools.article.aem.model.Article
 
 @Dao

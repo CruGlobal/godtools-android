@@ -11,6 +11,8 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import java.util.Locale
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -32,8 +34,6 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.xml.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
-import javax.inject.Named
 
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 private const val STATE_LIVE_SHARE_TUTORIAL_SHOWN = "liveShareTutorialShown"

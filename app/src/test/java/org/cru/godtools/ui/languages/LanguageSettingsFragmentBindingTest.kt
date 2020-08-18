@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.Locale
 import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
 import org.cru.godtools.model.Language
 import org.junit.Assert.assertEquals
@@ -19,7 +20,6 @@ import org.junit.runner.RunWith
 import org.keynote.godtools.android.activity.MainActivity
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
-import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)

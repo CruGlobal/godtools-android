@@ -1,7 +1,7 @@
 package org.cru.godtools.xml.util
 
-import org.cru.godtools.xml.service.xmlPullParser
 import java.io.InputStream
+import org.cru.godtools.xml.service.xmlPullParser
 
 fun Any.getXmlParserForResource(name: String) = getInputStreamForResource(name).xmlPullParser()
 

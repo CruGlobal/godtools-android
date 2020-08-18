@@ -2,6 +2,7 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.ViewGroup
 import androidx.core.util.Pools
+import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Base
@@ -15,7 +16,6 @@ import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.tips.InlineTip
 import timber.log.Timber
-import kotlin.reflect.KClass
 
 internal class UiControllerCache(private val parent: ViewGroup, private val parentController: BaseController<*>?) {
     private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()

@@ -1,8 +1,8 @@
 package org.cru.godtools.tract.analytics.model
 
+import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
-import java.util.Locale
 
 class TractPageAnalyticsScreenEvent(tool: String, locale: Locale, page: Int, card: Int?) :
     ToolAnalyticsScreenEvent(tractPageToScreenName(tool, page, card), tool, locale) {

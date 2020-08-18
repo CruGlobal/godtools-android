@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import java.util.Locale
 import org.cru.godtools.article.R
 import org.cru.godtools.article.ui.articles.startArticlesActivity
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
@@ -14,7 +15,6 @@ import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.xml.model.Category
-import java.util.Locale
 
 fun Context.createCategoriesIntent(toolCode: String, language: Locale): Intent {
     return Intent(this, CategoriesActivity::class.java)

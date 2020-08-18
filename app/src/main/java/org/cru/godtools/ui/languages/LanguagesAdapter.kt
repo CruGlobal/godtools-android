@@ -6,10 +6,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
+import java.util.Locale
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.ListItemLanguageBinding
 import org.cru.godtools.model.Language
-import java.util.Locale
 
 class LanguagesAdapter(lifecycleOwner: LifecycleOwner? = null, private val selected: LiveData<Locale?>) :
     SimpleDataBindingAdapter<ListItemLanguageBinding>(lifecycleOwner), LanguageSelectedListener,

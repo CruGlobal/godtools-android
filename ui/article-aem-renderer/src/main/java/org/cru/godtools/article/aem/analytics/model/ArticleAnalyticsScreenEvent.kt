@@ -1,8 +1,8 @@
 package org.cru.godtools.article.aem.analytics.model
 
+import java.util.Locale
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
-import java.util.Locale
 
 private const val SCREEN_ARTICLE_PREFIX = "Article : "
 

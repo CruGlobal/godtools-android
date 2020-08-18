@@ -3,10 +3,10 @@
 package org.cru.godtools.base.ui.util
 
 import android.content.Context
+import java.util.Locale
 import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import java.util.Locale
 
 @JvmName("getTranslationName")
 fun Translation?.getName(tool: Tool?, context: Context?) =

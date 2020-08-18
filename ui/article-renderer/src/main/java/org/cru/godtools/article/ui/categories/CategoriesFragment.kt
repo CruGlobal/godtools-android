@@ -3,13 +3,13 @@ package org.cru.godtools.article.ui.categories
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.map
+import java.util.Locale
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.xml.model.Category
-import java.util.Locale
 
 class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, CategorySelectedListener {
     constructor() : super(R.layout.article_categories_fragment)

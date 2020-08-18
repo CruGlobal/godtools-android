@@ -1,8 +1,7 @@
 package org.cru.godtools.article.analytics.model
 
-import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
-
 import java.util.Locale
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 
 private const val SCREEN_ARTICLES_ALL = "All Articles"
 private const val SCREEN_ARTICLES_CATEGORY_PREFIX = "Category : "

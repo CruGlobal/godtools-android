@@ -12,6 +12,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
+import java.util.Locale
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -26,7 +27,6 @@ import org.junit.runner.RunWith
 import org.keynote.godtools.android.activity.MainActivity
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
-import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)

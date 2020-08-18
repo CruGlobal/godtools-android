@@ -8,6 +8,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
+import java.util.UUID
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
@@ -24,7 +25,6 @@ import org.cru.godtools.api.TractShareService.Companion.PARAM_CHANNEL_ID
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.api.model.PublisherInfo
 import timber.log.Timber
-import java.util.UUID
 
 private const val TAG = "TractPublisherContrller"
 

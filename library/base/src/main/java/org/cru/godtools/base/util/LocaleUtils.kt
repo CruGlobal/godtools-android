@@ -5,10 +5,10 @@ package org.cru.godtools.base.util
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
+import java.util.Locale
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.content.localize
 import timber.log.Timber
-import java.util.Locale
 
 @VisibleForTesting
 internal const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"

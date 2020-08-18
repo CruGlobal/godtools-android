@@ -11,9 +11,9 @@ import androidx.viewbinding.ViewBinding
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
-import javax.inject.Inject
 
 abstract class BaseFragment<B : ViewBinding> @JvmOverloads constructor(
     @LayoutRes contentLayoutId: Int? = INVALID_LAYOUT_RES

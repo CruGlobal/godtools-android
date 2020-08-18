@@ -21,6 +21,8 @@ import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.tabs.TabLayout
+import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
@@ -64,8 +66,6 @@ import org.cru.godtools.xml.model.navBarControlColor
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.Locale
-import javax.inject.Inject
 
 private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"

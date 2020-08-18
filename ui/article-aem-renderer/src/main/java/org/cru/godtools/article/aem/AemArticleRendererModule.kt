@@ -10,6 +10,7 @@ import dagger.Reusable
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
+import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
@@ -24,7 +25,6 @@ import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
-import javax.inject.Singleton
 
 @Module
 abstract class AemArticleRendererModule {

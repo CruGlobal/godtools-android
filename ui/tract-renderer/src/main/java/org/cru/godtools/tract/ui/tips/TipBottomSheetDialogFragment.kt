@@ -11,6 +11,8 @@ import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -25,8 +27,6 @@ import org.cru.godtools.xml.model.tips.Tip
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
-import java.util.Locale
-import javax.inject.Inject
 
 class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBinding>(), TipCallbacks {
     internal constructor(tip: Tip) : this() {

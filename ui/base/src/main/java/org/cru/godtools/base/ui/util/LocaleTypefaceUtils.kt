@@ -9,8 +9,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import androidx.core.content.res.ResourcesCompat
-import org.cru.godtools.base.ui.R
 import java.util.Locale
+import org.cru.godtools.base.ui.R
 
 @OptIn(ExperimentalStdlibApi::class)
 private val typefaces = buildMap<Locale, Int> {

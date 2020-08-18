@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import java.util.Locale
+import javax.inject.Inject
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -11,8 +13,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LA
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import java.util.Locale
-import javax.inject.Inject
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.ui.languages.LanguageSelectionActivity.PRIMARY"
 

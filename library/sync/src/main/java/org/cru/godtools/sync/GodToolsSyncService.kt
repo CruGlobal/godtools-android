@@ -3,6 +3,10 @@ package org.cru.godtools.sync
 import android.content.ContentResolver
 import android.os.Bundle
 import androidx.work.WorkManager
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,10 +22,6 @@ import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.greenrobot.eventbus.EventBus
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Provider
-import javax.inject.Singleton
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0

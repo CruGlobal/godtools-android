@@ -19,6 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
+import javax.inject.Singleton
 import okhttp3.Interceptor
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
@@ -26,7 +27,6 @@ import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_I
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.DefaultSqliteDatabaseProvider
 import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpenHelperDatabaseConnectionProvider
 import org.keynote.godtools.android.db.GodToolsDatabase
-import javax.inject.Singleton
 
 @Module
 abstract class FlipperModule {

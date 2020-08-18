@@ -8,6 +8,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
+import javax.inject.Singleton
 import me.thekey.android.TheKey
 import me.thekey.android.core.TheKeyImpl
 import me.thekey.android.eventbus.EventBusEventsManager
@@ -26,7 +27,6 @@ import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.ShortcutModule
 import org.cru.godtools.sync.SyncModule
 import org.greenrobot.eventbus.EventBus
-import javax.inject.Singleton
 
 @Module(
     includes = [

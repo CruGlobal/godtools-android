@@ -11,10 +11,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleDao
-import javax.inject.Inject
 
 internal class AemArticleViewModel @Inject constructor(
     application: Application,

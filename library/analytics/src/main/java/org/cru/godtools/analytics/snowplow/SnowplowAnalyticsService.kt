@@ -14,6 +14,8 @@ import com.snowplowanalytics.snowplow.tracker.events.Event
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView
 import com.snowplowanalytics.snowplow.tracker.events.Structured
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
+import javax.inject.Inject
+import javax.inject.Singleton
 import me.thekey.android.Attributes
 import me.thekey.android.TheKey
 import okhttp3.OkHttpClient
@@ -26,8 +28,6 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val TAG = "SnwplwAnalyticsService"
 

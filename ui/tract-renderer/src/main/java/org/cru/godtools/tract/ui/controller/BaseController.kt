@@ -3,6 +3,7 @@ package org.cru.godtools.tract.ui.controller
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.lifecycle.Observer
+import kotlin.reflect.KClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -15,7 +16,6 @@ import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.layoutDirection
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
-import kotlin.reflect.KClass
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,

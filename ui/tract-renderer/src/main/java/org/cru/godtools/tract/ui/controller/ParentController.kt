@@ -4,10 +4,10 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
+import kotlin.reflect.KClass
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
-import kotlin.reflect.KClass
 
 abstract class ParentController<T> protected constructor(
     clazz: KClass<T>,

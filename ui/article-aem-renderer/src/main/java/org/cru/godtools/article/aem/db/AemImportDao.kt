@@ -6,9 +6,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import java.util.Date
 import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.AemImport.AemImportArticle
-import java.util.Date
 
 @Dao
 interface AemImportDao {

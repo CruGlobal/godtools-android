@@ -3,10 +3,10 @@ package org.cru.godtools.base
 import android.content.Context
 import androidx.annotation.WorkerThread
 import dagger.Reusable
-import org.cru.godtools.base.util.getGodToolsFile
 import java.io.FileNotFoundException
 import java.io.InputStream
 import javax.inject.Inject
+import org.cru.godtools.base.util.getGodToolsFile
 
 @Reusable
 class FileManager @Inject internal constructor(private val context: Context) {

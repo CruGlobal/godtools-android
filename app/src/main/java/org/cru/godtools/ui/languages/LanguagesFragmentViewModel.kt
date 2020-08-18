@@ -10,6 +10,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.db.Query
@@ -18,7 +19,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
 
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"

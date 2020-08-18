@@ -1,12 +1,12 @@
 package org.cru.godtools.tract.activity
 
 import com.google.android.material.tabs.TabLayout
+import java.util.Locale
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarControlColor
-import java.util.Locale
 
 class LanguageToggleController(private val tabs: TabLayout) {
     var activeLocale: Locale? = null

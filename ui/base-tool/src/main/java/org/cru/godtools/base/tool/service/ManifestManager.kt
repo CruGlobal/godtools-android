@@ -6,6 +6,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import dagger.Reusable
+import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,8 +22,6 @@ import org.cru.godtools.xml.service.Result
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
-import javax.inject.Inject
 
 @Reusable
 class ManifestManager @Inject constructor(

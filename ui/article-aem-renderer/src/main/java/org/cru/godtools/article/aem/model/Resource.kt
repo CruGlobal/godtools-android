@@ -4,11 +4,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import okhttp3.MediaType
-import org.cru.godtools.article.aem.util.getFile
 import java.io.File
 import java.io.FileInputStream
 import java.util.Date
+import okhttp3.MediaType
+import org.cru.godtools.article.aem.util.getFile
 
 @Entity(tableName = TABLE_NAME_RESOURCE)
 class Resource(@field:PrimaryKey val uri: Uri) {

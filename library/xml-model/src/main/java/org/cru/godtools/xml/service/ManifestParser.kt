@@ -2,6 +2,12 @@ package org.cru.godtools.xml.service
 
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
+import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
@@ -12,12 +18,6 @@ import org.cru.godtools.base.FileManager
 import org.cru.godtools.xml.model.Manifest
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
-import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class ManifestParser @Inject internal constructor(private val fileManager: FileManager) {

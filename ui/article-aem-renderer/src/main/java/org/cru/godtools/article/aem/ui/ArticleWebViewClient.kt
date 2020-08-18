@@ -9,16 +9,16 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.WorkerThread
 import com.karumi.weak.weak
-import org.cru.godtools.article.aem.db.ResourceDao
-import org.cru.godtools.article.aem.model.Resource
-import org.cru.godtools.article.aem.service.AemArticleManager
-import org.cru.godtools.base.ui.util.openUrl
-import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import org.cru.godtools.article.aem.db.ResourceDao
+import org.cru.godtools.article.aem.model.Resource
+import org.cru.godtools.article.aem.service.AemArticleManager
+import org.cru.godtools.base.ui.util.openUrl
+import timber.log.Timber
 
 private const val TAG = "ArticleWebViewClient"
 

@@ -1,10 +1,10 @@
 package org.cru.godtools.tract.analytics.model
 
+import java.util.Locale
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.cru.godtools.analytics.adobe.ADOBE_ATTR_LANGUAGE_SECONDARY
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import java.util.Locale
 
 private const val ACTION_TOGGLE_LANGUAGE = "Parallel Language Toggled"
 

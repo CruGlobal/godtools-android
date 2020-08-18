@@ -13,6 +13,8 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.google.common.util.concurrent.Futures
+import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
@@ -29,8 +31,6 @@ import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
-import java.util.Locale
-import javax.inject.Inject
 
 fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
     val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {

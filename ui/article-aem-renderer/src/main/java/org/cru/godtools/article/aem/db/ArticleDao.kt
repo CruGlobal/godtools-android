@@ -8,8 +8,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.cru.godtools.article.aem.model.Article
 import java.util.Locale
+import org.cru.godtools.article.aem.model.Article
 
 private const val GET_ARTICLES_FROM = """
     translationAemImports AS t

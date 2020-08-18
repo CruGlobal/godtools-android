@@ -18,6 +18,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.util.graphics.toHslColor
@@ -41,9 +44,6 @@ import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarColor
 import org.cru.godtools.xml.model.navBarControlColor
 import org.keynote.godtools.android.db.GodToolsDao
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Named
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
     ImmersiveActivity<B>(contentLayoutId) {

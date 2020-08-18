@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.SimpleArrayMap
 import androidx.collection.forEach
+import java.util.Locale
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
@@ -24,7 +25,6 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.Locale
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao, eventBus: EventBus) :

@@ -2,6 +2,8 @@ package org.cru.godtools.sync.task
 
 import android.os.Bundle
 import androidx.collection.SimpleArrayMap
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -16,8 +18,6 @@ import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS

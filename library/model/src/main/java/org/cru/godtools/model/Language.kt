@@ -1,11 +1,11 @@
 package org.cru.godtools.model
 
 import android.content.Context
+import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.util.getDisplayName
-import java.util.Locale
 
 private const val JSON_API_TYPE_LANGUAGE = "language"
 

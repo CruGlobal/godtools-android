@@ -3,14 +3,14 @@ package org.cru.godtools.analytics.facebook
 import android.content.Context
 import androidx.annotation.WorkerThread
 import com.facebook.appevents.AppEventsLogger
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class FacebookAnalyticsService @Inject internal constructor(context: Context, eventBus: EventBus) {

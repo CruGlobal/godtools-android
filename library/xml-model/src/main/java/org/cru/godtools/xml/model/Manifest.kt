@@ -6,6 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import java.util.Locale
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -15,7 +16,6 @@ import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
-import java.util.Locale
 
 private const val XML_MANIFEST = "manifest"
 private const val XML_TYPE = "type"

@@ -2,8 +2,8 @@ package org.cru.godtools.article.aem.util
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import org.jetbrains.annotations.Contract
 import java.io.File
+import org.jetbrains.annotations.Contract
 
 private val resourcesDir = "aem-resources"
 

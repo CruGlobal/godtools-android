@@ -7,11 +7,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoMap
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
-import javax.inject.Named
 
 @Module
 abstract class BaseToolRendererModule {
