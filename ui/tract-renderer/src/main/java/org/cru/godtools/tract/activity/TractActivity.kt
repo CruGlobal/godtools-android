@@ -42,6 +42,7 @@ import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
+import org.cru.godtools.tract.analytics.model.ShareScreenActionEvent
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
@@ -502,7 +503,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
-                shareCurrentTool(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
+                eventBus.post(ShareScreenActionEvent)
+                showShareActivityChooser(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
             }
         }
     }
