@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <eat-comment />
+    <string name="tutorial_tips_light_headline">Tips to light the way</string>
+    <string name="tutorial_tips_light_text1">On select screens of this training, you\'ll see one of the icons above. Press the icon to reveal a tip that will help you talk about the content of the screen.</string>
+    <string name="tutorial_tips_light_text2">If a screen has no icon, then the tip is to just read through the content and discuss as needed.</string>
+
+    <string name="tutorial_tips_start_headline">Light up the tips</string>
+    <string name="tutorial_tips_start_text">When a tip lights up, you’ve completed that piece of training. Practice using as many tips as you need to feel confident explaining the tool.</string>
+    <string name="tutorial_tips_start_button">Start Training</string>
+
+    <string name="tutorial_tips_learns_sub_head1">Learn to Share</string>
+    <string name="tutoiral_tips_learns_sub_head2">with any one</string>
+    <string name="tutorial_tips_learns_headline">Knowing God Personally</string>
+    <string name="tutorial_tips_learns_text">This tool helps guide a conversation about how someone begins a relationship with God.  Practice sharing the content using the tips provided, so you feel ready to talk to someone else.</string>
+</resources>

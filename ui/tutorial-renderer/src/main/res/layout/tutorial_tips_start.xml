@@ -4,9 +4,7 @@
 
     <data>
 
-        <variable
-            name="callbacks"
-            type="org.cru.godtools.tutorial.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +43,7 @@
             android:layout_height="wrap_content"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="Light up the tips"
+            android:text="@string/tutorial_tips_start_headline"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
@@ -56,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
-            android:text="When a tip lights up, you’ve completed that piece of training. Practice using as many tips as you need to feel confident explaining the tool."
+            android:text="@string/tutorial_tips_start_text"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
@@ -67,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{callbacks::onTutorialAction}"
-            android:text="Start Training"
+            android:text="@string/tutorial_tips_start_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
