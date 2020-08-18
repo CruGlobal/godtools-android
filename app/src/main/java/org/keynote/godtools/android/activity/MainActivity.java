@@ -215,9 +215,16 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         return ActivityDashboardBinding.inflate(getLayoutInflater());
     }
 
+    @Nullable
+    @Override
+    protected TabLayout getNavigationTabs() {
+        return getBinding().appbarTabs;
+    }
+
     @Override
     protected void setupNavigationTabs() {
         super.setupNavigationTabs();
+        final TabLayout navigationTabs = getNavigationTabs();
         if (navigationTabs != null) {
             // This logic is brittle, so throw an error on debug builds if something changes.
             if (BuildConfig.DEBUG && navigationTabs.getTabCount() != 2) {
