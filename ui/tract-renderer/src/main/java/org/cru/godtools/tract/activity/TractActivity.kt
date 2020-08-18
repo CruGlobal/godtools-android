@@ -502,7 +502,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
-                shareCurrentTool(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
+                showShareActivityChooser(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
             }
         }
     }

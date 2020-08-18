@@ -166,15 +166,24 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     protected open val shareLinkMessageRes get() = R.string.share_general_message
     protected open val shareLinkUri: String? get() = null
 
-    protected fun shareCurrentTool(@StringRes message: Int = shareLinkMessageRes, shareUrl: String? = shareLinkUri) {
+    protected fun shareCurrentTool() {
         // short-circuit if we don't have a share tool url
-        if (shareUrl == null) return
+        val shareUrl = shareLinkUri ?: return
 
         // track the share action
         eventBus.post(ShareActionEvent)
         settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
         // start the share activity chooser with our share link
+        showShareActivityChooser(shareUrl = shareUrl)
+    }
+
+    protected fun showShareActivityChooser(
+        @StringRes message: Int = shareLinkMessageRes,
+        shareUrl: String? = shareLinkUri
+    ) {
+        if (shareUrl == null) return
+
         val title = shareLinkTitle
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
