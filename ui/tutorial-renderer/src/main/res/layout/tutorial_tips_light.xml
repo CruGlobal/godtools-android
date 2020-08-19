@@ -36,25 +36,34 @@
         <ImageView
             android:id="@+id/tips_light_img"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:contentDescription="@string/tutorial_tips_light_headline"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/inset_center"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/inset_top"
             app:layout_constraintVertical_chainStyle="packed"
             app:srcCompat="@drawable/img_tutorial_tips_light" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/inset_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".5" />
 
         <TextView
             android:id="@+id/tips_text_light_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_light_headline"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@+id/tips_light_img" />
+            app:layout_constraintTop_toBottomOf="@+id/inset_center" />
 
         <TextView
             android:id="@+id/tips_light_text"
