@@ -44,8 +44,7 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseMod
     }
 
     companion object {
-        // TODO: make internal
-        const val XML_HEADER = "header"
+        internal const val XML_HEADER = "header"
 
         @JvmStatic
         @Deprecated(

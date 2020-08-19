@@ -10,7 +10,6 @@ import android.os.Parcelable
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
@@ -92,16 +91,11 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     @BindView(R2.id.appbar)
     var toolbar: Toolbar? = null
 
-    @JvmField
-    @Deprecated("Use supportActionBar instead", ReplaceWith("supportActionBar"))
-    protected var actionBar: ActionBar? = null
-
     private fun setupActionBar() {
         toolbar?.let { setSupportActionBar(it) }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // trigger lifecycle event for subclasses
-        actionBar = supportActionBar
         onSetupActionBar()
     }
     // endregion ActionBar
