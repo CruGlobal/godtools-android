@@ -216,12 +216,8 @@ abstract class BasePlatformActivity<B : ViewBinding>(@LayoutRes contentLayoutId:
     // endregion Lifecycle
 
     // region Navigation Drawer
-    @JvmField
-    @BindView(R.id.drawer_layout)
-    protected var drawerLayout: DrawerLayout? = null
-    @JvmField
-    @BindView(R.id.drawer_menu)
-    internal var drawerMenu: NavigationView? = null
+    protected open val drawerLayout: DrawerLayout? get() = findViewById(R.id.drawer_layout)
+    protected open val drawerMenu: NavigationView? get() = findViewById(R.id.drawer_menu)
     private var drawerToggle: ActionBarDrawerToggle? = null
 
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.annimon.stream.Stream;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
@@ -39,6 +40,7 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -217,6 +219,18 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
 
     @Nullable
     @Override
+    protected DrawerLayout getDrawerLayout() {
+        return getBinding().drawerLayout;
+    }
+
+    @Nullable
+    @Override
+    protected NavigationView getDrawerMenu() {
+        return getBinding().drawerMenu;
+    }
+
+    @Nullable
+    @Override
     protected TabLayout getNavigationTabs() {
         return getBinding().appbarTabs;
     }
@@ -315,7 +329,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
     protected boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return toolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
+                return toolbar != null && !getBinding().drawerLayout.isDrawerOpen(GravityCompat.START);
             default:
                 return super.canShowFeatureDiscovery(feature);
         }
