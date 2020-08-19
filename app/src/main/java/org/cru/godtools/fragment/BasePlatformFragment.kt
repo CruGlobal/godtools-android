@@ -92,7 +92,7 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     private val syncHelper = SwipeRefreshSyncHelper()
 
     private fun triggerInitialSync() {
-        if ((activity as? BasePlatformActivity)?.handleChildrenSyncs != true) syncHelper.triggerSync()
+        if ((activity as? BasePlatformActivity<*>)?.handleChildrenSyncs != true) syncHelper.triggerSync()
     }
 
     internal fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {

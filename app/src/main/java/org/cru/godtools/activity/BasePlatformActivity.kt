@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewbinding.ViewBinding
 import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
@@ -67,7 +68,7 @@ private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
-abstract class BasePlatformActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
+abstract class BasePlatformActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
     BaseDesignActivity(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     @Inject
     protected lateinit var theKey: TheKey

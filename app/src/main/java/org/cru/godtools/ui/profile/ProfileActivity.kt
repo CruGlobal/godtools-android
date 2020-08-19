@@ -21,7 +21,7 @@ fun Activity.startProfileActivity() = startActivity(
         .putExtras(BaseActivity.buildExtras(this))
 )
 
-class ProfileActivity : BasePlatformActivity() {
+class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>() {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,6 +10,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 
 fun Activity.startLanguageSettingsActivity() {
     Intent(this, LanguageSettingsActivity::class.java)
@@ -18,7 +19,9 @@ fun Activity.startLanguageSettingsActivity() {
         .also { startActivity(it) }
 }
 
-class LanguageSettingsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
+class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>(
+    R.layout.activity_generic_fragment_with_nav_drawer
+) {
     // region Lifecycle
     override fun onContentChanged() {
         super.onContentChanged()

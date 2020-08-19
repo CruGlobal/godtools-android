@@ -21,6 +21,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.LocaleUtils;
+import org.cru.godtools.databinding.ActivityDashboardBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
@@ -51,7 +52,7 @@ import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
-public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
+public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding> implements ToolsFragment.Callbacks {
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
