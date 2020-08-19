@@ -33,6 +33,7 @@ import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsAction
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.view.getTypeface
+import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
@@ -46,7 +47,7 @@ import org.cru.godtools.xml.model.navBarControlColor
 import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
-    ImmersiveActivity<B>(contentLayoutId) {
+    BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject

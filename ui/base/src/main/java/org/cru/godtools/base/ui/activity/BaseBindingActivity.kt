@@ -1,12 +1,11 @@
-package org.cru.godtools.base.tool.activity
+package org.cru.godtools.base.ui.activity
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import org.cru.godtools.base.ui.activity.BaseActivity
 
-abstract class ImmersiveActivity<B : ViewDataBinding>(@LayoutRes private val contentLayoutId: Int) : BaseActivity() {
+abstract class BaseBindingActivity<B : ViewDataBinding>(@LayoutRes private val contentLayoutId: Int) : BaseActivity() {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
