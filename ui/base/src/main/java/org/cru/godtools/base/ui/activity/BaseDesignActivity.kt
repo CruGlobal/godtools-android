@@ -3,6 +3,7 @@ package org.cru.godtools.base.ui.activity
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
 import butterknife.BindView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -12,8 +13,8 @@ import org.cru.godtools.base.ui.R2
 
 private const val EXTRA_NAV_TAB_ACTIVE = "org.cru.godtools.base.ui.activity.BaseDesignActivity.EXTRA_NAV_TAB_SELECTED"
 
-abstract class BaseDesignActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : BaseActivity(contentLayoutId),
-    OnTabSelectedListener {
+abstract class BaseDesignActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
+    BaseActivity(contentLayoutId), OnTabSelectedListener {
     // region Lifecycle
     @CallSuper
     override fun onContentChanged() {
