@@ -48,6 +48,8 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
     }
     // endregion Lifecycle
 
+    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
+
     /**
      * @return true if the intent was successfully processed, otherwise return false
      */
