@@ -2,17 +2,14 @@ package org.cru.godtools.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
@@ -41,11 +38,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         }
 
         triggerInitialSync()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRefreshView()
     }
 
     override fun onStart() {
@@ -82,10 +74,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     // endregion Lifecycle
 
     // region Sync Logic
-    @JvmField
-    @BindView(R.id.refresh)
-    internal var refreshLayout: SwipeRefreshLayout? = null
-
     @Inject
     protected lateinit var syncService: GodToolsSyncService
 
@@ -100,14 +88,13 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         updateState()
     }
 
-    private fun setupRefreshView() {
-        syncHelper.refreshLayout = refreshLayout
-        refreshLayout?.setOnRefreshListener { syncHelper.triggerSync(true) }
+    internal fun SwipeRefreshLayout.setupSwipeRefresh() {
+        syncHelper.refreshLayout = this
+        setOnRefreshListener { syncHelper.triggerSync(true) }
     }
 
     private fun cleanupRefreshView() {
         syncHelper.refreshLayout = null
-        refreshLayout?.setOnRefreshListener(null)
     }
     // endregion Sync Logic
 

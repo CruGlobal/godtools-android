@@ -41,6 +41,7 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
 
     override fun onBindingCreated(binding: LanguagesFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
+        binding.refresh.setupSwipeRefresh()
         binding.setupLanguagesList()
     }
 

@@ -76,6 +76,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     override fun onBindingCreated(binding: ToolsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.fragment = this
+        binding.refresh.setupSwipeRefresh()
         binding.setTools(dataModel.tools)
         setupToolsList(binding)
     }
