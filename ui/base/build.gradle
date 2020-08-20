@@ -1,5 +1,3 @@
-apply plugin: 'com.jakewharton.butterknife'
-
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -31,8 +29,5 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
-
-    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

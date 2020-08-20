@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import butterknife.ButterKnife
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
@@ -53,8 +52,6 @@ abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayou
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()
-
-        ButterKnife.bind(this)
         setupActionBar()
     }
 

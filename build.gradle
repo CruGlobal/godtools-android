@@ -9,7 +9,6 @@ buildscript {
                 appsFlyer          : '5.4.0',
                 assistedInject     : '0.5.2',
                 autoService        : '1.0-rc7',
-                butterknife        : '10.2.1',
                 circleindicator    : '2.1.4',
                 dagger             : '2.28.3',
                 eventbus           : '3.2.0',
@@ -94,7 +93,6 @@ buildscript {
         classpath 'com.google.firebase:firebase-appdistribution-gradle:2.0.1'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
         classpath 'com.google.gms:google-services:4.3.3'
-        classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
 
         // HACK: use master-SNAPSHOT version to work around a gradle 6 incompatibility with v0.1.4 of the jacoco-android plugin
