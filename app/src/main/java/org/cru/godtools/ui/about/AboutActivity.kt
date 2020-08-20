@@ -10,6 +10,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -18,7 +19,7 @@ fun Activity.startAboutActivity() {
         .also { startActivity(it) }
 }
 
-class AboutActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
+class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // region Lifecycle
     override fun onContentChanged() {
         super.onContentChanged()
@@ -30,6 +31,8 @@ class AboutActivity : BasePlatformActivity(R.layout.activity_generic_fragment_wi
         eventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
 
     @MainThread
     private fun loadPrimaryFragmentIfNeeded() {

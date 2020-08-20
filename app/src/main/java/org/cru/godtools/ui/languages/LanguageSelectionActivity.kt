@@ -12,6 +12,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SELECTION
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.ui.languages.LanguageSelectionActivity.PRIMARY"
@@ -23,7 +24,7 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
-class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic_fragment), LocaleSelectedListener {
+class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBinding>(), LocaleSelectedListener {
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
 
@@ -51,6 +52,8 @@ class LanguageSelectionActivity : BasePlatformActivity(R.layout.activity_generic
         finish()
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = ActivityGenericFragmentBinding.inflate(layoutInflater)
 
     private fun storeLocale(locale: Locale?) {
         if (primary) {

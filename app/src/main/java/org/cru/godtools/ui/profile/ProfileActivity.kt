@@ -2,7 +2,6 @@ package org.cru.godtools.ui.profile
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
@@ -21,14 +20,8 @@ fun Activity.startProfileActivity() = startActivity(
         .putExtras(BaseActivity.buildExtras(this))
 )
 
-class ProfileActivity : BasePlatformActivity() {
+class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>(R.layout.profile_activity) {
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ProfileActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
-
     override fun onContentChanged() {
         super.onContentChanged()
         setupDataBinding()
@@ -42,10 +35,7 @@ class ProfileActivity : BasePlatformActivity() {
     // endregion Lifecycle
 
     // region Data Binding
-    private lateinit var binding: ProfileActivityBinding
-
     private fun setupDataBinding() {
-        binding.lifecycleOwner = this
         binding.keyAttributes = theKey.getAttributesLiveData()
     }
     // endregion Data Binding

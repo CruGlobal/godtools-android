@@ -16,9 +16,9 @@ import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.Constants.EXTRA_LANGUAGE
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.base.tool.activity.ImmersiveActivity
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tract.Constants.EXTRA_MODAL
 import org.cru.godtools.tract.Constants.EXTRA_PAGE
 import org.cru.godtools.tract.R
@@ -40,7 +40,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
         .toBundle()
 )
 
-class ModalActivity : ImmersiveActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
+class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
     @Inject
     internal lateinit var modalControllerFactory: ModalController.Factory

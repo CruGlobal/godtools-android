@@ -9,6 +9,7 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
@@ -19,7 +20,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) {
     )
 }
 
-class ToolDetailsActivity : BasePlatformActivity(R.layout.activity_generic_fragment_with_nav_drawer) {
+class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
 

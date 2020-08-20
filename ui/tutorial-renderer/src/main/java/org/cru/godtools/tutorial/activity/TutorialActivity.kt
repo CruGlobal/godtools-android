@@ -3,7 +3,6 @@ package org.cru.godtools.tutorial.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,18 +31,10 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, Tutoria
 
 fun Activity.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
 
-class TutorialActivity : BaseActivity(), TutorialCallbacks {
+class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
-    private lateinit var binding: TutorialActivityBinding
-
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = TutorialActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
-
     override fun onContentChanged() {
         super.onContentChanged()
         setupViewPager()
@@ -93,6 +84,8 @@ class TutorialActivity : BaseActivity(), TutorialCallbacks {
         super.onBackPressed()
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = TutorialActivityBinding.inflate(layoutInflater)
 
     private fun setupAppBar() {
         supportActionBar?.apply {

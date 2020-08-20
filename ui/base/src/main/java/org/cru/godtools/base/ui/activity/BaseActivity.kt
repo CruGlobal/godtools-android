@@ -12,7 +12,10 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
+import androidx.viewbinding.ViewBinding
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.android.AndroidInjection
@@ -32,7 +35,8 @@ private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.lau
 @VisibleForTesting
 internal const val MSG_FEATURE_DISCOVERY = 1
 
-abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) : AppCompatActivity(contentLayoutId) {
+abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayoutId: Int = INVALID_LAYOUT_RES) :
+    AppCompatActivity() {
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
@@ -42,8 +46,11 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setupDataBinding()
         savedInstanceState?.restoreFeatureDiscoveryState()
     }
+
+    protected open fun onBindingChanged() = Unit
 
     @CallSuper
     override fun onContentChanged() {
@@ -85,6 +92,22 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES
 
     override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
     // endregion ViewModelProvider.Factory
+
+    // region View & Data Binding
+    protected lateinit var binding: B
+        private set
+
+    @Suppress("UNCHECKED_CAST")
+    protected open fun inflateBinding(): B =
+        DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, contentLayoutId, null, false)
+            .also { it.lifecycleOwner = this } as B
+
+    private fun setupDataBinding() {
+        binding = inflateBinding()
+        setContentView(binding.root)
+        onBindingChanged()
+    }
+    // endregion View & Data Binding
 
     // region ActionBar
     @JvmField
