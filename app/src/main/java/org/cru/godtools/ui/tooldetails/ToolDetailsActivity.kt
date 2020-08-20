@@ -20,9 +20,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) {
     )
 }
 
-class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>(
-    R.layout.activity_generic_fragment_with_nav_drawer
-) {
+class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
 

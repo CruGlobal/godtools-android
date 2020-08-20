@@ -19,9 +19,7 @@ fun Activity.startAboutActivity() {
         .also { startActivity(it) }
 }
 
-class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>(
-    R.layout.activity_generic_fragment_with_nav_drawer
-) {
+class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // region Lifecycle
     override fun onContentChanged() {
         super.onContentChanged()
@@ -33,6 +31,8 @@ class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerB
         eventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
 
     @MainThread
     private fun loadPrimaryFragmentIfNeeded() {

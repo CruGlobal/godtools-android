@@ -24,8 +24,7 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
-class LanguageSelectionActivity :
-    BasePlatformActivity<ActivityGenericFragmentBinding>(R.layout.activity_generic_fragment), LocaleSelectedListener {
+class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBinding>(), LocaleSelectedListener {
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
 
@@ -53,6 +52,8 @@ class LanguageSelectionActivity :
         finish()
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = ActivityGenericFragmentBinding.inflate(layoutInflater)
 
     private fun storeLocale(locale: Locale?) {
         if (primary) {

@@ -77,7 +77,6 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         triggerOnboardingIfNecessary();
-        setContentView(R.layout.activity_dashboard);
 
         processIntent(getIntent());
 
@@ -209,6 +208,13 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         }
     }
 
+    // region View
+    @NonNull
+    @Override
+    protected ActivityDashboardBinding inflateBinding() {
+        return ActivityDashboardBinding.inflate(getLayoutInflater());
+    }
+
     @Override
     protected void setupNavigationTabs() {
         super.setupNavigationTabs();
@@ -222,6 +228,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
             mAllToolsTab = navigationTabs.getTabAt(1);
         }
     }
+    // endregion View
 
     // region Analytics
     private void trackInAnalytics() {

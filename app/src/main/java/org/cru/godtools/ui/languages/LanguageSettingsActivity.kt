@@ -19,9 +19,7 @@ fun Activity.startLanguageSettingsActivity() {
         .also { startActivity(it) }
 }
 
-class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>(
-    R.layout.activity_generic_fragment_with_nav_drawer
-) {
+class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // region Lifecycle
     override fun onContentChanged() {
         super.onContentChanged()
@@ -34,6 +32,8 @@ class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWit
         eventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SETTINGS))
     }
     // endregion Lifecycle
+
+    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
 
     @MainThread
     private fun loadPrimaryFragmentIfNeeded() {
