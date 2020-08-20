@@ -2,9 +2,12 @@ package org.cru.godtools.base.ui.activity
 
 import android.app.Application
 import android.os.Handler
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.viewbinding.ViewBinding
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
 import dagger.android.HasAndroidInjector
 import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
@@ -23,7 +26,7 @@ import org.robolectric.annotation.Config
 @Config(application = MockApplication::class)
 class BaseActivityTest {
     lateinit var controller: ActivityController<ConcreteBaseActivity>
-    lateinit var activity: BaseActivity
+    lateinit var activity: BaseActivity<*>
 
     @Before
     fun setup() {
@@ -55,8 +58,12 @@ class MockApplication : Application(), HasAndroidInjector by mock(defaultAnswer 
     }
 }
 
-class ConcreteBaseActivity : BaseActivity() {
+class ConcreteBaseActivity : BaseActivity<ViewBinding>() {
     init {
         settings = mock()
+    }
+
+    override fun inflateBinding() = mock<ViewBinding> {
+        on { root } doAnswer { View(this@ConcreteBaseActivity) }
     }
 }
