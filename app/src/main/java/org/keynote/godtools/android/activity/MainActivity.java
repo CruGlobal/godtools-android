@@ -39,6 +39,7 @@ import javax.inject.Inject;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -219,6 +220,12 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
 
     @Nullable
     @Override
+    protected Toolbar getToolbar() {
+        return getBinding().appbar;
+    }
+
+    @Nullable
+    @Override
     protected DrawerLayout getDrawerLayout() {
         return getBinding().drawerLayout;
     }
@@ -329,7 +336,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
     protected boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return toolbar != null && !getBinding().drawerLayout.isDrawerOpen(GravityCompat.START);
+                return getToolbar() != null && !getBinding().drawerLayout.isDrawerOpen(GravityCompat.START);
             default:
                 return super.canShowFeatureDiscovery(feature);
         }
@@ -339,6 +346,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         // dispatch specific feature discovery
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
+                final Toolbar toolbar = getToolbar();
                 assert toolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
                 if (toolbar.findViewById(R.id.action_switch_language) != null) {
                     // purge any pending feature discovery triggers since we are showing feature discovery now

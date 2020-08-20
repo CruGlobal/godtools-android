@@ -32,6 +32,7 @@ import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
+import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
@@ -109,6 +110,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
                 }
             }
         }
+    }
+
+    override val toolbar get() = when (val it = binding) {
+        is ToolGenericFragmentActivityBinding -> it.appbar
+        else -> super.toolbar
     }
 
     // region Toolbar update logic
