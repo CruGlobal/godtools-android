@@ -10,7 +10,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith

@@ -7,7 +7,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
-import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import org.ccci.gto.android.common.androidx.lifecycle.notNull

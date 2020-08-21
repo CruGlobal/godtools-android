@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
-import androidx.lifecycle.observe
 import com.google.common.util.concurrent.Futures
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale

@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.observe
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
