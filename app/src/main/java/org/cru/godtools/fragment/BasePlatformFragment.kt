@@ -39,7 +39,10 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         savedInstanceState?.let {
             syncHelper.onRestoreInstanceState(it.getBundle(EXTRA_SYNC_HELPER))
         }
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         triggerInitialSync()
     }
 
