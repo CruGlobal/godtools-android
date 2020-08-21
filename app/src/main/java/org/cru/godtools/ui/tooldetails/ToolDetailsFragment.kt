@@ -28,7 +28,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenButtonAnalyticsActionEvent
+import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
@@ -123,7 +123,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage)
             }
         }
-        eventBus.post(ToolOpenButtonAnalyticsActionEvent)
+        eventBus.post(AboutToolButtonAnalyticsActionEvent)
     }
 
     fun openTraining(manifest: Manifest) {
