@@ -8,8 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
@@ -27,11 +25,9 @@ abstract class BaseFragment<B : ViewBinding> @JvmOverloads constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding(view, savedInstanceState)
-        bindButterKnife(view)
     }
 
     override fun onDestroyView() {
-        unbindButterKnife()
         cleanupDataBinding()
         super.onDestroyView()
     }
@@ -44,19 +40,6 @@ abstract class BaseFragment<B : ViewBinding> @JvmOverloads constructor(
 
     override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
     // endregion ViewModelProvider.Factory
-
-    // region ButterKnife
-    private var butterKnife: Unbinder? = null
-
-    private fun bindButterKnife(view: View) {
-        butterKnife = ButterKnife.bind(this, view)
-    }
-
-    private fun unbindButterKnife() {
-        butterKnife?.unbind()
-        butterKnife = null
-    }
-    // endregion ButterKnife
 
     // region View & Data Binding
     private var binding: B? = null
