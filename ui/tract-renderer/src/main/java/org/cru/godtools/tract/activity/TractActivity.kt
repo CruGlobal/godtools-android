@@ -18,7 +18,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -491,10 +490,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private var liveShareMenuObserver: Observer<Pair<State, State>>? = null
     private fun Menu.setupLiveShareMenuItemVisibility() {
         liveShareMenuObserver?.let { liveShareState.removeObserver(it) }
-        liveShareMenuObserver = liveShareState.observe(this@TractActivity) { (publisherState, subscriberState) ->
+        liveShareMenuObserver = Observer<Pair<State, State>> { (publisherState, subscriberState) ->
             findItem(R.id.action_live_share_active)?.isVisible =
                 publisherState == State.On || subscriberState == State.On
-        }
+        }.also { liveShareState.observe(this@TractActivity, it) }
     }
 
     internal fun shareLiveShareLink() {
