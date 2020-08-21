@@ -17,7 +17,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
-import butterknife.BindView
 import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
 import java.util.Locale
@@ -44,8 +43,10 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseDesignActivity
+import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
@@ -215,13 +216,15 @@ abstract class BasePlatformActivity<B : ViewBinding>(@LayoutRes contentLayoutId:
     }
     // endregion Lifecycle
 
+    override val toolbar get() = when (val it = binding) {
+        is ActivityGenericFragmentBinding -> it.appbar
+        is ActivityGenericFragmentWithNavDrawerBinding -> it.genericActivity.appbar
+        else -> super.toolbar
+    }
+
     // region Navigation Drawer
-    @JvmField
-    @BindView(R.id.drawer_layout)
-    protected var drawerLayout: DrawerLayout? = null
-    @JvmField
-    @BindView(R.id.drawer_menu)
-    internal var drawerMenu: NavigationView? = null
+    protected open val drawerLayout: DrawerLayout? get() = findViewById(R.id.drawer_layout)
+    protected open val drawerMenu: NavigationView? get() = findViewById(R.id.drawer_menu)
     private var drawerToggle: ActionBarDrawerToggle? = null
 
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }

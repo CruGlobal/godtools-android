@@ -40,6 +40,7 @@ class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>(R.layout.pr
     }
     // endregion Data Binding
 
+    override val toolbar get() = binding.appbar
     override val swipeRefreshLayout get() = binding.refresh
 
     // region Pages

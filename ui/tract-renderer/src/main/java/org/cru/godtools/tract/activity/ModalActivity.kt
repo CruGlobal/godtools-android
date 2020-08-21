@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -84,6 +85,8 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
         eventBus.unregister(this)
     }
     // endregion Lifecycle
+
+    override val toolbar: Toolbar? get() = null
 
     private fun validStartState() = dataModel.toolCode.value != null
 

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.annimon.stream.Stream;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
@@ -38,7 +39,9 @@ import javax.inject.Inject;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -215,9 +218,34 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         return ActivityDashboardBinding.inflate(getLayoutInflater());
     }
 
+    @Nullable
+    @Override
+    protected Toolbar getToolbar() {
+        return getBinding().appbar;
+    }
+
+    @Nullable
+    @Override
+    protected DrawerLayout getDrawerLayout() {
+        return getBinding().drawerLayout;
+    }
+
+    @Nullable
+    @Override
+    protected NavigationView getDrawerMenu() {
+        return getBinding().drawerMenu;
+    }
+
+    @Nullable
+    @Override
+    protected TabLayout getNavigationTabs() {
+        return getBinding().appbarTabs;
+    }
+
     @Override
     protected void setupNavigationTabs() {
         super.setupNavigationTabs();
+        final TabLayout navigationTabs = getNavigationTabs();
         if (navigationTabs != null) {
             // This logic is brittle, so throw an error on debug builds if something changes.
             if (BuildConfig.DEBUG && navigationTabs.getTabCount() != 2) {
@@ -308,7 +336,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
     protected boolean canShowFeatureDiscovery(@NonNull final String feature) {
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
-                return toolbar != null && (drawerLayout == null || !drawerLayout.isDrawerOpen(GravityCompat.START));
+                return getToolbar() != null && !getBinding().drawerLayout.isDrawerOpen(GravityCompat.START);
             default:
                 return super.canShowFeatureDiscovery(feature);
         }
@@ -318,6 +346,7 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         // dispatch specific feature discovery
         switch (feature) {
             case FEATURE_LANGUAGE_SETTINGS:
+                final Toolbar toolbar = getToolbar();
                 assert toolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
                 if (toolbar.findViewById(R.id.action_switch_language) != null) {
                     // purge any pending feature discovery triggers since we are showing feature discovery now

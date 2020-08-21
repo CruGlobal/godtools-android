@@ -1,12 +1,10 @@
 package org.cru.godtools.article.ui.articles
 
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -16,7 +14,6 @@ import org.ccci.gto.android.common.util.MainThreadExecutor
 import org.ccci.gto.android.common.util.WeakTask
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
-import org.cru.godtools.article.R2
 import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -26,10 +23,9 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 
-private val resetRefreshLayoutTask = WeakTask.Task<SwipeRefreshLayout> { it.isRefreshing = false }
+private val syncCompleteTask = WeakTask.Task<MutableLiveData<Boolean>> { it.value = false }
 
-class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks,
-    SwipeRefreshLayout.OnRefreshListener {
+class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
     constructor(code: String, locale: Locale, category: String? = null) :
         super(R.layout.fragment_articles, code, locale) {
@@ -42,28 +38,18 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
 
     private var category by argOrNull<String>()
 
-    @JvmField
-    @BindView(R2.id.article_swipe_container)
-    internal var swipeRefreshLayout: SwipeRefreshLayout? = null
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataModel()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupSwipeRefresh()
-    }
-
     override fun onBindingCreated(binding: FragmentArticlesBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.manifest = toolDataModel.manifest
         binding.setupArticlesView()
+        binding.setupSwipeRefresh()
     }
-
-    override fun onRefresh() = syncData(true)
 
     /**
      * This is the callback method from ArticleAdapter that will handle the functionality of an article being selected
@@ -87,13 +73,11 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     @Inject
     internal lateinit var aemArticleManager: AemArticleManager
 
+    private val isSyncing = MutableLiveData(false)
     private fun syncData(force: Boolean) {
-        aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force)
-            .apply {
-                swipeRefreshLayout?.let {
-                    addListener(WeakTask(it, resetRefreshLayoutTask), MainThreadExecutor())
-                }
-            }
+        val result = aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force)
+        isSyncing.value = true
+        result.addListener(WeakTask(isSyncing, syncCompleteTask), MainThreadExecutor())
     }
 
     // region View Logic
@@ -113,7 +97,10 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     }
     // endregion ArticlesView
 
-    private fun setupSwipeRefresh() = swipeRefreshLayout?.setOnRefreshListener(this)
+    private fun FragmentArticlesBinding.setupSwipeRefresh() {
+        refresh.setOnRefreshListener { syncData(true) }
+        isSyncing.observe(viewLifecycleOwner) { refresh.isRefreshing = it }
+    }
     // endregion View Logic
 }
 

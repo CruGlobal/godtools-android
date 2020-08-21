@@ -86,6 +86,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     // endregion Lifecycle
 
     override fun inflateBinding() = TutorialActivityBinding.inflate(layoutInflater)
+    override val toolbar get() = binding.appbar
 
     private fun setupAppBar() {
         supportActionBar?.apply {

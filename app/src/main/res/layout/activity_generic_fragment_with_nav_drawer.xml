@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:openDrawer="start">
 
-    <include layout="@layout/activity_generic_fragment" />
+    <include
+        android:id="@+id/generic_activity"
+        layout="@layout/activity_generic_fragment" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_menu"

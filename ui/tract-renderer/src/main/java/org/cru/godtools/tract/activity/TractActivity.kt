@@ -291,6 +291,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     // endregion Data Model
 
     // region UI
+    override val toolbar get() = binding.appbar
+
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
 
     private fun setupBinding() {

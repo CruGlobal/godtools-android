@@ -184,7 +184,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
@@ -206,7 +205,6 @@ dependencies {
 
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

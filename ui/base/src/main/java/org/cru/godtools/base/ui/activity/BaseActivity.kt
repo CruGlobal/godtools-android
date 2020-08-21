@@ -16,15 +16,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import butterknife.BindView
-import butterknife.ButterKnife
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.R2
 import org.greenrobot.eventbus.EventBus
 
 private const val EXTRA_FEATURE_DISCOVERY = "org.cru.godtools.BaseActivity.FEATURE_DISCOVERY"
@@ -55,12 +52,6 @@ abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayou
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()
-
-        // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
-        // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
-        BaseActivity_ViewBinding(this)
-
-        ButterKnife.bind(this)
         setupActionBar()
     }
 
@@ -110,9 +101,7 @@ abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayou
     // endregion View & Data Binding
 
     // region ActionBar
-    @JvmField
-    @BindView(R2.id.appbar)
-    var toolbar: Toolbar? = null
+    protected open val toolbar: Toolbar? get() = null
 
     private fun setupActionBar() {
         toolbar?.let { setSupportActionBar(it) }
