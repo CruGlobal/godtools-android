@@ -26,6 +26,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
+    api "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
