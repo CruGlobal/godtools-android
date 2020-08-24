@@ -20,6 +20,7 @@ dependencies {
 
     api "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
     implementation "androidx.browser:browser:${deps.androidX.browser}"
+    compileOnly "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     api "com.google.android.material:material:${deps.materialDesign}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"

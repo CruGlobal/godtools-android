@@ -38,6 +38,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
+import org.cru.godtools.base.ui.fragment.showAllowingStateLoss
 import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
@@ -491,7 +492,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
                 startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
             publisherController.publisherInfo.value == null ->
-                LiveShareStartingDialogFragment().show(supportFragmentManager, null)
+                LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
             else -> {
                 val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
                 val shareUrl = (buildShareLink() ?: return)
