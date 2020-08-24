@@ -11,6 +11,7 @@ dependencies {
     api project(':ui:article-aem-renderer')
     implementation project(':ui:base-tool')
 
+    implementation "androidx.concurrent:concurrent-futures-ktx:${deps.androidX.concurrent}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"

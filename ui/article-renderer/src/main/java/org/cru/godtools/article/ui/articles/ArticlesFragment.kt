@@ -1,17 +1,19 @@
 package org.cru.godtools.article.ui.articles
 
 import android.os.Bundle
+import androidx.concurrent.futures.await
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
-import org.ccci.gto.android.common.util.MainThreadExecutor
-import org.ccci.gto.android.common.util.WeakTask
 import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.db.ArticleDao
@@ -22,8 +24,6 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
-
-private val syncCompleteTask = WeakTask.Task<MutableLiveData<Boolean>> { it.value = false }
 
 class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
@@ -74,10 +74,12 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     internal lateinit var aemArticleManager: AemArticleManager
 
     private val isSyncing = MutableLiveData(false)
-    private fun syncData(force: Boolean) {
-        val result = aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force)
-        isSyncing.value = true
-        result.addListener(WeakTask(isSyncing, syncCompleteTask), MainThreadExecutor())
+    private fun syncData(force: Boolean = false) {
+        lifecycleScope.launch(Dispatchers.Main.immediate) {
+            isSyncing.value = true
+            aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force).await()
+            isSyncing.value = false
+        }
     }
 
     // region View Logic
