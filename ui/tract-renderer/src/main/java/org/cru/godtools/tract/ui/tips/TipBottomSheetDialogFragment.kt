@@ -22,8 +22,10 @@ import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tract.R
+import org.cru.godtools.tract.analytics.model.TipAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractTipBinding
 import org.cru.godtools.xml.model.tips.Tip
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
@@ -41,6 +43,8 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
 
     @Inject
     internal lateinit var dao: GodToolsDao
+    @Inject
+    internal lateinit var eventBus: EventBus
 
     private val dataModel: TipBottomSheetDialogFragmentDataModel by viewModels()
 
@@ -62,6 +66,7 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
 
     override fun onStart() {
         super.onStart()
+        eventBus.post(TipAnalyticsScreenEvent(tool, locale, tip))
         if (context?.resources?.getBoolean(R.bool.tract_tips_show_full_height) == true) makeFullScreen()
     }
 
