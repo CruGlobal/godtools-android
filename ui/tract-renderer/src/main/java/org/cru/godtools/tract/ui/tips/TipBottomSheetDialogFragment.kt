@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Locale
@@ -72,7 +73,6 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
 
     override fun onStart() {
         super.onStart()
-        eventBus.post(TipAnalyticsScreenEvent(tool, locale, tip))
         if (context?.resources?.getBoolean(R.bool.tract_tips_show_full_height) == true) makeFullScreen()
     }
 
@@ -101,6 +101,9 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
 
     private fun TractTipBinding.setupPages() {
         pages.adapter = tipPageAdapter
+        pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
+        })
     }
     // endregion Pages
 
@@ -117,6 +120,10 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
+
+    private fun trackScreenAnalytics(page: Int = binding?.pages?.currentItem ?: 0) {
+        eventBus.post(TipAnalyticsScreenEvent(tool, locale, tip, page))
+    }
 
     private fun forceExpandedMode() {
         (dialog as? BottomSheetDialog)?.behavior?.apply {
