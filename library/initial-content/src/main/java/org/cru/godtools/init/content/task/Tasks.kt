@@ -2,12 +2,12 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.concurrent.futures.await
 import dagger.Reusable
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
