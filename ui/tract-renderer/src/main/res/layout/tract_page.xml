@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.PageKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="enableTips" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
     </data>
 
@@ -66,6 +70,19 @@
                 app:callbacks="@{callbacks}"
                 app:controller="@{controller}"
                 app:page="@{page}" />
+
+            <org.cru.godtools.tract.widget.MaterialShapeBackgroundImageView
+                style="@style/Widget.GodTools.Tip.Arrow.Down"
+                android:layout_above="@id/call_to_action_label"
+                android:layout_gravity="start"
+                android:layout_marginStart="24dp"
+                android:onClick="@{() -> controller.showTip(page.callToAction.tip)}"
+                android:src="@{TipTypeKt.getDrawable(page.callToAction.tip.type, context)}"
+                app:cornerBottomLeft="@{TipArrowShape.endCornerTreatment(context)}"
+                app:cornerBottomRight="@{TipArrowShape.startCornerTreatment(context)}"
+                app:layout_childType="call_to_action_tip"
+                app:visibleIf="@{enableTips &amp;&amp; page.callToAction.tip != null}"
+                tools:src="@drawable/ic_tips_tip" />
         </org.cru.godtools.tract.widget.PageContentLayout>
     </RelativeLayout>
 </layout>

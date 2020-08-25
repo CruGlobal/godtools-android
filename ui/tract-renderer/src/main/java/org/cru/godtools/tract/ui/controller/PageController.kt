@@ -255,7 +255,11 @@ class PageController @AssistedInject internal constructor(
     // endregion Content Events
 
     // region Tips
-    override var isTipsEnabled = false
+    override var isTipsEnabled: Boolean
+        get() = binding.enableTips ?: false
+        set(value) {
+            binding.enableTips = value
+        }
     override fun showTip(tip: Tip?) {
         tip?.let { callbacks?.showTip(tip) }
     }

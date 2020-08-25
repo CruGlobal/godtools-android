@@ -46,8 +46,10 @@ import androidx.customview.view.AbsSavedState;
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
@@ -98,6 +100,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Nullable
     private View mActiveCard;
     private int mActiveCardPosition = 0;
+    private int mTotalCards = 0;
 
     @Nullable
     Animator mAnimation;
@@ -197,6 +200,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
+        if (getChildType(child) == CHILD_TYPE_CARD) {
+            mTotalCards++;
+        }
         updateActiveCardPosition(false);
         updateChildrenOffsetsAndAlpha();
     }
@@ -204,6 +210,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public void onViewRemoved(final View child) {
         super.onViewRemoved(child);
+        if (getChildType(child) == CHILD_TYPE_CARD) {
+            mTotalCards--;
+        }
         if (mActiveCard != child) {
             updateActiveCardPosition(false);
             updateChildrenOffsetsAndAlpha();
@@ -335,8 +344,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final View oldActiveCard = mActiveCard;
         mActiveCard = view;
         if (mActiveCard != null) {
-            final LayoutParams lp = (LayoutParams) mActiveCard.getLayoutParams();
-            if (lp.childType != CHILD_TYPE_CARD) {
+            if (getChildType(mActiveCard) != CHILD_TYPE_CARD) {
                 mActiveCard = null;
             }
         }
@@ -390,16 +398,25 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return mActiveCardPosition;
     }
 
+    private int getChildType(final View view) {
+        final ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp instanceof LayoutParams) {
+            return ((LayoutParams) lp).childType;
+        }
+        return CHILD_TYPE_UNKNOWN;
+    }
+
     @NonNull
+    @SuppressWarnings("checkstyle:AvoidNestedBlocks")
     private Animator buildAnimation() {
         // build individual animations
         final List<Animator> offset = new ArrayList<>();
         final List<Animator> fadeIn = new ArrayList<>();
+        final List<Animator> show = new ArrayList<>();
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
+            switch (getChildType(child)) {
                 case CHILD_TYPE_HERO:
                 case CHILD_TYPE_CARD:
                     // position offset animation only
@@ -408,7 +425,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                         offset.add(ObjectAnimator.ofFloat(child, View.Y, getChildTargetY(i)));
                     }
                     break;
-                case CHILD_TYPE_CALL_TO_ACTION:
+                case CHILD_TYPE_CALL_TO_ACTION: {
                     // alpha animation only
                     final float targetAlpha = getChildTargetAlpha(child);
                     if (child.getAlpha() != targetAlpha) {
@@ -421,6 +438,22 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                         }
                     }
                     break;
+                }
+                case CHILD_TYPE_CALL_TO_ACTION_TIP: {
+                    // alpha animation only
+                    final float targetAlpha = getChildTargetAlpha(child);
+                    if (child.getAlpha() != targetAlpha) {
+                        final Animator animation = ObjectAnimator.ofFloat(child, View.ALPHA, targetAlpha);
+                        animation.setDuration(0);
+                        if (targetAlpha > 0) {
+                            show.add(animation);
+                        } else {
+                            // hiding the call to action tip can happen at the same time as other animations
+                            offset.add(animation);
+                        }
+                    }
+                    break;
+                }
             }
         }
 
@@ -430,10 +463,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // play each group together
         animation.playTogether(fadeIn);
         animation.playTogether(offset);
+        animation.playTogether(show);
 
         // chain groups in proper sequence
         if (!offset.isEmpty() && !fadeIn.isEmpty()) {
-            animation.playSequentially(offset.get(0), fadeIn.get(0));
+            animation.play(fadeIn.get(0)).after(offset.get(0));
+        }
+        if (!fadeIn.isEmpty() && !show.isEmpty()) {
+            animation.play(show.get(0)).after(fadeIn.get(0));
         }
 
         // set a few overall animation parameters
@@ -471,8 +508,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // animate the first card child
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
+            switch (getChildType(child)) {
                 case CHILD_TYPE_CARD:
                     mAnimation = buildBounceAnimation(child);
                     mAnimation.start();
@@ -535,8 +571,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION) {
                     // measure and track the call to action height
                     measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
                     callToActionHeight = child.getMeasuredHeight();
@@ -693,6 +728,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 childTop = parentTop + lp.topMargin;
         }
 
+        final View above = lp.above != INVALID_ID_RES ? findViewById(lp.above) : null;
+        if (above != null) {
+            childTop = ViewUtils.getTopOffset(this, above) - height;
+        }
+
         child.layout(childLeft, childTop, childLeft + width, childTop + height);
     }
 
@@ -714,8 +754,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     else {
                         return 0 - parentBottom;
                     }
-                case CHILD_TYPE_CALL_TO_ACTION:
-                    return child.getTop();
                 case CHILD_TYPE_CARD:
                     // no cards currently active, so stack the cards
                     if (mActiveCardPosition < 0) {
@@ -739,6 +777,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     else {
                         return getMeasuredHeight() - getPaddingTop();
                     }
+                case CHILD_TYPE_CALL_TO_ACTION:
+                case CHILD_TYPE_CALL_TO_ACTION_TIP:
+                default:
+                    return child.getTop();
             }
         }
 
@@ -747,9 +789,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private float getChildTargetAlpha(@Nullable final View child) {
         if (child != null) {
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
-                return mActiveCardPosition + mCardPositionOffset >= getChildCount() - 1 ? 1 : 0;
+            final int childType = getChildType(child);
+            if (childType == CHILD_TYPE_CALL_TO_ACTION || childType == CHILD_TYPE_CALL_TO_ACTION_TIP) {
+                return mActiveCardPosition + 1 >= mTotalCards ? 1 : 0;
             }
         }
         return 1;
@@ -764,8 +806,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 final View child = getChildAt(i);
                 child.setY(getChildTargetY(i));
 
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                final int childType = getChildType(child);
+                if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION || childType == CHILD_TYPE_CALL_TO_ACTION_TIP) {
                     child.setAlpha(getChildTargetAlpha(child));
                 }
             }
@@ -817,6 +859,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public static final int CHILD_TYPE_HERO = 1;
         public static final int CHILD_TYPE_CARD = 2;
         public static final int CHILD_TYPE_CALL_TO_ACTION = 3;
+        public static final int CHILD_TYPE_CALL_TO_ACTION_TIP = 4;
 
         public int childType = CHILD_TYPE_UNKNOWN;
 
@@ -826,6 +869,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public int cardPeekViewTop = INVALID_ID_RES;
         @IdRes
         public int cardStackViewTop = INVALID_ID_RES;
+
+        @IdRes
+        public int above = INVALID_ID_RES;
 
         // card peek heights
         int cardPaddingOffset = 0;
@@ -846,6 +892,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_peek_toTopOf, INVALID_ID_RES);
             cardStackViewTop =
                     a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_stack_toTopOf, INVALID_ID_RES);
+
+            above = a.getResourceId(R.styleable.PageContentLayout_Layout_android_layout_above, INVALID_ID_RES);
 
             a.recycle();
         }

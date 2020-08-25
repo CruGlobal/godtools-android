@@ -21,5 +21,6 @@ class CallToActionTest {
         assertEquals(Color.RED, callToAction.controlColor)
         assertThat(callToAction.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("Call To Action", callToAction.label!!.text)
+        assertEquals("tip1", callToAction.tipId)
     }
 }
