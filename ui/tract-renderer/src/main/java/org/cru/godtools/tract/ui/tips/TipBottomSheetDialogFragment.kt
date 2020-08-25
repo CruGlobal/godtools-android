@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.tips
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
@@ -35,6 +37,10 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         tool = tip.manifest.code
         locale = tip.manifest.locale
         this.tip = tip.id
+    }
+
+    interface Callbacks {
+        fun onDismissTip()
     }
 
     private var tool: String by arg()
@@ -75,6 +81,11 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         dataModel.tip.observe(viewLifecycleOwner) { binding.tip = it }
         binding.isComplete = dataModel.isCompleted
         binding.setupPages()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        findListener<Callbacks>()?.onDismissTip()
+        super.onDismiss(dialog)
     }
     // endregion Lifecycle
 
