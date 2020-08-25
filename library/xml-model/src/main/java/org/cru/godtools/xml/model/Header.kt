@@ -2,27 +2,36 @@ package org.cru.godtools.xml.model
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.XMLNS_TRAINING
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_NUMBER = "number"
 private const val XML_TITLE = "title"
+private const val XML_TIP = "tip"
 
 class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseModel(parent), Styles {
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt
     internal val backgroundColor get() = _backgroundColor ?: page.primaryColor
-    val number: Text?
-    val title: Text?
 
     @get:ColorInt
     override val textColor get() = primaryTextColor
 
+    val number: Text?
+    val title: Text?
+
+    @VisibleForTesting
+    internal val tipId: String?
+    val tip get() = manifest.findTip(tipId)
+
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HEADER)
         _backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR)
+        tipId = parser.getAttributeValue(XMLNS_TRAINING, XML_TIP)
 
         // process any child elements
         var number: Text? = null
