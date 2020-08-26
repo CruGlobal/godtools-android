@@ -1,6 +1,7 @@
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'dagger.hilt.android.plugin'
 
 apply plugin: 'com.getkeepsafe.dexcount'
 
@@ -35,6 +36,7 @@ android {
     kapt {
         javacOptions {
             option("-Adagger.fastInit=enabled")
+            option("-Adagger.hilt.disableModulesHaveInstallInCheck=true")
         }
     }
 
@@ -183,6 +185,7 @@ dependencies {
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
     implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
@@ -205,6 +208,7 @@ dependencies {
 
     kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
