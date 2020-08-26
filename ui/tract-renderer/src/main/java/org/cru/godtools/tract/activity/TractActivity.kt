@@ -464,12 +464,11 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
-        super.shareMenuItemVisible.distinctUntilChanged().combineWith(subscriberController.state) { visible, state ->
-            visible && state == State.Off
+        activeManifestLiveData.combineWith(subscriberController.state) { manifest, subscriberState ->
+            manifest != null && subscriberState == State.Off
         }
     }
 
-    override fun hasShareLinkUri() = activeManifest != null
     override val shareLinkUri get() = buildShareLink()?.build()?.toString()
     private fun buildShareLink() = activeManifest?.let {
         URI_SHARE_BASE.buildUpon()

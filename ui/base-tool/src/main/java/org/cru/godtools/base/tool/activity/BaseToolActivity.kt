@@ -157,7 +157,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Toolbar update logic
 
     // region Share tool logic
-    private val _shareMenuItemVisible by lazy { MutableLiveData(hasShareLinkUri()) }
+    private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
     protected open val shareMenuItemVisible: LiveData<Boolean> get() = _shareMenuItemVisible
 
     private var shareMenuItemObserver: Observer<Boolean>? = null
@@ -172,11 +172,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected fun updateShareMenuItem() {
-        _shareMenuItemVisible.value = hasShareLinkUri()
+        _shareMenuItemVisible.value = shareLinkUri != null
         showNextFeatureDiscovery()
     }
 
-    protected open fun hasShareLinkUri() = shareLinkUri != null
     protected open val shareLinkTitle get() = activeManifest?.title
     @get:StringRes
     protected open val shareLinkMessageRes get() = R.string.share_general_message
