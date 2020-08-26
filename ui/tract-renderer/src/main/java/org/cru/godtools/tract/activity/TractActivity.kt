@@ -465,7 +465,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
         activeManifestLiveData.combineWith(subscriberController.state) { manifest, subscriberState ->
-            manifest != null && subscriberState == State.Off
+            manifest != null && subscriberState == State.Off && !showTips
         }
     }
 
