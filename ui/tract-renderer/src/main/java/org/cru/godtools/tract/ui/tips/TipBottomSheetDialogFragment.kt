@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.tips
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Locale
@@ -17,13 +19,16 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tract.R
+import org.cru.godtools.tract.analytics.model.TipAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractTipBinding
 import org.cru.godtools.xml.model.tips.Tip
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
@@ -35,12 +40,18 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         this.tip = tip.id
     }
 
+    interface Callbacks {
+        fun onDismissTip()
+    }
+
     private var tool: String by arg()
     private var locale: Locale by arg()
     private var tip: String by arg()
 
     @Inject
     internal lateinit var dao: GodToolsDao
+    @Inject
+    internal lateinit var eventBus: EventBus
 
     private val dataModel: TipBottomSheetDialogFragmentDataModel by viewModels()
 
@@ -71,6 +82,11 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         binding.isComplete = dataModel.isCompleted
         binding.setupPages()
     }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        findListener<Callbacks>()?.onDismissTip()
+        super.onDismiss(dialog)
+    }
     // endregion Lifecycle
 
     // region Pages
@@ -85,6 +101,9 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
 
     private fun TractTipBinding.setupPages() {
         pages.adapter = tipPageAdapter
+        pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
+        })
     }
     // endregion Pages
 
@@ -101,6 +120,10 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
+
+    private fun trackScreenAnalytics(page: Int = binding?.pages?.currentItem ?: 0) {
+        eventBus.post(TipAnalyticsScreenEvent(tool, locale, tip, page))
+    }
 
     private fun forceExpandedMode() {
         (dialog as? BottomSheetDialog)?.behavior?.apply {

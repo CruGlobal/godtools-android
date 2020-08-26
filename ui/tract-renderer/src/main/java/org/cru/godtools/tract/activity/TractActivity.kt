@@ -90,7 +90,7 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
 }
 
 class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
-    TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks {
+    TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks, TipBottomSheetDialogFragment.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -179,6 +179,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         }
         else -> super.onOptionsItemSelected(item)
     }
+
+    override fun onDismissTip() = trackTractPage()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
         REQUEST_LIVE_SHARE_TUTORIAL -> when (resultCode) {
@@ -415,9 +417,15 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         }
     }
 
-    private fun trackTractPage(page: Page, card: Card?) = eventBus.post(
-        TractPageAnalyticsScreenEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
-    )
+    private fun trackTractPage(
+        page: Page? = pagerAdapter.primaryItem?.binding?.controller?.model,
+        card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard
+    ) {
+        if (page == null) return
+        eventBus.post(
+            TractPageAnalyticsScreenEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
+        )
+    }
 
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
