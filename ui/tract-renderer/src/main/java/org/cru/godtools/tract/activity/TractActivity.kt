@@ -146,6 +146,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         menuInflater.inflate(R.menu.activity_tract, menu)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menu.setupLiveShareMenuItemVisibility()
+        menu.setupShareMenuItem()
 
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
@@ -461,7 +462,13 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
     // endregion Active Translation management
 
-    // region Share Link Logic
+    // region Share Menu Logic
+    override val shareMenuItemVisible by lazy {
+        super.shareMenuItemVisible.distinctUntilChanged().combineWith(subscriberController.state) { visible, state ->
+            visible && state == State.Off
+        }
+    }
+
     override fun hasShareLinkUri() = activeManifest != null
     override val shareLinkUri get() = buildShareLink()?.build()?.toString()
     private fun buildShareLink() = activeManifest?.let {
@@ -471,7 +478,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
-    // endregion Share Link Logic
+    // endregion Share Menu Logic
 
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
@@ -480,17 +487,12 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
     }
-    private var menuObserver: Observer<Pair<State, State>>? = null
+    private var liveShareMenuObserver: Observer<Pair<State, State>>? = null
     private fun Menu.setupLiveShareMenuItemVisibility() {
-        menuObserver?.let { liveShareState.removeObserver(it) }
-        menuObserver = liveShareState.observe(this@TractActivity) { (publisherState, subscriberState) ->
+        liveShareMenuObserver?.let { liveShareState.removeObserver(it) }
+        liveShareMenuObserver = liveShareState.observe(this@TractActivity) { (publisherState, subscriberState) ->
             findItem(R.id.action_live_share_active)?.isVisible =
                 publisherState == State.On || subscriberState == State.On
-
-            findItem(R.id.action_share)?.apply {
-                isVisible = subscriberState == State.Off
-                isEnabled = subscriberState == State.Off
-            }
         }
     }
 
