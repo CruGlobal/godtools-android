@@ -8,6 +8,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
@@ -27,6 +30,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class AemArticleRendererModule {
     @ContributesAndroidInjector
     internal abstract fun aemArticleActivityInjector(): AemArticleActivity
@@ -47,7 +51,7 @@ abstract class AemArticleRendererModule {
     companion object {
         @Provides
         @Singleton
-        fun articleRoomDatabase(context: Context) =
+        fun articleRoomDatabase(@ApplicationContext context: Context) =
             Room.databaseBuilder(context, ArticleRoomDatabase::class.java, ArticleRoomDatabase.DATABASE_NAME)
                 .enableMigrations()
                 .build()
