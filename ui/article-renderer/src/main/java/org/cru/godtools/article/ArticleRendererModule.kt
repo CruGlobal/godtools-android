@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.aem.AemArticleRendererModule
@@ -14,6 +16,7 @@ import org.cru.godtools.article.ui.categories.CategoriesActivity
 import org.cru.godtools.article.ui.categories.CategoriesFragment
 
 @Module(includes = [AemArticleRendererModule::class])
+@InstallIn(SingletonComponent::class)
 abstract class ArticleRendererModule {
     @ContributesAndroidInjector
     internal abstract fun articlesActivityInjector(): ArticlesActivity
