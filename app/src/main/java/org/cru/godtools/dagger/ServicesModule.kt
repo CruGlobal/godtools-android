@@ -21,7 +21,6 @@ import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.api.ApiModule
 import org.cru.godtools.service.AccountListRegistrationService
-import org.cru.godtools.sync.SyncModule
 import org.greenrobot.eventbus.EventBus
 
 @Module(
@@ -29,7 +28,6 @@ import org.greenrobot.eventbus.EventBus
         ApiModule::class,
         EagerModule::class,
         EventBusModule::class,
-        SyncModule::class,
         ViewModelModule::class,
         WorkManagerModule::class
     ]
