@@ -20,7 +20,6 @@ import org.ccci.gto.android.common.dagger.workmanager.DaggerWorkerFactory
 import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
 import org.cru.godtools.api.ApiModule
-import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.init.content.InitialContentModule
 import org.cru.godtools.service.AccountListRegistrationService
 import org.cru.godtools.shortcuts.ShortcutModule
@@ -30,7 +29,6 @@ import org.greenrobot.eventbus.EventBus
 @Module(
     includes = [
         ApiModule::class,
-        DownloadManagerModule::class,
         EagerModule::class,
         EventBusModule::class,
         InitialContentModule::class,

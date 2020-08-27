@@ -4,11 +4,14 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class DownloadManagerModule {
     @Binds
     @IntoSet

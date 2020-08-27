@@ -26,11 +26,13 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     api "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
