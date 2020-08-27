@@ -10,6 +10,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
@@ -48,6 +49,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         intent?.extras?.let { extras ->
             dataModel.toolCode.value = extras.getString(EXTRA_TOOL)

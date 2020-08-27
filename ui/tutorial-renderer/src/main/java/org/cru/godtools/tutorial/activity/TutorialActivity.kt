@@ -10,6 +10,7 @@ import androidx.core.view.forEach
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import dagger.hilt.android.AndroidEntryPoint
 import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.deviceLocale
@@ -31,6 +32,7 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, Tutoria
 
 fun Activity.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
 
+@AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 

@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
@@ -32,8 +31,10 @@ private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.lau
 @VisibleForTesting
 internal const val MSG_FEATURE_DISCOVERY = 1
 
-abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayoutId: Int = INVALID_LAYOUT_RES) :
+abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes private val contentLayoutId: Int) :
     AppCompatActivity() {
+    protected constructor() : this(INVALID_LAYOUT_RES)
+
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
@@ -41,7 +42,6 @@ abstract class BaseActivity<B : ViewBinding>(@LayoutRes private val contentLayou
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setupDataBinding()
         savedInstanceState?.restoreFeatureDiscoveryState()
