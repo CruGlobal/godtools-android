@@ -6,6 +6,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
@@ -14,6 +17,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class BaseToolRendererModule {
     @Binds
     @IntoMap
@@ -31,6 +35,6 @@ abstract class BaseToolRendererModule {
         @Provides
         @Reusable
         @Named(IS_CONNECTED_LIVE_DATA)
-        fun isConnectedLiveData(context: Context) = context.isConnectedLiveData()
+        fun isConnectedLiveData(@ApplicationContext context: Context) = context.isConnectedLiveData()
     }
 }

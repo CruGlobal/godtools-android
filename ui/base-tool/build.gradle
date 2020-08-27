@@ -36,11 +36,13 @@ dependencies {
 
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
 
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }
