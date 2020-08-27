@@ -3,17 +3,22 @@ package org.cru.godtools
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.instantapps.InstantApps
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.dagger.ApplicationModule
-import org.cru.godtools.dagger.DaggerApplicationComponent
 import timber.log.Timber
 
+@HiltAndroidApp
 open class GodToolsApplication : DaggerApplication() {
     override fun onCreate() {
         // Enable application monitoring
@@ -43,8 +48,13 @@ open class GodToolsApplication : DaggerApplication() {
     }
 
     // region Dagger
-    override fun applicationInjector() =
-        DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ApplicationInjector : AndroidInjector<GodToolsApplication>
+
+    override fun applicationInjector(): AndroidInjector<GodToolsApplication> {
+        return EntryPoints.get(this, ApplicationInjector::class.java)
+    }
 
     @Inject
     internal lateinit var eagerInitializer: EagerSingletonInitializer
