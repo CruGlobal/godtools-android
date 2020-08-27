@@ -6,7 +6,6 @@ import androidx.annotation.LayoutRes
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import dagger.android.AndroidInjection
 import org.ccci.gto.android.common.compat.view.ViewCompat
 
 private const val EXTRA_NAV_TAB_ACTIVE = "org.cru.godtools.base.ui.activity.BaseDesignActivity.EXTRA_NAV_TAB_SELECTED"
@@ -14,11 +13,6 @@ private const val EXTRA_NAV_TAB_ACTIVE = "org.cru.godtools.base.ui.activity.Base
 abstract class BaseDesignActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int) : BaseActivity<B>(contentLayoutId),
     OnTabSelectedListener {
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     @CallSuper
     override fun onContentChanged() {
         super.onContentChanged()

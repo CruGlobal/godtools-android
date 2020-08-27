@@ -13,9 +13,6 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 @InstallIn(SingletonComponent::class)
 abstract class ProfileModule {
     @ContributesAndroidInjector
-    internal abstract fun profileActivityInjector(): ProfileActivity
-
-    @ContributesAndroidInjector
     internal abstract fun globalActivityFragmentInjector(): GlobalActivityFragment
 
     @Binds

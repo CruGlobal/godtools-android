@@ -13,9 +13,6 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 @InstallIn(SingletonComponent::class)
 abstract class ToolDetailsModule {
     @ContributesAndroidInjector
-    internal abstract fun toolDetailsActivityInjector(): ToolDetailsActivity
-
-    @ContributesAndroidInjector
     internal abstract fun toolDetailsFragmentInjector(): ToolDetailsFragment
 
     @Binds

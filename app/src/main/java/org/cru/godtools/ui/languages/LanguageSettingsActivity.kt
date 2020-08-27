@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -19,6 +20,7 @@ fun Activity.startLanguageSettingsActivity() {
         .also { startActivity(it) }
 }
 
+@AndroidEntryPoint
 class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // region Lifecycle
     override fun onContentChanged() {

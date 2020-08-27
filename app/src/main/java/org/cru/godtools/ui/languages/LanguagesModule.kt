@@ -16,12 +16,6 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 @InstallIn(SingletonComponent::class)
 abstract class LanguagesModule {
     @ContributesAndroidInjector
-    internal abstract fun languageSelectionActivityInjector(): LanguageSelectionActivity
-
-    @ContributesAndroidInjector
-    internal abstract fun languageSettingsActivityInjector(): LanguageSettingsActivity
-
-    @ContributesAndroidInjector
     internal abstract fun languageSettingsFragmentInjector(): LanguageSettingsFragment
 
     @Binds

@@ -45,6 +45,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import dagger.Lazy;
+import dagger.hilt.android.AndroidEntryPoint;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static androidx.lifecycle.Lifecycle.State.STARTED;
@@ -54,6 +55,7 @@ import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
+@AndroidEntryPoint
 public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding> implements ToolsFragment.Callbacks {
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 

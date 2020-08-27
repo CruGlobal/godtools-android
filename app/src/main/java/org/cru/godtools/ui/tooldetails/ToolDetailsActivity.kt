@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Constants.EXTRA_TOOL
@@ -20,6 +21,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) {
     )
 }
 
+@AndroidEntryPoint
 class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var tool: String
