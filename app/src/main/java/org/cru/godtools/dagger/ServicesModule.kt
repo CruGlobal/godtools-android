@@ -7,6 +7,9 @@ import androidx.work.WorkManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 import me.thekey.android.TheKey
@@ -25,11 +28,11 @@ import org.greenrobot.eventbus.EventBus
 @Module(
     includes = [
         EagerModule::class,
-        EventBusModule::class,
         ViewModelModule::class,
         WorkManagerModule::class
     ]
 )
+@InstallIn(SingletonComponent::class)
 abstract class ServicesModule {
     // TODO: TheKey doesn't need to be Eager once TheKey is only accessed via Dagger
     @Binds
@@ -50,7 +53,7 @@ abstract class ServicesModule {
     companion object {
         @Provides
         @Singleton
-        fun theKey(context: Context, eventBus: EventBus): TheKey {
+        fun theKey(@ApplicationContext context: Context, eventBus: EventBus): TheKey {
             TheKeyImpl.configure(
                 TheKeyImpl.Configuration.base()
                     .accountType(BuildConfig.ACCOUNT_TYPE)
@@ -62,7 +65,7 @@ abstract class ServicesModule {
 
         @Provides
         @Singleton
-        fun workManager(context: Context, workerFactory: DaggerWorkerFactory): WorkManager {
+        fun workManager(@ApplicationContext context: Context, workerFactory: DaggerWorkerFactory): WorkManager {
             WorkManager.initialize(context, Configuration.Builder().setWorkerFactory(workerFactory).build())
             TimberLogger(Log.ERROR).install()
             return WorkManager.getInstance(context)

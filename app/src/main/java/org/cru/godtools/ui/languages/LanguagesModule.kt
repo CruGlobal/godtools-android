@@ -5,12 +5,15 @@ import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 
+@Module
 @AssistedModule
-@Module(includes = [AssistedInject_LanguagesModule::class])
+@InstallIn(SingletonComponent::class)
 abstract class LanguagesModule {
     @ContributesAndroidInjector
     internal abstract fun languageSelectionActivityInjector(): LanguageSelectionActivity

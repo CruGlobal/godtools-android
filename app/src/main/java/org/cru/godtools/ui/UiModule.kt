@@ -2,22 +2,12 @@ package org.cru.godtools.ui
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import org.cru.godtools.ui.about.AboutModule
-import org.cru.godtools.ui.languages.LanguagesModule
-import org.cru.godtools.ui.profile.ProfileModule
-import org.cru.godtools.ui.tooldetails.ToolDetailsModule
-import org.cru.godtools.ui.tools.ToolsModule
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.keynote.godtools.android.activity.MainActivity
 
-@Module(
-    includes = [
-        AboutModule::class,
-        LanguagesModule::class,
-        ProfileModule::class,
-        ToolsModule::class,
-        ToolDetailsModule::class
-    ]
-)
+@Module
+@InstallIn(SingletonComponent::class)
 abstract class UiModule {
     @ContributesAndroidInjector
     internal abstract fun mainActivityInjector(): MainActivity
