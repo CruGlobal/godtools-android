@@ -13,7 +13,6 @@ import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
-import org.cru.godtools.tract.activity.ModalActivity
 import org.cru.godtools.tract.activity.ModalActivityDataModel
 import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.activity.TractActivityDataModel
@@ -35,9 +34,6 @@ abstract class TractRendererModule {
     @ViewModelKey(TractActivityDataModel::class)
     abstract fun tractActivityDataModel(f: TractActivityDataModel.Factory):
         AssistedSavedStateViewModelFactory<out ViewModel>
-
-    @ContributesAndroidInjector
-    internal abstract fun modalActivityInjector(): ModalActivity
 
     @Binds
     @IntoMap

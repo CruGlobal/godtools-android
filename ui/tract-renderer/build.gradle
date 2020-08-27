@@ -1,10 +1,12 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
+                arguments += [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
             }
         }
     }
