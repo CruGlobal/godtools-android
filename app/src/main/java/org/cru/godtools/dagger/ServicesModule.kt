@@ -19,13 +19,11 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
 import org.ccci.gto.android.common.dagger.workmanager.DaggerWorkerFactory
 import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
-import org.cru.godtools.api.ApiModule
 import org.cru.godtools.service.AccountListRegistrationService
 import org.greenrobot.eventbus.EventBus
 
 @Module(
     includes = [
-        ApiModule::class,
         EagerModule::class,
         EventBusModule::class,
         ViewModelModule::class,
