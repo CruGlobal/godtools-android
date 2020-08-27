@@ -3,9 +3,12 @@ package org.cru.godtools.base
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class SettingsModule {
     companion object {
         @Provides

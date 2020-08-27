@@ -7,7 +7,6 @@ import dagger.android.AndroidInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.cru.godtools.base.SettingsModule
 import org.cru.godtools.ui.UiModule
 
 @InstallIn(SingletonComponent::class)
@@ -16,7 +15,6 @@ import org.cru.godtools.ui.UiModule
         AndroidInjectionModule::class,
         ConfigModule::class,
         ServicesModule::class,
-        SettingsModule::class,
         UiModule::class
     ]
 )
