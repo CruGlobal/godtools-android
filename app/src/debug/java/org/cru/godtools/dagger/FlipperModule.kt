@@ -17,6 +17,8 @@ import dagger.Binds
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
@@ -29,6 +31,7 @@ import org.ccci.gto.android.common.facebook.flipper.plugins.databases.SQLiteOpen
 import org.keynote.godtools.android.db.GodToolsDatabase
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class FlipperModule {
     @Binds
     @IntoSet
