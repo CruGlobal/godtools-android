@@ -6,6 +6,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
@@ -21,7 +23,8 @@ import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @AssistedModule
-@Module(includes = [AssistedInject_AnalyticsModule::class])
+@Module
+@InstallIn(SingletonComponent::class)
 abstract class AnalyticsModule {
     @Binds
     @IntoMap

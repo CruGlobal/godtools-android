@@ -14,7 +14,7 @@ buildscript {
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.54.0',
-                findbugs           : '3.0.2',
+                findbugs           : '3.0.1',
                 gradleAndroidPlugin: '4.0.1',
                 gtoSupport         : '3.6.2-SNAPSHOT',
                 guava              : '29.0-android',
@@ -161,7 +161,7 @@ subprojects {
                 substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
 
                 // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
-                substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.davidliu.AssistedInject:assisted-inject-processor-dagger2:268bff6')
+                substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.frett.AssistedInject:assisted-inject-processor-dagger2:a298fbf')
             }
 
             // HACK: Fix transitive auto-service dependency until robolectric contains https://github.com/robolectric/robolectric/pull/5432 fix
