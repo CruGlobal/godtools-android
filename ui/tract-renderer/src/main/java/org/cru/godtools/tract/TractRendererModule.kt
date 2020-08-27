@@ -7,6 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
@@ -21,8 +23,9 @@ import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragmentDataModel
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
+@Module
 @AssistedModule
-@Module(includes = [AssistedInject_TractRendererModule::class])
+@InstallIn(SingletonComponent::class)
 abstract class TractRendererModule {
     @ContributesAndroidInjector
     internal abstract fun tractActivityInjector(): TractActivity
