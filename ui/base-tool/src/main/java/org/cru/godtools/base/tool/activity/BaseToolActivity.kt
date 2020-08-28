@@ -19,7 +19,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
-import dagger.android.AndroidInjection
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
@@ -58,7 +57,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()

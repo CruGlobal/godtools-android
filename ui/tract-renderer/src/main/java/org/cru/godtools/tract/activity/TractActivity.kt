@@ -21,6 +21,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.android.instantapps.InstantApps
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -89,6 +90,7 @@ private fun Bundle.populateTractActivityExtras(toolCode: String, vararg language
     putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
 }
 
+@AndroidEntryPoint
 class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
     TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks, TipBottomSheetDialogFragment.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms

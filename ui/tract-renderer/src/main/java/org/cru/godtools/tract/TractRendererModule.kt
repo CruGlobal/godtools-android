@@ -14,7 +14,6 @@ import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.tract.activity.ModalActivityDataModel
-import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.activity.TractActivityDataModel
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
@@ -26,9 +25,6 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 @AssistedModule
 @InstallIn(SingletonComponent::class)
 abstract class TractRendererModule {
-    @ContributesAndroidInjector
-    internal abstract fun tractActivityInjector(): TractActivity
-
     @Binds
     @IntoMap
     @ViewModelKey(TractActivityDataModel::class)
