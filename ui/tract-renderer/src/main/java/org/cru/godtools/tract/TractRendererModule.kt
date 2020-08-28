@@ -6,7 +6,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.android.ContributesAndroidInjector
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
@@ -17,7 +16,6 @@ import org.cru.godtools.tract.activity.ModalActivityDataModel
 import org.cru.godtools.tract.activity.TractActivityDataModel
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
-import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragmentDataModel
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
@@ -35,9 +33,6 @@ abstract class TractRendererModule {
     @IntoMap
     @ViewModelKey(ModalActivityDataModel::class)
     internal abstract fun modalActivityDataModel(dataModel: ModalActivityDataModel): ViewModel
-
-    @ContributesAndroidInjector
-    internal abstract fun tipBottomSheetDialogFragmentInjector(): TipBottomSheetDialogFragment
 
     @Binds
     @IntoMap

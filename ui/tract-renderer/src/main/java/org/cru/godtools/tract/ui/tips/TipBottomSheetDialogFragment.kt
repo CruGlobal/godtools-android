@@ -13,6 +13,7 @@ import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -33,6 +34,7 @@ import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 
+@AndroidEntryPoint
 class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBinding>(), TipCallbacks {
     internal constructor(tip: Tip) : this() {
         tool = tip.manifest.code
