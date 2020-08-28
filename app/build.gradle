@@ -36,7 +36,6 @@ android {
     kapt {
         javacOptions {
             option("-Adagger.fastInit=enabled")
-            option("-Adagger.hilt.disableModulesHaveInstallInCheck=true")
         }
     }
 
