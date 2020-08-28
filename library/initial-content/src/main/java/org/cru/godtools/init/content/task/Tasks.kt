@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.concurrent.futures.await
 import dagger.Reusable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -39,7 +40,7 @@ private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
 
 @Reusable
 internal class Tasks @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,

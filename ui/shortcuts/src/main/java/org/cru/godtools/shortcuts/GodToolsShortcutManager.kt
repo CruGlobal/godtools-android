@@ -13,6 +13,7 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.Locale
@@ -56,7 +57,7 @@ private const val TYPE_TOOL = "tool|"
 
 @Singleton
 class GodToolsShortcutManager @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
     private val settings: Settings

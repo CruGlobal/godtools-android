@@ -18,6 +18,7 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
@@ -41,7 +42,7 @@ abstract class FlipperModule {
         @Provides
         @Singleton
         internal fun provideFlipper(
-            context: Context,
+            @ApplicationContext context: Context,
             plugins: Lazy<Set<@JvmSuppressWildcards FlipperPlugin>>
         ): FlipperClient? {
             if (!FlipperUtils.shouldEnableFlipper(context)) return null
@@ -58,7 +59,7 @@ abstract class FlipperModule {
         @IntoSet
         @Provides
         @Singleton
-        internal fun databasesFlipperPlugin(context: Context, db: GodToolsDatabase): FlipperPlugin =
+        internal fun databasesFlipperPlugin(@ApplicationContext context: Context, db: GodToolsDatabase): FlipperPlugin =
             DatabasesFlipperPlugin(
                 SqliteDatabaseDriver(
                     context,

@@ -14,6 +14,7 @@ import com.snowplowanalytics.snowplow.tracker.events.Event
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView
 import com.snowplowanalytics.snowplow.tracker.events.Structured
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import me.thekey.android.Attributes
@@ -43,7 +44,7 @@ private const val CONTEXT_ATTR_SCORING_URI = "uri"
 
 @Singleton
 class SnowplowAnalyticsService @Inject internal constructor(
-    context: Context,
+    @ApplicationContext context: Context,
     eventBus: EventBus,
     okhttp: OkHttpClient,
     private val theKey: TheKey

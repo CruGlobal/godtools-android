@@ -3,6 +3,7 @@ package org.cru.godtools.analytics.facebook
 import android.content.Context
 import androidx.annotation.WorkerThread
 import com.facebook.appevents.AppEventsLogger
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -13,7 +14,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 @Singleton
-class FacebookAnalyticsService @Inject internal constructor(context: Context, eventBus: EventBus) {
+class FacebookAnalyticsService @Inject internal constructor(@ApplicationContext context: Context, eventBus: EventBus) {
     private val logger = AppEventsLogger.newLogger(context)
 
     init {

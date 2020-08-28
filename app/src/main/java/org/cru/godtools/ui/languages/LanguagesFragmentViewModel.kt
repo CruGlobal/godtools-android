@@ -10,6 +10,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
@@ -24,7 +25,7 @@ private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
 class LanguagesFragmentViewModel @AssistedInject constructor(
-    context: Context,
+    @ApplicationContext context: Context,
     dao: GodToolsDao,
     settings: Settings,
     @Assisted private val savedState: SavedStateHandle

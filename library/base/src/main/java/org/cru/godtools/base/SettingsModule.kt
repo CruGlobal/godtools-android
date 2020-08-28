@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -13,6 +14,6 @@ abstract class SettingsModule {
     companion object {
         @Provides
         @Singleton
-        internal fun provideSettings(context: Context) = Settings.getInstance(context)
+        internal fun provideSettings(@ApplicationContext context: Context) = Settings.getInstance(context)
     }
 }

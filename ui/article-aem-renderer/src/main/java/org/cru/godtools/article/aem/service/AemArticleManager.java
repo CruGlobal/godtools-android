@@ -75,6 +75,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import androidx.room.InvalidationTracker;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import kotlin.sequences.SequencesKt;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -125,8 +126,9 @@ public class AemArticleManager {
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     @Inject
-    AemArticleManager(@NonNull final Context context, final EventBus eventBus, final GodToolsDao dao, final AemApi api,
-                      final ManifestManager manifestManager, final ArticleRoomDatabase aemDb) {
+    AemArticleManager(@ApplicationContext @NonNull final Context context, final EventBus eventBus,
+                      final GodToolsDao dao, final AemApi api, final ManifestManager manifestManager,
+                      final ArticleRoomDatabase aemDb) {
         mApi = api;
         mContext = context.getApplicationContext();
         mAemDb = aemDb;

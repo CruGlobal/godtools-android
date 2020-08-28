@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.ccci.gto.android.common.app.ApplicationUtils
@@ -44,7 +45,7 @@ private const val DATABASE_VERSION = 44
  */
 
 @Singleton
-class GodToolsDatabase @Inject internal constructor(private val context: Context) :
+class GodToolsDatabase @Inject internal constructor(@ApplicationContext private val context: Context) :
     WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
         try {
