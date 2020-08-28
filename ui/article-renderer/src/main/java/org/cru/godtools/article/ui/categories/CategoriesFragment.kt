@@ -3,6 +3,7 @@ package org.cru.godtools.article.ui.categories
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.map
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
 import org.ccci.gto.android.common.util.findListener
@@ -11,6 +12,7 @@ import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.xml.model.Category
 
+@AndroidEntryPoint
 class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, CategorySelectedListener {
     constructor() : super(R.layout.article_categories_fragment)
     constructor(code: String, locale: Locale) : super(R.layout.article_categories_fragment, code, locale)
