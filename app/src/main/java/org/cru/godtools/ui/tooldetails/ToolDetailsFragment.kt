@@ -14,6 +14,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.Lazy
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
@@ -33,6 +34,7 @@ import org.cru.godtools.util.openToolActivity
 import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
 
+@AndroidEntryPoint
 class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
     LinkClickedListener {
     constructor(toolCode: String) : this() {

@@ -8,11 +8,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import javax.inject.Inject
-import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 
-abstract class BaseFragment<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int?) :
-    Fragment(contentLayoutId ?: INVALID_LAYOUT_RES) {
+abstract class BaseFragment<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
+    Fragment(contentLayoutId) {
     // region Lifecycle
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

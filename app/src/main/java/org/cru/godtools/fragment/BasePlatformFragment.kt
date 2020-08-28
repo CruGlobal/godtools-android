@@ -1,6 +1,5 @@
 package org.cru.godtools.fragment
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.annotation.CallSuper
@@ -8,7 +7,6 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -23,7 +21,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
-abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int? = null) : BaseFragment<B>(layoutId) {
+abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int) : BaseFragment<B>(layoutId) {
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
@@ -31,11 +29,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     private val settingsChangeListener = ChangeListener()
 
     // region Lifecycle
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
