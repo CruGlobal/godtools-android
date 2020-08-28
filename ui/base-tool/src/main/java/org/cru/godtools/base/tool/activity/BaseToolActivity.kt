@@ -14,6 +14,7 @@ import androidx.core.view.forEach
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.getkeepsafe.taptargetview.TapTarget
@@ -156,18 +157,25 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Toolbar update logic
 
     // region Share tool logic
-    private var shareMenuItem: MenuItem? = null
+    private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
+    protected open val shareMenuItemVisible: LiveData<Boolean> get() = _shareMenuItemVisible
 
-    private fun Menu.setupShareMenuItem() {
-        shareMenuItem = findItem(R.id.action_share)
+    private var shareMenuItemObserver: Observer<Boolean>? = null
+    protected fun Menu.setupShareMenuItem() {
+        shareMenuItemObserver?.let { shareMenuItemVisible.removeObserver(it) }
+        shareMenuItemObserver = shareMenuItemVisible.observe(this@BaseToolActivity) {
+            findItem(R.id.action_share)?.apply {
+                isVisible = it
+                isEnabled = it
+            }
+        }
     }
 
     protected fun updateShareMenuItem() {
-        shareMenuItem?.isVisible = hasShareLinkUri()
+        _shareMenuItemVisible.value = shareLinkUri != null
         showNextFeatureDiscovery()
     }
 
-    protected open fun hasShareLinkUri() = shareLinkUri != null
     protected open val shareLinkTitle get() = activeManifest?.title
     @get:StringRes
     protected open val shareLinkMessageRes get() = R.string.share_general_message
@@ -263,7 +271,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_TOOL_SHARE -> toolbar != null && shareMenuItem?.isVisible == true && hasShareLinkUri()
+        FEATURE_TOOL_SHARE -> toolbar != null && shareMenuItemVisible.value == true
         else -> super.canShowFeatureDiscovery(feature)
     }
 

@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.common.util.concurrent.Futures
 import java.util.Locale
@@ -161,7 +162,7 @@ class AemArticleActivity :
     // endregion Sync logic
 
     // region Share Link logic
-    override fun hasShareLinkUri() = dataModel.article.value?.canonicalUri != null
+    override val shareMenuItemVisible by lazy { dataModel.article.map { it?.canonicalUri != null } }
     override val shareLinkTitle get() = dataModel.article.value?.title ?: super.shareLinkTitle
     override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
     // endregion Share Link logic
