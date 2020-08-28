@@ -1,8 +1,10 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [
+                arguments += [
                         "room.schemaLocation": "$projectDir/room-schemas".toString(),
                         "room.incremental"   : "true"
                 ]

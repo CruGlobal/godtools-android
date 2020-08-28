@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.lifecycle.observe
 import com.google.common.util.concurrent.Futures
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +43,7 @@ fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articl
         .also { startActivity(it) }
 }
 
+@AndroidEntryPoint
 class AemArticleActivity :
     BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity, false) {
     // these properties should be treated as final and only set/modified in onCreate()

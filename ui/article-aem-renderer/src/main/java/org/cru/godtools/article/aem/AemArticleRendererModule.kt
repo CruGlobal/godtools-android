@@ -23,7 +23,6 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.service.AemArticleManager
-import org.cru.godtools.article.aem.ui.AemArticleActivity
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -32,9 +31,6 @@ import retrofit2.create
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AemArticleRendererModule {
-    @ContributesAndroidInjector
-    internal abstract fun aemArticleActivityInjector(): AemArticleActivity
-
     @ContributesAndroidInjector
     internal abstract fun aemArticleFragmentInjector(): AemArticleFragment
 

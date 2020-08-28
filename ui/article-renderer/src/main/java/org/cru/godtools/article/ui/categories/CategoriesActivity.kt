@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import org.cru.godtools.article.R
 import org.cru.godtools.article.ui.articles.startArticlesActivity
@@ -25,6 +26,7 @@ fun Activity.startCategoriesActivity(toolCode: String, language: Locale) {
     startActivity(createCategoriesIntent(toolCode, language))
 }
 
+@AndroidEntryPoint
 class CategoriesActivity :
     BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity),
     CategorySelectedListener {
