@@ -46,7 +46,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
-    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
@@ -58,7 +58,6 @@ dependencies {
     testImplementation "androidx.room:room-testing:${deps.androidX.room}"
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
-    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
 }

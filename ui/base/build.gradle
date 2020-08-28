@@ -29,6 +29,6 @@ dependencies {
     api "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.google.dagger:dagger-android-support:${deps.dagger}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 }

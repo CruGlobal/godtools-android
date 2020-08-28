@@ -12,7 +12,7 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }
