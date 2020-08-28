@@ -1,16 +1,17 @@
 package org.cru.godtools.base.tool.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
+import dagger.android.support.AndroidSupportInjection
 import java.util.Locale
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import splitties.fragmentargs.arg
 
-abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int) :
-    BaseFragment<B>(contentLayoutId) {
+abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int) : BaseFragment<B>(contentLayoutId) {
     constructor(@LayoutRes contentLayoutId: Int, tool: String, locale: Locale) : this(contentLayoutId) {
         this.tool = tool
         this.locale = locale
@@ -20,6 +21,11 @@ abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     private var locale by arg<Locale>()
 
     // region Lifecycle
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataModel()

@@ -1,5 +1,6 @@
 package org.cru.godtools.fragment
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.annotation.CallSuper
@@ -7,6 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -29,6 +31,11 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     private val settingsChangeListener = ChangeListener()
 
     // region Lifecycle
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

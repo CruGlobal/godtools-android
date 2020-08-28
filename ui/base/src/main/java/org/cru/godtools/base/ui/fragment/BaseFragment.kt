@@ -1,6 +1,5 @@
 package org.cru.godtools.base.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -8,20 +7,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 
-abstract class BaseFragment<B : ViewBinding> @JvmOverloads constructor(
-    @LayoutRes contentLayoutId: Int? = INVALID_LAYOUT_RES
-) : Fragment(contentLayoutId ?: INVALID_LAYOUT_RES) {
+abstract class BaseFragment<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int?) :
+    Fragment(contentLayoutId ?: INVALID_LAYOUT_RES) {
     // region Lifecycle
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding(view, savedInstanceState)
