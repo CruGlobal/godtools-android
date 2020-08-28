@@ -4,7 +4,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.android.ContributesAndroidInjector
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
@@ -18,9 +17,6 @@ abstract class ShortcutModule {
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
     abstract fun shortcutManagerEagerSingleton(shortcutManager: GodToolsShortcutManager): Any
-
-    @ContributesAndroidInjector
-    internal abstract fun localeUpdateBroadcastReceiverInjector(): LocaleUpdateBroadcastReceiver
 
     companion object {
         @IntoSet
