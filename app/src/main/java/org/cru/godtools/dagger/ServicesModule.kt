@@ -32,12 +32,6 @@ import org.greenrobot.eventbus.EventBus
 )
 @InstallIn(SingletonComponent::class)
 abstract class ServicesModule {
-    // TODO: TheKey doesn't need to be Eager once TheKey is only accessed via Dagger
-    @Binds
-    @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
-    abstract fun eagerTheKey(theKey: TheKey): Any
-
     @Binds
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
