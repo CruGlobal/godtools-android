@@ -33,6 +33,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +44,7 @@ import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
 import androidx.customview.view.AbsSavedState;
+import dagger.hilt.android.AndroidEntryPoint;
 
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
@@ -51,6 +54,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
+@AndroidEntryPoint
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int DEFAULT_GUTTER_SIZE = 16;
@@ -77,7 +81,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private int mGutterSize = 0;
 
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
-    private final Settings mSettings;
+    @Inject
+    Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -139,7 +144,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super(context, attrs, defStyleAttr);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
-        mSettings = Settings.Companion.getInstance(context.getApplicationContext());
         init();
     }
 
@@ -149,7 +153,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super(context, attrs, defStyleAttr, defStyleRes);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
-        mSettings = Settings.Companion.getInstance(context.getApplicationContext());
         init();
     }
 
