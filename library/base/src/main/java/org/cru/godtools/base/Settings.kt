@@ -7,14 +7,16 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 import me.thekey.android.TheKey
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
-import org.cru.godtools.base.util.SingletonHolder
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
@@ -25,13 +27,14 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 private const val VERSION_5_1_4 = 4033503
 private const val VERSION_5_2_0 = 4035089
 
-class Settings @VisibleForTesting internal constructor(
-    private val context: Context,
-    private val theKey: TheKey = TheKey.getInstance(context)
+@Singleton
+class Settings @Inject internal constructor(
+    @ApplicationContext private val context: Context,
+    private val theKey: TheKey
 ) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
-    companion object : SingletonHolder<Settings, Context>({ Settings(it.applicationContext) }) {
+    companion object {
         const val PREF_PRIMARY_LANGUAGE = "languagePrimary"
         const val PREF_PARALLEL_LANGUAGE = "languageParallel"
         const val PREF_FEATURE_DISCOVERED = "feature_discovered."
