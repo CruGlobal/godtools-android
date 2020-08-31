@@ -31,6 +31,7 @@ dependencies {
     implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.activity}"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
     api "androidx.lifecycle:lifecycle-common-java8:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
@@ -60,6 +61,7 @@ dependencies {
 
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
 
+    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"

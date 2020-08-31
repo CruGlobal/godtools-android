@@ -7,8 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import javax.inject.Inject
-import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 
 abstract class BaseFragment<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     Fragment(contentLayoutId) {
@@ -23,14 +21,6 @@ abstract class BaseFragment<B : ViewBinding> protected constructor(@LayoutRes co
         super.onDestroyView()
     }
     // endregion Lifecycle
-
-    // region ViewModelProvider.Factory
-    @Inject
-    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
-    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
-
-    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
-    // endregion ViewModelProvider.Factory
 
     // region View & Data Binding
     private var binding: B? = null

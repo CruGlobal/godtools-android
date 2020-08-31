@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
@@ -141,7 +142,7 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     }
 }
 
-internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
+internal class TipBottomSheetDialogFragmentDataModel @ViewModelInject constructor(
     dao: GodToolsDao,
     manifestManager: ManifestManager
 ) : LatestPublishedManifestDataModel(manifestManager) {

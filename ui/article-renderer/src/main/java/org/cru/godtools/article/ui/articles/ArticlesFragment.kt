@@ -3,6 +3,7 @@ package org.cru.godtools.article.ui.articles
 import android.os.Bundle
 import androidx.concurrent.futures.await
 import androidx.fragment.app.viewModels
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -108,7 +109,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel @Inject constructor(
+class ArticlesFragmentDataModel @ViewModelInject constructor(
     manifestManager: ManifestManager,
     private val articleDao: ArticleDao
 ) : LatestPublishedManifestDataModel(manifestManager) {

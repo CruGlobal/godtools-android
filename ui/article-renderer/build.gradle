@@ -15,6 +15,7 @@ dependencies {
 
     implementation "androidx.concurrent:concurrent-futures-ktx:${deps.androidX.concurrent}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
@@ -33,6 +34,7 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
+    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
 }

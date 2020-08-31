@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityOptionsCompat
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
@@ -97,7 +98,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     }
 }
 
-class ModalActivityDataModel @Inject constructor(manifestManager: ManifestManager) :
+class ModalActivityDataModel @ViewModelInject constructor(manifestManager: ManifestManager) :
     LatestPublishedManifestDataModel(manifestManager) {
     val pageId = MutableLiveData<String?>()
     val modalId = MutableLiveData<String?>()

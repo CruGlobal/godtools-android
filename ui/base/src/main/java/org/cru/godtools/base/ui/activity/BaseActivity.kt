@@ -19,7 +19,6 @@ import androidx.viewbinding.ViewBinding
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
-import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 
@@ -75,14 +74,6 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
         outState.saveFeatureDiscoveryState()
     }
     // endregion Lifecycle
-
-    // region ViewModelProvider.Factory
-    @Inject
-    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
-    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, intent.extras) }
-
-    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
-    // endregion ViewModelProvider.Factory
 
     // region View & Data Binding
     protected lateinit var binding: B

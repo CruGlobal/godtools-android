@@ -32,6 +32,7 @@ dependencies {
 
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
     implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
@@ -57,6 +58,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "androidx.room:room-testing:${deps.androidX.room}"
 
+    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"

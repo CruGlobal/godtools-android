@@ -23,6 +23,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
@@ -41,6 +42,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
+    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
 

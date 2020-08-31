@@ -6,8 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import javax.inject.Inject
-import org.ccci.gto.android.common.dagger.viewmodel.DaggerSavedStateViewModelProviderFactory
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialogFragment() {
     // region Lifecycle
@@ -21,14 +19,6 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
         super.onDestroyView()
     }
     // endregion Lifecycle
-
-    // region ViewModelProvider.Factory
-    @Inject
-    internal lateinit var viewModelProviderFactory: DaggerSavedStateViewModelProviderFactory
-    private val defaultViewModelProvider by lazy { viewModelProviderFactory.create(this, arguments) }
-
-    override fun getDefaultViewModelProviderFactory() = defaultViewModelProvider
-    // endregion ViewModelProvider.Factory
 
     // region View & Data Binding
     protected var binding: B? = null

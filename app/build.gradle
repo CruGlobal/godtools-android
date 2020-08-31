@@ -193,8 +193,6 @@ dependencies {
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
 
-    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
-
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
@@ -207,7 +205,6 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
-    kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
 

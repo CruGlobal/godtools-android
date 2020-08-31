@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import dagger.Binds
 import dagger.Module
@@ -10,18 +9,15 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
-import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
 import org.cru.godtools.article.aem.service.AemArticleManager
-import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
@@ -29,11 +25,6 @@ import retrofit2.create
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AemArticleRendererModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(AemArticleViewModel::class)
-    internal abstract fun aemArticleViewModel(dataModel: AemArticleViewModel): ViewModel
-
     @Binds
     @IntoSet
     @EagerSingleton(on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED, threadMode = EagerSingleton.ThreadMode.ASYNC)

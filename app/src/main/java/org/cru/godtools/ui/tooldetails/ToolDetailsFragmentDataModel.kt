@@ -1,12 +1,12 @@
 package org.cru.godtools.ui.tooldetails
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -23,7 +23,7 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-class ToolDetailsFragmentDataModel @Inject constructor(
+class ToolDetailsFragmentDataModel @ViewModelInject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,

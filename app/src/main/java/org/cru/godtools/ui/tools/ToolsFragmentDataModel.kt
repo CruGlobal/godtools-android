@@ -1,11 +1,11 @@
 package org.cru.godtools.ui.tools
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import java.util.Locale
-import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -21,7 +21,8 @@ import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, settings: Settings) : ViewModel() {
+class ToolsFragmentDataModel @ViewModelInject constructor(private val dao: GodToolsDao, settings: Settings) :
+    ViewModel() {
     val mode = MutableLiveData(MODE_ADDED)
 
     val tools = mode.distinctUntilChanged().switchMap { mode ->
