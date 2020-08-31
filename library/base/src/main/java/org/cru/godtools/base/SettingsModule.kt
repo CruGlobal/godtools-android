@@ -10,10 +10,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class SettingsModule {
-    companion object {
-        @Provides
-        @Singleton
-        internal fun provideSettings(@ApplicationContext context: Context) = Settings.getInstance(context)
-    }
+object SettingsModule {
+    @Provides
+    @Singleton
+    internal fun provideSettings(@ApplicationContext context: Context) = Settings.getInstance(context)
 }

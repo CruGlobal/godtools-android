@@ -18,28 +18,26 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AnalyticsModule {
-    companion object {
-        @IntoSet
-        @Provides
-        @Reusable
-        internal fun analyticsEventBusIndex(): SubscriberInfoIndex = AnalyticsEventBusIndex()
+object AnalyticsModule {
+    @IntoSet
+    @Provides
+    @Reusable
+    internal fun analyticsEventBusIndex(): SubscriberInfoIndex = AnalyticsEventBusIndex()
 
-        @Provides
-        @ElementsIntoSet
-        @EagerSingleton(threadMode = ThreadMode.MAIN)
-        internal fun mainEagerSingletons(adobe: AdobeAnalyticsService, appsFlyer: AppsFlyerAnalyticsService) =
-            setOf<Any>(adobe, appsFlyer)
+    @Provides
+    @ElementsIntoSet
+    @EagerSingleton(threadMode = ThreadMode.MAIN)
+    internal fun mainEagerSingletons(adobe: AdobeAnalyticsService, appsFlyer: AppsFlyerAnalyticsService) =
+        setOf<Any>(adobe, appsFlyer)
 
-        @Provides
-        @ElementsIntoSet
-        @EagerSingleton(threadMode = ThreadMode.MAIN_ASYNC)
-        internal fun mainAsyncEagerSingletons(firebase: FirebaseAnalyticsService) = setOf<Any>(firebase)
+    @Provides
+    @ElementsIntoSet
+    @EagerSingleton(threadMode = ThreadMode.MAIN_ASYNC)
+    internal fun mainAsyncEagerSingletons(firebase: FirebaseAnalyticsService) = setOf<Any>(firebase)
 
-        @Provides
-        @ElementsIntoSet
-        @EagerSingleton(threadMode = ThreadMode.ASYNC)
-        internal fun backgroundEagerSingletons(facebook: FacebookAnalyticsService, snowplow: SnowplowAnalyticsService) =
-            setOf<Any>(facebook, snowplow)
-    }
+    @Provides
+    @ElementsIntoSet
+    @EagerSingleton(threadMode = ThreadMode.ASYNC)
+    internal fun backgroundEagerSingletons(facebook: FacebookAnalyticsService, snowplow: SnowplowAnalyticsService) =
+        setOf<Any>(facebook, snowplow)
 }
