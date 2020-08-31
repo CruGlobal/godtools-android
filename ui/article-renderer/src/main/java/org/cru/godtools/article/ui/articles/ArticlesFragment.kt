@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import splitties.fragmentargs.argOrNull
 
+@AndroidEntryPoint
 class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
     constructor(code: String, locale: Locale, category: String? = null) :

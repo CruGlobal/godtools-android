@@ -9,6 +9,8 @@ import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -44,6 +46,7 @@ import retrofit2.create
 import timber.log.Timber
 
 @Module(includes = [OkHttp3Module::class])
+@InstallIn(SingletonComponent::class)
 object ApiModule {
     @Provides
     @Singleton

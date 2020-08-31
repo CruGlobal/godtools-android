@@ -3,6 +3,7 @@ package org.cru.godtools.article.ui.articles
 import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
@@ -23,6 +24,7 @@ fun Activity.startArticlesActivity(toolCode: String, language: Locale, category:
         .also { this.startActivity(it) }
 }
 
+@AndroidEntryPoint
 class ArticlesActivity :
     BaseArticleActivity<ToolGenericFragmentActivityBinding>(R.layout.tool_generic_fragment_activity),
     ArticlesFragment.Callbacks {

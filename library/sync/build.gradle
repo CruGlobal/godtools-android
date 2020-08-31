@@ -13,8 +13,10 @@ dependencies {
     api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
 }

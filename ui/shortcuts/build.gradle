@@ -1,8 +1,10 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.shortcuts.ShortcutsEventBusIndex']
+                arguments += [eventBusIndex: 'org.cru.godtools.shortcuts.ShortcutsEventBusIndex']
             }
         }
     }
@@ -24,10 +26,11 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
-    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

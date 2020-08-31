@@ -69,8 +69,9 @@ private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
-abstract class BasePlatformActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int = INVALID_LAYOUT_RES) :
+abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     BaseDesignActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
+    protected constructor() : this(INVALID_LAYOUT_RES)
     @Inject
     protected lateinit var theKey: TheKey
 

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import me.thekey.android.livedata.getAttributesLiveData
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.cru.godtools.R
@@ -20,6 +21,7 @@ fun Activity.startProfileActivity() = startActivity(
         .putExtras(BaseActivity.buildExtras(this))
 )
 
+@AndroidEntryPoint
 class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>(R.layout.profile_activity) {
     // region Lifecycle
     override fun onContentChanged() {

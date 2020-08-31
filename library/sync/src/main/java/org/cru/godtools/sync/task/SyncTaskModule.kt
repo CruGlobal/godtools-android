@@ -3,6 +3,8 @@ package org.cru.godtools.sync.task
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
 
@@ -12,6 +14,7 @@ import kotlin.reflect.KClass
 annotation class SyncTaskKey(val value: KClass<out BaseSyncTasks>)
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class SyncTaskModule {
     @Binds
     @IntoMap

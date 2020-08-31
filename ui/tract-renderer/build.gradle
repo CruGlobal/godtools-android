@@ -1,10 +1,12 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
+                arguments += [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
             }
         }
     }
@@ -50,15 +52,16 @@ dependencies {
     api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
-    implementation "com.google.dagger:dagger-android:${deps.dagger}"
+    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
 
-    kapt "com.google.dagger:dagger-android-processor:${deps.dagger}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 

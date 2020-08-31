@@ -7,6 +7,9 @@ import androidx.work.WorkManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 import me.thekey.android.TheKey
@@ -19,29 +22,17 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelModule
 import org.ccci.gto.android.common.dagger.workmanager.DaggerWorkerFactory
 import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
-import org.cru.godtools.analytics.AnalyticsModule
-import org.cru.godtools.api.ApiModule
-import org.cru.godtools.download.manager.DownloadManagerModule
-import org.cru.godtools.init.content.InitialContentModule
 import org.cru.godtools.service.AccountListRegistrationService
-import org.cru.godtools.shortcuts.ShortcutModule
-import org.cru.godtools.sync.SyncModule
 import org.greenrobot.eventbus.EventBus
 
 @Module(
     includes = [
-        AnalyticsModule::class,
-        ApiModule::class,
-        DownloadManagerModule::class,
         EagerModule::class,
-        EventBusModule::class,
-        InitialContentModule::class,
-        ShortcutModule::class,
-        SyncModule::class,
         ViewModelModule::class,
         WorkManagerModule::class
     ]
 )
+@InstallIn(SingletonComponent::class)
 abstract class ServicesModule {
     // TODO: TheKey doesn't need to be Eager once TheKey is only accessed via Dagger
     @Binds
@@ -62,7 +53,7 @@ abstract class ServicesModule {
     companion object {
         @Provides
         @Singleton
-        fun theKey(context: Context, eventBus: EventBus): TheKey {
+        fun theKey(@ApplicationContext context: Context, eventBus: EventBus): TheKey {
             TheKeyImpl.configure(
                 TheKeyImpl.Configuration.base()
                     .accountType(BuildConfig.ACCOUNT_TYPE)
@@ -74,7 +65,7 @@ abstract class ServicesModule {
 
         @Provides
         @Singleton
-        fun workManager(context: Context, workerFactory: DaggerWorkerFactory): WorkManager {
+        fun workManager(@ApplicationContext context: Context, workerFactory: DaggerWorkerFactory): WorkManager {
             WorkManager.initialize(context, Configuration.Builder().setWorkerFactory(workerFactory).build())
             TimberLogger(Log.ERROR).install()
             return WorkManager.getInstance(context)

@@ -2,10 +2,13 @@ package org.cru.godtools.init.content
 
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class InitialContentModule {
     @Binds
     @IntoSet

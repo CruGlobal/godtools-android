@@ -1,14 +1,15 @@
 package org.cru.godtools.dagger
 
-import android.app.Application
 import android.content.Context
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import org.cru.godtools.base.SettingsModule
-import org.cru.godtools.ui.UiModule
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
-@Module(includes = [ConfigModule::class, ServicesModule::class, SettingsModule::class, UiModule::class])
-class ApplicationModule(@get:Provides val app: Application) {
-    @get:Provides
-    val context: Context get() = app
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class ApplicationModule {
+    @Binds
+    abstract fun context(@ApplicationContext context: Context): Context
 }

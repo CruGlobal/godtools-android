@@ -10,6 +10,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
@@ -41,6 +42,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
         .toBundle()
 )
 
+@AndroidEntryPoint
 class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
     @Inject

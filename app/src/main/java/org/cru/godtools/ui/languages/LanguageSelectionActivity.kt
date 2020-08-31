@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.cru.godtools.R
@@ -24,6 +25,7 @@ fun Activity.startLanguageSelectionActivity(primary: Boolean) {
         .also { startActivity(it) }
 }
 
+@AndroidEntryPoint
 class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBinding>(), LocaleSelectedListener {
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager

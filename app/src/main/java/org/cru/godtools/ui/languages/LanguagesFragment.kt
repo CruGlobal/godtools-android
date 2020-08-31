@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -18,6 +19,7 @@ import org.cru.godtools.databinding.LanguagesFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import splitties.fragmentargs.argOrDefault
 
+@AndroidEntryPoint
 class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
     LocaleSelectedListener {
     constructor(primary: Boolean) : this() {

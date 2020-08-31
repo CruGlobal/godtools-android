@@ -1,19 +1,20 @@
 package org.cru.godtools.shortcuts
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import org.cru.godtools.base.dagger.HiltBroadcastReceiver
 
-class LocaleUpdateBroadcastReceiver : BroadcastReceiver() {
+@AndroidEntryPoint
+class LocaleUpdateBroadcastReceiver : HiltBroadcastReceiver() {
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_LOCALE_CHANGED) return
 
-        AndroidInjection.inject(this, context)
+        super.onReceive(context, intent)
         shortcutManager.onUpdateSystemLocale(goAsync())
     }
 }

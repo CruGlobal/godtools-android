@@ -7,7 +7,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.android.ContributesAndroidInjector
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
@@ -18,22 +20,15 @@ import org.ccci.gto.android.common.dagger.viewmodel.ViewModelKey
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
-import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.service.AemArticleManager
-import org.cru.godtools.article.aem.ui.AemArticleActivity
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class AemArticleRendererModule {
-    @ContributesAndroidInjector
-    internal abstract fun aemArticleActivityInjector(): AemArticleActivity
-
-    @ContributesAndroidInjector
-    internal abstract fun aemArticleFragmentInjector(): AemArticleFragment
-
     @Binds
     @IntoMap
     @ViewModelKey(AemArticleViewModel::class)
@@ -47,7 +42,7 @@ abstract class AemArticleRendererModule {
     companion object {
         @Provides
         @Singleton
-        fun articleRoomDatabase(context: Context) =
+        fun articleRoomDatabase(@ApplicationContext context: Context) =
             Room.databaseBuilder(context, ArticleRoomDatabase::class.java, ArticleRoomDatabase.DATABASE_NAME)
                 .enableMigrations()
                 .build()
