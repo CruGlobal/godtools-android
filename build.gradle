@@ -141,6 +141,7 @@ subprojects {
             force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
             force "androidx.loader:loader:${deps.androidX.loader}"
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
+            force "com.google.code.findbugs:jsr305:${deps.findbugs}"
             force "junit:junit:${deps.junit}"
 
             // force the correct version of transitive coroutine libraries
