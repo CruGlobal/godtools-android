@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -139,9 +138,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     private var pinShortcutObserver: Observer<PendingShortcut?>? = null
 
     private fun Menu.setupPinShortcutAction() {
-        pinShortcutObserver = findItem(R.id.action_pin_shortcut)?.let { action ->
-            dataModel.shortcut.observe(this@ToolDetailsFragment) { action.isVisible = it != null }
-        }
+        pinShortcutObserver = findItem(R.id.action_pin_shortcut)
+            ?.let { action -> Observer<PendingShortcut?> { action.isVisible = it != null } }
+            ?.also { dataModel.shortcut.observe(this@ToolDetailsFragment, it) }
     }
 
     private fun cleanupPinShortcutAction() {
