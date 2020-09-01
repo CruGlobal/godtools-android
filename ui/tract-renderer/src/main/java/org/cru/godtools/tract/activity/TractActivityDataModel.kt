@@ -2,6 +2,8 @@ package org.cru.godtools.tract.activity
 
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -9,8 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import java.util.Locale
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -20,7 +20,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.compat.util.LocaleCompat
-import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -38,16 +37,13 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 private const val STATE_LIVE_SHARE_TUTORIAL_SHOWN = "liveShareTutorialShown"
 
-class TractActivityDataModel @AssistedInject constructor(
+class TractActivityDataModel @ViewModelInject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
-    @AssistedInject.Factory
-    interface Factory : AssistedSavedStateViewModelFactory<TractActivityDataModel>
-
     val tool = MutableLiveData<String?>()
     val isInitialSyncFinished = MutableLiveData(false)
     private val distinctTool = tool.distinctUntilChanged()

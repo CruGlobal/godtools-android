@@ -1,11 +1,11 @@
 package org.cru.godtools.tract.liveshare
 
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
 import java.util.UUID
@@ -14,7 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.dagger.viewmodel.AssistedSavedStateViewModelFactory
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.model.Identifier
 import org.ccci.gto.android.common.scarlet.actioncable.model.Message
@@ -29,14 +28,11 @@ import timber.log.Timber
 private const val TAG = "TractPublisherContrller"
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TractPublisherController @AssistedInject constructor(
+class TractPublisherController @ViewModelInject constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    @AssistedInject.Factory
-    interface Factory : AssistedSavedStateViewModelFactory<TractPublisherController>
-
     private val channelId: String
         get() = savedStateHandle[PARAM_CHANNEL_ID]
             ?: UUID.randomUUID().toString().also { savedStateHandle[PARAM_CHANNEL_ID] = it }

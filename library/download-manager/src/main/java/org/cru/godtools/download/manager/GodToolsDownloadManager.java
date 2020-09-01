@@ -81,6 +81,7 @@ import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -114,7 +115,8 @@ public final class GodToolsDownloadManager {
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
     @Inject
-    GodToolsDownloadManager(@NonNull final Context context, @NonNull final AttachmentsApi attachmentsApi,
+    GodToolsDownloadManager(@ApplicationContext @NonNull final Context context,
+                            @NonNull final AttachmentsApi attachmentsApi,
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
                             @NonNull final EventBus eventBus, @NonNull final Settings settings) {
         mContext = context;

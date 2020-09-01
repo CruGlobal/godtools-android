@@ -1,11 +1,11 @@
 package org.cru.godtools.tract.liveshare
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
@@ -23,7 +23,7 @@ import timber.log.Timber
 
 private const val TAG = "TractSubscribrControllr"
 
-class TractSubscriberController @Inject internal constructor(
+class TractSubscriberController @ViewModelInject internal constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle
 ) : ViewModel() {
