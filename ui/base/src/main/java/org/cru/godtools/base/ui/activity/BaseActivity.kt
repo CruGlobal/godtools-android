@@ -165,14 +165,13 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     fun dispatchDelayedFeatureDiscovery(feature: String, force: Boolean, delay: Long) {
-        featureDiscoveryHandler.sendMessageDelayed(
-            featureDiscoveryHandler.obtainMessage(MSG_FEATURE_DISCOVERY, feature).apply {
-                data = Bundle().apply {
-                    putString(EXTRA_FEATURE, feature)
-                    putBoolean(EXTRA_FORCE, force)
-                }
-            }, delay
-        )
+        val message = featureDiscoveryHandler.obtainMessage(MSG_FEATURE_DISCOVERY, feature).apply {
+            data = Bundle().apply {
+                putString(EXTRA_FEATURE, feature)
+                putBoolean(EXTRA_FORCE, force)
+            }
+        }
+        featureDiscoveryHandler.sendMessageDelayed(message, delay)
     }
 
     private fun showFeatureDiscovery(message: Message): Boolean {

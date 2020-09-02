@@ -139,7 +139,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         setupActionBarTitle()
-        if (InstantApps.isInstantApp(this)) toolbar?.setNavigationIcon(R.drawable.ic_close)
+        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(R.drawable.ic_close)
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
