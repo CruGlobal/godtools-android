@@ -162,12 +162,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     private var shareMenuItemObserver: Observer<Boolean>? = null
     protected fun Menu.setupShareMenuItem() {
         shareMenuItemObserver?.let { shareMenuItemVisible.removeObserver(it) }
-        shareMenuItemObserver = shareMenuItemVisible.observe(this@BaseToolActivity) {
+        shareMenuItemObserver = Observer<Boolean> {
             findItem(R.id.action_share)?.apply {
                 isVisible = it
                 isEnabled = it
             }
-        }
+        }.also { shareMenuItemVisible.observe(this@BaseToolActivity, it) }
     }
 
     protected fun updateShareMenuItem() {
