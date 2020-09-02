@@ -52,15 +52,17 @@ class SnowplowAnalyticsService @Inject internal constructor(
     private val snowplowTracker: Tracker
 
     init {
+        // HACK: restrict snowplow executor to 1 thread to allow adding custom params via the subject
         Executor.setThreadCount(1)
+        Executor.shutdown()
+
+        // close any existing SP tracker and build our new one
         Tracker.close()
         val emitter = EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
             .security(RequestSecurity.HTTPS)
             .client(okhttp)
             .build()
-        snowplowTracker = TrackerBuilder(emitter,
-            SNOWPLOW_NAMESPACE,
-            BuildConfig.SNOWPLOW_APP_ID, context)
+        snowplowTracker = TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, BuildConfig.SNOWPLOW_APP_ID, context)
             .base64(false)
             .mobileContext(true)
             .applicationCrash(false)
