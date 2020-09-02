@@ -64,7 +64,7 @@ abstract class FlipperModule {
                 SqliteDatabaseDriver(
                     context,
                     DefaultSqliteDatabaseProvider(context),
-                    SQLiteOpenHelperDatabaseConnectionProvider(context, dbs = *arrayOf(db))
+                    SQLiteOpenHelperDatabaseConnectionProvider(context, dbs = arrayOf(db))
                 )
             )
 
