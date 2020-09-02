@@ -47,7 +47,6 @@ class Modal : BaseModel, Parent, Styles {
         dismissListeners = emptySet()
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     internal constructor(parent: Base, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
 

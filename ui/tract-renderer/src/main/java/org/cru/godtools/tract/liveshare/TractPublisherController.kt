@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
 import java.util.UUID
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.filter
@@ -27,7 +26,6 @@ import timber.log.Timber
 
 private const val TAG = "TractPublisherContrller"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TractPublisherController @ViewModelInject constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle,
