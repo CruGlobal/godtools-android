@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="callbacks"
-            type="org.cru.godtools.tutorial.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -97,7 +93,5 @@
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/tips_text_subtitle2" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

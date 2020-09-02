@@ -23,7 +23,7 @@ internal enum class Page(
     LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
     LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
     LIVE_SHARE_START(R.layout.tutorial_live_share_start, showMenu = false),
-    TIPS_LEARN(R.layout.tutorial_tips_learns),
+    TIPS_LEARN(R.layout.tutorial_tips_learn),
     TIPS_LIGHT(R.layout.tutorial_tips_light),
     TIPS_START(R.layout.tutorial_tips_start)
 }
