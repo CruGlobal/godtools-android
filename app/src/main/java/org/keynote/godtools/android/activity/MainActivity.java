@@ -13,8 +13,6 @@ import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSy
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.analytics.LaunchTrackingViewModel;
-import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent;
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -39,27 +37,16 @@ import dagger.Lazy;
 import dagger.hilt.android.AndroidEntryPoint;
 import me.thekey.android.core.CodeGrantAsyncTask;
 
-import static androidx.lifecycle.Lifecycle.State.STARTED;
-import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
-import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
-import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_ALL_TOOLS;
 import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_FAVORITE_TOOLS;
 
 @AndroidEntryPoint
 public class MainActivity extends KotlinMainActivity implements ToolsFragment.Callbacks {
-    private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
-
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-
-    private static final int STATE_MY_TOOLS = 0;
-    private static final int STATE_FIND_TOOLS = 1;
 
     @Inject
     Lazy<ManifestManager> mManifestManager;
-
-    private int mActiveState = STATE_MY_TOOLS;
 
     // region Lifecycle
     @Override
@@ -68,10 +55,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
         triggerOnboardingIfNecessary();
 
         processIntent(getIntent());
-
-        if (savedInstanceState != null) {
-            mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
-        }
     }
 
     @Override
@@ -95,7 +78,7 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     @Override
     protected void onResume() {
         super.onResume();
-        trackInAnalytics();
+        trackLaunch();
     }
 
     @Override
@@ -160,12 +143,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     public void onNoToolsAvailableAction() {
         showAllTools();
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(EXTRA_ACTIVE_STATE, mActiveState);
-    }
     // endregion Lifecycle
 
     // region Onboarding
@@ -197,23 +174,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     }
 
     // region Analytics
-    private void trackInAnalytics() {
-        // only track analytics if this activity has been started
-        if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
-            switch (mActiveState) {
-                case STATE_FIND_TOOLS:
-                    eventBus.post(new AnalyticsScreenEvent(SCREEN_ALL_TOOLS));
-                    break;
-                case STATE_MY_TOOLS:
-                default:
-                    eventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
-                    eventBus.post(new FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS));
-            }
-
-            trackLaunch();
-        }
-    }
-
     private void trackLaunch() {
         (new ViewModelProvider(this)).get(LaunchTrackingViewModel.class).trackLaunch();
     }
@@ -240,8 +200,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
                 .commit();
 
         selectNavigationTabIfNecessary(getAllToolsTab());
-        mActiveState = STATE_FIND_TOOLS;
-        trackInAnalytics();
     }
 
     private void showFavoriteTools() {
@@ -251,7 +209,5 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
                 .commit();
 
         selectNavigationTabIfNecessary(getFavoriteToolsTab());
-        mActiveState = STATE_MY_TOOLS;
-        trackInAnalytics();
     }
 }
