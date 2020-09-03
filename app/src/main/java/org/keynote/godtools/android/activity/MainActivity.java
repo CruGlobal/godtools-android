@@ -7,15 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
-import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.analytics.LaunchTrackingViewModel;
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
@@ -26,7 +23,6 @@ import org.cru.godtools.databinding.ActivityDashboardBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
-import org.cru.godtools.ui.languages.LanguageSettingsActivityKt;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.ui.tools.ToolsFragment;
 import org.cru.godtools.util.ActivityUtilsKt;
@@ -39,7 +35,6 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -52,11 +47,10 @@ import static androidx.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt.ACTION_IAM_MY_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
-import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 
 @AndroidEntryPoint
-public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding> implements ToolsFragment.Callbacks {
+public class MainActivity extends KotlinMainActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -71,8 +65,6 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
     private TabLayout.Tab mFavoriteToolsTab;
     @Nullable
     private TabLayout.Tab mAllToolsTab;
-    @Nullable
-    TapTargetView mFeatureDiscovery;
 
     private int mActiveState = STATE_MY_TOOLS;
 
@@ -320,91 +312,5 @@ public class MainActivity extends BasePlatformActivity<ActivityDashboardBinding>
         selectNavigationTabIfNecessary(mFavoriteToolsTab);
         mActiveState = STATE_MY_TOOLS;
         trackInAnalytics();
-    }
-
-    // region Feature Discovery logic
-    protected void showNextFeatureDiscovery() {
-        if (!getSettings().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
-                canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
-            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
-            return;
-        }
-
-        super.showNextFeatureDiscovery();
-    }
-
-    protected boolean canShowFeatureDiscovery(@NonNull final String feature) {
-        switch (feature) {
-            case FEATURE_LANGUAGE_SETTINGS:
-                return getToolbar() != null && !getBinding().drawerLayout.isDrawerOpen(GravityCompat.START);
-            default:
-                return super.canShowFeatureDiscovery(feature);
-        }
-    }
-
-    protected void onShowFeatureDiscovery(@NonNull final String feature, final boolean force) {
-        // dispatch specific feature discovery
-        switch (feature) {
-            case FEATURE_LANGUAGE_SETTINGS:
-                final Toolbar toolbar = getToolbar();
-                assert toolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
-                if (toolbar.findViewById(R.id.action_switch_language) != null) {
-                    // purge any pending feature discovery triggers since we are showing feature discovery now
-                    purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS);
-
-                    // show language settings feature discovery
-                    final TapTarget target = TapTarget.forToolbarMenuItem(
-                            toolbar, R.id.action_switch_language,
-                            getString(R.string.feature_discovery_title_language_settings),
-                            getString(R.string.feature_discovery_desc_language_settings));
-                    mFeatureDiscovery =
-                            TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
-                    setFeatureDiscoveryActive(feature);
-                } else {
-                    // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
-                    // TODO: the menu item just hasn't been drawn yet.
-
-                    // the toolbar action isn't available yet.
-                    // re-attempt this feature discovery on the next frame iteration.
-                    dispatchDelayedFeatureDiscovery(feature, force, 17);
-                }
-                break;
-            default:
-                super.onShowFeatureDiscovery(feature, force);
-                break;
-        }
-    }
-
-    @Override
-    protected boolean isFeatureDiscoveryVisible() {
-        return super.isFeatureDiscoveryVisible() || mFeatureDiscovery != null;
-    }
-    // endregion Feature Discovery logic
-
-    class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
-        @Override
-        public void onTargetClick(final TapTargetView view) {
-            super.onTargetClick(view);
-            LanguageSettingsActivityKt.startLanguageSettingsActivity(MainActivity.this);
-        }
-
-        @Override
-        public void onOuterCircleClick(final TapTargetView view) {
-            onTargetCancel(view);
-        }
-
-        @Override
-        public void onTargetDismissed(final TapTargetView view, final boolean userInitiated) {
-            super.onTargetDismissed(view, userInitiated);
-            if (userInitiated) {
-                getSettings().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
-                setFeatureDiscoveryActive(null);
-                showNextFeatureDiscovery();
-            }
-
-            if (view == mFeatureDiscovery) {
-                mFeatureDiscovery = null;
-            }
-        }
     }
 }
