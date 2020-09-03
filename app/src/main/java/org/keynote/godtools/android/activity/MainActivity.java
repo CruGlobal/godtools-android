@@ -1,17 +1,11 @@
 package org.keynote.godtools.android.activity;
 
-import android.os.Bundle;
-
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 
 import org.cru.godtools.BuildConfig;
-import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.service.ManifestManager;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.model.Tool;
-import org.cru.godtools.tutorial.PageSet;
-import org.cru.godtools.tutorial.activity.TutorialActivityKt;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
 import org.cru.godtools.ui.tools.ToolsFragment;
 import org.cru.godtools.util.ActivityUtilsKt;
@@ -25,7 +19,6 @@ import androidx.annotation.Nullable;
 import dagger.Lazy;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_ALL_TOOLS;
 import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_FAVORITE_TOOLS;
 
@@ -35,12 +28,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     Lazy<ManifestManager> mManifestManager;
 
     // region Lifecycle
-    @Override
-    protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        triggerOnboardingIfNecessary();
-    }
-
     @Override
     public void onTabSelected(final TabLayout.Tab tab) {
         if (tab.getPosition() == TAB_FAVORITE_TOOLS) {
@@ -87,19 +74,4 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
         showAllTools();
     }
     // endregion Lifecycle
-
-    // region Onboarding
-    private void triggerOnboardingIfNecessary() {
-        // TODO: remove this once we support onboarding in all languages
-        // mark OnBoarding as discovered if this isn't a supported language
-        final Settings settings = getSettings();
-        if (!PageSet.ONBOARDING.supportsLocale(LocaleUtils.getDeviceLocale(this))) {
-            settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING);
-        }
-
-        if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) {
-            TutorialActivityKt.startTutorialActivity(this, PageSet.ONBOARDING);
-        }
-    }
-    // endregion Onboarding
 }

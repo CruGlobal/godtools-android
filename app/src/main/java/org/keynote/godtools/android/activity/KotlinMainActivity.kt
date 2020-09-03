@@ -16,7 +16,11 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
+import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityDashboardBinding
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
@@ -36,6 +40,7 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         intent?.process()
+        triggerOnboardingIfNecessary()
         loadInitialFragmentIfNeeded()
     }
 
@@ -70,6 +75,15 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
                 }
             }
         }
+    }
+
+    private fun triggerOnboardingIfNecessary() {
+        // TODO: remove this once we support onboarding in all languages
+        // mark OnBoarding as discovered if this isn't a supported language
+        if (!PageSet.ONBOARDING.supportsLocale(deviceLocale)) settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
+
+        if (settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) return
+        startTutorialActivity(PageSet.ONBOARDING)
     }
 
     // region UI
