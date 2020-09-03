@@ -27,11 +27,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import dagger.Lazy;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -43,8 +40,6 @@ import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_FAV
 
 @AndroidEntryPoint
 public class MainActivity extends KotlinMainActivity implements ToolsFragment.Callbacks {
-    private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-
     @Inject
     Lazy<ManifestManager> mManifestManager;
 
@@ -61,12 +56,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadInitialFragmentIfNeeded();
     }
 
     @Override
@@ -178,36 +167,4 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
         (new ViewModelProvider(this)).get(LaunchTrackingViewModel.class).trackLaunch();
     }
     // endregion Analytics
-
-    @MainThread
-    private void loadInitialFragmentIfNeeded() {
-        final FragmentManager fm = getSupportFragmentManager();
-
-        // short-circuit if there is a currently attached fragment
-        Fragment fragment = fm.findFragmentByTag(TAG_MAIN_FRAGMENT);
-        if (fragment != null) {
-            return;
-        }
-
-        // default to My Tools
-        showFavoriteTools();
-    }
-
-    private void showAllTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ALL), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(getAllToolsTab());
-    }
-
-    private void showFavoriteTools() {
-        // update the displayed fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
-                .commit();
-
-        selectNavigationTabIfNecessary(getFavoriteToolsTab());
-    }
 }

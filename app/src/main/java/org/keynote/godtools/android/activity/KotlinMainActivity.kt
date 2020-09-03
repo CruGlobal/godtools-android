@@ -1,7 +1,10 @@
 package org.keynote.godtools.android.activity
 
+import android.os.Bundle
 import android.view.View
+import androidx.annotation.MainThread
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import org.cru.godtools.R
@@ -9,11 +12,25 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
+import org.cru.godtools.ui.tools.ToolsFragment
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 
 const val TAB_FAVORITE_TOOLS = 0
 const val TAB_ALL_TOOLS = 1
 
 abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>() {
+    private enum class Page(val tabPosition: Int, val listMode: Int) {
+        FAVORITE_TOOLS(TAB_FAVORITE_TOOLS, MODE_ADDED), ALL_TOOLS(TAB_ALL_TOOLS, MODE_ALL)
+    }
+
+    // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadInitialFragmentIfNeeded()
+    }
+    // endregion Lifecycle
+
     // region UI
     override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
     override val toolbar get() = binding.appbar
@@ -21,10 +38,26 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
     override val drawerMenu get() = binding.drawerMenu
     override val navigationTabs get() = binding.appbarTabs
 
-    protected val favoriteToolsTab get() = navigationTabs.getTabAt(TAB_FAVORITE_TOOLS)
-    protected val allToolsTab get() = navigationTabs.getTabAt(TAB_ALL_TOOLS)
-
     override val isShowNavigationDrawerIndicator get() = true
+
+    // region Tool List
+    @MainThread
+    private fun loadInitialFragmentIfNeeded() {
+        if (supportFragmentManager.primaryNavigationFragment == null) showToolsFragment(Page.FAVORITE_TOOLS)
+    }
+
+    private fun showToolsFragment(page: Page) {
+        supportFragmentManager.commit {
+            val fragment = ToolsFragment(page.listMode)
+            replace(R.id.frame, fragment)
+            setPrimaryNavigationFragment(fragment)
+        }
+        selectNavigationTabIfNecessary(navigationTabs.getTabAt(page.tabPosition))
+    }
+
+    protected fun showAllTools() = showToolsFragment(Page.ALL_TOOLS)
+    protected fun showFavoriteTools() = showToolsFragment(Page.FAVORITE_TOOLS)
+    // endregion Tool List
     // endregion UI
 
     // region Feature Discovery
