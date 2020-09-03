@@ -57,7 +57,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
     interface Callbacks {
         fun onToolInfo(code: String?)
-        fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale?)
+        fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale)
         fun onNoToolsAvailableAction()
     }
 
@@ -172,10 +172,12 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
 
     // region ToolsAdapterCallbacks
     override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
-        if (tool != null) {
-            findListener<Callbacks>()?.onToolSelect(tool.code, tool.type, primary?.languageCode, parallel?.languageCode)
-            eventBus.post(ToolOpenTapAnalyticsActionEvent)
-        }
+        if (tool == null) return
+        val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
+        if (languages.isEmpty()) return
+
+        findListener<Callbacks>()?.onToolSelect(tool.code, tool.type, *languages.toTypedArray())
+        eventBus.post(ToolOpenTapAnalyticsActionEvent)
     }
 
     override fun addTool(code: String?) {

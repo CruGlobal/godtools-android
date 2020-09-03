@@ -11,6 +11,9 @@ import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.tabs.TabLayout
+import dagger.Lazy
+import java.util.Locale
+import javax.inject.Inject
 import me.thekey.android.core.CodeGrantAsyncTask
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.BuildConfig
@@ -19,16 +22,20 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityDashboardBinding
+import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
+import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
+import org.cru.godtools.util.openToolActivity
 
-abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>() {
+abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFragment.Callbacks {
     private enum class Tab(val listMode: Int) { FAVORITE_TOOLS(MODE_ADDED), ALL_TOOLS(MODE_ALL) }
 
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
@@ -117,7 +124,23 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
         selectNavigationTabIfNecessary(navigationTabs.getTabAt(tab.ordinal))
     }
 
-    protected fun showAllTools() = showToolsFragment(Tab.ALL_TOOLS)
+    // region ToolsFragment.Callbacks
+    @Inject
+    internal lateinit var lazyManifestManager: Lazy<ManifestManager>
+    private val manifestManager get() = lazyManifestManager.get()
+
+    override fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale) {
+        if (code == null || languages.isEmpty()) return
+        languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
+        openToolActivity(code, type, *languages)
+    }
+
+    override fun onToolInfo(code: String?) {
+        code?.let { startToolDetailsActivity(code) }
+    }
+
+    override fun onNoToolsAvailableAction() = showToolsFragment(Tab.ALL_TOOLS)
+    // endregion ToolsFragment.Callbacks
     // endregion Tool List
     // endregion UI
 
