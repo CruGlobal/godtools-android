@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
@@ -19,7 +18,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.LocaleUtils;
-import org.cru.godtools.databinding.ActivityDashboardBinding;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tutorial.PageSet;
 import org.cru.godtools.tutorial.activity.TutorialActivityKt;
@@ -34,8 +32,6 @@ import javax.inject.Inject;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,6 +44,8 @@ import static org.cru.godtools.analytics.firebase.model.FirebaseIamActionEventKt
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ALL_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
+import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_ALL_TOOLS;
+import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_FAVORITE_TOOLS;
 
 @AndroidEntryPoint
 public class MainActivity extends KotlinMainActivity implements ToolsFragment.Callbacks {
@@ -60,11 +58,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
 
     @Inject
     Lazy<ManifestManager> mManifestManager;
-
-    @Nullable
-    private TabLayout.Tab mFavoriteToolsTab;
-    @Nullable
-    private TabLayout.Tab mAllToolsTab;
 
     private int mActiveState = STATE_MY_TOOLS;
 
@@ -124,9 +117,9 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
 
     @Override
     public void onTabSelected(final TabLayout.Tab tab) {
-        if (tab == mFavoriteToolsTab) {
+        if (tab.getPosition() == TAB_FAVORITE_TOOLS) {
             showFavoriteTools();
-        } else if (tab == mAllToolsTab) {
+        } else if (tab.getPosition() == TAB_ALL_TOOLS) {
             showAllTools();
         } else if (BuildConfig.DEBUG) {
             // The tab selection logic is brittle, so throw an error in unrecognized scenarios
@@ -203,53 +196,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
         }
     }
 
-    // region View
-    @NonNull
-    @Override
-    protected ActivityDashboardBinding inflateBinding() {
-        return ActivityDashboardBinding.inflate(getLayoutInflater());
-    }
-
-    @Nullable
-    @Override
-    protected Toolbar getToolbar() {
-        return getBinding().appbar;
-    }
-
-    @Nullable
-    @Override
-    protected DrawerLayout getDrawerLayout() {
-        return getBinding().drawerLayout;
-    }
-
-    @Nullable
-    @Override
-    protected NavigationView getDrawerMenu() {
-        return getBinding().drawerMenu;
-    }
-
-    @Nullable
-    @Override
-    protected TabLayout getNavigationTabs() {
-        return getBinding().appbarTabs;
-    }
-
-    @Override
-    protected void setupNavigationTabs() {
-        super.setupNavigationTabs();
-        final TabLayout navigationTabs = getNavigationTabs();
-        if (navigationTabs != null) {
-            // This logic is brittle, so throw an error on debug builds if something changes.
-            if (BuildConfig.DEBUG && navigationTabs.getTabCount() != 2) {
-                throw new IllegalStateException("The navigation tabs changed!!! Logic needs to be updated!!!");
-            }
-
-            mFavoriteToolsTab = navigationTabs.getTabAt(0);
-            mAllToolsTab = navigationTabs.getTabAt(1);
-        }
-    }
-    // endregion View
-
     // region Analytics
     private void trackInAnalytics() {
         // only track analytics if this activity has been started
@@ -273,11 +219,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     }
     // endregion Analytics
 
-    @Override
-    protected boolean isShowNavigationDrawerIndicator() {
-        return true;
-    }
-
     @MainThread
     private void loadInitialFragmentIfNeeded() {
         final FragmentManager fm = getSupportFragmentManager();
@@ -298,7 +239,7 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
                 .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ALL), TAG_MAIN_FRAGMENT)
                 .commit();
 
-        selectNavigationTabIfNecessary(mAllToolsTab);
+        selectNavigationTabIfNecessary(getAllToolsTab());
         mActiveState = STATE_FIND_TOOLS;
         trackInAnalytics();
     }
@@ -309,7 +250,7 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
                 .replace(R.id.frame, new ToolsFragment(ToolsFragment.MODE_ADDED), TAG_MAIN_FRAGMENT)
                 .commit();
 
-        selectNavigationTabIfNecessary(mFavoriteToolsTab);
+        selectNavigationTabIfNecessary(getFavoriteToolsTab());
         mActiveState = STATE_MY_TOOLS;
         trackInAnalytics();
     }

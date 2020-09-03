@@ -10,14 +10,30 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 
+const val TAB_FAVORITE_TOOLS = 0
+const val TAB_ALL_TOOLS = 1
+
 abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>() {
+    // region UI
+    override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
+    override val toolbar get() = binding.appbar
+    override val drawerLayout get() = binding.drawerLayout
+    override val drawerMenu get() = binding.drawerMenu
+    override val navigationTabs get() = binding.appbarTabs
+
+    protected val favoriteToolsTab get() = navigationTabs.getTabAt(TAB_FAVORITE_TOOLS)
+    protected val allToolsTab get() = navigationTabs.getTabAt(TAB_ALL_TOOLS)
+
+    override val isShowNavigationDrawerIndicator get() = true
+    // endregion UI
+
     // region Feature Discovery
     @JvmField
     protected var featureDiscovery: TapTargetView? = null
     override fun isFeatureDiscoveryVisible() = super.isFeatureDiscoveryVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_LANGUAGE_SETTINGS -> toolbar != null && !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
+        FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }
 
@@ -33,8 +49,7 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
 
     override fun onShowFeatureDiscovery(feature: String, force: Boolean) = when (feature) {
         FEATURE_LANGUAGE_SETTINGS -> {
-            val toolbar = toolbar
-            if (toolbar?.findViewById<View>(R.id.action_switch_language) != null) {
+            if (toolbar.findViewById<View>(R.id.action_switch_language) != null) {
                 // purge any pending feature discovery triggers since we are showing feature discovery now
                 purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
 
