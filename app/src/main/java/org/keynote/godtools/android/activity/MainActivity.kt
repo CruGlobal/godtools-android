@@ -12,6 +12,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.tabs.TabLayout
 import dagger.Lazy
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import me.thekey.android.core.CodeGrantAsyncTask
@@ -35,7 +36,8 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.util.openToolActivity
 
-abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFragment.Callbacks {
+@AndroidEntryPoint
+class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFragment.Callbacks {
     private enum class Tab(val listMode: Int) { FAVORITE_TOOLS(MODE_ADDED), ALL_TOOLS(MODE_ALL) }
 
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
