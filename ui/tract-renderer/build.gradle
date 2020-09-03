@@ -16,6 +16,10 @@ android {
     }
 }
 
+hilt {
+    enableTransformForLocalTests = true
+}
+
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')
@@ -67,5 +71,8 @@ dependencies {
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation "com.google.dagger:hilt-android-testing:${deps.hilt}"
+
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
+    kaptTest "com.google.dagger:hilt-android-compiler:${deps.hilt}"
 }

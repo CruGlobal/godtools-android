@@ -12,11 +12,9 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 @Module
 @AssistedModule
 @InstallIn(SingletonComponent::class)
-abstract class TractRendererModule {
-    companion object {
-        @IntoSet
-        @Provides
-        @Reusable
-        fun tractEventBusIndex(): SubscriberInfoIndex = TractEventBusIndex()
-    }
+object TractRendererModule {
+    @IntoSet
+    @Provides
+    @Reusable
+    fun tractEventBusIndex(): SubscriberInfoIndex = TractEventBusIndex()
 }

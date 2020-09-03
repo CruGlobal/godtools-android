@@ -27,7 +27,7 @@ import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
-import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
+import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
