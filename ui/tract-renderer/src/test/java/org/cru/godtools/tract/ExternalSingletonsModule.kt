@@ -30,7 +30,11 @@ class ExternalSingletonsModule {
         }
     }
     @get:Provides
-    val downloadManager by lazy { mock<GodToolsDownloadManager>() }
+    val downloadManager by lazy {
+        mock<GodToolsDownloadManager> {
+            on { getDownloadProgressLiveData(any(), any()) } doAnswer { ImmutableLiveData(null) }
+        }
+    }
     @get:Provides
     val eventBus by lazy { mock<EventBus>() }
     @get:Provides
