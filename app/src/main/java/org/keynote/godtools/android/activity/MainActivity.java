@@ -1,9 +1,7 @@
 package org.keynote.godtools.android.activity;
 
 import com.annimon.stream.Stream;
-import com.google.android.material.tabs.TabLayout;
 
-import org.cru.godtools.BuildConfig;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.ui.tooldetails.ToolDetailsActivityKt;
@@ -19,27 +17,12 @@ import androidx.annotation.Nullable;
 import dagger.Lazy;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_ALL_TOOLS;
-import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_FAVORITE_TOOLS;
-
 @AndroidEntryPoint
 public class MainActivity extends KotlinMainActivity implements ToolsFragment.Callbacks {
     @Inject
     Lazy<ManifestManager> mManifestManager;
 
     // region Lifecycle
-    @Override
-    public void onTabSelected(final TabLayout.Tab tab) {
-        if (tab.getPosition() == TAB_FAVORITE_TOOLS) {
-            showFavoriteTools();
-        } else if (tab.getPosition() == TAB_ALL_TOOLS) {
-            showAllTools();
-        } else if (BuildConfig.DEBUG) {
-            // The tab selection logic is brittle, so throw an error in unrecognized scenarios
-            throw new IllegalArgumentException("Unrecognized tab!! something changed with the navigation tabs");
-        }
-    }
-
     @Override
     public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type,
                              @Nullable Locale... languages) {

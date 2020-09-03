@@ -10,8 +10,10 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.material.tabs.TabLayout
 import me.thekey.android.core.CodeGrantAsyncTask
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
@@ -26,13 +28,8 @@ import org.cru.godtools.ui.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 
-const val TAB_FAVORITE_TOOLS = 0
-const val TAB_ALL_TOOLS = 1
-
 abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBinding>() {
-    private enum class Page(val tabPosition: Int, val listMode: Int) {
-        FAVORITE_TOOLS(TAB_FAVORITE_TOOLS, MODE_ADDED), ALL_TOOLS(TAB_ALL_TOOLS, MODE_ALL)
-    }
+    private enum class Tab(val listMode: Int) { FAVORITE_TOOLS(MODE_ADDED), ALL_TOOLS(MODE_ALL) }
 
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
@@ -61,6 +58,16 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
         super.onSyncData(helper, force)
         syncService.syncFollowups().sync()
         syncService.syncToolShares().sync()
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab) {
+        when (val it = Tab.values().getOrNull(tab.position)) {
+            null -> {
+                // The tab selection logic is brittle, so throw an error in unrecognized scenarios
+                if (BuildConfig.DEBUG) error("Unrecognized tab!! something changed with the navigation tabs")
+            }
+            else -> showToolsFragment(it)
+        }
     }
     // endregion Lifecycle
 
@@ -98,20 +105,19 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
     // region Tool List
     @MainThread
     private fun loadInitialFragmentIfNeeded() {
-        if (supportFragmentManager.primaryNavigationFragment == null) showToolsFragment(Page.FAVORITE_TOOLS)
+        if (supportFragmentManager.primaryNavigationFragment == null) showToolsFragment(Tab.FAVORITE_TOOLS)
     }
 
-    private fun showToolsFragment(page: Page) {
+    private fun showToolsFragment(tab: Tab) {
         supportFragmentManager.commit {
-            val fragment = ToolsFragment(page.listMode)
+            val fragment = ToolsFragment(tab.listMode)
             replace(R.id.frame, fragment)
             setPrimaryNavigationFragment(fragment)
         }
-        selectNavigationTabIfNecessary(navigationTabs.getTabAt(page.tabPosition))
+        selectNavigationTabIfNecessary(navigationTabs.getTabAt(tab.ordinal))
     }
 
-    protected fun showAllTools() = showToolsFragment(Page.ALL_TOOLS)
-    protected fun showFavoriteTools() = showToolsFragment(Page.FAVORITE_TOOLS)
+    protected fun showAllTools() = showToolsFragment(Tab.ALL_TOOLS)
     // endregion Tool List
     // endregion UI
 
