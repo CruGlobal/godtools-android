@@ -1,18 +1,11 @@
 package org.keynote.godtools.android.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
 import com.google.android.material.tabs.TabLayout;
 
-import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper;
 import org.cru.godtools.BuildConfig;
-import org.cru.godtools.R;
-import org.cru.godtools.analytics.LaunchTrackingViewModel;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.LocaleUtils;
@@ -29,10 +22,8 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import dagger.Lazy;
 import dagger.hilt.android.AndroidEntryPoint;
-import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static org.cru.godtools.base.Settings.FEATURE_TUTORIAL_ONBOARDING;
 import static org.keynote.godtools.android.activity.KotlinMainActivityKt.TAB_ALL_TOOLS;
@@ -48,43 +39,6 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         triggerOnboardingIfNecessary();
-
-        processIntent(getIntent());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onNewIntent(final Intent intent) {
-        super.onNewIntent(intent);
-        processIntent(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        trackLaunch();
-    }
-
-    @Override
-    protected void onSyncData(@NonNull final SwipeRefreshSyncHelper syncHelper, final boolean force) {
-        super.onSyncData(syncHelper, force);
-        getSyncService().syncFollowups().sync();
-        getSyncService().syncToolShares().sync();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                showAllTools();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -148,23 +102,4 @@ public class MainActivity extends KotlinMainActivity implements ToolsFragment.Ca
         }
     }
     // endregion Onboarding
-
-    private void processIntent(@Nullable final Intent intent) {
-        final String action = intent != null ? intent.getAction() : null;
-        final Uri data = intent != null ? intent.getData() : null;
-        if (Intent.ACTION_VIEW.equals(action) && data != null) {
-            if (getString(R.string.account_deeplink_host).equalsIgnoreCase(data.getHost())) {
-                if (getString(R.string.account_deeplink_path).equalsIgnoreCase(data.getPath())) {
-                    new CodeGrantAsyncTask(getTheKey(), data).execute();
-                    intent.setData(null);
-                }
-            }
-        }
-    }
-
-    // region Analytics
-    private void trackLaunch() {
-        (new ViewModelProvider(this)).get(LaunchTrackingViewModel.class).trackLaunch();
-    }
-    // endregion Analytics
 }

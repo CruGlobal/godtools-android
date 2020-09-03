@@ -1,14 +1,20 @@
 package org.keynote.godtools.android.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import me.thekey.android.core.CodeGrantAsyncTask
+import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
+import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
@@ -24,12 +30,47 @@ abstract class KotlinMainActivity : BasePlatformActivity<ActivityDashboardBindin
         FAVORITE_TOOLS(TAB_FAVORITE_TOOLS, MODE_ADDED), ALL_TOOLS(TAB_ALL_TOOLS, MODE_ALL)
     }
 
+    private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        intent?.process()
         loadInitialFragmentIfNeeded()
     }
+
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
+        newIntent.process()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu)
+        .also { menuInflater.inflate(R.menu.activity_main, menu) }
+
+    override fun onResume() {
+        super.onResume()
+        launchTrackingViewModel.trackLaunch()
+    }
+
+    override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
+        super.onSyncData(helper, force)
+        syncService.syncFollowups().sync()
+        syncService.syncToolShares().sync()
+    }
     // endregion Lifecycle
+
+    private fun Intent.process() {
+        if (action == Intent.ACTION_VIEW) {
+            data?.run {
+                if (getString(R.string.account_deeplink_host).equals(host, ignoreCase = true) &&
+                    getString(R.string.account_deeplink_path).equals(path, ignoreCase = true)
+                ) {
+                    CodeGrantAsyncTask(theKey, this).execute()
+                    this@process.data = null
+                }
+            }
+        }
+    }
 
     // region UI
     override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
