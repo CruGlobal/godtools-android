@@ -24,9 +24,9 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     // region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         DataBindingUtil.inflate<ViewDataBinding>(inflater, page.layout, container, false).also {
-            it.lifecycleOwner = this
+            it.lifecycleOwner = viewLifecycleOwner
             it.setVariable(BR.callbacks, this)
-            it.setVariable(BR.lifecycleOwner2, this)
+            it.setVariable(BR.lifecycleOwner2, viewLifecycleOwner)
             it.setVariable(BR.isVisible, false)
             binding = it
         }.root
