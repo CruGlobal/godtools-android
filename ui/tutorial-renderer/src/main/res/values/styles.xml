@@ -21,6 +21,11 @@
         <item name="android:textSize">28sp</item>
     </style>
 
+    <style name="TextAppearance.GodTools.Tutorial.Headline3" parent="TextAppearance.GodTools.Headline">
+        <item name="android:textColor">@color/gray_5A</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
     <style name="TextAppearance.GodTools.Tutorial.Subhead" parent="TextAppearance.GodTools.Subhead">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">20sp</item>
