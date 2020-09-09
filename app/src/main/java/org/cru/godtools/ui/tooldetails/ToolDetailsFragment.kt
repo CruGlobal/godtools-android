@@ -63,7 +63,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
 
-        binding.setupOverviewVideo()
         binding.setupPages()
     }
 
@@ -145,12 +144,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         pinShortcutObserver = null
     }
     // endregion Pin Shortcut
-
-    // region Overview Video
-    private fun ToolDetailsFragmentBinding.setupOverviewVideo() {
-        viewLifecycleOwner.lifecycle.addObserver(videoBanner)
-    }
-    // endregion Overview Video
 
     // region Pages
     private fun ToolDetailsFragmentBinding.setupPages() {
