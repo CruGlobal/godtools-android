@@ -118,8 +118,8 @@ class GodToolsShortcutManager @Inject constructor(
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            // primary/parallel language preferences changed.
-            Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE -> {
+            // primary/parallel language preferences changed. key=null when preferences are cleared
+            Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
                 launchUpdateShortcutsJob(false)
                 launchUpdatePendingShortcutsJob(false)
             }
