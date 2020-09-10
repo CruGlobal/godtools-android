@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapConte
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -25,6 +26,8 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import org.cru.godtools.xml.model.Manifest
@@ -124,8 +127,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     }
 
     fun openTraining(manifest: Manifest) {
-        if (manifest.type == Manifest.Type.TRACT) {
-            requireActivity().openToolActivity(manifest.code, Tool.Type.TRACT, manifest.locale, showTips = true)
+        if (manifest.type == Manifest.Type.TRACT) activity?.run {
+            openToolActivity(toolCode, Tool.Type.TRACT, manifest.locale, showTips = true)
+            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TIPS)) startTutorialActivity(PageSet.TIPS)
         }
     }
     // endregion Data Binding
@@ -165,5 +169,5 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         mediator.attach()
         dataModel.availableLanguages.observe(viewLifecycleOwner) { mediator.notifyChanged() }
     }
-    // region Pages
+    // endregion Pages
 }

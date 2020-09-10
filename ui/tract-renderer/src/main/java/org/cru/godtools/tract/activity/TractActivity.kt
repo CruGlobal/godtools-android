@@ -35,7 +35,6 @@ import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Constants.EXTRA_TOOL
 import org.cru.godtools.base.Constants.URI_SHARE_BASE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
-import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
@@ -60,7 +59,6 @@ import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
-import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
@@ -123,7 +121,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary()
-        showTipsTutorialIfNecessary()
     }
 
     override fun onBindingChanged() {
@@ -290,11 +287,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
 
     private fun validStartState() = dataModel.tool.value != null &&
         (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
-
-    private fun showTipsTutorialIfNecessary() {
-        if (!showTips || settings.isFeatureDiscovered(FEATURE_TUTORIAL_TIPS)) return
-        startTutorialActivity(PageSet.TIPS)
-    }
 
     // region Data Model
     private val dataModel: TractActivityDataModel by viewModels()
