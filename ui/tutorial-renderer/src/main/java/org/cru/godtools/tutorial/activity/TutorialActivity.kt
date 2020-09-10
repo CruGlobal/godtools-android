@@ -183,7 +183,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
                 setResult(RESULT_OK)
                 finish()
             }
-            R.id.action_training_finish -> finish()
+            R.id.action_training_finish, R.id.action_tips_finish -> finish()
         }
     }
     // endregion TutorialCallbacks

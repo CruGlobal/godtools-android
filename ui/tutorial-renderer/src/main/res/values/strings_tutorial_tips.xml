@@ -11,7 +11,6 @@
 
     <string name="tutorial_tips_start_headline">Light up the tips</string>
     <string name="tutorial_tips_start_text">When a tip lights up, you’ve completed that piece of training. Practice using as many tips as you need to feel confident explaining the tool.</string>
-    <string name="tutorial_tips_start_button">Start Training</string>
 
     <string name="tutorial_tips_action_continue">Continue</string>
     <string name="tutorial_tips_action_start">Start Training</string>

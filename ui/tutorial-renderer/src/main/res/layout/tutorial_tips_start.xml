@@ -1,81 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
-        <variable
-            name="callbacks"
-            type="org.cru.godtools.tutorial.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/tutorial_include_margins" />
+        <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_training_include_positioning" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/inset_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
+        <include layout="@layout/tutorial_tips_include_positioning" />
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="center"
-            android:src="@drawable/img_tutorial_tips_start"
-            app:layout_constraintBottom_toTopOf="@id/inset_center"
-            app:layout_constraintEnd_toStartOf="@id/marginEnd"
-            app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/inset_top"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/inset_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".5" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_tutorial_tips_light"
+            app:layout_constraintBottom_toBottomOf="@id/imagePosition"
+            app:layout_constraintEnd_toEndOf="@id/imagePosition"
+            app:layout_constraintStart_toStartOf="@id/imagePosition"
+            app:layout_constraintTop_toTopOf="@id/imagePosition" />
 
         <TextView
             android:id="@+id/headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_start_headline"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline3"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/inset_center" />
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
 
         <TextView
+            android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_start_text"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_training_finish"
+            android:id="@+id/action_tips_finish"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{callbacks::onTutorialAction}"
-            android:text="@string/tutorial_tips_start_button"
+            android:text="@string/tutorial_tips_action_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
