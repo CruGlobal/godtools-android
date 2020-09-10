@@ -11,13 +11,16 @@ import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import splitties.fragmentargs.arg
+import splitties.fragmentargs.argOrNull
 
 internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
-    constructor(page: Page) : this() {
+    constructor(page: Page, formatArgs: Bundle?) : this() {
         this.page = page
+        this.formatArgs = formatArgs
     }
 
     private var page by arg<Page>()
+    private var formatArgs by argOrNull<Bundle>()
 
     private var binding: ViewDataBinding? = null
 
@@ -26,6 +29,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         DataBindingUtil.inflate<ViewDataBinding>(inflater, page.layout, container, false).also {
             it.lifecycleOwner = viewLifecycleOwner
             it.setVariable(BR.callbacks, this)
+            it.setVariable(BR.formatArgs, formatArgs)
             it.setVariable(BR.lifecycleOwner2, viewLifecycleOwner)
             it.setVariable(BR.isVisible, false)
             binding = it

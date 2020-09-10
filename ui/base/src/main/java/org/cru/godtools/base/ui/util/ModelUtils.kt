@@ -9,7 +9,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
 @JvmName("getTranslationName")
-fun Translation?.getName(tool: Tool?, context: Context?) =
+fun Translation?.getName(tool: Tool?, context: Context? = null) =
     this?.let { name?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.name ?: ""
 
 @JvmName("getTranslationDescription")
