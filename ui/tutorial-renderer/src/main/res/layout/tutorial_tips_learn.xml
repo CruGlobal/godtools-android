@@ -38,7 +38,7 @@
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@{@string/tutorial_tips_learn_headline(formatArgs.getString(TutorialActivity.FORMAT_ARG_TOOL_NAME)), default=@string/tutorial_tips_learn_headline}"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline3"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Tips.Headline"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toTopOf="@id/headlinePosition" />
