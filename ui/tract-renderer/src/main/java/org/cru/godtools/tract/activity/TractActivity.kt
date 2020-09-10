@@ -29,6 +29,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
@@ -329,10 +330,8 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             var selectedColor = manifest.navBarColor
             if (Color.alpha(selectedColor) < 255) {
                 // XXX: the expected behavior is to support transparent text. But we currently don't support
-                // XXX: transparent text, so pick white or black based on the control color
-                val hsv = FloatArray(3)
-                Color.colorToHSV(controlColor, hsv)
-                selectedColor = if (hsv[2] > 0.6) Color.BLACK else Color.WHITE
+                //      transparent text, so pick white or black based on the control color
+                selectedColor = if (controlColor.toHsvColor().value > 0.6) Color.BLACK else Color.WHITE
             }
 
             // update colors for tab text, and background
