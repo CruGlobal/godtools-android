@@ -51,6 +51,7 @@
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_learn_text"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/headlineBottom" />

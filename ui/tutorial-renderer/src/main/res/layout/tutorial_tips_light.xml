@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="callbacks"
-            type="org.cru.godtools.tutorial.TutorialCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,75 +15,59 @@
 
         <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_training_include_positioning" />
-
-        <include
-            android:id="@+id/include"
-            layout="@layout/tutorial_training_include_navigation"
-            app:callbacks="@{callbacks}" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/inset_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
+        <include layout="@layout/tutorial_tips_include_positioning" />
 
         <ImageView
-            android:id="@+id/tips_light_img"
+            android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:contentDescription="@string/tutorial_tips_light_headline"
             android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@id/inset_center"
-            app:layout_constraintEnd_toStartOf="@id/marginEnd"
-            app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/inset_top"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/img_tutorial_tips_light" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/inset_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".5" />
+            android:src="@drawable/img_tutorial_tips_tool"
+            app:layout_constraintBottom_toBottomOf="@id/imagePosition"
+            app:layout_constraintEnd_toEndOf="@id/imagePosition"
+            app:layout_constraintStart_toStartOf="@id/imagePosition"
+            app:layout_constraintTop_toTopOf="@id/imagePosition" />
 
         <TextView
-            android:id="@+id/tips_text_light_title"
+            android:id="@+id/headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_light_headline"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline3"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@+id/inset_center" />
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
 
         <TextView
-            android:id="@+id/tips_light_text"
+            android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_light_text1"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@+id/tips_text_light_title" />
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
 
         <TextView
-            android:id="@+id/tips_light_text2"
+            android:id="@+id/text2"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
+            android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:text="@string/tutorial_tips_light_text2"
-            app:layout_constraintBottom_toTopOf="@+id/include"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@+id/tips_light_text" />
+            app:layout_constraintTop_toBottomOf="@id/text" />
 
-
+        <include
+            layout="@layout/tutorial_tips_include_navigation"
+            app:callbacks="@{callbacks}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
