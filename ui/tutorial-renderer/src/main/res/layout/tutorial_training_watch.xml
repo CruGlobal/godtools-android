@@ -61,6 +61,6 @@
             app:pauseVideoWhen="@{!isVisible}"
             app:recue="@{true}"
             app:useWebUi="true"
-            app:videoId="Us2psJs8izU" />
+            app:videoId="ELRAmQxLqHE" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
