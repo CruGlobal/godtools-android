@@ -54,6 +54,8 @@
                     android:background="@color/gray_E6"
                     app:layout_constraintDimensionRatio="21:10"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:lifecycleOwner="@{fragment.viewLifecycleOwner}"
+                    app:recue="@{true}"
                     app:showFullScreenButton="false"
                     app:showSeekBar="false"
                     app:showVideoCurrentTime="false"

@@ -9,9 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -66,7 +63,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
 
-        binding.setupOverviewVideo()
         binding.setupPages()
     }
 
@@ -148,22 +144,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         pinShortcutObserver = null
     }
     // endregion Pin Shortcut
-
-    // region Overview Video
-    private fun ToolDetailsFragmentBinding.setupOverviewVideo() {
-        viewLifecycleOwner.lifecycle.addObserver(videoBanner)
-        videoBanner.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            private lateinit var videoId: String
-            override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-                this.videoId = videoId
-            }
-
-            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-                if (state == PlayerConstants.PlayerState.ENDED) youTubePlayer.cueVideo(videoId, 0f)
-            }
-        })
-    }
-    // endregion Overview Video
 
     // region Pages
     private fun ToolDetailsFragmentBinding.setupPages() {
