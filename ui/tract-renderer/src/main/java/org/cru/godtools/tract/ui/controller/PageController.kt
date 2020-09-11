@@ -85,6 +85,8 @@ class PageController @AssistedInject internal constructor(
         when (key) {
             "$PREF_FEATURE_DISCOVERED$FEATURE_TRACT_CARD_CLICKED",
             "$PREF_FEATURE_DISCOVERED$FEATURE_TRACT_CARD_SWIPED" -> updateBounceAnimation()
+            // key=null when preferences are cleared
+            null -> updateBounceAnimation()
         }
     }
 

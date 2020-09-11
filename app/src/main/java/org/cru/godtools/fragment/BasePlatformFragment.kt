@@ -1,6 +1,5 @@
 package org.cru.godtools.fragment
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
@@ -12,7 +11,6 @@ import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
@@ -26,7 +24,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     protected lateinit var eventBus: EventBus
     @Inject
     protected lateinit var settings: Settings
-    private val settingsChangeListener = ChangeListener()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,14 +43,11 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
     override fun onStart() {
         super.onStart()
         eventBus.register(this)
-        startSettingsChangeListener()
         syncHelper.updateState()
     }
 
     @CallSuper
     protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
-
-    protected open fun onUpdateFeatureDiscovery(feature: String) = Unit
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -61,7 +55,6 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
 
     override fun onStop() {
         super.onStop()
-        stopSettingsChangeListener()
         eventBus.unregister(this)
     }
 
@@ -100,20 +93,4 @@ abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: In
         syncHelper.refreshLayout = null
     }
     // endregion Sync Logic
-
-    private fun startSettingsChangeListener() {
-        settings.registerOnSharedPreferenceChangeListener(settingsChangeListener)
-    }
-
-    private fun stopSettingsChangeListener() {
-        settings.unregisterOnSharedPreferenceChangeListener(settingsChangeListener)
-    }
-
-    internal inner class ChangeListener : SharedPreferences.OnSharedPreferenceChangeListener {
-        override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
-            if (key?.startsWith(PREF_FEATURE_DISCOVERED) == true) {
-                onUpdateFeatureDiscovery(key.removePrefix(PREF_FEATURE_DISCOVERED))
-            }
-        }
-    }
 }
