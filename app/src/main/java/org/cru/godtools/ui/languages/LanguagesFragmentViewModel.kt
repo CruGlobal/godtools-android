@@ -56,7 +56,7 @@ class LanguagesFragmentViewModel @ViewModelInject constructor(
     private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
         .combineWith(rawLanguages) { displayLocale, languages ->
             languages.associateBy { lang -> lang.getDisplayName(context, displayLocale) }
-                .toSortedMap(Collator.getInstance(displayLocale))
+                .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
         }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
