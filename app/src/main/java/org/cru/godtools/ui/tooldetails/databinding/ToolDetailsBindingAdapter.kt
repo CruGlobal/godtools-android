@@ -4,11 +4,17 @@ import android.annotation.SuppressLint
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.adapters.TextViewBindingAdapter
+import java.text.Collator
 import java.util.Locale
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.base.util.getDisplayName
 
 @BindingAdapter("languages")
 @SuppressLint("RestrictedApi")
 fun TextView.bindLanguages(languages: List<Locale>?) = TextViewBindingAdapter.setText(
-    this, languages?.map { it.getDisplayName(context) }?.sortedWith(String.CASE_INSENSITIVE_ORDER)?.joinToString(", ")
+    this,
+    languages?.map { it.getDisplayName(context) }
+        ?.sortedWith(Collator.getInstance(LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY))
+            .apply { strength = Collator.PRIMARY })
+        ?.joinToString(", ")
 )
