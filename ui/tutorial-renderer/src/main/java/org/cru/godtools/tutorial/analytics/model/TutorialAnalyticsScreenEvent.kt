@@ -11,5 +11,6 @@ class TutorialAnalyticsScreenEvent(private val tutorial: PageSet, page: Int, loc
         PageSet.TRAINING -> ADOBE_SITE_SECTION_TUTORIAL
         // TODO: what should the adobe site section actually be?
         PageSet.LIVE_SHARE -> null
+        PageSet.TIPS -> null
     }
 }

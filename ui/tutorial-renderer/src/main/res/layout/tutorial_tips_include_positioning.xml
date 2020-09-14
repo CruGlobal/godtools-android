@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="true">
+
+    <Space
+        android:id="@+id/imagePosition"
+        android:layout_width="0dp"
+        android:layout_height="290dp"
+        app:layout_constraintBottom_toTopOf="@id/headlinePosition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/headlinePosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Tips.Headline"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/textPosition"
+        app:layout_constraintTop_toBottomOf="@id/imagePosition"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headlineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="headline,headlinePosition" />
+
+    <TextView
+        android:id="@+id/textPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:lines="8"
+        android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headlinePosition" />
+</merge>

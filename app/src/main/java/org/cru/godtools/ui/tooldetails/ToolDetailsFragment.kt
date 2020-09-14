@@ -17,7 +17,9 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapConte
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -25,9 +27,11 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.TutorialActivity.Companion.FORMAT_ARG_TOOL_NAME
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
-import org.cru.godtools.xml.model.Manifest
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
@@ -123,9 +127,18 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         eventBus.post(AboutToolButtonAnalyticsActionEvent)
     }
 
-    fun openTraining(manifest: Manifest) {
-        if (manifest.type == Manifest.Type.TRACT) {
-            requireActivity().openToolActivity(manifest.code, Tool.Type.TRACT, manifest.locale, showTips = true)
+    fun openToolTraining(tool: Tool?, translation: Translation?) {
+        val code = tool?.code ?: return
+        val locale = translation?.languageCode ?: return
+
+        activity?.run {
+            openToolActivity(code, tool.type, locale, showTips = true)
+            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TIPS)) {
+                startTutorialActivity(
+                    PageSet.TIPS,
+                    Bundle().apply { putString(FORMAT_ARG_TOOL_NAME, translation.getName(tool).toString()) }
+                )
+            }
         }
     }
     // endregion Data Binding
@@ -165,5 +178,5 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
         mediator.attach()
         dataModel.availableLanguages.observe(viewLifecycleOwner) { mediator.notifyChanged() }
     }
-    // region Pages
+    // endregion Pages
 }

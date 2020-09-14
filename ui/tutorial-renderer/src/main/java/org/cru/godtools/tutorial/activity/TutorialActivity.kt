@@ -3,6 +3,7 @@ package org.cru.godtools.tutorial.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,14 +27,23 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 
 private const val ARG_PAGE_SET = "pageSet"
+private const val ARG_FRMT_ARGS = "formatArgs"
 
-fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, TutorialActivity::class.java)
-    .putExtra(ARG_PAGE_SET, pageSet)
+fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
+    Intent(this, TutorialActivity::class.java)
+        .putExtra(ARG_PAGE_SET, pageSet)
+        .putExtra(ARG_FRMT_ARGS, formatArgs)
 
-fun Activity.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
+@JvmOverloads
+fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
+    startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
+    companion object {
+        const val FORMAT_ARG_TOOL_NAME = "toolName"
+    }
+
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
     // region Lifecycle
@@ -101,7 +111,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     // region ViewPager
     private fun setupViewPager() {
         binding.pages.apply {
-            adapter = TutorialPagerAdapter(this@TutorialActivity, pageSet.pages)
+            adapter = TutorialPagerAdapter(this@TutorialActivity, pageSet.pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
             setupAnalytics()
             setupMenuVisibility()
             setupIndicator()
@@ -173,7 +183,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
                 setResult(RESULT_OK)
                 finish()
             }
-            R.id.action_training_finish -> finish()
+            R.id.action_training_finish, R.id.action_tips_finish -> finish()
         }
     }
     // endregion TutorialCallbacks
@@ -184,8 +194,11 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 }
 
-internal class TutorialPagerAdapter(activity: FragmentActivity, private val pages: List<Page>) :
-    FragmentStateAdapter(activity) {
+internal class TutorialPagerAdapter(
+    activity: FragmentActivity,
+    private val pages: List<Page>,
+    private val formatArgs: Bundle? = null
+) : FragmentStateAdapter(activity) {
     override fun getItemCount() = pages.size
-    override fun createFragment(position: Int) = TutorialPageFragment(pages[position])
+    override fun createFragment(position: Int) = TutorialPageFragment(pages[position], formatArgs)
 }

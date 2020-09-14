@@ -57,6 +57,15 @@ enum class PageSet(
             Page.LIVE_SHARE_MIRRORED,
             Page.LIVE_SHARE_START
         )
+    ),
+    TIPS(
+        feature = Settings.FEATURE_TUTORIAL_TIPS,
+        analyticsBaseScreenName = "tutorial-tips",
+        pages = listOf(
+            Page.TIPS_LEARN,
+            Page.TIPS_LIGHT,
+            Page.TIPS_START
+        )
     );
 
     fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }
