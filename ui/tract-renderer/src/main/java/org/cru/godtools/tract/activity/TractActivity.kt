@@ -45,7 +45,8 @@ import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
-import org.cru.godtools.tract.analytics.model.ShareScreenActionEvent
+import org.cru.godtools.tract.analytics.model.ShareScreenEngagedActionEvent
+import org.cru.godtools.tract.analytics.model.ShareScreenOpenedActionEvent
 import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
@@ -120,7 +121,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         setupDataModel()
         setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
-        startLiveShareSubscriberIfNecessary()
+        startLiveShareSubscriberIfNecessary(savedInstanceState)
     }
 
     override fun onBindingChanged() {
@@ -516,7 +517,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
-                eventBus.post(ShareScreenActionEvent)
+                eventBus.post(ShareScreenEngagedActionEvent)
                 showShareActivityChooser(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
             }
         }
@@ -528,12 +529,13 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         )
     }
 
-    private fun startLiveShareSubscriberIfNecessary() {
+    private fun startLiveShareSubscriberIfNecessary(savedInstanceState: Bundle?) {
         val streamId = intent?.data?.getQueryParameter(PARAM_LIVE_SHARE_STREAM) ?: return
 
         subscriberController.channelId = streamId
         subscriberController.receivedEvent.notNull().distinctUntilChanged()
             .observe(this) { navigateToLiveShareEvent(it) }
+        if (savedInstanceState == null) eventBus.post(ShareScreenOpenedActionEvent)
     }
 
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
