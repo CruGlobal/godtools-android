@@ -29,7 +29,7 @@ class LanguagesFragmentViewModel @ViewModelInject constructor(
     settings: Settings,
     @Assisted private val savedState: SavedStateHandle
 ) : ViewModel() {
-    val isPrimary = MutableLiveData<Boolean>(true)
+    val isPrimary = MutableLiveData(true)
 
     // region Search
     val query: MutableLiveData<String?> = savedState.getLiveData(KEY_QUERY, null)
