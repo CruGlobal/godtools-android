@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -67,6 +68,7 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
 
     private fun setupViewModel() {
         viewModel.isPrimary.value = isPrimary
+        viewModel.sortLocale.value = LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY)
     }
     // endregion ViewModel
 
