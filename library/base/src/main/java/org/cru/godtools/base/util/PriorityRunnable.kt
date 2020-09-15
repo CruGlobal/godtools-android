@@ -4,11 +4,8 @@ import java.util.Comparator
 
 private const val PRIORITY_DEFAULT = 0
 
-interface PriorityRunnable : Comparable<PriorityRunnable>, Runnable {
-    @JvmDefault
+interface PriorityRunnable : Runnable, Comparable<PriorityRunnable> {
     val priority get() = PRIORITY_DEFAULT
-
-    @JvmDefault
     override fun compareTo(other: PriorityRunnable) = COMPARATOR.compare(this, other)
 
     companion object {
