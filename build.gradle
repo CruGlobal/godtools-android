@@ -37,7 +37,7 @@ buildscript {
                 robolectric        : '4.4',
                 scarlet            : '0.1.10',
                 snowplow           : '1.6.0',
-                splitties          : '3.0.0-alpha07',
+                splitties          : '3.0.0-beta01',
                 taptargetview      : '1.13.0',
                 thekey             : '4.0.0',
                 timber             : '4.7.1',
