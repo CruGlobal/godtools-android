@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.databinding
 
 import android.app.Application
 import android.view.LayoutInflater
@@ -11,8 +11,9 @@ import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import java.util.Locale
-import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.LanguageTestUtils
+import org.cru.godtools.ui.languages.LanguageSettingsFragmentBindingCallbacks
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -42,7 +43,7 @@ class LanguageSettingsFragmentBindingTest {
     @Test
     fun verifyPrimaryLanguageLabel() {
         val language = mock<Language>()
-        whenever(language.getDisplayName(any())).thenReturn("Language Object")
+        whenever(LanguageTestUtils.getDisplayName(language, any())).thenReturn("Language Object")
         binding.primaryLocale = MutableLiveData(Locale.ENGLISH)
         binding.primaryLanguage = MutableLiveData(language)
         binding.invalidateAll()
@@ -75,7 +76,7 @@ class LanguageSettingsFragmentBindingTest {
     @Test
     fun verifyParallelLanguageLabel() {
         val language = mock<Language>()
-        whenever(language.getDisplayName(any())).thenReturn("Language Object")
+        whenever(LanguageTestUtils.getDisplayName(language, any())).thenReturn("Language Object")
         binding.parallelLocale = MutableLiveData(Locale.ENGLISH)
         binding.parallelLanguage = MutableLiveData(language)
         binding.invalidateAll()

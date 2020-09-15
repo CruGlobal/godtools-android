@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
@@ -48,12 +48,16 @@ class LanguagesFragmentViewModel @ViewModelInject constructor(
         }
     }
 
+    val sortLocale = MutableLiveData<Locale>()
     private val rawLanguages = Query.select<Language>()
         .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
         .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
         .getAsLiveData(dao)
-    private val sortedLanguages: LiveData<Map<String, Language>> = rawLanguages
-        .map { it.associateBy { lang -> lang.getDisplayName(context) }.toSortedMap(String.CASE_INSENSITIVE_ORDER) }
+    private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
+        .combineWith(rawLanguages) { displayLocale, languages ->
+            languages.associateBy { lang -> lang.getDisplayName(context, displayLocale) }
+                .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
+        }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
             query.isNullOrEmpty() -> languages.values.toList()
