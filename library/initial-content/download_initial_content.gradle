@@ -121,7 +121,7 @@ static def simplifyBundledLanguages(File file) {
     def data = new JsonSlurper().parseText(file.text)
 
     data.data.each { language ->
-        removeJsonApiAttrs(language, 'name', 'direction')
+        removeJsonApiAttrs(language, 'direction')
         language.remove('relationships')
     }
 
@@ -138,7 +138,7 @@ static def simplifyBundledTools(File file) {
                 // attributes
                 'manifest', 'onesky-project-id',
                 // relationships
-                'system', 'translations', 'latest-drafts-translations', 'pages')
+                'system', 'translations', 'latest-drafts-translations', 'pages', 'custom-manifests', 'tips')
     }
 
     // update included objects
@@ -149,7 +149,7 @@ static def simplifyBundledTools(File file) {
                 break
             case "language":
                 obj.remove('relationships')
-                removeJsonApiAttrs(obj, 'name', 'direction')
+                removeJsonApiAttrs(obj, 'direction')
                 break
         }
     }
