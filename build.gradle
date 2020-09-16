@@ -219,7 +219,7 @@ subprojects {
                 }
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_1_8.toString()
-                    freeCompilerArgs += '-Xjvm-default=enable'
+                    freeCompilerArgs += '-Xjvm-default=all'
                 }
                 lintOptions {
                     lintConfig rootProject.file("analysis/lint/lint.xml")
