@@ -77,6 +77,11 @@ buildscript {
                 messaging     : '20.2.4',
                 perf          : '19.0.8',
         ]
+        bundledContent = [
+                tools      : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
+                attachments: ['attr-banner', 'attr-banner-about'],
+                languages  : ['en'],
+        ]
         uris = [
                 mobileContentApi: [
                         stage     : "https://mobile-content-api-stage.cru.org/",
@@ -266,20 +271,6 @@ subprojects {
 // common library config
 configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
     beforeEvaluate {
-        android {
-            defaultConfig {
-                multiDexKeepProguard rootProject.file('multidex-keep.pro')
-            }
-
-            buildTypes {
-                debug {
-                    // HACK: Unfortunately we cannot target androidTest builds with multidex only, so we have to target
-                    //       all debug builds so that androidTest works when multidex is required.
-                    multiDexEnabled true
-                }
-            }
-        }
-
         // disable lint checks
         tasks.lint.enabled = false
     }
