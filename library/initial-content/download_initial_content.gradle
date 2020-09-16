@@ -1,11 +1,6 @@
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
-// the tools, languages, and attachments to bundle with app
-def toolsToDownload = ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare']
-def languagesToDownload = ['en']
-def attachmentsToDownload = ['attr-banner', 'attr-banner-about']
-
 apply plugin: 'de.undercouch.download'
 
 android.libraryVariants.all { variant ->
@@ -13,9 +8,9 @@ android.libraryVariants.all { variant ->
 
     // include the list of downloaded tools and languages as a BuildConfig constant
     variant.buildConfigField('java.util.Set<String>', 'BUNDLED_TOOLS', 'com.google.common.collect.ImmutableSet.of('
-            + toolsToDownload.collect{ "\"$it\"" }.join(',') + ')')
+            + bundledContent.tools.collect{ "\"$it\"" }.join(',') + ')')
     variant.buildConfigField('java.util.Set<String>', 'BUNDLED_LANGUAGES', 'com.google.common.collect.ImmutableSet.of('
-            + languagesToDownload.collect{ "\"$it\"" }.join(',') + ')')
+            + bundledContent.languages.collect{ "\"$it\"" }.join(',') + ')')
 
     // create a generated assets directory for the initial content and add it to the most specific source set available.
     def assetGenDir = new File(project.buildDir, "generated/assets/initial-content/" + variant.dirName)
@@ -62,8 +57,8 @@ android.libraryVariants.all { variant ->
 
         doLast {
             def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
-            toolsJson.data.findAll { toolsToDownload.contains(it.attributes.abbreviation) }.each { tool ->
-                attachmentsToDownload.each { attr ->
+            toolsJson.data.findAll { bundledContent.tools.contains(it.attributes.abbreviation) }.each { tool ->
+                bundledContent.attachments.each { attr ->
                     def attachmentId = tool.attributes.get(attr)
                     def attachment = toolsJson.included.find { it.id == attachmentId && it.type == "attachment" }
                     if (!attachment) {
@@ -94,10 +89,10 @@ android.libraryVariants.all { variant ->
         doLast {
             def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
             def tools = toolsJson.data.findAll {
-                toolsToDownload.contains(it.attributes.abbreviation)
+                bundledContent.tools.contains(it.attributes.abbreviation)
             }.collect { it.id }
             def languages = toolsJson.included.findAll {
-                it.type == 'language' && languagesToDownload.contains(it.attributes.code)
+                it.type == 'language' && bundledContent.languages.contains(it.attributes.code)
             }.collect { it.id }
             def translations = toolsJson.included.findAll {
                 it.type == 'translation' && tools.contains(it.relationships.resource.data.id) && languages.contains(it.relationships.language.data.id)
