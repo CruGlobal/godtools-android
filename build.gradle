@@ -8,7 +8,6 @@ buildscript {
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.0',
                 assistedInject     : '0.6.0',
-                autoService        : '1.0-rc7',
                 circleindicator    : '2.1.4',
                 dagger             : '2.29.1',
                 eventbus           : '3.2.0',
@@ -169,18 +168,6 @@ subprojects {
 
                 // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
                 substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.frett.AssistedInject:assisted-inject-processor-dagger2:a298fbf')
-            }
-
-            // HACK: Fix transitive auto-service dependency until robolectric contains https://github.com/robolectric/robolectric/pull/5432 fix
-            // Force latest versions of auto-service so we can perform appropriate dependency substitution.
-            force "com.google.auto.service:auto-service:${deps.autoService}"
-            force "com.google.auto.service:auto-service-annotations:${deps.autoService}"
-            String lowercaseName = configuration.name.toLowerCase(Locale.US)
-            if (!lowercaseName.contains("compileonly") && !lowercaseName.contains("kapt") &&
-                    !lowercaseName.contains("annotationprocessor")) {
-                dependencySubstitution {
-                    substitute module('com.google.auto.service:auto-service') with module("com.google.auto.service:auto-service-annotations:${deps.autoService}")
-                }
             }
         }
     }
