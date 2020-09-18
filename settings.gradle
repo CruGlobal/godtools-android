@@ -21,3 +21,5 @@ include 'ui:tract-renderer'
 include 'ui:tutorial-renderer'
 
 include 'app'
+
+include 'feature:bundledcontent'

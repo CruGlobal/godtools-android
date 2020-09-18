@@ -102,12 +102,16 @@ android {
         }
         release {
             minifyEnabled true
-            shrinkResources true
+            // TODO: this is disabled until it supports dynamic features in AS 4.2
+//            shrinkResources true
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
         }
     }
+    dynamicFeatures = [
+            ':feature:bundledcontent',
+    ]
     sourceSets {
         qa {
             setRoot 'src/debug'

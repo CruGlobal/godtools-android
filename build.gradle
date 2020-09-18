@@ -188,6 +188,29 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'jacoco-android'
 }
 
+// base feature plugins
+configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
+    apply plugin: "com.android.dynamic-feature"
+    apply plugin: 'kotlin-android'
+    apply plugin: 'kotlin-kapt'
+
+    android {
+        flavorDimensions "env"
+        productFlavors {
+            stage {
+                dimension "env"
+            }
+            production {
+                dimension "env"
+            }
+        }
+    }
+
+    dependencies {
+        implementation project(":app")
+    }
+}
+
 // common config
 subprojects {
     beforeEvaluate { project ->
