@@ -78,9 +78,10 @@ buildscript {
                 perf          : '19.0.8',
         ]
         bundledContent = [
-                tools      : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
-                attachments: ['attr-banner', 'attr-banner-about'],
-                languages  : ['en'],
+                tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
+                attachments         : ['attr-banner', 'attr-banner-about'],
+                languages           : ['en'],
+                downloadTranslations: false,
         ]
         uris = [
                 mobileContentApi: [
