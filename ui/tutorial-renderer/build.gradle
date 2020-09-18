@@ -32,5 +32,5 @@ dependencies {
     implementation "me.relex:circleindicator:${deps.circleindicator}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 }

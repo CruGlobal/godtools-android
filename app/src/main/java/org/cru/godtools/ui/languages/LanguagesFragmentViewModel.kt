@@ -61,7 +61,7 @@ class LanguagesFragmentViewModel @ViewModelInject constructor(
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
             query.isNullOrEmpty() -> languages.values.toList()
-            else -> languages.entries.filter { it.key.contains(query, true) }.map { it.value }.toList()
+            else -> languages.entries.filter { it.key.contains(query, true) }.map { it.value }
         }
     }
 

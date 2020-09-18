@@ -105,7 +105,7 @@ internal class Tasks @Inject constructor(
             eventBus.post(ToolUpdateEvent)
             eventBus.post(TranslationUpdateEvent)
             eventBus.post(AttachmentUpdateEvent)
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             // log exception, but it shouldn't be fatal (for now)
             Timber.tag(TAG).e(e, "Error loading bundled tools")
         }

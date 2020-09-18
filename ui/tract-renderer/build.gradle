@@ -66,7 +66,7 @@ dependencies {
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
@@ -74,5 +74,5 @@ dependencies {
     testImplementation "com.google.dagger:hilt-android-testing:${deps.hilt}"
 
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
-    kaptTest "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kaptTest "com.google.dagger:hilt-compiler:${deps.hilt}"
 }

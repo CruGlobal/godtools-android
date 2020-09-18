@@ -33,6 +33,6 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

@@ -32,5 +32,5 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 }

@@ -17,6 +17,6 @@ dependencies {
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:${deps.assistedInject}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:${deps.assistedInject}"
 }

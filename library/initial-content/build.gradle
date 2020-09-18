@@ -40,7 +40,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    kapt "com.google.dagger:hilt-android-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 }
 
 apply from: 'download_initial_content.gradle'
