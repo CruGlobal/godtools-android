@@ -10,7 +10,7 @@ buildscript {
                 assistedInject     : '0.5.2',
                 autoService        : '1.0-rc7',
                 circleindicator    : '2.1.4',
-                dagger             : '2.28.3',
+                dagger             : '2.29.1',
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.56.0',
