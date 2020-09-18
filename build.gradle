@@ -7,7 +7,7 @@ buildscript {
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.0',
-                assistedInject     : '0.5.2',
+                assistedInject     : '0.6.0',
                 autoService        : '1.0-rc7',
                 circleindicator    : '2.1.4',
                 dagger             : '2.28.3',
