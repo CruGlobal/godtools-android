@@ -141,9 +141,8 @@ subprojects {
     configurations.all { configuration ->
         configuration.resolutionStrategy {
             force "androidx.annotation:annotation:${deps.androidX.annotation}"
-            force "androidx.collection:collection:${deps.androidX.collection}"
+            force "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
             force "androidx.fragment:fragment:${deps.androidX.fragment}"
-            force "androidx.lifecycle:lifecycle-runtime:${deps.androidX.lifecycle}"
             force "androidx.loader:loader:${deps.androidX.loader}"
             force "androidx.multidex:multidex:${deps.androidX.multidex}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
