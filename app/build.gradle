@@ -117,16 +117,6 @@ android {
             setRoot 'src/debug'
         }
     }
-
-    variantFilter { variant ->
-        // stage product flavors
-        if (variant.flavors*.name.contains("stage")) {
-            // ignore for non-debug build types
-            if (variant.buildType.name != "debug") {
-                setIgnore(true)
-            }
-        }
-    }
 }
 kapt {
     arguments {

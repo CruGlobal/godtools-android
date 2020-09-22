@@ -250,6 +250,11 @@ subprojects {
                         }
                     }
                 }
+
+                // only include stage variants for the debug buildType
+                variantFilter { variant ->
+                    if (variant.flavors*.name.contains("stage") && variant.buildType.name != "debug") setIgnore(true)
+                }
             }
 
             dependencies {
