@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
-import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.liveshare.TractPublisherController

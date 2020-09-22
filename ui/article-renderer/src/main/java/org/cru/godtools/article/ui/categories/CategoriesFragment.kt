@@ -5,8 +5,8 @@ import android.view.View
 import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
-import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.article.R
 import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment

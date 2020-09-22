@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import org.ccci.gto.android.common.util.findListener
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import splitties.fragmentargs.arg

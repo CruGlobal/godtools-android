@@ -19,10 +19,10 @@ import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.ccci.gto.android.common.util.findListener
 import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerHeaderAdapter
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_MY_TOOLS
