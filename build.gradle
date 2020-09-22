@@ -131,7 +131,7 @@ ext {
 }
 
 // configure dependency resolution
-subprojects {
+allprojects {
     repositories {
         google()
         jcenter()
