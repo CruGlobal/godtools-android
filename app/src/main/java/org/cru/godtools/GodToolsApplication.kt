@@ -1,8 +1,10 @@
 package org.cru.godtools
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.instantapps.InstantApps
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import java.util.Locale
@@ -29,6 +31,11 @@ open class GodToolsApplication : Application() {
 
         // enable compat vector images
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
     }
 
     private fun configureLanguageFallacks() {
