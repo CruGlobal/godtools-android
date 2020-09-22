@@ -200,4 +200,5 @@ class Settings @Inject internal constructor(
     }
 }
 
+@Suppress("NOTHING_TO_INLINE")
 private inline fun String.parseLanguageTag() = forLanguageTag(this)
