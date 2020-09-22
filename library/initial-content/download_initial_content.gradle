@@ -81,35 +81,37 @@ android.libraryVariants.all { variant ->
     assetGenTask.dependsOn(downloadAttachmentsTask)
 
     // download translations
-    def translationsDir = new File(assetGenDir, 'translations')
-    def downloadTranslationsTask = project.tasks.create("download${variant.name.capitalize()}BundledTranslations") {
-        mustRunAfter clean
-        dependsOn downloadToolsTask
+    if (bundledContent.downloadTranslations) {
+        def translationsDir = new File(assetGenDir, 'translations')
+        def downloadTranslationsTask = project.tasks.create("download${variant.name.capitalize()}BundledTranslations") {
+            mustRunAfter clean
+            dependsOn downloadToolsTask
 
-        doLast {
-            def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
-            def tools = toolsJson.data.findAll {
-                bundledContent.tools.contains(it.attributes.abbreviation)
-            }.collect { it.id }
-            def languages = toolsJson.included.findAll {
-                it.type == 'language' && bundledContent.languages.contains(it.attributes.code)
-            }.collect { it.id }
-            def translations = toolsJson.included.findAll {
-                it.type == 'translation' && tools.contains(it.relationships.resource.data.id) && languages.contains(it.relationships.language.data.id)
-            }.collect { it.id }
+            doLast {
+                def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
+                def tools = toolsJson.data.findAll {
+                    bundledContent.tools.contains(it.attributes.abbreviation)
+                }.collect { it.id }
+                def languages = toolsJson.included.findAll {
+                    it.type == 'language' && bundledContent.languages.contains(it.attributes.code)
+                }.collect { it.id }
+                def translations = toolsJson.included.findAll {
+                    it.type == 'translation' && tools.contains(it.relationships.resource.data.id) && languages.contains(it.relationships.language.data.id)
+                }.collect { it.id }
 
-            translations.each { translationId ->
-                download {
-                    src "${mobileContentApi}translations/${translationId}"
-                    dest new File(translationsDir, "${translationId}.zip")
-                    overwrite false
-                    tempAndMove true
-                    quiet true
+                translations.each { translationId ->
+                    download {
+                        src "${mobileContentApi}translations/${translationId}"
+                        dest new File(translationsDir, "${translationId}.zip")
+                        overwrite false
+                        tempAndMove true
+                        quiet true
+                    }
                 }
             }
         }
+        assetGenTask.dependsOn(downloadTranslationsTask)
     }
-    assetGenTask.dependsOn(downloadTranslationsTask)
 }
 
 static def simplifyBundledLanguages(File file) {
