@@ -6,8 +6,8 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
 import java.util.Locale
-import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.content.localize
+import org.ccci.gto.android.common.util.getOptionalDisplayName
 import timber.log.Timber
 
 @VisibleForTesting
@@ -19,7 +19,7 @@ val Context.deviceLocale: Locale get() = ConfigurationCompat.getLocales(resource
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
     return context?.localizeIfPossible(inLocale)?.getLanguageNameStringRes(this)
         // use Locale.getDisplayName()
-        ?: LocaleUtils.getOptionalDisplayName(this, inLocale)
+        ?: getOptionalDisplayName(inLocale)
         // use the default name if specified
         ?: defaultName
         // just rely on Locale.getDisplayName() which will default to the language code at this point
