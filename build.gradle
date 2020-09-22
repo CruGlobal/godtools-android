@@ -30,7 +30,7 @@ buildscript {
                 mockitoKotlin      : '2.1.0',
                 moshi              : '1.10.0',
                 okhttp3            : '3.12.12',
-                picasso            : '2.71828',
+                picasso            : '2.8',
                 picassoTransforms  : '2.3.1',
                 retrofit2          : '2.6.4',
                 robolectric        : '4.4',
@@ -117,7 +117,6 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "9.2.1"
 }
 
-group 'org.cru.android'
 version '5.3.2-SNAPSHOT'
 ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 
@@ -131,7 +130,7 @@ ext {
 }
 
 // configure dependency resolution
-subprojects {
+allprojects {
     repositories {
         google()
         jcenter()
@@ -201,8 +200,6 @@ subprojects {
 
                     minSdkVersion minSdk
                     targetSdkVersion targetSdk
-
-                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                 }
 
                 compileOptions {
@@ -246,11 +243,6 @@ subprojects {
                 testImplementation "org.mockito:mockito-inline:${deps.mockito}"
                 testImplementation "org.robolectric:robolectric:${deps.robolectric}"
             }
-        }
-
-        if (project.hasProperty('kapt')) {
-            // don't include the compile classpath when looking for annotation processors
-            kapt.includeCompileClasspath = false
         }
     }
 }
