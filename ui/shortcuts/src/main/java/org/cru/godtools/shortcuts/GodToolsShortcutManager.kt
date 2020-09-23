@@ -38,6 +38,7 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.article.ui.categories.createCategoriesIntent
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.model.Attachment
@@ -46,7 +47,6 @@ import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.cru.godtools.tract.activity.createTractActivityIntent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable

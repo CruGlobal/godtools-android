@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -31,12 +30,13 @@ import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
-import org.ccci.gto.android.common.util.os.putLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
+import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
 import org.cru.godtools.base.ui.fragment.showAllowingStateLoss
@@ -71,25 +71,9 @@ import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-private const val EXTRA_LANGUAGES = "org.cru.godtools.tract.activity.TractActivity.LANGUAGES"
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
-private const val EXTRA_SHOW_TIPS = "org.cru.godtools.tract.activity.TractActivity.SHOW_TIPS"
 
 private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
-
-fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
-    startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
-
-fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
-    Intent(this, TractActivity::class.java)
-        .putExtras(Bundle().populateTractActivityExtras(toolCode, *languages))
-        .putExtra(EXTRA_SHOW_TIPS, showTips)
-
-private fun Bundle.populateTractActivityExtras(toolCode: String, vararg languages: Locale?) = apply {
-    putString(EXTRA_TOOL, toolCode)
-    // XXX: we use singleString mode to support using this intent for legacy shortcuts
-    putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
-}
 
 @AndroidEntryPoint
 class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
