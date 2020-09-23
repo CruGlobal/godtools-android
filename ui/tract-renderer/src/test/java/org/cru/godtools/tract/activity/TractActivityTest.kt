@@ -32,7 +32,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.SyncModule
 import org.cru.godtools.sync.task.SyncTaskModule
-import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
+import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Manifest
 import org.junit.After

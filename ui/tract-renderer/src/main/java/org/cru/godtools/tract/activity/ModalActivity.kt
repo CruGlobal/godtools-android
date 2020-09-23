@@ -21,8 +21,8 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.tract.Constants.EXTRA_MODAL
-import org.cru.godtools.tract.Constants.EXTRA_PAGE
+import org.cru.godtools.tract.EXTRA_MODAL
+import org.cru.godtools.tract.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController

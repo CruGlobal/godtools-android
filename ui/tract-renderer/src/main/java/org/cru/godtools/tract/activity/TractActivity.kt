@@ -40,10 +40,10 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
 import org.cru.godtools.base.ui.fragment.showAllowingStateLoss
-import org.cru.godtools.tract.Constants.PARAM_LIVE_SHARE_STREAM
-import org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE
-import org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE
-import org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE
+import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
+import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
+import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
+import org.cru.godtools.tract.PARAM_USE_DEVICE_LANGUAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ShareScreenEngagedActionEvent
