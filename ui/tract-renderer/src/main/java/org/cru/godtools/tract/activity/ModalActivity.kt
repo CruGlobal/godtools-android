@@ -15,8 +15,8 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
-import org.cru.godtools.base.Constants.EXTRA_LANGUAGE
-import org.cru.godtools.base.Constants.EXTRA_TOOL
+import org.cru.godtools.base.EXTRA_LANGUAGE
+import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
