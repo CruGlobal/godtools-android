@@ -10,10 +10,21 @@
 
     <bool name="tract_tips_show_full_height">true</bool>
 
+    <!-- region Badge -->
+    <style name="Widget.GodTools.Tip.Badge" parent="Base">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="backgroundFillColor">@color/white</item>
+        <item name="elevation">@dimen/tract_tips_tip_elevation</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Badge</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
     <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
     </style>
+    <!-- endregion Badge -->
 
     <!-- region Arrow -->
     <dimen name="tract_tips_arrow_height">38dp</dimen>

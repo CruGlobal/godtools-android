@@ -12,16 +12,14 @@
         <variable name="model" type="org.cru.godtools.xml.model.tips.InlineTip" />
     </data>
 
-    <com.google.android.material.chip.Chip
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <org.cru.godtools.tract.widget.MaterialShapeBackgroundImageView
+        style="@style/Widget.GodTools.Tip.Badge"
         android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
         android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:onClick="@{() -> controller.showTip(model.tip)}"
-        android:text="@string/tract_tips_action_open_inline"
-        android:textColor="@color/tract_tips_red"
-        app:chipBackgroundColor="@color/white"
-        app:chipIconResource="@{TipTypeKt.getDrawableRes(model.tip.type)}"
-        app:elevation="@{@dimen/tract_tips_tip_elevation}"
-        app:visibleIf="@{enableTips}" />
+        android:src="@{TipTypeKt.getDrawable(model.tip.type, context)}"
+        app:visibleIf="@{enableTips}"
+        tools:src="@drawable/ic_tips_tip" />
 </layout>
