@@ -10,7 +10,8 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
-import org.cru.godtools.base.Constants
+import org.cru.godtools.base.EXTRA_LANGUAGE
+import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.xml.model.Manifest
@@ -30,8 +31,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         super.onCreate(savedInstanceState)
 
         intent?.extras?.let { extras ->
-            dataModel.toolCode.value = extras.getString(Constants.EXTRA_TOOL, dataModel.toolCode.value)
-            dataModel.locale.value = extras.getLocale(Constants.EXTRA_LANGUAGE, dataModel.locale.value)
+            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
+            dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
         }
 
         // finish now if this activity is in an invalid state
@@ -86,16 +87,16 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     // region Up Navigation
     override fun buildParentIntentExtras(): Bundle {
         val extras = super.buildParentIntentExtras()
-        extras.putString(Constants.EXTRA_TOOL, dataModel.toolCode.value)
-        extras.putLocale(Constants.EXTRA_LANGUAGE, dataModel.locale.value)
+        extras.putString(EXTRA_TOOL, dataModel.toolCode.value)
+        extras.putLocale(EXTRA_LANGUAGE, dataModel.locale.value)
         return extras
     }
     // endregion Up Navigation
 
     companion object {
         fun buildExtras(context: Context, toolCode: String?, language: Locale?) = buildExtras(context).apply {
-            putString(Constants.EXTRA_TOOL, toolCode)
-            putLocale(Constants.EXTRA_LANGUAGE, language)
+            putString(EXTRA_TOOL, toolCode)
+            putLocale(EXTRA_LANGUAGE, language)
         }
     }
 }

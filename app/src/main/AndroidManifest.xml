@@ -69,64 +69,36 @@
             android:name=".ui.about.AboutActivity"
             android:label="@string/title_about"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".ui.tooldetails.ToolDetailsActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".ui.languages.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".ui.languages.LanguageSelectionActivity"
             android:parentActivityName=".ui.languages.LanguageSettingsActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cru.godtools.ui.languages.LanguageSettingsActivity" />
-        </activity>
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".tract.activity.TractActivity"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
 
         <activity
             android:name=".tutorial.activity.TutorialActivity"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
 
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/profile_title"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
 
         <!-- Disable the built-in WorkManagerInitializer -->
         <provider
