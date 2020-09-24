@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':library:initial-content')
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+
+    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+
+    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+}

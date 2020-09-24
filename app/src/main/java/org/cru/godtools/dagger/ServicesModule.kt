@@ -18,6 +18,7 @@ import me.thekey.android.eventbus.EventBusEventsManager
 import org.ccci.gto.android.common.androidx.work.TimberLogger
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
 import org.ccci.gto.android.common.dagger.workmanager.DaggerWorkerFactory
 import org.ccci.gto.android.common.dagger.workmanager.WorkManagerModule
 import org.cru.godtools.account.BuildConfig
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.EventBus
 @Module(
     includes = [
         EagerModule::class,
+        SplitInstallModule::class,
         WorkManagerModule::class
     ]
 )

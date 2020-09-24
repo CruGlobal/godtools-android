@@ -102,25 +102,19 @@ android {
         }
         release {
             minifyEnabled true
-            shrinkResources true
+            // TODO: this is disabled until it supports dynamic features in AS 4.2
+//            shrinkResources true
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
         }
     }
+    dynamicFeatures = [
+            ':feature:bundledcontent',
+    ]
     sourceSets {
         qa {
             setRoot 'src/debug'
-        }
-    }
-
-    variantFilter { variant ->
-        // stage product flavors
-        if (variant.flavors*.name.contains("stage")) {
-            // ignore for non-debug build types
-            if (variant.buildType.name != "debug") {
-                setIgnore(true)
-            }
         }
     }
 }
@@ -135,11 +129,10 @@ configurations {
 }
 
 dependencies {
-    implementation project(':library:api')
+    api project(':library:api')
     implementation project(':library:base')
-    implementation project(':library:db')
-    implementation project(':library:download-manager')
-    implementation project(':library:initial-content')
+    api project(':library:db')
+    api project(':library:download-manager')
     implementation project(':library:model')
     implementation project(':library:sync')
 
@@ -180,6 +173,8 @@ dependencies {
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
+    implementation 'com.google.android.play:core:1.8.0'
+
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
@@ -187,12 +182,14 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
+    api "me.thekey.android:thekey-api:${deps.thekey}"
     implementation "me.thekey.android:thekey-core:${deps.thekey}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-livedata:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
+    api "org.greenrobot:eventbus:${deps.eventbus}"
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"

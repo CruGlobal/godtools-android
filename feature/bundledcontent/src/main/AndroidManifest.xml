@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="org.cru.godtools.feature.bundledcontent">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/feature_bundled_content">
+        <dist:delivery>
+            <dist:install-time>
+                <!-- TODO: enable this when we upgrade to Android Studio 4.2 -->
+<!--                <dist:removable value="true" />-->
+            </dist:install-time>
+        </dist:delivery>
+        <dist:fusing dist:include="true" />
+    </dist:module>
+    <application android:hasCode="true" />
+</manifest>
