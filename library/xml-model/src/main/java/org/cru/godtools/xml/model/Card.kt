@@ -20,6 +20,7 @@ class Card : BaseModel, Styles, Parent {
     val id get() = "${page.id}-$position"
     val position: Int
     val visiblePosition get() = page.visibleCards.indexOf(this).takeUnless { it == -1 }
+    val isLastVisibleCard get() = this == page.visibleCards.lastOrNull()
 
     val isHidden: Boolean
     val listeners: Set<Event.Id>
@@ -82,10 +83,15 @@ class Card : BaseModel, Styles, Parent {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(parent: Page, position: Int = 0, content: ((Card) -> List<Content>?)? = null) : super(parent) {
+    constructor(
+        parent: Page,
+        position: Int = 0,
+        isHidden: Boolean = false,
+        content: ((Card) -> List<Content>?)? = null
+    ) : super(parent) {
         this.position = position
 
-        isHidden = false
+        this.isHidden = isHidden
         listeners = emptySet()
         dismissListeners = emptySet()
         analyticsEvents = emptySet()
