@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">GodTools</string>
     <string name="toast_unable_to_launch_activity">Unable to open %s</string>
 
     <!-- Tool Categories -->
