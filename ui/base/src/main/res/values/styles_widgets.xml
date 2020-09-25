@@ -11,10 +11,6 @@
     <style name="Widget.GodTools.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton" />
 
     <!-- region Button ThemeOverlays -->
-    <style name="ThemeOverlay.GodTools.Button.Green" parent="ThemeOverlay.MaterialComponents">
-        <item name="colorPrimary">@color/gt_green</item>
-    </style>
-
     <style name="ThemeOverlay.GodTools.Button.Red" parent="ThemeOverlay.MaterialComponents">
         <item name="colorPrimary">@color/gt_red</item>
     </style>
