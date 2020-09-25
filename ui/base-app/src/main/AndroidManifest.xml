@@ -9,9 +9,5 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true">
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
-    </application>
+        android:supportsRtl="true" />
 </manifest>
