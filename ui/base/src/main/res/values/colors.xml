@@ -3,14 +3,13 @@
     <!-- standard colors -->
     <color name="tintable">#FF000000</color>
     <color name="tintable_20">#33000000</color>
-    <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
 
     <color name="gray_5A">#5A5A5A</color>
     <color name="gray_97">#979797</color>
     <color name="gray_BE">#bebebe</color>
     <color name="gray_E6">#E6E6E6</color>
     <color name="gray_F2">#F2F2F2</color>
+    <color name="white">#ffffff</color>
 
     <!-- theme colors -->
     <color name="gt_blue">#3BA4DB</color>
