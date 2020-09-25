@@ -92,6 +92,17 @@ class TractContentCardBindingTest {
     }
 
     @Test
+    fun verifyTipsIndicatorHiddenWhenCallToActionHasATipButThisIsntTheLastCard() {
+        whenever(card.isLastVisibleCard).thenReturn(false)
+        callToAction.setTip(tip)
+        binding.enableTips = true
+        binding.model = card
+        binding.executePendingBindings()
+
+        assertEquals(View.GONE, binding.tipsIndicator.visibility)
+    }
+
+    @Test
     fun verifyTipIndicatorIconUsesFirstCardTip() {
         card.setTips(Tip(id = "ask", type = Tip.Type.ASK), Tip(id = "ask", type = Tip.Type.CONSIDER))
         callToAction.setTip(Tip(id = "quote", type = Tip.Type.QUOTE))
