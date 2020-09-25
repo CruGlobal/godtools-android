@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation project(':ui:base-app')
+    implementation project(':ui:base')
 
     implementation "me.thekey.android:thekey-accountmanager:${deps.thekey}"
 }
