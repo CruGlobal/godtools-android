@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.robolectric.Robolectric
+import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class TractContentCardBindingTest {
@@ -88,6 +89,25 @@ class TractContentCardBindingTest {
         binding.executePendingBindings()
 
         assertEquals(View.VISIBLE, binding.tipsIndicator.visibility)
+    }
+
+    @Test
+    fun verifyTipIndicatorIconUsesFirstCardTip() {
+        card.setTips(Tip(id = "ask", type = Tip.Type.ASK), Tip(id = "ask", type = Tip.Type.CONSIDER))
+        callToAction.setTip(Tip(id = "quote", type = Tip.Type.QUOTE))
+        binding.model = card
+        binding.executePendingBindings()
+
+        assertEquals(R.drawable.ic_tips_ask, Shadows.shadowOf(binding.tipsIndicator.drawable).createdFromResId)
+    }
+
+    @Test
+    fun verifyTipIndicatorIconUsesCallToActionTip() {
+        callToAction.setTip(Tip(id = "quote", type = Tip.Type.QUOTE))
+        binding.model = card
+        binding.executePendingBindings()
+
+        assertEquals(R.drawable.ic_tips_quote, Shadows.shadowOf(binding.tipsIndicator.drawable).createdFromResId)
     }
     // endregion Tips Indicator
 }

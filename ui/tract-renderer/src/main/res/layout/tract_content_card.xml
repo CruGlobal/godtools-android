@@ -64,7 +64,7 @@
                     android:layout_height="24dp"
                     android:layout_marginTop="@dimen/card_margin_content_top"
                     android:layout_marginEnd="@dimen/tract_content_margin_horizontal"
-                    android:src="@{TipTypeKt.getDrawable(model.tips[0].type, context)}"
+                    android:src="@{TipTypeKt.getDrawable((model.tips[0] ?? model.page.callToAction.tip).type, context)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:visibleIf="@{enableTips &amp;&amp; (!model.tips.isEmpty || (model.isLastVisibleCard &amp;&amp; model.page.callToAction.tip != null))}"
