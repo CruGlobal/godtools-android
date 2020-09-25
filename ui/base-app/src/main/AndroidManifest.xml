@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.base.app">
-
-    <!-- These permissions should be obvious -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true" />
-</manifest>
+<manifest package="org.cru.godtools.base.app" />
