@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.net.Uri
@@ -25,6 +26,7 @@ internal class AemArticleViewModel @ViewModelInject constructor(
     val article = articleUri.distinctUntilChanged().switchMap { articleDao.findLiveData(it) }
 
     // region WebView
+    @SuppressLint("StaticFieldLeak")
     private lateinit var webView: WebView
 
     fun getWebView(activity: Activity): WebView {

@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -14,6 +15,7 @@ class HackyRtlViewPager @JvmOverloads constructor(context: Context?, attrs: Attr
         ViewUtils.handleOnInterceptTouchEventException(e)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent) = try {
         super.onTouchEvent(ev)
     } catch (e: RuntimeException) {

@@ -4,6 +4,6 @@
     <issue id="MissingTranslation" severity="warning" />
 
     <!-- enable a few additional lint checks -->
-    <issue id="SyntheticAccessor" severity="warning" />
-    <issue id="UnusedIds" severity="warning" />
+<!--    <issue id="SyntheticAccessor" severity="warning" />-->
+<!--    <issue id="UnusedIds" severity="warning" />-->
 </lint>

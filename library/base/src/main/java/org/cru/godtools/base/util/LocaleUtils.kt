@@ -32,7 +32,6 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
         }
 }
 
-@JvmName("localizeContextIfPossible")
 fun Context.localizeIfPossible(locale: Locale?) = locale?.let { localize(it) } ?: this
 
 private fun Context.getLanguageNameStringRes(locale: Locale): String? {
