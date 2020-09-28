@@ -60,7 +60,7 @@
                     <org.cru.godtools.tract.widget.MaterialShapeBackgroundImageView
                         style="@style/Widget.GodTools.Tip.Arrow.Up"
                         android:layout_gravity="start"
-                        android:layout_marginTop="-12dp"
+                        android:layout_marginTop="-16dp"
                         android:layout_marginStart="24dp"
                         android:onClick="@{() -> controller.showTip(page.header.tip)}"
                         android:src="@{TipTypeKt.getDrawable(page.header.tip.type, context)}"

@@ -11,13 +11,16 @@
     <bool name="tract_tips_show_full_height">true</bool>
 
     <!-- region Badge -->
+    <dimen name="tract_tips_badge_size">40dp</dimen>
+    <dimen name="tract_tips_badge_padding">8dp</dimen>
+
     <style name="Widget.GodTools.Tip.Badge" parent="Base">
-        <item name="android:layout_width">40dp</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">@dimen/tract_tips_badge_size</item>
+        <item name="android:layout_height">@dimen/tract_tips_badge_size</item>
         <item name="backgroundFillColor">@color/white</item>
         <item name="elevation">@dimen/tract_tips_tip_elevation</item>
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Badge</item>
-        <item name="android:padding">8dp</item>
+        <item name="android:padding">@dimen/tract_tips_badge_padding</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
@@ -27,9 +30,11 @@
     <!-- endregion Badge -->
 
     <!-- region Arrow -->
-    <dimen name="tract_tips_arrow_height">38dp</dimen>
-    <dimen name="tract_tips_arrow_width">32dp</dimen>
-    <dimen name="tract_tips_arrow_size">9dp</dimen>
+    <dimen name="tract_tips_arrow_height">48dp</dimen>
+    <dimen name="tract_tips_arrow_width">@dimen/tract_tips_badge_size</dimen>
+    <dimen name="tract_tips_arrow_padding">@dimen/tract_tips_badge_padding</dimen>
+    <dimen name="tract_tips_arrow_padding_arrow">16dp</dimen>
+    <dimen name="tract_tips_arrow_size">12dp</dimen>
 
     <style name="Widget.GodTools.Tip.Arrow" parent="Base">
         <item name="backgroundFillColor">@color/white</item>
@@ -40,18 +45,18 @@
     <style name="Widget.GodTools.Tip.Arrow.Vertical">
         <item name="android:layout_width">@dimen/tract_tips_arrow_width</item>
         <item name="android:layout_height">@dimen/tract_tips_arrow_height</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingLeft">@dimen/tract_tips_arrow_padding</item>
+        <item name="android:paddingRight">@dimen/tract_tips_arrow_padding</item>
     </style>
 
     <style name="Widget.GodTools.Tip.Arrow.Down" parent="Widget.GodTools.Tip.Arrow.Vertical">
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">@dimen/tract_tips_arrow_padding</item>
+        <item name="android:paddingBottom">@dimen/tract_tips_arrow_padding_arrow</item>
     </style>
 
     <style name="Widget.GodTools.Tip.Arrow.Up" parent="Widget.GodTools.Tip.Arrow.Vertical">
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingTop">@dimen/tract_tips_arrow_padding_arrow</item>
+        <item name="android:paddingBottom">@dimen/tract_tips_arrow_padding</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Arrow" parent="ShapeAppearance.MaterialComponents">

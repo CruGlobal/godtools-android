@@ -54,8 +54,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon_background"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/tract_tips_badge_size"
+            android:layout_height="@dimen/tract_tips_badge_size"
             android:layout_marginStart="@dimen/tract_tip_margin_horiz"
             android:layout_marginTop="8dp"
             android:elevation="@dimen/tract_tips_tip_elevation"
