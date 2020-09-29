@@ -59,6 +59,7 @@ import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
+import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
 import org.cru.godtools.xml.model.Card
@@ -215,7 +216,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
-        if (intent?.action == Intent.ACTION_VIEW && data?.isDeepLinkValid == true) {
+        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink(this) == true) {
             dataModel.tool.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
@@ -234,12 +235,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             dataModel.tool.value = null
         }
     }
-
-    @VisibleForTesting
-    internal val Uri.isDeepLinkValid get() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
-        (getString(R.string.tract_deeplink_host_1).equals(host, true) ||
-            getString(R.string.tract_deeplink_host_2).equals(host, true)) &&
-        pathSegments.size >= 2
 
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = LocaleCompat.forLanguageTag(pathSegments[0])

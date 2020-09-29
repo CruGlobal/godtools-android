@@ -4,9 +4,7 @@ import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,20 +17,6 @@ class TractActivityDeepLinkTest {
     @Before
     fun setup() {
         activity = Robolectric.buildActivity(TractActivity::class.java).get()
-    }
-
-    @Test
-    fun verifyIsDeepLinkValid() {
-        with(activity) {
-            assertFalse(Uri.parse("wss://knowgod.com/en/kgp").isDeepLinkValid)
-            assertFalse(Uri.parse("https://example.com/en/kgp").isDeepLinkValid)
-            assertFalse(Uri.parse("https://knowgod.com/en").isDeepLinkValid)
-            assertTrue(Uri.parse("http://knowgod.com/en/kgp").isDeepLinkValid)
-            assertTrue(Uri.parse("https://knowgod.com/en/kgp").isDeepLinkValid)
-            assertTrue(Uri.parse("https://www.knowgod.com/en/kgp").isDeepLinkValid)
-            assertTrue(Uri.parse("https://knowgod.com/en/fourlaws").isDeepLinkValid)
-            assertTrue(Uri.parse("https://knowgod.com/en/kgp/2").isDeepLinkValid)
-        }
     }
 
     @Test
