@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
     package="org.cru.godtools">
 
     <!-- This permission should be obvious -->
@@ -33,6 +34,8 @@
         android:name="android.hardware.location"
         android:required="false" />
 
+    <dist:module dist:instant="true" />
+
     <application
         android:name=".GodToolsApplication"
         android:allowBackup="false"
@@ -55,6 +58,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="@string/account_deeplink_host" />
                 <data android:path="@string/account_deeplink_path" />
