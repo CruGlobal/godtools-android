@@ -67,7 +67,8 @@ class Page : BaseModel, Styles {
         manifest: Manifest,
         position: Int = 0,
         fileName: String? = null,
-        cards: ((Page) -> List<Card>?)? = null
+        cards: ((Page) -> List<Card>?)? = null,
+        callToAction: ((Page) -> CallToAction?)? = null
     ) : super(manifest) {
         this.position = position
         this.fileName = fileName
@@ -88,7 +89,7 @@ class Page : BaseModel, Styles {
         hero = null
         this.cards = cards?.invoke(this).orEmpty()
         modals = emptyList()
-        callToAction = CallToAction(this)
+        this.callToAction = callToAction?.invoke(this) ?: CallToAction(this)
     }
 
     @WorkerThread

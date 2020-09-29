@@ -10,6 +10,8 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -47,5 +49,17 @@ class CardTest {
 
         assertEquals(3, card.tips.size)
         assertThat(card.tips, contains(tip1, tip2, tip1))
+    }
+
+    @Test
+    fun verifyCardIsLastVisibleCard() {
+        val page = Page(
+            Manifest(),
+            cards = { listOf(Card(it, isHidden = false), Card(it, isHidden = false), Card(it, isHidden = true)) }
+        )
+
+        assertFalse(page.cards[0].isLastVisibleCard)
+        assertTrue(page.cards[1].isLastVisibleCard)
+        assertFalse(page.cards[2].isLastVisibleCard)
     }
 }
