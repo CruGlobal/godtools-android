@@ -73,7 +73,7 @@ buildscript {
                 core          : '17.5.0',
                 crashlytics   : '17.2.1',
                 inAppMessaging: '19.1.1',
-                messaging     : '20.2.4',
+                messaging     : '20.3.0',
                 perf          : '19.0.9',
         ]
         bundledContent = [
