@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
@@ -29,7 +30,8 @@ import timber.log.Timber
 
 private const val TAG = "AppsFlyerAnalytics"
 
-private const val AF_DP = "af_dp"
+@VisibleForTesting
+internal const val AF_DP = "af_dp"
 private const val AF_STATUS = "af_status"
 private const val IS_FIRST_LAUNCH = "is_first_launch"
 
