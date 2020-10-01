@@ -23,8 +23,6 @@
     </style>
 
     <style name="Widget.GodTools.Static.Text" parent="Base">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/static_content_margin_vert</item>
         <item name="android:breakStrategy" tools:targetApi="m">balanced</item>
         <item name="android:gravity">center_horizontal</item>

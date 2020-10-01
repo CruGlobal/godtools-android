@@ -44,6 +44,8 @@
         <TextView
             android:id="@+id/loading_text"
             style="@style/Widget.GodTools.Static.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/loading_progress"
             android:text="@string/tool_loading"
             app:layout_constraintBottom_toBottomOf="parent"
