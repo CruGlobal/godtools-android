@@ -45,10 +45,11 @@ open class GodToolsApplication : Application() {
     }
 
     private fun initializeCrashlytics() {
-        val crashlytics = FirebaseCrashlytics.getInstance()
-        crashlytics.setCustomKey("InstantApp", InstantApps.isInstantApp(this))
-        crashlytics.setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
-        crashlytics.setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
+        FirebaseCrashlytics.getInstance().apply {
+            setCustomKey("InstantApp", InstantApps.isInstantApp(this@GodToolsApplication))
+            setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
+            setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
+        }
         Timber.plant(CrashlyticsTree())
     }
 }
