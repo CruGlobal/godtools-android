@@ -275,14 +275,6 @@ subprojects {
     }
 }
 
-// common library config
-configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
-    beforeEvaluate {
-        // disable lint checks
-        tasks.lint.enabled = false
-    }
-}
-
 // configure checkstyle
 subprojects {
     apply plugin: 'checkstyle'
