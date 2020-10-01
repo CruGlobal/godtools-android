@@ -43,13 +43,6 @@
         <item name="android:layout_centerHorizontal">true</item>
     </style>
 
-    <style name="Widget.GodTools.Static.Action" parent="Widget.GodTools.Button.Colored.Blue">
-        <item name="android:layout_width">260dp</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
-    </style>
-
     <style name="TextAppearance.GodTools.Static.Text" parent="TextAppearance.GodTools.Medium">
         <item name="android:textColor">@color/gray_5A</item>
     </style>

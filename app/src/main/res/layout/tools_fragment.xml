@@ -41,10 +41,11 @@
                     app:layout_constraintVertical_chainStyle="packed"
                     app:srcCompat="@drawable/ic_find_tools" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/action"
-                    style="@style/Widget.GodTools.Static.Action"
-                    android:layout_width="144dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:onClick="@{() -> fragment.onEmptyActionClick()}"
                     android:text="@string/nav_all_tools"
                     app:layout_constraintBottom_toBottomOf="parent"
