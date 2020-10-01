@@ -19,7 +19,6 @@
     </style>
 
     <style name="Widget.GodTools.Static.Text" parent="Base">
-        <item name="android:layout_marginBottom">@dimen/static_content_margin_vert</item>
         <item name="android:breakStrategy" tools:targetApi="m">balanced</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Static.Text</item>
