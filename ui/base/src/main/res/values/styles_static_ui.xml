@@ -26,10 +26,7 @@
 
     <style name="Widget.GodTools.Static.ProgressBar" parent="Widget.GodTools.ProgressBar">
         <item name="android:progressDrawable">@drawable/progress_loading</item>
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">10dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:minHeight">10dp</item>
     </style>
 
     <style name="TextAppearance.GodTools.Static.Text" parent="TextAppearance.GodTools.Medium">
