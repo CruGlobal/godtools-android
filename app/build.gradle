@@ -93,6 +93,7 @@ android {
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
+                    apkPath = new File(buildDir, 'outputs/universal_apk/productionQa/app-production-qa-universal.apk')
                     appId = '1:71275134527:android:e6af54d704ba9adac5028a'
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
