@@ -304,7 +304,7 @@ subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     ktlint {
-        version = '0.36.0'
+        version = '0.40.0'
         android = true
         reporters {
             reporter(ReporterType.PLAIN_GROUP_BY_FILE)
