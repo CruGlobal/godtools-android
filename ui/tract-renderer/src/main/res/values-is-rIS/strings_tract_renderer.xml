@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Fara úr lotu fyrir fjardeilingu núna?</string>
     <string name="tract_live_share_exit_dialog_confirm">Hætta</string>
     <string name="tract_live_share_exit_dialog_cancel">Hætta við</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

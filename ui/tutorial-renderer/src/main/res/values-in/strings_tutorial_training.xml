@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Tonton</string>
+    <string name="tutorial_training_watch_subhead">Lihat apa yang ditawarkan di demo video kami</string>
+    <string name="tutorial_training_prepare_headline">Persiapan</string>
+    <string name="tutorial_training_prepare_subhead">Kenali beberapa sarana Saudara. Sarana \"Ajari Saya untuk Berbagi\" adalah tempat yang baik untuk memulai.</string>
+    <string name="tutorial_training_try_headline">Mencoba</string>
+    <string name="tutorial_training_try_subhead">Semua orang memulai sebagai pemula. Coba gunakan sarana dalam percakapan dan lihat apa yang Saudara pelajari.</string>
+    <string name="tutorial_training_final_headline">Tutorial ini tersedia untuk dilihat lagi di menu</string>
+    <string name="tutorial_training_action_continue">Lanjutkan</string>
+    <string name="tutorial_training_action_start">Mulai menggunakan GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Tunjukkan tutorial</string>
+    <string name="tutorial_training_banner_action_open">Membuka tutorial</string>
+    <string name="tutorial_training_banner_action_dismiss">Memberhentikan</string>
+</resources>

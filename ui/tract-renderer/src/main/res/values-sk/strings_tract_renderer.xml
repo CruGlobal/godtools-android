@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Ukončiť reláciu zdieľania na diaľku?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ukončiť</string>
     <string name="tract_live_share_exit_dialog_cancel">Zrušiť</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

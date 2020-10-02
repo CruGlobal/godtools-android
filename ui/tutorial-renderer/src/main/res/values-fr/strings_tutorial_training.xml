@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Regardez</string>
+    <string name="tutorial_training_watch_subhead">Découvrez ce que GodTools peut vous offrir grâce à notre vidéo de démo</string>
+    <string name="tutorial_training_prepare_headline">Préparez-vous</string>
+    <string name="tutorial_training_prepare_subhead">Familiarisez-vous avez certains de vos outils. L\'outil « Aidez-moi à partager » est parfait pour débuter. 
+
+Appuyez le bouton « À propos » sur n\'importe quel outil pour obtenir plus d\'informations.</string>
+    <string name="tutorial_training_try_headline">Essayez</string>
+    <string name="tutorial_training_try_subhead">Tout le monde commence en tant que débutant. Essayez d\'utiliser un outil dans une conversation et découvrez ce qu\'il peut vous apprendre.</string>
+    <string name="tutorial_training_final_headline">Ce tutoriel peut être consulté à nouveau depuis le menu</string>
+    <string name="tutorial_training_action_continue">Continuer</string>
+    <string name="tutorial_training_action_start">Commencez à utiliser GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Me montrez un tutoriel</string>
+    <string name="tutorial_training_banner_action_open">Ouvrir le tutoriel</string>
+    <string name="tutorial_training_banner_action_dismiss">Ignorer</string>
+</resources>

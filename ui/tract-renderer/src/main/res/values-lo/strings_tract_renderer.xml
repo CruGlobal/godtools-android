@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">ອອກຈາກເຊດຊັນແບ່ງປັນທາງໄກດຽວນີ້ບໍ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ອອກ</string>
     <string name="tract_live_share_exit_dialog_cancel">ຍົກເລີກ</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">اکنون از جلسه اشتراک‌گذاری راه‌دور خارج می‌شوید؟</string>
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">لغو</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

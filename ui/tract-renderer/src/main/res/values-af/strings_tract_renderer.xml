@@ -7,9 +7,11 @@
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Deel jou skerm</string>
     <string name="share_tool_message_tract_live_share">Haai, volg saam met my in GodTools via skermdeling. Hier is die skakel:%1$s\n\nAs jy nie hierdie boodskap gou kry nie, mag dit wees omdat die skakel nog nie werk nie. Ons kan later weer probeer.</string>
-    <string name="tract_live_share_starting">Begin van skermdeling...</string>
+    <string name="tract_live_share_starting">Begin van skermdeling…</string>
     <string name="tract_live_share_unable_to_connect">Nie in staat om met skermdeling te verbind nie</string>
     <string name="tract_live_share_exit_dialog_message">Wil jy nou die afstanddeelsessie verlaat?</string>
     <string name="tract_live_share_exit_dialog_confirm">Verlaat</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselleer</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

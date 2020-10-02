@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Haluatko poistua etäjaosta?</string>
     <string name="tract_live_share_exit_dialog_confirm">Poistu</string>
     <string name="tract_live_share_exit_dialog_cancel">Peruuta</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

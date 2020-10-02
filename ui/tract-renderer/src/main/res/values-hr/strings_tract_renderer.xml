@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Želite li odmah napustiti sesiju udaljenog dijeljenja?</string>
     <string name="tract_live_share_exit_dialog_confirm">Izlaz</string>
     <string name="tract_live_share_exit_dialog_cancel">Odustani</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

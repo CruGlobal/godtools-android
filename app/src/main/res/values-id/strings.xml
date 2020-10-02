@@ -9,6 +9,7 @@
     <string name="menu_about">Tentang</string>
     <string name="menu_help">Tanya Jawab Umum</string>
     <string name="menu_contact_us">Hubungi Kami</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Masuk</string>
     <string name="menu_signup">Buat Akun</string>
     <string name="menu_logout">Keluar</string>

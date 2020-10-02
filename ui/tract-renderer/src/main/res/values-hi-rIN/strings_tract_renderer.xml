@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">रिमोट साझाकरण सत्र अब छोड़ें?</string>
     <string name="tract_live_share_exit_dialog_confirm">छोड़ें</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करें</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

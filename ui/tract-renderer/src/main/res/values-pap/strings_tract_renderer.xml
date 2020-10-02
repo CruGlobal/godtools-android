@@ -6,6 +6,21 @@
     <string name="tract_card_next">Siguiente</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Kompartí bo pantaya</string>
+    <string name="menu_live_share_active">Kompartí Pantaya ta aktivo</string>
+    <string name="share_tool_message_tract_live_share">Hey, Wak huntu ku mi den GodTools dor di kompartí nos pantaya. Ata e lenk aki:   %1$s\n\n\n\nSi bo tarda pa haña e mensahe aki, kisas e lenk no ta funshoná ahinda. Nos por purba un otro bia.</string>
     <string name="tract_live_share_starting">Kuminsando ku \"Kompartí bo Pantaya\"...</string>
     <string name="tract_live_share_unable_to_connect">No por a konektá ku \"Kompartí bo Pantaya\"</string>
+    <string name="tract_live_share_exit_dialog_message">Sali for di e seshon di kompartí riba distansha aworakí?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Sali</string>
+    <string name="tract_live_share_exit_dialog_cancel">Kanselá</string>
+    <!-- Training Tips -->
+    <string name="tract_tips_action_open_inline">Wak Tep</string>
+    <string name="tract_tips_tip_action_next">Siguiente</string>
+    <string name="tract_tips_tip_action_close">Sera</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Puntra</string>
+    <string name="tract_tips_type_consider">Konsiderá</string>
+    <string name="tract_tips_type_prepare">Prepará</string>
+    <string name="tract_tips_type_quote">Sita</string>
+    <string name="tract_tips_type_tip">Tep</string>
 </resources>

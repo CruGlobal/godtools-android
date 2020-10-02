@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Pretende sair da sessão de compartilhamento remoto agora?</string>
     <string name="tract_live_share_exit_dialog_confirm">Sair</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

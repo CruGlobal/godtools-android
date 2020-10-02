@@ -15,6 +15,7 @@
     <string name="action_tools_open_tool">Ouvrir l\'outil</string>
     <string name="action_tools_add_favorite">Ajouter aux favoris</string>
     <string name="action_tools_remove_favorite">Supprimer des favoris</string>
+    <string name="action_tools_open_training">Apprendre à partager cet outil</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d vue</item>
         <item quantity="other">%1$,d vues</item>

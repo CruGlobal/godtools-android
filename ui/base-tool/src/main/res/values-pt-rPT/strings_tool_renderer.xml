@@ -3,7 +3,7 @@
     <string name="menu_share_tool">Partilhar</string>
     <string name="share_tool_title">Partilhar \"%1$s\" com</string>
     <string name="tool_not_found">Não é possível encontrar a ferramenta que solicitaste</string>
-    <string name="tool_loading">A ferramenta que solicitaste está a carregar...</string>
+    <string name="tool_loading">A ferramenta que solicitaste está a carregar…</string>
     <string name="tool_offline">Tens de ter ligação à Internet para abrir a ferramenta que solicitaste</string>
     <string name="feature_discovery_title_share_tool">Partilhar uma ligação</string>
     <string name="feature_discovery_desc_share_tool">Clica neste ícone para enviar esta ferramenta a um amigo</string>

@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Opuścić zdalną sesję udostępniania?</string>
     <string name="tract_live_share_exit_dialog_confirm">Wyjdź</string>
     <string name="tract_live_share_exit_dialog_cancel">Anuluj</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

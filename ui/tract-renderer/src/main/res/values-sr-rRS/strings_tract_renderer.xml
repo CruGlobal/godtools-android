@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Изађите из сесије даљинског дељења одмах?</string>
     <string name="tract_live_share_exit_dialog_confirm">Излаз</string>
     <string name="tract_live_share_exit_dialog_cancel">Откажи</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

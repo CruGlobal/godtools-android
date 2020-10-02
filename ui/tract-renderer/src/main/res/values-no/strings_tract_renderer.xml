@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Vil du avslutte den eksterne delingsøkten nå?</string>
     <string name="tract_live_share_exit_dialog_confirm">Avslutt</string>
     <string name="tract_live_share_exit_dialog_cancel">Avbryt</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>
