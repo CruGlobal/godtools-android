@@ -5,7 +5,12 @@ import android.content.ComponentName
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import java.util.Locale
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
@@ -28,6 +33,7 @@ class ActivitiesTest {
     @Before
     fun setup() {
         activity = spy(Robolectric.buildActivity(AppCompatActivity::class.java).get())
+        doNothing().whenever(activity).startActivity(any())
     }
 
     @Test
@@ -40,6 +46,27 @@ class ActivitiesTest {
     fun verifyCreateTractActivityIntentWithShowTips() {
         val intent = activity.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH, showTips = true)
         intent.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH), showTips = true)
+    }
+
+    @Test
+    fun verifyStartTractActivity() {
+        activity.startTractActivity(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA, showTips = false)
+        argumentCaptor<Intent> {
+            verify(activity).startActivity(capture())
+            firstValue.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA))
+        }
+    }
+
+    @Test
+    fun verifyStartTractActivityWithShowTips() {
+        activity.startTractActivity(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA, showTips = true)
+        argumentCaptor<Intent> {
+            verify(activity).startActivity(capture())
+            firstValue.assertTractIntent(
+                languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA),
+                showTips = true
+            )
+        }
     }
 
     private fun Intent.assertTractIntent(tool: String = TOOL, vararg languages: Locale, showTips: Boolean = false) {
