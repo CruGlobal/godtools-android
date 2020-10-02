@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="static_content_margin_vert">20dp</dimen>
+    <dimen name="static_content_icon_size">90dp</dimen>
+    <dimen name="static_content_icon_size_large">144dp</dimen>
 
-    <style name="Widget.GodTools.Static.Icon" parent="Base">
-        <item name="android:layout_width">90dp</item>
-        <item name="android:layout_height">90dp</item>
-        <item name="android:layout_marginBottom">@dimen/static_content_margin_vert</item>
-        <item name="android:layout_centerHorizontal">true</item>
-    </style>
+    <style name="Widget.GodTools.Static.Icon" parent="Base" />
 
     <style name="Widget.GodTools.Static.Icon.Tinted.Blue" parent="Widget.GodTools.Static.Icon">
         <item name="android:tint">@color/gt_blue</item>
@@ -17,15 +14,7 @@
         <item name="android:tint">@color/gt_green</item>
     </style>
 
-    <style name="Widget.GodTools.Static.Icon.Large">
-        <item name="android:layout_width">144dp</item>
-        <item name="android:layout_height">144dp</item>
-    </style>
-
     <style name="Widget.GodTools.Static.Text" parent="Base">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/static_content_margin_vert</item>
         <item name="android:breakStrategy" tools:targetApi="m">balanced</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Static.Text</item>
@@ -37,17 +26,7 @@
 
     <style name="Widget.GodTools.Static.ProgressBar" parent="Widget.GodTools.ProgressBar">
         <item name="android:progressDrawable">@drawable/progress_loading</item>
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">10dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
-    </style>
-
-    <style name="Widget.GodTools.Static.Action" parent="Widget.GodTools.Button.Colored.Blue">
-        <item name="android:layout_width">260dp</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:minHeight">10dp</item>
     </style>
 
     <style name="TextAppearance.GodTools.Static.Text" parent="TextAppearance.GodTools.Medium">
