@@ -89,7 +89,7 @@ import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 @Singleton
-public final class GodToolsDownloadManager {
+public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
@@ -116,6 +116,7 @@ public final class GodToolsDownloadManager {
                             @NonNull final AttachmentsApi attachmentsApi,
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
                             @NonNull final EventBus eventBus, @NonNull final Settings settings) {
+        super(dao, eventBus);
         mContext = context;
         mAttachmentsApi = attachmentsApi;
         mTranslationsApi = translationsApi;
@@ -192,17 +193,6 @@ public final class GodToolsDownloadManager {
             update.addListener(new EventBusDelayedPost(mEventBus, LanguageUpdateEvent.INSTANCE),
                                directExecutor());
         }
-    }
-
-    @NonNull
-    @AnyThread
-    public ListenableFuture<Integer> addTool(@NonNull final String code) {
-        final Tool tool = new Tool();
-        tool.setCode(code);
-        tool.setAdded(true);
-        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(mEventBus, ToolUpdateEvent.INSTANCE), directExecutor());
-        return update;
     }
 
     @AnyThread

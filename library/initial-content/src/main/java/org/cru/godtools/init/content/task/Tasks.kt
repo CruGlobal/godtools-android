@@ -2,13 +2,15 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import androidx.concurrent.futures.await
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -116,9 +118,11 @@ internal class Tasks @Inject constructor(
         if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
 
         // add any bundled tools as the default tools
-        BuildConfig.BUNDLED_TOOLS
-            .map { downloadManager.addTool(it) }
-            .forEach { it.await() }
+        coroutineScope {
+            BuildConfig.BUNDLED_TOOLS
+                .map { async { downloadManager.pinTool(it) } }
+                .awaitAll()
+        }
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
