@@ -53,7 +53,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -672,12 +671,6 @@ public final class GodToolsDownloadManager {
         scheduleProgressUpdate(translation);
     }
 
-    @Nullable
-    @AnyThread
-    public DownloadProgress getDownloadProgress(@NonNull final String tool, @NonNull final Locale locale) {
-        return getDownloadProgressLiveData(new TranslationKey(tool, locale)).getValue();
-    }
-
     @AnyThread
     void scheduleProgressUpdate(@NonNull final TranslationKey translation) {
         // remove any pending executions
@@ -701,48 +694,6 @@ public final class GodToolsDownloadManager {
 
             for (final OnDownloadProgressUpdateListener listener : listeners) {
                 listener.onDownloadProgressUpdated(progress);
-            }
-        }
-    }
-
-    @MainThread
-    public void addOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
-                                                    @NonNull final OnDownloadProgressUpdateListener listener) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
-        if (listeners == null) {
-            listeners = new ArrayList<>();
-            mDownloadProgressListeners.put(key, listeners);
-        }
-        listeners.add(listener);
-    }
-
-    @MainThread
-    public void removeOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
-                                                       @NonNull final OnDownloadProgressUpdateListener listener) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
-        if (listeners != null) {
-            listeners.remove(listener);
-            if (listeners.isEmpty()) {
-                mDownloadProgressListeners.remove(key);
-            }
-        }
-        if (listeners == null || listeners.isEmpty()) {
-            mDownloadProgressListeners.remove(key);
-        }
-    }
-
-    @MainThread
-    public void removeOnDownloadProgressUpdateListener(@NonNull final OnDownloadProgressUpdateListener listener) {
-        for (int i = 0; i < mDownloadProgressListeners.size(); i++) {
-            final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.valueAt(i);
-            if (listeners != null) {
-                listeners.remove(listener);
-            }
-            if (listeners == null || listeners.isEmpty()) {
-                mDownloadProgressListeners.removeAt(i);
-                i--;
             }
         }
     }
