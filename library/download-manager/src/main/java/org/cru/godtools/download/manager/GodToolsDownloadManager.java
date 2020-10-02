@@ -94,7 +94,6 @@ public final class GodToolsDownloadManager {
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private static final int MSG_CLEAN = 1;
-    private static final int MSG_PROGRESS_UPDATE = 2;
 
     private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
@@ -670,18 +669,6 @@ public final class GodToolsDownloadManager {
 
     @AnyThread
     void scheduleProgressUpdate(@NonNull final TranslationKey translation) {
-        // remove any pending executions
-        mHandler.removeMessages(MSG_PROGRESS_UPDATE, translation);
-
-        // schedule another execution
-        final Message m = Message.obtain(mHandler, () -> dispatchOnProgressUpdateCallbacks(translation));
-        m.what = MSG_PROGRESS_UPDATE;
-        m.obj = translation;
-        mHandler.sendMessage(m);
-    }
-
-    @MainThread
-    void dispatchOnProgressUpdateCallbacks(@NonNull final TranslationKey translation) {
     }
     // endregion Download Progress
 
