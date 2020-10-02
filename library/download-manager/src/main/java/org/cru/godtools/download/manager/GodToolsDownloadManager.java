@@ -652,23 +652,16 @@ public final class GodToolsDownloadManager {
 
     private void startProgress(@NonNull final TranslationKey translation) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL);
-        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
         getDownloadProgressLiveData(translation).postValue(new DownloadProgress(progress, max));
-        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void finishDownload(@NonNull final TranslationKey translation) {
         getDownloadProgressLiveData(translation).postValue(null);
-        scheduleProgressUpdate(translation);
-    }
-
-    @AnyThread
-    void scheduleProgressUpdate(@NonNull final TranslationKey translation) {
     }
     // endregion Download Progress
 
