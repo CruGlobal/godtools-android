@@ -1,8 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="org.keynote.godtools.android.activity.MainActivity">
+        <activity
+            android:name="org.keynote.godtools.android.activity.MainActivity"
+            tools:ignore="MissingClass">
             <!-- AppsFlyer deep links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
