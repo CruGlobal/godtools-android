@@ -14,7 +14,6 @@
     <string name="tract_live_share_exit_dialog_confirm">Quitter</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuler</string>
     <!-- Training Tips -->
-    <string name="tract_tips_action_open_inline">Afficher conseil</string>
     <string name="tract_tips_tip_action_next">Suivant</string>
     <string name="tract_tips_tip_action_close">Fermer</string>
     <!-- Tip Types -->

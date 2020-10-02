@@ -14,7 +14,6 @@
     <string name="tract_live_share_exit_dialog_confirm">Выход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмена</string>
     <!-- Training Tips -->
-    <string name="tract_tips_action_open_inline">Подсказка</string>
     <string name="tract_tips_tip_action_next">Дальше</string>
     <string name="tract_tips_tip_action_close">Закрыть</string>
     <!-- Tip Types -->
