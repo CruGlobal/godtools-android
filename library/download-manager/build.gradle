@@ -2,7 +2,7 @@ android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.download.manager.DownloadManagerEventBusIndex']
+                arguments += [eventBusIndex: 'org.cru.godtools.download.manager.DownloadManagerEventBusIndex']
             }
         }
     }
