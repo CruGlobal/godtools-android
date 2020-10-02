@@ -53,7 +53,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -627,8 +626,6 @@ public final class GodToolsDownloadManager {
     }
 
     // region Download Progress
-    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
-            new SimpleArrayMap<>();
     private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
             new SimpleArrayMap<>();
 
@@ -685,17 +682,6 @@ public final class GodToolsDownloadManager {
 
     @MainThread
     void dispatchOnProgressUpdateCallbacks(@NonNull final TranslationKey translation) {
-        // get any listeners
-        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(translation);
-
-        // dispatch any listeners we have
-        if (listeners != null && !listeners.isEmpty()) {
-            final DownloadProgress progress = getDownloadProgressLiveData(translation).getValue();
-
-            for (final OnDownloadProgressUpdateListener listener : listeners) {
-                listener.onDownloadProgressUpdated(progress);
-            }
-        }
     }
     // endregion Download Progress
 
