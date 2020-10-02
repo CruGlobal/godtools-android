@@ -734,13 +734,6 @@ public final class GodToolsDownloadManager {
 
     // endregion Download & Cleaning Scheduling Methods
 
-    public interface OnDownloadProgressUpdateListener {
-        /**
-         * @param progress The current download progress. If this is null there is no download running.
-         */
-        void onDownloadProgressUpdated(@Nullable DownloadProgress progress);
-    }
-
     // region Task PriorityRunnables
 
     private static final int PRIORITY_PRIMARY = -40;
