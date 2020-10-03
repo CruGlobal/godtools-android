@@ -1,13 +1,19 @@
 package org.cru.godtools.download.manager
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import java.io.File
+import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
+import org.cru.godtools.base.FileManager
+import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -20,6 +26,7 @@ private const val TOOL = "tool"
 class GodToolsDownloadManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
+    private lateinit var fileManager: FileManager
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
 
@@ -27,8 +34,9 @@ class GodToolsDownloadManagerTest {
     fun setup() {
         dao = mock()
         eventBus = mock()
+        fileManager = mock()
 
-        downloadManager = KotlinGodToolsDownloadManager(dao, eventBus)
+        downloadManager = KotlinGodToolsDownloadManager(dao, eventBus, fileManager)
     }
 
     // region pinTool()
@@ -61,4 +69,17 @@ class GodToolsDownloadManagerTest {
         verify(eventBus).post(ToolUpdateEvent)
     }
     // endregion pinTool()
+
+    @Test
+    fun verifyCopyToLocalFile() {
+        val file = File.createTempFile("test-", null)
+        val localFile: LocalFile = mock {
+            on { getFile(eq(fileManager)) } doReturn file
+        }
+        val testData = Random.nextBytes(16 * 1024)
+
+        with(downloadManager) { testData.inputStream().copyTo(localFile) }
+        assertArrayEquals(testData, file.readBytes())
+        verify(dao).updateOrInsert(eq(localFile))
+    }
 }

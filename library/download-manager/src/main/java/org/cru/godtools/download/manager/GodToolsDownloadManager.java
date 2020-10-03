@@ -1,5 +1,6 @@
 package org.cru.godtools.download.manager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
 import org.cru.godtools.api.AttachmentsApi;
 import org.cru.godtools.api.TranslationsApi;
+import org.cru.godtools.base.FileManager;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -89,6 +91,7 @@ import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 @Singleton
+@SuppressLint("VisibleForTests")
 public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
@@ -115,8 +118,9 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     GodToolsDownloadManager(@ApplicationContext @NonNull final Context context,
                             @NonNull final AttachmentsApi attachmentsApi,
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
-                            @NonNull final EventBus eventBus, @NonNull final Settings settings) {
-        super(dao, eventBus);
+                            @NonNull final EventBus eventBus, @NonNull final FileManager fileManager,
+                            @NonNull final Settings settings) {
+        super(dao, eventBus, fileManager);
         mContext = context;
         mAttachmentsApi = attachmentsApi;
         mTranslationsApi = translationsApi;
@@ -311,7 +315,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                             if (response.isSuccessful()) {
                                 final ResponseBody body = response.body();
                                 if (body != null) {
-                                    processStream(localFile, body.byteStream());
+                                    copyTo(body.byteStream(), localFile);
 
                                     // mark attachment as downloaded
                                     attachment.setDownloaded(true);
@@ -363,7 +367,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                         localFile = new LocalFile(fileName);
 
                         // process the input stream
-                        processStream(localFile, in);
+                        copyTo(in, localFile);
                     }
 
                     // mark attachment as downloaded
@@ -376,32 +380,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             }
         } finally {
             lock.unlock();
-        }
-    }
-
-    private void processStream(@NonNull final LocalFile localFile, @NonNull final InputStream stream)
-            throws IOException {
-        final Closer closer = Closer.create();
-        try {
-            // short-circuit if we can't create the local file
-            final File file = localFile.getFile(mContext);
-            if (file == null) {
-                throw new FileNotFoundException(localFile.getFilename() + " (File could not be created)");
-            }
-
-            // write file
-            final InputStream in = closer.register(new BufferedInputStream(stream));
-            final OutputStream os = closer.register(new FileOutputStream(file));
-            IOUtils.copy(in, os);
-            os.flush();
-            os.close();
-
-            // store local file in database
-            mDao.updateOrInsert(localFile);
-        } catch (final Throwable e) {
-            throw closer.rethrow(e);
-        } finally {
-            closer.close();
         }
     }
 
