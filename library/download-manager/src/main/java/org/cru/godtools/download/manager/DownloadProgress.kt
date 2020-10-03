@@ -6,7 +6,6 @@ class DownloadProgress(progress: Long, max: Long) {
     companion object {
         @JvmField
         internal val INITIAL = DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL)
-        @JvmField
         val INDETERMINATE = DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL)
     }
 
