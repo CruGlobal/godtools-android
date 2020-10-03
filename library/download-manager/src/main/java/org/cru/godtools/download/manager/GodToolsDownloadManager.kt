@@ -1,12 +1,16 @@
 package org.cru.godtools.download.manager
 
 import androidx.annotation.AnyThread
+import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,6 +19,7 @@ import kotlinx.coroutines.withContext
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -46,6 +51,34 @@ open class KotlinGodToolsDownloadManager(
         eventBus.post(ToolUpdateEvent)
     }
     // endregion Tool/Language pinning
+
+    // region Download Progress
+    private val downloadProgressLiveData = mutableMapOf<TranslationKey, MutableLiveData<DownloadProgress?>>()
+
+    @AnyThread
+    private fun getDownloadProgressLiveData(translation: TranslationKey) = synchronized(downloadProgressLiveData) {
+        downloadProgressLiveData.getOrPut(translation) { DownloadProgressLiveData() }
+    }
+
+    @MainThread
+    fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
+        getDownloadProgressLiveData(TranslationKey(tool, locale))
+
+    @AnyThread
+    protected fun startProgress(translation: TranslationKey) {
+        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
+    }
+
+    @AnyThread
+    protected fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
+        getDownloadProgressLiveData(translation).postValue(DownloadProgress(progress, max))
+    }
+
+    @AnyThread
+    protected fun finishDownload(translation: TranslationKey) {
+        getDownloadProgressLiveData(translation).postValue(null)
+    }
+    // endregion Download Progress
 
     @WorkerThread
     @VisibleForTesting(otherwise = PRIVATE)

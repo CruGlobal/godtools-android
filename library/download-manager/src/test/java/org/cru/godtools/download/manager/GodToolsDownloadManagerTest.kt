@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import java.io.File
+import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.base.FileManager
@@ -15,6 +16,8 @@ import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -69,6 +72,20 @@ class GodToolsDownloadManagerTest {
         verify(eventBus).post(ToolUpdateEvent)
     }
     // endregion pinTool()
+
+    // region Download Progress
+    @Test
+    fun verifyDownloadProgressLiveDataReused() {
+        assertSame(
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
+        )
+        assertNotSame(
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH)
+        )
+    }
+    // endregion Download Progress
 
     @Test
     fun verifyCopyToLocalFile() {

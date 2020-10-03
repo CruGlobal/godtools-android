@@ -71,16 +71,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.collection.ArrayMap;
 import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
-import androidx.collection.SimpleArrayMap;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -588,47 +584,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             lock.unlock();
         }
     }
-
-    // region Download Progress
-    private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
-            new SimpleArrayMap<>();
-
-    @NonNull
-    @AnyThread
-    private MutableLiveData<DownloadProgress> getDownloadProgressLiveData(@NonNull final TranslationKey translation) {
-        synchronized (mDownloadingProgressLiveData) {
-            MutableLiveData<DownloadProgress> liveData = mDownloadingProgressLiveData.get(translation);
-            if (liveData == null) {
-                liveData = new DownloadProgressLiveData();
-                mDownloadingProgressLiveData.put(translation, liveData);
-            }
-            return liveData;
-        }
-    }
-
-    @NonNull
-    @MainThread
-    public LiveData<DownloadProgress> getDownloadProgressLiveData(
-            @NonNull final String tool,
-            @NonNull final Locale locale
-    ) {
-        return getDownloadProgressLiveData(new TranslationKey(tool, locale));
-    }
-
-    private void startProgress(@NonNull final TranslationKey translation) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL);
-    }
-
-    @AnyThread
-    private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
-        getDownloadProgressLiveData(translation).postValue(new DownloadProgress(progress, max));
-    }
-
-    @AnyThread
-    private void finishDownload(@NonNull final TranslationKey translation) {
-        getDownloadProgressLiveData(translation).postValue(null);
-    }
-    // endregion Download Progress
 
     // region Download & Cleaning Scheduling Methods
 
