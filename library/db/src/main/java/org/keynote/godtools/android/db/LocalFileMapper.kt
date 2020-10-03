@@ -15,8 +15,5 @@ internal object LocalFileMapper : AbstractMapper<LocalFile>() {
         }
     }
 
-    override fun newObject(c: Cursor) = LocalFile()
-    override fun toObject(c: Cursor) = super.toObject(c).apply {
-        fileName = c.getString(COLUMN_NAME, LocalFile.INVALID_FILE_NAME)
-    }
+    override fun newObject(c: Cursor) = LocalFile(c.getString(COLUMN_NAME))
 }

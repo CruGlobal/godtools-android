@@ -313,8 +313,7 @@ public final class GodToolsDownloadManager {
                     // we don't have a local file, so download it
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         try {
                             // download attachment
@@ -371,8 +370,7 @@ public final class GodToolsDownloadManager {
                     // we don't have a local file, so create it
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         // process the input stream
                         processStream(localFile, in);
@@ -522,8 +520,7 @@ public final class GodToolsDownloadManager {
                     LocalFile localFile = mDao.find(LocalFile.class, fileName);
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         // short-circuit if we can't create the local file
                         final File file = localFile.getFile(mContext);
