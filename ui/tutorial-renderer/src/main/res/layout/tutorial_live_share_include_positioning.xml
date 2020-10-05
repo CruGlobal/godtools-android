@@ -43,7 +43,7 @@
     <Space
         android:id="@+id/imagePosition"
         android:layout_width="match_parent"
-        android:layout_height="266dp"
+        android:layout_height="@dimen/tutorial_page_live_share_anim_height"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/actions"
         app:layout_constraintTop_toBottomOf="@id/textPosition" />
