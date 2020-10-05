@@ -105,7 +105,8 @@ open class KotlinGodToolsDownloadManager(
 
     // region Attachments
     @WorkerThread
-    protected fun downloadAttachment(attachmentId: Long) {
+    @VisibleForTesting
+    fun downloadAttachment(attachmentId: Long) {
         if (!fileManager.createResourcesDir()) return
 
         synchronized(ThreadUtils.getLock(LOCKS_ATTACHMENTS, attachmentId)) {

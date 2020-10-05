@@ -12,13 +12,16 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.nullableArgumentCaptor
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.stub
+import com.nhaarman.mockitokotlin2.stubbing
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.nhaarman.mockitokotlin2.whenever
 import java.io.File
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
+import okhttp3.ResponseBody
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
@@ -42,6 +45,7 @@ import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
+import retrofit2.Response
 
 private const val TOOL = "tool"
 
@@ -156,6 +160,40 @@ class GodToolsDownloadManagerTest {
     }
     private val file = File.createTempFile("test-", null).also { it.delete() }
     private val testData = Random.nextBytes(16 * 1024)
+
+    @Test
+    fun verifyDownloadAttachment() {
+        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
+        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
+        whenever(fileManager.getFile(attachment)).thenReturn(file)
+
+        downloadManager.downloadAttachment(1L)
+        assertArrayEquals(testData, file.readBytes())
+        verify(dao).find<Attachment>(1L)
+        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
+        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(AttachmentUpdateEvent)
+        assertTrue(attachment.isDownloaded)
+    }
+
+    @Test
+    fun verifyDownloadAttachmentAlreadyDownloaded() {
+        attachment.isDownloaded = true
+        stubbing(dao) {
+            on { find<Attachment>(1L) } doReturn attachment
+            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
+        }
+
+        downloadManager.downloadAttachment(1L)
+        verify(dao).find<Attachment>(1L)
+        verify(dao).find<LocalFile>(attachment.localFilename!!)
+        verifyBlocking(attachmentsApi, never()) { download(any()) }
+        verify(dao, never()).updateOrInsert(any())
+        verify(dao, never()).update(any(), anyVararg<String>())
+        verify(eventBus, never()).post(AttachmentUpdateEvent)
+        assertTrue(attachment.isDownloaded)
+    }
 
     @Test
     fun verifyImportAttachment() {
