@@ -130,10 +130,10 @@ internal class Tasks @Inject constructor(
 
             // find any attachments that aren't downloaded, but came bundled with the resource for
             dao.get(Query.select<Attachment>().where(AttachmentTable.SQL_WHERE_NOT_DOWNLOADED))
-                .filter { files.contains(it.localFileName) }
+                .filter { files.contains(it.localFilename) }
                 .forEach { attachment ->
                     launch(Dispatchers.IO) {
-                        context.assets.open("attachments/${attachment.localFileName}").use {
+                        context.assets.open("attachments/${attachment.localFilename}").use {
                             downloadManager.importAttachment(attachment, it)
                         }
                     }

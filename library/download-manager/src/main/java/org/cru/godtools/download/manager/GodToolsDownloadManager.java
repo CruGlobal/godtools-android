@@ -294,7 +294,7 @@ public final class GodToolsDownloadManager {
             }
 
             // short-circuit if we don't have a local filename
-            final String fileName = attachment.getLocalFileName();
+            final String fileName = attachment.getLocalFilename();
             if (fileName == null) {
                 return;
             }
@@ -353,7 +353,7 @@ public final class GodToolsDownloadManager {
             return;
         }
 
-        final String fileName = attachment.getLocalFileName();
+        final String fileName = attachment.getLocalFilename();
 
         final Lock lock = LOCK_FILESYSTEM.readLock();
         try {

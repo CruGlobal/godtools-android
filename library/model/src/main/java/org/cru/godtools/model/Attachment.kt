@@ -18,7 +18,7 @@ class Attachment : Base() {
         get() = field?.takeUnless { it == INVALID_ID } ?: tool?.id ?: INVALID_ID
 
     @JsonApiAttribute(JSON_FILE_NAME)
-    var fileName: String? = null
+    var filename: String? = null
 
     @JsonApiAttribute(JSON_SHA256)
     var sha256: String? = null
@@ -26,9 +26,9 @@ class Attachment : Base() {
     @JsonApiIgnore
     var isDownloaded = false
 
-    val localFileName: String?
+    val localFilename: String?
         get() = sha256?.let { sha256 ->
-            val extension = fileName?.substringAfterLast('.', "bin") ?: "bin"
+            val extension = filename?.substringAfterLast('.', "bin") ?: "bin"
             "$sha256.$extension"
         }
 }
