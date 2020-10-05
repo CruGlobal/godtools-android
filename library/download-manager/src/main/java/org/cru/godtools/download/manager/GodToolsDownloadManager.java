@@ -61,8 +61,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -330,50 +328,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             } finally {
                 lock.unlock();
             }
-        }
-    }
-
-    @WorkerThread
-    public void importAttachment(@NonNull final Attachment attachment, @NonNull final InputStream in)
-            throws IOException {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        final String fileName = attachment.getLocalFilename();
-
-        final Lock lock = LOCK_FILESYSTEM.readLock();
-        try {
-            lock.lock();
-            synchronized (getLock(LOCKS_FILES, fileName)) {
-                // short-circuit if the attachment is actually downloaded
-                LocalFile localFile = mDao.find(LocalFile.class, fileName);
-                if (attachment.isDownloaded() && localFile != null) {
-                    return;
-                }
-                attachment.setDownloaded(false);
-
-                try {
-                    // we don't have a local file, so create it
-                    if (localFile == null) {
-                        // create a new local file object
-                        localFile = new LocalFile(fileName);
-
-                        // process the input stream
-                        copyTo(in, localFile);
-                    }
-
-                    // mark attachment as downloaded
-                    attachment.setDownloaded(true);
-                } finally {
-                    // update attachment download state
-                    mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
-                }
-            }
-        } finally {
-            lock.unlock();
         }
     }
 

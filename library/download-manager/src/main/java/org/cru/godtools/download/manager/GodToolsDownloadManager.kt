@@ -17,13 +17,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.base.FileManager
+import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.TranslationKey
+import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -92,6 +98,46 @@ open class KotlinGodToolsDownloadManager(
     }
     // endregion Download Progress
 
+    // region Attachments
+    @WorkerThread
+    @Throws(IOException::class)
+    fun importAttachment(attachment: Attachment, data: InputStream) {
+        if (!fileManager.createResourcesDir()) return
+
+        val filename = attachment.localFilename ?: return
+        val lock = LOCK_FILESYSTEM.readLock()
+        try {
+            lock.lock()
+            synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
+                runBlocking {
+                    // short-circuit if the attachment is already downloaded
+                    val localFile: LocalFile? = dao.find(filename)
+                    if (attachment.isDownloaded && localFile != null) return@runBlocking
+
+                    // download the attachment
+                    attachment.isDownloaded = false
+                    try {
+                        // we don't have a local file, so create it
+                        if (localFile == null) {
+                            val file = LocalFile(filename)
+                            data.copyTo(file)
+                            dao.updateOrInsert(file)
+                        }
+
+                        // mark attachment as downloaded
+                        attachment.isDownloaded = true
+                    } finally {
+                        // update attachment download state
+                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                        eventBus.post(AttachmentUpdateEvent)
+                    }
+                }
+            }
+        } finally {
+            lock.unlock()
+        }
+    }
+
     @WorkerThread
     @VisibleForTesting
     @Throws(IOException::class)
@@ -106,4 +152,5 @@ open class KotlinGodToolsDownloadManager(
             }
         }
     }
+    // endregion Attachments
 }
