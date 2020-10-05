@@ -127,7 +127,7 @@ open class KotlinGodToolsDownloadManager(
                             try {
                                 // download attachment
                                 attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
-                                    ?.let {
+                                    ?.use {
                                         val file = LocalFile(filename)
                                         it.copyTo(file)
                                         dao.updateOrInsert(file)
@@ -187,15 +187,12 @@ open class KotlinGodToolsDownloadManager(
     }
 
     @WorkerThread
-    @VisibleForTesting
     @Throws(IOException::class)
-    internal fun InputStream.copyTo(localFile: LocalFile) {
-        buffered().use { buffer ->
-            val file = localFile.getFile(fileManager)
-                ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
+    private fun InputStream.copyTo(localFile: LocalFile) {
+        val file = localFile.getFile(fileManager)
+            ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
 
-            file.outputStream().use { buffer.copyTo(it) }
-        }
+        file.outputStream().use { copyTo(it) }
     }
     // endregion Attachments
 }

@@ -199,7 +199,7 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachment() {
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        downloadManager.importAttachment(attachment, testData.inputStream())
+        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -214,7 +214,7 @@ class GodToolsDownloadManagerTest {
             on { getFile(attachment) } doReturn file
         }
 
-        downloadManager.importAttachment(attachment, testData.inputStream())
+        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
@@ -227,7 +227,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        downloadManager.importAttachment(attachment, testData.inputStream())
+        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(any())
@@ -241,25 +241,12 @@ class GodToolsDownloadManagerTest {
         whenever(fileManager.getFile(attachment)).thenReturn(file)
         whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
 
-        downloadManager.importAttachment(attachment, testData.inputStream())
+        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
         verify(fileManager, never()).getFile(any())
         verify(dao, never()).updateOrInsert(any())
         assertTrue(attachment.isDownloaded)
-    }
-
-    // TODO: temporary test, remove once we test the public entry points
-    @Test
-    fun verifyCopyToLocalFile() {
-        val file = File.createTempFile("test-", null)
-        val localFile: LocalFile = mock {
-            on { getFile(eq(fileManager)) } doReturn file
-        }
-        val testData = Random.nextBytes(16 * 1024)
-
-        with(downloadManager) { testData.inputStream().copyTo(localFile) }
-        assertArrayEquals(testData, file.readBytes())
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
