@@ -33,16 +33,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/bkg_tutorial_onboarding_wave_2" />
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/image"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_tutorial_onboarding_knife"
+            android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
             app:layout_constraintBottom_toTopOf="@id/headlinePosition"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toBottomOf="@id/inset_top"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/anim_tutorial_onboarding_knife"
+            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/headline"
