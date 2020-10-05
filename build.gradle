@@ -29,7 +29,7 @@ buildscript {
                 materialDesign     : '1.2.1',
                 mockito            : '3.5.13',
                 mockitoKotlin      : '2.1.0',
-                moshi              : '1.10.0',
+                moshi              : '1.11.0',
                 okhttp3            : '3.12.12',
                 picasso            : '2.8',
                 picassoTransforms  : '2.3.1',
