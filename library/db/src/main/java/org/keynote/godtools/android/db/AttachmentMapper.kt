@@ -16,12 +16,12 @@ internal object AttachmentMapper : BaseMapper<Attachment>() {
         when (field) {
             COLUMN_TOOL -> values.put(field, obj.toolId)
             COLUMN_FILENAME -> {
-                values.put(field, obj.fileName)
-                values.put(COLUMN_LOCALFILENAME, obj.localFileName)
+                values.put(field, obj.filename)
+                values.put(COLUMN_LOCALFILENAME, obj.localFilename)
             }
             COLUMN_SHA256 -> {
                 values.put(field, obj.sha256)
-                values.put(COLUMN_LOCALFILENAME, obj.localFileName)
+                values.put(COLUMN_LOCALFILENAME, obj.localFilename)
             }
             COLUMN_DOWNLOADED -> values.put(field, obj.isDownloaded)
             else -> super.mapField(values, field, obj)
@@ -30,8 +30,8 @@ internal object AttachmentMapper : BaseMapper<Attachment>() {
 
     override fun newObject(c: Cursor) = Attachment()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        setToolId(c.getLong(COLUMN_TOOL))
-        fileName = c.getString(COLUMN_FILENAME)
+        toolId = c.getLong(COLUMN_TOOL)
+        filename = c.getString(COLUMN_FILENAME)
         sha256 = c.getString(COLUMN_SHA256)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
     }

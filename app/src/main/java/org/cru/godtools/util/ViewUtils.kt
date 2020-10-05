@@ -5,6 +5,6 @@ import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.model.Attachment
 
 fun PicassoImageView?.bindLocalImage(attachment: Attachment?) =
-    bindLocalImage(attachment?.takeIf { it.isDownloaded }?.localFileName)
+    bindLocalImage(attachment?.takeIf { it.isDownloaded }?.localFilename)
 
 fun PicassoImageView?.bindLocalImage(filename: String?) = this?.setPicassoFile(context.getGodToolsFile(filename))

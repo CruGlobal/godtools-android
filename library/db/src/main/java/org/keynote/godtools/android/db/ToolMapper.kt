@@ -5,7 +5,6 @@ import android.database.Cursor
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER
@@ -51,7 +50,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
         shares = c.getInt(COLUMN_SHARES, 0)
         pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0)
         bannerId = c.getLong(COLUMN_BANNER)
-        detailsBannerId = c.getLong(COLUMN_DETAILS_BANNER, Attachment.INVALID_ID)
+        detailsBannerId = c.getLong(COLUMN_DETAILS_BANNER)
         overviewVideo = c.getString(COLUMN_OVERVIEW_VIDEO)
         defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0)
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE)

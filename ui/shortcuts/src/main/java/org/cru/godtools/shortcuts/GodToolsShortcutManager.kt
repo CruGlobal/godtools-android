@@ -282,8 +282,9 @@ class GodToolsShortcutManager @Inject constructor(
             .getName(tool, context)
 
         // create the icon bitmap
-        val icon: IconCompat = dao.find<Attachment>(tool.detailsBannerId)
-            ?.let { context.getGodToolsFile(it.localFileName) }
+        val icon: IconCompat = tool.detailsBannerId
+            ?.let { dao.find<Attachment>(it) }
+            ?.let { context.getGodToolsFile(it.localFilename) }
             ?.let {
                 try {
                     // TODO: create a suspend extension method to async load an image in a coroutine

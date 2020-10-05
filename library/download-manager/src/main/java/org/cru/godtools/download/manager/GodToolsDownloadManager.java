@@ -53,8 +53,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -96,7 +94,6 @@ public final class GodToolsDownloadManager {
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private static final int MSG_CLEAN = 1;
-    private static final int MSG_PROGRESS_UPDATE = 2;
 
     private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
@@ -297,7 +294,7 @@ public final class GodToolsDownloadManager {
             }
 
             // short-circuit if we don't have a local filename
-            final String fileName = attachment.getLocalFileName();
+            final String fileName = attachment.getLocalFilename();
             if (fileName == null) {
                 return;
             }
@@ -316,8 +313,7 @@ public final class GodToolsDownloadManager {
                     // we don't have a local file, so download it
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         try {
                             // download attachment
@@ -357,7 +353,7 @@ public final class GodToolsDownloadManager {
             return;
         }
 
-        final String fileName = attachment.getLocalFileName();
+        final String fileName = attachment.getLocalFilename();
 
         final Lock lock = LOCK_FILESYSTEM.readLock();
         try {
@@ -374,8 +370,7 @@ public final class GodToolsDownloadManager {
                     // we don't have a local file, so create it
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         // process the input stream
                         processStream(localFile, in);
@@ -525,8 +520,7 @@ public final class GodToolsDownloadManager {
                     LocalFile localFile = mDao.find(LocalFile.class, fileName);
                     if (localFile == null) {
                         // create a new local file object
-                        localFile = new LocalFile();
-                        localFile.setFileName(fileName);
+                        localFile = new LocalFile(fileName);
 
                         // short-circuit if we can't create the local file
                         final File file = localFile.getFile(mContext);
@@ -628,8 +622,6 @@ public final class GodToolsDownloadManager {
     }
 
     // region Download Progress
-    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
-            new SimpleArrayMap<>();
     private final SimpleArrayMap<TranslationKey, MutableLiveData<DownloadProgress>> mDownloadingProgressLiveData =
             new SimpleArrayMap<>();
 
@@ -657,94 +649,16 @@ public final class GodToolsDownloadManager {
 
     private void startProgress(@NonNull final TranslationKey translation) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL);
-        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
         getDownloadProgressLiveData(translation).postValue(new DownloadProgress(progress, max));
-        scheduleProgressUpdate(translation);
     }
 
     @AnyThread
     private void finishDownload(@NonNull final TranslationKey translation) {
         getDownloadProgressLiveData(translation).postValue(null);
-        scheduleProgressUpdate(translation);
-    }
-
-    @Nullable
-    @AnyThread
-    public DownloadProgress getDownloadProgress(@NonNull final String tool, @NonNull final Locale locale) {
-        return getDownloadProgressLiveData(new TranslationKey(tool, locale)).getValue();
-    }
-
-    @AnyThread
-    void scheduleProgressUpdate(@NonNull final TranslationKey translation) {
-        // remove any pending executions
-        mHandler.removeMessages(MSG_PROGRESS_UPDATE, translation);
-
-        // schedule another execution
-        final Message m = Message.obtain(mHandler, () -> dispatchOnProgressUpdateCallbacks(translation));
-        m.what = MSG_PROGRESS_UPDATE;
-        m.obj = translation;
-        mHandler.sendMessage(m);
-    }
-
-    @MainThread
-    void dispatchOnProgressUpdateCallbacks(@NonNull final TranslationKey translation) {
-        // get any listeners
-        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(translation);
-
-        // dispatch any listeners we have
-        if (listeners != null && !listeners.isEmpty()) {
-            final DownloadProgress progress = getDownloadProgressLiveData(translation).getValue();
-
-            for (final OnDownloadProgressUpdateListener listener : listeners) {
-                listener.onDownloadProgressUpdated(progress);
-            }
-        }
-    }
-
-    @MainThread
-    public void addOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
-                                                    @NonNull final OnDownloadProgressUpdateListener listener) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
-        if (listeners == null) {
-            listeners = new ArrayList<>();
-            mDownloadProgressListeners.put(key, listeners);
-        }
-        listeners.add(listener);
-    }
-
-    @MainThread
-    public void removeOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
-                                                       @NonNull final OnDownloadProgressUpdateListener listener) {
-        final TranslationKey key = new TranslationKey(tool, locale);
-        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
-        if (listeners != null) {
-            listeners.remove(listener);
-            if (listeners.isEmpty()) {
-                mDownloadProgressListeners.remove(key);
-            }
-        }
-        if (listeners == null || listeners.isEmpty()) {
-            mDownloadProgressListeners.remove(key);
-        }
-    }
-
-    @MainThread
-    public void removeOnDownloadProgressUpdateListener(@NonNull final OnDownloadProgressUpdateListener listener) {
-        for (int i = 0; i < mDownloadProgressListeners.size(); i++) {
-            final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.valueAt(i);
-            if (listeners != null) {
-                listeners.remove(listener);
-            }
-            if (listeners == null || listeners.isEmpty()) {
-                mDownloadProgressListeners.removeAt(i);
-                i--;
-            }
-        }
     }
     // endregion Download Progress
 
@@ -816,13 +730,6 @@ public final class GodToolsDownloadManager {
     }
 
     // endregion Download & Cleaning Scheduling Methods
-
-    public interface OnDownloadProgressUpdateListener {
-        /**
-         * @param progress The current download progress. If this is null there is no download running.
-         */
-        void onDownloadProgressUpdated(@Nullable DownloadProgress progress);
-    }
 
     // region Task PriorityRunnables
 
