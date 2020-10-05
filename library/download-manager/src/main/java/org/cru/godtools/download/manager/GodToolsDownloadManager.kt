@@ -3,7 +3,6 @@ package org.cru.godtools.download.manager
 import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -65,23 +64,26 @@ open class KotlinGodToolsDownloadManager(
         getDownloadProgressLiveData(TranslationKey(tool, locale))
 
     @AnyThread
-    protected fun startProgress(translation: TranslationKey) {
+    @VisibleForTesting
+    fun startProgress(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
     }
 
     @AnyThread
-    protected fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
+    @VisibleForTesting
+    fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress(progress, max))
     }
 
     @AnyThread
-    protected fun finishDownload(translation: TranslationKey) {
+    @VisibleForTesting
+    fun finishDownload(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(null)
     }
     // endregion Download Progress
 
     @WorkerThread
-    @VisibleForTesting(otherwise = PRIVATE)
+    @VisibleForTesting
     @Throws(IOException::class)
     fun InputStream.copyTo(localFile: LocalFile) {
         buffered().use { buffer ->
