@@ -4,12 +4,15 @@ import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import androidx.collection.ArrayMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
+import java.util.concurrent.locks.ReadWriteLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,6 +37,13 @@ open class KotlinGodToolsDownloadManager(
     @VisibleForTesting
     internal val job = SupervisorJob()
     override val coroutineContext get() = Dispatchers.Default + job
+
+    // region Temporary migration logic
+    @JvmField
+    protected val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
+    @JvmField
+    protected val LOCKS_FILES = ArrayMap<String, Any>()
+    // endregion Temporary migration logic
 
     // region Tool/Language pinning
     @AnyThread

@@ -94,10 +94,8 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
 
     private static final int MSG_CLEAN = 1;
 
-    private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
     private static final ArrayMap<TranslationKey, Object> LOCKS_TRANSLATION_DOWNLOADS = new ArrayMap<>();
-    private static final ArrayMap<String, Object> LOCKS_FILES = new ArrayMap<>();
 
     private final Context mContext;
     private final AttachmentsApi mAttachmentsApi;
