@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Искаш ли да прекратиш сесията за отдалечено споделяне сега?</string>
     <string name="tract_live_share_exit_dialog_confirm">Изход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмяна</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

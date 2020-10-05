@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Thoát khỏi phiên chia sẻ từ xa bây giờ?</string>
     <string name="tract_live_share_exit_dialog_confirm">Thoát</string>
     <string name="tract_live_share_exit_dialog_cancel">Hủy</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">ਕੀ ਹੁਣ ਰਿਮੋਟ ਸ਼ੇਅਰਿੰਗ ਸੈਸ਼ਨ ਤੋਂ ਨਿਕਾਸ ਕਰਨਾ ਹੈ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ਨਿਕਾਸ ਕਰੋ</string>
     <string name="tract_live_share_exit_dialog_cancel">ਰੱਦ ਕਰੋ</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

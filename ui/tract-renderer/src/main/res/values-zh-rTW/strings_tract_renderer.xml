@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">確定要現在離開遠端分享會？</string>
     <string name="tract_live_share_exit_dialog_confirm">離開</string>
     <string name="tract_live_share_exit_dialog_cancel">取消</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

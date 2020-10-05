@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_unable_to_launch_activity">Inkapás pa habri %s</string>
+    <string name="toast_unable_to_launch_activity">No por habri %s</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">Invitashon di e Evangelio</string>
     <string name="tool_category_articles">Artíkulonan</string>

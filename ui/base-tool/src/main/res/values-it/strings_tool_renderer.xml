@@ -3,7 +3,7 @@
     <string name="menu_share_tool">Condividi</string>
     <string name="share_tool_title">Condividi “%1$s” usando</string>
     <string name="tool_not_found">Non è stato possibile trovare lo strumento che hai richiesto</string>
-    <string name="tool_loading">Caricamento dello strumento richiesto in corso...</string>
+    <string name="tool_loading">Caricamento dello strumento richiesto in corso…</string>
     <string name="tool_offline">Per aprire lo strumento da te richiesto, è necessaria una connessione internet</string>
     <string name="feature_discovery_title_share_tool">Condividi un link</string>
     <string name="feature_discovery_desc_share_tool">Invia questo strumento a un amico facendo clic su questa icona</string>

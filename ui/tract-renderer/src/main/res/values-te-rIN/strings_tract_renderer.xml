@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">ఇప్పుడే సుదూర పంచుకునే సెషన్ నుండి నిష్క్రమించేదా?</string>
     <string name="tract_live_share_exit_dialog_confirm">నిష్క్రమించండి</string>
     <string name="tract_live_share_exit_dialog_cancel">రద్దు చేయండి</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

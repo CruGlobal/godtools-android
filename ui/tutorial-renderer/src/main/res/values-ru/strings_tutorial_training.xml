@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Посмотрите</string>
+    <string name="tutorial_training_watch_subhead">Посмотрите короткое видео, которое расскажет, что может наше приложение</string>
+    <string name="tutorial_training_prepare_headline">Подготовьтесь</string>
+    <string name="tutorial_training_prepare_subhead">Познакомьтесь с инструментами. Лучше всего начать с инструмента: «Научите меня говорить с другими о Боге». 
+
+Нажмите на кнопку «о приложении», чтобы узнать больше.</string>
+    <string name="tutorial_training_try_headline">Попробуйте</string>
+    <string name="tutorial_training_try_subhead">Все когда-то пробуют первый раз. Просто попробуйте этот инструмент в разговоре с кем-то из ваших друзей или знакомых.</string>
+    <string name="tutorial_training_final_headline">Это руководство будет доступно для повторного просмотра в меню</string>
+    <string name="tutorial_training_action_continue">Продолжить</string>
+    <string name="tutorial_training_action_start">Начните использовать GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Покажите мне руководство по использованию</string>
+    <string name="tutorial_training_banner_action_open">Откройте руководство по использованию</string>
+    <string name="tutorial_training_banner_action_dismiss">Скрыть</string>
+</resources>

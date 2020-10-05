@@ -7,9 +7,11 @@
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Teile deinen Bildschirm</string>
     <string name="share_tool_message_tract_live_share">Hallo! Folge mir in GodTools über die Bildschirmfreigabe. Hier ist der Link: %1$s \n\nWenn du diese Nachricht erst später erhältst, funktioniert der Link möglicherweise nicht mehr. Wir können es zu einem anderen Zeitpunkt erneut versuchen.</string>
-    <string name="tract_live_share_starting">Bildschirmfreigabe wird gestartet...</string>
+    <string name="tract_live_share_starting">Bildschirmfreigabe wird gestartet…</string>
     <string name="tract_live_share_unable_to_connect">Keine Verbindung zur Bildschirmfreigabe</string>
     <string name="tract_live_share_exit_dialog_message">Fernfreigabe-Sitzung jetzt beenden?</string>
     <string name="tract_live_share_exit_dialog_confirm">Beenden</string>
     <string name="tract_live_share_exit_dialog_cancel">Abbrechen</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

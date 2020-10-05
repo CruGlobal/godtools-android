@@ -4,11 +4,13 @@
     <string name="share_prompt">Выберите способ отправки</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Общая информация</string>
+    <string name="menu_heading_account">Учетная запись</string>
     <string name="menu_heading_share">Поделиться</string>
     <string name="menu_heading_legal">Юридическая информация</string>
     <string name="menu_about">О приложении</string>
     <string name="menu_help">Частые вопросы</string>
     <string name="menu_contact_us">Связаться с нами</string>
+    <string name="menu_tutorial">Руководство для использования</string>
     <string name="menu_login">Войти</string>
     <string name="menu_signup">Создать учетную запись</string>
     <string name="menu_logout">Выйти</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Политика конфиденциальности</string>
     <string name="menu_copyright">Авторское право</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Услышьте поступь божью!</string>
+    <string name="share_story_subject">Живые истории</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 80 языков</string>
     <string name="menu_language_settings">Настройки языка</string>

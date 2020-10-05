@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">De deelsessie afsluiten?</string>
     <string name="tract_live_share_exit_dialog_confirm">Afsluiten</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuleren</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

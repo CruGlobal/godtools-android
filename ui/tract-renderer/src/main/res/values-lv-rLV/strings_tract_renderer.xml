@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Iziet no attālinātās koplietošanas sesijas?</string>
     <string name="tract_live_share_exit_dialog_confirm">Iziet</string>
     <string name="tract_live_share_exit_dialog_cancel">Atcelt</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

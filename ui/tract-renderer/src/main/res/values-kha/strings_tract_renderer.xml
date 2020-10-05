@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">রিমোট শেয়ার করার সত্র থেকে এখন প্রস্তান করবেন?</string>
     <string name="tract_live_share_exit_dialog_confirm">প্রস্থান করুন</string>
     <string name="tract_live_share_exit_dialog_cancel">বাতিল</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

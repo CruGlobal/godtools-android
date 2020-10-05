@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Kompartí bo pantaya</string>
+    <string name="tutorial_live_share_description_text">E opshon aki lo manda un lenk di e hèrmènt aki pa un amigu. Ora e habri e lenk, esaki lo kuminsá un seshon di kompartí pantaya.</string>
+    <string name="tutorial_live_share_mirrored_headline">Eksperensia di refleho</string>
+    <string name="tutorial_live_share_mirrored_text">Mientras bo ta move den e hèrmènt riba bo telefòn, e pantaya di bo amigu lo move na mesun manera. Esaki lo pèrmití bo pasa dor di e hèrmènt huntu riba dos aparato diferente na mesun momentu.</string>
+    <string name="tutorial_live_share_start_headline">Kuminsá</string>
+    <string name="tutorial_live_share_start_text">Manda e lenk na un òf mas hende pa kuminsá un seshon di kompartí pantaya.
+
+
+
+Na e momentu aki, esaki ta rekerí pa tur partisipante tin e app di GodTools riba nan aparato.</string>
+    <string name="tutorial_live_share_action_continue">Sigui</string>
+    <string name="tutorial_live_share_action_skip">Bula</string>
+    <string name="tutorial_live_share_action_start">Kompartí lenk</string>
+</resources>

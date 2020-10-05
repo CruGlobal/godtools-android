@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Părăsești sesiunea de partajare la distanță acum?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ieși</string>
     <string name="tract_live_share_exit_dialog_cancel">Anulează</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

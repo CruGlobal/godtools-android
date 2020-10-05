@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Uzaktan paylaşım oturumundan şimdi çıkılsın mı?</string>
     <string name="tract_live_share_exit_dialog_confirm">Çık</string>
     <string name="tract_live_share_exit_dialog_cancel">İptal</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Mon profil</string>
+    <string name="menu_profile">Activité mondiale</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Activité</string>
+    <string name="profile_global_activity_heading">%s Activité Mondiale</string>
+    <string name="profile_activity_unique_users">Utilisateurs Uniques</string>
+    <string name="profile_activity_gospel_presentations">Présentations de l\'Evangile</string>
+    <string name="profile_activity_sessions">Sessions</string>
+    <string name="profile_activity_countries">Pays</string>
+</resources>

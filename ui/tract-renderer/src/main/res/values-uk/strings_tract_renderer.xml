@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Закінчити віддалений сеанс демонстрації?</string>
     <string name="tract_live_share_exit_dialog_confirm">Закінчити</string>
     <string name="tract_live_share_exit_dialog_cancel">Скасувати</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

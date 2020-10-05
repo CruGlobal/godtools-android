@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">지금 원격 공유 세션에서 나갈까요?</string>
     <string name="tract_live_share_exit_dialog_confirm">나가기</string>
     <string name="tract_live_share_exit_dialog_cancel">취소</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

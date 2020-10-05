@@ -4,11 +4,13 @@
     <string name="share_prompt">Sélectionnez le mode de partage</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Général</string>
+    <string name="menu_heading_account">Compte</string>
     <string name="menu_heading_share">Partager</string>
     <string name="menu_heading_legal">Mentions légales</string>
     <string name="menu_about">À propos</string>
     <string name="menu_help">Questions fréquemment posées</string>
     <string name="menu_contact_us">Nous contacter</string>
+    <string name="menu_tutorial">Tutoriel</string>
     <string name="menu_login">Connexion</string>
     <string name="menu_signup">Créer un compte</string>
     <string name="menu_logout">Déconnexion</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Politique de confidentialité</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Découvrez comment Dieu agit !</string>
+    <string name="share_story_subject">histoire à propos de GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Plus de 80 langues</string>
     <string name="menu_language_settings">Paramètres de langue</string>
