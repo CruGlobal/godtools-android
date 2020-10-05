@@ -27,9 +27,12 @@ enum class PageSet(
         ),
         supportedLocales = setOf(
             Locale.ENGLISH,
-            LocaleCompat.forLanguageTag("zh-Hans"),
+            Locale("es"),
+            Locale.FRENCH,
+            Locale("in"),
+            Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
-            Locale("es")
+            LocaleCompat.forLanguageTag("zh-Hans")
         )
     ),
     TRAINING(
@@ -43,9 +46,12 @@ enum class PageSet(
         ),
         supportedLocales = setOf(
             Locale.ENGLISH,
-            LocaleCompat.forLanguageTag("zh-Hans"),
+            Locale("es"),
+            Locale.FRENCH,
+            Locale("in"),
+            Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
-            Locale("es")
+            LocaleCompat.forLanguageTag("zh-Hans")
         )
     ),
     LIVE_SHARE(

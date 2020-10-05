@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">遠隔共有セッションを今すぐ終了しますか？</string>
     <string name="tract_live_share_exit_dialog_confirm">終了</string>
     <string name="tract_live_share_exit_dialog_cancel">キャンセル</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

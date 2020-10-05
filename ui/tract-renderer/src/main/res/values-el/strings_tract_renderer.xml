@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Έξοδος από την απομακρυσμένη συνεδρία κοινής χρήσης τώρα;</string>
     <string name="tract_live_share_exit_dialog_confirm">Έξοδος</string>
     <string name="tract_live_share_exit_dialog_cancel">Ακύρωση</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

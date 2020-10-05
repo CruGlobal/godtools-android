@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Izhod iz seje deljenja na daljavo?</string>
     <string name="tract_live_share_exit_dialog_confirm">Izhod</string>
     <string name="tract_live_share_exit_dialog_cancel">Prekliči</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

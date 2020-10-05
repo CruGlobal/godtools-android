@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Kilép most a távmegosztási munkamenetből?</string>
     <string name="tract_live_share_exit_dialog_confirm">Kilépés</string>
     <string name="tract_live_share_exit_dialog_cancel">Mégse</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

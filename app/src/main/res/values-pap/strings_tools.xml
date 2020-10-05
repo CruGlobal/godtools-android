@@ -15,6 +15,7 @@
     <string name="action_tools_open_tool">Habri e Hèrmènt</string>
     <string name="action_tools_add_favorite">Agregá na lista di Faboritonan</string>
     <string name="action_tools_remove_favorite">Kita for di lista di Faboritonan</string>
+    <string name="action_tools_open_training">Siña kon pa kompartí e hèrmènt aki</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d View</item>
         <item quantity="other">%1$,d Views</item>

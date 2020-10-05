@@ -6,10 +6,19 @@
     <string name="tract_card_next">Далее</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Покажите свой экран</string>
-    <string name="share_tool_message_tract_live_share">Привет, пройди этот путь вместе со мной в GodTools с помощью трансляции экрана. Вот ссылка: %1$s\n\nЕсли это сообщение придет слишком поздно, ссылка может уже не работать. Мы можем попробовать еще раз в другое время.</string>
+    <string name="menu_live_share_active">Функция «поделиться экраном» запущена</string>
+    <string name="share_tool_message_tract_live_share">Привет, чтобы запустилась функция трансляции экрана, пройдите по ссылке: %1$s\n\nЕсли это сообщение придет слишком поздно, ссылка может уже не работать. Мы можем попробовать еще раз в другое время.</string>
     <string name="tract_live_share_starting">Запуск трансляции экрана…</string>
     <string name="tract_live_share_unable_to_connect">Невозможно подключиться к трансляции экрана</string>
     <string name="tract_live_share_exit_dialog_message">Выйти из сеанса удаленной трансляции?</string>
     <string name="tract_live_share_exit_dialog_confirm">Выход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмена</string>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Дальше</string>
+    <string name="tract_tips_tip_action_close">Закрыть</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Задать вопрос</string>
+    <string name="tract_tips_type_consider">Подумайте</string>
+    <string name="tract_tips_type_prepare">Подготовьтесь</string>
+    <string name="tract_tips_type_tip">Подсказка</string>
 </resources>

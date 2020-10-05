@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Umalis na sa session ng remote na pagbabahagi?</string>
     <string name="tract_live_share_exit_dialog_confirm">Umalis</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselahin</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

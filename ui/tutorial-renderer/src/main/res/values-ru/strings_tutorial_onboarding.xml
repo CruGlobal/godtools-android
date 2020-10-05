@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Добро пожаловать</string>
+    <string name="tutorial_onboarding_welcome_2">Помогая вам говорить с другими о своей вере</string>
+    <string name="tutorial_onboarding_others_headline">Поделитесь в другими</string>
+    <string name="tutorial_onboarding_others_subhead">GodTools создан для того, чтобы помочь вам говорить с другими о своей вере</string>
+    <string name="tutorial_onboarding_tools_headline">Выберите свои инструменты</string>
+    <string name="tutorial_onboarding_tools_subhead">GodTools поможет вам во время разговора с человеком о Боге, до и после</string>
+    <string name="tutorial_onboarding_ready_headline">Всегда в доступе и готово помочь</string>
+    <string name="tutorial_onboarding_ready_subhead">Приложение GodTools готово помочь в любой момент, когда готовы вы</string>
+    <string name="tutorial_onboarding_final_prepare">Подготовьтесь к любому разговору</string>
+    <string name="tutorial_onboarding_final_gospel">Расскажите кому-то Евангелие</string>
+    <string name="tutorial_onboarding_final_parallel_languages">Выбрать два параллельных языка для просмотра</string>
+    <string name="tutorial_onboarding_final_languages">Выберите свой язык из 80+ представленных в приложении</string>
+    <string name="tutorial_onboarding_final_help_others">Помогите другим в их духовном росте</string>
+    <string name="tutorial_onboarding_final_action_show_more">Покажите еще</string>
+    <string name="tutorial_onboarding_final_action_start">Начать</string>
+    <string name="tutorial_onboarding_action_begin">Начать</string>
+    <string name="tutorial_onboarding_action_continue">Продолжить</string>
+    <string name="tutorial_onboarding_action_skip">Пропустить</string>
+</resources>

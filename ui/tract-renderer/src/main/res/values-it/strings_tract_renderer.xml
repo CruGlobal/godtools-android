@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Uscire subito dalla sessione di condivisione remota?</string>
     <string name="tract_live_share_exit_dialog_confirm">Esci</string>
     <string name="tract_live_share_exit_dialog_cancel">Annulla</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">ออกจากเซสชันการแชร์ทางไกลตอนนี้หรือไม่</string>
     <string name="tract_live_share_exit_dialog_confirm">ออก</string>
     <string name="tract_live_share_exit_dialog_cancel">ยกเลิก</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

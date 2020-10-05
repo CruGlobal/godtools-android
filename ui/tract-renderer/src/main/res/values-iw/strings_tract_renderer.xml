@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">לצאת מהשיתוף מרחוק עכשיו?</string>
     <string name="tract_live_share_exit_dialog_confirm">יציאה</string>
     <string name="tract_live_share_exit_dialog_cancel">בטל</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

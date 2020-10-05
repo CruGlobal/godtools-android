@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">立即退出远程共享会话？</string>
     <string name="tract_live_share_exit_dialog_confirm">退出</string>
     <string name="tract_live_share_exit_dialog_cancel">取消</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

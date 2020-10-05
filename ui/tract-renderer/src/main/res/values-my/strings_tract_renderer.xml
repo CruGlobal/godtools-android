@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">အဝေးမှ မျှဝေခြင်း အပိုင်းမှ ယခု ထွက်မလား။</string>
     <string name="tract_live_share_exit_dialog_confirm">ထွက်မည်</string>
     <string name="tract_live_share_exit_dialog_cancel">ပယ်ဖျက်မည်</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

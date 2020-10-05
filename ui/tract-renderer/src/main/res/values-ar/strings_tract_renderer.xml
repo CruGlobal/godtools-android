@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">الخروج من جلسة المشاركة عن بُعد الآن؟</string>
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">إلغاء</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

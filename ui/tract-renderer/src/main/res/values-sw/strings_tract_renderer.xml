@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Ondoka sasa kutoka kipindi cha kuchangia ukiwa mbali?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ondoka</string>
     <string name="tract_live_share_exit_dialog_cancel">Ghairi</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>

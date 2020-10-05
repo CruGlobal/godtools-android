@@ -3,7 +3,7 @@
     <string name="menu_share_tool">Podijeli</string>
     <string name="share_tool_title">Podijeli “%1$s” uporabom</string>
     <string name="tool_not_found">Alat koji ste tražili nije moguće pronaći</string>
-    <string name="tool_loading">Alat koji ste tražili se učitava...</string>
+    <string name="tool_loading">Alat koji ste tražili se učitava…</string>
     <string name="tool_offline">Kako biste otvorili alat koji ste tražili potrebna je internetska veza</string>
     <string name="feature_discovery_title_share_tool">Podijeli vezu</string>
     <string name="feature_discovery_desc_share_tool">Pošalji ovaj alat prijatelju klikom na ikonu</string>

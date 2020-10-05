@@ -3,7 +3,7 @@
     <string name="menu_share_tool">Megosztás</string>
     <string name="share_tool_title">“%1$s” megosztása ezzel:</string>
     <string name="tool_not_found">A kért eszköz nem található</string>
-    <string name="tool_loading">A kért eszköz betöltése folyamatban...</string>
+    <string name="tool_loading">A kért eszköz betöltése folyamatban…</string>
     <string name="tool_offline">Az általad kért eszköz megnyitásához internetkapcsolat szükséges</string>
     <string name="feature_discovery_title_share_tool">Hivatkozás megosztása</string>
     <string name="feature_discovery_desc_share_tool">Küldd el ezt az eszközt egy ismerősnek az ikonra kattintva</string>

@@ -12,4 +12,6 @@
     <string name="tract_live_share_exit_dialog_message">Kas lõpetada ekraanikuva kaugjagamine kohe?</string>
     <string name="tract_live_share_exit_dialog_confirm">Välju</string>
     <string name="tract_live_share_exit_dialog_cancel">Tühista</string>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
 </resources>
