@@ -92,11 +92,9 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
 
     private static final int MSG_CLEAN = 1;
 
-    private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
     private static final ArrayMap<TranslationKey, Object> LOCKS_TRANSLATION_DOWNLOADS = new ArrayMap<>();
 
     private final Context mContext;
-    private final AttachmentsApi mAttachmentsApi;
     private final TranslationsApi mTranslationsApi;
     private final GodToolsDao mDao;
     private final EventBus mEventBus;
@@ -112,9 +110,8 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
                             @NonNull final EventBus eventBus, @NonNull final FileManager fileManager,
                             @NonNull final Settings settings) {
-        super(dao, eventBus, fileManager);
+        super(attachmentsApi, dao, eventBus, fileManager);
         mContext = context;
-        mAttachmentsApi = attachmentsApi;
         mTranslationsApi = translationsApi;
         mDao = dao;
         mEventBus = eventBus;
@@ -262,74 +259,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
 
             return true;
         });
-    }
-
-    @WorkerThread
-    @SuppressWarnings("checkstyle:RightCurly")
-    void downloadAttachment(final long attachmentId) {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        synchronized (getLock(LOCKS_ATTACHMENTS, attachmentId)) {
-            // short-circuit if attachment doesn't exist
-            final Attachment attachment = mDao.find(Attachment.class, attachmentId);
-            if (attachment == null) {
-                return;
-            }
-
-            // short-circuit if we don't have a local filename
-            final String fileName = attachment.getLocalFilename();
-            if (fileName == null) {
-                return;
-            }
-
-            final Lock lock = LOCK_FILESYSTEM.readLock();
-            try {
-                lock.lock();
-                synchronized (getLock(LOCKS_FILES, fileName)) {
-                    // short-circuit if the attachment is actually downloaded
-                    LocalFile localFile = mDao.find(LocalFile.class, fileName);
-                    if (attachment.isDownloaded() && localFile != null) {
-                        return;
-                    }
-                    attachment.setDownloaded(false);
-
-                    // we don't have a local file, so download it
-                    if (localFile == null) {
-                        // create a new local file object
-                        localFile = new LocalFile(fileName);
-
-                        try {
-                            // download attachment
-                            final Response<ResponseBody> response = mAttachmentsApi.download(attachmentId).execute();
-                            if (response.isSuccessful()) {
-                                final ResponseBody body = response.body();
-                                if (body != null) {
-                                    copyTo(body.byteStream(), localFile);
-                                    mDao.updateOrInsert(localFile);
-
-                                    // mark attachment as downloaded
-                                    attachment.setDownloaded(true);
-                                }
-                            }
-                        } catch (final IOException ignored) {
-                        }
-                    }
-                    // this file is already available locally, so just mark it as downloaded
-                    else {
-                        attachment.setDownloaded(true);
-                    }
-
-                    // update attachment download state
-                    mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                    mEventBus.post(AttachmentUpdateEvent.INSTANCE);
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
     }
 
     @WorkerThread

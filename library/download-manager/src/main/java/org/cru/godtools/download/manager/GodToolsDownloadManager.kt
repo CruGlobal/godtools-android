@@ -5,6 +5,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
+import androidx.collection.LongSparseArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.io.FileNotFoundException
@@ -21,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.util.ThreadUtils
+import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
@@ -36,6 +38,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val TAG = "GodToolsDownloadManager"
 
 open class KotlinGodToolsDownloadManager(
+    private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fileManager: FileManager
@@ -45,6 +48,8 @@ open class KotlinGodToolsDownloadManager(
     override val coroutineContext get() = Dispatchers.Default + job
 
     // region Temporary migration logic
+    @JvmField
+    protected val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
     @JvmField
     protected val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
     @JvmField
@@ -100,6 +105,48 @@ open class KotlinGodToolsDownloadManager(
 
     // region Attachments
     @WorkerThread
+    protected fun downloadAttachment(attachmentId: Long) {
+        if (!fileManager.createResourcesDir()) return
+
+        synchronized(ThreadUtils.getLock(LOCKS_ATTACHMENTS, attachmentId)) {
+            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val filename = attachment.localFilename ?: return
+
+            val lock = LOCK_FILESYSTEM.readLock()
+            try {
+                lock.lock()
+                synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
+                    runBlocking {
+                        val localFile = dao.find<LocalFile>(filename)
+                        if (attachment.isDownloaded && localFile != null) return@runBlocking
+                        attachment.isDownloaded = localFile != null
+
+                        if (localFile == null) {
+                            // create a new local file object
+                            try {
+                                // download attachment
+                                attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
+                                    ?.let {
+                                        val file = LocalFile(filename)
+                                        it.copyTo(file)
+                                        dao.updateOrInsert(file)
+                                        attachment.isDownloaded = true
+                                    }
+                            } catch (ignored: IOException) {
+                            }
+                        }
+
+                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                        eventBus.post(AttachmentUpdateEvent)
+                    }
+                }
+            } finally {
+                lock.unlock()
+            }
+        }
+    }
+
+    @WorkerThread
     @Throws(IOException::class)
     fun importAttachment(attachment: Attachment, data: InputStream) {
         if (!fileManager.createResourcesDir()) return
@@ -141,14 +188,12 @@ open class KotlinGodToolsDownloadManager(
     @WorkerThread
     @VisibleForTesting
     @Throws(IOException::class)
-    fun InputStream.copyTo(localFile: LocalFile) {
+    internal fun InputStream.copyTo(localFile: LocalFile) {
         buffered().use { buffer ->
             val file = localFile.getFile(fileManager)
                 ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
 
-            file.outputStream().use { out ->
-                buffer.copyTo(out)
-            }
+            file.outputStream().use { buffer.copyTo(it) }
         }
     }
     // endregion Attachments

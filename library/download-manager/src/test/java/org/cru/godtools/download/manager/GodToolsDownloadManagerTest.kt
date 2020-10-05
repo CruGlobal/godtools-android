@@ -20,6 +20,7 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.db.find
+import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
@@ -48,6 +49,7 @@ class GodToolsDownloadManagerTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var attachmentsApi: AttachmentsApi
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fileManager: FileManager
@@ -56,11 +58,12 @@ class GodToolsDownloadManagerTest {
 
     @Before
     fun setup() {
+        attachmentsApi = mock()
         dao = mock()
         eventBus = mock()
         fileManager = mock { on { createResourcesDir() } doReturn true }
 
-        downloadManager = KotlinGodToolsDownloadManager(dao, eventBus, fileManager)
+        downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager)
     }
 
     // region pinTool()
