@@ -66,7 +66,7 @@ class Tool : Base() {
     @JsonApiAttribute(JSON_BANNER)
     var bannerId: Long? = null
     @JsonApiAttribute(JSON_BANNER_DETAILS)
-    var detailsBannerId = Attachment.INVALID_ID
+    var detailsBannerId: Long? = null
 
     @JsonApiAttribute(JSON_OVERVIEW_VIDEO)
     var overviewVideo: String? = null

@@ -282,7 +282,8 @@ class GodToolsShortcutManager @Inject constructor(
             .getName(tool, context)
 
         // create the icon bitmap
-        val icon: IconCompat = dao.find<Attachment>(tool.detailsBannerId)
+        val icon: IconCompat = tool.detailsBannerId
+            ?.let { dao.find<Attachment>(it) }
             ?.let { context.getGodToolsFile(it.localFileName) }
             ?.let {
                 try {
