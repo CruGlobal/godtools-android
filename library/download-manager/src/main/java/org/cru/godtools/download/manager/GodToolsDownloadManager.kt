@@ -148,7 +148,6 @@ open class KotlinGodToolsDownloadManager(
 
             file.outputStream().use { out ->
                 buffer.copyTo(out)
-                dao.updateOrInsert(localFile)
             }
         }
     }

@@ -308,6 +308,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                                 final ResponseBody body = response.body();
                                 if (body != null) {
                                     copyTo(body.byteStream(), localFile);
+                                    mDao.updateOrInsert(localFile);
 
                                     // mark attachment as downloaded
                                     attachment.setDownloaded(true);
