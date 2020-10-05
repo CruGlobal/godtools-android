@@ -45,11 +45,11 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/imagePosition"
-            app:layout_constraintEnd_toEndOf="@id/imagePosition"
-            app:layout_constraintStart_toStartOf="@id/imagePosition"
-            app:layout_constraintTop_toTopOf="@id/imagePosition"
+            android:layout_height="@dimen/tutorial_page_live_share_anim_height"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintTop_toBottomOf="@id/textBottom"
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/anim_tutorial_live_share_devices"
             app:lottie_loop="true" />

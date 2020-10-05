@@ -4,4 +4,5 @@
 
     <dimen name="tutorial_page_inset_top">48dp</dimen>
     <dimen name="tutorial_page_inset_bottom">64dp</dimen>
+    <dimen name="tutorial_page_live_share_anim_height">266dp</dimen>
 </resources>
