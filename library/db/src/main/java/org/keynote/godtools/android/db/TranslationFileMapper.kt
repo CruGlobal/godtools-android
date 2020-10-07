@@ -21,6 +21,6 @@ internal object TranslationFileMapper : AbstractMapper<TranslationFile>() {
 
     override fun newObject(c: Cursor) = TranslationFile(
         translationId = c.getLong(COLUMN_TRANSLATION, Base.INVALID_ID),
-        filename = c.getString(COLUMN_FILE)
+        filename = c.getString(COLUMN_FILE).orEmpty()
     )
 }

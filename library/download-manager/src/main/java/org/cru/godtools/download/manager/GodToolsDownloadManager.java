@@ -10,16 +10,12 @@ import android.os.Message;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.common.io.Closer;
-import com.google.common.io.CountingInputStream;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
-import org.ccci.gto.android.common.util.IOUtils;
-import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
 import org.cru.godtools.api.AttachmentsApi;
 import org.cru.godtools.api.TranslationsApi;
 import org.cru.godtools.base.FileManager;
@@ -48,23 +44,16 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import javax.annotation.concurrent.GuardedBy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -328,7 +317,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                 lock.lock();
 
                 // process the download
-                processZipStream(translation, zipStream, size);
+                extractZipFor(zipStream, translation, size);
 
                 // mark translation as downloaded
                 translation.setDownloaded(true);
@@ -340,60 +329,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                 // finish the download
                 finishDownload(key);
             }
-        }
-    }
-
-    /**
-     * Process a streaming zip response.
-     */
-    @WorkerThread
-    @GuardedBy("LOCK_FILESYSTEM")
-    private void processZipStream(@NonNull final Translation translation, @NonNull final InputStream zipStream,
-                                  final long size) throws IOException {
-        final TranslationKey translationKey = new TranslationKey(translation);
-
-        final Closer closer = Closer.create();
-        try {
-            final CountingInputStream count = closer.register(new CountingInputStream(zipStream));
-            final ZipInputStream zin = closer.register(new ZipInputStream(new BufferedInputStream(count)));
-            final ProgressCallback progressCallback = (s) -> updateProgress(translationKey, count.getCount(), size);
-
-            ZipEntry ze;
-            while ((ze = zin.getNextEntry()) != null) {
-                final String fileName = ze.getName();
-                synchronized (getLock(LOCKS_FILES, fileName)) {
-                    // write the file if it hasn't been downloaded before
-                    LocalFile localFile = mDao.find(LocalFile.class, fileName);
-                    if (localFile == null) {
-                        // create a new local file object
-                        localFile = new LocalFile(fileName);
-
-                        // short-circuit if we can't create the local file
-                        final File file = localFile.getFile(mContext);
-                        if (file == null) {
-                            throw new FileNotFoundException(fileName + " (File could not be created)");
-                        }
-
-                        // write file
-                        final OutputStream os = closer.register(new FileOutputStream(file));
-                        IOUtils.copy(zin, os, progressCallback);
-                        os.flush();
-                        os.close();
-
-                        // store local file in database
-                        mDao.updateOrInsert(localFile);
-                    }
-
-                    // associate this file with this translation
-                    mDao.updateOrInsert(new TranslationFile(translation, localFile));
-                }
-
-                updateProgress(translationKey, count.getCount(), size);
-            }
-        } catch (final Throwable e) {
-            throw closer.rethrow(e);
-        } finally {
-            closer.close();
         }
     }
 

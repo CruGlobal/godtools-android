@@ -8,12 +8,15 @@ import androidx.collection.ArrayMap
 import androidx.collection.LongSparseArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.common.io.CountingInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import java.util.zip.ZipInputStream
+import javax.annotation.concurrent.GuardedBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -27,6 +30,8 @@ import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
+import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
@@ -148,7 +153,6 @@ open class KotlinGodToolsDownloadManager(
     }
 
     @WorkerThread
-    @Throws(IOException::class)
     fun importAttachment(attachment: Attachment, data: InputStream) {
         if (!fileManager.createResourcesDir()) return
 
@@ -185,14 +189,41 @@ open class KotlinGodToolsDownloadManager(
             lock.unlock()
         }
     }
+    // endregion Attachments
+
+    // region Translations
+    @WorkerThread
+    @GuardedBy("LOCK_FILESYSTEM")
+    @Throws(IOException::class)
+    protected fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
+        val count = CountingInputStream(this)
+        val translationKey = TranslationKey(translation)
+        ZipInputStream(count.buffered()).use { zin ->
+            while (true) {
+                val ze = zin.nextEntry ?: break
+                val filename = ze.name
+                synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
+                    // write the file if it hasn't been downloaded before
+                    if (dao.find<LocalFile>(filename) == null) {
+                        val newFile = LocalFile(filename)
+                        zin.copyTo(newFile)
+                        dao.updateOrInsert(newFile)
+                    }
+
+                    // associate this file with this translation
+                    dao.updateOrInsert(TranslationFile(translation, filename))
+                }
+                updateProgress(translationKey, count.count, zipSize)
+            }
+        }
+    }
+    // endregion Translations
 
     @WorkerThread
-    @Throws(IOException::class)
     private fun InputStream.copyTo(localFile: LocalFile) {
         val file = localFile.getFile(fileManager)
             ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
 
         file.outputStream().use { copyTo(it) }
     }
-    // endregion Attachments
 }
