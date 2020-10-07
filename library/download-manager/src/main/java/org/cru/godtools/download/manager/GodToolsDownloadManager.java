@@ -396,7 +396,7 @@ public final class GodToolsDownloadManager {
             // short-circuit if we can't create the local file
             final File file = localFile.getFile(mContext);
             if (file == null) {
-                throw new FileNotFoundException(localFile.getFileName() + " (File could not be created)");
+                throw new FileNotFoundException(localFile.getFilename() + " (File could not be created)");
             }
 
             // write file
