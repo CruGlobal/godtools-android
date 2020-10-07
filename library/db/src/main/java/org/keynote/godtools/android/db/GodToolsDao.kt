@@ -86,7 +86,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
     }
 
     public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
-        is LocalFile -> getPrimaryKeyWhere(LocalFile::class.java, obj.fileName!!)
+        is LocalFile -> getPrimaryKeyWhere(LocalFile::class.java, obj.filename)
         is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.filename!!)
         is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)
         is Tool -> getPrimaryKeyWhere(Tool::class.java, obj.code!!)

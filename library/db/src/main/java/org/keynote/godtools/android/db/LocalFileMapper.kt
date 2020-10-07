@@ -10,10 +10,10 @@ import org.keynote.godtools.android.db.Contract.LocalFileTable.COLUMN_NAME
 internal object LocalFileMapper : AbstractMapper<LocalFile>() {
     override fun mapField(values: ContentValues, field: String, file: LocalFile) {
         when (field) {
-            COLUMN_NAME -> values.put(field, file.fileName)
+            COLUMN_NAME -> values.put(field, file.filename)
             else -> super.mapField(values, field, file)
         }
     }
 
-    override fun newObject(c: Cursor) = LocalFile(c.getString(COLUMN_NAME))
+    override fun newObject(c: Cursor) = LocalFile(c.getString(COLUMN_NAME).orEmpty())
 }
