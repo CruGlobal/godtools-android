@@ -14,13 +14,13 @@ internal object TranslationFileMapper : AbstractMapper<TranslationFile>() {
     override fun mapField(values: ContentValues, field: String, file: TranslationFile) {
         when (field) {
             COLUMN_TRANSLATION -> values.put(field, file.translationId)
-            COLUMN_FILE -> values.put(field, file.fileName)
+            COLUMN_FILE -> values.put(field, file.filename)
             else -> super.mapField(values, field, file)
         }
     }
 
     override fun newObject(c: Cursor) = TranslationFile(
         translationId = c.getLong(COLUMN_TRANSLATION, Base.INVALID_ID),
-        fileName = c.getString(COLUMN_FILE)
+        filename = c.getString(COLUMN_FILE)
     )
 }
