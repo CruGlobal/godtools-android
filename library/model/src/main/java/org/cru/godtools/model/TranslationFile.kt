@@ -2,7 +2,7 @@ package org.cru.godtools.model
 
 import org.cru.godtools.model.Base.INVALID_ID
 
-class TranslationFile(
+data class TranslationFile(
     val translationId: Long = INVALID_ID,
     val filename: String
 ) {

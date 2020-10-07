@@ -28,6 +28,8 @@ import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
+import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
@@ -252,4 +254,36 @@ class GodToolsDownloadManagerTest {
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
     private fun FileManager.getFile(attachment: Attachment) = getFile(attachment.localFilename)
     // endregion Attachments
+
+    // region Translations
+    private val translation = Translation().apply {
+        setId(Random.nextLong())
+        toolCode = TOOL
+        languageCode = Locale.FRENCH
+    }
+
+    @Test
+    fun verifyExtractZipFor() {
+        val files = Array(3) { getTmpFile() }
+        fileManager.stub {
+            on { getFile("a.txt") } doReturn files[0]
+            on { getFile("b.txt") } doReturn files[1]
+            on { getFile("c.txt") } doReturn files[2]
+        }
+
+        with(downloadManager) { getInputStreamForResource("abc.zip").extractZipFor(translation, -1) }
+        assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
+        assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
+        assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
+        verify(dao).updateOrInsert(eq(LocalFile("a.txt")))
+        verify(dao).updateOrInsert(eq(LocalFile("b.txt")))
+        verify(dao).updateOrInsert(eq(LocalFile("c.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "a.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
+    }
+    // endregion Translations
+
+    private fun getTmpFile() = File.createTempFile("test-", null).also { it.delete() }
+    private fun getInputStreamForResource(name: String) = this::class.java.getResourceAsStream(name)!!
 }

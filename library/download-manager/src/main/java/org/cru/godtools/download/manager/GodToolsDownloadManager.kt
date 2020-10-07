@@ -195,7 +195,8 @@ open class KotlinGodToolsDownloadManager(
     @WorkerThread
     @GuardedBy("LOCK_FILESYSTEM")
     @Throws(IOException::class)
-    protected fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
+    @VisibleForTesting
+    fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
         val count = CountingInputStream(this)
         val translationKey = TranslationKey(translation)
         ZipInputStream(count.buffered()).use { zin ->
