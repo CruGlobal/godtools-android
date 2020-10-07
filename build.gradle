@@ -14,7 +14,7 @@ buildscript {
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.60.0',
                 findbugs           : '3.0.2',
-                gradleAndroidPlugin: '4.0.1',
+                gradleAndroidPlugin: '4.0.2',
                 gtoSupport         : '3.6.2-SNAPSHOT',
                 guava              : '29.0-android',
                 hamcrest           : '2.2',
