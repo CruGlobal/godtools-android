@@ -26,6 +26,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"

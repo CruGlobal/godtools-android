@@ -4,7 +4,6 @@ import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import androidx.collection.ArrayMap
 import androidx.collection.LongSparseArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +23,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
+import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
@@ -52,13 +53,13 @@ open class KotlinGodToolsDownloadManager(
     internal val job = SupervisorJob()
     override val coroutineContext get() = Dispatchers.Default + job
 
+    private val filesMutex = MutexMap()
+
     // region Temporary migration logic
     @JvmField
     protected val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
     @JvmField
     protected val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
-    @JvmField
-    protected val LOCKS_FILES = ArrayMap<String, Any>()
     // endregion Temporary migration logic
 
     // region Tool/Language pinning
@@ -121,8 +122,8 @@ open class KotlinGodToolsDownloadManager(
             val lock = LOCK_FILESYSTEM.readLock()
             try {
                 lock.lock()
-                synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
-                    runBlocking {
+                runBlocking {
+                    filesMutex.withLock(filename) {
                         val localFile = dao.find<LocalFile>(filename)
                         if (attachment.isDownloaded && localFile != null) return@runBlocking
                         attachment.isDownloaded = localFile != null
@@ -160,8 +161,8 @@ open class KotlinGodToolsDownloadManager(
         val lock = LOCK_FILESYSTEM.readLock()
         try {
             lock.lock()
-            synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
-                runBlocking {
+            runBlocking {
+                filesMutex.withLock(filename) {
                     // short-circuit if the attachment is already downloaded
                     val localFile: LocalFile? = dao.find(filename)
                     if (attachment.isDownloaded && localFile != null) return@runBlocking
@@ -197,34 +198,39 @@ open class KotlinGodToolsDownloadManager(
     @Throws(IOException::class)
     @VisibleForTesting
     fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
-        val count = CountingInputStream(this)
-        val translationKey = TranslationKey(translation)
-        ZipInputStream(count.buffered()).use { zin ->
-            while (true) {
-                val ze = zin.nextEntry ?: break
-                val filename = ze.name
-                synchronized(ThreadUtils.getLock(LOCKS_FILES, filename)) {
-                    // write the file if it hasn't been downloaded before
-                    if (dao.find<LocalFile>(filename) == null) {
-                        val newFile = LocalFile(filename)
-                        zin.copyTo(newFile)
-                        dao.updateOrInsert(newFile)
-                    }
+        runBlocking {
+            if (!fileManager.createResourcesDir()) return@runBlocking
 
-                    // associate this file with this translation
-                    dao.updateOrInsert(TranslationFile(translation, filename))
+            val count = CountingInputStream(this@extractZipFor)
+            val translationKey = TranslationKey(translation)
+
+            ZipInputStream(count.buffered()).use { zin ->
+                while (true) {
+                    val ze = zin.nextEntry ?: break
+                    val filename = ze.name
+                    filesMutex.withLock(filename) {
+                        // write the file if it hasn't been downloaded before
+                        if (dao.find<LocalFile>(filename) == null) {
+                            val newFile = LocalFile(filename)
+                            zin.copyTo(newFile)
+                            dao.updateOrInsert(newFile)
+                        }
+
+                        // associate this file with this translation
+                        dao.updateOrInsert(TranslationFile(translation, filename))
+                    }
+                    updateProgress(translationKey, count.count, zipSize)
                 }
-                updateProgress(translationKey, count.count, zipSize)
             }
         }
     }
     // endregion Translations
 
     @WorkerThread
-    private fun InputStream.copyTo(localFile: LocalFile) {
+    private suspend fun InputStream.copyTo(localFile: LocalFile) {
         val file = localFile.getFile(fileManager)
             ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
 
-        file.outputStream().use { copyTo(it) }
+        withContext(Dispatchers.IO) { file.outputStream().use { copyTo(it) } }
     }
 }
