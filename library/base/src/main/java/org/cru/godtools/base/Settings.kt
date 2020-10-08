@@ -51,7 +51,7 @@ class Settings @Inject internal constructor(
         const val FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding"
         const val FEATURE_TUTORIAL_TRAINING = "tutorialTraining"
         const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare."
-        const val FEATURE_TUTORIAL_TIPS = "tutorialTips"
+        const val FEATURE_TUTORIAL_TIPS = "tutorialTips."
 
         @JvmStatic
         val defaultLanguage: Locale get() = Locale.ENGLISH
