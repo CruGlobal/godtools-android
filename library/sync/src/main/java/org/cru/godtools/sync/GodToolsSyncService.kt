@@ -36,13 +36,12 @@ class GodToolsSyncService @Inject internal constructor(
     private val eventBus: EventBus,
     private val workManager: WorkManager,
     private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
-) : CoroutineScope {
-    private val job = SupervisorJob()
-    override val coroutineContext get() = Dispatchers.IO + job
+) {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
-        launch {
+        coroutineScope.launch {
             try {
                 when (task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> { syncLanguages(task.args) }
