@@ -85,6 +85,7 @@
             android:text="@{ContextKt.getString(context, tip.manifest.locale, TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
             android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
             android:textSize="@dimen/text_size_tip_label"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/icon_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/icon_background"
