@@ -230,7 +230,7 @@ open class KotlinGodToolsDownloadManager(
                 lock.lock()
 
                 // process the download
-                zipStream.extractZipFor(translation, size)
+                runBlocking { zipStream.extractZipFor(translation, size) }
 
                 // mark translation as downloaded
                 translation.isDownloaded = true
@@ -245,16 +245,15 @@ open class KotlinGodToolsDownloadManager(
         }
     }
 
-    @WorkerThread
+    @AnyThread
     @GuardedBy("LOCK_FILESYSTEM")
     @VisibleForTesting
-    fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
-        runBlocking {
-            if (!fileManager.createResourcesDir()) return@runBlocking
+    internal suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
+        if (!fileManager.createResourcesDir()) return
 
+        val translationKey = TranslationKey(translation)
+        withContext(Dispatchers.IO) {
             val count = CountingInputStream(this@extractZipFor)
-            val translationKey = TranslationKey(translation)
-
             ZipInputStream(count.buffered()).use { zin ->
                 while (true) {
                     val ze = zin.nextEntry ?: break

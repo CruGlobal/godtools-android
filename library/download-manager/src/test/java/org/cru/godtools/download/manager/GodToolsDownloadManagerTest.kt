@@ -305,7 +305,7 @@ class GodToolsDownloadManagerTest {
             on { getFile("c.txt") } doReturn files[2]
         }
 
-        with(downloadManager) { getInputStreamForResource("abc.zip").extractZipFor(translation, -1) }
+        with(downloadManager) { runBlocking { getInputStreamForResource("abc.zip").extractZipFor(translation, -1) } }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
