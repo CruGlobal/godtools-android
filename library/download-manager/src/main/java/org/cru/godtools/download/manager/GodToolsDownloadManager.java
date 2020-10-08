@@ -284,40 +284,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     }
 
     @WorkerThread
-    public void storeTranslation(@NonNull final Translation translation, @NonNull final InputStream zipStream,
-                                 final long size) throws IOException {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        // lock translation
-        final TranslationKey key = new TranslationKey(translation);
-        synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            // track the start of this download
-            startProgress(key);
-
-            final Lock lock = LOCK_FILESYSTEM.readLock();
-            try {
-                lock.lock();
-
-                // process the download
-                extractZipFor(zipStream, translation, size);
-
-                // mark translation as downloaded
-                translation.setDownloaded(true);
-                mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
-                mEventBus.post(TranslationUpdateEvent.INSTANCE);
-            } finally {
-                lock.unlock();
-
-                // finish the download
-                finishDownload(key);
-            }
-        }
-    }
-
-    @WorkerThread
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void cleanFilesystem() {
         // short-circuit if the resources directory isn't valid

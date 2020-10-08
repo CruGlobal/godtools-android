@@ -1,6 +1,7 @@
 package org.cru.godtools.download.manager
 
 import androidx.annotation.AnyThread
+import androidx.annotation.GuardedBy
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -16,7 +17,6 @@ import java.util.Locale
 import java.util.concurrent.locks.ReadWriteLock
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import java.util.zip.ZipInputStream
-import javax.annotation.concurrent.GuardedBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -39,10 +39,12 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
+import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val TAG = "GodToolsDownloadManager"
@@ -214,8 +216,37 @@ open class KotlinGodToolsDownloadManager(
 
     // region Translations
     @WorkerThread
-    @GuardedBy("LOCK_FILESYSTEM")
     @Throws(IOException::class)
+    fun storeTranslation(translation: Translation, zipStream: InputStream, size: Long) {
+        if (!fileManager.createResourcesDir()) return
+
+        // lock translation
+        val key = TranslationKey(translation)
+        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
+            // track the start of this download
+            startProgress(key)
+            val lock = LOCK_FILESYSTEM.readLock()
+            try {
+                lock.lock()
+
+                // process the download
+                zipStream.extractZipFor(translation, size)
+
+                // mark translation as downloaded
+                translation.isDownloaded = true
+                dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+                eventBus.post(TranslationUpdateEvent)
+            } finally {
+                lock.unlock()
+
+                // finish the download
+                finishDownload(key)
+            }
+        }
+    }
+
+    @WorkerThread
+    @GuardedBy("LOCK_FILESYSTEM")
     @VisibleForTesting
     fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
         runBlocking {
