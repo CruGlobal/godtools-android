@@ -135,7 +135,7 @@ open class KotlinGodToolsDownloadManager(
     @WorkerThread
     @VisibleForTesting
     fun downloadAttachment(attachmentId: Long) {
-        if (!fileManager.createResourcesDir()) return
+        if (runBlocking { !fileManager.createResourcesDir() }) return
 
         synchronized(ThreadUtils.getLock(LOCKS_ATTACHMENTS, attachmentId)) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -177,7 +177,7 @@ open class KotlinGodToolsDownloadManager(
 
     @WorkerThread
     fun importAttachment(attachment: Attachment, data: InputStream) {
-        if (!fileManager.createResourcesDir()) return
+        if (runBlocking { !fileManager.createResourcesDir() }) return
 
         val filename = attachment.localFilename ?: return
         val lock = LOCK_FILESYSTEM.readLock()
@@ -218,7 +218,7 @@ open class KotlinGodToolsDownloadManager(
     @WorkerThread
     @Throws(IOException::class)
     fun storeTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (!fileManager.createResourcesDir()) return
+        if (runBlocking { !fileManager.createResourcesDir() }) return
 
         // lock translation
         val key = TranslationKey(translation)

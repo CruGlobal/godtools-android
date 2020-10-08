@@ -70,7 +70,7 @@ class GodToolsDownloadManagerTest {
         attachmentsApi = mock()
         dao = mock()
         eventBus = mock()
-        fileManager = mock { on { createResourcesDir() } doReturn true }
+        fileManager = mock { onBlocking { createResourcesDir() } doReturn true }
 
         downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager)
     }
@@ -246,7 +246,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportAttachmentUnableToCreateResourcesDir() {
         fileManager.stub {
-            on { createResourcesDir() } doReturn false
+            onBlocking { createResourcesDir() } doReturn false
             on { getFile(attachment) } doReturn file
         }
 
