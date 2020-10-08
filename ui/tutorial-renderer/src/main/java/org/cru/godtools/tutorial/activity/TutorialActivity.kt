@@ -79,7 +79,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.onboarding_action_skip -> {
+        R.id.onboarding_action_skip, R.id.action_tips_skip -> {
             finish()
             true
         }

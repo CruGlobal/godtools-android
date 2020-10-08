@@ -133,7 +133,8 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
         activity?.run {
             openToolActivity(code, tool.type, locale, showTips = true)
-            if (!settings.isFeatureDiscovered(FEATURE_TUTORIAL_TIPS)) {
+            if (settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_TIPS$code") < 3) {
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
                 startTutorialActivity(
                     PageSet.TIPS,
                     Bundle().apply { putString(FORMAT_ARG_TOOL_NAME, translation.getName(tool).toString()) }

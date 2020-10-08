@@ -65,7 +65,6 @@ enum class PageSet(
         )
     ),
     TIPS(
-        feature = Settings.FEATURE_TUTORIAL_TIPS,
         analyticsBaseScreenName = "tutorial-tips",
         pages = listOf(
             Page.TIPS_LEARN,
