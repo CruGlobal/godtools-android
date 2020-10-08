@@ -4,6 +4,7 @@ import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import androidx.collection.ArrayMap
 import androidx.collection.LongSparseArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -60,6 +61,8 @@ open class KotlinGodToolsDownloadManager(
     protected val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
     @JvmField
     protected val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
+    @JvmField
+    protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
     // endregion Temporary migration logic
 
     // region Tool/Language pinning

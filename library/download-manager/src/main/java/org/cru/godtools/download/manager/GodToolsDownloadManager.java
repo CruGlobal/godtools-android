@@ -61,7 +61,6 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import androidx.collection.ArrayMap;
 import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
 import dagger.hilt.android.qualifiers.ApplicationContext;
@@ -80,8 +79,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private static final int MSG_CLEAN = 1;
-
-    private static final ArrayMap<TranslationKey, Object> LOCKS_TRANSLATION_DOWNLOADS = new ArrayMap<>();
 
     private final Context mContext;
     private final TranslationsApi mTranslationsApi;
