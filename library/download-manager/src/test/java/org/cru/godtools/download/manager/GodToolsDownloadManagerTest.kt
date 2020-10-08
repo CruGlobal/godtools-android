@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyVararg
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -22,6 +23,7 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
@@ -322,6 +324,24 @@ class GodToolsDownloadManagerTest {
     }
     // endregion Translations
 
-    private fun getTmpFile() = File.createTempFile("test-", null).also { it.delete() }
+    // region Cleanup
+    @Test
+    fun verifyDetectMissingFiles() {
+        val file = getTmpFile(true)
+        val missingFile = getTmpFile()
+        whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
+        fileManager.stub {
+            onBlocking { getResourcesDir() } doReturn file.parentFile!!
+            on { getFile(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
+        }
+
+        downloadManager.detectMissingFiles()
+        verify(dao, never()).delete(LocalFile(file.name))
+        verify(dao).delete(LocalFile(missingFile.name))
+    }
+    // endregion Cleanup
+
+    private fun getTmpFile(create: Boolean = false) =
+        File.createTempFile("test-", null).also { if (!create) it.delete() }
     private fun getInputStreamForResource(name: String) = this::class.java.getResourceAsStream(name)!!
 }

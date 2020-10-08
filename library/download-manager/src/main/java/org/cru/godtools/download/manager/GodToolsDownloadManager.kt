@@ -279,7 +279,8 @@ open class KotlinGodToolsDownloadManager(
 
     // region Cleanup
     @WorkerThread
-    protected fun detectMissingFiles() {
+    @VisibleForTesting
+    fun detectMissingFiles() {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
         // acquire filesystem lock
