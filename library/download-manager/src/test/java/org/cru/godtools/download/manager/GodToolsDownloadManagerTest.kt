@@ -26,12 +26,14 @@ import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
+import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertArrayEquals
@@ -45,6 +47,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import retrofit2.Response
@@ -100,6 +103,37 @@ class GodToolsDownloadManagerTest {
             assertTrue(firstValue.isAdded)
         }
         verify(eventBus).post(ToolUpdateEvent)
+    }
+    // endregion pinTool()
+
+    // region pinLanguage()
+    @Test
+    fun verifyPinLanguage() {
+        runBlocking { downloadManager.pinLanguage(Locale.FRENCH) }
+        argumentCaptor<Language> {
+            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
+            assertEquals(Locale.FRENCH, firstValue.code)
+            assertTrue(firstValue.isAdded)
+        }
+        verify(eventBus).post(LanguageUpdateEvent)
+    }
+
+    @Test
+    fun verifyPinLanguageAsync() {
+        downloadManager.pinLanguageAsync(Locale.FRENCH)
+
+        runBlocking {
+            with(downloadManager.job) {
+                complete()
+                join()
+            }
+        }
+        argumentCaptor<Language> {
+            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
+            assertEquals(Locale.FRENCH, firstValue.code)
+            assertTrue(firstValue.isAdded)
+        }
+        verify(eventBus).post(LanguageUpdateEvent)
     }
     // endregion pinTool()
 
