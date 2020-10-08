@@ -1,22 +1,30 @@
 package org.cru.godtools.base
 
 import android.content.Context
-import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
-import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
 import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.cru.godtools.base.util.createGodToolsResourcesDir
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import org.cru.godtools.base.util.getGodToolsFile
 
-@Reusable
+@Singleton
 class FileManager @Inject internal constructor(@ApplicationContext private val context: Context) {
-    @AnyThread
-    suspend fun createResourcesDir() = withContext(Dispatchers.IO) { context.createGodToolsResourcesDir() }
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    private val resourcesDir = coroutineScope.async { File(context.filesDir, "resources") }
+    private val resourcesDirCreated =
+        coroutineScope.async { resourcesDir.await().run { (exists() || mkdirs()) && isDirectory } }
+
+    suspend fun createResourcesDir() = resourcesDirCreated.await()
+    suspend fun getResourcesDir() = resourcesDir.await()
+
     fun getFile(filename: String?) = context.getGodToolsFile(filename)
 
     @WorkerThread
