@@ -35,6 +35,7 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
+import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -49,6 +50,7 @@ import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import retrofit2.Response
 
@@ -297,7 +299,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyExtractZipFor() {
+    fun verifyStoreTranslation() {
         val files = Array(3) { getTmpFile() }
         fileManager.stub {
             on { getFile("a.txt") } doReturn files[0]
@@ -305,7 +307,7 @@ class GodToolsDownloadManagerTest {
             on { getFile("c.txt") } doReturn files[2]
         }
 
-        with(downloadManager) { runBlocking { getInputStreamForResource("abc.zip").extractZipFor(translation, -1) } }
+        downloadManager.storeTranslation(translation, getInputStreamForResource("abc.zip"), -1)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -315,6 +317,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "a.txt")))
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
+        verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(TranslationUpdateEvent)
     }
     // endregion Translations
 

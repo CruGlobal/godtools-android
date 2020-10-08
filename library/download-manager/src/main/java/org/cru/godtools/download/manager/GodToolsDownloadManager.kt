@@ -247,8 +247,7 @@ open class KotlinGodToolsDownloadManager(
 
     @AnyThread
     @GuardedBy("LOCK_FILESYSTEM")
-    @VisibleForTesting
-    internal suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
+    private suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
         if (!fileManager.createResourcesDir()) return
 
         val translationKey = TranslationKey(translation)
