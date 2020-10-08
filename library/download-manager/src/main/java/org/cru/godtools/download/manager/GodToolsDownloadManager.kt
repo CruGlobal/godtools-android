@@ -56,10 +56,10 @@ open class KotlinGodToolsDownloadManager(
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fileManager: FileManager
-) : CoroutineScope {
+) {
     @VisibleForTesting
     internal val job = SupervisorJob()
-    override val coroutineContext get() = Dispatchers.Default + job
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + job)
 
     private val filesMutex = MutexMap()
 
@@ -75,7 +75,7 @@ open class KotlinGodToolsDownloadManager(
     // region Tool/Language pinning
     @AnyThread
     fun pinToolAsync(code: String) {
-        launch { pinTool(code) }
+        coroutineScope.launch { pinTool(code) }
     }
 
     suspend fun pinTool(code: String) {
@@ -89,7 +89,7 @@ open class KotlinGodToolsDownloadManager(
 
     @AnyThread
     fun pinLanguageAsync(locale: Locale) {
-        launch { pinLanguage(locale) }
+        coroutineScope.launch { pinLanguage(locale) }
     }
 
     suspend fun pinLanguage(locale: Locale) {
