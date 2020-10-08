@@ -23,7 +23,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.util.ThreadUtils
@@ -274,6 +276,31 @@ open class KotlinGodToolsDownloadManager(
         }
     }
     // endregion Translations
+
+    // region Cleanup
+    @WorkerThread
+    protected fun detectMissingFiles() {
+        if (runBlocking { !fileManager.createResourcesDir() }) return
+
+        // acquire filesystem lock
+        val lock = LOCK_FILESYSTEM.writeLock()
+        try {
+            lock.lock()
+
+            runBlocking {
+                // get the set of all downloaded files
+                val files = fileManager.getResourcesDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
+
+                // check for missing files
+                Query.select<LocalFile>().get(dao)
+                    .filterNot { files.contains(it.getFile(fileManager)) }
+                    .forEach { dao.delete(it) }
+            }
+        } finally {
+            lock.unlock()
+        }
+    }
+    // endregion Cleanup
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {

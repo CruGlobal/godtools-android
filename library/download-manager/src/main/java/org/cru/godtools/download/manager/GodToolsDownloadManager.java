@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -46,7 +45,6 @@ import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -324,35 +322,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             lock.unlock();
         }
     }
-
-    @WorkerThread
-    void detectMissingFiles() {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        // acquire filesystem lock
-        final Lock lock = LOCK_FILESYSTEM.writeLock();
-        try {
-            lock.lock();
-
-            // get the set of all downloaded files
-            final Set<File> files = Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
-                    .map(Stream::of).stream().flatMap(s -> s)
-                    .filter(File::isFile)
-                    .collect(Collectors.toSet());
-
-            // check for missing files
-            mDao.streamCompat(Query.select(LocalFile.class))
-                    .filter(f -> !files.contains(f.getFile(mContext)))
-                    .forEach(mDao::delete);
-        } finally {
-            // release filesystem lock
-            lock.unlock();
-        }
-    }
-
     // region Download & Cleaning Scheduling Methods
 
     @WorkerThread
