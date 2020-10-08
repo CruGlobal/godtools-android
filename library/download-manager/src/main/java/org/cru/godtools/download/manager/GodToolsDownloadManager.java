@@ -144,18 +144,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     // endregion Lifecycle Events
 
     @AnyThread
-    public void addLanguage(@Nullable final Locale locale) {
-        if (locale != null) {
-            final Language language = new Language();
-            language.setCode(locale);
-            language.setAdded(true);
-            final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(new EventBusDelayedPost(mEventBus, LanguageUpdateEvent.INSTANCE),
-                               directExecutor());
-        }
-    }
-
-    @AnyThread
     public void removeLanguage(@Nullable final Locale locale) {
         if (locale != null && !mPrefs.isLanguageProtected(locale)) {
             // clear the parallel language if it is the language being removed

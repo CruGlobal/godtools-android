@@ -30,15 +30,18 @@ import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
+import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -78,6 +81,20 @@ open class KotlinGodToolsDownloadManager(
         }
         withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
         eventBus.post(ToolUpdateEvent)
+    }
+
+    @AnyThread
+    fun pinLanguageAsync(locale: Locale) {
+        launch { pinLanguage(locale) }
+    }
+
+    suspend fun pinLanguage(locale: Locale) {
+        val language = Language().apply {
+            code = locale
+            isAdded = true
+        }
+        withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
+        eventBus.post(LanguageUpdateEvent)
     }
     // endregion Tool/Language pinning
 
