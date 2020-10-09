@@ -137,7 +137,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     @AnyThread
     @VisibleForTesting
-    fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
+    internal fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress(progress, max))
     }
 
@@ -188,17 +188,16 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @WorkerThread
-    fun importAttachment(attachment: Attachment, data: InputStream) {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+    suspend fun importAttachment(attachment: Attachment, data: InputStream) {
+        if (!fileManager.createResourcesDir()) return
 
         val filename = attachment.localFilename ?: return
-        runBlocking {
-            filesystemMutex.read.withLock {
-                filesMutex.withLock(filename) {
+        filesystemMutex.read.withLock {
+            filesMutex.withLock(filename) {
+                withContext(Dispatchers.IO) {
                     // short-circuit if the attachment is already downloaded
                     val localFile: LocalFile? = dao.find(filename)
-                    if (attachment.isDownloaded && localFile != null) return@runBlocking
+                    if (attachment.isDownloaded && localFile != null) return@withContext
 
                     // download the attachment
                     attachment.isDownloaded = false
@@ -251,7 +250,6 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @AnyThread
     @GuardedBy("filesystemMutex")
     private suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
         if (!fileManager.createResourcesDir()) return

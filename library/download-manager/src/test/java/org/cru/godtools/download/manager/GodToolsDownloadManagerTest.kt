@@ -253,7 +253,7 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachment() {
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -268,7 +268,7 @@ class GodToolsDownloadManagerTest {
             on { getFile(attachment) } doReturn file
         }
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
@@ -281,7 +281,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(any())
@@ -295,7 +295,7 @@ class GodToolsDownloadManagerTest {
         whenever(fileManager.getFile(attachment)).thenReturn(file)
         whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment, it) }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
         verify(fileManager, never()).getFile(any())
