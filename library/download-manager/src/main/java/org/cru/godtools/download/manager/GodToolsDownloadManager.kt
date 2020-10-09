@@ -23,6 +23,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
@@ -45,7 +46,9 @@ import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
+import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -64,10 +67,8 @@ open class KotlinGodToolsDownloadManager(
     private val filesMutex = MutexMap()
 
     // region Temporary migration logic
-    @JvmField
-    protected val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
-    @JvmField
-    protected val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
+    private val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
+    private val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
     @JvmField
     protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
     // endregion Temporary migration logic
@@ -298,6 +299,50 @@ open class KotlinGodToolsDownloadManager(
                     .forEach { dao.delete(it) }
             }
         } finally {
+            lock.unlock()
+        }
+    }
+
+    @WorkerThread
+    protected fun cleanFilesystem() {
+        if (runBlocking { !fileManager.createResourcesDir() }) return
+
+        // acquire filesystem lock
+        val lock = LOCK_FILESYSTEM.writeLock()
+        try {
+            lock.lock()
+
+            runBlocking {
+                // remove any TranslationFiles for translations that are no longer downloaded
+                Query.select<TranslationFile>()
+                    .join(
+                        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
+                            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
+                    )
+                    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
+                    .get(dao).forEach { dao.delete(it) }
+
+                // delete any LocalFiles that are no longer being used
+                Query.select<LocalFile>()
+                    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
+                    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
+                    .where(
+                        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
+                            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
+                    )
+                    .get(dao)
+                    .forEach {
+                        dao.delete(it)
+                        it.getFile(fileManager)?.delete()
+                    }
+
+                // delete any orphaned files
+                fileManager.getResourcesDir().listFiles()
+                    ?.filter { dao.find<LocalFile>(it.name) == null }
+                    ?.forEach { it.delete() }
+            }
+        } finally {
+            // release filesystem lock
             lock.unlock()
         }
     }

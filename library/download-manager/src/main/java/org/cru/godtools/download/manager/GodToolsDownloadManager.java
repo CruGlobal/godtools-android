@@ -7,12 +7,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
-import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.cru.godtools.api.AttachmentsApi;
@@ -23,10 +20,8 @@ import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
-import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.TranslationFile;
 import org.cru.godtools.model.TranslationKey;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
@@ -39,18 +34,15 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -278,48 +270,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             // [1] downloadLatestPublishedTranslation() short-circuits on the actual download logic
             // [1] we still need to call finishDownload()
             finishDownload(key);
-        }
-    }
-
-    @WorkerThread
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    void cleanFilesystem() {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        // acquire filesystem lock
-        final Lock lock = LOCK_FILESYSTEM.writeLock();
-        try {
-            lock.lock();
-
-            // remove any TranslationFiles for translations that are no longer downloaded
-            mDao.streamCompat(Query.select(TranslationFile.class)
-                                      .join(TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
-                                                    .andOn(TranslationTable.SQL_WHERE_DOWNLOADED))
-                                      .where(TranslationTable.FIELD_ID.is(Expression.NULL)))
-                    .forEach(mDao::delete);
-
-            // delete any LocalFiles that are no longer being used
-            mDao.streamCompat(Query.select(LocalFile.class)
-                                      .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
-                                      .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-                                      .where(AttachmentTable.FIELD_ID.is(Expression.NULL)
-                                                     .and(TranslationFileTable.FIELD_FILE.is(Expression.NULL))))
-                    .peek(mDao::delete)
-                    .map(f -> f.getFile(mContext))
-                    .withoutNulls()
-                    .forEach(File::delete);
-
-            // delete any orphaned files
-            Optional.ofNullable(FileUtils.getGodToolsResourcesDir(mContext).listFiles())
-                    .map(Stream::of).stream().flatMap(s -> s)
-                    .filter(f -> mDao.find(LocalFile.class, f.getName()) == null)
-                    .forEach(File::delete);
-        } finally {
-            // release filesystem lock
-            lock.unlock();
         }
     }
     // region Download & Cleaning Scheduling Methods
