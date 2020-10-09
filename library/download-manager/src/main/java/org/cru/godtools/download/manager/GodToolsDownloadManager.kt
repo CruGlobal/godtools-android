@@ -17,11 +17,17 @@ import java.util.Locale
 import java.util.zip.ZipInputStream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
+import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
+import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -67,11 +73,12 @@ open class KotlinGodToolsDownloadManager(
     private val filesMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
 
-    // region Temporary migration logic
+    // region TODO: Temporary migration logic
     private val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
     @JvmField
     protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
-    // endregion Temporary migration logic
+    protected fun enqueueCleanFilesystem() = coroutineScope.launch { cleanupActor.send(RunCleanup) }
+    // endregion TODO: Temporary migration logic
 
     // region Tool/Language pinning
     @AnyThread
@@ -268,6 +275,18 @@ open class KotlinGodToolsDownloadManager(
     // endregion Translations
 
     // region Cleanup
+    protected object RunCleanup
+
+    @OptIn(ObsoleteCoroutinesApi::class)
+    private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
+        withTimeoutOrNull(MIN_IN_MS) { channel.receive() }
+        while (true) {
+            detectMissingFiles()
+            cleanFilesystem()
+            withTimeoutOrNull(HOUR_IN_MS) { channel.receive() }
+        }
+    }
+
     @WorkerThread
     @VisibleForTesting
     fun detectMissingFiles() {

@@ -3,9 +3,6 @@ package org.cru.godtools.download.manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -58,7 +55,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
@@ -66,9 +62,6 @@ import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 @SuppressLint("VisibleForTests")
 public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
-    private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
-
-    private static final int MSG_CLEAN = 1;
 
     private final Context mContext;
     private final TranslationsApi mTranslationsApi;
@@ -76,7 +69,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     private final EventBus mEventBus;
     final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
-    final Handler mHandler;
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
@@ -91,7 +83,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
         mTranslationsApi = translationsApi;
         mDao = dao;
         mEventBus = eventBus;
-        mHandler = new Handler(Looper.getMainLooper());
         mPrefs = settings;
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
@@ -99,9 +90,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
 
         // register with EventBus
         mEventBus.register(this);
-
-        // enqueue an initial clean filesystem task
-        enqueueCleanFilesystem();
     }
 
     // region Lifecycle Events
@@ -272,8 +260,8 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             finishDownload(key);
         }
     }
-    // region Download & Cleaning Scheduling Methods
 
+    // region Download & Cleaning Scheduling Methods
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {
         final Query<Translation> query = Query.select(Translation.class)
@@ -322,27 +310,9 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             }
         }
     }
-
-    @AnyThread
-    private void enqueueCleanFilesystem() {
-        mExecutor.execute(new CleanFileSystem());
-    }
-
-    @AnyThread
-    void scheduleNextCleanFilesystem() {
-        // remove any pending executions
-        mHandler.removeMessages(MSG_CLEAN);
-
-        // schedule another execution
-        final Message m = Message.obtain(mHandler, GodToolsDownloadManager.this::enqueueCleanFilesystem);
-        m.what = MSG_CLEAN;
-        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
-    }
-
     // endregion Download & Cleaning Scheduling Methods
 
     // region Task PriorityRunnables
-
     private static final int PRIORITY_PRIMARY = -40;
     private static final int PRIORITY_ATTACHMENT = -30;
     private static final int PRIORITY_PARALLEL = -20;
@@ -393,20 +363,5 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
             }
         }
     }
-
-    final class CleanFileSystem implements PriorityRunnable {
-        @Override
-        public int getPriority() {
-            return PRIMARY_PRUNE_FILESYSTEM;
-        }
-
-        @Override
-        public void run() {
-            detectMissingFiles();
-            cleanFilesystem();
-            scheduleNextCleanFilesystem();
-        }
-    }
-
     // endregion Task PriorityRunnables
 }
