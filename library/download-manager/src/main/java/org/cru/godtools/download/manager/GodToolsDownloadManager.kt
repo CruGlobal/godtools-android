@@ -82,11 +82,11 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         fileManager: FileManager
     ) : this(attachmentsApi, dao, eventBus, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
-    private val filesMutex = MutexMap()
+    private val attachmentsMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
+    private val filesMutex = MutexMap()
 
     // region TODO: Temporary migration logic
-    private val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
     @JvmField
     protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
     protected fun enqueueCleanFilesystem() = coroutineScope.launch { cleanupActor.send(RunCleanup) }
@@ -151,13 +151,13 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     @WorkerThread
     @VisibleForTesting
     fun downloadAttachment(attachmentId: Long) {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+        runBlocking {
+            if (!fileManager.createResourcesDir()) return@runBlocking
 
-        synchronized(ThreadUtils.getLock(LOCKS_ATTACHMENTS, attachmentId)) {
-            val attachment: Attachment = dao.find(attachmentId) ?: return
-            val filename = attachment.localFilename ?: return
+            attachmentsMutex.withLock(attachmentId) {
+                val attachment: Attachment = dao.find(attachmentId) ?: return@runBlocking
+                val filename = attachment.localFilename ?: return@runBlocking
 
-            runBlocking {
                 filesystemMutex.read.withLock {
                     filesMutex.withLock(filename) {
                         val localFile = dao.find<LocalFile>(filename)
