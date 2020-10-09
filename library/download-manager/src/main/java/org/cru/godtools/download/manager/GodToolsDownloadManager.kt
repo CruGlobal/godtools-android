@@ -304,7 +304,8 @@ open class KotlinGodToolsDownloadManager(
     }
 
     @WorkerThread
-    protected fun cleanFilesystem() {
+    @VisibleForTesting
+    fun cleanFilesystem() {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
         // acquire filesystem lock

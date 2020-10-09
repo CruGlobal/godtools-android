@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyVararg
+import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -39,6 +40,8 @@ import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.hasItem
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -62,6 +65,11 @@ class GodToolsDownloadManagerTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private val resourcesDir = File.createTempFile("resources", "").also {
+        it.delete()
+        it.mkdirs()
+    }
+
     private lateinit var attachmentsApi: AttachmentsApi
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
@@ -74,7 +82,10 @@ class GodToolsDownloadManagerTest {
         attachmentsApi = mock()
         dao = mock()
         eventBus = mock()
-        fileManager = mock { onBlocking { createResourcesDir() } doReturn true }
+        fileManager = mock {
+            onBlocking { getResourcesDir() } doReturn resourcesDir
+            onBlocking { createResourcesDir() } doReturn true
+        }
 
         downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager)
     }
@@ -198,7 +209,7 @@ class GodToolsDownloadManagerTest {
         filename = "image.jpg"
         sha256 = "sha256"
     }
-    private val file = File.createTempFile("test-", null).also { it.delete() }
+    private val file = getTmpFile()
     private val testData = Random.nextBytes(16 * 1024)
 
     @Test
@@ -339,9 +350,28 @@ class GodToolsDownloadManagerTest {
         verify(dao, never()).delete(LocalFile(file.name))
         verify(dao).delete(LocalFile(missingFile.name))
     }
+
+    @Test
+    fun verifyCleanupFilesystem() {
+        val orphan = getTmpFile(true)
+        val translation = TranslationFile(1, orphan.name)
+        val localFile = LocalFile(orphan.name)
+        val keep = getTmpFile(true)
+        dao.stub {
+            on { get(argThat<Query<*>> { table.type == TranslationFile::class.java }) } doReturn listOf(translation)
+            on { get(argThat<Query<*>> { table.type == LocalFile::class.java }) } doReturn listOf(localFile)
+            on { find<LocalFile>(keep.name) } doReturn LocalFile(keep.name)
+        }
+
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
+        downloadManager.cleanFilesystem()
+        verify(dao).delete(translation)
+        verify(dao).delete(localFile)
+        assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+    }
     // endregion Cleanup
 
     private fun getTmpFile(create: Boolean = false) =
-        File.createTempFile("test-", null).also { if (!create) it.delete() }
+        File.createTempFile("test-", null, resourcesDir).also { if (!create) it.delete() }
     private fun getInputStreamForResource(name: String) = this::class.java.getResourceAsStream(name)!!
 }
