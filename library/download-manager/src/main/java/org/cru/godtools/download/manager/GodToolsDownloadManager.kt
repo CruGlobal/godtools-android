@@ -18,6 +18,7 @@ import java.util.Locale
 import java.util.zip.ZipInputStream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -61,6 +62,11 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val TAG = "GodToolsDownloadManager"
+
+@VisibleForTesting
+internal const val CLEANUP_DELAY = HOUR_IN_MS
+@VisibleForTesting
+internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 
 open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
@@ -275,15 +281,17 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Translations
 
     // region Cleanup
-    protected object RunCleanup
+    @VisibleForTesting
+    internal object RunCleanup
 
-    @OptIn(ObsoleteCoroutinesApi::class)
-    private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(MIN_IN_MS) { channel.receiveOrNull() }
+    @VisibleForTesting
+    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+    internal val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
+        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveOrNull() }
         while (!channel.isClosedForReceive) {
             detectMissingFiles()
             cleanFilesystem()
-            withTimeoutOrNull(HOUR_IN_MS) { channel.receiveOrNull() }
+            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveOrNull() }
         }
     }
 

@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.nullableArgumentCaptor
@@ -22,6 +23,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import java.io.File
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.ResponseBody
@@ -63,6 +65,7 @@ import retrofit2.Response
 
 private const val TOOL = "tool"
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -334,6 +337,58 @@ class GodToolsDownloadManagerTest {
     // endregion Translations
 
     // region Cleanup
+    @Test
+    fun verifyCleanupActorAutomaticRuns() {
+        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
+        assertCleanupActorRan(0)
+        testScope.advanceTimeBy(1)
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(1)
+        assertCleanupActorRan(2)
+    }
+
+    @Test
+    fun verifyCleanupActorBeforeInitialRun() {
+        assertCleanupActorRan(0)
+        runBlocking { downloadManager.cleanupActor.send(KotlinGodToolsDownloadManager.RunCleanup) }
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(CLEANUP_DELAY - CLEANUP_DELAY_INITIAL - 1)
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(1)
+        assertCleanupActorRan(2)
+    }
+
+    @Test
+    fun verifyCleanupActorRunsWhenTriggered() {
+        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        assertCleanupActorRan(1)
+        testScope.advanceTimeBy(2000)
+        runBlocking { downloadManager.cleanupActor.send(KotlinGodToolsDownloadManager.RunCleanup) }
+        assertCleanupActorRan(2)
+        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
+        assertCleanupActorRan(2)
+        testScope.advanceTimeBy(1)
+        assertCleanupActorRan(3)
+    }
+
+    private fun assertCleanupActorRan(times: Int = 1) {
+        inOrder(dao, fileManager) {
+            repeat(times) {
+                runBlocking { verify(fileManager).getResourcesDir() }
+                verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
+                verify(dao).get(argThat<Query<*>> { table.type == TranslationFile::class.java })
+                verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
+                runBlocking { verify(fileManager).getResourcesDir() }
+            }
+            verify(dao, never()).get(any<Query<*>>())
+            runBlocking { verify(fileManager, never()).getResourcesDir() }
+        }
+    }
+
     @Test
     fun verifyDetectMissingFiles() {
         val file = getTmpFile(true)
