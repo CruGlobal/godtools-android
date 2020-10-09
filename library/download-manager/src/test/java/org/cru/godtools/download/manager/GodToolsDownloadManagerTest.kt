@@ -42,6 +42,7 @@ import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasItem
+import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -90,6 +91,11 @@ class GodToolsDownloadManagerTest {
         downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager)
     }
 
+    @After
+    fun cleanup() {
+        downloadManager.shutdown()
+    }
+
     // region pinTool()
     @Test
     fun verifyPinTool() {
@@ -105,13 +111,8 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyPinToolAsync() {
         downloadManager.pinToolAsync(TOOL)
+        downloadManager.shutdown()
 
-        runBlocking {
-            with(downloadManager.job) {
-                complete()
-                join()
-            }
-        }
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
             assertEquals(TOOL, firstValue.code)
@@ -136,13 +137,8 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyPinLanguageAsync() {
         downloadManager.pinLanguageAsync(Locale.FRENCH)
+        downloadManager.shutdown()
 
-        runBlocking {
-            with(downloadManager.job) {
-                complete()
-                join()
-            }
-        }
         argumentCaptor<Language> {
             verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
             assertEquals(Locale.FRENCH, firstValue.code)

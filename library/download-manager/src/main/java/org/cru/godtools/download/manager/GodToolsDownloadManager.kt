@@ -3,6 +3,7 @@ package org.cru.godtools.download.manager
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.MainThread
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
@@ -21,6 +22,7 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
@@ -66,8 +68,7 @@ open class KotlinGodToolsDownloadManager(
     private val eventBus: EventBus,
     private val fileManager: FileManager
 ) {
-    @VisibleForTesting
-    internal val job = SupervisorJob()
+    private val job = SupervisorJob()
     private val coroutineScope = CoroutineScope(Dispatchers.Default + job)
 
     private val filesMutex = MutexMap()
@@ -279,11 +280,11 @@ open class KotlinGodToolsDownloadManager(
 
     @OptIn(ObsoleteCoroutinesApi::class)
     private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(MIN_IN_MS) { channel.receive() }
-        while (true) {
+        withTimeoutOrNull(MIN_IN_MS) { channel.receiveOrNull() }
+        while (!channel.isClosedForReceive) {
             detectMissingFiles()
             cleanFilesystem()
-            withTimeoutOrNull(HOUR_IN_MS) { channel.receive() }
+            withTimeoutOrNull(HOUR_IN_MS) { channel.receiveOrNull() }
         }
     }
 
@@ -343,6 +344,15 @@ open class KotlinGodToolsDownloadManager(
         }
     }
     // endregion Cleanup
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun shutdown() {
+        runBlocking {
+            cleanupActor.close()
+            job.complete()
+            job.join()
+        }
+    }
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
