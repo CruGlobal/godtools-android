@@ -7,7 +7,6 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
-import androidx.collection.LongSparseArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.common.io.CountingInputStream
@@ -16,6 +15,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import java.util.zip.ZipInputStream
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -73,7 +73,8 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fileManager: FileManager,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
     constructor(
         attachmentsApi: AttachmentsApi,
@@ -295,13 +296,12 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @WorkerThread
     @VisibleForTesting
-    fun detectMissingFiles() {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+    internal suspend fun detectMissingFiles() {
+        if (!fileManager.createResourcesDir()) return
 
-        runBlocking {
-            filesystemMutex.write.withLock {
+        filesystemMutex.write.withLock {
+            withContext(ioDispatcher) {
                 // get the set of all downloaded files
                 val files = fileManager.getResourcesDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
@@ -313,13 +313,11 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @WorkerThread
     @VisibleForTesting
-    fun cleanFilesystem() {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
-
-        runBlocking {
-            filesystemMutex.write.withLock {
+    internal suspend fun cleanFilesystem() {
+        if (!fileManager.createResourcesDir()) return
+        filesystemMutex.write.withLock {
+            withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded
                 Query.select<TranslationFile>()
                     .join(

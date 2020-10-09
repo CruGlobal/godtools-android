@@ -94,7 +94,9 @@ class GodToolsDownloadManagerTest {
         }
         testScope = TestCoroutineScope()
 
-        downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager, testScope)
+        downloadManager = KotlinGodToolsDownloadManager(
+            attachmentsApi, dao, eventBus, fileManager, testScope, testScope.coroutineContext
+        )
     }
 
     @After
@@ -399,7 +401,7 @@ class GodToolsDownloadManagerTest {
             on { getFile(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
         }
 
-        downloadManager.detectMissingFiles()
+        runBlocking { downloadManager.detectMissingFiles() }
         verify(dao, never()).delete(LocalFile(file.name))
         verify(dao).delete(LocalFile(missingFile.name))
     }
@@ -417,7 +419,7 @@ class GodToolsDownloadManagerTest {
         }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        downloadManager.cleanFilesystem()
+        runBlocking { downloadManager.cleanFilesystem() }
         verify(dao).delete(translation)
         verify(dao).delete(localFile)
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
