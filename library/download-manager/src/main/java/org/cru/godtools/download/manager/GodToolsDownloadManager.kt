@@ -14,20 +14,20 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
-import java.util.concurrent.locks.ReadWriteLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 import java.util.zip.ZipInputStream
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
+import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
@@ -65,10 +65,10 @@ open class KotlinGodToolsDownloadManager(
     private val coroutineScope = CoroutineScope(Dispatchers.Default + job)
 
     private val filesMutex = MutexMap()
+    private val filesystemMutex = ReadWriteMutex()
 
     // region Temporary migration logic
     private val LOCKS_ATTACHMENTS = LongSparseArray<Any>()
-    private val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
     @JvmField
     protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
     // endregion Temporary migration logic
@@ -144,10 +144,8 @@ open class KotlinGodToolsDownloadManager(
             val attachment: Attachment = dao.find(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
 
-            val lock = LOCK_FILESYSTEM.readLock()
-            try {
-                lock.lock()
-                runBlocking {
+            runBlocking {
+                filesystemMutex.read.withLock {
                     filesMutex.withLock(filename) {
                         val localFile = dao.find<LocalFile>(filename)
                         if (attachment.isDownloaded && localFile != null) return@runBlocking
@@ -172,8 +170,6 @@ open class KotlinGodToolsDownloadManager(
                         eventBus.post(AttachmentUpdateEvent)
                     }
                 }
-            } finally {
-                lock.unlock()
             }
         }
     }
@@ -183,10 +179,8 @@ open class KotlinGodToolsDownloadManager(
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
         val filename = attachment.localFilename ?: return
-        val lock = LOCK_FILESYSTEM.readLock()
-        try {
-            lock.lock()
-            runBlocking {
+        runBlocking {
+            filesystemMutex.read.withLock {
                 filesMutex.withLock(filename) {
                     // short-circuit if the attachment is already downloaded
                     val localFile: LocalFile? = dao.find(filename)
@@ -211,8 +205,6 @@ open class KotlinGodToolsDownloadManager(
                     }
                 }
             }
-        } finally {
-            lock.unlock()
         }
     }
     // endregion Attachments
@@ -226,30 +218,27 @@ open class KotlinGodToolsDownloadManager(
         // lock translation
         val key = TranslationKey(translation)
         synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            // track the start of this download
-            startProgress(key)
-            val lock = LOCK_FILESYSTEM.readLock()
-            try {
-                lock.lock()
+            runBlocking {
+                try {
+                    startProgress(key)
+                    filesystemMutex.read.withLock {
+                        // process the download
+                        zipStream.extractZipFor(translation, size)
 
-                // process the download
-                runBlocking { zipStream.extractZipFor(translation, size) }
-
-                // mark translation as downloaded
-                translation.isDownloaded = true
-                dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-                eventBus.post(TranslationUpdateEvent)
-            } finally {
-                lock.unlock()
-
-                // finish the download
-                finishDownload(key)
+                        // mark translation as downloaded
+                        translation.isDownloaded = true
+                        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+                        eventBus.post(TranslationUpdateEvent)
+                    }
+                } finally {
+                    finishDownload(key)
+                }
             }
         }
     }
 
     @AnyThread
-    @GuardedBy("LOCK_FILESYSTEM")
+    @GuardedBy("filesystemMutex")
     private suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
         if (!fileManager.createResourcesDir()) return
 
@@ -284,12 +273,8 @@ open class KotlinGodToolsDownloadManager(
     fun detectMissingFiles() {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
-        // acquire filesystem lock
-        val lock = LOCK_FILESYSTEM.writeLock()
-        try {
-            lock.lock()
-
-            runBlocking {
+        runBlocking {
+            filesystemMutex.write.withLock {
                 // get the set of all downloaded files
                 val files = fileManager.getResourcesDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
@@ -298,8 +283,6 @@ open class KotlinGodToolsDownloadManager(
                     .filterNot { files.contains(it.getFile(fileManager)) }
                     .forEach { dao.delete(it) }
             }
-        } finally {
-            lock.unlock()
         }
     }
 
@@ -308,12 +291,8 @@ open class KotlinGodToolsDownloadManager(
     fun cleanFilesystem() {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
-        // acquire filesystem lock
-        val lock = LOCK_FILESYSTEM.writeLock()
-        try {
-            lock.lock()
-
-            runBlocking {
+        runBlocking {
+            filesystemMutex.write.withLock {
                 // remove any TranslationFiles for translations that are no longer downloaded
                 Query.select<TranslationFile>()
                     .join(
@@ -342,9 +321,6 @@ open class KotlinGodToolsDownloadManager(
                     ?.filter { dao.find<LocalFile>(it.name) == null }
                     ?.forEach { it.delete() }
             }
-        } finally {
-            // release filesystem lock
-            lock.unlock()
         }
     }
     // endregion Cleanup
