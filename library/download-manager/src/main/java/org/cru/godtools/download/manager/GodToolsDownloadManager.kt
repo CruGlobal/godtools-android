@@ -62,14 +62,19 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 private const val TAG = "GodToolsDownloadManager"
 
-open class KotlinGodToolsDownloadManager(
+open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
-    private val fileManager: FileManager
+    private val fileManager: FileManager,
+    private val coroutineScope: CoroutineScope
 ) {
-    private val job = SupervisorJob()
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + job)
+    constructor(
+        attachmentsApi: AttachmentsApi,
+        dao: GodToolsDao,
+        eventBus: EventBus,
+        fileManager: FileManager
+    ) : this(attachmentsApi, dao, eventBus, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     private val filesMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
@@ -83,10 +88,7 @@ open class KotlinGodToolsDownloadManager(
 
     // region Tool/Language pinning
     @AnyThread
-    fun pinToolAsync(code: String) {
-        coroutineScope.launch { pinTool(code) }
-    }
-
+    fun pinToolAsync(code: String) = coroutineScope.launch { pinTool(code) }
     suspend fun pinTool(code: String) {
         val tool = Tool().also {
             it.code = code
@@ -97,10 +99,7 @@ open class KotlinGodToolsDownloadManager(
     }
 
     @AnyThread
-    fun pinLanguageAsync(locale: Locale) {
-        coroutineScope.launch { pinLanguage(locale) }
-    }
-
+    fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }
     suspend fun pinLanguage(locale: Locale) {
         val language = Language().apply {
             code = locale
@@ -347,11 +346,7 @@ open class KotlinGodToolsDownloadManager(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
-        runBlocking {
-            cleanupActor.close()
-            job.complete()
-            job.join()
-        }
+        cleanupActor.close()
     }
 
     @WorkerThread

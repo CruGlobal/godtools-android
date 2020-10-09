@@ -34,6 +34,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"

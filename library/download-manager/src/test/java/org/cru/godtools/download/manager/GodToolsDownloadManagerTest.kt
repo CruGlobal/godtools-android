@@ -23,6 +23,7 @@ import java.io.File
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.ResponseBody
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -75,6 +76,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fileManager: FileManager
+    private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
 
@@ -87,13 +89,15 @@ class GodToolsDownloadManagerTest {
             onBlocking { getResourcesDir() } doReturn resourcesDir
             onBlocking { createResourcesDir() } doReturn true
         }
+        testScope = TestCoroutineScope()
 
-        downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager)
+        downloadManager = KotlinGodToolsDownloadManager(attachmentsApi, dao, eventBus, fileManager, testScope)
     }
 
     @After
     fun cleanup() {
         downloadManager.shutdown()
+        testScope.cleanupTestCoroutines()
     }
 
     // region pinTool()
@@ -110,8 +114,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyPinToolAsync() {
-        downloadManager.pinToolAsync(TOOL)
-        downloadManager.shutdown()
+        runBlocking { downloadManager.pinToolAsync(TOOL).join() }
 
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
@@ -136,8 +139,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyPinLanguageAsync() {
-        downloadManager.pinLanguageAsync(Locale.FRENCH)
-        downloadManager.shutdown()
+        runBlocking { downloadManager.pinLanguageAsync(Locale.FRENCH).join() }
 
         argumentCaptor<Language> {
             verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
