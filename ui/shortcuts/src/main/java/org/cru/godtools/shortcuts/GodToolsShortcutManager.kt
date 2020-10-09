@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -61,9 +62,8 @@ class GodToolsShortcutManager @Inject constructor(
     private val dao: GodToolsDao,
     eventBus: EventBus,
     private val settings: Settings
-) : SharedPreferences.OnSharedPreferenceChangeListener, CoroutineScope {
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+) : SharedPreferences.OnSharedPreferenceChangeListener {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
@@ -77,7 +77,7 @@ class GodToolsShortcutManager @Inject constructor(
     // region Events
     @AnyThread
     fun onUpdateSystemLocale(result: BroadcastReceiver.PendingResult) {
-        launch {
+        coroutineScope.launch {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
             updatePendingShortcuts()
             result.finish()
@@ -144,7 +144,7 @@ class GodToolsShortcutManager @Inject constructor(
             pendingShortcuts[id]?.get()
                 ?: PendingShortcut(code).also {
                     pendingShortcuts[id] = WeakReference(it)
-                    launch { updatePendingShortcut(it) }
+                    coroutineScope.launch { updatePendingShortcut(it) }
                 }
         }
     }
@@ -163,7 +163,7 @@ class GodToolsShortcutManager @Inject constructor(
         updatePendingShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
 
         // launch the update
-        updatePendingShortcutsJob.set(launch {
+        updatePendingShortcutsJob.set(coroutineScope.launch {
             if (!immediate) delay(100)
             withContext(NonCancellable) { updatePendingShortcuts() }
         })
@@ -209,7 +209,7 @@ class GodToolsShortcutManager @Inject constructor(
         updateShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
 
         // launch the update
-        updateShortcutsJob.set(launch {
+        updateShortcutsJob.set(coroutineScope.launch {
             if (!immediate) delay(5_000)
             withContext(NonCancellable) { updateShortcuts() }
         })
