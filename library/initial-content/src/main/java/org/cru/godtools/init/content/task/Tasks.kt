@@ -142,7 +142,7 @@ internal class Tasks @Inject constructor(
                 .forEach { attachment ->
                     launch(Dispatchers.IO) {
                         context.assets.open("attachments/${attachment.localFilename}").use {
-                            downloadManager.importAttachment(attachment, it)
+                            downloadManager.importAttachment(attachment.id, data = it)
                         }
                     }
                 }

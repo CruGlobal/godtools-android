@@ -188,33 +188,37 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    suspend fun importAttachment(attachment: Attachment, data: InputStream) {
+    suspend fun importAttachment(attachmentId: Long, data: InputStream) {
         if (!fileManager.createResourcesDir()) return
 
-        val filename = attachment.localFilename ?: return
-        filesystemMutex.read.withLock {
-            filesMutex.withLock(filename) {
-                withContext(Dispatchers.IO) {
-                    // short-circuit if the attachment is already downloaded
-                    val localFile: LocalFile? = dao.find(filename)
-                    if (attachment.isDownloaded && localFile != null) return@withContext
+        attachmentsMutex.withLock(attachmentId) {
+            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val filename = attachment.localFilename ?: return
 
-                    // download the attachment
-                    attachment.isDownloaded = false
-                    try {
-                        // we don't have a local file, so create it
-                        if (localFile == null) {
-                            val file = LocalFile(filename)
-                            data.copyTo(file)
-                            dao.updateOrInsert(file)
+            filesystemMutex.read.withLock {
+                filesMutex.withLock(filename) {
+                    withContext(Dispatchers.IO) {
+                        // short-circuit if the attachment is already downloaded
+                        val localFile: LocalFile? = dao.find(filename)
+                        if (attachment.isDownloaded && localFile != null) return@withContext
+
+                        // download the attachment
+                        attachment.isDownloaded = false
+                        try {
+                            // we don't have a local file, so create it
+                            if (localFile == null) {
+                                val file = LocalFile(filename)
+                                data.copyTo(file)
+                                dao.updateOrInsert(file)
+                            }
+
+                            // mark attachment as downloaded
+                            attachment.isDownloaded = true
+                        } finally {
+                            // update attachment download state
+                            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                            eventBus.post(AttachmentUpdateEvent)
                         }
-
-                        // mark attachment as downloaded
-                        attachment.isDownloaded = true
-                    } finally {
-                        // update attachment download state
-                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-                        eventBus.post(AttachmentUpdateEvent)
                     }
                 }
             }

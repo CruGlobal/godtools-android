@@ -251,9 +251,10 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportAttachment() {
+        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -263,12 +264,13 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportAttachmentUnableToCreateResourcesDir() {
+        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
         fileManager.stub {
             onBlocking { createResourcesDir() } doReturn false
             on { getFile(attachment) } doReturn file
         }
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
@@ -278,10 +280,13 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportAttachmentAttachmentAlreadyDownloaded() {
         attachment.isDownloaded = true
-        whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
+        dao.stub {
+            on { find<Attachment>(1L) } doReturn attachment
+            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
+        }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(any())
@@ -292,10 +297,13 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportAttachmentLocalFileExists() {
         attachment.isDownloaded = false
+        dao.stub {
+            on { find<Attachment>(1L) } doReturn attachment
+            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
+        }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
-        whenever(dao.find<LocalFile>(attachment.localFilename!!)).thenReturn(attachment.asLocalFile())
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
         verify(fileManager, never()).getFile(any())
