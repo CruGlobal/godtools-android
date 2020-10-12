@@ -14,7 +14,7 @@ buildscript {
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.61.0',
                 findbugs           : '3.0.2',
-                gradleAndroidPlugin: '4.0.2',
+                gradleAndroidPlugin: '4.1.0',
                 gtoSupport         : '3.6.2-SNAPSHOT',
                 guava              : '29.0-android',
                 hamcrest           : '2.2',
@@ -217,13 +217,13 @@ subprojects {
     beforeEvaluate { project ->
         if (project.hasProperty('android')) {
             android {
-                compileSdkVersion compileSdk
+                compileSdkVersion rootProject.compileSdk
 
                 defaultConfig {
                     versionCode rootProject.versionCode
 
-                    minSdkVersion minSdk
-                    targetSdkVersion targetSdk
+                    minSdkVersion rootProject.minSdk
+                    targetSdkVersion rootProject.targetSdk
                 }
 
                 compileOptions {
@@ -247,7 +247,7 @@ subprojects {
 
                             // enable only SDKs we actually support in robolectric
                             // TODO: SDK >= 29 requires Java 9 which we don't currently support
-                            systemProperty 'robolectric.enabledSdks', (minSdk..28).join(" ")
+                            systemProperty 'robolectric.enabledSdks', (rootProject.minSdk..28).join(" ")
                         }
                     }
                 }

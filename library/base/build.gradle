@@ -1,3 +1,9 @@
+android {
+    defaultConfig {
+        buildConfigField "int", "VERSION_CODE", "${rootProject.versionCode}"
+    }
+}
+
 dependencies {
     implementation "androidx.core:core:${deps.androidX.core}"
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
