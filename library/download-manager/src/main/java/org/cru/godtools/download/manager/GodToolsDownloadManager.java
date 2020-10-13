@@ -162,52 +162,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     }
 
     @WorkerThread
-    void pruneStaleTranslations() {
-        mDao.inTransaction(() -> {
-            // load the tools and languages that are added to this device
-            final Object[] tools = mDao
-                    .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
-                    .map(Tool::getCode)
-                    .withoutNulls()
-                    .toArray();
-            final Object[] languages = mDao
-                    .streamCompat(Query.select(Language.class).where(LanguageTable.SQL_WHERE_ADDED))
-                    .map(Language::getCode)
-                    .toArray();
-
-//            // remove any translation that is no longer added to this device and hasn't been accessed within the past
-//            // week
-//            final Translation translation = new Translation();
-//            translation.setDownloaded(false);
-//            int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
-//                    .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
-//                    .and(TranslationTable.FIELD_LAST_ACCESSED.lt(new Date(System.currentTimeMillis() - WEEK_IN_MS)))
-//                    .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
-
-            // remove any translation we have a newer version of
-            final Set<TranslationKey> seen = new ArraySet<>();
-            final long changes = mDao.streamCompat(Query.select(Translation.class)
-                                                 .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-                                                 .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
-                    // filter out the newest version of every translation
-                    .filterNot(t -> seen.add(new TranslationKey(t)))
-                    .peek(t -> {
-                        t.setDownloaded(false);
-                        mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
-                    })
-                    .count();
-
-            // if any translations were updated, send a broadcast
-            if (changes > 0) {
-                mEventBus.post(TranslationUpdateEvent.INSTANCE);
-                enqueueCleanFilesystem();
-            }
-
-            return true;
-        });
-    }
-
-    @WorkerThread
     void downloadLatestPublishedTranslation(@NonNull final TranslationKey key) {
         // short-circuit if the resources directory isn't valid
         if (!FileUtils.createGodToolsResourcesDir(mContext)) {

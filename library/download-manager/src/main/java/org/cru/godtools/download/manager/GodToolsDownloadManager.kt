@@ -96,7 +96,6 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // region TODO: Temporary migration logic
     @JvmField
     protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
-    protected fun enqueueCleanFilesystem() = coroutineScope.launch { cleanupActor.send(RunCleanup) }
     // endregion TODO: Temporary migration logic
 
     // region Tool/Language pinning
@@ -292,6 +291,32 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
                     }
                     updateProgress(translationKey, count.count, zipSize)
                 }
+            }
+        }
+    }
+
+    @WorkerThread
+    @VisibleForTesting
+    fun pruneStaleTranslations() {
+        runBlocking {
+            val changes = dao.transaction(true) {
+                val seen = mutableSetOf<TranslationKey>()
+                Query.select<Translation>()
+                    .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                    .get(dao).asSequence()
+                    .filterNot { seen.add(TranslationKey(it)) }
+                    .onEach {
+                        it.isDownloaded = false
+                        dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
+                    }
+                    .count()
+            }
+
+            // if any translations were updated, send a broadcast
+            if (changes > 0) {
+                eventBus.post(TranslationUpdateEvent)
+                cleanupActor.send(RunCleanup)
             }
         }
     }
