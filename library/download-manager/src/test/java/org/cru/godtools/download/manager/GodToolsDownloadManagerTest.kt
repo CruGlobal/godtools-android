@@ -24,6 +24,9 @@ import java.io.File
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.ResponseBody
@@ -83,10 +86,15 @@ class GodToolsDownloadManagerTest {
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
 
+    private val staleAttachmentsChannel = Channel<List<Attachment>>()
+
     @Before
     fun setup() {
         attachmentsApi = mock()
-        dao = mock()
+        dao = mock {
+            on { getAsFlow(argThat<Query<*>> { table.type == Attachment::class.java }) }
+                .thenReturn(staleAttachmentsChannel.consumeAsFlow())
+        }
         eventBus = mock()
         fileManager = mock {
             onBlocking { getResourcesDir() } doReturn resourcesDir
@@ -101,6 +109,7 @@ class GodToolsDownloadManagerTest {
 
     @After
     fun cleanup() {
+        staleAttachmentsChannel.close()
         downloadManager.shutdown()
         testScope.cleanupTestCoroutines()
     }
@@ -209,6 +218,7 @@ class GodToolsDownloadManagerTest {
 
     // region Attachments
     private val attachment = Attachment().apply {
+        setId(1)
         filename = "image.jpg"
         sha256 = "sha256"
     }
@@ -216,15 +226,36 @@ class GodToolsDownloadManagerTest {
     private val testData = Random.nextBytes(16 * 1024)
 
     @Test
-    fun verifyDownloadAttachment() {
-        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
+    fun verifyDownloadStaleAttachments() {
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
         stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        downloadManager.downloadAttachment(1L)
+        staleAttachmentsChannel.sendBlocking(emptyList())
+        staleAttachmentsChannel.sendBlocking(emptyList())
+        verify(dao, never()).find<Attachment>(attachment.id)
+
+        staleAttachmentsChannel.sendBlocking(listOf(attachment))
+        staleAttachmentsChannel.sendBlocking(emptyList()) // this will block until the previous list has been processed
         assertArrayEquals(testData, file.readBytes())
-        verify(dao).find<Attachment>(1L)
+        verify(dao).find<Attachment>(attachment.id)
+        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
+        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(AttachmentUpdateEvent)
+        assertTrue(attachment.isDownloaded)
+    }
+
+    @Test
+    fun verifyDownloadAttachment() {
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
+        whenever(fileManager.getFile(attachment)).thenReturn(file)
+
+        downloadManager.downloadAttachment(attachment.id)
+        assertArrayEquals(testData, file.readBytes())
+        verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
@@ -235,12 +266,12 @@ class GodToolsDownloadManagerTest {
     fun verifyDownloadAttachmentAlreadyDownloaded() {
         attachment.isDownloaded = true
         stubbing(dao) {
-            on { find<Attachment>(1L) } doReturn attachment
+            on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
 
-        downloadManager.downloadAttachment(1L)
-        verify(dao).find<Attachment>(1L)
+        downloadManager.downloadAttachment(attachment.id)
+        verify(dao).find<Attachment>(attachment.id)
         verify(dao).find<LocalFile>(attachment.localFilename!!)
         verifyBlocking(attachmentsApi, never()) { download(any()) }
         verify(dao, never()).updateOrInsert(any())
@@ -251,10 +282,10 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportAttachment() {
-        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -264,13 +295,13 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportAttachmentUnableToCreateResourcesDir() {
-        whenever(dao.find<Attachment>(1L)).thenReturn(attachment)
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         fileManager.stub {
             onBlocking { createResourcesDir() } doReturn false
             on { getFile(attachment) } doReturn file
         }
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
@@ -281,12 +312,12 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentAttachmentAlreadyDownloaded() {
         attachment.isDownloaded = true
         dao.stub {
-            on { find<Attachment>(1L) } doReturn attachment
+            on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(any())
@@ -298,12 +329,12 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentLocalFileExists() {
         attachment.isDownloaded = false
         dao.stub {
-            on { find<Attachment>(1L) } doReturn attachment
+            on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(1, it) } }
+        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
         verify(fileManager, never()).getFile(any())
