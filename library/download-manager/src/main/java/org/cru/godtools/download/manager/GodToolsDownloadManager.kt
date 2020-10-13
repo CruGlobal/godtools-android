@@ -16,14 +16,19 @@ import java.io.InputStream
 import java.util.Locale
 import java.util.zip.ZipInputStream
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
@@ -35,6 +40,7 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
+import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -149,6 +155,14 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Download Progress
 
     // region Attachments
+    private val staleAttachmentsJob = coroutineScope.launch {
+        Query.select<Attachment>()
+            .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
+            .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.`is`(Expression.NULL)))
+            .getAsFlow(dao)
+            .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
+    }
+
     @WorkerThread
     @VisibleForTesting
     fun downloadAttachment(attachmentId: Long) {
@@ -355,6 +369,12 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
         cleanupActor.close()
+        runBlocking {
+            staleAttachmentsJob.cancelAndJoin()
+            val job = coroutineScope.coroutineContext[Job]
+            if (job is CompletableJob) job.complete()
+            job?.join()
+        }
     }
 
     @WorkerThread

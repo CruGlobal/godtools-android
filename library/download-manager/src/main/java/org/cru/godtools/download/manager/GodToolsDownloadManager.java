@@ -113,12 +113,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
         enqueuePendingPublishedTranslations();
     }
 
-    @WorkerThread
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
-        enqueueStaleAttachments();
-    }
-
     // endregion Lifecycle Events
 
     @AnyThread
@@ -292,15 +286,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                 .forEach(this::enqueueAttachmentDownload);
     }
 
-    @WorkerThread
-    private void enqueueStaleAttachments() {
-        mDao.streamCompat(Query.select(Attachment.class)
-                                  .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
-                                  .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.is(NULL))))
-                .mapToLong(Attachment::getId)
-                .forEach(this::enqueueAttachmentDownload);
-    }
-
     @AnyThread
     private void enqueueAttachmentDownload(final long attachmentId) {
         synchronized (mDownloadingAttachments) {
@@ -317,7 +302,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     private static final int PRIORITY_ATTACHMENT = -30;
     private static final int PRIORITY_PARALLEL = -20;
     private static final int PRIORITY_OTHER = -10;
-    private static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
     final class DownloadTranslationRunnable implements PriorityRunnable {
         @NonNull

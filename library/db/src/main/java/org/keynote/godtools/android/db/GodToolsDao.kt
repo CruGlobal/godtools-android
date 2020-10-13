@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.AsyncDao
 import org.ccci.gto.android.common.db.AsyncDao.Companion.runAsync
+import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
@@ -42,7 +43,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @Singleton
 class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), AsyncDao,
-    LiveDataDao, StreamDao {
+    CoroutinesFlowDao, LiveDataDao, StreamDao {
     override val liveDataRegistry = LiveDataRegistry()
 
     init {
