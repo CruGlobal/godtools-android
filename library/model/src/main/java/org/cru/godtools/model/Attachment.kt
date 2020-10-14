@@ -19,7 +19,6 @@ class Attachment : Base() {
 
     @JsonApiAttribute(JSON_FILE_NAME)
     var filename: String? = null
-
     @JsonApiAttribute(JSON_SHA256)
     var sha256: String? = null
 

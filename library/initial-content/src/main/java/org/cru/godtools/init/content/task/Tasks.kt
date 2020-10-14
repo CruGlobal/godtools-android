@@ -2,13 +2,15 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import androidx.concurrent.futures.await
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -64,21 +66,25 @@ internal class Tasks @Inject constructor(
         }
     }
 
-    fun initSystemLanguages() {
+    suspend fun initSystemLanguages() {
         if (dao.getCursor(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED)).count > 0) return
 
         // add device languages if we haven't added languages before
         if (dao.get(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
-            LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
-                // add all device languages and fallbacks
-                .onEach { downloadManager.addLanguage(it) }
-                .asSequence()
-                // set the first available language as the primary language
-                .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
+            coroutineScope {
+                LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
+                    // add all device languages and fallbacks
+                    .onEach { launch { downloadManager.pinLanguage(it) } }
+                    .asSequence()
+                    // set the first available language as the primary language
+                    .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
 
-            // always add english and bundled languages
-            downloadManager.addLanguage(Locale.ENGLISH)
-            BuildConfig.BUNDLED_LANGUAGES.forEach { downloadManager.addLanguage(LocaleCompat.forLanguageTag(it)) }
+                // always add english and bundled languages
+                launch { downloadManager.pinLanguage(Locale.ENGLISH) }
+                BuildConfig.BUNDLED_LANGUAGES.forEach {
+                    launch { downloadManager.pinLanguage(LocaleCompat.forLanguageTag(it)) }
+                }
+            }
         }
     }
     // endregion Language Initial Content Tasks
@@ -116,9 +122,11 @@ internal class Tasks @Inject constructor(
         if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
 
         // add any bundled tools as the default tools
-        BuildConfig.BUNDLED_TOOLS
-            .map { downloadManager.addTool(it) }
-            .forEach { it.await() }
+        coroutineScope {
+            BuildConfig.BUNDLED_TOOLS
+                .map { async { downloadManager.pinTool(it) } }
+                .awaitAll()
+        }
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
@@ -134,7 +142,7 @@ internal class Tasks @Inject constructor(
                 .forEach { attachment ->
                     launch(Dispatchers.IO) {
                         context.assets.open("attachments/${attachment.localFilename}").use {
-                            downloadManager.importAttachment(attachment, it)
+                            downloadManager.importAttachment(attachment.id, data = it)
                         }
                     }
                 }

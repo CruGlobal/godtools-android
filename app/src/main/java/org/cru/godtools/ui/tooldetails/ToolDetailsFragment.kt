@@ -104,7 +104,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
 
     // region Data Binding
     fun addTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.addTool(toolCode)
+        if (toolCode != null) downloadManager.pinToolAsync(toolCode)
     }
 
     fun removeTool(toolCode: String?) {

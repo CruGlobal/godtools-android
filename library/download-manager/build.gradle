@@ -17,6 +17,8 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
     implementation "androidx.collection:collection:${deps.androidX.collection}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
@@ -24,6 +26,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
@@ -31,6 +34,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"

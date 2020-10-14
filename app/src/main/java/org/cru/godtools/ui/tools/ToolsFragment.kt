@@ -181,7 +181,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     }
 
     override fun addTool(code: String?) {
-        code?.let { downloadManager.addTool(it) }
+        code?.let { downloadManager.pinToolAsync(it) }
     }
 
     override fun removeTool(tool: Tool?, translation: Translation?) {

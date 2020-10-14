@@ -5,6 +5,8 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+
     implementation "androidx.core:core:${deps.androidX.core}"
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
