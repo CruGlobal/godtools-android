@@ -1,10 +1,17 @@
 package org.cru.godtools.analytics.appsflyer
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import com.karumi.weak.weak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -23,23 +30,33 @@ import timber.log.Timber
 
 private const val TAG = "AppsFlyerAnalytics"
 
+@VisibleForTesting
+internal const val AF_DP = "af_dp"
+private const val AF_STATUS = "af_status"
+private const val IS_FIRST_LAUNCH = "is_first_launch"
+
+private const val STATUS_NON_ORGANIC = "Non-organic"
+
 @Singleton
-class AppsFlyerAnalyticsService @Inject internal constructor(private val app: Application, eventBus: EventBus) {
+class AppsFlyerAnalyticsService @Inject internal constructor(
+    private val app: Application,
+    eventBus: EventBus,
+    private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
+) : Application.ActivityLifecycleCallbacks, AppsFlyerConversionListener {
     private val appsFlyer: AppsFlyerLib = AppsFlyerLib.getInstance()
 
     init {
         appsFlyer.apply {
-            init(BuildConfig.APPSFLYER_DEV_KEY, GodToolsAppsFlyerConversionListener, app)
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
+            init(BuildConfig.APPSFLYER_DEV_KEY, this@AppsFlyerAnalyticsService, app)
+            startTracking(app)
         }
+        app.registerActivityLifecycleCallbacks(this)
+        eventBus.register(this)
 
-        GlobalScope.launch(Dispatchers.Default) {
+        GlobalScope.launch(Dispatchers.IO) {
             val mcId = adobeMarketingCloudId
-            withContext(Dispatchers.Main) {
-                appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId))
-                appsFlyer.startTracking(app)
-                eventBus.register(this@AppsFlyerAnalyticsService)
-            }
+            withContext(Dispatchers.Main) { appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId)) }
         }
     }
 
@@ -58,26 +75,43 @@ class AppsFlyerAnalyticsService @Inject internal constructor(private val app: Ap
             appsFlyer.trackEvent(app, event.action, emptyMap())
     }
     // endregion Analytics Events
+
+    // region Application.ActivityLifecycleCallbacks
+    private var activeActivity: Activity? by weak()
+
+    override fun onActivityResumed(activity: Activity) {
+        activeActivity = activity
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+    override fun onActivityStarted(activity: Activity) = Unit
+    override fun onActivityPaused(activity: Activity) = Unit
+    override fun onActivityStopped(activity: Activity) = Unit
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+    override fun onActivityDestroyed(activity: Activity) = Unit
+    // endregion Application.ActivityLifecycleCallbacks
+
+    // region AppsFlyerConversionListener
+    override fun onConversionDataSuccess(data: Map<String, Any?>) {
+        Timber.tag(TAG).d("onConversionDataSuccess($data)")
+        if (data[IS_FIRST_LAUNCH] == true && data[AF_STATUS] == STATUS_NON_ORGANIC) {
+            onAppOpenAttribution(mapOf(AF_DP to data[AF_DP] as? String))
+        }
+    }
+
+    override fun onAppOpenAttribution(data: Map<String, String?>) {
+        Timber.tag(TAG).d("onAppOpenAttribution($data)")
+        val uri = data[AF_DP]?.let { Uri.parse(it) }
+        deepLinkResolvers.asSequence().mapNotNull { it.resolve(app, uri, data) }.firstOrNull()?.let { intent ->
+            activeActivity?.startActivity(intent)
+        }
+    }
+
+    override fun onConversionDataFail(error: String) = Unit
+    override fun onAttributionFailure(error: String) = Unit
+    // endregion AppsFlyerConversionListener
 }
 
-private object GodToolsAppsFlyerConversionListener : AppsFlyerConversionListener {
-    override fun onAppOpenAttribution(data: Map<String, String>?) {
-        data?.map { (key, value) ->
-            Timber.tag(TAG).d("AppsFlyer onAppOpenAttribution Attribute: %s = %s", key, value)
-        }
-    }
-
-    override fun onAttributionFailure(error: String?) {
-        Timber.tag(TAG).e("AppsFlyer onAttributionFailure: %s", error)
-    }
-
-    override fun onConversionDataSuccess(data: Map<String, Any>?) {
-        data?.map { (key, value) ->
-            Timber.tag(TAG).d("AppsFlyer onConversionDataSuccess Attribute: %s = %s", key, value)
-        }
-    }
-
-    override fun onConversionDataFail(error: String?) {
-        Timber.tag(TAG).e("AppsFlyer onConversionDataFail: %s", error)
-    }
+interface AppsFlyerDeepLinkResolver {
+    fun resolve(context: Context, uri: Uri?, data: Map<String, String?>): Intent?
 }

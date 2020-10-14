@@ -26,6 +26,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.api.ApiModule
+import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.model.Language
