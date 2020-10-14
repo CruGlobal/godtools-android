@@ -310,3 +310,6 @@ junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
 }
+task jacocoTestReport {
+    subprojects.each { dependsOn(it.tasks.withType(JacocoReport)) }
+}
