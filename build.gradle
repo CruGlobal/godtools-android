@@ -94,7 +94,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${deps.gradleAndroidPlugin}"
@@ -104,15 +103,12 @@ buildscript {
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
         classpath 'com.google.gms:google-services:4.3.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
-
-        // HACK: use master-SNAPSHOT version to work around a gradle 6 incompatibility with v0.1.4 of the jacoco-android plugin
-//        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
-        classpath 'com.github.arturdm:jacoco-android-gradle-plugin:master-SNAPSHOT'
     }
 }
 
 plugins {
     id "com.getkeepsafe.dexcount" version "1.0.4" apply false
+    id "com.vanniktech.android.junit.jacoco" version "0.16.0"
     id "de.undercouch.download" version "4.1.1" apply false
     id "org.ajoberstar.grgit" version "4.1.0"
     id "org.jlleitschuh.gradle.ktlint" version "9.2.1"
@@ -178,7 +174,6 @@ configure(subprojects.findAll { it.path == ":app" }) {
     apply plugin: 'com.android.application'
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
-    apply plugin: 'jacoco-android'
 }
 
 // base library plugins
@@ -186,7 +181,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'com.android.library'
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
-    apply plugin: 'jacoco-android'
 }
 
 // base feature plugins
@@ -312,16 +306,7 @@ subprojects {
 }
 
 // jacoco config
-subprojects {
-    beforeEvaluate { project ->
-        if (project.hasProperty('jacoco')) {
-            jacoco.toolVersion = deps.jacoco
-
-            if (project.hasProperty('android')) {
-                android.testOptions.unitTests.all {
-                    jacoco.includeNoLocationClasses = true
-                }
-            }
-        }
-    }
+junitJacoco {
+    jacocoVersion = deps.jacoco
+    includeNoLocationClasses = true
 }
