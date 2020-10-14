@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.widget;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -23,7 +24,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.animation.BounceInterpolator;
@@ -109,7 +109,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     @Nullable
     Animator mAnimation;
-    private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
+    private final Animator.AnimatorListener mAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
@@ -120,7 +120,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
-    private final Animator.AnimatorListener mBounceAnimationListener = new SimpleAnimatorListener() {
+    private final Animator.AnimatorListener mBounceAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
