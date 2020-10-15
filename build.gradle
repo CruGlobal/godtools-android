@@ -313,3 +313,9 @@ junitJacoco {
 task jacocoTestReport {
     subprojects.each { dependsOn(it.tasks.withType(JacocoReport)) }
 }
+allprojects {
+    if (gradle.startParameter.excludedTaskNames.contains("test")) {
+        // exclude all test type tasks when the test task is excluded
+        tasks.withType(Test).all { gradle.startParameter.excludedTaskNames += it.name }
+    }
+}
