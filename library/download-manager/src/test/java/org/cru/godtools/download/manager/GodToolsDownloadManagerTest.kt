@@ -92,8 +92,8 @@ class GodToolsDownloadManagerTest {
     fun setup() {
         attachmentsApi = mock()
         dao = mock {
-            on { getAsFlow(argThat<Query<*>> { table.type == Attachment::class.java }) }
-                .thenReturn(staleAttachmentsChannel.consumeAsFlow())
+            on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
+            on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
         }
         eventBus = mock()
         fileManager = mock {
@@ -162,7 +162,7 @@ class GodToolsDownloadManagerTest {
         }
         verify(eventBus).post(LanguageUpdateEvent)
     }
-    // endregion pinTool()
+    // endregion pinLanguage()
 
     // region Download Progress
     @Test
@@ -373,6 +373,43 @@ class GodToolsDownloadManagerTest {
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(TranslationUpdateEvent)
+    }
+
+    @Test
+    fun verifyPruneStaleTranslations() {
+        val valid1 = Translation().apply {
+            toolCode = TOOL
+            languageCode = Locale.ENGLISH
+            isDownloaded = true
+        }
+        val valid2 = Translation().apply {
+            toolCode = TOOL
+            languageCode = Locale.FRENCH
+            isDownloaded = true
+        }
+        val valid3 = Translation().apply {
+            toolCode = "$TOOL$TOOL"
+            languageCode = Locale.ENGLISH
+            isDownloaded = true
+        }
+        val invalid = Translation().apply {
+            toolCode = TOOL
+            languageCode = Locale.ENGLISH
+            isDownloaded = true
+        }
+        whenever(dao.get(argThat<Query<*>> { table.type == Translation::class.java }))
+            .thenReturn(listOf(valid1, valid2, invalid, valid3))
+
+        downloadManager.pruneStaleTranslations()
+        verify(dao).update(invalid, TranslationTable.COLUMN_DOWNLOADED)
+        assertFalse(invalid.isDownloaded)
+        verify(dao, never()).update(valid1, TranslationTable.COLUMN_DOWNLOADED)
+        verify(dao, never()).update(valid2, TranslationTable.COLUMN_DOWNLOADED)
+        verify(dao, never()).update(valid3, TranslationTable.COLUMN_DOWNLOADED)
+        assertTrue(valid1.isDownloaded)
+        assertTrue(valid2.isDownloaded)
+        assertTrue(valid3.isDownloaded)
         verify(eventBus).post(TranslationUpdateEvent)
     }
     // endregion Translations

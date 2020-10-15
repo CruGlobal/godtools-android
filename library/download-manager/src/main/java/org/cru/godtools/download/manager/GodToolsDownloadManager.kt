@@ -40,7 +40,6 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
-import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -73,6 +72,12 @@ private const val TAG = "GodToolsDownloadManager"
 internal const val CLEANUP_DELAY = HOUR_IN_MS
 @VisibleForTesting
 internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+
+@VisibleForTesting
+internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
+    .distinct(true)
+    .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
+    .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.isNull()))
 
 open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
@@ -155,11 +160,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     // region Attachments
     private val staleAttachmentsJob = coroutineScope.launch {
-        Query.select<Attachment>()
-            .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
-            .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.`is`(Expression.NULL)))
-            .getAsFlow(dao)
-            .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
+        dao.getAsFlow(QUERY_STALE_ATTACHMENTS).collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
     }
 
     @WorkerThread
