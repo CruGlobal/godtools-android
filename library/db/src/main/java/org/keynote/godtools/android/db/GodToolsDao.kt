@@ -129,7 +129,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         }
     }
 
-    private fun getLatestTranslationQuery(code: String?, locale: Locale?, isPublished: Boolean, isDownloaded: Boolean) =
+    private fun getLatestTranslationQuery(code: String, locale: Locale, isPublished: Boolean, isDownloaded: Boolean) =
         Query.select<Translation>()
             .where(
                 TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
