@@ -71,7 +71,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
                             @NonNull final EventBus eventBus, @NonNull final FileManager fileManager,
                             @NonNull final Settings settings) {
-        super(attachmentsApi, dao, eventBus, fileManager);
+        super(attachmentsApi, dao, eventBus, fileManager, settings);
         mContext = context;
         mTranslationsApi = translationsApi;
         mDao = dao;
@@ -106,25 +106,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     }
 
     // endregion Lifecycle Events
-
-    @AnyThread
-    public void removeLanguage(@Nullable final Locale locale) {
-        if (locale != null && !mPrefs.isLanguageProtected(locale)) {
-            // clear the parallel language if it is the language being removed
-            if (locale.equals(mPrefs.getParallelLanguage())) {
-                mPrefs.setParallelLanguage(null);
-            }
-
-            // remove the language from the device
-            final Language language = new Language();
-            language.setCode(locale);
-            language.setAdded(false);
-            final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(this::pruneStaleTranslations, directExecutor());
-            update.addListener(new EventBusDelayedPost(mEventBus, LanguageUpdateEvent.INSTANCE),
-                               directExecutor());
-        }
-    }
 
     @AnyThread
     public void cacheTranslation(@NonNull final String code, @NonNull final Locale locale) {

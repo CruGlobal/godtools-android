@@ -34,6 +34,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -82,6 +83,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fileManager: FileManager
+    private lateinit var settings: Settings
     private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
@@ -102,10 +104,11 @@ class GodToolsDownloadManagerTest {
             onBlocking { getResourcesDir() } doReturn resourcesDir
             onBlocking { createResourcesDir() } doReturn true
         }
+        settings = mock()
         testScope = TestCoroutineScope()
 
         downloadManager = KotlinGodToolsDownloadManager(
-            attachmentsApi, dao, eventBus, fileManager, testScope, testScope.coroutineContext
+            attachmentsApi, dao, eventBus, fileManager, settings, testScope, testScope.coroutineContext
         )
     }
 
@@ -165,7 +168,7 @@ class GodToolsDownloadManagerTest {
     }
     // endregion pinTool()/unpinTool()
 
-    // region pinLanguage()
+    // region pinLanguage()/unpinLanguage()
     @Test
     fun verifyPinLanguage() {
         runBlocking { downloadManager.pinLanguage(Locale.FRENCH) }
@@ -188,7 +191,18 @@ class GodToolsDownloadManagerTest {
         }
         verify(eventBus).post(LanguageUpdateEvent)
     }
-    // endregion pinLanguage()
+
+    @Test
+    fun verifyUnpinLanguage() {
+        runBlocking { downloadManager.unpinLanguage(Locale.FRENCH) }
+        argumentCaptor<Language> {
+            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
+            assertEquals(Locale.FRENCH, firstValue.code)
+            assertFalse(firstValue.isAdded)
+        }
+        verify(eventBus).post(LanguageUpdateEvent)
+    }
+    // endregion pinLanguage()/unpinLanguage()
 
     // region Download Progress
     @Test

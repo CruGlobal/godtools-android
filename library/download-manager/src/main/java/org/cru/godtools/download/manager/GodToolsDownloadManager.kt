@@ -45,6 +45,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -93,6 +94,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fileManager: FileManager,
+    private val settings: Settings,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
@@ -100,8 +102,16 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: FileManager
-    ) : this(attachmentsApi, dao, eventBus, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        fileManager: FileManager,
+        settings: Settings
+    ) : this(
+        attachmentsApi,
+        dao,
+        eventBus,
+        fileManager,
+        settings,
+        CoroutineScope(Dispatchers.Default + SupervisorJob())
+    )
 
     private val attachmentsMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
@@ -141,6 +151,18 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         val language = Language().apply {
             code = locale
             isAdded = true
+        }
+        withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
+        eventBus.post(LanguageUpdateEvent)
+    }
+
+    suspend fun unpinLanguage(locale: Locale) {
+        if (settings.isLanguageProtected(locale)) return
+        if (settings.parallelLanguage == locale) settings.parallelLanguage = null
+
+        val language = Language().apply {
+            code = locale
+            isAdded = false
         }
         withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
         eventBus.post(LanguageUpdateEvent)
