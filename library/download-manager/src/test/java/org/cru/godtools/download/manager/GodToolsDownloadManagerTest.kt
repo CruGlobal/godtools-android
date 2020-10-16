@@ -427,7 +427,7 @@ class GodToolsDownloadManagerTest {
             on { getFile("c.txt") } doReturn files[2]
         }
 
-        downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
+        runBlocking { downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1) }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())

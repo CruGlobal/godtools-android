@@ -314,15 +314,15 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @WorkerThread
-    @Throws(IOException::class)
-    fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        runBlocking {
-            if (!fileManager.createResourcesDir()) return@runBlocking
+    suspend fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
+        if (!fileManager.createResourcesDir()) return
 
-            translationsMutex.withLock(TranslationKey(translation)) {
-                zipStream.extractZipFor(translation, size)
-            }
+        val key = TranslationKey(translation)
+        translationsMutex.withLock(TranslationKey(translation)) {
+            val current = dao.getLatestTranslation(key.tool, key.locale, isPublished = true, isDownloaded = true)
+            if (current != null && current.version >= translation.version) return
+
+            zipStream.extractZipFor(translation, size)
         }
     }
 
