@@ -14,6 +14,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import java.util.zip.ZipInputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -98,7 +100,8 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
     )
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
 
-open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
+@Singleton
+class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
@@ -108,6 +111,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
+    @Inject
     constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,

@@ -89,7 +89,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var translationsApi: TranslationsApi
     private lateinit var testScope: TestCoroutineScope
 
-    private lateinit var downloadManager: KotlinGodToolsDownloadManager
+    private lateinit var downloadManager: GodToolsDownloadManager
 
     private lateinit var observer: Observer<DownloadProgress?>
 
@@ -116,7 +116,7 @@ class GodToolsDownloadManagerTest {
         translationsApi = mock()
         testScope = TestCoroutineScope()
 
-        downloadManager = KotlinGodToolsDownloadManager(
+        downloadManager = GodToolsDownloadManager(
             attachmentsApi, dao, eventBus, fileManager, settings, translationsApi, testScope, testScope.coroutineContext
         )
     }
@@ -544,7 +544,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyCleanupActorBeforeInitialRun() {
         assertCleanupActorRan(0)
-        runBlocking { downloadManager.cleanupActor.send(KotlinGodToolsDownloadManager.RunCleanup) }
+        runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
         assertCleanupActorRan(1)
         testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
         assertCleanupActorRan(1)
@@ -559,7 +559,7 @@ class GodToolsDownloadManagerTest {
         testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
         assertCleanupActorRan(1)
         testScope.advanceTimeBy(2000)
-        runBlocking { downloadManager.cleanupActor.send(KotlinGodToolsDownloadManager.RunCleanup) }
+        runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
         assertCleanupActorRan(2)
         testScope.advanceTimeBy(CLEANUP_DELAY - 1)
         assertCleanupActorRan(2)
