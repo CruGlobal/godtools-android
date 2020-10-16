@@ -151,7 +151,7 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                     if (response.isSuccessful()) {
                         final ResponseBody body = response.body();
                         if (body != null) {
-                            storeTranslation(translation, body.byteStream(), body.contentLength());
+                            importTranslation(translation, body.byteStream(), body.contentLength());
 
                             // prune any old translations
                             pruneStaleTranslations();

@@ -289,28 +289,32 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // region Translations
     @WorkerThread
     @Throws(IOException::class)
-    fun storeTranslation(translation: Translation, zipStream: InputStream, size: Long) {
+    fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
         // lock translation
-        val key = TranslationKey(translation)
-        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            runBlocking {
-                try {
-                    startProgress(key)
-                    filesystemMutex.read.withLock {
-                        // process the download
-                        zipStream.extractZipFor(translation, size)
+        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, TranslationKey(translation))) {
+            runBlocking { zipStream.writeTranslation(translation, size) }
+        }
+    }
 
-                        // mark translation as downloaded
-                        translation.isDownloaded = true
-                        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-                        eventBus.post(TranslationUpdateEvent)
-                    }
-                } finally {
-                    finishDownload(key)
-                }
+    @WorkerThread
+    @GuardedBy("LOCKS_TRANSLATION_DOWNLOADS")
+    private suspend fun InputStream.writeTranslation(translation: Translation, size: Long) {
+        val key = TranslationKey(translation)
+        try {
+            startProgress(key)
+            filesystemMutex.read.withLock {
+                // process the download
+                extractZipFor(translation, size)
+
+                // mark translation as downloaded
+                translation.isDownloaded = true
+                dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+                eventBus.post(TranslationUpdateEvent)
             }
+        } finally {
+            finishDownload(key)
         }
     }
 
