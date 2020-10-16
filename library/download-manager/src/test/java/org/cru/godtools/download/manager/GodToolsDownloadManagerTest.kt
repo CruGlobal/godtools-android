@@ -95,6 +95,7 @@ class GodToolsDownloadManagerTest {
 
     private val staleAttachmentsChannel = Channel<List<Attachment>>()
     private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
+    private val pinnedTranslationsChannel = Channel<List<Translation>>()
 
     @Before
     fun setup() {
@@ -103,6 +104,7 @@ class GodToolsDownloadManagerTest {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
             on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
             on { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } doReturn toolBannerAttachmentsChannel.consumeAsFlow()
+            on { getAsFlow(QUERY_PINNED_TRANSLATIONS) } doReturn pinnedTranslationsChannel.consumeAsFlow()
         }
         eventBus = mock()
         fileManager = mock {

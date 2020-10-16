@@ -87,6 +87,16 @@ internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
         )
     )
     .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
+@VisibleForTesting
+internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
+    .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
+    .where(
+        LanguageTable.SQL_WHERE_ADDED
+            .and(ToolTable.FIELD_ADDED.eq(true))
+            .and(TranslationTable.SQL_WHERE_PUBLISHED)
+            .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
+    )
+    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
 
 open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
@@ -282,6 +292,11 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Attachments
 
     // region Translations
+    private val pinnedTranslationsJob = coroutineScope.launch {
+        dao.getAsFlow(QUERY_PINNED_TRANSLATIONS)
+            .collect { it.map { launch { downloadLatestPublishedTranslation(TranslationKey(it)) } }.joinAll() }
+    }
+
     @AnyThread
     fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
@@ -301,17 +316,10 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
                             pruneStaleTranslations()
                         }
                     } catch (ignored: IOException) {
+                    } finally {
+                        finishDownload(key)
                     }
                 }
-
-                // We always finish the download (even if we didn't start it) because of the following race condition:
-                //
-                // [1] enqueuePendingPublishedTranslations() loads the list of pending downloads from the database
-                // [2] downloadLatestPublishedTranslation() finishes downloading one of the translations loaded by [1]
-                // [1] enqueuePendingPublishedTranslations() triggers startProgress() on already downloaded translation
-                // [1] downloadLatestPublishedTranslation() short-circuits on the actual download logic
-                // [1] we still need to call finishDownload()
-                finishDownload(key)
             }
         }
     }
@@ -324,45 +332,45 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
             val current = dao.getLatestTranslation(key.tool, key.locale, isPublished = true, isDownloaded = true)
             if (current != null && current.version >= translation.version) return
 
-            zipStream.extractZipFor(translation, size)
+            startProgress(key)
+            try {
+                zipStream.extractZipFor(translation, size)
+            } finally {
+                finishDownload(key)
+            }
         }
     }
 
     @GuardedBy("translationsMutex")
     private suspend fun InputStream.extractZipFor(translation: Translation, size: Long) {
         val key = TranslationKey(translation)
-        try {
-            startProgress(key)
-            filesystemMutex.read.withLock {
-                val count = CountingInputStream(this)
-                withContext(Dispatchers.IO) {
-                    ZipInputStream(count.buffered()).use { zin ->
-                        while (true) {
-                            val ze = zin.nextEntry ?: break
-                            val filename = ze.name
-                            filesMutex.withLock(filename) {
-                                // write the file if it hasn't been downloaded before
-                                if (dao.find<LocalFile>(filename) == null) {
-                                    val newFile = LocalFile(filename)
-                                    zin.copyTo(newFile)
-                                    dao.updateOrInsert(newFile)
-                                }
-
-                                // associate this file with this translation
-                                dao.updateOrInsert(TranslationFile(translation, filename))
+        filesystemMutex.read.withLock {
+            val count = CountingInputStream(this)
+            withContext(Dispatchers.IO) {
+                ZipInputStream(count.buffered()).use { zin ->
+                    while (true) {
+                        val ze = zin.nextEntry ?: break
+                        val filename = ze.name
+                        filesMutex.withLock(filename) {
+                            // write the file if it hasn't been downloaded before
+                            if (dao.find<LocalFile>(filename) == null) {
+                                val newFile = LocalFile(filename)
+                                zin.copyTo(newFile)
+                                dao.updateOrInsert(newFile)
                             }
-                            updateProgress(key, count.count, size)
+
+                            // associate this file with this translation
+                            dao.updateOrInsert(TranslationFile(translation, filename))
                         }
+                        updateProgress(key, count.count, size)
                     }
                 }
-
-                // mark translation as downloaded
-                translation.isDownloaded = true
-                dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-                eventBus.post(TranslationUpdateEvent)
             }
-        } finally {
-            finishDownload(key)
+
+            // mark translation as downloaded
+            translation.isDownloaded = true
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            eventBus.post(TranslationUpdateEvent)
         }
     }
 
@@ -466,11 +474,13 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         runBlocking {
             staleAttachmentsJob.cancel()
             toolBannerAttachmentsJob.cancel()
+            pinnedTranslationsJob.cancel()
             val job = coroutineScope.coroutineContext[Job]
             if (job is CompletableJob) job.complete()
             job?.join()
             staleAttachmentsJob.join()
             toolBannerAttachmentsJob.join()
+            pinnedTranslationsJob.join()
         }
     }
 
