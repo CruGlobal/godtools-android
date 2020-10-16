@@ -179,9 +179,9 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         val sql = """
             UPDATE ${getTable(Tool::class.java)}
             SET ${ToolTable.COLUMN_PENDING_SHARES} = coalesce(${ToolTable.COLUMN_PENDING_SHARES}, 0) + ?
-            WHERE ${where.first}
+            WHERE ${where.sql}
         """
-        val args = bindValues(shares) + where.second
+        val args = bindValues(shares) + where.args
 
         // execute query
         transaction(exclusive = false) { db ->
