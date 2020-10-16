@@ -466,7 +466,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.get(argThat<Query<*>> { table.type == Translation::class.java }))
             .thenReturn(listOf(valid1, valid2, invalid, valid3))
 
-        downloadManager.pruneStaleTranslations()
+        runBlocking { downloadManager.pruneStaleTranslations() }
         verify(dao).update(invalid, TranslationTable.COLUMN_DOWNLOADED)
         assertFalse(invalid.isDownloaded)
         verify(dao, never()).update(valid1, TranslationTable.COLUMN_DOWNLOADED)

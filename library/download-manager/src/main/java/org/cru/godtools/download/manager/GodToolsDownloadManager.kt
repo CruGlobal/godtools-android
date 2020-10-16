@@ -361,29 +361,27 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @WorkerThread
     @VisibleForTesting
-    internal fun pruneStaleTranslations() {
-        runBlocking {
-            val changes = dao.transaction(true) {
-                val seen = mutableSetOf<TranslationKey>()
-                Query.select<Translation>()
-                    .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-                    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-                    .get(dao).asSequence()
-                    .filterNot { seen.add(TranslationKey(it)) }
-                    .onEach {
-                        it.isDownloaded = false
-                        dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
-                    }
-                    .count()
-            }
+    internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
+        val changes = dao.transaction(true) {
+            val seen = mutableSetOf<TranslationKey>()
+            Query.select<Translation>()
+                .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                .get(dao).asSequence()
+                .filterNot { seen.add(TranslationKey(it)) }
+                .filter { it.isDownloaded }
+                .onEach {
+                    it.isDownloaded = false
+                    dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
+                }
+                .count()
+        }
 
-            // if any translations were updated, send a broadcast
-            if (changes > 0) {
-                eventBus.post(TranslationUpdateEvent)
-                cleanupActor.send(RunCleanup)
-            }
+        // if any translations were updated, send a broadcast
+        if (changes > 0) {
+            eventBus.post(TranslationUpdateEvent)
+            cleanupActor.send(RunCleanup)
         }
     }
     // endregion Translations
