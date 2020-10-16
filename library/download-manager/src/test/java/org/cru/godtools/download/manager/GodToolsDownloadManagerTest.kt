@@ -318,7 +318,7 @@ class GodToolsDownloadManagerTest {
         stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
         whenever(fileManager.getFile(attachment)).thenReturn(file)
 
-        downloadManager.downloadAttachment(attachment.id)
+        runBlocking { downloadManager.downloadAttachment(attachment.id) }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
@@ -335,7 +335,7 @@ class GodToolsDownloadManagerTest {
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
 
-        downloadManager.downloadAttachment(attachment.id)
+        runBlocking { downloadManager.downloadAttachment(attachment.id) }
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).find<LocalFile>(attachment.localFilename!!)
         verifyBlocking(attachmentsApi, never()) { download(any()) }

@@ -207,40 +207,37 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
             .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
     }
 
-    @WorkerThread
     @VisibleForTesting
-    fun downloadAttachment(attachmentId: Long) {
-        runBlocking {
-            if (!fileManager.createResourcesDir()) return@runBlocking
+    internal suspend fun downloadAttachment(attachmentId: Long) {
+        if (!fileManager.createResourcesDir()) return
 
-            attachmentsMutex.withLock(attachmentId) {
-                val attachment: Attachment = dao.find(attachmentId) ?: return@runBlocking
-                val filename = attachment.localFilename ?: return@runBlocking
+        attachmentsMutex.withLock(attachmentId) {
+            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val filename = attachment.localFilename ?: return
 
-                filesystemMutex.read.withLock {
-                    filesMutex.withLock(filename) {
-                        val localFile = dao.find<LocalFile>(filename)
-                        if (attachment.isDownloaded && localFile != null) return@runBlocking
-                        attachment.isDownloaded = localFile != null
+            filesystemMutex.read.withLock {
+                filesMutex.withLock(filename) {
+                    val localFile = dao.find<LocalFile>(filename)
+                    if (attachment.isDownloaded && localFile != null) return
+                    attachment.isDownloaded = localFile != null
 
-                        if (localFile == null) {
-                            // create a new local file object
-                            try {
-                                // download attachment
-                                attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
-                                    ?.use {
-                                        val file = LocalFile(filename)
-                                        it.copyTo(file)
-                                        dao.updateOrInsert(file)
-                                        attachment.isDownloaded = true
-                                    }
-                            } catch (ignored: IOException) {
-                            }
+                    if (localFile == null) {
+                        // create a new local file object
+                        try {
+                            // download attachment
+                            attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
+                                ?.use {
+                                    val file = LocalFile(filename)
+                                    it.copyTo(file)
+                                    dao.updateOrInsert(file)
+                                    attachment.isDownloaded = true
+                                }
+                        } catch (ignored: IOException) {
                         }
-
-                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-                        eventBus.post(AttachmentUpdateEvent)
                     }
+
+                    dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                    eventBus.post(AttachmentUpdateEvent)
                 }
             }
         }
