@@ -193,7 +193,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     @AnyThread
     @VisibleForTesting
-    fun finishDownload(translation: TranslationKey) {
+    internal fun finishDownload(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(null)
     }
     // endregion Download Progress
@@ -366,7 +366,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     @WorkerThread
     @VisibleForTesting
-    fun pruneStaleTranslations() {
+    internal fun pruneStaleTranslations() {
         runBlocking {
             val changes = dao.transaction(true) {
                 val seen = mutableSetOf<TranslationKey>()
