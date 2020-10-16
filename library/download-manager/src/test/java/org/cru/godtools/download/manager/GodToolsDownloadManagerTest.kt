@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyVararg
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
@@ -90,6 +91,8 @@ class GodToolsDownloadManagerTest {
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
 
+    private lateinit var observer: Observer<DownloadProgress?>
+
     private val staleAttachmentsChannel = Channel<List<Attachment>>()
     private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
 
@@ -106,6 +109,7 @@ class GodToolsDownloadManagerTest {
             onBlocking { getResourcesDir() } doReturn resourcesDir
             onBlocking { createResourcesDir() } doReturn true
         }
+        observer = mock()
         settings = mock()
         translationsApi = mock()
         testScope = TestCoroutineScope()
@@ -223,7 +227,6 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyDownloadProgressLiveData() {
         val translationKey = TranslationKey(TOOL, Locale.ENGLISH)
-        val observer: Observer<DownloadProgress?> = mock()
         val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
 
         liveData.observeForever(observer)
@@ -426,6 +429,7 @@ class GodToolsDownloadManagerTest {
             on { getFile("b.txt") } doReturn files[1]
             on { getFile("c.txt") } doReturn files[2]
         }
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
         runBlocking { downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1) }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
@@ -439,6 +443,10 @@ class GodToolsDownloadManagerTest {
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(TranslationUpdateEvent)
+        argumentCaptor<DownloadProgress> {
+            verify(observer, atLeastOnce()).onChanged(capture())
+            assertNull(lastValue)
+        }
     }
 
     @Test
