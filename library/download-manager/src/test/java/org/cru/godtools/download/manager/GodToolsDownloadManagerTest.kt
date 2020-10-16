@@ -419,17 +419,56 @@ class GodToolsDownloadManagerTest {
         setId(Random.nextLong())
         toolCode = TOOL
         languageCode = Locale.FRENCH
+        isDownloaded = false
     }
 
     @Test
-    fun verifyImportTranslation() {
+    fun verifyDownloadLatestPublishedTranslation() {
         val files = Array(3) { getTmpFile() }
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+        dao.stub {
+            on { getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true) } doReturn translation
+        }
         fileManager.stub {
             on { getFile("a.txt") } doReturn files[0]
             on { getFile("b.txt") } doReturn files[1]
             on { getFile("c.txt") } doReturn files[2]
         }
+        val response: ResponseBody = mock { on { byteStream() } doReturn getInputStreamForResource("abc.zip") }
+        translationsApi.stub {
+            onBlocking { download(translation.id) } doReturn Response.success(response)
+        }
+
+        downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation))
+        verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+        runBlocking { verify(translationsApi).download(translation.id) }
+        assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
+        assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
+        assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
+        verify(dao).updateOrInsert(eq(LocalFile("a.txt")))
+        verify(dao).updateOrInsert(eq(LocalFile("b.txt")))
+        verify(dao).updateOrInsert(eq(LocalFile("c.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "a.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
+        verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
+        verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        assertTrue(translation.isDownloaded)
+        verify(eventBus).post(TranslationUpdateEvent)
+        argumentCaptor<DownloadProgress> {
+            verify(observer, atLeastOnce()).onChanged(capture())
+            assertNull(lastValue)
+        }
+    }
+
+    @Test
+    fun verifyImportTranslation() {
+        val files = Array(3) { getTmpFile() }
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+        fileManager.stub {
+            on { getFile("a.txt") } doReturn files[0]
+            on { getFile("b.txt") } doReturn files[1]
+            on { getFile("c.txt") } doReturn files[2]
+        }
 
         runBlocking { downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1) }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
