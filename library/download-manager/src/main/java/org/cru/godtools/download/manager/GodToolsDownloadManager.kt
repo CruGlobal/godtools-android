@@ -194,7 +194,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @AnyThread
     @VisibleForTesting
-    fun startProgress(translation: TranslationKey) {
+    internal fun startProgress(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
     }
 
