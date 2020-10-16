@@ -394,7 +394,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
 
     override fun cacheTools() {
         dataModel.tool.value?.let { tool ->
-            dataModel.locales.value?.forEach { downloadManager.cacheTranslation(tool, it) }
+            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
         }
     }
 
@@ -519,7 +519,7 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
-            dataModel.tool.value?.let { tool -> downloadManager.cacheTranslation(tool, it) }
+            dataModel.tool.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
             dataModel.setActiveLocale(it)
         }
         event.page?.let { goToPage(it) }

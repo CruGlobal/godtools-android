@@ -82,23 +82,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
 
     // endregion Lifecycle Events
 
-    @AnyThread
-    public void cacheTranslation(@NonNull final String code, @NonNull final Locale locale) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> mDao.streamCompat(
-                Query.select(Translation.class)
-                        .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-                                       .and(TranslationTable.SQL_WHERE_PUBLISHED))
-                        .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
-                .findFirst()
-                .executeIfPresent(t -> {
-                    t.updateLastAccessed();
-                    mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
-                })
-                .map(TranslationKey::new)
-                .map(DownloadTranslationRunnable::new)
-                .ifPresent(mExecutor::execute));
-    }
-
     // region Download & Cleaning Scheduling Methods
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {

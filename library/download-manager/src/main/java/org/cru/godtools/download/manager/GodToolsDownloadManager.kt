@@ -282,6 +282,11 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Attachments
 
     // region Translations
+    @AnyThread
+    fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
+        downloadLatestPublishedTranslation(TranslationKey(code, locale))
+    }
+
     @WorkerThread
     fun downloadLatestPublishedTranslation(key: TranslationKey) {
         if (runBlocking { !fileManager.createResourcesDir() }) return

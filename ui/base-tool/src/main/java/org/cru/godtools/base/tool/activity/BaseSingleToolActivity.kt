@@ -68,7 +68,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     override fun cacheTools() {
         val toolCode = dataModel.toolCode.value ?: return
         val locale = dataModel.locale.value ?: return
-        downloadManager.cacheTranslation(toolCode, locale)
+        downloadManager.downloadLatestPublishedTranslationAsync(toolCode, locale)
     }
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
