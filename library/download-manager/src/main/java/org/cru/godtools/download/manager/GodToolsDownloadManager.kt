@@ -6,7 +6,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import androidx.collection.ArrayMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.common.io.CountingInputStream
@@ -42,7 +41,6 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
-import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.FileManager
@@ -120,11 +118,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     private val attachmentsMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val filesMutex = MutexMap()
-
-    // region TODO: Temporary migration logic
-    @JvmField
-    protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
-    // endregion TODO: Temporary migration logic
+    private val translationsMutex = MutexMap()
 
     // region Tool/Language pinning
     @AnyThread
@@ -295,9 +289,8 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     fun downloadLatestPublishedTranslation(key: TranslationKey) {
         if (runBlocking { !fileManager.createResourcesDir() }) return
 
-        // lock translation
-        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            runBlocking {
+        runBlocking {
+            translationsMutex.withLock(key) {
                 dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
                     startProgress(key)
                     try {
@@ -324,16 +317,16 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     @WorkerThread
     @Throws(IOException::class)
     fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+        runBlocking {
+            if (!fileManager.createResourcesDir()) return@runBlocking
 
-        // lock translation
-        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, TranslationKey(translation))) {
-            runBlocking { zipStream.writeTranslation(translation, size) }
+            translationsMutex.withLock(TranslationKey(translation)) {
+                zipStream.writeTranslation(translation, size)
+            }
         }
     }
 
-    @WorkerThread
-    @GuardedBy("LOCKS_TRANSLATION_DOWNLOADS")
+    @GuardedBy("translationsMutex")
     private suspend fun InputStream.writeTranslation(translation: Translation, size: Long) {
         val key = TranslationKey(translation)
         try {
