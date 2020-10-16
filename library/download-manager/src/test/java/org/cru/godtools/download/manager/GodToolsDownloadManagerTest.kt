@@ -87,6 +87,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
 
     private val staleAttachmentsChannel = Channel<List<Attachment>>()
+    private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
 
     @Before
     fun setup() {
@@ -94,6 +95,7 @@ class GodToolsDownloadManagerTest {
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
             on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
+            on { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } doReturn toolBannerAttachmentsChannel.consumeAsFlow()
         }
         eventBus = mock()
         fileManager = mock {
@@ -110,6 +112,7 @@ class GodToolsDownloadManagerTest {
     @After
     fun cleanup() {
         staleAttachmentsChannel.close()
+        toolBannerAttachmentsChannel.close()
         downloadManager.shutdown()
         testScope.cleanupTestCoroutines()
     }

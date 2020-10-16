@@ -23,7 +23,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
@@ -78,6 +77,16 @@ internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
     .distinct(true)
     .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
     .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.isNull()))
+@VisibleForTesting
+internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
+    .distinct(true)
+    .join(
+        AttachmentTable.SQL_JOIN_TOOL.andOn(
+            ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
+                .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))
+        )
+    )
+    .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
 
 open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
@@ -161,6 +170,10 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // region Attachments
     private val staleAttachmentsJob = coroutineScope.launch {
         dao.getAsFlow(QUERY_STALE_ATTACHMENTS).collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
+    }
+    private val toolBannerAttachmentsJob = coroutineScope.launch {
+        dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
+            .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
     }
 
     @WorkerThread
@@ -396,10 +409,13 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     internal fun shutdown() {
         cleanupActor.close()
         runBlocking {
-            staleAttachmentsJob.cancelAndJoin()
+            staleAttachmentsJob.cancel()
+            toolBannerAttachmentsJob.cancel()
             val job = coroutineScope.coroutineContext[Job]
             if (job is CompletableJob) job.complete()
             job?.join()
+            staleAttachmentsJob.join()
+            toolBannerAttachmentsJob.join()
         }
     }
 

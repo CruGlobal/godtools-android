@@ -15,28 +15,23 @@ import org.cru.godtools.base.FileManager;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
-import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationKey;
-import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
-import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -48,14 +43,12 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import androidx.collection.ArraySet;
 import androidx.collection.LongSparseArray;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 @Singleton
@@ -103,7 +96,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onToolUpdate(@NonNull final ToolUpdateEvent event) {
-        enqueueToolBannerAttachments();
         enqueuePendingPublishedTranslations();
     }
 
@@ -228,32 +220,10 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                 .map(DownloadTranslationRunnable::new)
                 .forEach(mExecutor::execute);
     }
-
-    @WorkerThread
-    private void enqueueToolBannerAttachments() {
-        mDao.streamCompat(Query.select(Attachment.class)
-                                  .join(AttachmentTable.SQL_JOIN_TOOL.andOn(
-                                          ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
-                                                  .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))))
-                                  .where(AttachmentTable.FIELD_DOWNLOADED.eq(false)))
-                .mapToLong(Attachment::getId)
-                .forEach(this::enqueueAttachmentDownload);
-    }
-
-    @AnyThread
-    private void enqueueAttachmentDownload(final long attachmentId) {
-        synchronized (mDownloadingAttachments) {
-            if (!mDownloadingAttachments.get(attachmentId, false)) {
-                mExecutor.execute(new DownloadAttachmentRunnable(attachmentId));
-                mDownloadingAttachments.put(attachmentId, true);
-            }
-        }
-    }
     // endregion Download & Cleaning Scheduling Methods
 
     // region Task PriorityRunnables
     private static final int PRIORITY_PRIMARY = -40;
-    private static final int PRIORITY_ATTACHMENT = -30;
     private static final int PRIORITY_PARALLEL = -20;
     private static final int PRIORITY_OTHER = -10;
 
@@ -278,27 +248,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
         @Override
         public void run() {
             downloadLatestPublishedTranslation(mKey);
-        }
-    }
-
-    final class DownloadAttachmentRunnable implements PriorityRunnable {
-        private final long mAttachmentId;
-
-        DownloadAttachmentRunnable(final long attachmentId) {
-            mAttachmentId = attachmentId;
-        }
-
-        @Override
-        public int getPriority() {
-            return PRIORITY_ATTACHMENT;
-        }
-
-        @Override
-        public void run() {
-            downloadAttachment(mAttachmentId);
-            synchronized (mDownloadingAttachments) {
-                mDownloadingAttachments.remove(mAttachmentId);
-            }
         }
     }
     // endregion Task PriorityRunnables
