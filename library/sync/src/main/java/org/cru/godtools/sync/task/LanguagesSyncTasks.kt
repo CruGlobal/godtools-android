@@ -9,7 +9,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.db.Expression.constants
+import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.cru.godtools.api.LanguagesApi

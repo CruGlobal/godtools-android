@@ -119,7 +119,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
     fun updateToolOrder(vararg tools: Long) {
         val tool = Tool()
         transaction(exclusive = false) { _ ->
-            update(tool, where = null, projection = *arrayOf(ToolTable.COLUMN_ORDER))
+            update(tool, null, ToolTable.COLUMN_ORDER)
 
             // set order for each specified tool
             tools.forEachIndexed { index, toolId ->
@@ -129,7 +129,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         }
     }
 
-    private fun getLatestTranslationQuery(code: String?, locale: Locale?, isPublished: Boolean, isDownloaded: Boolean) =
+    private fun getLatestTranslationQuery(code: String, locale: Locale, isPublished: Boolean, isDownloaded: Boolean) =
         Query.select<Translation>()
             .where(
                 TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
@@ -179,9 +179,9 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         val sql = """
             UPDATE ${getTable(Tool::class.java)}
             SET ${ToolTable.COLUMN_PENDING_SHARES} = coalesce(${ToolTable.COLUMN_PENDING_SHARES}, 0) + ?
-            WHERE ${where.first}
+            WHERE ${where.sql}
         """
-        val args = bindValues(shares) + where.second
+        val args = bindValues(shares) + where.args
 
         // execute query
         transaction(exclusive = false) { db ->
