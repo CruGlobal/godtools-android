@@ -16,7 +16,6 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -93,10 +92,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         }
 
         // prune any existing languages that weren't synced and aren't already added to the device
-        existing?.values?.forEach {
-            dao.delete(it)
-            coalesceEvent(events, LanguageUpdateEvent)
-        }
+        existing?.values?.forEach { dao.delete(it) }
     }
 
     @VisibleForTesting
@@ -109,7 +105,6 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
                 .firstOrNull()
                 ?.let { old ->
                     dao.update(language, dao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE)
-                    coalesceEvent(events, LanguageUpdateEvent)
                 }
         }
 
@@ -117,7 +112,6 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
             language, SQLiteDatabase.CONFLICT_REPLACE,
             LanguageTable.COLUMN_ID, LanguageTable.COLUMN_NAME
         )
-        coalesceEvent(events, LanguageUpdateEvent)
     }
     // endregion Languages
 

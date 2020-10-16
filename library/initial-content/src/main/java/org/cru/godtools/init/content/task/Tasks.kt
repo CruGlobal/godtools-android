@@ -27,7 +27,6 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -59,8 +58,6 @@ internal class Tasks @Inject constructor(
                 .let { jsonApiConverter.fromJson(it, Language::class.java) }
 
             dao.transaction { languages.data.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) } }
-
-            eventBus.post(LanguageUpdateEvent)
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
