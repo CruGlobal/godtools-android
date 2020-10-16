@@ -295,7 +295,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
                     startProgress(key)
                     try {
                         translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
-                            body.byteStream().writeTranslation(trans, body.contentLength())
+                            body.byteStream().extractZipFor(trans, body.contentLength())
                             pruneStaleTranslations()
                         }
                     } catch (ignored: IOException) {
@@ -321,19 +321,38 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
             if (!fileManager.createResourcesDir()) return@runBlocking
 
             translationsMutex.withLock(TranslationKey(translation)) {
-                zipStream.writeTranslation(translation, size)
+                zipStream.extractZipFor(translation, size)
             }
         }
     }
 
     @GuardedBy("translationsMutex")
-    private suspend fun InputStream.writeTranslation(translation: Translation, size: Long) {
+    private suspend fun InputStream.extractZipFor(translation: Translation, size: Long) {
         val key = TranslationKey(translation)
         try {
             startProgress(key)
             filesystemMutex.read.withLock {
-                // process the download
-                extractZipFor(translation, size)
+                val count = CountingInputStream(this)
+                withContext(Dispatchers.IO) {
+                    ZipInputStream(count.buffered()).use { zin ->
+                        while (true) {
+                            val ze = zin.nextEntry ?: break
+                            val filename = ze.name
+                            filesMutex.withLock(filename) {
+                                // write the file if it hasn't been downloaded before
+                                if (dao.find<LocalFile>(filename) == null) {
+                                    val newFile = LocalFile(filename)
+                                    zin.copyTo(newFile)
+                                    dao.updateOrInsert(newFile)
+                                }
+
+                                // associate this file with this translation
+                                dao.updateOrInsert(TranslationFile(translation, filename))
+                            }
+                            updateProgress(key, count.count, size)
+                        }
+                    }
+                }
 
                 // mark translation as downloaded
                 translation.isDownloaded = true
@@ -342,34 +361,6 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
             }
         } finally {
             finishDownload(key)
-        }
-    }
-
-    @GuardedBy("filesystemMutex")
-    private suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
-        if (!fileManager.createResourcesDir()) return
-
-        val translationKey = TranslationKey(translation)
-        withContext(Dispatchers.IO) {
-            val count = CountingInputStream(this@extractZipFor)
-            ZipInputStream(count.buffered()).use { zin ->
-                while (true) {
-                    val ze = zin.nextEntry ?: break
-                    val filename = ze.name
-                    filesMutex.withLock(filename) {
-                        // write the file if it hasn't been downloaded before
-                        if (dao.find<LocalFile>(filename) == null) {
-                            val newFile = LocalFile(filename)
-                            zin.copyTo(newFile)
-                            dao.updateOrInsert(newFile)
-                        }
-
-                        // associate this file with this translation
-                        dao.updateOrInsert(TranslationFile(translation, filename))
-                    }
-                    updateProgress(translationKey, count.count, zipSize)
-                }
-            }
         }
     }
 
