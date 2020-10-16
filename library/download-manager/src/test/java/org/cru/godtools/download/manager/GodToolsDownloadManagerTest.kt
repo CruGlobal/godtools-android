@@ -33,6 +33,7 @@ import okhttp3.ResponseBody
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
+import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Attachment
@@ -84,6 +85,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var eventBus: EventBus
     private lateinit var fileManager: FileManager
     private lateinit var settings: Settings
+    private lateinit var translationsApi: TranslationsApi
     private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: KotlinGodToolsDownloadManager
@@ -105,10 +107,11 @@ class GodToolsDownloadManagerTest {
             onBlocking { createResourcesDir() } doReturn true
         }
         settings = mock()
+        translationsApi = mock()
         testScope = TestCoroutineScope()
 
         downloadManager = KotlinGodToolsDownloadManager(
-            attachmentsApi, dao, eventBus, fileManager, settings, testScope, testScope.coroutineContext
+            attachmentsApi, dao, eventBus, fileManager, settings, translationsApi, testScope, testScope.coroutineContext
         )
     }
 

@@ -44,6 +44,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
+import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Attachment
@@ -95,6 +96,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     private val eventBus: EventBus,
     private val fileManager: FileManager,
     private val settings: Settings,
+    private val translationsApi: TranslationsApi,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
@@ -103,13 +105,15 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         dao: GodToolsDao,
         eventBus: EventBus,
         fileManager: FileManager,
-        settings: Settings
+        settings: Settings,
+        translationsApi: TranslationsApi
     ) : this(
         attachmentsApi,
         dao,
         eventBus,
         fileManager,
         settings,
+        translationsApi,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
@@ -287,6 +291,36 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Attachments
 
     // region Translations
+    @WorkerThread
+    fun downloadLatestPublishedTranslation(key: TranslationKey) {
+        if (runBlocking { !fileManager.createResourcesDir() }) return
+
+        // lock translation
+        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
+            runBlocking {
+                dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
+                    startProgress(key)
+                    try {
+                        translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
+                            body.byteStream().writeTranslation(trans, body.contentLength())
+                            pruneStaleTranslations()
+                        }
+                    } catch (ignored: IOException) {
+                    }
+                }
+
+                // We always finish the download (even if we didn't start it) because of the following race condition:
+                //
+                // [1] enqueuePendingPublishedTranslations() loads the list of pending downloads from the database
+                // [2] downloadLatestPublishedTranslation() finishes downloading one of the translations loaded by [1]
+                // [1] enqueuePendingPublishedTranslations() triggers startProgress() on already downloaded translation
+                // [1] downloadLatestPublishedTranslation() short-circuits on the actual download logic
+                // [1] we still need to call finishDownload()
+                finishDownload(key)
+            }
+        }
+    }
+
     @WorkerThread
     @Throws(IOException::class)
     fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {

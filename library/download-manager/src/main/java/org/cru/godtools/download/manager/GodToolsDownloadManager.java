@@ -1,22 +1,15 @@
 package org.cru.godtools.download.manager;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
-
-import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.cru.godtools.api.AttachmentsApi;
 import org.cru.godtools.api.TranslationsApi;
 import org.cru.godtools.base.FileManager;
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
-import org.cru.godtools.model.Language;
-import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationKey;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
@@ -30,7 +23,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -41,48 +33,31 @@ import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import androidx.collection.LongSparseArray;
-import dagger.hilt.android.qualifiers.ApplicationContext;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
-
-import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 @Singleton
 @SuppressLint("VisibleForTests")
 public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
 
-    private final Context mContext;
-    private final TranslationsApi mTranslationsApi;
     private final GodToolsDao mDao;
-    private final EventBus mEventBus;
     final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
 
-    final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
-
     @Inject
-    GodToolsDownloadManager(@ApplicationContext @NonNull final Context context,
-                            @NonNull final AttachmentsApi attachmentsApi,
+    GodToolsDownloadManager(@NonNull final AttachmentsApi attachmentsApi,
                             @NonNull final TranslationsApi translationsApi, @NonNull final GodToolsDao dao,
                             @NonNull final EventBus eventBus, @NonNull final FileManager fileManager,
                             @NonNull final Settings settings) {
-        super(attachmentsApi, dao, eventBus, fileManager, settings);
-        mContext = context;
-        mTranslationsApi = translationsApi;
+        super(attachmentsApi, dao, eventBus, fileManager, settings, translationsApi);
         mDao = dao;
-        mEventBus = eventBus;
         mPrefs = settings;
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(GodToolsDownloadManager.class.getSimpleName()));
 
         // register with EventBus
-        mEventBus.register(this);
+        eventBus.register(this);
     }
 
     // region Lifecycle Events
@@ -122,54 +97,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
                 .map(TranslationKey::new)
                 .map(DownloadTranslationRunnable::new)
                 .ifPresent(mExecutor::execute));
-    }
-
-    @WorkerThread
-    void downloadLatestPublishedTranslation(@NonNull final TranslationKey key) {
-        // short-circuit if the resources directory isn't valid
-        if (!FileUtils.createGodToolsResourcesDir(mContext)) {
-            return;
-        }
-
-        // lock translation
-        synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            // process the most recent published version
-            final Query<Translation> query = Query.select(Translation.class)
-                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(key.getTool(), key.getLocale())
-                                   .and(TranslationTable.SQL_WHERE_PUBLISHED))
-                    .orderBy(TranslationTable.COLUMN_VERSION + " DESC")
-                    .limit(1);
-            final Translation translation = mDao.streamCompat(query).findFirst().orElse(null);
-
-            // only process this translation if it's not already downloaded
-            if (translation != null && !translation.isDownloaded()) {
-                // track the start of this download
-                startProgress(key);
-
-                try {
-                    final Response<ResponseBody> response = mTranslationsApi.download(translation.getId()).execute();
-                    if (response.isSuccessful()) {
-                        final ResponseBody body = response.body();
-                        if (body != null) {
-                            importTranslation(translation, body.byteStream(), body.contentLength());
-
-                            // prune any old translations
-                            pruneStaleTranslations();
-                        }
-                    }
-                } catch (final IOException ignored) {
-                }
-            }
-
-            // We always finish the download (even if we didn't start it) because of the following race condition:
-            //
-            // [1] enqueuePendingPublishedTranslations() loads the list of pending downloads from the database
-            // [2] downloadLatestPublishedTranslation() finishes downloading one of the translations loaded by [1]
-            // [1] enqueuePendingPublishedTranslations() triggers startProgress() on already downloaded translation
-            // [1] downloadLatestPublishedTranslation() short-circuits on the actual download logic
-            // [1] we still need to call finishDownload()
-            finishDownload(key);
-        }
     }
 
     // region Download & Cleaning Scheduling Methods
