@@ -250,6 +250,28 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
+    fun verifyDownloadToolBannerAttachments() {
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
+        whenever(fileManager.getFile(attachment)).thenReturn(file)
+
+        toolBannerAttachmentsChannel.sendBlocking(emptyList())
+        toolBannerAttachmentsChannel.sendBlocking(emptyList())
+        verify(dao, never()).find<Attachment>(attachment.id)
+
+        toolBannerAttachmentsChannel.sendBlocking(listOf(attachment))
+        // this will block until the previous list has been processed
+        toolBannerAttachmentsChannel.sendBlocking(emptyList())
+        assertArrayEquals(testData, file.readBytes())
+        verify(dao).find<Attachment>(attachment.id)
+        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
+        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(AttachmentUpdateEvent)
+        assertTrue(attachment.isDownloaded)
+    }
+
+    @Test
     fun verifyDownloadAttachment() {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
