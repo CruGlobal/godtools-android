@@ -30,7 +30,6 @@ import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -471,19 +470,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Cleanup
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal fun shutdown() {
+    internal suspend fun shutdown() {
         cleanupActor.close()
-        runBlocking {
-            staleAttachmentsJob.cancel()
-            toolBannerAttachmentsJob.cancel()
-            pinnedTranslationsJob.cancel()
-            val job = coroutineScope.coroutineContext[Job]
-            if (job is CompletableJob) job.complete()
-            job?.join()
-            staleAttachmentsJob.join()
-            toolBannerAttachmentsJob.join()
-            pinnedTranslationsJob.join()
-        }
+        staleAttachmentsJob.cancel()
+        toolBannerAttachmentsJob.cancel()
+        pinnedTranslationsJob.cancel()
+        val job = coroutineScope.coroutineContext[Job]
+        if (job is CompletableJob) job.complete()
+        job?.join()
+        staleAttachmentsJob.join()
+        toolBannerAttachmentsJob.join()
+        pinnedTranslationsJob.join()
     }
 
     @WorkerThread

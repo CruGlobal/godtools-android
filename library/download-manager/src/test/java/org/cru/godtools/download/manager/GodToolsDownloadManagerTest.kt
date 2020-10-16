@@ -125,7 +125,7 @@ class GodToolsDownloadManagerTest {
     fun cleanup() {
         staleAttachmentsChannel.close()
         toolBannerAttachmentsChannel.close()
-        downloadManager.shutdown()
+        runBlocking { downloadManager.shutdown() }
         testScope.cleanupTestCoroutines()
     }
 
