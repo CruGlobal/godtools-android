@@ -127,16 +127,6 @@ public final class GodToolsDownloadManager extends KotlinGodToolsDownloadManager
     }
 
     @AnyThread
-    public void removeTool(@NonNull final String code) {
-        final Tool tool = new Tool();
-        tool.setCode(code);
-        tool.setAdded(false);
-        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(this::pruneStaleTranslations, directExecutor());
-        update.addListener(new EventBusDelayedPost(mEventBus, ToolUpdateEvent.INSTANCE), directExecutor());
-    }
-
-    @AnyThread
     public void cacheTranslation(@NonNull final String code, @NonNull final Locale locale) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> mDao.streamCompat(
                 Query.select(Translation.class)

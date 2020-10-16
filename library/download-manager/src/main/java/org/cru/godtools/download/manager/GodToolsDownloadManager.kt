@@ -125,6 +125,17 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     }
 
     @AnyThread
+    fun unpinToolAsync(code: String) = coroutineScope.launch { unpinTool(code) }
+    suspend fun unpinTool(code: String) {
+        val tool = Tool().also {
+            it.code = code
+            it.isAdded = false
+        }
+        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+        eventBus.post(ToolUpdateEvent)
+    }
+
+    @AnyThread
     fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }
     suspend fun pinLanguage(locale: Locale) {
         val language = Language().apply {

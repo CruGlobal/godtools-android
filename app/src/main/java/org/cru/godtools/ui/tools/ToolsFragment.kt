@@ -199,7 +199,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     }
 
     internal fun removeFavorite(code: String?) {
-        code?.let { downloadManager.removeTool(it) }
+        code?.let { downloadManager.unpinToolAsync(it) }
     }
     // endregion Remove Favorite
 

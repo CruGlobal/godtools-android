@@ -117,7 +117,7 @@ class GodToolsDownloadManagerTest {
         testScope.cleanupTestCoroutines()
     }
 
-    // region pinTool()
+    // region pinTool()/unpinTool()
     @Test
     fun verifyPinTool() {
         runBlocking { downloadManager.pinTool(TOOL) }
@@ -140,7 +140,30 @@ class GodToolsDownloadManagerTest {
         }
         verify(eventBus).post(ToolUpdateEvent)
     }
-    // endregion pinTool()
+
+    @Test
+    fun verifyUnpinTool() {
+        runBlocking { downloadManager.unpinTool(TOOL) }
+        argumentCaptor<Tool> {
+            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
+            assertEquals(TOOL, firstValue.code)
+            assertFalse(firstValue.isAdded)
+        }
+        verify(eventBus).post(ToolUpdateEvent)
+    }
+
+    @Test
+    fun verifyUnpinToolAsync() {
+        runBlocking { downloadManager.unpinToolAsync(TOOL).join() }
+
+        argumentCaptor<Tool> {
+            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
+            assertEquals(TOOL, firstValue.code)
+            assertFalse(firstValue.isAdded)
+        }
+        verify(eventBus).post(ToolUpdateEvent)
+    }
+    // endregion pinTool()/unpinTool()
 
     // region pinLanguage()
     @Test
