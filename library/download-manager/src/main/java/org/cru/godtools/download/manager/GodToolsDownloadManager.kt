@@ -306,23 +306,21 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
     }
 
-    @WorkerThread
-    fun downloadLatestPublishedTranslation(key: TranslationKey) {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+    @VisibleForTesting
+    internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
+        if (!fileManager.createResourcesDir()) return
 
-        runBlocking {
-            translationsMutex.withLock(key) {
-                dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
-                    startProgress(key)
-                    try {
-                        translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
-                            body.byteStream().extractZipFor(trans, body.contentLength())
-                            pruneStaleTranslations()
-                        }
-                    } catch (ignored: IOException) {
-                    } finally {
-                        finishDownload(key)
+        translationsMutex.withLock(key) {
+            dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
+                startProgress(key)
+                try {
+                    translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
+                        body.byteStream().extractZipFor(trans, body.contentLength())
+                        pruneStaleTranslations()
                     }
+                } catch (ignored: IOException) {
+                } finally {
+                    finishDownload(key)
                 }
             }
         }

@@ -441,7 +441,7 @@ class GodToolsDownloadManagerTest {
             onBlocking { download(translation.id) } doReturn Response.success(response)
         }
 
-        downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation))
+        runBlocking { downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)) }
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
         runBlocking { verify(translationsApi).download(translation.id) }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
