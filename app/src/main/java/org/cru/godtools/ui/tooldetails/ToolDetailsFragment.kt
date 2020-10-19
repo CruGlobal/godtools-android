@@ -108,7 +108,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R
     }
 
     fun removeTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.removeTool(toolCode)
+        if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
     }
 
     fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {

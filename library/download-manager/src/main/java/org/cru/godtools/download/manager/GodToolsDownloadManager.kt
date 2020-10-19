@@ -6,7 +6,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import androidx.collection.ArrayMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.common.io.CountingInputStream
@@ -15,17 +14,22 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import java.util.zip.ZipInputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -38,9 +42,10 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
-import org.ccci.gto.android.common.util.ThreadUtils
 import org.cru.godtools.api.AttachmentsApi
+import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -68,30 +73,65 @@ internal const val CLEANUP_DELAY = HOUR_IN_MS
 @VisibleForTesting
 internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 
-open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor(
+@VisibleForTesting
+internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
+    .distinct(true)
+    .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
+    .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.isNull()))
+@VisibleForTesting
+internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
+    .distinct(true)
+    .join(
+        AttachmentTable.SQL_JOIN_TOOL.andOn(
+            ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
+                .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))
+        )
+    )
+    .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
+@VisibleForTesting
+internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
+    .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
+    .where(
+        LanguageTable.SQL_WHERE_ADDED
+            .and(ToolTable.FIELD_ADDED.eq(true))
+            .and(TranslationTable.SQL_WHERE_PUBLISHED)
+            .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
+    )
+    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+
+@Singleton
+class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fileManager: FileManager,
+    private val settings: Settings,
+    private val translationsApi: TranslationsApi,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
+    @Inject
     constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: FileManager
-    ) : this(attachmentsApi, dao, eventBus, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        fileManager: FileManager,
+        settings: Settings,
+        translationsApi: TranslationsApi
+    ) : this(
+        attachmentsApi,
+        dao,
+        eventBus,
+        fileManager,
+        settings,
+        translationsApi,
+        CoroutineScope(Dispatchers.Default + SupervisorJob())
+    )
 
     private val attachmentsMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val filesMutex = MutexMap()
-
-    // region TODO: Temporary migration logic
-    @JvmField
-    protected val LOCKS_TRANSLATION_DOWNLOADS = ArrayMap<TranslationKey, Any>()
-    protected fun enqueueCleanFilesystem() = coroutineScope.launch { cleanupActor.send(RunCleanup) }
-    // endregion TODO: Temporary migration logic
+    private val translationsMutex = MutexMap()
 
     // region Tool/Language pinning
     @AnyThread
@@ -106,11 +146,34 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     }
 
     @AnyThread
+    fun unpinToolAsync(code: String) = coroutineScope.launch { unpinTool(code) }
+    suspend fun unpinTool(code: String) {
+        val tool = Tool().also {
+            it.code = code
+            it.isAdded = false
+        }
+        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+        eventBus.post(ToolUpdateEvent)
+    }
+
+    @AnyThread
     fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }
     suspend fun pinLanguage(locale: Locale) {
         val language = Language().apply {
             code = locale
             isAdded = true
+        }
+        withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
+        eventBus.post(LanguageUpdateEvent)
+    }
+
+    suspend fun unpinLanguage(locale: Locale) {
+        if (settings.isLanguageProtected(locale)) return
+        if (settings.parallelLanguage == locale) settings.parallelLanguage = null
+
+        val language = Language().apply {
+            code = locale
+            isAdded = false
         }
         withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
         eventBus.post(LanguageUpdateEvent)
@@ -131,7 +194,7 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     @AnyThread
     @VisibleForTesting
-    fun startProgress(translation: TranslationKey) {
+    internal fun startProgress(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
     }
 
@@ -143,46 +206,51 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
 
     @AnyThread
     @VisibleForTesting
-    fun finishDownload(translation: TranslationKey) {
+    internal fun finishDownload(translation: TranslationKey) {
         getDownloadProgressLiveData(translation).postValue(null)
     }
     // endregion Download Progress
 
     // region Attachments
-    @WorkerThread
+    private val staleAttachmentsJob = coroutineScope.launch {
+        dao.getAsFlow(QUERY_STALE_ATTACHMENTS).collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
+    }
+    private val toolBannerAttachmentsJob = coroutineScope.launch {
+        dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
+            .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
+    }
+
     @VisibleForTesting
-    fun downloadAttachment(attachmentId: Long) {
-        runBlocking {
-            if (!fileManager.createResourcesDir()) return@runBlocking
+    internal suspend fun downloadAttachment(attachmentId: Long) {
+        if (!fileManager.createResourcesDir()) return
 
-            attachmentsMutex.withLock(attachmentId) {
-                val attachment: Attachment = dao.find(attachmentId) ?: return@runBlocking
-                val filename = attachment.localFilename ?: return@runBlocking
+        attachmentsMutex.withLock(attachmentId) {
+            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val filename = attachment.localFilename ?: return
 
-                filesystemMutex.read.withLock {
-                    filesMutex.withLock(filename) {
-                        val localFile = dao.find<LocalFile>(filename)
-                        if (attachment.isDownloaded && localFile != null) return@runBlocking
-                        attachment.isDownloaded = localFile != null
+            filesystemMutex.read.withLock {
+                filesMutex.withLock(filename) {
+                    val localFile = dao.find<LocalFile>(filename)
+                    if (attachment.isDownloaded && localFile != null) return
+                    attachment.isDownloaded = localFile != null
 
-                        if (localFile == null) {
-                            // create a new local file object
-                            try {
-                                // download attachment
-                                attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
-                                    ?.use {
-                                        val file = LocalFile(filename)
-                                        it.copyTo(file)
-                                        dao.updateOrInsert(file)
-                                        attachment.isDownloaded = true
-                                    }
-                            } catch (ignored: IOException) {
-                            }
+                    if (localFile == null) {
+                        // create a new local file object
+                        try {
+                            // download attachment
+                            attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
+                                ?.use {
+                                    val file = LocalFile(filename)
+                                    it.copyTo(file)
+                                    dao.updateOrInsert(file)
+                                    attachment.isDownloaded = true
+                                }
+                        } catch (ignored: IOException) {
                         }
-
-                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-                        eventBus.post(AttachmentUpdateEvent)
                     }
+
+                    dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                    eventBus.post(AttachmentUpdateEvent)
                 }
             }
         }
@@ -227,26 +295,29 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Attachments
 
     // region Translations
-    @WorkerThread
-    @Throws(IOException::class)
-    fun storeTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (runBlocking { !fileManager.createResourcesDir() }) return
+    private val pinnedTranslationsJob = coroutineScope.launch {
+        dao.getAsFlow(QUERY_PINNED_TRANSLATIONS)
+            .collect { it.map { launch { downloadLatestPublishedTranslation(TranslationKey(it)) } }.joinAll() }
+    }
 
-        // lock translation
-        val key = TranslationKey(translation)
-        synchronized(ThreadUtils.getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
-            runBlocking {
+    @AnyThread
+    fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
+        downloadLatestPublishedTranslation(TranslationKey(code, locale))
+    }
+
+    @VisibleForTesting
+    internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
+        if (!fileManager.createResourcesDir()) return
+
+        translationsMutex.withLock(key) {
+            dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
+                startProgress(key)
                 try {
-                    startProgress(key)
-                    filesystemMutex.read.withLock {
-                        // process the download
-                        zipStream.extractZipFor(translation, size)
-
-                        // mark translation as downloaded
-                        translation.isDownloaded = true
-                        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-                        eventBus.post(TranslationUpdateEvent)
+                    translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
+                        body.byteStream().extractZipFor(trans, body.contentLength())
+                        pruneStaleTranslations()
                     }
+                } catch (ignored: IOException) {
                 } finally {
                     finishDownload(key)
                 }
@@ -254,31 +325,77 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
         }
     }
 
-    @GuardedBy("filesystemMutex")
-    private suspend fun InputStream.extractZipFor(translation: Translation, zipSize: Long = -1L) {
+    suspend fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
         if (!fileManager.createResourcesDir()) return
 
-        val translationKey = TranslationKey(translation)
-        withContext(Dispatchers.IO) {
-            val count = CountingInputStream(this@extractZipFor)
-            ZipInputStream(count.buffered()).use { zin ->
-                while (true) {
-                    val ze = zin.nextEntry ?: break
-                    val filename = ze.name
-                    filesMutex.withLock(filename) {
-                        // write the file if it hasn't been downloaded before
-                        if (dao.find<LocalFile>(filename) == null) {
-                            val newFile = LocalFile(filename)
-                            zin.copyTo(newFile)
-                            dao.updateOrInsert(newFile)
-                        }
+        val key = TranslationKey(translation)
+        translationsMutex.withLock(TranslationKey(translation)) {
+            val current = dao.getLatestTranslation(key.tool, key.locale, isPublished = true, isDownloaded = true)
+            if (current != null && current.version >= translation.version) return
 
-                        // associate this file with this translation
-                        dao.updateOrInsert(TranslationFile(translation, filename))
+            startProgress(key)
+            try {
+                zipStream.extractZipFor(translation, size)
+            } finally {
+                finishDownload(key)
+            }
+        }
+    }
+
+    @GuardedBy("translationsMutex")
+    private suspend fun InputStream.extractZipFor(translation: Translation, size: Long) {
+        val key = TranslationKey(translation)
+        filesystemMutex.read.withLock {
+            val count = CountingInputStream(this)
+            withContext(Dispatchers.IO) {
+                ZipInputStream(count.buffered()).use { zin ->
+                    while (true) {
+                        val ze = zin.nextEntry ?: break
+                        val filename = ze.name
+                        filesMutex.withLock(filename) {
+                            // write the file if it hasn't been downloaded before
+                            if (dao.find<LocalFile>(filename) == null) {
+                                val newFile = LocalFile(filename)
+                                zin.copyTo(newFile)
+                                dao.updateOrInsert(newFile)
+                            }
+
+                            // associate this file with this translation
+                            dao.updateOrInsert(TranslationFile(translation, filename))
+                        }
+                        updateProgress(key, count.count, size)
                     }
-                    updateProgress(translationKey, count.count, zipSize)
                 }
             }
+
+            // mark translation as downloaded
+            translation.isDownloaded = true
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            eventBus.post(TranslationUpdateEvent)
+        }
+    }
+
+    @VisibleForTesting
+    internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
+        val changes = dao.transaction(true) {
+            val seen = mutableSetOf<TranslationKey>()
+            Query.select<Translation>()
+                .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                .get(dao).asSequence()
+                .filterNot { seen.add(TranslationKey(it)) }
+                .filter { it.isDownloaded }
+                .onEach {
+                    it.isDownloaded = false
+                    dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
+                }
+                .count()
+        }
+
+        // if any translations were updated, send a broadcast
+        if (changes > 0) {
+            eventBus.post(TranslationUpdateEvent)
+            cleanupActor.send(RunCleanup)
         }
     }
     // endregion Translations
@@ -353,8 +470,17 @@ open class KotlinGodToolsDownloadManager @VisibleForTesting internal constructor
     // endregion Cleanup
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal fun shutdown() {
+    internal suspend fun shutdown() {
         cleanupActor.close()
+        staleAttachmentsJob.cancel()
+        toolBannerAttachmentsJob.cancel()
+        pinnedTranslationsJob.cancel()
+        val job = coroutineScope.coroutineContext[Job]
+        if (job is CompletableJob) job.complete()
+        job?.join()
+        staleAttachmentsJob.join()
+        toolBannerAttachmentsJob.join()
+        pinnedTranslationsJob.join()
     }
 
     @WorkerThread

@@ -1,11 +1,4 @@
 android {
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [eventBusIndex: 'org.cru.godtools.download.manager.DownloadManagerEventBusIndex']
-            }
-        }
-    }
     buildFeatures {
         dataBinding = true
     }
@@ -38,5 +31,4 @@ dependencies {
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

@@ -173,7 +173,7 @@ internal class Tasks @Inject constructor(
                     withContext(Dispatchers.IO) {
                         try {
                             context.assets.open("translations/$file")
-                                .use { downloadManager.storeTranslation(translation, it, -1) }
+                                .use { downloadManager.importTranslation(translation, it, -1) }
                         } catch (e: IOException) {
                             Timber.tag(TAG).e(
                                 e, "Error importing bundled translation %s-%s-%d (%s)", tool.code, language.code,
