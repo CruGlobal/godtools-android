@@ -93,8 +93,12 @@ class Page : BaseModel, Styles {
     }
 
     @WorkerThread
-    internal constructor(manifest: Manifest, position: Int, fileName: String?, parser: XmlPullParser?) :
-        super(manifest) {
+    internal constructor(
+        manifest: Manifest,
+        position: Int,
+        fileName: String?,
+        parser: XmlPullParser?
+    ) : super(manifest) {
         this.position = position
         this.fileName = fileName
 
