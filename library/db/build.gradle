@@ -15,6 +15,7 @@ dependencies {
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    api "com.google.guava:guava:${deps.guava}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }
