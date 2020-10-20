@@ -15,9 +15,7 @@ class AemImport(@field:PrimaryKey val uri: Uri) {
     var lastProcessed = Date(0)
     var lastAccessed = Date(0)
 
-    fun isStale(): Boolean {
-        return lastProcessed.before(Date(System.currentTimeMillis() - STALE_AGE))
-    }
+    fun isStale() = lastProcessed.before(Date(System.currentTimeMillis() - STALE_AGE))
 
     @Entity(
         tableName = "aemImportArticles",
