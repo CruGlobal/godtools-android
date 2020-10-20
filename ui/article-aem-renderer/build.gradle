@@ -46,6 +46,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
