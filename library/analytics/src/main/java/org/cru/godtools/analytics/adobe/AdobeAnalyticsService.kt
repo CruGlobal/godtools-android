@@ -137,7 +137,7 @@ class AdobeAnalyticsService @Inject internal constructor(
     @WorkerThread
     private fun MutableMap<String, Any?>.baseContextData(guid: String?, event: AnalyticsBaseEvent? = null) {
         put(ADOBE_ATTR_APP_NAME, VALUE_GODTOOLS)
-        put(ADOBE_ATTR_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId())
+        put(ADOBE_ATTR_MARKETING_CLOUD_ID, adobeMarketingCloudId)
 
         put(ADOBE_ATTR_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN)
         if (guid != null) {

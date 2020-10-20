@@ -10,11 +10,11 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-async:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-coroutines:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-livedata:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    api "com.google.guava:guava:${deps.guava}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }

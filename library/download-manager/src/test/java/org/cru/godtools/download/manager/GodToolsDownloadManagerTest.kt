@@ -45,7 +45,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -186,7 +185,6 @@ class GodToolsDownloadManagerTest {
             assertEquals(Locale.FRENCH, firstValue.code)
             assertTrue(firstValue.isAdded)
         }
-        verify(eventBus).post(LanguageUpdateEvent)
     }
 
     @Test
@@ -198,7 +196,6 @@ class GodToolsDownloadManagerTest {
             assertEquals(Locale.FRENCH, firstValue.code)
             assertTrue(firstValue.isAdded)
         }
-        verify(eventBus).post(LanguageUpdateEvent)
     }
 
     @Test
@@ -209,7 +206,6 @@ class GodToolsDownloadManagerTest {
             assertEquals(Locale.FRENCH, firstValue.code)
             assertFalse(firstValue.isAdded)
         }
-        verify(eventBus).post(LanguageUpdateEvent)
     }
     // endregion pinLanguage()/unpinLanguage()
 

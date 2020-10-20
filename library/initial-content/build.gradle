@@ -28,6 +28,7 @@ dependencies {
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"

@@ -40,13 +40,16 @@ interface ArticleDao {
     fun insertOrIgnore(articleResource: Article.ArticleResource)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         UPDATE articles
         SET
             uuid = :uuid,
             title = :title,
             canonicalUri = :canonicalUri
-        WHERE uri = :uri""")
+        WHERE uri = :uri
+        """
+    )
     fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
 
     @WorkerThread
@@ -58,14 +61,20 @@ interface ArticleDao {
     fun removeAllTags(articleUri: Uri)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         DELETE FROM articleResources
-        WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)""")
+        WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)
+        """
+    )
     fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM articles
-        WHERE uri NOT IN (SELECT articleUri FROM aemImportArticles)""")
+        WHERE uri NOT IN (SELECT articleUri FROM aemImportArticles)
+        """
+    )
     fun removeOrphanedArticles()
 
     @WorkerThread
@@ -77,20 +86,26 @@ interface ArticleDao {
     fun findLiveData(uri: Uri?): LiveData<Article?>
 
     @AnyThread
-    @Query("""
+    @Query(
+        """
         SELECT DISTINCT a.*
         FROM $GET_ARTICLES_FROM
         WHERE $GET_ARTICLES_WHERE
-        ORDER BY a.title""")
+        ORDER BY a.title
+        """
+    )
     fun getArticles(tool: String, locale: Locale): LiveData<List<Article>>
 
     @AnyThread
-    @Query("""
+    @Query(
+        """
         SELECT DISTINCT a.*
         FROM $GET_ARTICLES_FROM
              JOIN articleTags AS tag ON tag.articleUri = a.uri
         WHERE $GET_ARTICLES_WHERE AND
             tag.tag IN (:tags)
-        ORDER BY a.title""")
+        ORDER BY a.title
+        """
+    )
     fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
 }

@@ -93,8 +93,12 @@ class Page : BaseModel, Styles {
     }
 
     @WorkerThread
-    internal constructor(manifest: Manifest, position: Int, fileName: String?, parser: XmlPullParser?) :
-        super(manifest) {
+    internal constructor(
+        manifest: Manifest,
+        position: Int,
+        fileName: String?,
+        parser: XmlPullParser?
+    ) : super(manifest) {
         this.position = position
         this.fileName = fileName
 
@@ -109,8 +113,7 @@ class Page : BaseModel, Styles {
         backgroundColor = parser?.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
         _backgroundImage = parser?.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
-            parser?.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
-                ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
+            parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser?.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 

@@ -54,7 +54,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.LanguageUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -164,7 +163,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             isAdded = true
         }
         withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
-        eventBus.post(LanguageUpdateEvent)
     }
 
     suspend fun unpinLanguage(locale: Locale) {
@@ -176,7 +174,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             isAdded = false
         }
         withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
-        eventBus.post(LanguageUpdateEvent)
     }
     // endregion Tool/Language pinning
 

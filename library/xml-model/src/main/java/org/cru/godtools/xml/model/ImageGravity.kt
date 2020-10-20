@@ -36,7 +36,7 @@ inline class ImageGravity(internal val gravity: Int) {
 
         internal val NONE = ImageGravity(0)
 
-        fun parse(raw: String?, defaultGravity: ImageGravity = CENTER): ImageGravity {
+        internal fun parse(raw: String?, defaultGravity: ImageGravity = CENTER): ImageGravity {
             if (raw == null) return defaultGravity
 
             try {
@@ -81,5 +81,5 @@ inline class ImageGravity(internal val gravity: Int) {
     }
 }
 
-fun XmlPullParser.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
-    ImageGravity.parse(getAttributeValue(null, name), defaultGravity)
+internal fun XmlPullParser?.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
+    ImageGravity.parse(this?.getAttributeValue(null, name), defaultGravity)
