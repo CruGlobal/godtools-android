@@ -27,7 +27,7 @@ buildscript {
                 leakcanary         : '2.5',
                 lottie             : '3.4.4',
                 materialDesign     : '1.2.1',
-                mockito            : '3.5.13',
+                mockito            : '3.5.15',
                 mockitoKotlin      : '2.1.0',
                 moshi              : '1.11.0',
                 okhttp3            : '3.12.12',
