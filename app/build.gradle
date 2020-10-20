@@ -111,7 +111,9 @@ android {
     ]
     sourceSets {
         qa {
-            setRoot 'src/debug'
+            java.srcDir 'src/debug/java'
+            res.srcDir 'src/debug/res/values'
+            manifest.srcFile 'src/debug/AndroidManifest.xml'
         }
     }
 }
