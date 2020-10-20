@@ -29,8 +29,11 @@ import splitties.fragmentargs.argOrNull
 @AndroidEntryPoint
 class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
-    constructor(code: String, locale: Locale, category: String? = null) :
-        super(R.layout.fragment_articles, code, locale) {
+    constructor(
+        code: String,
+        locale: Locale,
+        category: String? = null
+    ) : super(R.layout.fragment_articles, code, locale) {
         this.category = category
     }
 
