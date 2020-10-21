@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.tinder.StateMachine
 import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.filter
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.model.Identifier
@@ -23,6 +23,7 @@ import timber.log.Timber
 
 private const val TAG = "TractSubscribrControllr"
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TractSubscriberController @ViewModelInject internal constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle
@@ -63,9 +64,9 @@ class TractSubscriberController @ViewModelInject internal constructor(
                     }
 
                     launch(Dispatchers.Main) {
-                        navigationEventsChannel
-                            .filter { it.identifier == identifier }
-                            .consumeEach { receivedEvent.value = it.data }
+                        navigationEventsChannel.consumeEach {
+                            if (it.identifier == identifier) receivedEvent.value = it.data
+                        }
                     }
                 }
             }
