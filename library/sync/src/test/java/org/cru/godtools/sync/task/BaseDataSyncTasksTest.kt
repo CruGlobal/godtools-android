@@ -44,7 +44,7 @@ class BaseDataSyncTasksTest {
         }
 
         // run test
-        tasks.storeLanguage(events, language)
+        tasks.storeLanguage(language)
         verify(dao).refresh(same(language))
         verify(dao, never()).update(any<Any>(), anyOrNull<Expression>(), any<String>())
         verify(dao).updateOrInsert(same(language), eq(SQLiteDatabase.CONFLICT_REPLACE), any())
@@ -68,7 +68,7 @@ class BaseDataSyncTasksTest {
         whenever(dao.getPrimaryKeyWhere(eq(originalLanguage))).thenReturn(pk)
 
         // run test
-        tasks.storeLanguage(events, language)
+        tasks.storeLanguage(language)
         verify(dao).refresh(same(language))
         verify(dao).update(same(language), same(pk), eq(LanguageTable.COLUMN_CODE))
         verify(dao).updateOrInsert(same(language), eq(SQLiteDatabase.CONFLICT_REPLACE), any())

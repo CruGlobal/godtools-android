@@ -81,13 +81,9 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     // endregion Tools
 
     // region Languages
-    protected fun storeLanguages(
-        events: SimpleArrayMap<Class<*>, Any>,
-        languages: List<Language>,
-        existing: MutableMap<Locale, Language>?
-    ) {
+    protected fun storeLanguages(languages: List<Language>, existing: MutableMap<Locale, Language>?) {
         languages.forEach {
-            storeLanguage(events, it)
+            storeLanguage(it)
             existing?.remove(it.code)
         }
 
@@ -96,7 +92,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     }
 
     @VisibleForTesting
-    internal fun storeLanguage(events: SimpleArrayMap<Class<*>, Any>, language: Language) {
+    internal fun storeLanguage(language: Language) {
         // this language doesn't exist yet, check to see if a different language shares the same id
         if (language.id != Base.INVALID_ID && dao.refresh(language) == null) {
             // update the language code to preserve the added state
@@ -145,7 +141,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         )
         coalesceEvent(events, TranslationUpdateEvent)
 
-        if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(events, it) }
+        if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
     }
     // endregion Translations
 

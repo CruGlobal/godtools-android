@@ -1,7 +1,6 @@
 package org.cru.godtools.sync.task
 
 import android.os.Bundle
-import androidx.collection.SimpleArrayMap
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +38,6 @@ class LanguagesSyncTasks @Inject internal constructor(
 
             // fetch & store languages
             languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body()?.let { json ->
-                val events = SimpleArrayMap<Class<*>, Any>()
                 dao.transaction {
                     val existing = dao.get(Query.select<Language>())
                         .groupingBy { it.code }
@@ -55,10 +53,9 @@ class LanguagesSyncTasks @Inject internal constructor(
                             lang1
                         }
                         .toMutableMap()
-                    storeLanguages(events, json.data, existing)
+                    storeLanguages(json.data, existing)
                 }
 
-                sendEvents(events)
                 dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
             } ?: return@withContext false
         }
