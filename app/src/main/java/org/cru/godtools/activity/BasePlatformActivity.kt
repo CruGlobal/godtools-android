@@ -25,7 +25,6 @@ import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import me.thekey.android.TheKey
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -76,8 +75,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     @Inject
     @Named(IS_AUTHENTICATED_LIVE_DATA)
     internal lateinit var isAuthenticatedLiveData: LiveData<Boolean>
-    @Inject
-    protected lateinit var theKey: TheKey
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
