@@ -73,7 +73,7 @@
                     <include
                         android:id="@+id/hero"
                         layout="@layout/tract_page_hero"
-                        app:hero="@{page.hero}" />
+                        app:model="@{page.hero}" />
                 </LinearLayout>
             </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 
