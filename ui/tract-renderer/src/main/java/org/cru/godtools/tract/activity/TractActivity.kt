@@ -22,6 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
@@ -39,7 +40,6 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.view.bindBackgroundImage
-import org.cru.godtools.base.ui.fragment.showAllowingStateLoss
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE

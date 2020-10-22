@@ -7,7 +7,7 @@
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.HeroController" />
-        <variable name="hero" type="org.cru.godtools.xml.model.Hero" />
+        <variable name="model" type="org.cru.godtools.xml.model.Hero" />
     </data>
 
     <LinearLayout
@@ -17,7 +17,7 @@
         android:layout_marginLeft="@dimen/horiz_margin_hero"
         android:layout_marginRight="@dimen/horiz_margin_hero"
         android:orientation="vertical"
-        app:visibleIf="@{hero != null}">
+        app:visibleIf="@{model != null}">
 
         <TextView
             android:id="@+id/hero_heading"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:saveEnabled="false"
-            android:text="@{hero.heading}"
+            android:text="@{model.heading}"
             android:textIsSelectable="true"
             android:textSize="@{@dimen/text_size_hero_heading}"
-            app:defaultTextColor="@{StylesKt.getPrimaryColor(hero)}"
-            app:visibleIf="@{hero.heading != null}"
+            app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
+            app:visibleIf="@{model.heading != null}"
             tools:text="Knowing God Personally"
             tools:textSize="@dimen/text_size_hero_heading" />
 
