@@ -6,3 +6,4 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 object ToolOpenedAnalyticsActionEvent : AnalyticsActionEvent("tool-opened", system = AnalyticsSystem.APPSFLYER)
 object FirstToolOpenedAnalyticsActionEvent :
     AnalyticsActionEvent("first-tool-opened", system = AnalyticsSystem.APPSFLYER)
+object ToolOpenedViaShortcutAnalyticsActionEvent : AnalyticsActionEvent("tool-opened-shortcut", system = AnalyticsSystem.APPSFLYER)
