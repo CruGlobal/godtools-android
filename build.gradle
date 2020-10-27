@@ -183,6 +183,12 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'com.android.library'
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
+
+    android {
+        defaultConfig {
+            manifestPlaceholders = [appAuthRedirectScheme: "org.cru.godtools.library.test"]
+        }
+    }
 }
 
 // base feature plugins
