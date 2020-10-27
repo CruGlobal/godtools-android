@@ -15,6 +15,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.isAuthenticatedLiveData
 import org.ccci.gto.android.common.okta.oidc.net.OkHttpOktaHttpClient
 import org.ccci.gto.android.common.okta.oidc.storage.makeChangeAware
@@ -56,4 +57,8 @@ object OktaModule {
     @Provides
     @Reusable
     fun WebAuthClient.oktaSession() = sessionClient
+
+    @Provides
+    @Singleton
+    fun SessionClient.oktaUserProfileProvider() = OktaUserProfileProvider(this)
 }

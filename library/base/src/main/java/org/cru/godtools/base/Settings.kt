@@ -148,11 +148,17 @@ class Settings @Inject internal constructor(
     // endregion Feature Discovery Tracking
 
     // region Campaign Tracking
-    fun isAddedToCampaign(guid: String) =
-        prefs.getBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), false)
+    fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {
+        oktaId == null && guid == null -> true
+        oktaId?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", false) } == true -> true
+        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", false) } == true -> true
+        else -> false
+    }
 
-    fun setAddedToCampaign(guid: String, added: Boolean) =
-        prefs.edit { putBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), added) }
+    fun recordAddedToCampaign(oktaId: String? = null, guid: String? = null) = prefs.edit {
+        if (oktaId != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", true)
+        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", true)
+    }
     // endregion Campaign Tracking
 
     // region Launch tracking
