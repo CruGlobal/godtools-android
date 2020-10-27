@@ -65,7 +65,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         setupStatusBar()
 
         // track if activity was launched by a shortcut
-        if(savedInstanceState == null && shortcutLaunch) {
+        if (savedInstanceState == null && shortcutLaunch) {
             eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
         }
     }
