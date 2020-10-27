@@ -39,6 +39,7 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.article.ui.categories.createCategoriesIntent
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.base.util.getGodToolsFile
@@ -273,7 +274,9 @@ class GodToolsShortcutManager @Inject constructor(
             Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
             Tool.Type.ARTICLE -> context.createCategoriesIntent(code, locales[0])
             else -> return@withContext null
-        }.apply { action = Intent.ACTION_VIEW }
+        }
+        intent.action = Intent.ACTION_VIEW
+        intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
         val label = LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH).asSequence()
