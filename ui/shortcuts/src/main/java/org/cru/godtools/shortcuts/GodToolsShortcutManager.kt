@@ -274,7 +274,9 @@ class GodToolsShortcutManager @Inject constructor(
             Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
             Tool.Type.ARTICLE -> context.createCategoriesIntent(code, locales[0])
             else -> return@withContext null
-        }.apply { action = Intent.ACTION_VIEW; putExtra(SHORTCUT_LAUNCH, true) }
+        }
+        intent.action = Intent.ACTION_VIEW
+        intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
         val label = LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH).asSequence()

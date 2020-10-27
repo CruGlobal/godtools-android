@@ -64,7 +64,12 @@ import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
-import org.cru.godtools.xml.model.*
+import org.cru.godtools.xml.model.Card
+import org.cru.godtools.xml.model.Modal
+import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.backgroundColor
+import org.cru.godtools.xml.model.navBarColor
+import org.cru.godtools.xml.model.navBarControlColor
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -81,8 +86,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     internal lateinit var followupService: FollowupService
 
     private val showTips get() = intent?.getBooleanExtra(EXTRA_SHOW_TIPS, false) ?: false
-
-    private val shortCutLaunch get() = intent?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,11 +105,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
 
         // track this view
         if (savedInstanceState == null) dataModel.tool.value?.let { trackToolOpen(it) }
-
-        // track if activity was launched by a shortcut
-        if(shortCutLaunch) {
-            eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
-        }
 
         setupDataModel()
         setupActiveTranslationManagement()

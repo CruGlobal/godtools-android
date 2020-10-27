@@ -29,9 +29,11 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
+import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
@@ -54,11 +56,18 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
 
+    private val shortcutLaunch get() = intent?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
+
+        // track if activity was launched by a shortcut
+        if(savedInstanceState == null && shortcutLaunch) {
+            eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
+        }
     }
 
     @CallSuper

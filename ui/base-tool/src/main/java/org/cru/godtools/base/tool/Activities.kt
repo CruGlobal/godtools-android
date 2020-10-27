@@ -14,7 +14,7 @@ private const val ACTIVITY_CLASS_TRACT = "org.cru.godtools.tract.activity.TractA
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.tract.activity.TractActivity.SHOW_TIPS"
 
-const val SHORTCUT_LAUNCH = "org.cru.goodtools.tract.activity.TractActivity.SHORTCUT_LAUNCH"
+const val SHORTCUT_LAUNCH = "org.cru.godtools.tool.SHORTCUT_LAUNCH"
 
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
     startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
