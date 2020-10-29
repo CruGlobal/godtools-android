@@ -151,7 +151,6 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:sync')
 
-    implementation project(':ui:account')
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:shortcuts')
