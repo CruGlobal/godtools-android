@@ -39,6 +39,13 @@
 
     <dist:module dist:instant="true" />
 
+    <queries>
+        <!-- Used by the Okta OIDC SDK for logging in -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".GodToolsApplication"
         android:allowBackup="false"
