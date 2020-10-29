@@ -3,15 +3,19 @@ package org.cru.godtools.analytics.firebase
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.karumi.weak.weak
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.TheKey
-import me.thekey.android.eventbus.event.TheKeyEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -28,8 +32,9 @@ private const val VALUE_APP_TYPE_INSTALLED = "installed"
 class FirebaseAnalyticsService @MainThread @Inject internal constructor(
     app: Application,
     eventBus: EventBus,
-    private val theKey: TheKey
+    oktaUserProfileProvider: OktaUserProfileProvider
 ) : Application.ActivityLifecycleCallbacks {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val firebase = FirebaseAnalytics.getInstance(app)
 
     // region Tracking Events
@@ -45,10 +50,6 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
     }
-
-    @AnyThread
-    @Subscribe
-    fun onTheKeyEvent(@Suppress("UNUSED_PARAMETER") event: TheKeyEvent) = updateUser()
 
     // region ActivityLifecycleCallbacks
     init {
@@ -73,11 +74,6 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
     // endregion ActivityLifecycleCallbacks
     // endregion Tracking Events
 
-    @AnyThread
-    private fun updateUser() {
-        firebase.setUserId(theKey.defaultSessionGuid)
-    }
-
     @MainThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
         currentActivity?.let { firebase.setCurrentScreen(it, event.screen, null) }
@@ -89,7 +85,11 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
     }
 
     init {
-        updateUser()
+        oktaUserProfileProvider.userInfoFlow()
+            .mapNotNull { it?.ssoGuid }
+            .onEach { firebase.setUserId(it) }
+            .launchIn(coroutineScope)
+
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )
