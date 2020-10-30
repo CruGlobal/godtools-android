@@ -21,4 +21,5 @@ class ToggleLanguageAnalyticsActionEvent(tool: String?, locale: Locale) :
         put(ADOBE_ATTR_TOGGLE_LANGUAGE, 1)
         put(ADOBE_ATTR_LANGUAGE_SECONDARY, toLanguageTag(locale))
     }
+    override val firebaseEventName = "parallel_language_toggled"
 }

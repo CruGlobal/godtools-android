@@ -13,7 +13,11 @@ const val ADOBE_TUTORIAL_HOME_DISMISS = "cru.tutorial_home_dismiss"
 
 class TutorialAnalyticsActionEvent(action: String) : AnalyticsActionEvent(action = action) {
     override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.ADOBE
-
+    override val firebaseEventName = when (action) {
+        ACTION_TUTORIAL_ONBOARDING_TRAINING -> "on_boarding_more"
+        ACTION_TUTORIAL_ONBOARDING_FINISH -> "on_boarding_start"
+        else -> super.firebaseEventName
+    }
     override val adobeSiteSection get() = ADOBE_SITE_SECTION_TUTORIAL
     @OptIn(ExperimentalStdlibApi::class)
     override val adobeAttributes = buildMap<String, Int> {

@@ -40,7 +40,7 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
+        if (event.isForSystem(AnalyticsSystem.FIREBASE) || event.isForSystem(AnalyticsSystem.ADOBE)) when (event) {
             is AnalyticsScreenEvent -> handleScreenEvent(event)
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
@@ -80,7 +80,11 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
 
     @MainThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
-        currentActivity?.let { firebase.setCurrentScreen(it, event.screen, null) }
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
+        currentActivity?.let {
+            firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
 
     @MainThread
