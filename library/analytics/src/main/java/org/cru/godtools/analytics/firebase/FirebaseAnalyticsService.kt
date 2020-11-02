@@ -82,9 +82,7 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
-        currentActivity?.let {
-            firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
+        firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
     @MainThread
