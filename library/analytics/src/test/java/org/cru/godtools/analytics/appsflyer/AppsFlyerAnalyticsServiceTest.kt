@@ -40,13 +40,13 @@ class AppsFlyerAnalyticsServiceTest {
         analyticsService = AppsFlyerAnalyticsService(application, eventBus, setOf(deepLinkResolver))
     }
 
-    // region onAppOpenAttribution()
+    // region conversionListener.onAppOpenAttribution()
     @Test
     fun verifyOnAppOpenAttributionCallsResolverWithUri() {
         val uri = Uri.parse("https://example.com")
         val data = mapOf(AF_DP to uri.toString())
 
-        analyticsService.onAppOpenAttribution(data)
+        analyticsService.conversionListener.onAppOpenAttribution(data)
         verify(deepLinkResolver).resolve(any(), eq(uri), same(data))
     }
 
@@ -54,7 +54,7 @@ class AppsFlyerAnalyticsServiceTest {
     fun verifyOnAppOpenAttributionCallsResolverWithoutUrl() {
         val data = emptyMap<String, String>()
 
-        analyticsService.onAppOpenAttribution(data)
+        analyticsService.conversionListener.onAppOpenAttribution(data)
         verify(deepLinkResolver).resolve(any(), isNull(), same(data))
     }
 
@@ -64,7 +64,7 @@ class AppsFlyerAnalyticsServiceTest {
         analyticsService.onActivityResumed(activity)
         whenever(deepLinkResolver.resolve(any(), anyOrNull(), any())).thenReturn(intent)
 
-        analyticsService.onAppOpenAttribution(emptyMap())
+        analyticsService.conversionListener.onAppOpenAttribution(emptyMap())
         verify(activity).startActivity(intent)
     }
 
@@ -73,8 +73,8 @@ class AppsFlyerAnalyticsServiceTest {
         analyticsService.onActivityResumed(activity)
         whenever(deepLinkResolver.resolve(any(), anyOrNull(), any())).thenReturn(null)
 
-        analyticsService.onAppOpenAttribution(emptyMap())
+        analyticsService.conversionListener.onAppOpenAttribution(emptyMap())
         verify(activity, never()).startActivity(any())
     }
-    // endregion onAppOpenAttribution()
+    // endregion conversionListener.onAppOpenAttribution()
 }

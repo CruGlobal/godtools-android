@@ -42,23 +42,8 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
     private val app: Application,
     eventBus: EventBus,
     private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
-) : Application.ActivityLifecycleCallbacks, AppsFlyerConversionListener {
+) : Application.ActivityLifecycleCallbacks {
     private val appsFlyer: AppsFlyerLib = AppsFlyerLib.getInstance()
-
-    init {
-        appsFlyer.apply {
-            if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
-            init(BuildConfig.APPSFLYER_DEV_KEY, this@AppsFlyerAnalyticsService, app)
-            startTracking(app)
-        }
-        app.registerActivityLifecycleCallbacks(this)
-        eventBus.register(this)
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val mcId = adobeMarketingCloudId
-            withContext(Dispatchers.Main) { appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId)) }
-        }
-    }
 
     // region Analytics Events
     @WorkerThread
@@ -92,24 +77,42 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
     // endregion Application.ActivityLifecycleCallbacks
 
     // region AppsFlyerConversionListener
-    override fun onConversionDataSuccess(data: Map<String, Any?>) {
-        Timber.tag(TAG).d("onConversionDataSuccess($data)")
-        if (data[IS_FIRST_LAUNCH] == true && data[AF_STATUS] == STATUS_NON_ORGANIC) {
-            onAppOpenAttribution(mapOf(AF_DP to data[AF_DP] as? String))
+    @VisibleForTesting
+    internal val conversionListener = object : AppsFlyerConversionListener {
+        override fun onConversionDataSuccess(data: Map<String, Any?>) {
+            Timber.tag(TAG).d("onConversionDataSuccess($data)")
+            if (data[IS_FIRST_LAUNCH] == true && data[AF_STATUS] == STATUS_NON_ORGANIC) {
+                onAppOpenAttribution(mapOf(AF_DP to data[AF_DP] as? String))
+            }
         }
-    }
 
-    override fun onAppOpenAttribution(data: Map<String, String?>) {
-        Timber.tag(TAG).d("onAppOpenAttribution($data)")
-        val uri = data[AF_DP]?.let { Uri.parse(it) }
-        deepLinkResolvers.asSequence().mapNotNull { it.resolve(app, uri, data) }.firstOrNull()?.let { intent ->
-            activeActivity?.startActivity(intent)
+        override fun onAppOpenAttribution(data: Map<String, String?>) {
+            Timber.tag(TAG).d("onAppOpenAttribution($data)")
+            val uri = data[AF_DP]?.let { Uri.parse(it) }
+            deepLinkResolvers.asSequence().mapNotNull { it.resolve(app, uri, data) }.firstOrNull()?.let { intent ->
+                activeActivity?.startActivity(intent)
+            }
         }
-    }
 
-    override fun onConversionDataFail(error: String) = Unit
-    override fun onAttributionFailure(error: String) = Unit
+        override fun onConversionDataFail(error: String) = Unit
+        override fun onAttributionFailure(error: String) = Unit
+    }
     // endregion AppsFlyerConversionListener
+
+    init {
+        appsFlyer.apply {
+            if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
+            init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
+            startTracking(app)
+        }
+        app.registerActivityLifecycleCallbacks(this)
+        eventBus.register(this)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val mcId = adobeMarketingCloudId
+            withContext(Dispatchers.Main) { appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId)) }
+        }
+    }
 }
 
 interface AppsFlyerDeepLinkResolver {
