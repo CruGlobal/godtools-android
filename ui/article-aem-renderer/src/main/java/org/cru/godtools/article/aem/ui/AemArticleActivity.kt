@@ -102,21 +102,17 @@ class AemArticleActivity :
         return true
     }
 
-    private fun processDeepLink(): Uri? {
-        return when {
-            isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
-            else -> null
-        }
+    private fun processDeepLink() = when {
+        isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+        else -> null
     }
 
-    private fun isValidDeepLink(): Boolean {
-        return intent?.action == Intent.ACTION_VIEW &&
-                intent.data?.run {
-                    (scheme == "http" || scheme == "https") &&
-                            host == "godtoolsapp.com" &&
-                            path == "/article/aem"
-                } == true
-    }
+    private fun isValidDeepLink() = intent?.action == Intent.ACTION_VIEW &&
+        intent.data?.let {
+            (it.scheme == "http" || it.scheme == "https") &&
+                it.host == "godtoolsapp.com" &&
+                it.path == "/article/aem"
+        } == true
 
     private val dataModel: AemArticleViewModel by viewModels()
 
