@@ -26,7 +26,7 @@ abstract class Content : BaseModel {
     /**
      * @return true if this content element should be completely ignored.
      */
-    val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
+    val isIgnored get() = !restrictTo.contains(DeviceType.ANDROID) && !restrictTo.contains(DeviceType.MOBILE)
 
     open val tips get() = emptyList<Tip>()
 

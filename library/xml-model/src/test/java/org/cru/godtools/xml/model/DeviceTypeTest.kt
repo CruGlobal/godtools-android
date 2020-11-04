@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.sameInstance
 import org.junit.Assert.assertEquals
@@ -12,17 +13,22 @@ class DeviceTypeTest {
     fun verifyParseSingle() {
         assertNull(DeviceType.parseSingle(null))
         assertEquals(DeviceType.UNKNOWN, DeviceType.parseSingle("hjasdf"))
+        assertEquals(DeviceType.ANDROID, DeviceType.parseSingle(DeviceType.XML_DEVICE_TYPE_ANDROID))
         assertEquals(DeviceType.MOBILE, DeviceType.parseSingle(DeviceType.XML_DEVICE_TYPE_MOBILE))
     }
 
     @Test
     fun verifyParse() {
-        val defValue: Set<DeviceType> = mutableSetOf()
+        val defValue = mutableSetOf<DeviceType>()
         assertThat(DeviceType.parse(null, defValue), sameInstance(defValue))
-        assertThat(DeviceType.parse("aljksdf ajklsdfa awe", defValue), containsInAnyOrder(DeviceType.UNKNOWN))
+        assertThat(DeviceType.parse("aljksdf ajklsdfa awe", defValue), contains(DeviceType.UNKNOWN))
         assertThat(
             DeviceType.parse("${DeviceType.XML_DEVICE_TYPE_MOBILE} ajklsdfa awe", defValue),
             containsInAnyOrder(DeviceType.MOBILE, DeviceType.UNKNOWN)
+        )
+        assertThat(
+            DeviceType.parse("${DeviceType.XML_DEVICE_TYPE_ANDROID} ${DeviceType.XML_DEVICE_TYPE_MOBILE} aw", defValue),
+            containsInAnyOrder(DeviceType.ANDROID, DeviceType.MOBILE, DeviceType.UNKNOWN)
         )
     }
 }
