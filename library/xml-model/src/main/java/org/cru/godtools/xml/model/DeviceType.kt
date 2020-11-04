@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import java.util.Collections
 import java.util.EnumSet
 
-enum class DeviceType {
+internal enum class DeviceType {
     ANDROID, MOBILE, UNKNOWN;
 
     companion object {
@@ -23,9 +23,9 @@ enum class DeviceType {
             else -> UNKNOWN
         }
 
-        internal fun parse(types: String?, defValue: Set<DeviceType>) = when {
-            types != null -> REGEX_SEQUENCE_SEPARATOR.split(types).mapNotNullTo(mutableSetOf()) { parseSingle(it) }
-            else -> defValue
+        internal fun parseOrNull(types: String?) = when (types) {
+            null -> null
+            else -> REGEX_SEQUENCE_SEPARATOR.split(types).mapNotNullTo(mutableSetOf()) { parseSingle(it) }
         }
     }
 }
