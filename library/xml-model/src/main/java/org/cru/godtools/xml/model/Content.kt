@@ -17,7 +17,7 @@ abstract class Content : BaseModel {
     }
 
     protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
-        restrictTo = DeviceType.parseOrNull(parser.getAttributeValue(null, XML_RESTRICT_TO)) ?: DeviceType.ALL
+        restrictTo = parser.getAttributeValueAsDeviceTypesOrNull(XML_RESTRICT_TO) ?: DeviceType.ALL
     }
 
     /**

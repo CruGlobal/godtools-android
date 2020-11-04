@@ -3,6 +3,7 @@ package org.cru.godtools.xml.model
 import androidx.annotation.VisibleForTesting
 import java.util.Collections
 import java.util.EnumSet
+import org.xmlpull.v1.XmlPullParser
 
 internal enum class DeviceType {
     ANDROID, MOBILE, UNKNOWN;
@@ -29,3 +30,6 @@ internal enum class DeviceType {
         }
     }
 }
+
+internal fun XmlPullParser.getAttributeValueAsDeviceTypesOrNull(name: String) =
+    DeviceType.parseOrNull(getAttributeValue(null, name))
