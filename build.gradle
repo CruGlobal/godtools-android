@@ -12,7 +12,7 @@ buildscript {
                 dagger             : '2.29.1',
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
-                facebookFlipper    : '0.63.0',
+                facebookFlipper    : '0.64.0',
                 findbugs           : '3.0.2',
                 gradleAndroidPlugin: '4.1.0',
                 gtoSupport         : '3.7.0-SNAPSHOT',
