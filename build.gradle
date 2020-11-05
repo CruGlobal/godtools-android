@@ -23,7 +23,7 @@ buildscript {
                 jsoup              : '1.13.1',
                 junit              : '4.13.1',
                 kotlin             : '1.4.10',
-                kotlinCoroutines   : '1.4.0',
+                kotlinCoroutines   : '1.4.1',
                 leakcanary         : '2.5',
                 lightweightStream  : '1.2.1',
                 lottie             : '3.4.4',
