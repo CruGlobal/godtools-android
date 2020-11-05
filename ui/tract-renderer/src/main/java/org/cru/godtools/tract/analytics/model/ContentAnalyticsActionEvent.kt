@@ -5,7 +5,7 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.xml.model.AnalyticsEvent
 import timber.log.Timber
 
-const val TAG = "ContentAnalyticsActionEvent"
+const val TAG = "ContentAnalyticsEvent"
 
 class ContentAnalyticsActionEvent(private val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty()) {
