@@ -14,6 +14,8 @@ import com.snowplowanalytics.snowplow.tracker.events.Event
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView
 import com.snowplowanalytics.snowplow.tracker.events.Structured
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
+import com.snowplowanalytics.snowplow.tracker.utils.LogLevel
+import com.snowplowanalytics.snowplow.tracker.utils.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,6 +27,7 @@ import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.snowplow.utils.TimberLogger
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -72,10 +75,12 @@ class SnowplowAnalyticsService @Inject internal constructor(
             .base64(false)
             .mobileContext(true)
             .applicationCrash(false)
+            .loggerDelegate(TimberLogger)
             .lifecycleEvents(true)
             .threadCount(1)
             .subject(SubjectBuilder().build())
             .build()
+        Logger.updateLogLevel(if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR)
     }
 
     // region Tracking Events
