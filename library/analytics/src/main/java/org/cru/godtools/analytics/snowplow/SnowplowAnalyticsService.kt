@@ -72,6 +72,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
             .lifecycleEvents(true)
             .subject(SubjectBuilder().build())
             .build()
+        Logger.setErrorLogger(TimberLogger)
         Logger.updateLogLevel(if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR)
     }
 
