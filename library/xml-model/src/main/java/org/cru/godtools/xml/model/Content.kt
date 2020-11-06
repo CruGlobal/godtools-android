@@ -17,16 +17,13 @@ abstract class Content : BaseModel {
     }
 
     protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
-        restrictTo = DeviceType.parse(
-            types = parser.getAttributeValue(null, XML_RESTRICT_TO),
-            defValue = DeviceType.ALL
-        )
+        restrictTo = parser.getAttributeValueAsDeviceTypesOrNull(XML_RESTRICT_TO) ?: DeviceType.ALL
     }
 
     /**
      * @return true if this content element should be completely ignored.
      */
-    val isIgnored get() = !restrictTo.contains(DeviceType.MOBILE)
+    val isIgnored get() = !restrictTo.contains(DeviceType.ANDROID) && !restrictTo.contains(DeviceType.MOBILE)
 
     open val tips get() = emptyList<Tip>()
 
