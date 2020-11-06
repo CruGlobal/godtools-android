@@ -7,16 +7,18 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
+import com.okta.oidc.clients.sessions.SessionClient
+import dagger.Lazy
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.TheKey
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
 import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
+import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
@@ -30,7 +32,7 @@ private const val VERSION_5_2_0 = 4035089
 @Singleton
 class Settings @Inject internal constructor(
     @ApplicationContext private val context: Context,
-    private val theKey: TheKey
+    private val oktaSessionClient: Lazy<SessionClient>
 ) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
@@ -111,7 +113,7 @@ class Settings @Inject internal constructor(
                     setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
                     changed = true
                 }
-                FEATURE_LOGIN -> if (theKey.defaultSessionGuid != null) {
+                FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
                     setFeatureDiscovered(FEATURE_LOGIN)
                     changed = true
                 }
@@ -148,11 +150,17 @@ class Settings @Inject internal constructor(
     // endregion Feature Discovery Tracking
 
     // region Campaign Tracking
-    fun isAddedToCampaign(guid: String) =
-        prefs.getBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), false)
+    fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {
+        oktaId == null && guid == null -> true
+        oktaId?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", false) } == true -> true
+        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", false) } == true -> true
+        else -> false
+    }
 
-    fun setAddedToCampaign(guid: String, added: Boolean) =
-        prefs.edit { putBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), added) }
+    fun recordAddedToCampaign(oktaId: String? = null, guid: String? = null) = prefs.edit {
+        if (oktaId != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", true)
+        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", true)
+    }
     // endregion Campaign Tracking
 
     // region Launch tracking

@@ -7,8 +7,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import me.thekey.android.livedata.getAttributesLiveData
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
+import org.ccci.gto.android.common.okta.oidc.clients.sessions.idTokenLiveData
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -38,7 +38,7 @@ class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>(R.layout.pr
 
     // region Data Binding
     private fun setupDataBinding() {
-        binding.keyAttributes = theKey.getAttributesLiveData()
+        binding.idToken = oktaClient.sessionClient.idTokenLiveData
     }
     // endregion Data Binding
 

@@ -7,6 +7,12 @@
     <!-- This permission should be obvious -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Okta permissions -->
+    <uses-permission
+        android:name="android.permission.USE_FINGERPRINT"
+        tools:node="remove" />
+    <uses-permission-sdk-23 android:name="android.permission.USE_FINGERPRINT" />
+
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
     <uses-permission
         android:name="android.permission.GET_TASKS"
@@ -33,6 +39,13 @@
 
     <dist:module dist:instant="true" />
 
+    <queries>
+        <!-- Used by the Okta OIDC SDK for logging in -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".GodToolsApplication"
         android:allowBackup="false"
@@ -48,17 +61,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="@string/account_deeplink_host" />
-                <data android:path="@string/account_deeplink_path" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />

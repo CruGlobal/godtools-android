@@ -39,6 +39,7 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     implementation "com.android.installreferrer:installreferrer:2.1"
@@ -49,8 +50,6 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
-    implementation "me.thekey.android:thekey-api:${deps.thekey}"
-    implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"

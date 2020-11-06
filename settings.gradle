@@ -10,7 +10,6 @@ include 'library:model'
 include 'library:sync'
 include 'library:xml-model'
 
-include 'ui:account'
 include 'ui:article-aem-renderer'
 include 'ui:article-renderer'
 include 'ui:base'

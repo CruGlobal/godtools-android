@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -15,7 +14,6 @@ import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
-import me.thekey.android.core.CodeGrantAsyncTask
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
@@ -45,14 +43,8 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        intent?.process()
         triggerOnboardingIfNecessary()
         loadInitialFragmentIfNeeded()
-    }
-
-    override fun onNewIntent(newIntent: Intent) {
-        super.onNewIntent(newIntent)
-        newIntent.process()
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu)
@@ -79,19 +71,6 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
         }
     }
     // endregion Lifecycle
-
-    private fun Intent.process() {
-        if (action == Intent.ACTION_VIEW) {
-            data?.run {
-                if (getString(R.string.account_deeplink_host).equals(host, ignoreCase = true) &&
-                    getString(R.string.account_deeplink_path).equals(path, ignoreCase = true)
-                ) {
-                    CodeGrantAsyncTask(theKey, this).execute()
-                    this@process.data = null
-                }
-            }
-        }
-    }
 
     private fun triggerOnboardingIfNecessary() {
         // TODO: remove this once we support onboarding in all languages

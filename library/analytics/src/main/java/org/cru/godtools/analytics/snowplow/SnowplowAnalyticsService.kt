@@ -17,9 +17,14 @@ import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.Attributes
-import me.thekey.android.TheKey
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -47,8 +52,9 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @ApplicationContext context: Context,
     eventBus: EventBus,
     okhttp: OkHttpClient,
-    private val theKey: TheKey
+    oktaUserProfileProvider: OktaUserProfileProvider
 ) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val snowplowTracker: Tracker
 
     init {
@@ -130,16 +136,17 @@ class SnowplowAnalyticsService @Inject internal constructor(
     }
 
     // region Contexts
+    private val userProfileStateFlow = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+        .stateIn(coroutineScope, SharingStarted.Eagerly, null)
+
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
         adobeMarketingCloudId?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
-        theKey.defaultSessionGuid?.let { guid ->
-            put(CONTEXT_ATTR_ID_GUID, guid)
-            theKey.getAttributes(guid).getAttribute(Attributes.ATTR_GR_MASTER_PERSON_ID)?.let {
-                put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it)
-            }
+        userProfileStateFlow.value?.let { profile ->
+            profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
+            profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
         }
     })
 

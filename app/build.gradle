@@ -42,11 +42,17 @@ android {
             dimension "env"
 
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.stage}\""
+
+            buildConfigField "String", "OKTA_CLIENT_ID", "\"0oatqowo16nlzqJRV0h7\""
+            buildConfigField "String", "OKTA_DISCOVERY_URI", "\"https://cru.oktapreview.com\""
         }
         production {
             dimension "env"
 
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.production}\""
+
+            buildConfigField "String", "OKTA_CLIENT_ID", "\"0oa1ju0zx08vYGgbB0h8\""
+            buildConfigField "String", "OKTA_DISCOVERY_URI", "\"https://signon.okta.com\""
         }
     }
 
@@ -74,6 +80,9 @@ android {
             minifyEnabled false
             shrinkResources false
 
+            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools.debug"]
+
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug\""
             resValue "string", "app_name_debug", "GodTools (Dev)"
         }
         qa {
@@ -83,6 +92,9 @@ android {
             applicationIdSuffix ".qa"
             versionNameSuffix "-qa"
 
+            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools.qa"]
+
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa\""
             resValue "string", "app_name_debug", "GodTools (QA)"
 
             // Firebase App Distribution build
@@ -104,6 +116,10 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
+
+            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools"]
+
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools\""
         }
     }
     dynamicFeatures = [
@@ -111,7 +127,9 @@ android {
     ]
     sourceSets {
         qa {
-            setRoot 'src/debug'
+            java.srcDir 'src/debug/java'
+            res.srcDir 'src/debug/res/values'
+            manifest.srcFile 'src/debug/AndroidManifest.xml'
         }
     }
 }
@@ -133,7 +151,6 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:sync')
 
-    implementation project(':ui:account')
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:shortcuts')
@@ -160,6 +177,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
@@ -178,13 +196,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation "com.okta.android:oidc-androidx:${deps.okta}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
-    api "me.thekey.android:thekey-api:${deps.thekey}"
-    implementation "me.thekey.android:thekey-core:${deps.thekey}"
-    implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
-    implementation "me.thekey.android:thekey-livedata:${deps.thekey}"
-    implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 
     debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
