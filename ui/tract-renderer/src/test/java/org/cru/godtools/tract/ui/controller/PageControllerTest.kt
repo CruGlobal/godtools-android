@@ -57,7 +57,7 @@ class PageControllerTest {
         hiltRule.inject()
         val activity = Robolectric.buildActivity(TestActivity::class.java).create().get()
         binding = TractPageBinding.inflate(LayoutInflater.from(activity))
-        controller = PageController(binding, eventBus, settings)
+        controller = PageController(binding, null, eventBus, settings)
     }
 
     @Test

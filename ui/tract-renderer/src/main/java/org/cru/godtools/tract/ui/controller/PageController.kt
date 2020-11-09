@@ -5,8 +5,11 @@ import android.view.View
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.util.Pools
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
@@ -23,13 +26,14 @@ import org.greenrobot.eventbus.EventBus
 
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
+    @Assisted baseLifecycleOwner: LifecycleOwner?,
     override val eventBus: EventBus,
     private val settings: Settings
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     @AssistedInject.Factory
     interface Factory {
-        fun create(binding: TractPageBinding): PageController
+        fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?): PageController
     }
 
     interface Callbacks {
@@ -38,6 +42,10 @@ class PageController @AssistedInject internal constructor(
         fun showTip(tip: Tip)
         fun goToNextPage()
     }
+
+    override val lifecycleOwner =
+        baseLifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+            .also { binding.lifecycleOwner = it }
 
     private val heroController = binding.hero.bindController(this)
     var callbacks: Callbacks?
@@ -279,4 +287,5 @@ class PageController @AssistedInject internal constructor(
     }
 }
 
-fun TractPageBinding.bindController(factory: PageController.Factory) = controller ?: factory.create(this)
+internal fun TractPageBinding.bindController(factory: PageController.Factory, lifecycleOwner: LifecycleOwner? = null) =
+    controller ?: factory.create(this, lifecycleOwner)

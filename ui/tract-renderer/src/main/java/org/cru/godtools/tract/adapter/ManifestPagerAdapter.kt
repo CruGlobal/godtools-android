@@ -3,6 +3,7 @@ package org.cru.godtools.tract.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.MainThread
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
@@ -12,7 +13,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.onStart
 import org.ccci.gto.android.common.androidx.lifecycle.onStop
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.support.v4.util.IdUtils
-import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
+import org.ccci.gto.android.common.viewpager.adapter.BaseDataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.model.Event
@@ -28,11 +29,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+// XXX: we override BaseDataBindingPagerAdapter instead of DataBindingPagerAdapter to prevent DataBindingPagerAdapter
+//      from setting the lifecycleOwner for the databinding.
 class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
-) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
+) : BaseDataBindingPagerAdapter<TractPageBinding, DataBindingViewHolder<TractPageBinding>>(lifecycleOwner),
+    PageController.Callbacks, Observer<Manifest?> {
     @AssistedInject.Factory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner): ManifestPagerAdapter
@@ -75,20 +79,28 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         manifest = t
     }
 
-    override fun onCreateViewDataBinding(parent: ViewGroup) =
-        TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-            bindController(pageControllerFactory).also {
-                it.callbacks = this@ManifestPagerAdapter
+    override fun onCreateViewHolder(parent: ViewGroup) = DataBindingViewHolder(
+        TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).also { binding ->
+            binding.bindController(pageControllerFactory, lifecycleOwner).also {
+                it.callbacks = this
                 it.isTipsEnabled = showTips
             }
         }
+    )
 
     override fun onBindViewDataBinding(
         holder: DataBindingViewHolder<TractPageBinding>,
         binding: TractPageBinding,
         position: Int
     ) {
-        binding.controller?.model = getItem(position)
+        binding.controller?.let { controller ->
+            controller.model = getItem(position)
+            controller.lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
+        }
+    }
+
+    override fun onViewDataBindingRecycled(holder: DataBindingViewHolder<TractPageBinding>, binding: TractPageBinding) {
+        binding.controller?.lifecycleOwner?.maxState = Lifecycle.State.CREATED
     }
 
     override fun onUpdatePrimaryItem(
@@ -102,7 +114,9 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
         val oldController = oldBinding?.controller
         if (oldController !== controller) {
+            oldController?.lifecycleOwner?.maxState = Lifecycle.State.STARTED
             oldController?.isVisible = false
+            controller?.lifecycleOwner?.maxState = Lifecycle.State.RESUMED
             controller?.isVisible = true
         }
     }
