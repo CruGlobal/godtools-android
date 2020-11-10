@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.ui.controller
 
-import android.content.SharedPreferences
 import android.view.View
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
@@ -10,11 +9,13 @@ import androidx.lifecycle.LifecycleOwner
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.lifecycle.onPause
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.ccci.gto.android.common.androidx.lifecycle.or
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
-import org.cru.godtools.base.Settings.Companion.PREF_FEATURE_DISCOVERED
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
@@ -29,8 +30,7 @@ class PageController @AssistedInject internal constructor(
     @Assisted baseLifecycleOwner: LifecycleOwner?,
     override val eventBus: EventBus,
     private val settings: Settings
-) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener,
-    SharedPreferences.OnSharedPreferenceChangeListener {
+) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
     @AssistedInject.Factory
     interface Factory {
         fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?): PageController
@@ -56,7 +56,14 @@ class PageController @AssistedInject internal constructor(
 
     init {
         binding.controller = this
+        binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or
+            settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_SWIPED)
         binding.pageContentLayout.setActiveCardListener(this)
+
+        lifecycleOwner?.lifecycle?.apply {
+            onResume { binding.isVisible = true }
+            onPause { binding.isVisible = false }
+        } ?: run { binding.isVisible = true }
     }
 
     // region Lifecycle
@@ -68,10 +75,8 @@ class PageController @AssistedInject internal constructor(
     }
 
     override fun onVisible() {
-        settings.registerOnSharedPreferenceChangeListener(this)
         super.onVisible()
         (activeCardController ?: heroController).isVisible = true
-        updateBounceAnimation()
     }
 
     fun onLiveShareNavigationEvent(event: NavigationEvent) {
@@ -89,20 +94,9 @@ class PageController @AssistedInject internal constructor(
         propagateEventToChildren(event)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when (key) {
-            "$PREF_FEATURE_DISCOVERED$FEATURE_TRACT_CARD_CLICKED",
-            "$PREF_FEATURE_DISCOVERED$FEATURE_TRACT_CARD_SWIPED" -> updateBounceAnimation()
-            // key=null when preferences are cleared
-            null -> updateBounceAnimation()
-        }
-    }
-
     override fun onHidden() {
-        settings.unregisterOnSharedPreferenceChangeListener(this)
         super.onHidden()
         (activeCardController ?: heroController).isVisible = false
-        updateBounceAnimation()
     }
     // endregion Lifecycle
 
@@ -276,15 +270,6 @@ class PageController @AssistedInject internal constructor(
     // endregion Tips
 
     override fun updateLayoutDirection() = Unit
-
-    // TODO: move this into data binding and use LiveData once we attach the PageBinding to a LifecycleOwner
-    private fun updateBounceAnimation() {
-        // we bounce the first card if the page is visible and the user hasn't opened a card before
-        binding.pageContentLayout.setBounceFirstCard(
-            isVisible && !(settings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
-                settings.isFeatureDiscovered(FEATURE_TRACT_CARD_SWIPED))
-        )
-    }
 }
 
 internal fun TractPageBinding.bindController(factory: PageController.Factory, lifecycleOwner: LifecycleOwner? = null) =
