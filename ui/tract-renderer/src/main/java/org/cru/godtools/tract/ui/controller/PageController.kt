@@ -130,8 +130,12 @@ class PageController @AssistedInject internal constructor(
     }
 
     private fun updateVisibleCard(old: CardController?) {
-        if (!isVisible || old == activeCardController) return
+        if (old == activeCardController) return
 
+        if (old == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.STARTED
+        if (activeCardController == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.RESUMED
+
+        if (!isVisible) return
         (old ?: heroController).isVisible = false
         (activeCardController ?: heroController).isVisible = true
     }
