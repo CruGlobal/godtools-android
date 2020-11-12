@@ -14,6 +14,7 @@ internal class InlineTipController private constructor(
         this(TractContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.enableTips = isTipsEnabled
     }
@@ -21,5 +22,6 @@ internal class InlineTipController private constructor(
     public override fun onBind() {
         super.onBind()
         binding.model = model
+        binding.isCompleted = isTipComplete(model?.id)
     }
 }
