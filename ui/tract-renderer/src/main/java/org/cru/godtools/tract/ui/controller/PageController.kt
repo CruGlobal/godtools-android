@@ -24,10 +24,12 @@ import org.cru.godtools.xml.model.Modal
 import org.cru.godtools.xml.model.Page
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.GodToolsDao
 
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
+    override val dao: GodToolsDao,
     override val eventBus: EventBus,
     private val settings: Settings
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
@@ -71,6 +73,8 @@ class PageController @AssistedInject internal constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
+        binding.isHeaderTipComplete = isTipComplete(model?.header?.tip?.id)
+        binding.isCallToActionTipComplete = isTipComplete(model?.callToAction?.tip?.id)
         heroController.model = model?.hero
         updateVisibleCards()
     }

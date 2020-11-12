@@ -3,26 +3,38 @@ package org.cru.godtools.tract.ui.controller
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.layoutDirection
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
+    protected open val dao: GodToolsDao
+        get() {
+            checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }
+            return parentController.dao
+        }
     internal open val eventBus: EventBus
         get() {
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
@@ -100,6 +112,15 @@ abstract class BaseController<T : Base> protected constructor(
 
     open fun showTip(tip: Tip?) {
         parentController?.showTip(tip)
+    }
+
+    protected fun isTipComplete(tipId: String?): LiveData<Boolean> {
+        val manifest = model?.manifest
+        return when {
+            manifest == null || tipId == null -> ImmutableLiveData(false)
+            else -> dao.findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
+                .distinctUntilChanged()
+        }
     }
     // endregion Tips
 }
