@@ -73,6 +73,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "com.google.dagger:hilt-android-testing:${deps.hilt}"
     testCompileOnly "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    testImplementation "org.ccci.gto.android.testing:gto-support-picasso:${deps.gtoSupport}"
 
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
     kaptTest "com.google.dagger:hilt-compiler:${deps.hilt}"

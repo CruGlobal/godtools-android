@@ -47,7 +47,8 @@ class PageController @AssistedInject internal constructor(
         baseLifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
             .also { binding.lifecycleOwner = it }
 
-    private val heroController = binding.hero.bindController(this)
+    @VisibleForTesting
+    internal val heroController = binding.hero.bindController(this)
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {
