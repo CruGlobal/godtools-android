@@ -74,11 +74,6 @@ class PageController @AssistedInject internal constructor(
         updateVisibleCards()
     }
 
-    override fun onVisible() {
-        super.onVisible()
-        (activeCardController ?: heroController).isVisible = true
-    }
-
     fun onLiveShareNavigationEvent(event: NavigationEvent) {
         if (model?.position != event.page) return
 
@@ -92,11 +87,6 @@ class PageController @AssistedInject internal constructor(
         checkForModalEvent(event)
         checkForCardEvent(event)
         propagateEventToChildren(event)
-    }
-
-    override fun onHidden() {
-        super.onHidden()
-        (activeCardController ?: heroController).isVisible = false
     }
     // endregion Lifecycle
 
@@ -134,10 +124,6 @@ class PageController @AssistedInject internal constructor(
 
         (if (old != null) old.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.STARTED
         (if (new != null) new.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.RESUMED
-
-        if (!isVisible) return
-        (old ?: heroController).isVisible = false
-        (new ?: heroController).isVisible = true
     }
 
     @UiThread
