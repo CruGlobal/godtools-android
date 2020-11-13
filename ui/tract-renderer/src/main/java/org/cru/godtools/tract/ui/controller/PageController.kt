@@ -129,15 +129,15 @@ class PageController @AssistedInject internal constructor(
         if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateVisibleCards()
     }
 
-    private fun updateVisibleCard(old: CardController?) {
-        if (old == activeCardController) return
+    private fun updateChildrenLifecycles(old: CardController?, new: CardController?) {
+        if (old == new) return
 
-        if (old == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.STARTED
-        if (activeCardController == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.RESUMED
+        (if (old != null) old.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.STARTED
+        (if (new != null) new.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.RESUMED
 
         if (!isVisible) return
         (old ?: heroController).isVisible = false
-        (activeCardController ?: heroController).isVisible = true
+        (new ?: heroController).isVisible = true
     }
 
     @UiThread
@@ -221,7 +221,7 @@ class PageController @AssistedInject internal constructor(
         val old = activeCardController
         activeCardController = activeCard?.let { cardControllers.firstOrNull { it.root == activeCard } }
         hideHiddenCardsThatArentActive()
-        updateVisibleCard(old)
+        updateChildrenLifecycles(old, activeCardController)
         callbacks?.onUpdateActiveCard(model, activeCardController?.model)
     }
     // endregion PageContentLayout.OnActiveCardListener
