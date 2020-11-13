@@ -1,8 +1,5 @@
 package org.cru.godtools.tract.ui.controller
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.argThat
@@ -17,7 +14,6 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
-import org.cru.godtools.tract.R
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.tract.util.TestLifecycleOwner
@@ -30,27 +26,23 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
-import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class HeroControllerTest {
-    private lateinit var binding: TractPageHeroBinding
-
     private val baseLifecycleOwner = TestLifecycleOwner()
     private lateinit var eventBus: EventBus
     private val mainDispatcher = TestCoroutineDispatcher()
-    private lateinit var pageController: PageController
 
     private lateinit var controller: HeroController
 
     @Before
     fun setup() {
         Dispatchers.setMain(mainDispatcher)
-        val activity = Robolectric.buildActivity(TestActivity::class.java).create().get()
-        binding = TractPageHeroBinding.inflate(LayoutInflater.from(activity))
+
         eventBus = mock()
-        pageController = mock {
+        val binding: TractPageHeroBinding = mock { on { root } doReturn mock() }
+        val pageController: PageController = mock {
             on { lifecycleOwner } doReturn ConstrainedStateLifecycleOwner(baseLifecycleOwner)
             on { eventBus } doReturn eventBus
         }
@@ -94,12 +86,5 @@ class HeroControllerTest {
         mainDispatcher.advanceUntilIdle()
         verify(eventBus, never()).post(argThat<ContentAnalyticsActionEvent> { event == event3 })
         verifyNoMoreInteractions(eventBus)
-    }
-
-    class TestActivity : AppCompatActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setTheme(R.style.Theme_AppCompat)
-        }
     }
 }
