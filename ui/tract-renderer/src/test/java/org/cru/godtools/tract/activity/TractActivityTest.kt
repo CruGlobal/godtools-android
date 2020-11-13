@@ -12,10 +12,8 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.whenever
-import com.squareup.picasso.picassoSingleton
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -24,6 +22,7 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.api.ApiModule
 import org.cru.godtools.base.tool.createTractActivityIntent
@@ -36,7 +35,6 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Manifest
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -44,7 +42,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.robolectric.annotation.Config
 
 @HiltAndroidTest
@@ -62,6 +59,8 @@ class TractActivityTest {
     var hiltRule = HiltAndroidRule(this)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val picassoSingletonRule = PicassoSingletonRule()
 
     private val context: Context get() = getInstrumentation().context
     @Inject
@@ -72,17 +71,11 @@ class TractActivityTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        picassoSingleton = mock(defaultAnswer = RETURNS_DEEP_STUBS)
         dao.stub {
             on {
                 getLiveData(argThat<Query<Language>> { table.type == Language::class.java })
             } doReturn ImmutableLiveData(emptyList())
         }
-    }
-
-    @After
-    fun cleanup() {
-        picassoSingleton = null
     }
 
     // region Share Menu Tests
