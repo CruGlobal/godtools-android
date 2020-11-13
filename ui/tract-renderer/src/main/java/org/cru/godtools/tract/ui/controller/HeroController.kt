@@ -1,30 +1,31 @@
 package org.cru.godtools.tract.ui.controller
 
 import kotlinx.coroutines.Job
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.lifecycle.onPause
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Hero
 
 class HeroController internal constructor(private val binding: TractPageHeroBinding, pageController: PageController) :
     ParentController<Hero>(Hero::class, binding.root, pageController) {
-    init {
-        binding.controller = this
-    }
+    override val lifecycleOwner = pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it) }
 
     override val contentContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Job>? = null
 
-    // region Lifecycle
-    override fun onVisible() {
-        super.onVisible()
-        pendingAnalyticsEvents = triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-    }
+    init {
+        binding.controller = this
 
-    override fun onHidden() {
-        super.onHidden()
-        pendingAnalyticsEvents?.cancelPendingAnalyticsEvents()
+        lifecycleOwner?.lifecycle?.apply {
+            onResume {
+                pendingAnalyticsEvents =
+                    triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
+            }
+            onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
+        }
     }
-    // endregion Lifecycle
 }
 
 fun TractPageHeroBinding.bindController(pageController: PageController) =

@@ -46,7 +46,11 @@ class ExternalSingletonsModule {
     @get:Provides
     val referenceLifecycle by lazy { mock<ReferenceLifecycle>() }
     @get:Provides
-    val settings by lazy { mock<Settings>() }
+    val settings by lazy {
+        mock<Settings> {
+            on { isFeatureDiscoveredLiveData(any()) } doAnswer { ImmutableLiveData(true) }
+        }
+    }
     @get:Provides
     val syncService by lazy { mock<GodToolsSyncService>(defaultAnswer = RETURNS_DEEP_STUBS) }
     @get:Provides

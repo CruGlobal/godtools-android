@@ -11,8 +11,10 @@
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="isVisible" type="Boolean" />
         <variable name="enableTips" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
+        <variable name="cardsDiscovered" type="androidx.lifecycle.LiveData&lt;Boolean&gt;" />
     </data>
 
     <RelativeLayout
@@ -38,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
-            android:layoutDirection="inherit">
+            android:layoutDirection="inherit"
+            app:bounceFirstCard="@{isVisible &amp;&amp; !cardsDiscovered}">
 
             <org.ccci.gto.android.common.widget.HackyNestedScrollView
                 android:id="@+id/initial_page_content"

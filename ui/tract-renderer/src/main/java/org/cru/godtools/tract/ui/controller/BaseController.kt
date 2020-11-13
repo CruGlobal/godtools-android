@@ -2,6 +2,7 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ abstract class BaseController<T : Base> protected constructor(
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
         }
+    internal open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
 
     var model: T? = null
         set(value) {
