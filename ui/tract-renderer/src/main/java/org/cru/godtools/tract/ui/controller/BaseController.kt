@@ -23,7 +23,7 @@ abstract class BaseController<T : Base> protected constructor(
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
-    protected open val eventBus: EventBus
+    internal open val eventBus: EventBus
         get() {
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
