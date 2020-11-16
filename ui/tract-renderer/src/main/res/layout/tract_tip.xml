@@ -53,28 +53,15 @@
             tools:max="2" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/icon_background"
-            android:layout_width="@dimen/tract_tips_badge_size"
-            android:layout_height="@dimen/tract_tips_badge_size"
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Tip.Badge"
             android:layout_marginStart="@dimen/tract_tip_margin_horiz"
             android:layout_marginTop="8dp"
-            android:elevation="@dimen/tract_tips_tip_elevation"
-            android:src="@{isComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip, default=@drawable/bkg_tips_tip}"
+            android:background="@{isComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip, default=@drawable/bkg_tips_tip}"
+            android:src="@{isComplete ? TipTypeKt.getDoneDrawable(tip.type, context) : TipTypeKt.getDrawable(tip.type, context)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appbar"
-            app:shapeAppearance="@style/ShapeAppearance.GodTools.Tip.Badge" />
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:elevation="@dimen/tract_tips_tip_elevation"
-            android:src="@{isComplete ? TipTypeKt.getDoneDrawable(tip.type, context) : TipTypeKt.getDrawable(tip.type, context)}"
-            app:layout_constraintBottom_toBottomOf="@id/icon_background"
-            app:layout_constraintEnd_toEndOf="@id/icon_background"
-            app:layout_constraintStart_toStartOf="@id/icon_background"
-            app:layout_constraintTop_toTopOf="@id/icon_background"
-            tools:src="@drawable/ic_tips_tip" />
+            app:srcInset="@{@dimen/tract_tips_badge_padding}" />
 
         <TextView
             android:id="@+id/label"
@@ -86,17 +73,17 @@
             android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
             android:textSize="@dimen/text_size_tip_label"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/icon_background"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/icon_background"
-            app:layout_constraintTop_toTopOf="@id/icon_background" />
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintTop_toTopOf="@id/icon" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/header_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="icon_background,label" />
+            app:constraint_referenced_ids="icon,label" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pages"
