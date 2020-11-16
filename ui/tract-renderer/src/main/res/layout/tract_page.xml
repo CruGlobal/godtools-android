@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.PageKt" />
@@ -11,10 +12,12 @@
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
-        <variable name="isVisible" type="Boolean" />
-        <variable name="enableTips" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
-        <variable name="cardsDiscovered" type="androidx.lifecycle.LiveData&lt;Boolean&gt;" />
+        <variable name="isVisible" type="Boolean" />
+        <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />
+        <variable name="enableTips" type="Boolean" />
+        <variable name="isHeaderTipComplete" type="LiveData&lt;Boolean&gt;" />
+        <variable name="isCallToActionTipComplete" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <RelativeLayout
@@ -65,9 +68,9 @@
                         android:layout_gravity="start"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="-16dp"
-                        android:background="@drawable/bkg_tips_tip"
+                        android:background="@{isHeaderTipComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
                         android:onClick="@{() -> controller.showTip(page.header.tip)}"
-                        android:src="@{TipTypeKt.getDrawable(page.header.tip.type, context)}"
+                        android:src="@{isHeaderTipComplete ? TipTypeKt.getDoneDrawable(page.header.tip.type, context) : TipTypeKt.getDrawable(page.header.tip.type, context)}"
                         app:cornerTopLeft="@{TipArrowShape.startCornerTreatment(context)}"
                         app:cornerTopRight="@{TipArrowShape.endCornerTreatment(context)}"
                         app:layout_childType="call_to_action_tip"
@@ -97,9 +100,9 @@
                 android:layout_above="@id/call_to_action_label"
                 android:layout_gravity="start"
                 android:layout_marginStart="24dp"
-                android:background="@drawable/bkg_tips_tip"
+                android:background="@{isCallToActionTipComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
                 android:onClick="@{() -> controller.showTip(page.callToAction.tip)}"
-                android:src="@{TipTypeKt.getDrawable(page.callToAction.tip.type, context)}"
+                android:src="@{isCallToActionTipComplete ? TipTypeKt.getDoneDrawable(page.callToAction.tip.type, context) : TipTypeKt.getDrawable(page.callToAction.tip.type, context)}"
                 app:cornerBottomLeft="@{TipArrowShape.endCornerTreatment(context)}"
                 app:cornerBottomRight="@{TipArrowShape.startCornerTreatment(context)}"
                 app:layout_childType="call_to_action_tip"

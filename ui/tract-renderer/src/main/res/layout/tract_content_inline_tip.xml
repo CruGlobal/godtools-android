@@ -10,6 +10,7 @@
         <variable name="enableTips" type="Boolean" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.tips.InlineTipController" />
         <variable name="model" type="org.cru.godtools.xml.model.tips.InlineTip" />
+        <variable name="isCompleted" type="androidx.lifecycle.LiveData&lt;Boolean&gt;" />
     </data>
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -18,9 +19,9 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="@dimen/tract_content_margin_horizontal"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/bkg_tips_tip"
+        android:background="@{isCompleted ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
         android:onClick="@{() -> controller.showTip(model.tip)}"
-        android:src="@{TipTypeKt.getDrawable(model.tip.type, context)}"
+        android:src="@{isCompleted ? TipTypeKt.getDoneDrawable(model.tip.type, context) : TipTypeKt.getDrawable(model.tip.type, context)}"
         app:srcInset="@{@dimen/tract_tips_badge_padding}"
         app:visibleIf="@{enableTips}"
         tools:src="@drawable/ic_tips_tip" />

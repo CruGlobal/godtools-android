@@ -32,6 +32,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -55,6 +56,8 @@ class PageControllerTest {
 
     private lateinit var binding: TractPageBinding
     @Inject
+    lateinit var dao: GodToolsDao
+    @Inject
     lateinit var eventBus: EventBus
     @Inject
     lateinit var settings: Settings
@@ -67,7 +70,7 @@ class PageControllerTest {
         hiltRule.inject()
         val activity = Robolectric.buildActivity(TestActivity::class.java).create().get()
         binding = TractPageBinding.inflate(LayoutInflater.from(activity))
-        controller = PageController(binding, baseLifecycleOwner, eventBus, settings)
+        controller = PageController(binding, baseLifecycleOwner, dao, eventBus, settings)
         baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.RESUMED
     }
 
