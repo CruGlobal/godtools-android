@@ -23,7 +23,7 @@ abstract class BaseController<T : Base> protected constructor(
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
-    protected open val eventBus: EventBus
+    internal open val eventBus: EventBus
         get() {
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
@@ -32,16 +32,8 @@ abstract class BaseController<T : Base> protected constructor(
 
     var model: T? = null
         set(value) {
-            if (value == null) isVisible = false
             field = value
             onBind()
-        }
-
-    var isVisible = false
-        set(value) {
-            if (field == value) return
-            field = value
-            if (field) onVisible() else onHidden()
         }
 
     // region Lifecycle
@@ -54,11 +46,9 @@ abstract class BaseController<T : Base> protected constructor(
         updateLayoutDirection()
     }
 
-    protected open fun onVisible() = Unit
     internal open fun onValidate() = true
     internal open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
     internal open fun onContentEvent(event: Event) = Unit
-    protected open fun onHidden() = Unit
     // endregion Lifecycle
 
     fun supportsModel(model: Base?) = modelClass.isInstance(model)

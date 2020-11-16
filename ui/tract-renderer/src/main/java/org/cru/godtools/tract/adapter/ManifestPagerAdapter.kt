@@ -9,8 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.ccci.gto.android.common.androidx.lifecycle.onStart
-import org.ccci.gto.android.common.androidx.lifecycle.onStop
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.ccci.gto.android.common.viewpager.adapter.BaseDataBindingPagerAdapter
@@ -61,8 +59,6 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     init {
         setHasStableIds(true)
         eventBus.register(lifecycleOwner, this)
-        lifecycleOwner.lifecycle.onStart { primaryItem?.binding?.controller?.isVisible = true }
-        lifecycleOwner.lifecycle.onStop { primaryItem?.binding?.controller?.isVisible = false }
     }
 
     override fun getCount() = manifest?.pages?.size ?: 0
@@ -115,9 +111,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         val oldController = oldBinding?.controller
         if (oldController !== controller) {
             oldController?.lifecycleOwner?.maxState = Lifecycle.State.STARTED
-            oldController?.isVisible = false
             controller?.lifecycleOwner?.maxState = Lifecycle.State.RESUMED
-            controller?.isVisible = true
         }
     }
 

@@ -47,7 +47,8 @@ class PageController @AssistedInject internal constructor(
         baseLifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
             .also { binding.lifecycleOwner = it }
 
-    private val heroController = binding.hero.bindController(this)
+    @VisibleForTesting
+    internal val heroController = binding.hero.bindController(this)
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {
@@ -74,11 +75,6 @@ class PageController @AssistedInject internal constructor(
         updateVisibleCards()
     }
 
-    override fun onVisible() {
-        super.onVisible()
-        (activeCardController ?: heroController).isVisible = true
-    }
-
     fun onLiveShareNavigationEvent(event: NavigationEvent) {
         if (model?.position != event.page) return
 
@@ -92,11 +88,6 @@ class PageController @AssistedInject internal constructor(
         checkForModalEvent(event)
         checkForCardEvent(event)
         propagateEventToChildren(event)
-    }
-
-    override fun onHidden() {
-        super.onHidden()
-        (activeCardController ?: heroController).isVisible = false
     }
     // endregion Lifecycle
 
@@ -129,15 +120,11 @@ class PageController @AssistedInject internal constructor(
         if (enabledHiddenCards.removeAll { it != activeCard?.id }) updateVisibleCards()
     }
 
-    private fun updateVisibleCard(old: CardController?) {
-        if (old == activeCardController) return
+    private fun updateChildrenLifecycles(old: CardController?, new: CardController?) {
+        if (old == new) return
 
-        if (old == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.STARTED
-        if (activeCardController == null) heroController.lifecycleOwner?.maxState = Lifecycle.State.RESUMED
-
-        if (!isVisible) return
-        (old ?: heroController).isVisible = false
-        (activeCardController ?: heroController).isVisible = true
+        (if (old != null) old.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.STARTED
+        (if (new != null) new.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.RESUMED
     }
 
     @UiThread
@@ -221,7 +208,7 @@ class PageController @AssistedInject internal constructor(
         val old = activeCardController
         activeCardController = activeCard?.let { cardControllers.firstOrNull { it.root == activeCard } }
         hideHiddenCardsThatArentActive()
-        updateVisibleCard(old)
+        updateChildrenLifecycles(old, activeCardController)
         callbacks?.onUpdateActiveCard(model, activeCardController?.model)
     }
     // endregion PageContentLayout.OnActiveCardListener

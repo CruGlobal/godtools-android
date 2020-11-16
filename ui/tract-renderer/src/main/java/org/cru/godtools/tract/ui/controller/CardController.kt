@@ -3,7 +3,11 @@ package org.cru.godtools.tract.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.Job
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.lifecycle.onPause
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentCardBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
@@ -23,13 +27,24 @@ class CardController private constructor(
         fun onDismissCard(controller: CardController)
     }
 
-    init {
-        binding.controller = this
-        binding.enableTips = pageController.isTipsEnabled
-    }
+    override val lifecycleOwner =
+        pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.STARTED) }
 
     private val callbacks: Callbacks? = pageController
     private var pendingAnalyticsEvents: List<Job>? = null
+
+    init {
+        binding.controller = this
+        binding.enableTips = pageController.isTipsEnabled
+
+        lifecycleOwner?.lifecycle?.apply {
+            onResume {
+                pendingAnalyticsEvents =
+                    triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
+            }
+            onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
+        }
+    }
 
     // region Lifecycle
     @CallSuper
@@ -38,20 +53,10 @@ class CardController private constructor(
         binding.model = model
     }
 
-    override fun onVisible() {
-        super.onVisible()
-        pendingAnalyticsEvents = triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-    }
-
     @CallSuper
     override fun onContentEvent(event: Event) {
         super.onContentEvent(event)
         processDismissEvent(event)
-    }
-
-    override fun onHidden() {
-        super.onHidden()
-        pendingAnalyticsEvents?.cancelPendingAnalyticsEvents()
     }
     // endregion Lifecycle
 
