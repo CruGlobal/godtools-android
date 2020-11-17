@@ -7,6 +7,7 @@ import org.xmlpull.v1.XmlPullParser
 class Paragraph : Content, Parent {
     companion object {
         internal const val XML_PARAGRAPH = "paragraph"
+        internal const val XML_FALLBACK = "fallback"
     }
 
     override val content: List<Content>

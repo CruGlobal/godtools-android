@@ -37,11 +37,16 @@ abstract class Content : BaseModel {
 
             return when (parser.namespace) {
                 XMLNS_CONTENT -> when (parser.name) {
-                    Paragraph.XML_PARAGRAPH -> Paragraph(parent, parser)
+                    Paragraph.XML_PARAGRAPH -> when (parser.getAttributeValue(null, Paragraph.XML_FALLBACK)
+                        ?.toBoolean()) {
+                        true -> Fallback(parent, parser)
+                        else -> Paragraph(parent, parser)
+                    }
                     Tabs.XML_TABS -> Tabs(parent, parser)
                     Text.XML_TEXT -> Text(parent, parser)
                     Image.XML_IMAGE -> Image(parent, parser)
                     Button.XML_BUTTON -> Button(parent, parser)
+                    Fallback.XML_FALLBACK -> Fallback(parent, parser)
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
