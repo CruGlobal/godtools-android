@@ -1,7 +1,7 @@
 package org.cru.godtools.tract.ui.controller
 
 import android.view.View
-import android.widget.LinearLayout
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
 import kotlin.reflect.KClass
@@ -37,9 +37,11 @@ abstract class ParentController<T> protected constructor(
     // endregion Lifecycle
 
     // region Child Content
-    protected abstract val contentContainer: LinearLayout
+    protected abstract val contentContainer: ViewGroup
     private val childCache by lazy { UiControllerCache(contentContainer, this) }
     private var children: List<BaseController<Content>>? = null
+
+    protected open val contentToRender get() = model?.content
 
     @UiThread
     @OptIn(ExperimentalStdlibApi::class)
@@ -47,7 +49,7 @@ abstract class ParentController<T> protected constructor(
         val existing = children.orEmpty().toMutableList()
 
         var next: BaseController<Content>? = null
-        children = model?.content?.mapNotNull { model ->
+        children = contentToRender?.mapNotNull { model ->
             if (next == null) next = existing.removeFirstOrNull()
 
             (next?.takeIf { it.supportsModel(model) }?.also { next = null }
