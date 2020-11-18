@@ -55,6 +55,8 @@ dependencies {
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
 
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"

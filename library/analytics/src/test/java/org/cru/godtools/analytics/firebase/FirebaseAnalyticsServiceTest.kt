@@ -1,0 +1,71 @@
+package org.cru.godtools.analytics.firebase
+
+import android.app.Application
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.clearInvocations
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.okta.oidc.net.response.UserInfo
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineScope
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.greenrobot.eventbus.EventBus
+import org.json.JSONObject
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.RETURNS_DEEP_STUBS
+
+@RunWith(AndroidJUnit4::class)
+class FirebaseAnalyticsServiceTest {
+    private lateinit var application: Application
+    private lateinit var firebase: FirebaseAnalytics
+    private lateinit var eventBus: EventBus
+    private lateinit var oktaUserProfileProvider: OktaUserProfileProvider
+    private val userInfoChannel = Channel<UserInfo?>()
+
+    private lateinit var analyticsService: FirebaseAnalyticsService
+
+    @Before
+    fun setupMocks() {
+        application = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        eventBus = mock()
+        firebase = mock()
+        oktaUserProfileProvider = mock {
+            on { userInfoFlow() } doReturn userInfoChannel.consumeAsFlow()
+        }
+
+        analyticsService =
+            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, firebase, TestCoroutineScope())
+    }
+
+    @Test
+    fun verifySetUser() = runBlocking {
+        // initial state
+        verify(firebase, never()).setUserId(any())
+        clearInvocations(firebase)
+
+        // no active user
+        userInfoChannel.send(null)
+        verify(firebase).setUserId(null)
+        clearInvocations(firebase)
+
+        // active user
+        userInfoChannel.send(userInfo("GUID"))
+        verify(firebase).setUserId("GUID")
+        clearInvocations(firebase)
+
+        // user logs out
+        userInfoChannel.send(null)
+        verify(firebase).setUserId(null)
+    }
+
+    private fun userInfo(guid: String?): UserInfo = UserInfo(JSONObject(mapOf("ssoGuid" to guid)))
+}
