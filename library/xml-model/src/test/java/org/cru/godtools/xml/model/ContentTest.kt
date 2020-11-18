@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.xml.SUPPORTED_VERSION
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -23,6 +24,18 @@ class ContentTest {
             val content = object : Content(Manifest(), restrictTo = it) {}
             assertTrue(content.isIgnored)
         }
+    }
+
+    @Test
+    fun verifyVersionSupported() {
+        val content = object : Content(Manifest(), version = SUPPORTED_VERSION) {}
+        assertFalse(content.isIgnored)
+    }
+
+    @Test
+    fun verifyVersionNotSupported() {
+        val content = object : Content(Manifest(), version = SUPPORTED_VERSION + 1) {}
+        assertTrue(content.isIgnored)
     }
 
     @Test

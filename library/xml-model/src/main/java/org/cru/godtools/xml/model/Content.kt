@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.xmlpull.skipTag
+import org.cru.godtools.xml.SUPPORTED_VERSION
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.tips.InlineTip
@@ -8,22 +9,30 @@ import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESTRICT_TO = "restrictTo"
+private const val XML_VERSION = "version"
 
 abstract class Content : BaseModel {
+    private val version: Int
     private val restrictTo: Set<DeviceType>
 
-    internal constructor(parent: Base, restrictTo: Set<DeviceType>? = null) : super(parent) {
+    internal constructor(
+        parent: Base,
+        version: Int = SUPPORTED_VERSION,
+        restrictTo: Set<DeviceType>? = null
+    ) : super(parent) {
+        this.version = version
         this.restrictTo = restrictTo ?: DeviceType.ALL
     }
 
     protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
+        version = parser.getAttributeValue(null, XML_VERSION)?.toIntOrNull() ?: SUPPORTED_VERSION
         restrictTo = parser.getAttributeValueAsDeviceTypesOrNull(XML_RESTRICT_TO) ?: DeviceType.ALL
     }
 
     /**
      * @return true if this content element should be completely ignored.
      */
-    open val isIgnored get() = restrictTo.none { it in DeviceType.SUPPORTED }
+    open val isIgnored get() = version > SUPPORTED_VERSION || restrictTo.none { it in DeviceType.SUPPORTED }
 
     open val tips get() = emptyList<Tip>()
 
