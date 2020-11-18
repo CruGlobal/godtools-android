@@ -9,8 +9,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.okta.oidc.net.response.UserInfo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
@@ -18,24 +18,28 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class FirebaseAnalyticsServiceTest {
     private lateinit var application: Application
     private lateinit var firebase: FirebaseAnalytics
     private lateinit var eventBus: EventBus
     private lateinit var oktaUserProfileProvider: OktaUserProfileProvider
     private val userInfoChannel = Channel<UserInfo?>()
+    private lateinit var coroutineScope: TestCoroutineScope
 
     private lateinit var analyticsService: FirebaseAnalyticsService
 
     @Before
     fun setupMocks() {
         application = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        coroutineScope = TestCoroutineScope()
         eventBus = mock()
         firebase = mock()
         oktaUserProfileProvider = mock {
@@ -43,7 +47,12 @@ class FirebaseAnalyticsServiceTest {
         }
 
         analyticsService =
-            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, firebase, TestCoroutineScope())
+            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, firebase, coroutineScope)
+    }
+
+    @After
+    fun cleanup() {
+        coroutineScope.cleanupTestCoroutines()
     }
 
     @Test
