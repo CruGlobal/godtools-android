@@ -2,6 +2,7 @@
     <content:image resource="image.png" restrictTo="web" />
     <content:image resource="image.png" restrictTo="ios" />
     <content:text>Test</content:text>
+    <content:button type="unrecognized"><content:text>events</content:text></content:button>
     <content:text restrictTo="android">Test</content:text>
     <content:text restrictTo="mobile">Test</content:text>
 </content:fallback>
