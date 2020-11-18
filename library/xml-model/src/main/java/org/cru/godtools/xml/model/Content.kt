@@ -12,8 +12,8 @@ private const val XML_RESTRICT_TO = "restrictTo"
 abstract class Content : BaseModel {
     private val restrictTo: Set<DeviceType>
 
-    protected constructor(parent: Base) : super(parent) {
-        restrictTo = DeviceType.ALL
+    internal constructor(parent: Base, restrictTo: Set<DeviceType>? = null) : super(parent) {
+        this.restrictTo = restrictTo ?: DeviceType.ALL
     }
 
     protected constructor(parent: Base, parser: XmlPullParser) : super(parent) {
@@ -23,7 +23,7 @@ abstract class Content : BaseModel {
     /**
      * @return true if this content element should be completely ignored.
      */
-    open val isIgnored get() = !restrictTo.contains(DeviceType.ANDROID) && !restrictTo.contains(DeviceType.MOBILE)
+    open val isIgnored get() = restrictTo.none { it in DeviceType.SUPPORTED }
 
     open val tips get() = emptyList<Tip>()
 
