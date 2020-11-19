@@ -10,8 +10,9 @@ import org.ccci.gto.android.common.compat.view.ViewCompat
 
 private const val EXTRA_NAV_TAB_ACTIVE = "org.cru.godtools.base.ui.activity.BaseDesignActivity.EXTRA_NAV_TAB_SELECTED"
 
-abstract class BaseDesignActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int) : BaseActivity<B>(contentLayoutId),
-    OnTabSelectedListener {
+abstract class BaseDesignActivity<B : ViewBinding>(
+    @LayoutRes contentLayoutId: Int
+) : BaseActivity<B>(contentLayoutId), OnTabSelectedListener {
     // region Lifecycle
     @CallSuper
     override fun onContentChanged() {

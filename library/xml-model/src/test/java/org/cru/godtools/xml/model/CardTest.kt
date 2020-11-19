@@ -38,14 +38,17 @@ class CardTest {
         val tip1 = Tip(id = "tip1")
         val tip2 = Tip(id = "tip2")
         val page = Page(Manifest(tips = { listOf(tip1, tip2) }))
-        val card = Card(page, 0, content = {
-            listOf(
-                InlineTip(it, "tip1"),
-                Paragraph(it, content = { listOf(InlineTip(it, "tip2")) }),
-                InlineTip(it, "tip3"),
-                InlineTip(it, "tip1")
-            )
-        })
+        val card = Card(
+            page,
+            content = {
+                listOf(
+                    InlineTip(it, "tip1"),
+                    Paragraph(it, content = { listOf(InlineTip(it, "tip2")) }),
+                    InlineTip(it, "tip3"),
+                    InlineTip(it, "tip1")
+                )
+            }
+        )
 
         assertEquals(3, card.tips.size)
         assertThat(card.tips, contains(tip1, tip2, tip1))

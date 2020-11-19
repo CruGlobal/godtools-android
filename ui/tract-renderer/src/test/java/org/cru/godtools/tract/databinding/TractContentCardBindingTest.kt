@@ -5,27 +5,28 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
-import com.squareup.picasso.picassoSingleton
+import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.CallToAction
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Page
 import org.cru.godtools.xml.model.tips.Tip
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class TractContentCardBindingTest {
+    @get:Rule
+    val picassoSingletonRule = PicassoSingletonRule()
+
     private lateinit var binding: TractContentCardBinding
 
     private lateinit var page: Page
@@ -37,17 +38,11 @@ class TractContentCardBindingTest {
     fun setup() {
         val activity = Robolectric.buildActivity(AppCompatActivity::class.java).get()
         val context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
-        picassoSingleton = mock(defaultAnswer = Mockito.RETURNS_DEEP_STUBS)
 
         binding = TractContentCardBinding.inflate(LayoutInflater.from(context), null, false)
 
         tip = Tip(id = "tip")
         page = Page(Manifest(), cards = { listOf(spy(Card(it))) }, callToAction = { spy(CallToAction(it)) })
-    }
-
-    @After
-    fun cleanup() {
-        picassoSingleton = null
     }
 
     // region Tips Indicator
