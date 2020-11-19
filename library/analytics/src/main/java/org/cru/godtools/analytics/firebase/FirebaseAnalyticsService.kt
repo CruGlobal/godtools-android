@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.annotation.MainThread
+import androidx.annotation.VisibleForTesting
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.karumi.weak.weak
@@ -11,8 +12,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
@@ -29,13 +31,20 @@ private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
 @Singleton
-class FirebaseAnalyticsService @MainThread @Inject internal constructor(
+class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     app: Application,
     eventBus: EventBus,
-    oktaUserProfileProvider: OktaUserProfileProvider
+    oktaUserProfileProvider: OktaUserProfileProvider,
+    private val firebase: FirebaseAnalytics,
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Application.ActivityLifecycleCallbacks {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val firebase = FirebaseAnalytics.getInstance(app)
+    @Inject
+    @MainThread
+    internal constructor(
+        app: Application,
+        eventBus: EventBus,
+        oktaUserProfileProvider: OktaUserProfileProvider
+    ) : this(app, eventBus, oktaUserProfileProvider, FirebaseAnalytics.getInstance(app))
 
     // region Tracking Events
     init {
@@ -86,7 +95,8 @@ class FirebaseAnalyticsService @MainThread @Inject internal constructor(
 
     init {
         oktaUserProfileProvider.userInfoFlow()
-            .mapNotNull { it?.ssoGuid }
+            .map { it?.ssoGuid }
+            .distinctUntilChanged()
             .onEach { firebase.setUserId(it) }
             .launchIn(coroutineScope)
 
