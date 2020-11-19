@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.DimenRes
+import androidx.annotation.RestrictTo
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_TRACT
@@ -8,7 +9,7 @@ import org.xmlpull.v1.XmlPullParser
 
 private const val XML_HEADING = "heading"
 
-class Hero internal constructor(parent: Base, parser: XmlPullParser) : BaseModel(parent), Parent, Styles {
+class Hero : BaseModel, Parent, Styles {
     companion object {
         internal const val XML_HERO = "hero"
     }
@@ -20,7 +21,14 @@ class Hero internal constructor(parent: Base, parser: XmlPullParser) : BaseModel
     @get:DimenRes
     override val textSize get() = R.dimen.text_size_hero
 
-    init {
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(parent: Base, analyticsEvents: Collection<AnalyticsEvent> = emptyList()) : super(parent) {
+        this.analyticsEvents = analyticsEvents
+        heading = null
+        content = emptyList()
+    }
+
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_HERO)
 
         // process any child elements

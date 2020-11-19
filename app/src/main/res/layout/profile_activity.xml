@@ -6,7 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
-        <variable name="keyAttributes" type="LiveData&lt;me.thekey.android.Attributes&gt;" />
+        <variable name="idToken" type="LiveData&lt;com.okta.oidc.OktaIdToken&gt;" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -47,7 +47,7 @@
                         android:background="@color/white"
                         android:gravity="center"
                         android:paddingTop="32dp"
-                        android:text="@{(keyAttributes.firstName ?? ``) + ` ` + (keyAttributes.lastName ?? ``)}"
+                        android:text="@{idToken.claims.name}"
                         android:textAppearance="@style/TextAppearance.GodTools.Large"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="parent"

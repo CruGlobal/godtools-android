@@ -3,23 +3,30 @@ package org.cru.godtools.analytics.snowplow
 import android.content.Context
 import androidx.annotation.WorkerThread
 import com.snowplowanalytics.snowplow.tracker.Emitter.EmitterBuilder
-import com.snowplowanalytics.snowplow.tracker.Executor
-import com.snowplowanalytics.snowplow.tracker.Subject
 import com.snowplowanalytics.snowplow.tracker.Subject.SubjectBuilder
 import com.snowplowanalytics.snowplow.tracker.Tracker
 import com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder
 import com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity
 import com.snowplowanalytics.snowplow.tracker.events.AbstractEvent
 import com.snowplowanalytics.snowplow.tracker.events.Event
-import com.snowplowanalytics.snowplow.tracker.events.ScreenView
-import com.snowplowanalytics.snowplow.tracker.events.Structured
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
+import com.snowplowanalytics.snowplow.tracker.utils.LogLevel
+import com.snowplowanalytics.snowplow.tracker.utils.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.Attributes
-import me.thekey.android.TheKey
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.snowplow.events.CustomEventBuilder
+import org.ccci.gto.android.common.snowplow.events.CustomScreenView
+import org.ccci.gto.android.common.snowplow.events.CustomStructured
+import org.ccci.gto.android.common.snowplow.utils.TimberLogger
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
@@ -29,8 +36,6 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
-private const val TAG = "SnwplwAnalyticsService"
 
 private const val SNOWPLOW_NAMESPACE = "godtools-android"
 
@@ -47,15 +52,12 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @ApplicationContext context: Context,
     eventBus: EventBus,
     okhttp: OkHttpClient,
-    private val theKey: TheKey
+    oktaUserProfileProvider: OktaUserProfileProvider
 ) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val snowplowTracker: Tracker
 
     init {
-        // HACK: restrict snowplow executor to 1 thread to allow adding custom params via the subject
-        Executor.setThreadCount(1)
-        Executor.shutdown()
-
         // close any existing SP tracker and build our new one
         Tracker.close()
         val emitter = EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
@@ -66,10 +68,12 @@ class SnowplowAnalyticsService @Inject internal constructor(
             .base64(false)
             .mobileContext(true)
             .applicationCrash(false)
+            .loggerDelegate(TimberLogger)
             .lifecycleEvents(true)
-            .threadCount(1)
             .subject(SubjectBuilder().build())
             .build()
+        Logger.setErrorLogger(TimberLogger)
+        Logger.updateLogLevel(if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR)
     }
 
     // region Tracking Events
@@ -89,57 +93,45 @@ class SnowplowAnalyticsService @Inject internal constructor(
 
     @WorkerThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
-        ScreenView.builder()
+        CustomScreenView.builder()
             .name(event.screen)
             .populate(event)
             .build()
-            .send(event)
+            .send()
     }
 
     @WorkerThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        Structured.builder()
+        CustomStructured.builder()
             .action(event.action)
             .apply { event.label?.let { label(it) } }
             .populate(event)
             .build()
-            .send(event)
+            .send()
     }
 
     @WorkerThread
-    private fun <T : AbstractEvent.Builder<*>> T.populate(event: AnalyticsBaseEvent) =
-        apply { contexts(listOf(idContext(), event.contentScoringContext())) }
+    private fun <T> T.populate(
+        event: AnalyticsBaseEvent
+    ) where T : AbstractEvent.Builder<T>, T : CustomEventBuilder<T> =
+        contexts(listOf(idContext(), event.contentScoringContext()))
+            .attribute("url", "${event.snowplowContentScoringUri}")
+            .attribute("page", event.snowplowPageTitle)
 
-    @WorkerThread
-    @Synchronized
-    private fun Event.send(event: AnalyticsBaseEvent) {
-        val subject = snowplowTracker.subject
-        Executor.execute(TAG) { subject.populateUrl(event) }
-        snowplowTracker.track(this)
-        Executor.execute(TAG) { subject.resetUrl() }
-    }
-
-    private fun Subject.populateUrl(event: AnalyticsBaseEvent) {
-        subject["url"] = "${event.snowplowContentScoringUri}"
-        subject["page"] = event.snowplowPageTitle
-    }
-
-    private fun Subject.resetUrl() {
-        subject.remove("url")
-        subject.remove("page")
-    }
+    private fun Event.send() = snowplowTracker.track(this)
 
     // region Contexts
+    private val userProfileStateFlow = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+        .stateIn(coroutineScope, SharingStarted.Eagerly, null)
+
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
         adobeMarketingCloudId?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
-        theKey.defaultSessionGuid?.let { guid ->
-            put(CONTEXT_ATTR_ID_GUID, guid)
-            theKey.getAttributes(guid).getAttribute(Attributes.ATTR_GR_MASTER_PERSON_ID)?.let {
-                put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it)
-            }
+        userProfileStateFlow.value?.let { profile ->
+            profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
+            profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
         }
     })
 

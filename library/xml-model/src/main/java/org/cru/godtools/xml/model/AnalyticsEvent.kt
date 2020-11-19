@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.analytics.model.AnalyticsSystem
@@ -24,7 +25,7 @@ private const val XML_ATTRIBUTE_KEY = "key"
 private const val XML_ATTRIBUTE_VALUE = "value"
 
 @OptIn(ExperimentalStdlibApi::class)
-class AnalyticsEvent internal constructor(parser: XmlPullParser) {
+class AnalyticsEvent {
     enum class Trigger {
         SELECTED, VISIBLE, HIDDEN, DEFAULT, UNKNOWN;
 
@@ -39,28 +40,43 @@ class AnalyticsEvent internal constructor(parser: XmlPullParser) {
         }
     }
 
-    init {
-        parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENT)
+    val action: String?
+    val delay: Int
+    private val systems: Set<AnalyticsSystem>
+    private val trigger: Trigger
+    val attributes: Map<String, String>
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(delay: Int = 0) {
+        action = null
+        this.delay = delay
+        systems = emptySet()
+        trigger = Trigger.DEFAULT
+        attributes = emptyMap()
     }
 
-    val action: String? = parser.getAttributeValue(null, XML_ACTION)
-    val delay = parser.getAttributeValue(null, XML_DELAY)?.toIntOrNull() ?: 0
-    private val systems = parser.getAttributeValue(null, XML_SYSTEM)?.parseSystems().orEmpty()
-    private val trigger = Trigger.parse(parser.getAttributeValue(null, XML_TRIGGER), Trigger.DEFAULT)
-    val attributes = buildMap<String, String> {
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+    internal constructor(parser: XmlPullParser) {
+        parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENT)
 
-            when (parser.namespace) {
-                XMLNS_ANALYTICS -> when (parser.name) {
-                    XML_ATTRIBUTE -> put(
-                        parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
-                        parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
-                    )
+        action = parser.getAttributeValue(null, XML_ACTION)
+        delay = parser.getAttributeValue(null, XML_DELAY)?.toIntOrNull() ?: 0
+        systems = parser.getAttributeValue(null, XML_SYSTEM)?.parseSystems().orEmpty()
+        trigger = Trigger.parse(parser.getAttributeValue(null, XML_TRIGGER), Trigger.DEFAULT)
+        attributes = buildMap {
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) continue
+
+                when (parser.namespace) {
+                    XMLNS_ANALYTICS -> when (parser.name) {
+                        XML_ATTRIBUTE -> put(
+                            parser.getAttributeValue(null, XML_ATTRIBUTE_KEY).orEmpty(),
+                            parser.getAttributeValue(null, XML_ATTRIBUTE_VALUE).orEmpty()
+                        )
+                    }
                 }
-            }
 
-            parser.skipTag()
+                parser.skipTag()
+            }
         }
     }
 

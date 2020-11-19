@@ -1,53 +1,50 @@
 package org.cru.godtools.service
 
-import android.os.AsyncTask
-import androidx.annotation.WorkerThread
+import com.okta.oidc.net.response.UserInfo
 import dagger.Lazy
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.TheKey
-import me.thekey.android.eventbus.event.LoginEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.email
+import org.ccci.gto.android.common.okta.oidc.net.response.familyName
+import org.ccci.gto.android.common.okta.oidc.net.response.givenName
+import org.ccci.gto.android.common.okta.oidc.net.response.oktaUserId
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_ID
 import org.cru.godtools.api.CampaignFormsApi
 import org.cru.godtools.base.Settings
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 @Singleton
 class AccountListRegistrationService @Inject internal constructor(
-    eventBus: EventBus,
     private val settings: Settings,
-    private val theKey: TheKey,
+    oktaUserProfileProvider: OktaUserProfileProvider,
     private val campaignFormsApi: Lazy<CampaignFormsApi>
 ) {
-    init {
-        eventBus.register(this)
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-        // add the current user to Adobe Campaigns if they haven't been added already
-        theKey.defaultSessionGuid
-            ?.takeUnless { settings.isAddedToCampaign(it) }
-            ?.let { AsyncTask.THREAD_POOL_EXECUTOR.execute { registerUser(it) } }
+    init {
+        oktaUserProfileProvider.userInfoFlow()
+            .onEach { it?.let { registerUser(it) } }
+            .launchIn(coroutineScope)
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onLogin(event: LoginEvent) = registerUser(event.guid)
-
-    @WorkerThread
-    private fun registerUser(guid: String) {
-        val attrs = theKey.getAttributes(guid)
-            .takeIf { it.areValid() && it.email != null } ?: return
+    private suspend fun registerUser(userInfo: UserInfo) {
+        val oktaId = userInfo.oktaUserId
+        val guid = userInfo.ssoGuid
+        val email = userInfo.email ?: return
+        if (settings.isAddedToCampaign(oktaId = oktaId, guid = guid)) return
 
         // trigger the signup
         try {
             val response = campaignFormsApi.get()
-                .signup(CAMPAIGN_FORMS_ID, attrs.email, attrs.firstName, attrs.lastName)
-                .execute()
-            if (response.isSuccessful) {
-                settings.setAddedToCampaign(guid, true)
-            }
+                .signup(CAMPAIGN_FORMS_ID, email, userInfo.givenName, userInfo.familyName)
+            if (response.isSuccessful) settings.recordAddedToCampaign(oktaId = oktaId, guid = guid)
         } catch (e: IOException) {
             Timber.tag("AccountListRegService")
                 .d(e, "error registering user in account list")

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.PageKt" />
@@ -11,8 +12,12 @@
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.xml.model.Page" />
-        <variable name="enableTips" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
+        <variable name="isVisible" type="Boolean" />
+        <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />
+        <variable name="enableTips" type="Boolean" />
+        <variable name="isHeaderTipComplete" type="LiveData&lt;Boolean&gt;" />
+        <variable name="isCallToActionTipComplete" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <RelativeLayout
@@ -38,7 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
-            android:layoutDirection="inherit">
+            android:layoutDirection="inherit"
+            app:bounceFirstCard="@{isVisible &amp;&amp; !cardsDiscovered}">
 
             <org.ccci.gto.android.common.widget.HackyNestedScrollView
                 android:id="@+id/initial_page_content"
@@ -57,16 +63,21 @@
                         layout="@layout/tract_page_header"
                         app:header="@{page.header}" />
 
-                    <org.cru.godtools.tract.widget.MaterialShapeBackgroundImageView
-                        style="@style/Widget.GodTools.Tip.Arrow.Up"
+                    <com.google.android.material.imageview.ShapeableImageView
+                        style="@style/Widget.GodTools.Tip.Arrow.Vertical"
                         android:layout_gravity="start"
-                        android:layout_marginTop="-16dp"
                         android:layout_marginStart="24dp"
+                        android:layout_marginTop="-16dp"
+                        android:background="@{isHeaderTipComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
                         android:onClick="@{() -> controller.showTip(page.header.tip)}"
-                        android:src="@{TipTypeKt.getDrawable(page.header.tip.type, context)}"
+                        android:src="@{isHeaderTipComplete ? TipTypeKt.getDoneDrawable(page.header.tip.type, context) : TipTypeKt.getDrawable(page.header.tip.type, context)}"
                         app:cornerTopLeft="@{TipArrowShape.startCornerTreatment(context)}"
                         app:cornerTopRight="@{TipArrowShape.endCornerTreatment(context)}"
                         app:layout_childType="call_to_action_tip"
+                        app:srcInsetBottom="@{@dimen/tract_tips_arrow_padding}"
+                        app:srcInsetLeft="@{@dimen/tract_tips_arrow_padding}"
+                        app:srcInsetRight="@{@dimen/tract_tips_arrow_padding}"
+                        app:srcInsetTop="@{@dimen/tract_tips_arrow_padding_arrow}"
                         app:visibleIf="@{enableTips &amp;&amp; page.header.tip != null}"
                         tools:src="@drawable/ic_tips_tip" />
 
@@ -84,16 +95,21 @@
                 app:controller="@{controller}"
                 app:page="@{page}" />
 
-            <org.cru.godtools.tract.widget.MaterialShapeBackgroundImageView
-                style="@style/Widget.GodTools.Tip.Arrow.Down"
+            <com.google.android.material.imageview.ShapeableImageView
+                style="@style/Widget.GodTools.Tip.Arrow.Vertical"
                 android:layout_above="@id/call_to_action_label"
                 android:layout_gravity="start"
                 android:layout_marginStart="24dp"
+                android:background="@{isCallToActionTipComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
                 android:onClick="@{() -> controller.showTip(page.callToAction.tip)}"
-                android:src="@{TipTypeKt.getDrawable(page.callToAction.tip.type, context)}"
+                android:src="@{isCallToActionTipComplete ? TipTypeKt.getDoneDrawable(page.callToAction.tip.type, context) : TipTypeKt.getDrawable(page.callToAction.tip.type, context)}"
                 app:cornerBottomLeft="@{TipArrowShape.endCornerTreatment(context)}"
                 app:cornerBottomRight="@{TipArrowShape.startCornerTreatment(context)}"
                 app:layout_childType="call_to_action_tip"
+                app:srcInsetBottom="@{@dimen/tract_tips_arrow_padding_arrow}"
+                app:srcInsetLeft="@{@dimen/tract_tips_arrow_padding}"
+                app:srcInsetRight="@{@dimen/tract_tips_arrow_padding}"
+                app:srcInsetTop="@{@dimen/tract_tips_arrow_padding}"
                 app:visibleIf="@{enableTips &amp;&amp; page.callToAction.tip != null}"
                 tools:src="@drawable/ic_tips_tip" />
         </org.cru.godtools.tract.widget.PageContentLayout>

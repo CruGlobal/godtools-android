@@ -946,16 +946,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         @UiThread
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            final PageContentLayout layout = mPageContentLayout.get();
-            if (layout != null) {
-                switch (msg.what) {
-                    case MSG_BOUNCE_ANIMATION:
+            switch (msg.what) {
+                case MSG_BOUNCE_ANIMATION:
+                    final PageContentLayout layout = mPageContentLayout.get();
+                    if (layout != null && layout.mBounceFirstCard) {
                         layout.bounceFirstCard();
                         enqueueBounce(BOUNCE_ANIMATION_DELAY);
-                        break;
-                }
+                    }
+                    break;
             }
         }
     }

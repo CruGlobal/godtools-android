@@ -14,21 +14,22 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
+import com.okta.oidc.clients.BaseAuth.REMOVE_TOKENS
+import com.okta.oidc.clients.BaseAuth.SIGN_OUT_SESSION
+import com.okta.oidc.clients.web.WebAuthClient
 import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
-import me.thekey.android.TheKey
-import me.thekey.android.livedata.defaultSessionGuidLiveData
-import me.thekey.android.view.dialog.LoginDialogFragment
+import javax.inject.Named
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.ccci.gto.android.common.util.content.ComponentNameUtils
 import org.ccci.gto.android.common.util.view.MenuUtils
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
@@ -45,6 +46,7 @@ import org.cru.godtools.base.ui.activity.BaseDesignActivity
 import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.dagger.OktaModule.IS_AUTHENTICATED_LIVE_DATA
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
@@ -55,7 +57,6 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.keynote.godtools.android.activity.MainActivity
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
@@ -64,15 +65,16 @@ internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
 internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
 internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
 
-private const val TAG_KEY_LOGIN_DIALOG = "keyLoginDialog"
-
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     BaseDesignActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected constructor() : this(INVALID_LAYOUT_RES)
     @Inject
-    protected lateinit var theKey: TheKey
+    internal lateinit var oktaClient: WebAuthClient
+    @Inject
+    @Named(IS_AUTHENTICATED_LIVE_DATA)
+    internal lateinit var isAuthenticatedLiveData: LiveData<Boolean>
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +150,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_logout -> {
-            theKey.logout()
+            oktaClient.signOut(this, REMOVE_TOKENS or SIGN_OUT_SESSION, null)
             true
         }
         R.id.action_help -> {
@@ -258,11 +260,11 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
                     val signupItem = findItem(R.id.action_signup)
                     val logoutItem = findItem(R.id.action_logout)
                     val profileItem = findItem(R.id.action_profile)
-                    theKey.defaultSessionGuidLiveData.observe(this@BasePlatformActivity) { guid ->
-                        loginItem?.isVisible = guid == null
-                        signupItem?.isVisible = guid == null
-                        logoutItem?.isVisible = guid != null
-                        profileItem?.isVisible = guid != null
+                    isAuthenticatedLiveData.observe(this@BasePlatformActivity) { isAuthenticated ->
+                        loginItem?.isVisible = !isAuthenticated
+                        signupItem?.isVisible = !isAuthenticated
+                        logoutItem?.isVisible = isAuthenticated
+                        profileItem?.isVisible = isAuthenticated
                     }
                 } else {
                     // hide all menu items if we aren't showing login items for this language
@@ -295,34 +297,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     }
 
     private fun launchLogin(signup: Boolean) {
-        val redirectUri = Uri.Builder()
-            .scheme("https")
-            .authority(getString(R.string.account_deeplink_host))
-            .path(getString(R.string.account_deeplink_path))
-            .build()
-
-        // try using an external browser first if we will deeplink back to GodTools
-        var handled = false
-        if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity::class.java, redirectUri)) {
-            handled = openUrl(
-                theKey.loginUriBuilder()
-                    .redirectUri(redirectUri)
-                    .signup(signup)
-                    .build()
-            )
-        }
-
-        // fallback to an in-app DialogFragment for login
-        if (!handled) {
-            val fm = supportFragmentManager
-            if (fm.findFragmentByTag(TAG_KEY_LOGIN_DIALOG) == null) {
-                val loginDialogFragment = LoginDialogFragment.builder()
-                    .redirectUri(redirectUri)
-                    .signup(signup)
-                    .build()
-                loginDialogFragment.show(fm.beginTransaction().addToBackStack("loginDialog"), TAG_KEY_LOGIN_DIALOG)
-            }
-        }
+        // TODO: figure out how to handle signup
+        oktaClient.signIn(this, null)
     }
 
     private fun launchContactUs() {

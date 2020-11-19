@@ -2,44 +2,50 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.layoutDirection
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
+import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
-    protected open val eventBus: EventBus
+    protected open val dao: GodToolsDao
+        get() {
+            checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }
+            return parentController.dao
+        }
+    internal open val eventBus: EventBus
         get() {
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
         }
+    internal open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
 
     var model: T? = null
         set(value) {
-            if (value == null) isVisible = false
             field = value
             onBind()
-        }
-
-    var isVisible = false
-        set(value) {
-            if (field == value) return
-            field = value
-            if (field) onVisible() else onHidden()
         }
 
     // region Lifecycle
@@ -52,11 +58,9 @@ abstract class BaseController<T : Base> protected constructor(
         updateLayoutDirection()
     }
 
-    protected open fun onVisible() = Unit
     internal open fun onValidate() = true
     internal open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
     internal open fun onContentEvent(event: Event) = Unit
-    protected open fun onHidden() = Unit
     // endregion Lifecycle
 
     fun supportsModel(model: Base?) = modelClass.isInstance(model)
@@ -108,6 +112,15 @@ abstract class BaseController<T : Base> protected constructor(
 
     open fun showTip(tip: Tip?) {
         parentController?.showTip(tip)
+    }
+
+    protected fun isTipComplete(tipId: String?): LiveData<Boolean> {
+        val manifest = model?.manifest
+        return when {
+            manifest == null || tipId == null -> ImmutableLiveData(false)
+            else -> dao.findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
+                .distinctUntilChanged()
+        }
     }
     // endregion Tips
 }

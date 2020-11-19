@@ -12,14 +12,20 @@ import com.adobe.mobile.Config
 import com.adobe.mobile.Visitor
 import com.adobe.mobile.VisitorID.VisitorIDAuthenticationState
 import com.karumi.weak.weak
+import com.okta.oidc.net.response.UserInfo
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
-import me.thekey.android.Attributes
-import me.thekey.android.TheKey
-import me.thekey.android.eventbus.event.TheKeyEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
@@ -56,8 +62,10 @@ private const val VISITOR_ID_ECID = "ecid"
 class AdobeAnalyticsService @Inject internal constructor(
     app: Application,
     eventBus: EventBus,
-    private val theKey: TheKey
+    oktaUserProfileProvider: OktaUserProfileProvider
 ) : ActivityLifecycleCallbacks {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
     private val analyticsExecutor: Executor = Executors.newSingleThreadExecutor()
 
     init {
@@ -90,8 +98,10 @@ class AdobeAnalyticsService @Inject internal constructor(
     override fun onActivityResumed(activity: Activity) {
         activeActivity = activity
 
-        val guid = theKey.defaultSessionGuid
-        analyticsExecutor.execute { Config.collectLifecycleData(activity, buildMap { baseContextData(guid) }) }
+        val userProfile = userProfileStateFlow.value
+        analyticsExecutor.execute {
+            Config.collectLifecycleData(activity, buildMap { baseContextData(userProfile) })
+        }
     }
 
     @MainThread
@@ -112,10 +122,10 @@ class AdobeAnalyticsService @Inject internal constructor(
 
     @AnyThread
     private fun AnalyticsActionEvent.track() {
-        val guid = theKey.defaultSessionGuid
+        val userProfile = userProfileStateFlow.value
         analyticsExecutor.execute {
             Analytics.trackAction(action, buildMap {
-                baseContextData(guid, this@track)
+                baseContextData(userProfile, this@track)
                 previousScreenName?.let { put(ADOBE_ATTR_SCREEN_NAME, it) }
                 adobeAttributes?.let { putAll(it) }
             })
@@ -124,27 +134,23 @@ class AdobeAnalyticsService @Inject internal constructor(
 
     @AnyThread
     private fun AnalyticsScreenEvent.track() {
-        val guid = theKey.defaultSessionGuid
+        val userProfile = userProfileStateFlow.value
         analyticsExecutor.execute {
-            Analytics.trackState(screen, buildMap { stateContextData(guid, this@track) })
+            Analytics.trackState(screen, buildMap { stateContextData(userProfile, this@track) })
             previousScreenName = screen
         }
     }
 
-    /**
-     * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
-     */
     @WorkerThread
-    private fun MutableMap<String, Any?>.baseContextData(guid: String?, event: AnalyticsBaseEvent? = null) {
+    private fun MutableMap<String, Any?>.baseContextData(userProfile: UserInfo?, event: AnalyticsBaseEvent? = null) {
         put(ADOBE_ATTR_APP_NAME, VALUE_GODTOOLS)
         put(ADOBE_ATTR_MARKETING_CLOUD_ID, adobeMarketingCloudId)
 
         put(ADOBE_ATTR_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN)
-        if (guid != null) {
+        if (userProfile != null) {
             put(ADOBE_ATTR_LOGGED_IN_STATUS, VALUE_LOGGED_IN)
-            put(ADOBE_ATTR_SSO_GUID, guid)
-            theKey.getAttributes(guid).getAttribute(Attributes.ATTR_GR_MASTER_PERSON_ID)
-                ?.let { put(ADOBE_ATTR_GR_MASTER_PERSON_ID, it) }
+            put(ADOBE_ATTR_SSO_GUID, userProfile.ssoGuid)
+            userProfile.grMasterPersonId?.let { put(ADOBE_ATTR_GR_MASTER_PERSON_ID, it) }
         }
         event?.run {
             locale?.let { put(ADOBE_ATTR_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
@@ -154,41 +160,36 @@ class AdobeAnalyticsService @Inject internal constructor(
     }
 
     @WorkerThread
-    private fun MutableMap<String, Any?>.stateContextData(guid: String?, event: AnalyticsScreenEvent) {
-        baseContextData(guid, event)
+    private fun MutableMap<String, Any?>.stateContextData(userProfile: UserInfo?, event: AnalyticsScreenEvent) {
+        baseContextData(userProfile, event)
         put(ADOBE_ATTR_SCREEN_NAME_PREVIOUS, previousScreenName)
         put(ADOBE_ATTR_SCREEN_NAME, event.screen)
     }
 
     // region Visitor ids
+    private val userProfileStateFlow = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+        .onEach { analyticsExecutor.execute { updateVisitorIdIdentifiers(it) } }
+        .stateIn(coroutineScope, Eagerly, null)
+
     init {
-        val guid = theKey.defaultSessionGuid
         analyticsExecutor.execute {
             Visitor.syncIdentifier(
                 VISITOR_ID_ECID,
                 adobeMarketingCloudId,
                 VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_UNKNOWN
             )
-            updateVisitorIdIdentifiers(guid)
+            updateVisitorIdIdentifiers(userProfileStateFlow.value)
         }
     }
 
     @WorkerThread
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onTheKeyEvent(@Suppress("UNUSED_PARAMETER") event: TheKeyEvent) {
-        val guid = theKey.defaultSessionGuid
-        analyticsExecutor.execute { updateVisitorIdIdentifiers(guid) }
-    }
-
-    @WorkerThread
-    private fun updateVisitorIdIdentifiers(guid: String?) {
+    private fun updateVisitorIdIdentifiers(userProfile: UserInfo?) {
         Visitor.syncIdentifiers(
             mutableMapOf(
-                VISITOR_ID_GUID to guid,
-                VISITOR_ID_MASTER_PERSON_ID to theKey.getAttributes(guid)
-                    .getAttribute(Attributes.ATTR_GR_MASTER_PERSON_ID)
+                VISITOR_ID_GUID to userProfile?.ssoGuid,
+                VISITOR_ID_MASTER_PERSON_ID to userProfile?.grMasterPersonId
             ), when {
-                guid != null -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_AUTHENTICATED
+                userProfile != null -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_AUTHENTICATED
                 else -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_LOGGED_OUT
             }
         )
