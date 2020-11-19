@@ -3,9 +3,12 @@ package org.cru.godtools.shortcuts
 import android.content.Context
 import android.content.pm.ShortcutManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import java.util.EnumSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -73,6 +76,36 @@ class GodToolsShortcutManagerTest {
         coroutineScope.runCurrent()
         verify(dao).find<Tool>("invalid")
         assertNull(shortcut.shortcut)
+    }
+
+    @Test
+    fun verifyUpdatePendingToolShortcuts() {
+        val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
+        coroutineScope.runCurrent()
+        clearInvocations(dao)
+
+        // update doesn't trigger before requested
+        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        verifyZeroInteractions(dao)
+
+        // trigger update
+        shortcutManager.updatePendingShortcutsActor.offer(Unit)
+        verifyZeroInteractions(dao)
+        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        verify(dao).find<Tool>("kgp")
+        verifyNoMoreInteractions(dao)
+        clearInvocations(dao)
+
+        // trigger multiple updates simultaneously, it should conflate to a single update
+        shortcutManager.updatePendingShortcutsActor.offer(Unit)
+        coroutineScope.advanceTimeBy(1)
+        verifyZeroInteractions(dao)
+        shortcutManager.updatePendingShortcutsActor.offer(Unit)
+        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        verify(dao).find<Tool>("kgp")
+        verifyNoMoreInteractions(dao)
+        coroutineScope.advanceUntilIdle()
+        verifyZeroInteractions(dao)
     }
     // endregion Pending Shortcuts
 }

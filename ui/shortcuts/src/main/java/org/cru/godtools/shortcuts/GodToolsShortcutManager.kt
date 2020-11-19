@@ -24,14 +24,19 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -58,6 +63,8 @@ import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
+
+internal const val DELAY_PENDING_SHORTCUT_UPDATE = 100L
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
@@ -100,7 +107,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     fun onToolUpdate(event: ToolUpdateEvent) {
         // Could change which tools are visible or the label for tools
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        launchUpdatePendingShortcutsJob()
     }
 
     @AnyThread
@@ -108,7 +115,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
         // Handles potential icon image changes.
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        launchUpdatePendingShortcutsJob()
     }
 
     @AnyThread
@@ -116,7 +123,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     fun onTranslationUpdate(event: TranslationUpdateEvent) {
         // Could change which tools are available or the label for tools
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        launchUpdatePendingShortcutsJob()
     }
 
     @AnyThread
@@ -132,7 +139,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             // primary/parallel language preferences changed. key=null when preferences are cleared
             Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
                 launchUpdateShortcutsJob(false)
-                launchUpdatePendingShortcutsJob(false)
+                launchUpdatePendingShortcutsJob()
             }
         }
     }
@@ -165,31 +172,35 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
 
-    private val updatePendingShortcutsJob = AtomicReference<Job?>()
-    private val updatePendingShortcutsMutex = Mutex()
+    @VisibleForTesting
+    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+    internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        while (!channel.isClosedForReceive) {
+            var loop = false
+            do {
+                loop = select {
+                    channel.onReceive { true }
+                    if (loop) onTimeout(DELAY_PENDING_SHORTCUT_UPDATE) { false }
+                }
+            } while (loop)
+
+            updatePendingShortcuts()
+        }
+    }
 
     @AnyThread
-    private fun launchUpdatePendingShortcutsJob(immediate: Boolean) {
-        // cancel any pending update
-        updatePendingShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
-
-        // launch the update
-        updatePendingShortcutsJob.set(coroutineScope.launch {
-            if (!immediate) delay(100)
-            withContext(NonCancellable) { updatePendingShortcuts() }
-        })
+    private fun launchUpdatePendingShortcutsJob() {
+        updatePendingShortcutsActor.offer(Unit)
     }
 
     @AnyThread
     private suspend fun updatePendingShortcuts() = coroutineScope {
-        updatePendingShortcutsMutex.withLock {
-            synchronized(pendingShortcuts) {
-                val i = pendingShortcuts.iterator()
-                while (i.hasNext()) {
-                    when (val shortcut = i.next().value.get()) {
-                        null -> i.remove()
-                        else -> launch { updatePendingShortcut(shortcut) }
-                    }
+        synchronized(pendingShortcuts) {
+            val i = pendingShortcuts.iterator()
+            while (i.hasNext()) {
+                when (val shortcut = i.next().value.get()) {
+                    null -> i.remove()
+                    else -> launch { updatePendingShortcut(shortcut) }
                 }
             }
         }
