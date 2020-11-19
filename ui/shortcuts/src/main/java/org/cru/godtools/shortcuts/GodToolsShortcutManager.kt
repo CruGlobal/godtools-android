@@ -8,6 +8,7 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -20,6 +21,7 @@ import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -58,13 +60,21 @@ import timber.log.Timber
 private const val TYPE_TOOL = "tool|"
 
 @Singleton
-class GodToolsShortcutManager @Inject constructor(
+class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
-    private val settings: Settings
+    private val settings: Settings,
+    private val coroutineScope: CoroutineScope,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) : SharedPreferences.OnSharedPreferenceChangeListener {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+        dao: GodToolsDao,
+        eventBus: EventBus,
+        settings: Settings
+    ) : this(context, dao, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
@@ -187,9 +197,7 @@ class GodToolsShortcutManager @Inject constructor(
 
     @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
-        withContext(Dispatchers.IO) {
-            dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
-        }
+        withContext(ioDispatcher) { dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) } }
     }
     // endregion Pending Shortcuts
 

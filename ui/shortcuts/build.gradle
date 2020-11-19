@@ -29,6 +29,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
