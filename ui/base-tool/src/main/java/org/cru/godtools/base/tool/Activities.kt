@@ -25,8 +25,8 @@ fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale
         .putLanguagesExtra(*languages)
         .putExtra(EXTRA_SHOW_TIPS, showTips)
 
-private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(Bundle().apply {
+private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(
     // XXX: we use singleString mode to support using this intent for legacy shortcuts
-    putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true)
-})
+    Bundle().apply { putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true) }
+)
 // endregion TractActivity
