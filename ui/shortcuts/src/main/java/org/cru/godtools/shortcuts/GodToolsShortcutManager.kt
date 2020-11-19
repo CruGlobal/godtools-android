@@ -8,6 +8,7 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -20,15 +21,22 @@ import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -57,14 +65,24 @@ import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
 
+internal const val DELAY_PENDING_SHORTCUT_UPDATE = 100L
+
 @Singleton
-class GodToolsShortcutManager @Inject constructor(
+class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
-    private val settings: Settings
+    private val settings: Settings,
+    private val coroutineScope: CoroutineScope,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) : SharedPreferences.OnSharedPreferenceChangeListener {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+        dao: GodToolsDao,
+        eventBus: EventBus,
+        settings: Settings
+    ) : this(context, dao, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
@@ -90,7 +108,7 @@ class GodToolsShortcutManager @Inject constructor(
     fun onToolUpdate(event: ToolUpdateEvent) {
         // Could change which tools are visible or the label for tools
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        updatePendingShortcutsActor.offer(Unit)
     }
 
     @AnyThread
@@ -98,7 +116,7 @@ class GodToolsShortcutManager @Inject constructor(
     fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
         // Handles potential icon image changes.
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        updatePendingShortcutsActor.offer(Unit)
     }
 
     @AnyThread
@@ -106,7 +124,7 @@ class GodToolsShortcutManager @Inject constructor(
     fun onTranslationUpdate(event: TranslationUpdateEvent) {
         // Could change which tools are available or the label for tools
         launchUpdateShortcutsJob(false)
-        launchUpdatePendingShortcutsJob(false)
+        updatePendingShortcutsActor.offer(Unit)
     }
 
     @AnyThread
@@ -122,7 +140,7 @@ class GodToolsShortcutManager @Inject constructor(
             // primary/parallel language preferences changed. key=null when preferences are cleared
             Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
                 launchUpdateShortcutsJob(false)
-                launchUpdatePendingShortcutsJob(false)
+                updatePendingShortcutsActor.offer(Unit)
             }
         }
     }
@@ -155,31 +173,23 @@ class GodToolsShortcutManager @Inject constructor(
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
 
-    private val updatePendingShortcutsJob = AtomicReference<Job?>()
-    private val updatePendingShortcutsMutex = Mutex()
-
-    @AnyThread
-    private fun launchUpdatePendingShortcutsJob(immediate: Boolean) {
-        // cancel any pending update
-        updatePendingShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
-
-        // launch the update
-        updatePendingShortcutsJob.set(coroutineScope.launch {
-            if (!immediate) delay(100)
-            withContext(NonCancellable) { updatePendingShortcuts() }
-        })
+    @VisibleForTesting
+    @OptIn(ObsoleteCoroutinesApi::class)
+    internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        channel.consumeAsFlow().conflate().collectLatest {
+            delay(DELAY_PENDING_SHORTCUT_UPDATE)
+            updatePendingShortcuts()
+        }
     }
 
     @AnyThread
     private suspend fun updatePendingShortcuts() = coroutineScope {
-        updatePendingShortcutsMutex.withLock {
-            synchronized(pendingShortcuts) {
-                val i = pendingShortcuts.iterator()
-                while (i.hasNext()) {
-                    when (val shortcut = i.next().value.get()) {
-                        null -> i.remove()
-                        else -> launch { updatePendingShortcut(shortcut) }
-                    }
+        synchronized(pendingShortcuts) {
+            val i = pendingShortcuts.iterator()
+            while (i.hasNext()) {
+                when (val shortcut = i.next().value.get()) {
+                    null -> i.remove()
+                    else -> launch { updatePendingShortcut(shortcut) }
                 }
             }
         }
@@ -187,9 +197,7 @@ class GodToolsShortcutManager @Inject constructor(
 
     @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
-        withContext(Dispatchers.IO) {
-            dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
-        }
+        withContext(ioDispatcher) { dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) } }
     }
     // endregion Pending Shortcuts
 
