@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -24,6 +25,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+/* Value constants */
+private const val VALUE_GODTOOLS = "GodTools"
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
@@ -62,6 +65,10 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
+        bundle.putString("cru_appname", VALUE_GODTOOLS)
+        event.locale?.let { bundle.putString("cru_contentlanguage", LocaleCompat.toLanguageTag(it)) }
+        event.adobeSiteSection?.let { bundle.putString("cru_sitesection", event.adobeSiteSection) }
+        event.adobeSiteSubSection?.let { bundle.putString("cru_sitesubsection", event.adobeSiteSubSection) }
         firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
