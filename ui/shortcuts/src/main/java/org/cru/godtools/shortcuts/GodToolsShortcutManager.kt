@@ -65,7 +65,7 @@ import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
 
-internal const val DELAY_PENDING_SHORTCUT_UPDATE = 100L
+internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
@@ -177,7 +177,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @OptIn(ObsoleteCoroutinesApi::class)
     internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
         channel.consumeAsFlow().conflate().collectLatest {
-            delay(DELAY_PENDING_SHORTCUT_UPDATE)
+            delay(DELAY_UPDATE_PENDING_SHORTCUTS)
             updatePendingShortcuts()
         }
     }

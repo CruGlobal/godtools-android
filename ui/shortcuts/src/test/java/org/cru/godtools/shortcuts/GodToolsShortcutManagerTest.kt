@@ -1,14 +1,21 @@
 package org.cru.godtools.shortcuts
 
+import android.app.Application
 import android.content.Context
-import android.content.pm.ShortcutManager
+import android.content.pm.ActivityInfo
+import android.content.pm.ResolveInfo
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import java.util.EnumSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -23,12 +30,17 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
+import org.robolectric.Shadows
+import org.robolectric.annotation.Config
+
+private const val ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT"
+private const val INSTALL_SHORTCUT_PERMISSION = "com.android.launcher.permission.INSTALL_SHORTCUT"
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [24, 25, 28])
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerTest {
     private lateinit var context: Context
-    private lateinit var systemShortcutManager: ShortcutManager
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var settings: Settings
@@ -38,11 +50,19 @@ class GodToolsShortcutManagerTest {
 
     @Before
     fun setup() {
-        systemShortcutManager = mock {
-            on { it.isRequestPinShortcutSupported } doReturn true
-        }
-        context = mock {
-            on { getSystemService(ShortcutManager::class.java) } doReturn systemShortcutManager
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        Shadows.shadowOf(app).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
+        context = spy(app) {
+            val pm = spy(it.packageManager) { pm ->
+                doReturn(listOf(
+                    ResolveInfo().apply {
+                        activityInfo = ActivityInfo().apply {
+                            permission = INSTALL_SHORTCUT_PERMISSION
+                        }
+                    }
+                )).whenever(pm).queryBroadcastReceivers(argThat { action == ACTION_INSTALL_SHORTCUT }, eq(0))
+            }
+            on { packageManager } doReturn pm
         }
         dao = mock()
         eventBus = mock()
@@ -85,13 +105,13 @@ class GodToolsShortcutManagerTest {
         clearInvocations(dao)
 
         // update doesn't trigger before requested
-        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verifyZeroInteractions(dao)
 
         // trigger update
         shortcutManager.updatePendingShortcutsActor.offer(Unit)
         verifyZeroInteractions(dao)
-        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
         clearInvocations(dao)
@@ -101,7 +121,7 @@ class GodToolsShortcutManagerTest {
         coroutineScope.advanceTimeBy(1)
         verifyZeroInteractions(dao)
         shortcutManager.updatePendingShortcutsActor.offer(Unit)
-        coroutineScope.advanceTimeBy(DELAY_PENDING_SHORTCUT_UPDATE)
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
         coroutineScope.advanceUntilIdle()
