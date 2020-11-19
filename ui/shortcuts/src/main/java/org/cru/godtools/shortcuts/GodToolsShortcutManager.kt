@@ -24,7 +24,6 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -35,8 +34,10 @@ import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -173,17 +174,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+    @OptIn(ObsoleteCoroutinesApi::class)
     internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        while (!channel.isClosedForReceive) {
-            var loop = false
-            do {
-                loop = select {
-                    channel.onReceive { true }
-                    if (loop) onTimeout(DELAY_PENDING_SHORTCUT_UPDATE) { false }
-                }
-            } while (loop)
-
+        channel.consumeAsFlow().conflate().collectLatest {
+            delay(DELAY_PENDING_SHORTCUT_UPDATE)
             updatePendingShortcuts()
         }
     }
