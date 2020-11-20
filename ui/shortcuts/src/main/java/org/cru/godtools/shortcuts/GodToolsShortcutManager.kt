@@ -18,14 +18,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -65,6 +62,7 @@ import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
 
+internal const val DELAY_UPDATE_SHORTCUTS = 5000L
 internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
 
 @Singleton
@@ -107,7 +105,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onToolUpdate(event: ToolUpdateEvent) {
         // Could change which tools are visible or the label for tools
-        launchUpdateShortcutsJob(false)
+        updateShortcutsActor.offer(Unit)
         updatePendingShortcutsActor.offer(Unit)
     }
 
@@ -115,7 +113,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
         // Handles potential icon image changes.
-        launchUpdateShortcutsJob(false)
+        updateShortcutsActor.offer(Unit)
         updatePendingShortcutsActor.offer(Unit)
     }
 
@@ -123,7 +121,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onTranslationUpdate(event: TranslationUpdateEvent) {
         // Could change which tools are available or the label for tools
-        launchUpdateShortcutsJob(false)
+        updateShortcutsActor.offer(Unit)
         updatePendingShortcutsActor.offer(Unit)
     }
 
@@ -139,7 +137,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         when (key) {
             // primary/parallel language preferences changed. key=null when preferences are cleared
             Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
-                launchUpdateShortcutsJob(false)
+                updateShortcutsActor.offer(Unit)
                 updatePendingShortcutsActor.offer(Unit)
             }
         }
@@ -202,26 +200,22 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     // endregion Pending Shortcuts
 
     // region Update Existing Shortcuts
-    private val updateShortcutsJob = AtomicReference<Job?>()
     private val updateShortcutsMutex = Mutex()
+
+    @VisibleForTesting
+    @OptIn(ObsoleteCoroutinesApi::class)
+    internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            channel.consumeAsFlow().conflate().collectLatest {
+                delay(DELAY_UPDATE_SHORTCUTS)
+                updateShortcuts()
+            }
+        }
+    }
 
     init {
         // launch an initial update
-        launchUpdateShortcutsJob(false)
-    }
-
-    @AnyThread
-    private fun launchUpdateShortcutsJob(immediate: Boolean) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
-
-        // cancel any pending update
-        updateShortcutsJob.getAndSet(null)?.takeIf { it.isActive }?.cancel()
-
-        // launch the update
-        updateShortcutsJob.set(coroutineScope.launch {
-            if (!immediate) delay(5_000)
-            withContext(NonCancellable) { updateShortcuts() }
-        })
+        updateShortcutsActor.offer(Unit)
     }
 
     @AnyThread
@@ -256,7 +250,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
     // endregion Update Existing Shortcuts
 
-    private suspend fun createAllShortcuts() = withContext(Dispatchers.IO) {
+    private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
         dao.get(Tool::class.java)
             .map { async { createToolShortcut(it) } }.awaitAll()
             .filterNotNull()
