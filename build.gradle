@@ -22,7 +22,7 @@ buildscript {
                 jacoco             : '0.8.6',
                 jsoup              : '1.13.1',
                 junit              : '4.13.1',
-                kotlin             : '1.4.10',
+                kotlin             : '1.4.20',
                 kotlinCoroutines   : '1.4.1',
                 leakcanary         : '2.5',
                 lightweightStream  : '1.2.1',
