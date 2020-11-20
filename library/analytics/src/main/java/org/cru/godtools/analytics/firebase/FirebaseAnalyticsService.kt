@@ -63,12 +63,13 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
     @MainThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
-        bundle.putString("cru_appname", VALUE_GODTOOLS)
-        event.locale?.let { bundle.putString("cru_contentlanguage", LocaleCompat.toLanguageTag(it)) }
-        event.adobeSiteSection?.let { bundle.putString("cru_sitesection", event.adobeSiteSection) }
-        event.adobeSiteSubSection?.let { bundle.putString("cru_sitesubsection", event.adobeSiteSubSection) }
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
+            putString("cru_appname", VALUE_GODTOOLS)
+            event.locale?.let { putString("cru_contentlanguage", LocaleCompat.toLanguageTag(it)) }
+            event.adobeSiteSection?.let { putString("cru_sitesection", event.adobeSiteSection) }
+            event.adobeSiteSubSection?.let { putString("cru_sitesubsection", event.adobeSiteSubSection) }
+        }
         firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
