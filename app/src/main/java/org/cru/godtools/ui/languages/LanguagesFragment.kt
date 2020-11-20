@@ -20,8 +20,8 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
-class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
-    LocaleSelectedListener {
+class LanguagesFragment() :
+    BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment), LocaleSelectedListener {
     constructor(primary: Boolean) : this() {
         isPrimary = primary
     }

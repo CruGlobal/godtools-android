@@ -35,8 +35,8 @@ import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
-class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
-    LinkClickedListener {
+class ToolDetailsFragment() :
+    BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment), LinkClickedListener {
     constructor(toolCode: String) : this() {
         this.toolCode = toolCode
     }
