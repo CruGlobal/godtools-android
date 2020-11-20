@@ -16,7 +16,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_AVAILABLE
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -27,18 +26,11 @@ class ToolsFragmentDataModel @ViewModelInject constructor(private val dao: GodTo
 
     val tools = mode.distinctUntilChanged().switchMap { mode ->
         Query.select<Tool>()
-            .where(ToolTable.FIELD_TYPE.ne(Tool.Type.UNKNOWN).let {
-                when (mode) {
-                    MODE_ADDED, MODE_AVAILABLE -> it.and(ToolTable.FIELD_ADDED.eq(mode == MODE_ADDED))
-                    else -> it
-                }
-            })
-            .orderBy(
-                when (mode) {
-                    MODE_ADDED -> ToolTable.SQL_ORDER_BY_ORDER
-                    else -> ToolTable.COLUMN_DEFAULT_ORDER
-                }
+            .where(
+                ToolTable.FIELD_TYPE.ne(Tool.Type.UNKNOWN)
+                    .run { if (mode == MODE_ADDED) and(ToolTable.FIELD_ADDED.eq(true)) else this }
             )
+            .orderBy(if (mode == MODE_ADDED) ToolTable.SQL_ORDER_BY_ORDER else ToolTable.COLUMN_DEFAULT_ORDER)
             .getAsLiveData(dao)
     }
 

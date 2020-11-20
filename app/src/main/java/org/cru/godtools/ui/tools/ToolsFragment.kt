@@ -51,8 +51,7 @@ import splitties.fragmentargs.argOrDefault
 class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
     companion object {
         const val MODE_ADDED = 1
-        const val MODE_AVAILABLE = 2
-        const val MODE_ALL = 3
+        const val MODE_ALL = 2
     }
 
     interface Callbacks {
