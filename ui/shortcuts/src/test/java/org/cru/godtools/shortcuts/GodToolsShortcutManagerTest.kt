@@ -63,11 +63,11 @@ class GodToolsShortcutManagerTest {
         Shadows.shadowOf(app).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
         this.app = spy(app) {
             val pm = spy(it.packageManager) { pm ->
-                doReturn(listOf(
-                    ResolveInfo().apply {
-                        activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
-                    }
-                )).whenever(pm).queryBroadcastReceivers(argThat { action == ACTION_INSTALL_SHORTCUT }, eq(0))
+                val shortcutReceiver = ResolveInfo().apply {
+                    activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
+                }
+                doReturn(listOf(shortcutReceiver))
+                    .whenever(pm).queryBroadcastReceivers(argThat { action == ACTION_INSTALL_SHORTCUT }, eq(0))
             }
             on { packageManager } doReturn pm
             it.getSystemService<ShortcutManager>()?.let { sm ->

@@ -20,8 +20,8 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
-class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment),
-    LocaleSelectedListener {
+class LanguagesFragment() :
+    BasePlatformFragment<LanguagesFragmentBinding>(R.layout.languages_fragment), LocaleSelectedListener {
     constructor(primary: Boolean) : this() {
         isPrimary = primary
     }
@@ -122,7 +122,7 @@ class LanguagesFragment() : BasePlatformFragment<LanguagesFragmentBinding>(R.lay
     private val languagesAdapter by lazy {
         LanguagesAdapter(this, viewModel.selectedLanguage).also { adapter ->
             adapter.callbacks = this
-            viewModel.languages.observe(this, adapter)
+            viewModel.languages.observe(this) { adapter.languages = it }
             if (!isPrimary) settings.primaryLanguageLiveData.observe(this) { adapter.setDisabled(it) }
         }
     }
