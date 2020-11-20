@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import java.util.Locale
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.ListItemLanguageBinding
 import org.cru.godtools.model.Language
 
-class LanguagesAdapter(lifecycleOwner: LifecycleOwner? = null, private val selected: LiveData<Locale?>) :
-    SimpleDataBindingAdapter<ListItemLanguageBinding>(lifecycleOwner), LanguageSelectedListener,
-    Observer<List<Language?>> {
+class LanguagesAdapter(
+    lifecycleOwner: LifecycleOwner? = null,
+    private val selected: LiveData<Locale?>
+) : SimpleDataBindingAdapter<ListItemLanguageBinding>(lifecycleOwner), LanguageSelectedListener {
     init {
         setHasStableIds(true)
     }
@@ -28,10 +28,6 @@ class LanguagesAdapter(lifecycleOwner: LifecycleOwner? = null, private val selec
     private var disabled: Set<Locale> = emptySet()
     fun setDisabled(vararg disabled: Locale) {
         this.disabled = disabled.toSet()
-    }
-
-    override fun onChanged(t: List<Language?>?) {
-        languages = t
     }
 
     private fun getLanguage(position: Int) = languages?.get(position)
