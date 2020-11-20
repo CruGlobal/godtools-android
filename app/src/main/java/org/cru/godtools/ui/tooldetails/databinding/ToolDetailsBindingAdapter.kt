@@ -7,6 +7,7 @@ import androidx.databinding.adapters.TextViewBindingAdapter
 import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.compat.util.LocaleCompat
+import org.ccci.gto.android.common.compat.util.LocaleCompat.Category
 import org.cru.godtools.base.util.getDisplayName
 
 @BindingAdapter("languages")
@@ -14,7 +15,8 @@ import org.cru.godtools.base.util.getDisplayName
 fun TextView.bindLanguages(languages: List<Locale>?) = TextViewBindingAdapter.setText(
     this,
     languages?.map { it.getDisplayName(context) }
-        ?.sortedWith(Collator.getInstance(LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY))
-            .apply { strength = Collator.PRIMARY })
+        ?.sortedWith(
+            Collator.getInstance(LocaleCompat.getDefault(Category.DISPLAY)).apply { strength = Collator.PRIMARY }
+        )
         ?.joinToString(", ")
 )
