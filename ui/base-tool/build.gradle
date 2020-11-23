@@ -34,7 +34,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
