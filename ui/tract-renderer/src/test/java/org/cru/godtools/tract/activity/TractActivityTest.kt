@@ -35,6 +35,7 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Manifest
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -42,6 +43,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
+import org.mockito.MockedStatic
+import org.mockito.Mockito.mockStatic
 import org.robolectric.annotation.Config
 
 @HiltAndroidTest
@@ -68,6 +71,8 @@ class TractActivityTest {
     @Inject
     lateinit var manifestManager: ManifestManager
 
+    private lateinit var lottieUtils: MockedStatic<*>
+
     @Before
     fun setup() {
         hiltRule.inject()
@@ -76,6 +81,12 @@ class TractActivityTest {
                 getLiveData(argThat<Query<Language>> { table.type == Language::class.java })
             } doReturn ImmutableLiveData(emptyList())
         }
+        lottieUtils = mockStatic(Class.forName("org.cru.godtools.tract.util.LottieUtilsKt"))
+    }
+
+    @After
+    fun cleanup() {
+        lottieUtils.closeOnDemand()
     }
 
     // region Share Menu Tests
