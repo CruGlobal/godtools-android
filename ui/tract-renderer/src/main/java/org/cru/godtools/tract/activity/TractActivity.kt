@@ -60,6 +60,7 @@ import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tract.util.isTractDeepLink
+import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
 import org.cru.godtools.xml.model.Card
@@ -469,9 +470,11 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     private var liveShareMenuObserver: Observer<Pair<State, State>>? = null
     private fun Menu.setupLiveShareMenuItemVisibility() {
         liveShareMenuObserver?.let { liveShareState.removeObserver(it) }
+
+        val liveShareItem = findItem(R.id.action_live_share_active)
+        liveShareItem?.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
         liveShareMenuObserver = Observer<Pair<State, State>> { (publisherState, subscriberState) ->
-            findItem(R.id.action_live_share_active)?.isVisible =
-                publisherState == State.On || subscriberState == State.On
+            liveShareItem?.isVisible = publisherState == State.On || subscriberState == State.On
         }.also { liveShareState.observe(this@TractActivity, it) }
     }
 
