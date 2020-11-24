@@ -7,6 +7,7 @@ import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
+import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
@@ -32,6 +33,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
 
     private fun <T : Base> createController(clazz: KClass<T>) = when (clazz) {
         Button::class -> ButtonController(parent, parentController)
+        Fallback::class -> FallbackController(parent, parentController)
         Form::class -> FormController(parent, parentController)
         Image::class -> ImageController(parent, parentController)
         InlineTip::class -> InlineTipController(parent, parentController)

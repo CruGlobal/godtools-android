@@ -54,6 +54,12 @@ class ButtonTest {
     }
 
     @Test
+    fun testButtonTypeUnknown() {
+        val button = Button(manifest, type = Button.Type.UNKNOWN)
+        assertTrue(button.isIgnored)
+    }
+
+    @Test
     fun testButtonTextColorFallbackBehavior() {
         val parent: Styles = mock {
             whenever(it.primaryColor) doReturn Color.RED

@@ -1,0 +1,7 @@
+<content:paragraph fallback="true" xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    <content:image resource="image.png" restrictTo="web" />
+    <content:image resource="image.png" restrictTo="ios" />
+    <content:text>Test</content:text>
+    <content:text restrictTo="android">Test</content:text>
+    <content:text restrictTo="mobile">Test</content:text>
+</content:paragraph>

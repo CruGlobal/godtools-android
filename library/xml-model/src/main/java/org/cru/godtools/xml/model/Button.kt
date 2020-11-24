@@ -62,8 +62,8 @@ class Button : Content, Styles {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: Base, text: ((Button) -> Text?)? = null) : super(parent) {
-        type = Type.DEFAULT
+    internal constructor(parent: Base, type: Type = Type.DEFAULT, text: ((Button) -> Text?)? = null) : super(parent) {
+        this.type = type
         events = emptySet()
         url = null
         _buttonColor = null
@@ -86,6 +86,8 @@ class Button : Content, Styles {
     override val textColor get() = stylesParent.primaryTextColor
 
     val analyticsEvents: Collection<AnalyticsEvent>
+
+    override val isIgnored get() = super.isIgnored || type == Type.UNKNOWN
 }
 
 val Button?.buttonColor get() = this?.buttonColor ?: stylesParent.buttonColor

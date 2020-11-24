@@ -10,6 +10,7 @@ internal enum class DeviceType {
 
     companion object {
         internal val ALL: Set<DeviceType> = Collections.unmodifiableSet(EnumSet.allOf(DeviceType::class.java))
+        internal val SUPPORTED: Set<DeviceType> = Collections.unmodifiableSet(EnumSet.of(ANDROID, MOBILE))
 
         @VisibleForTesting
         internal const val XML_DEVICE_TYPE_ANDROID = "android"

@@ -1,5 +1,7 @@
 package org.cru.godtools.xml
 
+internal const val SUPPORTED_VERSION = 1
+
 // XML namespaces
 internal const val XMLNS_MANIFEST = "https://mobile-content-api.cru.org/xmlns/manifest"
 internal const val XMLNS_ARTICLE = "https://mobile-content-api.cru.org/xmlns/article"
