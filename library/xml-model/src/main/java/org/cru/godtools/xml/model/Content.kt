@@ -54,6 +54,7 @@ abstract class Content : BaseModel {
                     Tabs.XML_TABS -> Tabs(parent, parser)
                     Text.XML_TEXT -> Text(parent, parser)
                     Image.XML_IMAGE -> Image(parent, parser)
+                    Video.XML_VIDEO -> Video(parent, parser)
                     Button.XML_BUTTON -> Button(parent, parser)
                     Fallback.XML_FALLBACK -> Fallback(parent, parser)
                     Form.XML_FORM -> Form(parent, parser)
