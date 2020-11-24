@@ -205,8 +205,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @VisibleForTesting
     @OptIn(ObsoleteCoroutinesApi::class)
     internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            channel.consumeAsFlow().conflate().collectLatest {
+        channel.consumeAsFlow().conflate().collectLatest {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 delay(DELAY_UPDATE_SHORTCUTS)
                 updateShortcuts()
             }
