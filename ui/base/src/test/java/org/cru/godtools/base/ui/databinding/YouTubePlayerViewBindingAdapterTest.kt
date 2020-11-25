@@ -1,19 +1,17 @@
 package org.cru.godtools.base.ui.databinding
 
-import androidx.databinding.adapters.ListenerUtil
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import org.cru.godtools.base.ui.R
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,36 +34,30 @@ class YouTubePlayerViewBindingAdapterTest {
     @Test
     fun testRecueVideoEnabledAndDisabled() {
         view.recueVideo(true)
-        val listener = recueListener
-        argumentCaptor<YouTubePlayerListener> {
+        argumentCaptor<RecueYouTubePlayerListener> {
             verify(view).addYouTubePlayerListener(capture())
-            verify(view, never()).removeYouTubePlayerListener(any())
-
-            assertSame(listener, firstValue)
+            assertTrue(firstValue.enabled)
+            assertSame(view.recueListener, firstValue)
         }
-        clearInvocations(view)
 
         view.recueVideo(false)
-        argumentCaptor<YouTubePlayerListener> {
-            verify(view, never()).addYouTubePlayerListener(any())
-            verify(view).removeYouTubePlayerListener(capture())
-
-            assertSame(listener, firstValue)
-        }
+        assertFalse(view.recueListener.enabled)
+        verify(view, never()).removeYouTubePlayerListener(any())
     }
 
     @Test
     fun testRecueVideoListener() {
-        view.recueVideo(true)
-        val listener = recueListener
+        val listener = view.recueListener
         listener.onVideoId(player, "test")
         verify(player, never()).cueVideo(any(), any())
 
+        listener.enabled = false
+        listener.onStateChange(player, PlayerConstants.PlayerState.ENDED)
+        verify(player, never()).cueVideo(any(), any())
+
+        listener.enabled = true
         listener.onStateChange(player, PlayerConstants.PlayerState.ENDED)
         verify(player).cueVideo("test", 0f)
     }
-
-    private val recueListener
-        get() = ListenerUtil.getListener<YouTubePlayerListener>(view, R.id.youtubeplayer_recue_listener)
     // endregion recueVideo()
 }
