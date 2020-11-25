@@ -40,6 +40,7 @@ internal class RecueYouTubePlayerListener : AbstractYouTubePlayerListener() {
 }
 // endregion recueVideo()
 
+// region updateVideo()
 @BindingAdapter("videoId")
 fun YouTubePlayerView.updateVideo(videoId: String?) = updateVideo(videoId, false)
 
@@ -63,3 +64,4 @@ private val YouTubePlayerView.tracker
             ListenerUtil.trackListener(this, it, R.id.youtubeplayer_tracker)
             addYouTubePlayerListener(it)
         }
+// region updateVideo()
