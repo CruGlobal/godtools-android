@@ -169,6 +169,11 @@ class GodToolsShortcutManagerTest {
     fun verifyUpdateExistingShortcutsNotAvailableForOldSdks() {
         assumeThat(Build.VERSION.SDK_INT, lessThan(Build.VERSION_CODES.N_MR1))
         coroutineScope.advanceUntilIdle()
+        assertTrue(
+            "Ensure actor can still accept requests, even though they are no-ops",
+            shortcutManager.updateShortcutsActor.offer(Unit)
+        )
+        coroutineScope.advanceUntilIdle()
         verifyZeroInteractions(dao)
     }
     // endregion Update Existing Shortcuts
