@@ -75,7 +75,14 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
     @MainThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        firebase.logEvent(event.firebaseEventName, null)
+        val bundle = Bundle().apply {
+            event.adobeAttributes?.forEach { attribute ->
+                val attributeKey = attribute.key.replace(Regex("[ \\-.]"), "_")
+                putString(attributeKey, attribute.value.toString())
+            }
+        }
+
+        firebase.logEvent(event.firebaseEventName, bundle)
     }
 
     init {
