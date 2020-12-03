@@ -118,7 +118,7 @@ class GodToolsShortcutManagerTest {
     fun verifyUpdatePendingToolShortcuts() {
         shortcutManager.updateShortcutsActor.close()
         val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
-        coroutineScope.runCurrent()
+        coroutineScope.advanceUntilIdle()
         clearInvocations(dao)
 
         // update doesn't trigger before requested
@@ -159,11 +159,17 @@ class GodToolsShortcutManagerTest {
         verifyZeroInteractions(dao)
         coroutineScope.advanceTimeBy(1)
         verify(dao).get(Tool::class.java)
+        clearInvocations(dao)
 
-        // trigger multiple updates simultaneously, it should conflate to a single update
+        // trigger multiple updates simultaneously, it should aggregate to a single update
         assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
-        coroutineScope.advanceTimeBy(1)
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
+        assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verifyZeroInteractions(dao)
+        coroutineScope.advanceUntilIdle()
+        verify(dao).get(Tool::class.java)
     }
 
     @Test
