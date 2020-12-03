@@ -15,6 +15,7 @@ import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
 import timber.log.Timber
 
@@ -42,6 +43,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
         Paragraph::class -> ParagraphController(parent, parentController)
         Tabs::class -> TabsController(parent, parentController)
         Text::class -> TextController(parent, parentController)
+        Video::class -> VideoController(parent, parentController)
         else -> {
             val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
             if (ApplicationUtils.isDebuggable(parent.context)) throw e

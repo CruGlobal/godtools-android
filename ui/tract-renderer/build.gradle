@@ -60,6 +60,7 @@ dependencies {
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 

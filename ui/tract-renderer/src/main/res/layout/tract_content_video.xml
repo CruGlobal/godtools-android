@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.VideoController" />
+        <variable name="model" type="org.cru.godtools.xml.model.Video" />
+    </data>
+
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+        app:recue="@{true}"
+        app:useWebUi="true"
+        app:videoId="@{model.videoId}" />
+</layout>
