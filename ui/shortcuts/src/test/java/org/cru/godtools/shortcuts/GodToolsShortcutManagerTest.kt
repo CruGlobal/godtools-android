@@ -20,6 +20,7 @@ import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import java.util.EnumSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.base.Settings
@@ -53,7 +54,7 @@ class GodToolsShortcutManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var settings: Settings
-    private val coroutineScope = TestCoroutineScope().apply { pauseDispatcher() }
+    private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
 
     private lateinit var shortcutManager: GodToolsShortcutManager
 
@@ -85,7 +86,7 @@ class GodToolsShortcutManagerTest {
 
     @After
     fun cleanup() {
-        shortcutManager.updateShortcutsActor.close()
+        shortcutManager.shutdown()
         coroutineScope.cleanupTestCoroutines()
     }
 
