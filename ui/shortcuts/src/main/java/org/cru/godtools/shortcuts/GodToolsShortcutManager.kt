@@ -8,6 +8,7 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -23,6 +24,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -228,7 +230,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) = try {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             shortcutManager?.dynamicShortcuts = Query.select<Tool>()
                 .where(ToolTable.FIELD_ADDED.eq(true))
                 .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
@@ -249,6 +251,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Update Existing Shortcuts
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal fun shutdown() {
+        updatePendingShortcutsActor.close()
+        updateShortcutsActor.close()
+        coroutineScope.coroutineContext[Job]?.cancel()
+    }
 
     private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
         dao.get(Tool::class.java)
