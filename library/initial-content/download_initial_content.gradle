@@ -7,9 +7,9 @@ android.libraryVariants.all { variant ->
     def mobileContentApi = variant.flavorName.contains("stage") ? uris.mobileContentApi.stage : uris.mobileContentApi.production
 
     // include the list of downloaded tools and languages as a BuildConfig constant
-    variant.buildConfigField('java.util.Set<String>', 'BUNDLED_TOOLS', 'com.google.common.collect.ImmutableSet.of('
+    variant.buildConfigField('java.util.List<String>', 'BUNDLED_TOOLS', 'java.util.Arrays.asList('
             + bundledContent.tools.collect{ "\"$it\"" }.join(',') + ')')
-    variant.buildConfigField('java.util.Set<String>', 'BUNDLED_LANGUAGES', 'com.google.common.collect.ImmutableSet.of('
+    variant.buildConfigField('java.util.List<String>', 'BUNDLED_LANGUAGES', 'java.util.Arrays.asList('
             + bundledContent.languages.collect{ "\"$it\"" }.join(',') + ')')
 
     // create a generated assets directory for the initial content and add it to the most specific source set available.
