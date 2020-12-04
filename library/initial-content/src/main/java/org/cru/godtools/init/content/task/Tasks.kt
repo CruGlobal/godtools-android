@@ -8,9 +8,8 @@ import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -121,8 +120,8 @@ internal class Tasks @Inject constructor(
         // add any bundled tools as the default tools
         coroutineScope {
             BuildConfig.BUNDLED_TOOLS
-                .map { async { downloadManager.pinTool(it) } }
-                .awaitAll()
+                .map { launch { downloadManager.pinTool(it) } }
+                .joinAll()
         }
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
