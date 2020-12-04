@@ -2,6 +2,7 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.annotation.VisibleForTesting
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -40,7 +41,8 @@ private const val TAG = "InitialContentTasks"
 
 private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
 
-private val PREFERRED_FAVORITES = listOf(
+@VisibleForTesting
+internal val PREFERRED_FAVORITES = listOf(
     "teachmetoshare",
     "fourlaws",
     "kgp",
@@ -52,7 +54,8 @@ private val PREFERRED_FAVORITES = listOf(
     "emojitool",
     "kgp-us"
 )
-private const val NUMBER_OF_FAVORITES = 4
+@VisibleForTesting
+internal const val NUMBER_OF_FAVORITES = 4
 
 @Reusable
 internal class Tasks @Inject constructor(

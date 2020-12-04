@@ -28,6 +28,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 }
 
