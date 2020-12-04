@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
@@ -31,12 +32,27 @@ import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
 
 private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
+
+private val PREFERRED_FAVORITES = listOf(
+    "teachmetoshare",
+    "fourlaws",
+    "kgp",
+    "satisfied",
+    "thefour",
+    "honorrestored",
+    "poweroverfear",
+    "es",
+    "emojitool",
+    "kgp-us"
+)
+private const val NUMBER_OF_FAVORITES = 4
 
 @Reusable
 internal class Tasks @Inject constructor(
@@ -122,6 +138,29 @@ internal class Tasks @Inject constructor(
             BuildConfig.BUNDLED_TOOLS
                 .map { launch { downloadManager.pinTool(it) } }
                 .joinAll()
+        }
+
+        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
+    }
+
+    suspend fun initFavoriteTools() {
+        // check to see if we have initialized the default tools before
+        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+
+        coroutineScope {
+            val available = Query.select<Translation>()
+                .where(
+                    TranslationTable.FIELD_LANGUAGE.eq(settings.primaryLanguage)
+                        .and(TranslationTable.SQL_WHERE_PUBLISHED)
+                )
+                .get(dao)
+                .mapNotNullTo(mutableSetOf()) { it.toolCode }
+
+            (PREFERRED_FAVORITES.asSequence().filter { available.contains(it) } + PREFERRED_FAVORITES.asSequence())
+                .distinct()
+                .take(NUMBER_OF_FAVORITES)
+                .map { launch { downloadManager.pinTool(it) } }
+                .toList().joinAll()
         }
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
