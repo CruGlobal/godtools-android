@@ -7,7 +7,6 @@ import org.ccci.gto.android.common.util.database.getLocale
 import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.ToolCode.COLUMN_TOOL
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE
@@ -16,6 +15,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_MANIFEST
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_NAME
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TAGLINE
+import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TOOL
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_VERSION
 
 internal object TranslationMapper : BaseMapper<Translation>() {
