@@ -9,6 +9,7 @@ import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -41,19 +42,6 @@ private const val TAG = "InitialContentTasks"
 
 private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
 
-@VisibleForTesting
-internal val PREFERRED_FAVORITES = listOf(
-    "teachmetoshare",
-    "fourlaws",
-    "kgp",
-    "satisfied",
-    "thefour",
-    "honorrestored",
-    "poweroverfear",
-    "es",
-    "emojitool",
-    "kgp-us"
-)
 @VisibleForTesting
 internal const val NUMBER_OF_FAVORITES = 4
 
@@ -144,6 +132,9 @@ internal class Tasks @Inject constructor(
         if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
 
         coroutineScope {
+            val preferred = async {
+                bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
+            }
             val available = Query.select<Translation>()
                 .where(
                     TranslationTable.FIELD_LANGUAGE.eq(settings.primaryLanguage)
@@ -152,7 +143,7 @@ internal class Tasks @Inject constructor(
                 .get(dao)
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
 
-            (PREFERRED_FAVORITES.asSequence().filter { available.contains(it) } + PREFERRED_FAVORITES.asSequence())
+            (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
                 .distinct()
                 .take(NUMBER_OF_FAVORITES)
                 .map { launch { downloadManager.pinTool(it) } }
