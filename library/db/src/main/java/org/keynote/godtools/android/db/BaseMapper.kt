@@ -5,7 +5,7 @@ import android.database.Cursor
 import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getLong
 import org.cru.godtools.model.Base
-import org.keynote.godtools.android.db.Contract.BaseTable.COLUMN_ID
+import org.keynote.godtools.android.db.Contract.BaseTable.Companion.COLUMN_ID
 
 internal abstract class BaseMapper<T : Base> : AbstractMapper<T>() {
     override fun mapField(values: ContentValues, field: String, obj: T) {
