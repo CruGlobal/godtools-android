@@ -15,12 +15,24 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
+import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
+import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
 object Contract : BaseContract() {
     abstract class BaseTable : Base {
         internal companion object {
             internal const val COLUMN_ID = COLUMN_ROWID
             internal const val SQL_COLUMN_ID = SQL_COLUMN_ROWID
+        }
+
+        internal object ToolCode {
+            internal const val COLUMN_TOOL = "tool"
+            internal const val SQL_COLUMN_TOOL = "$COLUMN_TOOL TEXT NOT NULL"
+        }
+
+        internal object LanguageCode {
+            internal const val COLUMN_LANGUAGE = "language"
+            internal const val SQL_COLUMN_LANGUAGE = "$COLUMN_LANGUAGE TEXT NOT NULL"
         }
     }
 
@@ -31,20 +43,6 @@ object Contract : BaseContract() {
         val SQL_DELETE_GTPACKAGES = drop("gtpackages")
         val SQL_DELETE_GTPACKAGES_OLD = drop("gtpackages_old")
         val SQL_DELETE_RESOURCES = drop("resources")
-    }
-
-    internal interface ToolCode {
-        companion object {
-            internal const val COLUMN_TOOL = "tool"
-            internal const val SQL_COLUMN_TOOL = "$COLUMN_TOOL TEXT NOT NULL"
-        }
-    }
-
-    internal interface LanguageCode {
-        companion object {
-            internal const val COLUMN_LANGUAGE = "language"
-            internal const val SQL_COLUMN_LANGUAGE = "$COLUMN_LANGUAGE TEXT NOT NULL"
-        }
     }
 
     object LanguageTable : BaseTable() {
@@ -171,7 +169,7 @@ object Contract : BaseContract() {
         // endregion DB migrations
     }
 
-    object TranslationTable : BaseTable(), ToolCode, LanguageCode {
+    object TranslationTable : BaseTable() {
         internal const val TABLE_NAME = "translations"
         internal val TABLE = Table.forClass<Translation>()
 
@@ -418,7 +416,7 @@ object Contract : BaseContract() {
         // endregion DB Migrations
     }
 
-    object TrainingTipTable : Base, ToolCode, LanguageCode {
+    object TrainingTipTable : Base {
         internal const val TABLE_NAME = "training_tips"
         private val TABLE = Table.forClass<TrainingTip>()
 
