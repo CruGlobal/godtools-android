@@ -28,10 +28,6 @@ private const val DATABASE_VERSION = 44
 /*
  * Version history
  *
- * v5.0.0 - v5.0.10
- * 37: 2018-04-23
- * v5.0.11 - v5.0.12
- * 38: 2018-06-15
  * v5.0.13 - v5.0.18
  * 39: 2018-10-24
  * v5.0.19 - v5.1.4
@@ -72,11 +68,6 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             var upgradeTo = oldVersion + 1
             while (upgradeTo <= newVersion) {
                 when (upgradeTo) {
-                    37 -> db.execSQL(TranslationTable.SQL_V37_ALTER_TAGLINE)
-                    38 -> {
-                        db.execSQL(ToolTable.SQL_V38_ALTER_ORDER)
-                        db.execSQL(ToolTable.SQL_V38_POPULATE_ORDER)
-                    }
                     39 -> db.execSQL(LanguageTable.SQL_V39_ALTER_NAME)
                     40 -> db.execSQL(ToolTable.SQL_V40_ALTER_OVERVIEW_VIDEO)
                     41 -> db.execSQL(GlobalActivityAnalyticsTable.SQL_V41_CREATE_GLOBAL_ANALYTICS)

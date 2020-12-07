@@ -163,8 +163,6 @@ object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
-        internal const val SQL_V38_ALTER_ORDER = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_ORDER"
-        internal const val SQL_V38_POPULATE_ORDER = "UPDATE $TABLE_NAME SET $COLUMN_ORDER = ${Int.MAX_VALUE}"
         internal const val SQL_V40_ALTER_OVERVIEW_VIDEO =
             "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_OVERVIEW_VIDEO"
         internal const val SQL_V42_ALTER_DEFAULT_ORDER = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DEFAULT_ORDER"
@@ -244,10 +242,6 @@ object Contract : BaseContract() {
             SQL_COLUMN_LAST_ACCESSED
         )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB migrations
-        internal const val SQL_V37_ALTER_TAGLINE = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_TAGLINE"
-        // endregion DB migrations
     }
 
     object AttachmentTable : BaseTable() {
