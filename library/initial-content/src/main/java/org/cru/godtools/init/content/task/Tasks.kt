@@ -109,27 +109,20 @@ internal class Tasks @Inject constructor(
         // short-circuit if we already have any tools loaded
         if (dao.getCursor(Tool::class.java).count > 0) return@withContext
 
-        try {
-            val tools = context.assets.open("tools.json").reader().use { it.readText() }
-                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
-
+        bundledTools.let { tools ->
             dao.transaction {
-                tools.data.forEach { tool ->
-                    // if (dao.refresh(tool) != null) return@forEach
+                tools.forEach { tool ->
                     if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
                     tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
                     tool.attachments?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
                 }
             }
-
-            // send a broadcast for updated objects
-            eventBus.post(ToolUpdateEvent)
-            eventBus.post(TranslationUpdateEvent)
-            eventBus.post(AttachmentUpdateEvent)
-        } catch (e: Exception) {
-            // log exception, but it shouldn't be fatal (for now)
-            Timber.tag(TAG).e(e, "Error loading bundled tools")
         }
+
+        // send a broadcast for updated objects
+        eventBus.post(ToolUpdateEvent)
+        eventBus.post(TranslationUpdateEvent)
+        eventBus.post(AttachmentUpdateEvent)
     }
 
     suspend fun initDefaultTools() {
@@ -168,6 +161,17 @@ internal class Tasks @Inject constructor(
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
+
+    private val bundledTools: List<Tool>
+        get() = try {
+            context.assets.open("tools.json").reader().use { it.readText() }
+                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
+                .data
+        } catch (e: Exception) {
+            // log exception, but it shouldn't be fatal (for now)
+            Timber.tag(TAG).e(e, "Error parsing bundled tools")
+            emptyList()
+        }
     // endregion Tool Initial Content Tasks
 
     suspend fun importBundledAttachments() = withContext(Dispatchers.IO) {
