@@ -18,6 +18,7 @@ private const val JSON_BANNER = "attr-banner"
 private const val JSON_BANNER_DETAILS = "attr-banner-about"
 private const val JSON_OVERVIEW_VIDEO = "attr-about-overview-video-youtube"
 private const val JSON_DEFAULT_ORDER = "attr-default-order"
+private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
 
 @JsonApiType(JSON_API_TYPE)
 class Tool : Base() {
@@ -70,6 +71,9 @@ class Tool : Base() {
 
     @JsonApiAttribute(JSON_OVERVIEW_VIDEO)
     var overviewVideo: String? = null
+
+    @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
+    var initialFavoritesPriority: Int? = Int.MAX_VALUE
 
     @JsonApiAttribute(JSON_DEFAULT_ORDER)
     var defaultOrder: Int? = 0

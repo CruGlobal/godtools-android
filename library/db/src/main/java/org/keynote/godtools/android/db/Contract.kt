@@ -186,7 +186,7 @@ object Contract : BaseContract() {
 
         val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
-        internal val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
+        val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
         val FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST)
         private val FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED)
         val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)

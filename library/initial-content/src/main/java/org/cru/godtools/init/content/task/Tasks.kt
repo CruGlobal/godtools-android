@@ -2,6 +2,7 @@ package org.cru.godtools.init.content.task
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.annotation.VisibleForTesting
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -9,13 +10,14 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
@@ -32,12 +34,16 @@ import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
 
 private const val SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools"
+
+@VisibleForTesting
+internal const val NUMBER_OF_FAVORITES = 4
 
 @Reusable
 internal class Tasks @Inject constructor(
@@ -91,27 +97,20 @@ internal class Tasks @Inject constructor(
         // short-circuit if we already have any tools loaded
         if (dao.getCursor(Tool::class.java).count > 0) return@withContext
 
-        try {
-            val tools = context.assets.open("tools.json").reader().use { it.readText() }
-                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
-
+        bundledTools.let { tools ->
             dao.transaction {
-                tools.data.forEach { tool ->
-                    // if (dao.refresh(tool) != null) return@forEach
+                tools.forEach { tool ->
                     if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
                     tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
                     tool.attachments?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
                 }
             }
-
-            // send a broadcast for updated objects
-            eventBus.post(ToolUpdateEvent)
-            eventBus.post(TranslationUpdateEvent)
-            eventBus.post(AttachmentUpdateEvent)
-        } catch (e: Exception) {
-            // log exception, but it shouldn't be fatal (for now)
-            Timber.tag(TAG).e(e, "Error loading bundled tools")
         }
+
+        // send a broadcast for updated objects
+        eventBus.post(ToolUpdateEvent)
+        eventBus.post(TranslationUpdateEvent)
+        eventBus.post(AttachmentUpdateEvent)
     }
 
     suspend fun initDefaultTools() {
@@ -121,12 +120,49 @@ internal class Tasks @Inject constructor(
         // add any bundled tools as the default tools
         coroutineScope {
             BuildConfig.BUNDLED_TOOLS
-                .map { async { downloadManager.pinTool(it) } }
-                .awaitAll()
+                .map { launch { downloadManager.pinTool(it) } }
+                .joinAll()
         }
 
         dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
+
+    suspend fun initFavoriteTools() {
+        // check to see if we have initialized the default tools before
+        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+
+        coroutineScope {
+            val preferred = async {
+                bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
+            }
+            val available = Query.select<Translation>()
+                .where(
+                    TranslationTable.FIELD_LANGUAGE.eq(settings.primaryLanguage)
+                        .and(TranslationTable.SQL_WHERE_PUBLISHED)
+                )
+                .get(dao)
+                .mapNotNullTo(mutableSetOf()) { it.toolCode }
+
+            (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
+                .distinct()
+                .take(NUMBER_OF_FAVORITES)
+                .map { launch { downloadManager.pinTool(it) } }
+                .toList().joinAll()
+        }
+
+        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
+    }
+
+    private val bundledTools: List<Tool>
+        get() = try {
+            context.assets.open("tools.json").reader().use { it.readText() }
+                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
+                .data
+        } catch (e: Exception) {
+            // log exception, but it shouldn't be fatal (for now)
+            Timber.tag(TAG).e(e, "Error parsing bundled tools")
+            emptyList()
+        }
     // endregion Tool Initial Content Tasks
 
     suspend fun importBundledAttachments() = withContext(Dispatchers.IO) {
