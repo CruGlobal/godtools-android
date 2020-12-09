@@ -1,8 +1,9 @@
 package org.cru.godtools.xml.service
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.stub
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.Locale
@@ -33,8 +34,11 @@ class ManifestParserTest {
 
     @Test
     fun verifyParseManifest() {
-        whenever(fileManager.getInputStream(MANIFEST))
-            .thenReturn(getInputStreamForResource("../model/manifest_empty.xml"))
+        fileManager.stub {
+            onBlocking { getInputStream(MANIFEST) } doAnswer {
+                this@ManifestParserTest.getInputStreamForResource("../model/manifest_empty.xml")
+            }
+        }
         val result = runBlocking { parser.parse(MANIFEST, TOOL_CODE, Locale.ENGLISH) }
         assertTrue(result is Result.Data)
         assertNotNull((result as Result.Data).manifest)
@@ -42,21 +46,29 @@ class ManifestParserTest {
 
     @Test
     fun verifyParseManifestMissing() {
-        whenever(fileManager.getInputStream(MANIFEST)).thenThrow(FileNotFoundException::class.java)
+        fileManager.stub {
+            onBlocking { getInputStream(MANIFEST) } doAnswer { throw FileNotFoundException() }
+        }
         val result = runBlocking { parser.parse(MANIFEST, TOOL_CODE, Locale.ENGLISH) }
         assertTrue(result is Result.Error.NotFound)
     }
 
     @Test
     fun verifyParseManifestReadError() {
-        whenever(fileManager.getInputStream(MANIFEST)).thenAnswer { throw IOException() }
+        fileManager.stub {
+            onBlocking { getInputStream(MANIFEST) } doAnswer { throw IOException() }
+        }
         val result = runBlocking { parser.parse(MANIFEST, TOOL_CODE, Locale.ENGLISH) }
         assertTrue(result is Result.Error)
     }
 
     @Test
     fun verifyParseManifestInvalid() {
-        whenever(fileManager.getInputStream(MANIFEST)).thenReturn(getInputStreamForResource("../model/image.xml"))
+        fileManager.stub {
+            onBlocking { getInputStream(MANIFEST) } doAnswer {
+                this@ManifestParserTest.getInputStreamForResource("../model/image.xml")
+            }
+        }
         val result = runBlocking { parser.parse(MANIFEST, TOOL_CODE, Locale.ENGLISH) }
         assertTrue(result is Result.Error.Corrupted)
     }

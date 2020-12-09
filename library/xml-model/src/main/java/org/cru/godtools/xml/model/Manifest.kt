@@ -110,7 +110,7 @@ class Manifest : BaseModel, Styles {
         code: String,
         locale: Locale,
         parser: XmlPullParser,
-        parseFile: (String) -> CloseableXmlPullParser
+        parseFile: suspend (String) -> CloseableXmlPullParser
     ) : super() {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST)
 
@@ -228,7 +228,7 @@ class Manifest : BaseModel, Styles {
     }
 
     @WorkerThread
-    private fun parsePages(parser: XmlPullParser, parseFile: (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun parsePages(parser: XmlPullParser, parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
@@ -285,7 +285,7 @@ class Manifest : BaseModel, Styles {
     }
 
     @WorkerThread
-    private fun XmlPullParser.parseTips(parseFile: (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun XmlPullParser.parseTips(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
         buildList {
             while (next() != XmlPullParser.END_TAG) {
                 if (eventType != XmlPullParser.START_TAG) continue

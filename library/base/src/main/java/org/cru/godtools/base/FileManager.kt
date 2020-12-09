@@ -1,7 +1,6 @@
 package org.cru.godtools.base
 
 import android.content.Context
-import androidx.annotation.WorkerThread
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -17,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 @Singleton
 class FileManager @Inject internal constructor(@ApplicationContext private val context: Context) {
@@ -34,9 +34,9 @@ class FileManager @Inject internal constructor(@ApplicationContext private val c
     private val resourcesDir by lazy { runBlocking { resourcesDirTask.await() } }
     fun getFileBlocking(filename: String) = File(resourcesDir, filename)
 
-    @WorkerThread
     @Throws(FileNotFoundException::class)
-    fun getInputStream(filename: String): InputStream = getFileBlocking(filename).inputStream()
+    suspend fun getInputStream(filename: String): InputStream =
+        withContext(Dispatchers.IO) { getFile(filename).inputStream() }
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
