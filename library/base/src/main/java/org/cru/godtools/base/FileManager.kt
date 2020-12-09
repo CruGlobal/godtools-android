@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import org.cru.godtools.base.util.getGodToolsFile
 
 @Singleton
 class FileManager @Inject internal constructor(@ApplicationContext private val context: Context) {
@@ -26,9 +25,9 @@ class FileManager @Inject internal constructor(@ApplicationContext private val c
     suspend fun createResourcesDir() = resourcesDirCreated.await()
     suspend fun getResourcesDir() = resourcesDir.await()
 
-    suspend fun getFile(filename: String?) = context.getGodToolsFile(filename)
+    suspend fun getFile(filename: String) = File(resourcesDir.await(), filename)
 
     @WorkerThread
     @Throws(FileNotFoundException::class)
-    fun getInputStream(filename: String): InputStream? = runBlocking { getFile(filename) }?.inputStream()
+    fun getInputStream(filename: String): InputStream = runBlocking { getFile(filename).inputStream() }
 }

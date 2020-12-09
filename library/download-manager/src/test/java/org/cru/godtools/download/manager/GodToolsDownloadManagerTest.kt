@@ -409,7 +409,7 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
-    private suspend fun FileManager.getFile(attachment: Attachment) = getFile(attachment.localFilename)
+    private suspend fun FileManager.getFile(attachment: Attachment) = getFile(attachment.localFilename!!)
     // endregion Attachments
 
     // region Translations
