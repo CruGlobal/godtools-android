@@ -3,8 +3,8 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
-import java.io.File
+import kotlinx.coroutines.runBlocking
+import org.cru.godtools.base.fileManager
 
-// TODO: Context.filesDir accesses storage and is blocking.
-val Context.godToolsResourcesDir get() = File(filesDir, "resources")
-fun Context.getGodToolsFile(name: String?) = name?.let { File(godToolsResourcesDir, name) }
+@Deprecated("use FileManager to access files instead")
+fun Context.getGodToolsFile(name: String?) = name?.let { runBlocking { fileManager.getFile(name) } }
