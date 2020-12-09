@@ -46,7 +46,7 @@ class BaseDataSyncTasksTest {
         // run test
         tasks.storeLanguage(language)
         verify(dao).refresh(same(language))
-        verify(dao, never()).update(any<Any>(), anyOrNull<Expression>(), any<String>())
+        verify(dao, never()).update(any(), anyOrNull<Expression>(), any<String>())
         verify(dao).updateOrInsert(same(language), eq(SQLiteDatabase.CONFLICT_REPLACE), any())
     }
 
