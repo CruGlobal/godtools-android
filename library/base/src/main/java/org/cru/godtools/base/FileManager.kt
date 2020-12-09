@@ -2,7 +2,11 @@ package org.cru.godtools.base
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -30,4 +34,12 @@ class FileManager @Inject internal constructor(@ApplicationContext private val c
     @WorkerThread
     @Throws(FileNotFoundException::class)
     fun getInputStream(filename: String): InputStream = runBlocking { getFile(filename).inputStream() }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    internal interface Provider {
+        val fileManager: FileManager
+    }
 }
+
+val Context.fileManager get() = EntryPoints.get(applicationContext, FileManager.Provider::class.java).fileManager
