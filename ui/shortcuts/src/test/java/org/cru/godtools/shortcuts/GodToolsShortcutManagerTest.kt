@@ -23,6 +23,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.ccci.gto.android.common.db.find
+import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
@@ -53,6 +54,7 @@ class GodToolsShortcutManagerTest {
 
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
+    private lateinit var fileManager: FileManager
     private lateinit var settings: Settings
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
 
@@ -60,9 +62,9 @@ class GodToolsShortcutManagerTest {
 
     @Before
     fun setup() {
-        val app = ApplicationProvider.getApplicationContext<Application>()
-        Shadows.shadowOf(app).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
-        this.app = spy(app) {
+        val rawApp = ApplicationProvider.getApplicationContext<Application>()
+        Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
+        app = spy(rawApp) {
             val pm = spy(it.packageManager) { pm ->
                 val shortcutReceiver = ResolveInfo().apply {
                     activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
@@ -78,10 +80,13 @@ class GodToolsShortcutManagerTest {
         }
         dao = mock()
         eventBus = mock()
+        fileManager = mock()
         settings = mock()
 
-        shortcutManager =
-            GodToolsShortcutManager(this.app, dao, eventBus, settings, coroutineScope, coroutineScope.coroutineContext)
+        shortcutManager = GodToolsShortcutManager(
+            app, dao, eventBus, fileManager, settings,
+            coroutineScope, coroutineScope.coroutineContext
+        )
     }
 
     @After
