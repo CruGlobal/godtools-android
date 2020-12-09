@@ -22,18 +22,21 @@ import kotlinx.coroutines.runBlocking
 class FileManager @Inject internal constructor(@ApplicationContext private val context: Context) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val resourcesDir = coroutineScope.async { File(context.filesDir, "resources") }
+    private val resourcesDirTask = coroutineScope.async { File(context.filesDir, "resources") }
     private val resourcesDirCreated =
-        coroutineScope.async { resourcesDir.await().run { (exists() || mkdirs()) && isDirectory } }
+        coroutineScope.async { resourcesDirTask.await().run { (exists() || mkdirs()) && isDirectory } }
 
     suspend fun createResourcesDir() = resourcesDirCreated.await()
-    suspend fun getResourcesDir() = resourcesDir.await()
+    suspend fun getResourcesDir() = resourcesDirTask.await()
 
-    suspend fun getFile(filename: String) = File(resourcesDir.await(), filename)
+    suspend fun getFile(filename: String) = File(resourcesDirTask.await(), filename)
+
+    private val resourcesDir by lazy { runBlocking { resourcesDirTask.await() } }
+    fun getFileBlocking(filename: String) = File(resourcesDir, filename)
 
     @WorkerThread
     @Throws(FileNotFoundException::class)
-    fun getInputStream(filename: String): InputStream = runBlocking { getFile(filename).inputStream() }
+    fun getInputStream(filename: String): InputStream = getFileBlocking(filename).inputStream()
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
