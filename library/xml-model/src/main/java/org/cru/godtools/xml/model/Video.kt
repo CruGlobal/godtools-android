@@ -6,7 +6,7 @@ import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParser.START_TAG
 
-private const val XML_VIDEO_ID = "videoId"
+private const val XML_VIDEO_ID = "video-id"
 private const val XML_PROVIDER = "provider"
 private const val XML_PROVIDER_YOUTUBE = "youtube"
 
