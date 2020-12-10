@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -89,7 +90,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         oktaUserProfileProvider.userInfoFlow()
             .map { it?.ssoGuid }
             .distinctUntilChanged()
-            .onEach { firebase.setUserId(it) }
+            .onEach { firebase.setUserId(it); firebase.setUserProperty("debug", BuildConfig.DEBUG.toString()) }
             .launchIn(coroutineScope)
 
         firebase.setUserProperty(
