@@ -29,8 +29,8 @@ class ManifestParser @Inject internal constructor(private val fileManager: FileM
         try {
             cache[manifestName] ?: withContext(Dispatchers.IO) {
                 val manifest = try {
-                    fileManager.getInputStream(manifestName)!!.buffered().xmlPullParser().use {
-                        Manifest(toolCode, locale, it) { fileManager.getInputStream(it)!!.buffered().xmlPullParser() }
+                    fileManager.getInputStream(manifestName).buffered().xmlPullParser().use {
+                        Manifest(toolCode, locale, it) { fileManager.getInputStream(it).buffered().xmlPullParser() }
                     }
                 } catch (e: FileNotFoundException) {
                     return@withContext Result.Error.NotFound

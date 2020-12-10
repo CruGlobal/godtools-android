@@ -45,11 +45,11 @@ import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.article.ui.categories.createCategoriesIntent
+import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
-import org.cru.godtools.base.util.getGodToolsFile
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.event.AttachmentUpdateEvent
@@ -72,6 +72,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
+    private val fileManager: FileManager,
     private val settings: Settings,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
@@ -81,8 +82,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @ApplicationContext context: Context,
         dao: GodToolsDao,
         eventBus: EventBus,
+        fileManager: FileManager,
         settings: Settings
-    ) : this(context, dao, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    ) : this(context, dao, eventBus, fileManager, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
@@ -298,7 +300,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
             ?.let { dao.find<Attachment>(it) }
-            ?.let { context.getGodToolsFile(it.localFilename) }
+            ?.localFilename
+            ?.let { fileManager.getFile(it) }
             ?.let {
                 try {
                     // TODO: create a suspend extension method to async load an image in a coroutine
