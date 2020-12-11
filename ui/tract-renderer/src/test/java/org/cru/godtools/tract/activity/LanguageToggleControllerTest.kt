@@ -4,11 +4,16 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import java.util.Locale
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,5 +66,41 @@ class LanguageToggleControllerTest {
         assertEquals(2, tabLayout.tabCount)
         assertEquals(-1, tabLayout.selectedTabPosition)
         verify(tabListener, never()).onTabSelected(any())
+    }
+
+    @Test
+    fun testIsUpdatingTabsValueWhenMakingStructuralChanges() {
+        tabListener = spy(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) = assertTrue(controller.isUpdatingTabs)
+            override fun onTabUnselected(tab: TabLayout.Tab?) = assertTrue(controller.isUpdatingTabs)
+            override fun onTabReselected(tab: TabLayout.Tab?) = assertTrue(controller.isUpdatingTabs)
+        })
+        tabLayout.addOnTabSelectedListener(tabListener)
+
+        // initial tabs
+        assertFalse(controller.isUpdatingTabs)
+        controller.activeLocale = Locale.ENGLISH
+        controller.locales = listOf(Locale.ENGLISH, Locale.FRENCH)
+        assertFalse(controller.isUpdatingTabs)
+        verify(tabListener).onTabSelected(any())
+        verifyNoMoreInteractions(tabListener)
+        clearInvocations(tabListener)
+
+        // change activeLocale
+        assertFalse(controller.isUpdatingTabs)
+        controller.activeLocale = Locale.FRENCH
+        assertFalse(controller.isUpdatingTabs)
+        verify(tabListener).onTabSelected(any())
+        verify(tabListener).onTabUnselected(any())
+        verifyNoMoreInteractions(tabListener)
+        clearInvocations(tabListener)
+
+        // change locales
+        assertFalse(controller.isUpdatingTabs)
+        controller.locales = listOf(Locale.ENGLISH)
+        assertFalse(controller.isUpdatingTabs)
+        verify(tabListener, never()).onTabSelected(any())
+        verify(tabListener).onTabUnselected(any())
+        verifyNoMoreInteractions(tabListener)
     }
 }

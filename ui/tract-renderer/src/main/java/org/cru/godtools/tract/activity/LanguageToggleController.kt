@@ -9,6 +9,9 @@ import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarControlColor
 
 class LanguageToggleController(private val tabs: TabLayout) {
+    var isUpdatingTabs: Boolean = false
+        private set
+
     var activeLocale: Locale? = null
         set(value) {
             val changed = value != field
@@ -35,21 +38,27 @@ class LanguageToggleController(private val tabs: TabLayout) {
         }
 
     private fun createTabs() {
-        // if the selected locale is no longer valid, we need to remove all tabs to prevent an onTabSelected callback
-        val selected = tabs.getTabAt(tabs.selectedTabPosition)?.tag as? Locale
-        if (selected != null && !locales.contains(selected)) tabs.removeAllTabs()
+        isUpdatingTabs = true
+        try {
+            // de-select the tab if the currently selected locale is no longer valid
+            val selected = tabs.getTabAt(tabs.selectedTabPosition)?.tag as? Locale
+            if (selected != null && !locales.contains(selected)) tabs.selectTab(null)
 
-        // update tabs
-        locales.forEachIndexed { i, locale ->
-            // if this is the selected locale, reposition the selected tab
-            if (locale == selected) while (tabs.selectedTabPosition > i) tabs.removeTabAt(i)
+            // update tabs
+            locales.forEachIndexed { i, locale ->
+                // if this is the selected locale, reposition the selected tab
+                if (locale == selected) while (tabs.selectedTabPosition > i) tabs.removeTabAt(i)
 
-            // insert a new tab if the current tab isn't correct
-            if (tabs.getTabAt(i)?.tag != locale) tabs.addTab(tabs.newTab().setTag(locale), i, locale == activeLocale)
+                // insert a new tab if the current tab isn't correct
+                if (tabs.getTabAt(i)?.tag != locale)
+                    tabs.addTab(tabs.newTab().setTag(locale), i, locale == activeLocale)
+            }
+
+            // remove any excess tabs
+            while (tabs.tabCount > locales.size) tabs.removeTabAt(locales.size)
+        } finally {
+            isUpdatingTabs = false
         }
-
-        // remove excess tabs
-        while (tabs.tabCount > locales.size) tabs.removeTabAt(locales.size)
         configureTabs()
     }
 
@@ -64,14 +73,19 @@ class LanguageToggleController(private val tabs: TabLayout) {
     }
 
     private fun updateSelectedTab() {
-        tabs.forEachTab { tab ->
-            val locale = tab.tag as? Locale
-            if (activeLocale != null && locale == activeLocale) {
-                if (!tab.isSelected) tab.select()
-                return
-            } else {
-                if (tab.isSelected) tabs.selectTab(null)
+        isUpdatingTabs = true
+        try {
+            tabs.forEachTab { tab ->
+                val locale = tab.tag as? Locale
+                if (activeLocale != null && locale == activeLocale) {
+                    if (!tab.isSelected) tab.select()
+                    return
+                } else {
+                    if (tab.isSelected) tabs.selectTab(null)
+                }
             }
+        } finally {
+            isUpdatingTabs = false
         }
     }
 }
