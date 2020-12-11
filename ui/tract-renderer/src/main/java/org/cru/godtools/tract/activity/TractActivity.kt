@@ -301,9 +301,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     // region Language Toggle
+    private lateinit var languageToggleController: LanguageToggleController
+
     private fun setupLanguageToggle() {
         ViewCompat.setClipToOutline(binding.languageToggle, true)
-        binding.languageToggle.addOnTabSelectedListener(this)
         dataModel.activeManifest.observe(this) { manifest ->
             // determine colors for the language toggle
             val controlColor = manifest.navBarControlColor
@@ -319,15 +320,19 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             ViewUtils.setBackgroundTint(binding.languageToggle, controlColor)
         }
 
-        val controller = LanguageToggleController(binding.languageToggle)
-        dataModel.activeLocale.observe(this) { controller.activeLocale = it }
-        dataModel.activeManifest.observe(this) { controller.activeManifest = it }
-        dataModel.visibleLocales.observe(this) { controller.locales = it }
-        dataModel.languages.observe(this) { controller.languages = it }
+        languageToggleController = LanguageToggleController(binding.languageToggle).also { controller ->
+            dataModel.activeLocale.observe(this) { controller.activeLocale = it }
+            dataModel.activeManifest.observe(this) { controller.activeManifest = it }
+            dataModel.visibleLocales.observe(this) { controller.locales = it }
+            dataModel.languages.observe(this) { controller.languages = it }
+        }
+
+        binding.languageToggle.addOnTabSelectedListener(this)
     }
 
     // region TabLayout.OnTabSelectedListener
     override fun onTabSelected(tab: TabLayout.Tab) {
+        if (languageToggleController.isUpdatingTabs) return
         val locale = tab.tag as? Locale ?: return
         eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
         dataModel.setActiveLocale(locale)
