@@ -331,16 +331,6 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
         val locale = tab.tag as? Locale ?: return
         eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
         dataModel.setActiveLocale(locale)
-
-        // trigger analytics & live share publisher events
-        // TODO: this should probably occur whenever the activeManifest changes language,
-        //       but we need to make sure it executes after the pagerAdapter is updated
-        pagerAdapter.primaryItem?.binding?.controller?.let {
-            val page = it.model ?: return@let
-            val card = it.activeCard
-            trackTractPage(page, card)
-            sendLiveShareNavigationEvent(page, card)
-        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) = Unit
@@ -353,10 +343,23 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this).also {
-            it.callbacks = this
-            it.showTips = showTips
-            dataModel.activeManifest.observe(this, it)
+        pagerAdapterFactory.create(this).also { adapter ->
+            adapter.callbacks = this
+            adapter.showTips = showTips
+            dataModel.activeManifest.observe(this) { manifest ->
+                val sameLocale = adapter.manifest?.locale == manifest?.locale
+                adapter.manifest = manifest
+
+                // trigger analytics & live share publisher events if the locale was changed
+                if (!sameLocale) {
+                    adapter.primaryItem?.binding?.controller?.let {
+                        val page = it.model ?: return@let
+                        val card = it.activeCard
+                        trackTractPage(page, card)
+                        sendLiveShareNavigationEvent(page, card)
+                    }
+                }
+            }
         }
     }
     private var initialPage = 0
