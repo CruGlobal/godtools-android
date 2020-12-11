@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="controller" type="org.cru.godtools.tract.ui.controller.AnimationController" />
+        <variable name="model" type="org.cru.godtools.xml.model.Animation" />
+    </data>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+        android:adjustViewBounds="true"
+        android:onClick="@{() -> controller.sendEvents(model.events)}"
+        app:animation="@{model.resource}"
+        app:lottie_autoPlay="@{model.autoPlay}"
+        app:lottie_loop="@{model.loop}" />
+</layout>
