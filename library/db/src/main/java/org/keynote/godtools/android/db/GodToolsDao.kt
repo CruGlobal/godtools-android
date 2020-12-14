@@ -2,7 +2,6 @@ package org.keynote.godtools.android.db
 
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -10,10 +9,13 @@ import androidx.lifecycle.map
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
-import org.ccci.gto.android.common.db.AsyncDao
-import org.ccci.gto.android.common.db.AsyncDao.Companion.runAsync
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.LiveDataRegistry
@@ -41,8 +43,9 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @Singleton
-class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), AsyncDao,
-    CoroutinesFlowDao, LiveDataDao {
+class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), CoroutinesFlowDao,
+    LiveDataDao {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     override val liveDataRegistry = LiveDataRegistry()
 
     init {
@@ -160,17 +163,16 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         trackAccess: Boolean = false
     ): LiveData<Translation?> {
         if (code == null || locale == null) return emptyLiveData()
-        if (trackAccess) updateAsync(
-            Translation().apply { updateLastAccessed() },
-            TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale),
-            TranslationTable.COLUMN_LAST_ACCESSED
-        )
+        if (trackAccess) {
+            val obj = Translation().apply { updateLastAccessed() }
+            val where = TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
+            coroutineScope.launch { update(obj, where, TranslationTable.COLUMN_LAST_ACCESSED) }
+        }
         return getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
             .getAsLiveData(this).map { it.firstOrNull() }
     }
 
-    @WorkerThread
-    fun updateSharesDelta(toolCode: String?, shares: Int) {
+    suspend fun updateSharesDelta(toolCode: String?, shares: Int) {
         if (toolCode == null) return
         if (shares == 0) return
 
@@ -184,13 +186,12 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         val args = bindValues(shares) + where.args
 
         // execute query
-        transaction(exclusive = false) { db ->
-            db.execSQL(sql, args)
-            invalidateClass(Tool::class.java)
+        withContext(Dispatchers.IO) {
+            transaction(exclusive = false) { db ->
+                db.execSQL(sql, args)
+                invalidateClass(Tool::class.java)
+            }
         }
     }
-
-    @AnyThread
-    fun updateSharesDeltaAsync(toolCode: String?, shares: Int) = runAsync { updateSharesDelta(toolCode, shares) }
     // endregion Custom DAO methods
 }

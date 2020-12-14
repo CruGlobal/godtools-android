@@ -16,6 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -115,10 +117,11 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     }
 
     override fun closeTip(completed: Boolean) {
-        if (completed) dao.updateOrInsertAsync(
-            TrainingTip(tool, locale, tip).apply { isCompleted = true },
-            TrainingTipTable.COLUMN_IS_COMPLETED
-        )
+        if (completed) {
+            val trainingTip = TrainingTip(tool, locale, tip)
+            trainingTip.isCompleted = true
+            GlobalScope.launch { dao.updateOrInsert(trainingTip, TrainingTipTable.COLUMN_IS_COMPLETED) }
+        }
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
