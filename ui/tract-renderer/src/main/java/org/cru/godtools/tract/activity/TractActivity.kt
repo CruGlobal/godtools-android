@@ -301,9 +301,10 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     }
 
     // region Language Toggle
+    private lateinit var languageToggleController: LanguageToggleController
+
     private fun setupLanguageToggle() {
         ViewCompat.setClipToOutline(binding.languageToggle, true)
-        binding.languageToggle.addOnTabSelectedListener(this)
         dataModel.activeManifest.observe(this) { manifest ->
             // determine colors for the language toggle
             val controlColor = manifest.navBarControlColor
@@ -319,28 +320,22 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
             ViewUtils.setBackgroundTint(binding.languageToggle, controlColor)
         }
 
-        val controller = LanguageToggleController(binding.languageToggle)
-        dataModel.activeLocale.observe(this) { controller.activeLocale = it }
-        dataModel.activeManifest.observe(this) { controller.activeManifest = it }
-        dataModel.visibleLocales.observe(this) { controller.locales = it }
-        dataModel.languages.observe(this) { controller.languages = it }
+        languageToggleController = LanguageToggleController(binding.languageToggle).also { controller ->
+            dataModel.activeLocale.observe(this) { controller.activeLocale = it }
+            dataModel.activeManifest.observe(this) { controller.activeManifest = it }
+            dataModel.visibleLocales.observe(this) { controller.locales = it }
+            dataModel.languages.observe(this) { controller.languages = it }
+        }
+
+        binding.languageToggle.addOnTabSelectedListener(this)
     }
 
     // region TabLayout.OnTabSelectedListener
     override fun onTabSelected(tab: TabLayout.Tab) {
+        if (languageToggleController.isUpdatingTabs) return
         val locale = tab.tag as? Locale ?: return
         eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
         dataModel.setActiveLocale(locale)
-
-        // trigger analytics & live share publisher events
-        // TODO: this should probably occur whenever the activeManifest changes language,
-        //       but we need to make sure it executes after the pagerAdapter is updated
-        pagerAdapter.primaryItem?.binding?.controller?.let {
-            val page = it.model ?: return@let
-            val card = it.activeCard
-            trackTractPage(page, card)
-            sendLiveShareNavigationEvent(page, card)
-        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) = Unit
@@ -353,10 +348,23 @@ class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_acti
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this).also {
-            it.callbacks = this
-            it.showTips = showTips
-            dataModel.activeManifest.observe(this, it)
+        pagerAdapterFactory.create(this).also { adapter ->
+            adapter.callbacks = this
+            adapter.showTips = showTips
+            dataModel.activeManifest.observe(this) { manifest ->
+                val sameLocale = adapter.manifest?.locale == manifest?.locale
+                adapter.manifest = manifest
+
+                // trigger analytics & live share publisher events if the locale was changed
+                if (!sameLocale) {
+                    adapter.primaryItem?.binding?.controller?.let {
+                        val page = it.model ?: return@let
+                        val card = it.activeCard
+                        trackTractPage(page, card)
+                        sendLiveShareNavigationEvent(page, card)
+                    }
+                }
+            }
         }
     }
     private var initialPage = 0
