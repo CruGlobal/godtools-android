@@ -22,6 +22,7 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings
@@ -345,7 +346,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         )
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
 
-        dao.updateSharesDeltaAsync(tool, 1)
+        GlobalScope.launch { dao.updateSharesDelta(tool, 1) }
     }
 
     override fun setTitle(title: CharSequence) =
