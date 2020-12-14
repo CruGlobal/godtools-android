@@ -6,9 +6,9 @@ import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 
 private const val SCREEN_ARTICLE_PREFIX = "Article : "
 
-private const val SITE_SUB_SECTION_ARTICLE = "article"
+private const val APP_SUB_SECTION_ARTICLE = "article"
 
 class ArticleAnalyticsScreenEvent(article: Article, tool: String?, locale: Locale?) :
     ToolAnalyticsScreenEvent("$SCREEN_ARTICLE_PREFIX${article.title}", tool, locale) {
-    override val adobeSiteSubSection get() = SITE_SUB_SECTION_ARTICLE
+    override val appSubSection get() = APP_SUB_SECTION_ARTICLE
 }

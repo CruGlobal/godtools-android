@@ -15,7 +15,7 @@ class ToggleLanguageAnalyticsActionEvent(tool: String?, locale: Locale) :
     override fun isForSystem(system: AnalyticsSystem) =
         system === AnalyticsSystem.ADOBE || system === AnalyticsSystem.FACEBOOK
 
-    override val adobeSiteSection = tool
+    override val appSection = tool
     @OptIn(ExperimentalStdlibApi::class)
     override val adobeAttributes = buildMap<String, Any> {
         put(ADOBE_ATTR_TOGGLE_LANGUAGE, 1)

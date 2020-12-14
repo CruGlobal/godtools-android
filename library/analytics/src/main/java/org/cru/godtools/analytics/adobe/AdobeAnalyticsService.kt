@@ -154,8 +154,8 @@ class AdobeAnalyticsService @Inject internal constructor(
         }
         event?.run {
             locale?.let { put(ADOBE_ATTR_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
-            adobeSiteSection?.let { put(ADOBE_ATTR_SITE_SECTION, it) }
-            adobeSiteSubSection?.let { put(ADOBE_ATTR_SITE_SUB_SECTION, it) }
+            appSection?.let { put(ADOBE_ATTR_SITE_SECTION, it) }
+            appSubSection?.let { put(ADOBE_ATTR_SITE_SUB_SECTION, it) }
         }
     }
 

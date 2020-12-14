@@ -10,5 +10,5 @@ open class ToolAnalyticsScreenEvent(
     private val tool: String?,
     locale: Locale? = null
 ) : AnalyticsScreenEvent(screen, locale) {
-    override val adobeSiteSection get() = tool
+    override val appSection get() = tool
 }

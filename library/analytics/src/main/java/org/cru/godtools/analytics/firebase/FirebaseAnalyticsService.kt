@@ -77,8 +77,8 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
             putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
             putString(USER_PROP_APP_NAME, VALUE_GODTOOLS)
             event.locale?.let { putString(USER_PROP_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
-            event.adobeSiteSection?.let { putString(SITE_SECTION, event.adobeSiteSection) }
-            event.adobeSiteSubSection?.let { putString(SITE_SUB_SECTION, event.adobeSiteSubSection) }
+            event.appSection?.let { putString(SITE_SECTION, it) }
+            event.appSubSection?.let { putString(SITE_SUB_SECTION, it) }
         }
         firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }

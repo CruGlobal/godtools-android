@@ -6,9 +6,9 @@ import javax.annotation.concurrent.Immutable
 
 private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview"
 
-/* Adobe Site Sections */
-private const val SITE_SECTION_MENU = "menu"
-private const val SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings"
+/* App Sections */
+private const val APP_SECTION_MENU = "menu"
+private const val APP_SUB_SECTION_LANGUAGE_SETTINGS = "language settings"
 
 @Immutable
 open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, locale: Locale? = null) :
@@ -31,12 +31,12 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val SCREEN_GLOBAL_DASHBOARD = "Global Dashboard"
 
         /* Adobe Site Sections */
-        const val ADOBE_SITE_SECTION_TOOLS = "tools"
+        const val APP_SECTION_TOOLS = "tools"
     }
 
-    override val adobeSiteSection
+    override val appSection
         get() = when (screen) {
-            SCREEN_ALL_TOOLS -> ADOBE_SITE_SECTION_TOOLS
+            SCREEN_ALL_TOOLS -> APP_SECTION_TOOLS
             SCREEN_LANGUAGE_SETTINGS,
             SCREEN_LANGUAGE_SELECTION,
             SCREEN_ABOUT, SCREEN_HELP,
@@ -45,13 +45,13 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
             SCREEN_SHARE_STORY,
             SCREEN_TERMS_OF_USE,
             SCREEN_PRIVACY_POLICY,
-            SCREEN_COPYRIGHT -> SITE_SECTION_MENU
-            else -> null
+            SCREEN_COPYRIGHT -> APP_SECTION_MENU
+            else -> super.appSection
         }
-    override val adobeSiteSubSection
+    override val appSubSection
         get() = when (screen) {
-            SCREEN_LANGUAGE_SELECTION -> SITE_SUB_SECTION_LANGUAGE_SETTINGS
-            else -> null
+            SCREEN_LANGUAGE_SELECTION -> APP_SUB_SECTION_LANGUAGE_SETTINGS
+            else -> super.appSubSection
         }
 
     override val snowplowPageTitle get() = screen
