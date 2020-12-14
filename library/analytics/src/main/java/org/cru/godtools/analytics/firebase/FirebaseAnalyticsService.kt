@@ -27,19 +27,21 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 /* Value constants */
-private const val VALUE_GODTOOLS = "GodTools"
+private const val USER_PROP_APP_NAME = "cru_appname"
+private const val VALUE_APP_NAME_GODTOOLS = "GodTools"
+
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
-private const val USER_PROP_APP_NAME = "cru_appname"
+private const val USER_PROP_DEBUG = "debug"
 private const val USER_PROP_LOGGED_IN_STATUS = "cru_loggedinstatus"
 private const val USER_PROP_SSO_GUID = "cru_ssoguid"
 private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
-private const val USER_PROP_CONTENT_LANGUAGE = "cru_contentlanguage"
 
-private const val SITE_SECTION = "cru_sitesection"
-private const val SITE_SUB_SECTION = "cru_sitesubsection"
+private const val PARAM_APP_SECTION = "cru_sitesection"
+private const val PARAM_APP_SUB_SECTION = "cru_sitesubsection"
+private const val PARAM_CONTENT_LANGUAGE = "cru_contentlanguage"
 
 @Singleton
 class FirebaseAnalyticsService @VisibleForTesting internal constructor(
@@ -75,10 +77,10 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
         val bundle = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
-            putString(USER_PROP_APP_NAME, VALUE_GODTOOLS)
-            event.locale?.let { putString(USER_PROP_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
-            event.appSection?.let { putString(SITE_SECTION, it) }
-            event.appSubSection?.let { putString(SITE_SUB_SECTION, it) }
+            putString(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
+            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
+            event.appSection?.let { putString(PARAM_APP_SECTION, it) }
+            event.appSubSection?.let { putString(PARAM_APP_SUB_SECTION, it) }
         }
         firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
@@ -97,19 +99,19 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
     init {
         oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
-            .onEach { it ->
-                firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
+            .onEach {
                 firebase.setUserId(it?.ssoGuid)
+                firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
                 firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
                 firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
             }
             .launchIn(coroutineScope)
 
-        firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_GODTOOLS)
-        firebase.setUserProperty(USER_PROP_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
+        firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
+        firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )
-        firebase.setUserProperty("debug", BuildConfig.DEBUG.toString())
+        firebase.setUserProperty(USER_PROP_DEBUG, BuildConfig.DEBUG.toString())
     }
 }
