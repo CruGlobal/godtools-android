@@ -99,14 +99,14 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
             .onEach { it ->
                 firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
-                firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_GODTOOLS)
-                firebase.setUserProperty(USER_PROP_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
                 firebase.setUserId(it?.ssoGuid)
                 firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
                 firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
             }
             .launchIn(coroutineScope)
 
+        firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_GODTOOLS)
+        firebase.setUserProperty(USER_PROP_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )
