@@ -14,8 +14,8 @@ class ContentAnalyticsActionEvent(@VisibleForTesting internal val event: Analyti
     override val adobeAttributes: Map<String, *>? get() = event.attributes
     override val firebaseEventName = if (isForSystem(AnalyticsSystem.ADOBE)) {
         Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Usage"), "action ${event.action}")
-        event.action?.replace(Regex("[ \\-]"), "_").orEmpty()
+        event.action?.replace(Regex("[ \\-]"), "_").orEmpty().toLowerCase()
     } else {
-        super.firebaseEventName
+        super.firebaseEventName.toLowerCase()
     }
 }
