@@ -1,0 +1,2 @@
+<content:animation xmlns:content="https://mobile-content-api.cru.org/xmlns/content" autoplay="true"
+    events="ns:event1 event2" loop="false" play-listeners="event1" resource="animation.json" stop-listeners="event2" />

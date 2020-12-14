@@ -5,6 +5,7 @@ import androidx.core.util.Pools
 import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
+import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
@@ -33,6 +34,7 @@ internal class UiControllerCache(private val parent: ViewGroup, private val pare
     }
 
     private fun <T : Base> createController(clazz: KClass<T>) = when (clazz) {
+        Animation::class -> AnimationController(parent, parentController)
         Button::class -> ButtonController(parent, parentController)
         Fallback::class -> FallbackController(parent, parentController)
         Form::class -> FormController(parent, parentController)
