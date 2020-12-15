@@ -6,6 +6,9 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.xmlpull.v1.XmlPullParser
+import timber.log.Timber
+
+private const val TAG = "XmlAnalyticsEvent"
 
 private const val XML_EVENT = "event"
 private const val XML_ACTION = "action"
@@ -78,6 +81,10 @@ class AnalyticsEvent {
                 parser.skipTag()
             }
         }
+
+        // Log a non-fatal warning if this is an adobe analytics event
+        if (systems.contains(AnalyticsSystem.ADOBE))
+            Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Event"), "action: $action")
     }
 
     fun isTriggerType(vararg types: Trigger) = types.contains(trigger)
