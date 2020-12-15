@@ -43,7 +43,7 @@ class FirebaseAnalyticsServiceTest {
         eventBus = mock()
         firebase = mock()
         oktaUserProfileProvider = mock {
-            on { userInfoFlow() } doReturn userInfoChannel.consumeAsFlow()
+            on { userInfoFlow(refreshIfStale = any()) } doReturn userInfoChannel.consumeAsFlow()
         }
 
         analyticsService =
@@ -55,7 +55,7 @@ class FirebaseAnalyticsServiceTest {
         coroutineScope.cleanupTestCoroutines()
     }
 
-    @Test
+    @Test(timeout = 10000)
     fun verifySetUser() = runBlocking {
         // initial state
         verify(firebase, never()).setUserId(any())
