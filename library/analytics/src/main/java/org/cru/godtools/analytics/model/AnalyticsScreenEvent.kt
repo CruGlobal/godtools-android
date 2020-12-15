@@ -29,7 +29,7 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val SCREEN_COPYRIGHT = "Copyright Info"
         const val SCREEN_GLOBAL_DASHBOARD = "Global Dashboard"
 
-        /* Adobe Site Sections */
+        /* App Sections */
         const val APP_SECTION_TOOLS = "tools"
     }
 
