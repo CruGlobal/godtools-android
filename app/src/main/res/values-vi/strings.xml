@@ -4,11 +4,13 @@
     <string name="share_prompt">Chọn cách bạn muốn chia sẻ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Nói chung</string>
+    <string name="menu_heading_account">Tài khoản</string>
     <string name="menu_heading_share">Chia sẻ</string>
     <string name="menu_heading_legal">Hợp pháp</string>
     <string name="menu_about">Giới thiệu về</string>
     <string name="menu_help">Câu hỏi Thường Gặp</string>
     <string name="menu_contact_us">Liên hệ chúng tôi</string>
+    <string name="menu_tutorial">Hướng dẫn</string>
     <string name="menu_login">Đăng nhập</string>
     <string name="menu_signup">Tạo Tài khoản</string>
     <string name="menu_logout">Đăng xuất</string>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">"স্বাগতম "</string>
+    <string name="tutorial_onboarding_welcome_2">"আপনার বিশ্বাস শেয়ার করতে সাহায্য করা "</string>
+    <string name="tutorial_onboarding_others_headline">"অন্যদের সাথে শেয়ার করুন "</string>
+    <string name="tutorial_onboarding_others_subhead">"আপনার বিশ্বাসের কথোপকথনকে গাইড করতে GodTools তৈরী করা হয়েছে  I  "</string>
+    <string name="tutorial_onboarding_tools_headline">"আপনার টুলস পছন্দ করুন I "</string>
+    <string name="tutorial_onboarding_tools_subhead">"একটি আধ্যাত্মিক কথোপকথনের পূর্বে. মধ্যে, এবং পরে GodTools আপনাকে সাহায্য করে "</string>
+    <string name="tutorial_onboarding_ready_headline">"সর্বদা প্রস্তুত "</string>
+    <string name="tutorial_onboarding_ready_subhead">"GodTools এখানে এবং আপনি যখন প্রস্তুত তখন সাহায্য করতে আছে    "</string>
+    <string name="tutorial_onboarding_final_prepare">"যে কোনো কথোপকথনের জন্য প্রস্তুত করুন "</string>
+    <string name="tutorial_onboarding_final_gospel">"সুসমাচারের মধ্য দিয়ে কারোর চলা "</string>
+    <string name="tutorial_onboarding_final_parallel_languages">"দুটি ভাষাকে পাশাপাশি দেখুন "</string>
+    <string name="tutorial_onboarding_final_languages">"80 টি ভাষার অধিক থেকে পছন্দ করুন "</string>
+    <string name="tutorial_onboarding_final_help_others">"একজন খ্রীষ্টান হিসাবে শুরু করতে কাউকে সাহায্য করুন "</string>
+    <string name="tutorial_onboarding_final_action_show_more">"আমাকে আরও দেখান "</string>
+    <string name="tutorial_onboarding_final_action_start">"শুরু করুন "</string>
+    <string name="tutorial_onboarding_action_begin">"আরম্ভ করুন "</string>
+    <string name="tutorial_onboarding_action_continue">"চালিয়ে যান "</string>
+    <string name="tutorial_onboarding_action_skip">"ছেড়ে দিন "</string>
+</resources>

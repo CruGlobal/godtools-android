@@ -8,11 +8,11 @@
     <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
-    <string name="tools_list_favorites_banner_text">Jadikan alat tersedia offline dengan mengetuk ikon hati yang akan menambahkan alat tersebut ke favorit.</string>
+    <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Berhentikan</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Tambahkan ke Layar Beranda</string>
-    <string name="action_tools_open_tool">Buka Alat</string>
+    <string name="action_tools_open_tool">Buka Sarana</string>
     <string name="action_tools_add_favorite">Tambahkan ke Favorit</string>
     <string name="action_tools_remove_favorite">Hapus dari Favorit</string>
     <plurals name="label_tools_shares">

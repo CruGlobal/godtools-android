@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">ನೀವು ಹೇಗೆ ಹಂಚಿಕೊಳ್ಳಲು ಬಯಸುತ್ತೀರಿ ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">ಸಾರ್ವಜನಿಕವಾದ</string>
+    <string name="menu_heading_account">ಖಾತೆ</string>
+    <string name="menu_heading_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_heading_legal">ಕಾನೂನು</string>
+    <string name="menu_about">ಕುರಿತು</string>
+    <string name="menu_help">ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು</string>
+    <string name="menu_contact_us">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
+    <string name="menu_tutorial">ಶಿಕ್ಷಣ</string>
+    <string name="menu_login">ಲಾಗಿನ್ ಮಾಡಿ</string>
+    <string name="menu_signup">ಖಾತೆ ತೆರೆಯಿರಿ</string>
+    <string name="menu_logout">ಸಂಪರ್ಕ ತೊರೆ</string>
+    <string name="menu_share_godtools">ಗಾಡ್‌ಟೂಲ್ಸ್ ಅಪ್ಲಿಕೇಶನ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_share_story">ಒಂದು ಕಥೆಯನ್ನು ನಮ್ಮೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_rate">ಗಾಡ್‌ಟೂಲ್ಸ್ಗಗಳನ್ನು ದರ ಮಾಡಿ</string>
+    <string name="menu_terms_of_use">ಬಳಕೆಯ ನಿಯಮಗಳು</string>
+    <string name="menu_privacy_policy">ಗೌಪ್ಯತಾ ನೀತಿ</string>
+    <string name="menu_copyright">ಕೃತಿಸ್ವಾಮ್ಯ</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">ಗಾಡ್‌ಟೂಲ್ಸ್ ಕಥೆ</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">80+ ಭಾಷೆಗಳು</string>
+    <string name="menu_language_settings">ಭಾಷಾ ಅಳವಡಿಕೆಗಳು</string>
+    <string name="title_language_settings">ಭಾಷಾ ಅಳವಡಿಕೆಗಳು</string>
+    <string name="title_language_primary">ಪ್ರಾಥಮಿಕ ಭಾಷೆ</string>
+    <string name="title_language_parallel">ಸಮಾನಾಂತರ ಭಾಷೆ</string>
+    <string name="action_language_parallel_select">ಸಮಾನಾಂತರ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="text_language_parallel_description">ಗಾಡ್‌ಟೂಲ್ಸ್ ಅನ್ನು ಅವರ ಸ್ಥಳೀಯ ಭಾಷೆಯಲ್ಲಿ ಯಾರೊಂದಿಗಾದರೂ ಹಂಚಿಕೊಳ್ಳಿ.</string>
+    <string name="text_language_warning">ಪ್ರತಿಯೊಂದು ಭಾಷೆಯಲ್ಲೂ ಪ್ರತಿಯೊಂದು ಸಾಧನವು ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="label_language_none">ಯಾವುದೂ ಇಲ್ಲ</string>
+    <string name="label_language_search">ಭಾಷೆಗಳನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಿ</string>
+</resources>

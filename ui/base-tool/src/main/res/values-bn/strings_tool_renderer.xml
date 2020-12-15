@@ -2,6 +2,10 @@
 <resources>
     <string name="menu_share_tool">শেয়ার করুন</string>
     <string name="share_tool_title">"\"%1$s\" ব্যবহার করে শেয়ার করুন "</string>
-    <string name="tool_not_found">আপনি যা সরঞ্জাম খুজছেন তা পাওয়া যাচ্ছে না</string>
-    <string name="tool_loading">আপনি যা সরঞ্জাম খুজচ্ছেন সেটি লোড হচ্ছে</string>
+    <string name="share_tool_message_article">"আমি এই প্রবন্ধটি আপনার সাথে শেয়ার করতে চাই এবং এর সম্বন্ধে আপনার চিন্তাধারা শুনতে পছন্দ করব I %1$s "</string>
+    <string name="tool_not_found">"আপনি যে টুলটি অনুরোধ করেছেন তা পাওয়া যেতে পারে না "</string>
+    <string name="tool_loading">আপনি যে টুলটি অনুরোধ করেছেন তা লোড হচ্ছে...</string>
+    <string name="tool_offline">"আপনি যে টুলটি অনুরোধ করেছেন তা খোলার জন্য একটি ইন্টারনেট সংযোগের প্রয়োজন  "</string>
+    <string name="feature_discovery_title_share_tool">"একটি লিংক শেয়ার করুন "</string>
+    <string name="feature_discovery_desc_share_tool">"এই আইকনটিকে ক্লিক করার দ্বারা এই টুলটিকে একজন বন্ধুর কাছে পাঠান "</string>
 </resources>

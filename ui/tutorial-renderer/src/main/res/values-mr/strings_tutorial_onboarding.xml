@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">स्वागत आहे</string>
+    <string name="tutorial_onboarding_welcome_2">आपला विश्वास इतरांस सांगण्यात आपल्याला मदत करणे</string>
+    <string name="tutorial_onboarding_others_headline">इतरांस सांगा</string>
+    <string name="tutorial_onboarding_others_subhead">GodTools आपल्या विश्वासात संभाषणांचे मार्गदर्शन करण्यासाठी तयार केले गेले आहेत</string>
+    <string name="tutorial_onboarding_tools_headline">आपले टूल्स निवडा</string>
+    <string name="tutorial_onboarding_tools_subhead">GodTools आपल्याला आत्मिक संभाषणापूर्वी, दरम्यान आणि नंतर मदत करतात</string>
+    <string name="tutorial_onboarding_ready_headline">सदैव तयार</string>
+    <string name="tutorial_onboarding_ready_subhead">GodTools मदत करण्यासाठी येथे आहेत आणि आपण सज्ज असता तेव्हा ते सज्ज असते</string>
+    <string name="tutorial_onboarding_final_prepare">कोणत्याही संभाषणाची तयारी करा</string>
+    <string name="tutorial_onboarding_final_gospel">एखाद्याला सुवार्ता सांगा</string>
+    <string name="tutorial_onboarding_final_parallel_languages">दोन भाषा आजूबाजूला पाहा</string>
+    <string name="tutorial_onboarding_final_languages">80 पेक्षा जास्त भाषांमधून निवडा</string>
+    <string name="tutorial_onboarding_final_help_others">एखाद्याला ख्रिस्ती म्हणून प्रारंभ करण्यास मदत करा</string>
+    <string name="tutorial_onboarding_final_action_show_more">मला आणखी दाखवा</string>
+    <string name="tutorial_onboarding_final_action_start">सुरूवात करा</string>
+    <string name="tutorial_onboarding_action_begin">सुरू करा</string>
+    <string name="tutorial_onboarding_action_continue">सुरू</string>
+    <string name="tutorial_onboarding_action_skip">"
+वगळा"</string>
+</resources>

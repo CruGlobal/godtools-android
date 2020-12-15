@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tool">ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="share_tool_title">"“%1$s” ବ୍ୟବହାର କରି ଅଂଶୀଦାର କରନ୍ତୁ "</string>
+    <string name="share_tool_message_article">ମୁଁ ଆପଣଙ୍କ ସହିତ ଏହି ପ୍ରବନ୍ଧ ଅଂଶୀଦାର କରିବାକୁ ଚାହୁଁଥିଲି ଏବଂ ଏହା ବିଷୟରେ ଆପଣଙ୍କର ଚିନ୍ତାଧାରା ଶୁଣିବାକୁ ପସନ୍ଦ କରିବି |\n%1$s</string>
+    <string name="tool_not_found">ଆପଣ ଅନୁରୋଧ କରିଥିବା ଉପକରଣ ଉପଲବ୍ଧ ନାହିଁ</string>
+    <string name="tool_loading">ଆପଣ ଅନୁରୋଧ କରିଥିବା ଉପକରଣ ଲୋଡ୍ ହେଉଛି…</string>
+    <string name="tool_offline">ଆପଣ ଅନୁରୋଧ କରିଥିବା ଉପକରଣ ଖୋଲିବାକୁ ଇଣ୍ଟରନେଟ୍ ସଂଯୋଗ କରିବା ଆବଶ୍ୟକ</string>
+    <string name="feature_discovery_title_share_tool">"ଏକ ଲିଙ୍କ୍ ଅଂଶୀଦାର କରନ୍ତୁ "</string>
+    <string name="feature_discovery_desc_share_tool">ଏହି ଆଇକନ୍ କ୍ଲିକ୍ କରି ଆପଣଙ୍କ ଏକ ବନ୍ଧୁଙ୍କୁ ଏହି ଉପକରଣ ପଠାନ୍ତୁ |</string>
+</resources>

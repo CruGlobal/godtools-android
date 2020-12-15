@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tools List UI -->
+    <string name="nav_favorite_tools">ಮೆಚ್ಚಿನ</string>
+    <string name="nav_all_tools">ಎಲ್ಲಾ ಸಾಧನಗಳು</string>
+    <string name="action_tools_about">ಕುರಿತು</string>
+    <string name="action_tools_open">ತೆರೆ</string>
+    <string name="tools_list_remove_favorite_dialog_title">ಮೆಚ್ಚಿನವುಗಳಿಂದ “%1$s” ಅನ್ನು ತೆಗೆದುಹಾಕುವುದೇ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ತೆಗೆದುಹಾಕಿ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ರದ್ಧುಮಾಡಿ</string>
+    <string name="tools_list_favorites_banner_text">ನಿಮ್ಮ ಮೆಚ್ಚಿನವುಗಳಿಗೆ ಸೇರಿಸುವ ಹೃದಯ ಐಕಾನ್ ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡುವ ಮೂಲಕ ಸಾಧನವನ್ನು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ವಜಾಗೊಳಿಸಿ</string>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">ಮುಖಪುಟ ಪರದೆಗೆ ಸೇರಿಸಿ</string>
+    <string name="action_tools_open_tool">ಸಾಧನ ತೆರೆಯಿರಿ</string>
+    <string name="action_tools_add_favorite">ಮೆಚ್ಚಿನವುಗಳಿಗೆ ಸೇರಿಸಿ</string>
+    <string name="action_tools_remove_favorite">ಮೆಚ್ಚಿನವುಗಳಿಂದ ತೆಗೆದುಹಾಕಿ</string>
+    <string name="action_tools_open_training">ಈ ಸಾಧನವನ್ನು ಹಂಚಿಕೊಳ್ಳಲು ಕಲಿಯಿರಿ</string>
+    <string name="label_tools_about">ಕುರಿತು</string>
+</resources>

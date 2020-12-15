@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tract_content_input_error_required">%1$s দরকার</string>
-    <string name="tract_content_input_error_invalid_email">একটু বৈধ ইমেল এড্রেস এন্টার করুন</string>
+    <string name="tract_content_input_error_invalid_email">দয়াকরে একটি বৈধ ইমেল ঠিকানায় প্রবেশ করুন</string>
 </resources>

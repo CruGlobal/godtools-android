@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">உங்கள் திரையைப் பகிரவும்</string>
+    <string name="tutorial_live_share_description_text">இந்த விருப்பம் இந்த கருவிக்கான இணைப்பை நண்பருக்கு அனுப்பும். இணைப்பு திறக்கப்படும் போது அது ஒரு திரை பகிர்வு அமர்வைத் தொடங்கும்.</string>
+    <string name="tutorial_live_share_mirrored_headline">பிரதிபலித்த அனுபவம்</string>
+    <string name="tutorial_live_share_mirrored_text">உங்கள் தொலைபேசியில் கருவியை உருட்டும்போது, உங்கள் நண்பரின் திரை அதே வழியில் பதிலளிக்கும். ஒரே நேரத்தில் 2 சாதனங்களில் ஒன்றாக ஒரு கருவி வழியாக நடக்க இது உங்களை அனுமதிக்கிறது.</string>
+    <string name="tutorial_live_share_start_headline">தொடங்கவும்</string>
+    <string name="tutorial_live_share_start_text">திரை பகிர்வு அமர்வை இப்போது தொடங்க ஒன்று அல்லது அதற்கு மேற்பட்ட நபர்களுக்கு இணைப்பை அனுப்பவும்.</string>
+    <string name="tutorial_live_share_action_continue">தொடரவும்</string>
+    <string name="tutorial_live_share_action_skip">தவிர்</string>
+    <string name="tutorial_live_share_action_start">பகிர் இணைப்பு</string>
+</resources>

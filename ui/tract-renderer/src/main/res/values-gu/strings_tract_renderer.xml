@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">સ્થાપિત કરો</string>
+    <string name="menu_share_tract">આ Tool મોકલો</string>
     <string name="tract_card_previous">અગાઉના</string>
     <string name="tract_card_next">આગળ</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">તમારી સ્ક્રીન શેર કરો</string>
+    <string name="menu_live_share_active">સ્ક્રીન શેરિંગ સક્રિય</string>
+    <string name="share_tool_message_tract_live_share">હાય, સ્ક્રીન શેરિંગ દ્વારા GodTool માં મારી સાથે અનુસરો. અહીં લિંક છે: %1$s\n\nજો તમે છેવટ સુધી આ સંદેશ પ્રાપ્ત ન કરો, તો લિંક હજી પણ કામ કરી શકશે નહીં. આપણે બીજી વખત ફરીથી પ્રયાસ કરી શકીએ છીએ.\n</string>
+    <string name="tract_live_share_starting">સ્ક્રીન શેરિંગ પ્રારંભ કરી રહ્યું છે….</string>
+    <string name="tract_live_share_unable_to_connect">સ્ક્રીન શેરિંગમાં જોડાવામાં અસમર્થ</string>
+    <string name="tract_live_share_exit_dialog_message">હવે દૂરસ્થ શેરિંગ સત્રથી બહાર નીકળવું છે?</string>
+    <string name="tract_live_share_exit_dialog_confirm">બહાર નીકળો</string>
+    <string name="tract_live_share_exit_dialog_cancel">રદ કરો</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">આગળ</string>
+    <string name="tract_tips_tip_action_close">બંધ</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">પુછવું</string>
+    <string name="tract_tips_type_consider">ધ્યાનમાં લો</string>
+    <string name="tract_tips_type_prepare">તૈયાર કરો</string>
+    <string name="tract_tips_type_quote">ટાંકવુ</string>
+    <string name="tract_tips_type_tip">સૂચના</string>
 </resources>

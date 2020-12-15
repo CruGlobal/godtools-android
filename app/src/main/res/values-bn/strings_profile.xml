@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">"আমার প্রোফাইল "</string>
+    <string name="menu_profile">"বৈশ্বিক ক্রিয়া কলাপ "</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">"ক্রিয়াকলাপ "</string>
+    <string name="profile_global_activity_heading">"%s বৈশ্বিক ক্রিয়াকলাপ "</string>
+    <string name="profile_activity_unique_users">"অনন্য ইউজার "</string>
+    <string name="profile_activity_gospel_presentations">"সুসমাচার উপস্থাপন "</string>
+    <string name="profile_activity_sessions">"সেশনস "</string>
+    <string name="profile_activity_countries">"দেশ সমূহ "</string>
+</resources>

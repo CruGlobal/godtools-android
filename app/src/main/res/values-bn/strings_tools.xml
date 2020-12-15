@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_favorite_tools">"পছন্দ "</string>
+    <string name="nav_all_tools">"সমস্ত টুলগুলো "</string>
+    <string name="action_tools_about">"বিষয়ে "</string>
+    <string name="action_tools_open">"খুলুন "</string>
+    <string name="tools_list_remove_favorite_dialog_title">"পছন্দ থেকে \"%1$s\" সরিয়ে দিন "</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">"সরিয়ে দিন "</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">"বাতিল করুন "</string>
+    <string name="tools_list_favorites_banner_text">"একটি টুলকে অফলাইনে উপলব্ধ করুন হার্ট আইকনকে ট্যাপ করার দ্বারা যা এটিকে আপনার পছন্দের সঙ্গে যুক্ত করে I  "</string>
+    <string name="tools_list_favorites_banner_action_dismiss">"বাতিল করুন "</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">হোম স্ক্রিন এ যোগ করুন</string>
-    <string name="action_tools_open_tool">খোলা</string>
+    <string name="action_tools_open_tool">"টুল খুলুন "</string>
+    <string name="action_tools_add_favorite">"পছন্দের সাথে যোগ করুন "</string>
+    <string name="action_tools_remove_favorite">"পছন্দের থেকে সরিয়ে দিন "</string>
+    <string name="action_tools_open_training">"এই টুলটিকে শেয়ার করতে জানুন "</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d মতামত</item>
         <item quantity="other">%1$,d মতামত</item>

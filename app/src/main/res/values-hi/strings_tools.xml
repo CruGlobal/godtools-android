@@ -5,7 +5,7 @@
     <string name="nav_all_tools">सभी टूल्स</string>
     <string name="action_tools_about">परिचय</string>
     <string name="action_tools_open">खोलें</string>
-    <string name="tools_list_remove_favorite_dialog_title">“%1$s” को पसंदीदा से निकालें?</string>
+    <string name="tools_list_remove_favorite_dialog_title">पसंदीदा से “%1$s” को निकालें?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">निकालें</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करें</string>
     <string name="tools_list_favorites_banner_text">टूल को पसंदीदा में जोड़ने वाले \'दिल\' चिन्ह को टैप करके आप उस टूल को ऑफलाइन उपलब्ध कर सकते हैं।</string>
@@ -15,11 +15,12 @@
     <string name="action_tools_open_tool">टूल खोलें</string>
     <string name="action_tools_add_favorite">पसंदीदा में जोड़ें</string>
     <string name="action_tools_remove_favorite">पसंदीदा से निकालें</string>
+    <string name="action_tools_open_training">इस टूल को साझा करना सीखें</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d दृश्य</item>
         <item quantity="other">%1$,d दृश्य</item>
     </plurals>
-    <string name="label_tools_about">परिचय</string>
+    <string name="label_tools_about">बारे में</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d भाषा</item>
         <item quantity="other">%1$,d भाषाएं</item>

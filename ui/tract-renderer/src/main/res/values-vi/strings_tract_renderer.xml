@@ -13,5 +13,8 @@
     <string name="tract_live_share_exit_dialog_confirm">Thoát</string>
     <string name="tract_live_share_exit_dialog_cancel">Hủy</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Tiếp theo</string>
+    <string name="tract_tips_tip_action_close">Đóng</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_prepare">Chuẩn bị</string>
 </resources>

@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ইনস্টল করুন</string>
-    <string name="tract_card_previous">আগে</string>
-    <string name="tract_card_next">পরবর্তী</string>
+    <string name="menu_share_tract">"এই টুলটিকে পাঠান "</string>
+    <string name="tract_card_previous">"পিছে "</string>
+    <string name="tract_card_next">"পরে "</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">"আপনার স্ক্রিন শেয়ার করুন "</string>
+    <string name="menu_live_share_active">"শ্রীন শেয়ার করা সক্রিয় করুন "</string>
+    <string name="share_tool_message_tract_live_share">হাই, স্ক্রিন শেয়ার করার মধ্য দিয়ে GodTools এর মধ্যে আমার সঙ্গে অনুসরণ করুন I এখানে লিঙ্কটি রয়েছে: %1$s   \n\nযদি আপনি এই লিঙ্কটি পরে পান, তাহলে লিঙ্কটি কাজ নাও করতে পারে। আমরা তাহলে অন্য সময় আবার চেষ্টা করতে পারি।</string>
+    <string name="tract_live_share_starting">স্ক্রিন শেয়ার করা শুরু করুন ...</string>
+    <string name="tract_live_share_unable_to_connect">"স্ক্রিন শেয়ার করতে সংযোগ করতে অক্ষম "</string>
+    <string name="tract_live_share_exit_dialog_message">"এখন রিমোট শেয়ার করা সেশন থেকে বেরিয়ে আসুন "</string>
+    <string name="tract_live_share_exit_dialog_confirm">"বেরিয়ে আসুন "</string>
+    <string name="tract_live_share_exit_dialog_cancel">"বাতিল করুন "</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">"পরেরটি "</string>
+    <string name="tract_tips_tip_action_close">"বন্ধ করুন "</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">"জিজ্ঞাসা করুন "</string>
+    <string name="tract_tips_type_consider">"বিবেচনা করুন "</string>
+    <string name="tract_tips_type_prepare">"প্রস্তুত করুন "</string>
+    <string name="tract_tips_type_quote">"উদ্ধৃত করুন "</string>
+    <string name="tract_tips_type_tip">"টিপ "</string>
 </resources>

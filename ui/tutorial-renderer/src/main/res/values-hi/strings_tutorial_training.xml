@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">देखें</string>
+    <string name="tutorial_training_watch_subhead">देखें कि हमारे डेमो वीडियो में ऐप क्या प्रदान करता है</string>
+    <string name="tutorial_training_prepare_headline">तैयारी करें</string>
+    <string name="tutorial_training_prepare_subhead">अपने कुछ टूल्स से परिचित हो जाएँ। \"मुझे सुसमाचार साझा करना सिखाएंँ\" टूल एक अच्छी शुरुआत होगी। 
+
+किसी भी टूल की अधिक जानकारी हेतु उस पर जानकारी बटन दबाएं।</string>
+    <string name="tutorial_training_try_headline">कोशिश करें</string>
+    <string name="tutorial_training_try_subhead">सबकी शुरुआत नौसिखिए की तरह ही होती है। किसी वार्तालाप में एक टूल का उपयोग करके देखें कि आप क्या सीखें हैं।</string>
+    <string name="tutorial_training_final_headline">दुबारा देखने के लिए यह ट्यूटोरियल मेन्यु में उपलब्ध है</string>
+    <string name="tutorial_training_action_continue">जारी रखें</string>
+    <string name="tutorial_training_action_start">GodTools का उपयोग शुरू करें</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">मुझे एक ट्यूटोरियल दिखाएं</string>
+    <string name="tutorial_training_banner_action_open">ट्यूटोरियल खोलें</string>
+    <string name="tutorial_training_banner_action_dismiss">रद्द करें</string>
+</resources>

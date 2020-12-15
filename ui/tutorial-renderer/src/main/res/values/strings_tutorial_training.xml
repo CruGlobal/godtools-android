@@ -3,9 +3,7 @@
     <!-- Training Tutorial -->
     <eat-comment />
     <string name="tutorial_training_watch_headline">Watch</string>
-    <string name="tutorial_training_watch_subhead">See what the app offers in our demo video
-
-(Tap on the video to bring up settings for subtitles)</string>
+    <string name="tutorial_training_watch_subhead">See what the app offers in our demo video</string>
     <string name="tutorial_training_prepare_headline">Prepare</string>
     <string name="tutorial_training_prepare_subhead">Get familiar with some of your tools. The \"Teach Me to Share\" tool is a good place to start. 
 

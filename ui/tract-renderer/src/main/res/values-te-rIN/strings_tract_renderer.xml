@@ -6,6 +6,7 @@
     <string name="tract_card_next">తదుపరి</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">మీ స్క్రీన్ పంచుకోండి</string>
+    <string name="menu_live_share_active">స్క్రీన్ పంచుకునే కార్యాచరణ</string>
     <string name="share_tool_message_tract_live_share">హాయ్, స్క్రీన్ పంచుకోవడం ద్వారా GodTools లో నాతో పాటు అనుసరించండి. లింక్ ఇక్కడ ఉన్నది: %1$s\n\nఇంకనూ తరువాత ఈ సందేశమును ఒకవేళ మీరు అందుకోకుంటే, లింక్ ఇంకనూ పనిచేయక పోవచ్చు. మరొక సమయంలో మనము మళ్ళీ ప్రయత్నించవచ్చు.</string>
     <string name="tract_live_share_starting">స్క్రీన్ పంచుకోవడంను ప్రారంభిస్తున్నా…</string>
     <string name="tract_live_share_unable_to_connect">స్క్రన్ పంచుకోవడంకు కనెక్ట్ చేయలేకపోయాను</string>
@@ -13,5 +14,12 @@
     <string name="tract_live_share_exit_dialog_confirm">నిష్క్రమించండి</string>
     <string name="tract_live_share_exit_dialog_cancel">రద్దు చేయండి</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">తరువాత</string>
+    <string name="tract_tips_tip_action_close">దగ్గరగా</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">అడగండి</string>
+    <string name="tract_tips_type_consider">పరిగణించండి</string>
+    <string name="tract_tips_type_prepare">సిద్ధం</string>
+    <string name="tract_tips_type_quote">కోట్</string>
+    <string name="tract_tips_type_tip">చిట్కా</string>
 </resources>

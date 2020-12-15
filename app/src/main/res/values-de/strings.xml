@@ -4,11 +4,13 @@
     <string name="share_prompt">Wählen Sie, wie Sie teilen möchten.</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Allgemein</string>
+    <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Teilen</string>
     <string name="menu_heading_legal">Rechtliche Hinweise</string>
     <string name="menu_about">Über</string>
     <string name="menu_help">Häufige Fragen</string>
     <string name="menu_contact_us">Kontaktiere uns</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Anmelden</string>
     <string name="menu_signup">Account erstellen</string>
     <string name="menu_logout">Abmelden</string>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">સ્વાગત છે</string>
+    <string name="tutorial_onboarding_welcome_2">તમારો વિશ્વાસ વહેંચવામાં તમને મદદ કરશે</string>
+    <string name="tutorial_onboarding_others_headline">અન્ય લોકો સાથે શેર કરો</string>
+    <string name="tutorial_onboarding_others_subhead">GodTools તમારા વિશ્વાસ વાર્તાલાપને માર્ગદર્શન આપવા માટે બનાવવામાં આવ્યું છે</string>
+    <string name="tutorial_onboarding_tools_headline">તમારા ટુલ્સ પસંદ કરો</string>
+    <string name="tutorial_onboarding_tools_subhead">GodTools આધ્યાત્મિક વાતચીત પહેલાં, દરમ્યાન અને પછી તમને મદદ કરે છે</string>
+    <string name="tutorial_onboarding_ready_headline">હંમેશા તૈયાર</string>
+    <string name="tutorial_onboarding_ready_subhead">GodTools અહીં તમને મદદ કરવા માટે  છે અને જ્યારે તમને જરુર તે હોય  ત્યારે તૈયાર છે</string>
+    <string name="tutorial_onboarding_final_prepare">કોઈપણ વાતચીત માટે તૈયાર થાવ</string>
+    <string name="tutorial_onboarding_final_gospel">"સુવાર્તા સમજાવતાં કોઈની સાથે વ્યવહાર કરો "</string>
+    <string name="tutorial_onboarding_final_parallel_languages">એક સાથે બે ભાષાઓ જુઓ</string>
+    <string name="tutorial_onboarding_final_languages">80 થી વધુ ભાષાઓમાંથી પસંદ કરો</string>
+    <string name="tutorial_onboarding_final_help_others">કોઈને ખ્રિસ્તી તરીકે પ્રારંભ કરવામાં સહાય કરો</string>
+    <string name="tutorial_onboarding_final_action_show_more">મને વધુ બતાવો</string>
+    <string name="tutorial_onboarding_final_action_start">શરૂ કરો</string>
+    <string name="tutorial_onboarding_action_begin">શરૂઆત</string>
+    <string name="tutorial_onboarding_action_continue">ચાલુ રાખો</string>
+    <string name="tutorial_onboarding_action_skip">અવગણો</string>
+</resources>

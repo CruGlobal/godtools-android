@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">ଆପଣଙ୍କର ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="tutorial_live_share_description_text">ଏହି ବିକଳ୍ପ ଆପଣଙ୍କ ଏକ ବନ୍ଧୁଙ୍କୁ ଏହି ଉପକରଣକୁ ଏକ ଲିଙ୍କ ପଠାଇବ | ଯେତେବେଳେ ଏହି ଲିଙ୍କ୍ ଖୋଲାଯିବ, ଏହା ଏକ ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ଅଧିବେଶନ ଆରମ୍ଭ କରିବ |</string>
+    <string name="tutorial_live_share_mirrored_headline">ପ୍ରତିବିମ୍ବିତ ଅଭିଜ୍ଞତା</string>
+    <string name="tutorial_live_share_mirrored_text">ଯେବେ ଆପଣ ଆପଣଙ୍କ ଫୋନରେ ଉପକରଣକୁ ସ୍କ୍ରୋଲ୍ କରିବେ, ଆପଣଙ୍କ ବନ୍ଧୁଙ୍କ ସ୍କ୍ରିନ୍ ଏବଂ ଆପଣଙ୍କ ସ୍କ୍ରିନ୍ ସମାନ ପ୍ରତିକ୍ରିୟା କରିବ | ଏହା ଆପଣଙ୍କୁ ଏକ ସମୟରେ ଦୁଇଟି ଡିଭାଇସରେ ଗୋଟିଏ ଉପକରଣ ମାଧ୍ୟମରେ କାର୍ଯ୍ୟ କରିବାକୁ ଅନୁମତି ଦିଏ |</string>
+    <string name="tutorial_live_share_start_headline">ଆରମ୍ଭ କରନ୍ତୁ</string>
+    <string name="tutorial_live_share_start_text">ବର୍ତ୍ତମାନ ଏକ ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ଅଧିବେଶନ ଆରମ୍ଭ କରିବା ନିମନ୍ତେ ଜଣେ କିମ୍ବା ଅଧିକ ଲୋକଙ୍କୁ ଲିଙ୍କ୍ ପଠାନ୍ତୁ |</string>
+    <string name="tutorial_live_share_action_continue">ଜାରି ରଖନ୍ତୁ</string>
+    <string name="tutorial_live_share_action_skip">ଛାଡିଦିଅନ୍ତୁ</string>
+    <string name="tutorial_live_share_action_start">ଲିଙ୍କ୍ ଅଂଶୀଦାର କରନ୍ତୁ</string>
+</resources>

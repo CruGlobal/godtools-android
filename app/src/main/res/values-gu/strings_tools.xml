@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_favorite_tools">મનપસંદ</string>
+    <string name="nav_all_tools">બધા ટુલ્સ</string>
+    <string name="action_tools_about">ના વિશે</string>
+    <string name="action_tools_open">ખુલ્લું</string>
+    <string name="tools_list_remove_favorite_dialog_title">મનપસંદમાંથી \"%1s\" ને દૂર કરીએ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">દૂર કરો</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">રદ કરો</string>
+    <string name="tools_list_favorites_banner_text">હાર્ટ આઇકોનને ટેપ કરીને Tool ને ઓફ઼લાઇન ઉપલબ્ધ બનાવો જે તેને તમારા મનપસંદમાં ઉમેરે છે.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">કાઢી નાખો</string>
     <!-- Tool Details UI -->
-    <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
-    <string name="action_tools_open_tool">ખુલ્લું સાધન</string>
+    <string name="menu_add_to_home">હોમ સ્ક્રીન પર ઉમેરો</string>
+    <string name="action_tools_open_tool">Tool ને ખોલો</string>
+    <string name="action_tools_add_favorite">મનપસંદમાં ઉમેરો</string>
+    <string name="action_tools_remove_favorite">મનપસંદમાંથી દૂર કરો</string>
+    <string name="action_tools_open_training">આ Tool ને વહેંચવાનું શીખો</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d દર્શક</item>
         <item quantity="other">%1$,d દર્શકો</item>
     </plurals>
-    <string name="label_tools_about">વિશે/આશરે</string>
+    <string name="label_tools_about">વિશે</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d ભાષા</item>
         <item quantity="other">%1$,d ભાષાઓ</item>

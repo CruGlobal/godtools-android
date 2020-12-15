@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">%s ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">ಸುವಾರ್ತೆಯ ಆಹ್ವಾನ</string>
+    <string name="tool_category_articles">ಲೇಖನಗಳು</string>
+    <string name="tool_category_conversation_starter">ಸಂಭಾಷಣೆ ಪ್ರಾರಂಭಕ</string>
+    <string name="tool_category_growth">ಕ್ರಿಸ್ತನಲ್ಲಿ ಬೆಳವಣಿಗೆ</string>
+    <string name="tool_category_training">ತರಬೇತಿ</string>
+    <!-- Sharing -->
+    <string name="share_general_message">"ಈ ಲಿಂಕ್ ನಾವು ಇಂದು ಮಾತನಾಡುತ್ತಿದ್ದ ವೆಬ್ ಆವೃತ್ತಿಗೆ ನಿಮ್ಮನ್ನು ಕರೆದೊಯ್ಯುತ್ತದೆ: %1$s
+
+ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು https://godtoolsapp.com ನಿಂದ ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು
+
+ಹೆಚ್ಚು ಮಾತನಾಡೋಣ! 
+"</string>
+</resources>

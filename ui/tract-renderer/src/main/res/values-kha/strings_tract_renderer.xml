@@ -6,7 +6,7 @@
     <string name="tract_card_next">Hadien</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">আপনার স্ক্রিন শেয়ার করুন</string>
-    <string name="share_tool_message_tract_live_share">হাই, স্ক্রিন শেযারিং-এর মাধ্যমে আমার সাথে GodTools-এ ফলো করুন। লিঙ্কটি এখানে আছে:%1$s\n\nযদি আপনি এই লিঙ্কটি পরে পান, তাহলে লিঙ্কটি কাজ নাও করতে পারে। আমরা তাহলে অন্য সময় আবার চেষ্টা করতে পারি।</string>
+    <string name="share_tool_message_tract_live_share">হাই, স্ক্রিন শেযারিং-এর মাধ্যমে আমার সাথে GodTools-এ ফলো করুন। লিঙ্কটি এখানে আছে: %1$s\n\nযদি আপনি এই লিঙ্কটি পরে পান, তাহলে লিঙ্কটি কাজ নাও করতে পারে। আমরা তাহলে অন্য সময় আবার চেষ্টা করতে পারি।</string>
     <string name="tract_live_share_starting">স্ক্রিন শেয়ার করা শুরু করছি...</string>
     <string name="tract_live_share_unable_to_connect">স্ক্রিন শেয়ার করাতে সংযোগ করতে ব্যর্থ</string>
     <string name="tract_live_share_exit_dialog_message">রিমোট শেয়ার করার সত্র থেকে এখন প্রস্তান করবেন?</string>

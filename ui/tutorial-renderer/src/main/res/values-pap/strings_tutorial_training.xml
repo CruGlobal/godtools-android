@@ -2,11 +2,11 @@
 <resources>
     <!-- Training Tutorial -->
     <string name="tutorial_training_watch_headline">Wak</string>
-    <string name="tutorial_training_watch_subhead">Wak kiko e app ta ofresé den nos video di demonstrashon
-
-(Klek riba e video pa bo haña e ahustenan pa subtítulo)</string>
+    <string name="tutorial_training_watch_subhead">Wak kiko e app ta ofresé den nos video di demonstrashon</string>
     <string name="tutorial_training_prepare_headline">Prepará</string>
-    <string name="tutorial_training_prepare_subhead">Sera konosí ku algun di bo hèrmèntnan. \"Siñami Kon Pa Kompartí\" ta un bon kaminda pa kuminsá.
+    <string name="tutorial_training_prepare_subhead">Sera konosí ku algun di bo hèrmèntnan. \"Siñami Kon Pa Kompartí\" ta un bon kaminda pa kuminsá. 
+
+
 
 Primi riba e boton di Tokante pa mas informashon di e hèrmènt.</string>
     <string name="tutorial_training_try_headline">Purba</string>

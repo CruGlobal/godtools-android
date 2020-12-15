@@ -3,9 +3,10 @@
     <string name="menu_share_tool">"सांगा
        "</string>
     <string name="share_tool_title">सांगा “%1$s” उपयोग करून</string>
-    <string name="tool_not_found">आपण विनंती केलेले साधन आढळले नाही</string>
-    <string name="tool_loading">आपण विनंती केलेले साधन लोड होत आहे</string>
-    <string name="tool_offline">आपण विनंती केलेले साधन वापरण्यासाठी इंटरनेट कनेक्शन पाहिजे</string>
+    <string name="share_tool_message_article">मला हा लेख आपल्याबरोबर सामायिक करायचा आहे आणि त्याबद्दल आपले विचार ऐकायला आवडेल.\n%1$s</string>
+    <string name="tool_not_found">आपण विनंती केलेले टूल आढळले नाही</string>
+    <string name="tool_loading">आपण विनंती केलेले टूल लोड होत आहे</string>
+    <string name="tool_offline">आपण विनंती केलेले टूल वापरण्यासाठी इंटरनेट कनेक्शन पाहिजे</string>
     <string name="feature_discovery_title_share_tool">लिंक पाठवा</string>
-    <string name="feature_discovery_desc_share_tool">हे चिन्ह क्लिक करून हे टूल एका मित्राला पाठवा</string>
+    <string name="feature_discovery_desc_share_tool">हे आयकाॅन क्लिक करून हे टूल एका मित्राला पाठवा</string>
 </resources>

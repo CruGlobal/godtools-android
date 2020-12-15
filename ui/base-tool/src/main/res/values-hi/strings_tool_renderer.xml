@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">शेयर करें</string>
-    <string name="share_tool_title">“%1$s” शेयर करें इसका प्रयोग करते हुए</string>
+    <string name="menu_share_tool">साझा करें</string>
+    <string name="share_tool_title">इसका प्रयोग करते हुए “%1$s” को साझा करें</string>
+    <string name="share_tool_message_article">मैं इस लेख को आपके साथ साझा करना चाहता हूंँ और इसके बारे में आपके विचार सुनना चाहता हूंँ।\n\n%1$s</string>
     <string name="tool_not_found">आपका अनुरोधित टूल नहीं मिला</string>
     <string name="tool_loading">आपका अनुरोधित टूल लोड हो रहा है...</string>
     <string name="tool_offline">आपके द्वारा अनुरोधित टूल को खोलने के लिए इंटरनेट कनेक्शन आवश्यक है</string>

@@ -3,9 +3,9 @@
     <string name="toast_unable_to_launch_activity">%s ను తెరవలేకపోయాను</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">సువార్త ఆహ్వానం</string>
-    <string name="tool_category_articles">వస్తువులు</string>
+    <string name="tool_category_articles">వ్యాసాలు</string>
     <string name="tool_category_conversation_starter">సంభాషణ స్టార్టర్</string>
-    <string name="tool_category_growth">క్రిస్టియన్ ఎదుగుదల</string>
+    <string name="tool_category_growth">క్రిస్టియన్  ఎదుగుదల</string>
     <string name="tool_category_training">శిక్షణ</string>
     <!-- Sharing -->
     <string name="share_general_message">ఈ రోజు మనం మాట్లాడుతున్న వెబ్ వెర్షన్‌కు ఈ లింక్ మిమ్మల్ని తీసుకెళుతుంది: %1$s \n\n

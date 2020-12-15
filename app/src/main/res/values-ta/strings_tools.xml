@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_favorite_tools">பிடித்தவை</string>
+    <string name="nav_all_tools">அனைத்து கருவிகள்</string>
+    <string name="action_tools_about">பற்றி</string>
+    <string name="action_tools_open">திற</string>
+    <string name="tools_list_remove_favorite_dialog_title">பிடித்தவைகளிலிருந்து “%1$s” ஐ அகற்றவா?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">அகற்று</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ரத்துசெய்</string>
+    <string name="tools_list_favorites_banner_text">உங்கள் விருப்பங்களில் சேர்க்கும் இதய ஐகானைத் தட்டுவதன் மூலம் ஒரு கருவியை ஆஃப்லைனில் கிடைக்கும்.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">நிராகரி</string>
     <!-- Tool Details UI -->
-    <string name="action_tools_open_tool">திறந்த</string>
+    <string name="menu_add_to_home">முகப்புத் திரையில் சேர்</string>
+    <string name="action_tools_open_tool">திறந்த கருவி</string>
+    <string name="action_tools_add_favorite">பிடித்தவையில் சேர்</string>
+    <string name="action_tools_remove_favorite">பிடித்தவற்றிலிருந்து அகற்று</string>
+    <string name="action_tools_open_training">இந்த கருவியைப் பகிர கற்றுக்கொள்ளுங்கள்</string>
     <string name="label_tools_about">பற்றி</string>
 </resources>

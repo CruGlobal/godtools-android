@@ -3,23 +3,26 @@
     <!-- Main Activity-->
     <string name="share_prompt">आपण कसे सांगू इच्छिता त्याची निवड करा</string>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">सामान्य</string>
+    <string name="menu_heading_general">सर्वसामान्य</string>
+    <string name="menu_heading_account">खाते</string>
     <string name="menu_heading_share">सांगा</string>
     <string name="menu_heading_legal">कायदेशीर</string>
     <string name="menu_about">विषयी</string>
     <string name="menu_help">वारंवार विचारले जाणारे प्रश्न</string>
-    <string name="menu_contact_us">आमच्याशी संपर्क करा</string>
+    <string name="menu_contact_us">आमच्याशी संपर्क साधा</string>
+    <string name="menu_tutorial">"
+प्रशिक्षण"</string>
     <string name="menu_login">लाॅगिन</string>
     <string name="menu_signup">अकाऊंट सुरू करा.</string>
     <string name="menu_logout">लाॅग-आऊट</string>
-    <string name="menu_share_godtools">GodTools ऍप शेअर करा</string>
+    <string name="menu_share_godtools">GodTools App शेअर करा</string>
     <string name="menu_share_story">आम्हाला गोष्ट सांगा</string>
     <string name="menu_rate">गाॅड्स टूलचे मूल्यमापन करा</string>
     <string name="menu_terms_of_use">"उपयोगाच्या अटी "</string>
-    <string name="menu_privacy_policy">गोपनीयता धोरणा</string>
+    <string name="menu_privacy_policy">गोपनीयता धोरण</string>
     <string name="menu_copyright">काॅपीराईट</string>
     <!-- Share a story -->
-    <string name="share_story_subject">देव कसे कार्य करीत आहे ते ऐका!</string>
+    <string name="share_story_subject">GodTools Story</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ भाषा</string>
     <string name="menu_language_settings">भाषेच्या मांडण्या</string>
@@ -29,10 +32,8 @@
     <string name="title_language_parallel">समांतर भाषा</string>
     <string name="action_language_parallel_select">"समांतर भाषेची निवड करा
 "</string>
-    <string name="text_language_parallel_description">"कोणाला तरी त्यांच्या स्वदेशी भाषेत देवाची साधने  GodTools याविषयी सांगा
-
-"</string>
-    <string name="text_language_warning">प्रत्येक साधन प्रत्येक भाषेत उपलब्ध नसते</string>
-    <string name="label_language_none">एक ही नाही</string>
+    <string name="text_language_parallel_description">कोणाला तरी त्यांच्या स्वदेशी भाषेत GodTools विषयी सांगा</string>
+    <string name="text_language_warning">प्रत्येक टूल प्रत्येक भाषेत उपलब्ध नसते</string>
+    <string name="label_language_none">एकही नाही</string>
     <string name="label_language_search">भाषा फिल्टर करा</string>
 </resources>

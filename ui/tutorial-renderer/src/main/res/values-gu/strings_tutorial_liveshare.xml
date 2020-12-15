@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">તમારી સ્ક્રીન શેર કરો</string>
+    <string name="tutorial_live_share_description_text">આ વિકલ્પ આ Tool ની લિંક મિત્રને મોકલશે. જ્યારે લિંક ખુલશે ત્યારે તે સ્ક્રીન શેરિંગ સત્ર શરૂ કરશે.</string>
+    <string name="tutorial_live_share_mirrored_headline">પ્રતિબિંબિત અનુભવ</string>
+    <string name="tutorial_live_share_mirrored_text">જ્યારે તમે તમારા ફોન પર Tool સ્ક્રોલ કરો છો, ત્યારે તમારા મિત્રની સ્ક્રીન તે જ રીતે પ્રતિસાદ આપશે. આ તમને એક સાથે તે જ સમયે ૨ ઉપકરણો પર એક Tool દ્વારા ચાલવાની મંજૂરી આપે છે.</string>
+    <string name="tutorial_live_share_start_headline">શરૂ કરો</string>
+    <string name="tutorial_live_share_start_text">સ્ક્રીન વહેંચણી સત્ર શરૂ કરવા માટે એક અથવા વધુ લોકોને લિંક મોકલો.</string>
+    <string name="tutorial_live_share_action_continue">ચાલુ રાખો</string>
+    <string name="tutorial_live_share_action_skip">અવગણો</string>
+    <string name="tutorial_live_share_action_start">લિંક શેર કરો</string>
+</resources>

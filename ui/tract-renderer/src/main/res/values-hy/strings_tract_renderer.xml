@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tract_card_previous">նախորդ</string>
+    <string name="tract_card_previous">Նախորդը</string>
     <string name="tract_card_next">Հաջորդը</string>
     <!-- Live Sharing -->
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Հաջորդը</string>
     <!-- Tip Types -->
 </resources>

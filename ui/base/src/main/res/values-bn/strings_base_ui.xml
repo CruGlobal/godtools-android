@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_unable_to_launch_activity">খোলা যাচ্ছে না %s</string>
+    <string name="toast_unable_to_launch_activity">খুলতে অক্ষম %s</string>
     <!-- Tool Categories -->
+    <string name="tool_category_gospel">"সুসমাচার আমন্ত্রণ "</string>
+    <string name="tool_category_articles">"প্রবন্ধ সমূহ "</string>
+    <string name="tool_category_conversation_starter">"কথোপকথন স্টার্টার "</string>
+    <string name="tool_category_growth">"খ্রিষ্টীয় বিকাশ "</string>
+    <string name="tool_category_training">"প্রশিক্ষণ "</string>
     <!-- Sharing -->
-    <string name="share_general_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন:
-http://godtoolsapp.com
+    <string name="share_general_message">এই লিঙ্কটি আপনাকে একটি ওয়েব সংস্করণে নিয়ে যাবে যার সম্বন্ধে আমরা আজ কথা বলছি; %1$s \n\n 
 
-Here’s a link to a web version of the app %1$s \n\n</string>
+
+http://godtoolsapp.com \n\n থেকে app টিকে ডাউনলোড করা যেতে পারে
+
+আরও কথা বলা যাক!</string>
 </resources>

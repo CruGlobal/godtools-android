@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">நிறுவு</string>
+    <string name="menu_share_tract">இந்த கருவியை அனுப்பவும்</string>
     <string name="tract_card_previous">முந்தைய</string>
     <string name="tract_card_next">அடுத்த</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">உங்கள் திரையைப் பகிரவும்</string>
+    <string name="menu_live_share_active">திரை பகிர்வு செயலில் உள்ளது</string>
+    <string name="share_tool_message_tract_live_share">ஹாய், திரை பகிர்வு வழியாக GodTools என்னுடன் பின்தொடரவும். இங்கே இணைப்பு: %1$s\n\nஇந்தச் செய்தியை நீங்கள் பின்னர் பெறவில்லை எனில், இணைப்பு இன்னும் இயங்காது. மற்றொரு நேரத்தில் மீண்டும் முயற்சி செய்யலாம்.\n</string>
+    <string name="tract_live_share_starting">திரை பகிர்வைத் தொடங்குகிறது…</string>
+    <string name="tract_live_share_unable_to_connect">திரை பகிர்வுடன் இணைக்க முடியவில்லை</string>
+    <string name="tract_live_share_exit_dialog_message">தொலை பகிர்வு அமர்விலிருந்து இப்போது வெளியேற வேண்டுமா?</string>
+    <string name="tract_live_share_exit_dialog_confirm">வெளியேறு</string>
+    <string name="tract_live_share_exit_dialog_cancel">ரத்துசெய்</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">அடுத்தது</string>
+    <string name="tract_tips_tip_action_close">நெருக்கமான</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">கேளுங்கள்</string>
+    <string name="tract_tips_type_consider">கவனியுங்கள்</string>
+    <string name="tract_tips_type_prepare">தயார்</string>
+    <string name="tract_tips_type_quote">மேற்கோள்</string>
+    <string name="tract_tips_type_tip">உதவிக்குறிப்பு</string>
 </resources>

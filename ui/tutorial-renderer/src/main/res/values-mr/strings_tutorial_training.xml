@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">पाहा</string>
+    <string name="tutorial_training_watch_subhead">आमच्या डेमो व्हिडिओमध्ये अ‍ॅप काय ऑफर करतो ते पाहा</string>
+    <string name="tutorial_training_prepare_headline">तयार करा</string>
+    <string name="tutorial_training_prepare_subhead">आपल्या काही टूलशी परिचित व्हा. “मला सांगावयास शिकवा” टूल प्रारंभ करण्यासाठी चांगली जागा आहे.
+
+टूलबद्दल अधिक जाणून घेण्यासाठी बटण दाबा.</string>
+    <string name="tutorial_training_try_headline">प्रयत्न करा</string>
+    <string name="tutorial_training_try_subhead">प्रत्येक जण नवशिक्या म्हणून सुरुवात करतो. संभाषणात टूल वापरण्याचा प्रयत्न करा आणि आपण काय शिकता ते पहा.</string>
+    <string name="tutorial_training_final_headline">हे ट्यूटोरियल मेनूमध्ये पुन्हा पाहण्यासाठी उपलब्ध आहे</string>
+    <string name="tutorial_training_action_continue">सुरू</string>
+    <string name="tutorial_training_action_start">GodTools वापरण्या प्रारंभ करा</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">मला एक ट्यूटोरियल दाखवा</string>
+    <string name="tutorial_training_banner_action_open">ट्यूटोरियल उघडा</string>
+    <string name="tutorial_training_banner_action_dismiss">काढून टाका</string>
+</resources>

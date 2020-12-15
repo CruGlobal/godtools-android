@@ -4,11 +4,13 @@
     <string name="share_prompt">మీరు ఎలా పంచుకోదలచారో ఎంచుకోండి</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">సాధారణ</string>
+    <string name="menu_heading_account">ఖాతా</string>
     <string name="menu_heading_share">పంచుకోండి</string>
     <string name="menu_heading_legal">లీగల్</string>
     <string name="menu_about">గురించి</string>
     <string name="menu_help">తరచుగా అడగబడే ప్రశ్నలు</string>
     <string name="menu_contact_us">మమ్మల్ని సంప్రదించండి</string>
+    <string name="menu_tutorial">ట్యుటోరియల్</string>
     <string name="menu_login">లాగిన్</string>
     <string name="menu_signup">ఖాతాను సృష్టించు</string>
     <string name="menu_logout">లాగ్‌ఔట్</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">గోప్యత విధానం</string>
     <string name="menu_copyright">కాపీరైట్</string>
     <!-- Share a story -->
-    <string name="share_story_subject">దేవుడు ఎలా కదులుతున్నాడో వినండి!</string>
+    <string name="share_story_subject">GodTools కధ</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">80+ భాషలు</string>
     <string name="menu_language_settings">భాష సెట్టింగ్స్</string>

@@ -2,11 +2,15 @@
 <resources>
     <string name="toast_unable_to_launch_activity">%s ખુલી શકે એમ નથી</string>
     <!-- Tool Categories -->
+    <string name="tool_category_gospel">સુવાર્તા માટે આમંત્રણ</string>
+    <string name="tool_category_articles">લે્ખો</string>
+    <string name="tool_category_conversation_starter">વાર્તાલાપ પ્રારંભ</string>
+    <string name="tool_category_growth">ખ્રિસ્તી વિકાસ</string>
+    <string name="tool_category_training">તાલીમ</string>
     <!-- Sharing -->
     <string name="share_general_message">આજે આપણે જે એપ જોતા હતાં તે ડાઉનલોડ કરવા માટેની લીંક: http://godtoolsapp.com \n\n
 
-આ એપ ની વેબ વર્ઝનની લીંક 
-%1$s\n\n
+આ લીંક તમને વેબ વર્ઝનના એ પાન પર લઇ જશે જે વીશે આજે આપણે જોઈ રહ્યા હતા: %1$s\n\n
 
-ચાલો, વાત આગળ વધારીએ!</string>
+ચાલો આપણે વધુ વાત કરીએ!</string>
 </resources>
