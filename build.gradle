@@ -244,7 +244,7 @@ subprojects {
 
                         all {
                             // increase unit tests max heap size
-                            jvmArgs "-Xmx2g"
+                            jvmArgs "-Xmx3g"
 
                             // enable only SDKs we actually support in robolectric
                             // TODO: SDK >= 29 requires Java 9 which we don't currently support
