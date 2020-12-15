@@ -6,10 +6,10 @@ import org.cru.godtools.tutorial.PageSet
 
 class TutorialAnalyticsScreenEvent(private val tutorial: PageSet, page: Int, locale: Locale?) :
     AnalyticsScreenEvent("${tutorial.analyticsBaseScreenName}-${page + 1}", locale) {
-    override val adobeSiteSection get() = when (tutorial) {
-        PageSet.ONBOARDING -> ADOBE_SITE_SECTION_ONBOARDING
-        PageSet.TRAINING -> ADOBE_SITE_SECTION_TUTORIAL
-        // TODO: what should the adobe site section actually be?
+    override val appSection get() = when (tutorial) {
+        PageSet.ONBOARDING -> APP_SECTION_ONBOARDING
+        PageSet.TRAINING -> APP_SECTION_TUTORIAL
+        // TODO: what should the app section actually be?
         PageSet.LIVE_SHARE -> null
         PageSet.TIPS -> null
     }

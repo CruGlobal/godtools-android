@@ -16,8 +16,8 @@ abstract class AnalyticsBaseEvent internal constructor(
      */
     open fun isForSystem(system: AnalyticsSystem) = systems == null || systems.contains(system)
 
-    open val adobeSiteSection: String? get() = null
-    open val adobeSiteSubSection: String? get() = null
+    open val appSection: String? get() = null
+    open val appSubSection: String? get() = null
 
     open val snowplowPageTitle: String? get() = null
     open val snowplowContentScoringUri: Uri.Builder get() =

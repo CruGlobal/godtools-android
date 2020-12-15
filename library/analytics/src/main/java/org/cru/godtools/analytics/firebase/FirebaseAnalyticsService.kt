@@ -1,23 +1,23 @@
 package org.cru.godtools.analytics.firebase
 
-import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.karumi.weak.weak
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -26,9 +26,22 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+/* Value constants */
+private const val USER_PROP_APP_NAME = "cru_appname"
+private const val VALUE_APP_NAME_GODTOOLS = "GodTools"
+
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
+
+private const val USER_PROP_DEBUG = "debug"
+private const val USER_PROP_LOGGED_IN_STATUS = "cru_loggedinstatus"
+private const val USER_PROP_SSO_GUID = "cru_ssoguid"
+private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
+
+private const val PARAM_APP_SECTION = "cru_sitesection"
+private const val PARAM_APP_SUB_SECTION = "cru_sitesubsection"
+private const val PARAM_CONTENT_LANGUAGE = "cru_contentlanguage"
 
 @Singleton
 class FirebaseAnalyticsService @VisibleForTesting internal constructor(
@@ -37,7 +50,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     oktaUserProfileProvider: OktaUserProfileProvider,
     private val firebase: FirebaseAnalytics,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-) : Application.ActivityLifecycleCallbacks {
+) {
     @Inject
     @MainThread
     internal constructor(
@@ -54,54 +67,51 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
+        if (event.isForSystem(AnalyticsSystem.FIREBASE) || event.isForSystem(AnalyticsSystem.ADOBE)) when (event) {
             is AnalyticsScreenEvent -> handleScreenEvent(event)
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
     }
 
-    // region ActivityLifecycleCallbacks
-    init {
-        app.registerActivityLifecycleCallbacks(this)
-    }
-
-    private var currentActivity: Activity? by weak()
-
-    override fun onActivityResumed(activity: Activity) {
-        currentActivity = activity
-    }
-
-    override fun onActivityPaused(activity: Activity) {
-        currentActivity = currentActivity?.takeUnless { it === activity }
-    }
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
-    override fun onActivityStarted(activity: Activity) = Unit
-    override fun onActivityStopped(activity: Activity) = Unit
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
-    override fun onActivityDestroyed(activity: Activity) = Unit
-    // endregion ActivityLifecycleCallbacks
-    // endregion Tracking Events
-
     @MainThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
-        currentActivity?.let { firebase.setCurrentScreen(it, event.screen, null) }
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
+            putString(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
+            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
+            event.appSection?.let { putString(PARAM_APP_SECTION, it) }
+            event.appSubSection?.let { putString(PARAM_APP_SUB_SECTION, it) }
+        }
+        firebase.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
     @MainThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        firebase.logEvent(event.firebaseEventName, null)
+        val bundle = Bundle().apply {
+            event.adobeAttributes?.forEach { attribute ->
+                val attributeKey = attribute.key.replace(Regex("[ \\-.]"), "_")
+                putString(attributeKey, attribute.value.toString())
+            }
+        }
+
+        firebase.logEvent(event.firebaseEventName, bundle)
     }
 
     init {
-        oktaUserProfileProvider.userInfoFlow()
-            .map { it?.ssoGuid }
-            .distinctUntilChanged()
-            .onEach { firebase.setUserId(it) }
+        oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+            .onEach {
+                firebase.setUserId(it?.ssoGuid)
+                firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
+                firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
+                firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
+            }
             .launchIn(coroutineScope)
 
+        firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
+        firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )
+        firebase.setUserProperty(USER_PROP_DEBUG, BuildConfig.DEBUG.toString())
     }
 }
