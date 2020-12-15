@@ -19,7 +19,6 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val SCREEN_ALL_TOOLS = "All Tools"
         const val SCREEN_LANGUAGE_SETTINGS = "Language Settings"
         const val SCREEN_LANGUAGE_SELECTION = "Select Language"
-        const val SCREEN_MENU = "Menu"
         const val SCREEN_ABOUT = "About"
         const val SCREEN_HELP = "Help"
         const val SCREEN_CONTACT_US = "Contact Us"
