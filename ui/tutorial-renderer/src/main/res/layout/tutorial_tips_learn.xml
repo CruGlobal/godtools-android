@@ -20,16 +20,17 @@
 
         <include layout="@layout/tutorial_tips_include_positioning" />
 
-        <ImageView
-            android:id="@+id/image"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/img_tutorial_tips_people"
             app:layout_constraintBottom_toBottomOf="@id/imagePosition"
             app:layout_constraintEnd_toEndOf="@id/imagePosition"
             app:layout_constraintStart_toStartOf="@id/imagePosition"
-            app:layout_constraintTop_toTopOf="@id/imagePosition" />
+            app:layout_constraintTop_toTopOf="@id/imagePosition"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/anim_tutorial_tips_people"
+            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/headline"
@@ -37,7 +38,7 @@
             android:layout_height="wrap_content"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="@{@string/tutorial_tips_learn_headline(formatArgs.getString(TutorialActivity.FORMAT_ARG_TOOL_NAME)), default=@string/tutorial_tips_learn_headline}"
+            android:text="@string/tutorial_tips_learn_headline"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Tips.Headline"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"

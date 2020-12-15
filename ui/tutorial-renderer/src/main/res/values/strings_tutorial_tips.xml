@@ -2,7 +2,7 @@
 <resources>
     <!-- Tips Tutorial -->
     <eat-comment />
-    <string name="tutorial_tips_learn_headline">Learn to share\n%1$s\nwith anyone</string>
+    <string name="tutorial_tips_learn_headline">Learn to share this tool with anyone</string>
     <string name="tutorial_tips_learn_text">This tool helps guide a conversation about how someone begins a relationship with God. Practice sharing the content using the tips provided, so you feel ready to talk to someone else.</string>
 
     <string name="tutorial_tips_light_headline">Tips to light the way</string>
