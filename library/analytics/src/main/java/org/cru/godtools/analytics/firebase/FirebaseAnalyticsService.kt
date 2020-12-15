@@ -86,16 +86,8 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     }
 
     @MainThread
-    private fun handleActionEvent(event: AnalyticsActionEvent) {
-        val bundle = Bundle().apply {
-            event.adobeAttributes?.forEach { attribute ->
-                val attributeKey = attribute.key.replace(Regex("[ \\-.]"), "_")
-                putString(attributeKey, attribute.value.toString())
-            }
-        }
-
-        firebase.logEvent(event.firebaseEventName, bundle)
-    }
+    private fun handleActionEvent(event: AnalyticsActionEvent) =
+        firebase.logEvent(event.firebaseEventName, event.firebaseParams)
 
     init {
         oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)

@@ -1,6 +1,7 @@
 package org.cru.godtools.analytics.model
 
 import android.net.Uri
+import android.os.Bundle
 import java.util.Locale
 import javax.annotation.concurrent.Immutable
 
@@ -19,6 +20,10 @@ open class AnalyticsActionEvent(
     open val adobeAttributes: Map<String, *>? get() = null
 
     open val firebaseEventName get() = action
+    open val firebaseParams
+        get() = Bundle().apply {
+            adobeAttributes?.forEach { putString(it.key.replace(Regex("[ \\-.]"), "_"), it.value?.toString()) }
+        }
 
     override val snowplowPageTitle = listOfNotNull(action, label).joinToString(" : ")
     override val snowplowContentScoringUri: Uri.Builder = super.snowplowContentScoringUri
