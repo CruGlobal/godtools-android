@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">ప్రతిబింబించిన అనుభవం</string>
     <string name="tutorial_live_share_mirrored_text">మీ ఫోనుపై పరికరంను మీరు స్క్రోల్ చేసినప్పుడు, మీ స్నేహితుని స్క్రీన్ అదే విధంగా ప్రతిస్పందిస్తుంది. ఒకే సమయంలో 2 పరికరాలపై కలిసి పరికరం గుండా నిడిచేందుకు ఇది మీకు అనుమతిస్తుంది.</string>
     <string name="tutorial_live_share_start_headline">ప్రారంభించడానికి</string>
-    <string name="tutorial_live_share_start_text">ఇప్పుడు స్క్రీన్ పంచుకునే సెషన్ ప్రారంభించేందుకు ఒకరు లేదా ఎక్కువ వ్యక్తులకు లింకును పంపండి.
-
-పాల్గొనేవారు అందరికీ వారి పరికరంపై GodTools ఆప్ డౌన్‌లోడ్ చేసి ఉండడం ఈ అనుభవంకు ప్రస్తుతం అవసరం.</string>
+    <string name="tutorial_live_share_start_text">స్క్రీన్ షేరింగ్ సెషన్‌ను ప్రారంభించడానికి లింక్‌ను ఒకటి లేదా అంతకంటే ఎక్కువ మందికి పంపండి.</string>
     <string name="tutorial_live_share_action_continue">కొనసాగించండి</string>
     <string name="tutorial_live_share_action_skip">దాటవేయి</string>
     <string name="tutorial_live_share_action_start">లింకును పంచండి</string>

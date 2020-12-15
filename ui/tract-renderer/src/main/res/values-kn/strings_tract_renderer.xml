@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">ಸ್ಥಾಪಿಸಿ</string>
+    <string name="menu_share_tract">ಈ ಸಾಧನವನ್ನು ಕಳುಹಿಸಿ</string>
+    <string name="tract_card_previous">ಹಿಂದಿನದು</string>
+    <string name="tract_card_next">ಮುಂದೆನದು</string>
+    <!-- Live Sharing -->
+    <string name="menu_live_share_publish">ನಿಮ್ಮ ಪರದೆಯನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_live_share_active">ಪರದೆ ಹಂಚಿಕೆ ಸಕ್ರಿಯವಾಗಿದೆ</string>
+    <string name="share_tool_message_tract_live_share">ಹಾಯ್, ಪರದೆ ಹಂಚಿಕೆ ಮೂಲಕ ಗಾಡ್‌ಟೂಲ್ಸ್‌ನಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಅನುಸರಿಸಿ. ಲಿಂಕ್ ಇಲ್ಲಿದೆ: %1$s\n\n ನಂತರದವರೆಗೂ ನೀವು ಈ ಸಂದೇಶವನ್ನು ಸ್ವೀಕರಿಸದಿದ್ದರೆ, ಲಿಂಕ್ ಇನ್ನೂ ಕಾರ್ಯನಿರ್ವಹಿಸದೆ ಇರಬಹುದು. ನಾವು ಇನ್ನೊಂದು ಸಮಯದಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಬಹುದು.</string>
+    <string name="tract_live_share_starting">ಪರದೆ ಹಂಚಿಕೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="tract_live_share_unable_to_connect">ಪರದೆ ಹಂಚಿಕೆಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+    <string name="tract_live_share_exit_dialog_message">ಈಗ ದೂರಸ್ಥ ಹಂಚಿಕೆ ಅಧಿವೇಶನದಿಂದ ನಿರ್ಗಮಿಸುವುದೇ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">ನಿರ್ಗಮಿಸಿ</string>
+    <string name="tract_live_share_exit_dialog_cancel">ರದ್ದುಮಾಡಿ</string>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">ಮುಂದೆನದು</string>
+    <string name="tract_tips_tip_action_close">ಮುಚ್ಚಿ</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">ಕೇಳಿ</string>
+    <string name="tract_tips_type_consider">ಪರಿಗಣಿಸಿ</string>
+    <string name="tract_tips_type_prepare">ತಯಾರಿಸಿ</string>
+    <string name="tract_tips_type_quote">ಉಲ್ಲೇಖ</string>
+    <string name="tract_tips_type_tip">ಸಲಹೆ</string>
+</resources>

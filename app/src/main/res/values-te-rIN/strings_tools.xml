@@ -15,6 +15,7 @@
     <string name="action_tools_open_tool">పరికరం తెరవండి</string>
     <string name="action_tools_add_favorite">ఇష్టాలకు జోడించండి</string>
     <string name="action_tools_remove_favorite">ఇష్టాల నుంచి తొలగించండి</string>
+    <string name="action_tools_open_training">ఈ సాధనాన్ని భాగస్వామ్యం చేయడం నేర్చుకోండి</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d వీక్షణ</item>
         <item quantity="other">%1$,d వీక్షణలు</item>

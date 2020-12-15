@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Hồ sơ của tôi</string>
+    <string name="menu_profile">Hoạt động toàn cầu</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Hoạt động</string>
+    <string name="profile_global_activity_heading">%s Hoạt động toàn cầu</string>
+    <string name="profile_activity_unique_users">Người dùng duy nhất</string>
+    <string name="profile_activity_gospel_presentations">Bài thuyết trình Kinh Phúc âm</string>
+    <string name="profile_activity_sessions">Các phiên</string>
+    <string name="profile_activity_countries">Các quốc gia</string>
+</resources>

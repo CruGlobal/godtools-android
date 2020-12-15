@@ -7,9 +7,7 @@
     <string name="tutorial_live_share_mirrored_headline">Mirrored experience</string>
     <string name="tutorial_live_share_mirrored_text">As you scroll the tool on your phone, your friend\'s screen will respond in the same way. This allows you to walk through a tool together on 2 devices at the same time.</string>
     <string name="tutorial_live_share_start_headline">Get started</string>
-    <string name="tutorial_live_share_start_text">Send the link to one or more people to start a screen sharing session now.
-
-This experience currently requires all participants to have the GodTools app downloaded on their device.</string>
+    <string name="tutorial_live_share_start_text">Send the link to one or more people to start a screen sharing session now.</string>
     <string name="tutorial_live_share_action_continue">Continue</string>
     <string name="tutorial_live_share_action_skip">Skip</string>
     <string name="tutorial_live_share_action_start">Share link</string>

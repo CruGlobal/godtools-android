@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">વહેંચો</string>
-    <string name="share_tool_title">%1$s નો ઉપયોગ કરી વહેંચો</string>
-    <string name="tool_not_found">જે સાધન/ટુલ તમે માંગો છો તે જડતું નથી</string>
-    <string name="tool_loading">જે સાધન/ટુલ તમે માંગો છો તે લોડ થઈ રહ્યું છે…</string>
+    <string name="share_tool_title">ઉપયોગ કરીને \"%1$s\" વહેંચો</string>
+    <string name="share_tool_message_article">હું આ લેખ તમારી સાથે વહેંચવવા માંગુ છું અને તેના વિશે તમારા વિચારો સાંભળવા માંગુ છું.\n\n%1$s</string>
+    <string name="tool_not_found">તમે વિનંતી કરેલ ટુલ્સ શોધી શકાતું નથી</string>
+    <string name="tool_loading">તમે વિનંતી કરેલ ટૂલ લોડ થઈ રહ્યું છે ...</string>
+    <string name="tool_offline">તમે વિનંતી કરેલ ટૂલને ખોલવા માટે ઇન્ટરનેટ કનેક્શનની જરૂર છે</string>
+    <string name="feature_discovery_title_share_tool">એક લિંક વહેંચો</string>
+    <string name="feature_discovery_desc_share_tool">આ આઇકોનને ક્લિક કરીને આ ટુલ ને મિત્રને મોકલો</string>
 </resources>

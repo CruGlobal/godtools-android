@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tract_content_input_error_required">%1$s தேவை</string>
+    <string name="tract_content_input_error_invalid_email">செல்லுபடியாகும் மின்னஞ்சல் முகவரியை உள்ளிடவும்</string>
+</resources>

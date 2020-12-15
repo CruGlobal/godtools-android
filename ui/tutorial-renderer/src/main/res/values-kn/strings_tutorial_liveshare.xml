@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">ನಿಮ್ಮ ಪರದೆಯನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="tutorial_live_share_description_text">ಈ ಆಯ್ಕೆಯು ಈ ಉಪಕರಣದ ಲಿಂಕ್ ಅನ್ನು ಸ್ನೇಹಿತರಿಗೆ ಕಳುಹಿಸುತ್ತದೆ. ಲಿಂಕ್ ತೆರೆದಾಗ ಅದು ಪರದೆ ಹಂಚಿಕೆ ಅಧಿವೇಶನವನ್ನು ಪ್ರಾರಂಭಿಸುತ್ತದೆ.</string>
+    <string name="tutorial_live_share_mirrored_headline">ಪ್ರತಿಬಿಂಬಿತ ಅನುಭವ</string>
+    <string name="tutorial_live_share_mirrored_text">ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ನೀವು ಉಪಕರಣವನ್ನು ಸ್ಕ್ರಾಲ್ ಮಾಡುವಾಗ, ನಿಮ್ಮ ಸ್ನೇಹಿತನ ಪರದೆಯು ಅದೇ ರೀತಿಯಲ್ಲಿ ಪ್ರತಿಕ್ರಿಯಿಸುತ್ತದೆ. ಒಂದೇ ಸಮಯದಲ್ಲಿ 2 ಸಾಧನಗಳಲ್ಲಿ ಒಟ್ಟಿಗೆ ಉಪಕರಣದ ಮೂಲಕ ನಡೆಯಲು ಇದು ನಿಮ್ಮನ್ನು ಅನುಮತಿಸುತ್ತದೆ.</string>
+    <string name="tutorial_live_share_start_headline">ಪ್ರಾರಂಭಿಸಿ</string>
+    <string name="tutorial_live_share_start_text">ಪರದೆಯ ಹಂಚಿಕೆ ಅಧಿವೇಶನವನ್ನು ಪ್ರಾರಂಭಿಸಲು ಲಿಂಕ್ ಅನ್ನು ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಜನರಿಗೆ ಕಳುಹಿಸಿ.</string>
+    <string name="tutorial_live_share_action_continue">ಮುಂದುವರಿಸಿ</string>
+    <string name="tutorial_live_share_action_skip">ಬಿಟ್ಟುಬಿಡಿ</string>
+    <string name="tutorial_live_share_action_start">ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
+</resources>

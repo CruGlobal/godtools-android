@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">अपनी स्क्रीन को साझा करें</string>
+    <string name="tutorial_live_share_description_text">यह विकल्प एक मित्र को इस टूल का लिंक भेजेगा। जब लिंक को खोला जाएगा तो यह एक स्क्रीन साझाकरण सत्र शुरू करेगा।</string>
+    <string name="tutorial_live_share_mirrored_headline">प्रतिबिंबित अनुभव</string>
+    <string name="tutorial_live_share_mirrored_text">जैसे-जैसे आप अपने फ़ोन पर टूल स्क्रॉल करते जाते हैं, वैसे-वैसे आपके दोस्त की स्क्रीन प्रतिउत्तर देगी। यह आपको एक ही समय में 2 उपकरणों पर एक साथ एक टूल्ल को देखने की अनुमति देगा।</string>
+    <string name="tutorial_live_share_start_headline">शुरू हो जाएंँ</string>
+    <string name="tutorial_live_share_start_text">एक या अधिक लोगों के लिए लिंक भेजें अब स्क्रीन साझाकरण सत्र शुरू करें।</string>
+    <string name="tutorial_live_share_action_continue">जारी रखें</string>
+    <string name="tutorial_live_share_action_skip">छोड़ें</string>
+    <string name="tutorial_live_share_action_start">लिंक साझा करें</string>
+</resources>

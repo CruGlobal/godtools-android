@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">%s ଖୋଲିବାକୁ ଅସମର୍ଥ</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">ସୁସମାଚାର ନିମନ୍ତ୍ରଣ</string>
+    <string name="tool_category_articles">ପ୍ରବନ୍ଧଗୁଡ଼ିକ</string>
+    <string name="tool_category_conversation_starter">ବାର୍ତ୍ତାଳାପ ପ୍ରାରମ୍ଭକାରୀ</string>
+    <string name="tool_category_growth">ଖ୍ରୀଷ୍ଟିୟାନ ଜୀବନ ଅଭିବୃଦ୍ଧି |</string>
+    <string name="tool_category_training">ପ୍ରଶିକ୍ଷଣ</string>
+    <!-- Sharing -->
+    <string name="share_general_message">ଏହି ଲିଙ୍କ୍ ଆପଣଙ୍କୁ ଆଜି ଆମେ ଯେଉଁ ବିଷୟରେ ଅଲୋଚନା କରୁଥିଲେ ତାହାର ଏକ ୱେବ୍ ସଂସ୍କରଣକୁ ନେଇଯିବ: %1$s|
+
+https://godtoolsapp.com ରୁ ଆପ୍  ଡାଉନଲୋଡ୍ ହୋଇପାରିବ |
+
+ଆସନ୍ତୁ ଏବିଷୟରେ ଅଧିକ ଜାଣିବା!</string>
+</resources>

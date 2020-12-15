@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Chào mừng</string>
+    <string name="tutorial_onboarding_welcome_2">Giúp bạn chia sẻ đức tin của mình</string>
+    <string name="tutorial_onboarding_others_headline">Chia sẻ với người khác</string>
+    <string name="tutorial_onboarding_others_subhead">GodTools được xây dựng để dẫn dắt các cuộc trò chuyện về đức tin của bạn</string>
+    <string name="tutorial_onboarding_tools_headline">Chọn công cụ của bạn</string>
+    <string name="tutorial_onboarding_tools_subhead">GodTools trợ giúp bạn trước, trong và sau một cuộc trò chuyện về tâm linh</string>
+    <string name="tutorial_onboarding_ready_headline">Luôn sẵn sàng</string>
+    <string name="tutorial_onboarding_ready_subhead">GodTools luôn đồng hành để trợ giúp và sẵn sàng khi bạn</string>
+    <string name="tutorial_onboarding_final_prepare">Chuẩn bị cho bất kỳ cuộc trò chuyện nào</string>
+    <string name="tutorial_onboarding_final_gospel">Hướng dẫn về Kinh Phúc âm</string>
+    <string name="tutorial_onboarding_final_parallel_languages">Xem hai ngôn ngữ cạnh nhau</string>
+    <string name="tutorial_onboarding_final_languages">Chọn từ hơn 80 ngôn ngữ</string>
+    <string name="tutorial_onboarding_final_help_others">Trợ giúp ai đó bắt đầu với tư cách là Cơ đốc Nhân</string>
+    <string name="tutorial_onboarding_final_action_show_more">Cho tôi xem nhiều hơn</string>
+    <string name="tutorial_onboarding_final_action_start">Bắt đầu</string>
+    <string name="tutorial_onboarding_action_begin">Bắt đầu</string>
+    <string name="tutorial_onboarding_action_continue">Tiếp tục</string>
+    <string name="tutorial_onboarding_action_skip">Bỏ qua</string>
+</resources>

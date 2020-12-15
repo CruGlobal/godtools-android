@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">Xem</string>
+    <string name="tutorial_training_prepare_headline">Chuẩn bị</string>
+    <string name="tutorial_training_prepare_subhead">Làm quen với một số công cụ của bạn. Công cụ \"Dạy tôi chia sẻ\" là một nơi phù hợp để bắt đầu. Nhấn nút thông tin trên bất kỳ công cụ nào để xem thêm thông tin.</string>
+    <string name="tutorial_training_try_headline">Thử</string>
+    <string name="tutorial_training_try_subhead">Mỗi người đều bắt đầu là người mới mới học. Hãy thử sử dụng công cụ trong một cuộc trò chuyện và xem bạn học được những gì.</string>
+    <string name="tutorial_training_final_headline">Bạn có thể xem lại hướng dẫn này trong menu</string>
+    <string name="tutorial_training_action_continue">Tiếp tục</string>
+    <string name="tutorial_training_action_start">Bắt đầu sử dụng GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">Cho tôi xem hướng dẫn</string>
+    <string name="tutorial_training_banner_action_open">Mở hướng dẫn</string>
+    <string name="tutorial_training_banner_action_dismiss">Bỏ qua</string>
+</resources>

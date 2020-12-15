@@ -6,5 +6,5 @@
     <string name="tool_loading">Alat yang Anda minta sedang dimuat....</string>
     <string name="tool_offline">Alat yang Anda minta membutuhkan koneksi internet untuk dibuka</string>
     <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
-    <string name="feature_discovery_desc_share_tool">Kirim alat ini ke teman dengan mengklik ikon ini</string>
+    <string name="feature_discovery_desc_share_tool">Kirim sarana ini ke teman dengan mengklik ikon ini</string>
 </resources>

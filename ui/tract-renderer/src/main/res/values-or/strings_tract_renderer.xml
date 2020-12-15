@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">ଇନଷ୍ଟଲ୍</string>
+    <string name="menu_share_tract">"ଏହି ଉପକରଣ ପଠାନ୍ତୁ "</string>
+    <string name="tract_card_previous">ପୂର୍ବ ପୃଷ୍ଠା</string>
+    <string name="tract_card_next">ପରବର୍ତ୍ତୀ</string>
+    <!-- Live Sharing -->
+    <string name="menu_live_share_publish">"ଆପଣଙ୍କର ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର କରନ୍ତୁ "</string>
+    <string name="menu_live_share_active">ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ସକ୍ରିୟ ଅଛି</string>
+    <string name="share_tool_message_tract_live_share">ହାଏ, ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ମାଧ୍ୟମରେ ମୋତେ GodTools ରେ ଅନୁସରଣ କରନ୍ତୁ | ଏଠାରେ ଲିଙ୍କ୍ ଅଛି: %1$s\n\n ଯଦି ଆପଣ ଏହି ବାର୍ତ୍ତା ପାଆନ୍ତି ନାହିଁ, ଲିଙ୍କ୍ କାର୍ଯ୍ୟ କରିନପାରେ | ଆମେ ଅନ୍ୟ ସମୟରେ ପୁନର୍ବାର ଚେଷ୍ଟା କରିବା |</string>
+    <string name="tract_live_share_starting">ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ଆରମ୍ଭ…</string>
+    <string name="tract_live_share_unable_to_connect">"ସ୍କ୍ରିନ୍ ଅଂଶୀଦାର ସହିତ ସଂଯୋଗ କରିବାକୁ ଅସମର୍ଥ "</string>
+    <string name="tract_live_share_exit_dialog_message">ବର୍ତ୍ତମାନ ସୁଦୂର ଅଂଶୀଦାର ଅଧିବେଶନ ଛାଡନ୍ତୁ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">ପ୍ରସ୍ଥାନ କରନ୍ତୁ</string>
+    <string name="tract_live_share_exit_dialog_cancel">ବାତିଲ୍ କରନ୍ତୁ</string>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">ପରବର୍ତ୍ତୀ</string>
+    <string name="tract_tips_tip_action_close">"ବନ୍ଦ କରନ୍ତୁ "</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">ପଚାରନ୍ତୁ</string>
+    <string name="tract_tips_type_consider">ବିଚାର କରନ୍ତୁ</string>
+    <string name="tract_tips_type_prepare">ପ୍ରସ୍ତୁତ କରନ୍ତୁ</string>
+    <string name="tract_tips_type_quote">ଉଦ୍ଧୃତ</string>
+    <string name="tract_tips_type_tip">ଟିପ୍ପଣୀ</string>
+</resources>

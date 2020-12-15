@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">माझे प्रोफाइल</string>
+    <string name="menu_profile">जागतिक क्रियाकलाप</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">क्रियाकलाप</string>
+    <string name="profile_global_activity_heading">%s जागतिक क्रियाकलाप</string>
+    <string name="profile_activity_unique_users">अनन्य वापरकर्ते</string>
+    <string name="profile_activity_gospel_presentations">सुवार्ता सादरीकरण</string>
+    <string name="profile_activity_sessions">सत्रे</string>
+    <string name="profile_activity_countries">देश</string>
+</resources>

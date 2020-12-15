@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tutorial -->
+    <string name="tutorial_training_watch_headline">જુઓ</string>
+    <string name="tutorial_training_watch_subhead">અમારા ડેમો વિડિઓમાં એપ્લિકેશન શું પ્રદાન કરે છે તે જુઓ</string>
+    <string name="tutorial_training_prepare_headline">તૈયાર કરો</string>
+    <string name="tutorial_training_prepare_subhead">તમારા કેટલાક Tools થી પરિચિત થાઓ. \"મને શેર કરવાનું શીખવો\" આ ટૂલ પ્રારંભ કરવા માટે સારું સાધન છે.
+
+ટૂલ વિશે વધુ જાણવા માટે અબાઉટ  બટન દબાવો.</string>
+    <string name="tutorial_training_try_headline">પ્રયત્ન કરો</string>
+    <string name="tutorial_training_try_subhead">"દરેક પ્રથમ શિખાઉ વ્યક્તિ તરીકે શરૂ કરે છે. વાતચીતમાં ટૂલનો ઉપયોગ કરો અને જુઓ કે તમે શું શીખી શકો છો. "</string>
+    <string name="tutorial_training_final_headline">આ ટ્યુટોરીયલ ફરીથી મેનૂમાં જોવા માટે ઉપલબ્ધ છે</string>
+    <string name="tutorial_training_action_continue">ચાલુ રાખો</string>
+    <string name="tutorial_training_action_start">GodTools નો ઉપયોગ શરૂ કરો</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_training_banner_text">મને એક ટ્યુટોરિયલ બતાવો</string>
+    <string name="tutorial_training_banner_action_open">ટ્યુટોરિયલ ખોલો</string>
+    <string name="tutorial_training_banner_action_dismiss">કાઢી નાખો</string>
+</resources>

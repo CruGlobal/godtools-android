@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">%s ஐ திறக்க முடியவில்லை</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">நற்செய்தி அழைப்பு</string>
+    <string name="tool_category_articles">கட்டுரைகள்</string>
+    <string name="tool_category_conversation_starter">உரையாடலை தொடங்க</string>
+    <string name="tool_category_growth">கிறிஸ்தவ வளர்ச்சி</string>
+    <string name="tool_category_training">பயிற்சி</string>
+    <!-- Sharing -->
+    <string name="share_general_message">இந்த இணைப்பு இன்று நாங்கள் பேசிக் கொண்டிருந்த வலைதள பதிப்பிற்கு உங்களை அழைத்துச் செல்லும்: %1$s
+
+பயன்பாட்டை https://godtoolsapp.com  இலிருந்து பதிவிறக்கம் செய்யலாம்
+
+மேலும் பேசலாம்!</string>
+</resources>

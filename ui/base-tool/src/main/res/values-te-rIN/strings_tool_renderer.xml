@@ -2,6 +2,7 @@
 <resources>
     <string name="menu_share_tool">పంచుకోండి</string>
     <string name="share_tool_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>
+    <string name="share_tool_message_article">క్రిస్టియన్ ఈ కథనాన్ని మీతో పంచుకోవాలనుకున్నాడు మరియు దాని గురించి మీ ఆలోచనలను వినాలనుకుంటున్నారు. \n%1$s\n</string>
     <string name="tool_not_found">మీరు అభ్యర్థించిన పరికరము కనుగొనబడలేదు</string>
     <string name="tool_loading">మీ అభ్యర్థించిన పరికరము లోడ్ అవుతున్నది…</string>
     <string name="tool_offline">మీరు అభ్యర్థించిన పరికరం తెరవడానికి ఇంటర్నెట్ కనెక్షన్ అవసరం</string>

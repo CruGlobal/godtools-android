@@ -2,13 +2,11 @@
 <resources>
     <!-- Live Share Tutorial -->
     <string name="tutorial_live_share_description_headline">आपली स्क्रीन शेअर करा</string>
-    <string name="tutorial_live_share_description_text">हा पर्याय एका मित्राला या साधनाची लिंक पाठवेल. लिंक उघडल्यावर एक स्क्रीन शेअरिंग सत्र सुरु होईल.</string>
+    <string name="tutorial_live_share_description_text">हा पर्याय एका मित्राला या टूलची लिंक पाठवेल. लिंक उघडल्यावर एक स्क्रीन शेअरिंग सत्र सुरू होईल.</string>
     <string name="tutorial_live_share_mirrored_headline">प्रतिबिंब अनुभव</string>
-    <string name="tutorial_live_share_mirrored_text">तुम्ही साधन तुमच्या फोनवर स्क्रॉल केल्यावर तुमच्या मित्राच्या फोनवर देखील ते तसेच स्क्रॉल होईल. अशा प्रकारे तुम्ही 2 उपकरणांवर एकाच वेळी साधनाची माहिती देऊ शकाल.</string>
-    <string name="tutorial_live_share_start_headline">सुरु करा</string>
-    <string name="tutorial_live_share_start_text">स्क्रीन शेअरिंग सत्र सुरु करण्यासाठी लिंक एक किंवा अधिक लोकांना पाठवा.
-
-हा अनुभव घेण्यासाठी सध्या आवश्यक आहे की सर्व सहभागींने आपापल्या उपकरणावर GodTools ऍप डाउनलोड केलेली असावी.</string>
+    <string name="tutorial_live_share_mirrored_text">तुम्ही तुमच्या फोनवर टूल स्क्रॉल केल्यावर तुमच्या मित्राच्या फोनवर देखील ते तसेच स्क्रॉल होईल. अशाप्रकारे तुम्ही 2 उपकरणांवर एकाच वेळी टूलची माहिती देऊ शकाल.</string>
+    <string name="tutorial_live_share_start_headline">सुरू करा</string>
+    <string name="tutorial_live_share_start_text">स्क्रीन शेअरिंग सत्र आता सुरू करण्यासाठी लिंक एक किंवा अधिक लोकांना पाठवा.</string>
     <string name="tutorial_live_share_action_continue">चालू ठेवा</string>
     <string name="tutorial_live_share_action_skip">सोडा</string>
     <string name="tutorial_live_share_action_start">लिंक पाठवा</string>

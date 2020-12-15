@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
+    <string name="share_prompt">நீங்கள் எவ்வாறு பகிர விரும்புகிறீர்கள் என்பதைத் தேர்ந்தெடுக்கவும்</string>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">பொதுவான</string>
+    <string name="menu_heading_general">பொது</string>
+    <string name="menu_heading_account">கணக்கு</string>
     <string name="menu_heading_share">பகிர்</string>
-    <string name="menu_heading_legal">சட்டம் சம்பந்தப்பட்ட</string>
+    <string name="menu_heading_legal">சட்டரீதியாக</string>
     <string name="menu_about">பற்றி</string>
-    <string name="menu_help">உதவி</string>
-    <string name="menu_contact_us">எங்களை தொடர்புகொள்ள</string>
-    <string name="menu_share_godtools">காட்டூல்ஸ் பகிர்</string>
-    <string name="menu_share_story">ஒரு நிகழ்வை பகிர்ந்துகொள்ளுங்கள்</string>
-    <string name="menu_terms_of_use">உபயோக விதிமுறைகள்</string>
-    <string name="menu_privacy_policy">இரகசியகாப்பு கொள்கை</string>
-    <string name="menu_copyright">பதிப்புரிமை தகவல்</string>
+    <string name="menu_help">அடிக்கடி கேட்கப்படும் கேள்விகள்</string>
+    <string name="menu_contact_us">எங்களை தொடர்பு கொள்ள</string>
+    <string name="menu_tutorial">பயிற்சி</string>
+    <string name="menu_login">உள்நுழைய</string>
+    <string name="menu_signup">உங்கள் கணக்கை துவங்குங்கள்</string>
+    <string name="menu_logout">வெளியேறு</string>
+    <string name="menu_share_godtools">GodTools செயலியை பகிரவும்</string>
+    <string name="menu_share_story">ஒரு கதையை எங்களுடன் பகிர்ந்து கொள்ளுங்கள்</string>
+    <string name="menu_rate">GodToolளை மதிப்பிடுங்கள்</string>
+    <string name="menu_terms_of_use">பயன்பாட்டு விதிமுறைகளை</string>
+    <string name="menu_privacy_policy">தனியுரிமைக் கொள்கை</string>
+    <string name="menu_copyright">பதிப்புரிமை</string>
     <!-- Share a story -->
+    <string name="share_story_subject">GodTools கதை</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">60+ மொழிகளை</string>
+    <string name="feature_discovery_title_language_settings">80+ மொழிகள்</string>
     <string name="menu_language_settings">மொழி அமைப்புகள்</string>
     <string name="title_language_settings">மொழி அமைப்புகள்</string>
-    <string name="title_language_primary">பிரதான மொழி</string>
+    <string name="title_language_primary">முதன்மை மொழி</string>
     <string name="title_language_parallel">இணை மொழி</string>
-    <string name="action_language_parallel_select">இணை மொழியை தெரிந்தெடுங்கள்</string>
-    <string name="text_language_parallel_description">காட்டூல்ஸ்-யை இன்னொருவருடன் அவரது தாய்மொழியில் பகிர்ந்திடுங்கள்</string>
-    <string name="text_language_warning">எல்லா உபகரணங்களும் எல்லா மொழியிலும்  இல்லை</string>
+    <string name="action_language_parallel_select">இணை மொழியைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="text_language_parallel_description">கடவுளின் கருவிகளை ஒருவரது சொந்த மொழியில் பகிரவும்.</string>
+    <string name="text_language_warning">ஒவ்வொரு கருவியும் ஒவ்வொரு மொழியிலும் கிடைக்காது.</string>
+    <string name="label_language_none">எதுவுமில்லை</string>
+    <string name="label_language_search">மொழிகளை வடிகட்டவும்</string>
 </resources>

@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">আপনি কি ভাবে শেয়ার করতে চান সেটি সিলেক্ট করুন</string>
+    <string name="share_prompt">আপনি কি ভাবে শেয়ার করতে চান চয়ন করুন</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">সাধারণ</string>
+    <string name="menu_heading_account">"পরিমাণ "</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
     <string name="menu_heading_legal">"বৈধ "</string>
     <string name="menu_about">বিষয়ে</string>
-    <string name="menu_help">সাহায্য</string>
+    <string name="menu_help">"সাহায্য করুন বারবার জিজ্ঞাসিত প্রশ্নগুলো "</string>
     <string name="menu_contact_us">আমাদের সঙ্গে সম্পর্ক করুন</string>
+    <string name="menu_tutorial">"টিউটোরিয়াল "</string>
     <string name="menu_login">লগইন করুন</string>
     <string name="menu_signup">একাউন্ট খুলুন</string>
     <string name="menu_logout">লগ আউট করুন</string>
-    <string name="menu_share_godtools">GodTools ভাগ করুন</string>
+    <string name="menu_share_godtools">GodTools App শেয়ার করুন</string>
     <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
-    <string name="menu_copyright">কপিরাইট তথ্য</string>
+    <string name="menu_copyright">"কপিরাইট "</string>
     <!-- Share a story -->
-    <string name="share_story_subject">শুনুন ঈশ্বর কি করে কাজ করছেন</string>
+    <string name="share_story_subject">"GodTools গল্প  "</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">৭০+ ভাষা</string>
-    <string name="menu_language_settings">ভাষা ব্যাবস্থা</string>
-    <string name="title_language_settings">ভাষা ব্যাবস্থা</string>
+    <string name="feature_discovery_title_language_settings">80 + ভাষা</string>
+    <string name="menu_language_settings">"ভাষা সেটিংস "</string>
+    <string name="title_language_settings">"ভাষা সেটিংস "</string>
     <string name="title_language_primary">প্রাথমিক ভাষা</string>
     <string name="title_language_parallel">সমান্তরাল ভাষা</string>
     <string name="action_language_parallel_select">একটি সমান্তরাল ভাষা নির্বাচন করুন</string>
-    <string name="text_language_parallel_description">স্থানীয় ভাষায় কেউ সঙ্গে  GodTools শেয়ার করুন</string>
-    <string name="text_language_warning">সব রকম টুল সব ককম ভাষায় উপলব্ধ নয়</string>
+    <string name="text_language_parallel_description">তাদের স্থানীয় ভাষায় কারোর সঙ্গে  GodTools শেয়ার করুন</string>
+    <string name="text_language_warning">প্রত্যেক টুল প্রতিটি ভাষায় উপলব্ধ নয়</string>
     <string name="label_language_none">কোনটাই না</string>
+    <string name="label_language_search">"ফিল্টার ভাষা সমূহ "</string>
 </resources>

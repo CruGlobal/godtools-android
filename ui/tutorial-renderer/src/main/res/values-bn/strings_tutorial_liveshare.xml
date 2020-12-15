@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">"আপনার স্ক্রিন শেয়ার করুন "</string>
+    <string name="tutorial_live_share_description_text">"বিকল্পটি এই টুলেতে একজন বন্ধুর কাছে একটি লিঙ্ক পাঠাবে I যখন লিঙ্কটি খোলা হয় তখন এটি একটি স্ক্রিন শেয়ার করা সেশন শুরু করবে I "</string>
+    <string name="tutorial_live_share_mirrored_headline">"দর্পণের অভিজ্ঞতা "</string>
+    <string name="tutorial_live_share_mirrored_text">"যেই আপনি আপনার ফোনের মধ্যে টুলটিকে স্ক্রোল করবেন, আপনার বন্ধুর স্ক্রিন একইভাবে সাড়া দেবে I এটি আপনাকে একটি টুলের মধ্য দিয়ে দুটি যন্ত্রের উপরে একসাথে একই সময়ে যেতে অনুমতি দেবে I  "</string>
+    <string name="tutorial_live_share_start_headline">"শুরু করুন "</string>
+    <string name="tutorial_live_share_start_text">"এখনই একটি স্ক্রিন শেয়ার করা সেশন শুরু করতে এক বা একাধিক লোকদের কাছে লিঙ্কটিকে পাঠান I "</string>
+    <string name="tutorial_live_share_action_continue">"চালিয়ে যান "</string>
+    <string name="tutorial_live_share_action_skip">"ছেড়ে দিন "</string>
+    <string name="tutorial_live_share_action_start">"লিঙ্ক শেয়ার করুন "</string>
+</resources>

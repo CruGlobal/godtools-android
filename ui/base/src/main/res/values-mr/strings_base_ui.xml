@@ -2,15 +2,15 @@
 <resources>
     <string name="toast_unable_to_launch_activity">उघडता येत नाही.%s</string>
     <!-- Tool Categories -->
-    <string name="tool_category_gospel">गॉस्पेल आमंत्रण</string>
+    <string name="tool_category_gospel">गॉस्पल आमंत्रण</string>
     <string name="tool_category_articles">लेख</string>
-    <string name="tool_category_conversation_starter">संभाषण आरंभ</string>
+    <string name="tool_category_conversation_starter">संभाषण आरंभ करणारे</string>
     <string name="tool_category_growth">ख्रिस्ती वाढ</string>
     <string name="tool_category_training">प्रशिक्षण</string>
     <!-- Sharing -->
-    <string name="share_general_message">हे लिंक तुम्हाला पानाच्या वेब आवृत्तीकडे नेईल ज्यावर आपण आज बोल होतो: %1$s \n\n
+    <string name="share_general_message">हे लिंक तुम्हाला वेब आवृत्तीकडे नेईल ज्यावर आपण आज बोल होतो: %1$s \n\n
 
-ऍप इथून डाऊनलोड करा: https://godtoolsapp.com \n\n
+app इथून डाऊनलोड करा: https://godtoolsapp.com \n\n
 
 आपण आणखी बोलू या!</string>
 </resources>

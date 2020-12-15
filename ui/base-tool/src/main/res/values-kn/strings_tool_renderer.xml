@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tool">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_tool_title">“%1$s” ಅನ್ನು ಬಳಸಿ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_tool_message_article">ನಾನು ಈ ಲೇಖನವನ್ನು ನಿಮ್ಮೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲು ಬಯಸಿದ್ದೇನೆ ಮತ್ತು ಅದರ ಬಗ್ಗೆ ನಿಮ್ಮ ಆಲೋಚನೆಗಳನ್ನು ಕೇಳಲು ಬಯಸುತ್ತೇನೆ. %1$s</string>
+    <string name="tool_not_found">ನೀವು ವಿನಂತಿಸಿದ ಸಾಧನಗಳು ಕಂಡುಹಿಡಿಯಲಾಗುವುದಿಲ್ಲ</string>
+    <string name="tool_loading">ನೀವು ವಿನಂತಿಸಿದ ಸಾಧನಗಳು ಲೋಡ್ ಆಗುತ್ತಿದೆ…</string>
+    <string name="tool_offline">ನೀವು ವಿನಂತಿಸಿದ ಸಾಧನಗಳು ತೆರೆಯಲು ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕದ ಅಗತ್ಯವಿದೆ</string>
+    <string name="feature_discovery_title_share_tool">ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="feature_discovery_desc_share_tool">ಈ ಐಕಾನ್ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ಈ ಸಾಧನ ಸ್ನೇಹಿತರಿಗೆ ಕಳುಹಿಸಿ</string>
+</resources>

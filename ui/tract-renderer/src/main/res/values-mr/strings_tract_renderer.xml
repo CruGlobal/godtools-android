@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">इन्स्टाॅल करा.</string>
-    <string name="menu_share_tract">हे साधन पाठवा</string>
+    <string name="menu_share_tract">हे टूल पाठवा</string>
     <string name="tract_card_previous">मागील</string>
     <string name="tract_card_next">पुढील</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">आपली स्क्रीन शेअर करा</string>
-    <string name="share_tool_message_tract_live_share">नमस्कार, स्क्रीन शेअरिंग द्वारे GodTools वर मला फॉलो करा. ही आहे लिंक: %1$s\n\nतुम्हाला हा संदेश उशीरा मिळाला असल्यास लिंक निकामी झाली असण्याची शक्यता आहे. आपण नंतर कधी तरी परत प्रयास करू शकतो.</string>
+    <string name="menu_live_share_active">स्क्रीन सामायिकरण सक्रिय</string>
+    <string name="share_tool_message_tract_live_share">नमस्कार, स्क्रीन शेअरिंगद्वारे GodTools वर मला फॉलो करा. ही आहे लिंक: %1$s\n\nतुम्हाला हा संदेश उशीरा मिळाला असल्यास लिंक निकामी झाली असण्याची शक्यता आहे. आपण नंतर कधीतरी परत प्रयास करू शकतो.</string>
     <string name="tract_live_share_starting">स्क्रीन शेअरिंग सुरु होत आहे…</string>
     <string name="tract_live_share_unable_to_connect">स्क्रीन शेअरिंगशी कनेक्ट होऊ शकत नाही</string>
     <string name="tract_live_share_exit_dialog_message">रिमोट शेअरिंग सत्र आता सोडायचे?</string>
     <string name="tract_live_share_exit_dialog_confirm">सोडा</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करा</string>
     <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">पुढे</string>
+    <string name="tract_tips_tip_action_close">बंद</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">विचारा</string>
+    <string name="tract_tips_type_consider">विचार करा</string>
+    <string name="tract_tips_type_prepare">तयार करा</string>
+    <string name="tract_tips_type_quote">अवतरण</string>
+    <string name="tract_tips_type_tip">टीप</string>
 </resources>
