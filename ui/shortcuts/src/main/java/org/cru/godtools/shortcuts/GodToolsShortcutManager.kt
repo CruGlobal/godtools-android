@@ -230,8 +230,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         updatePinnedShortcuts(shortcuts)
     }
 
+    @VisibleForTesting
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) = try {
+    internal suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) = try {
         withContext(ioDispatcher) {
             shortcutManager?.dynamicShortcuts = Query.select<Tool>()
                 .where(ToolTable.FIELD_ADDED.eq(true))
