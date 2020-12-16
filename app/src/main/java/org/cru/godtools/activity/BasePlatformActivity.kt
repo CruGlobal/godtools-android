@@ -64,6 +64,10 @@ internal val URI_HELP = Uri.parse("https://godtoolsapp.com/faq/")
 internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
 internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
 internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
+private val URI_SIGNUP = Uri.parse(
+    "https://thekey.me/cas/login?response_type=code&client_id=5337397229970887848" +
+        "&redirect_uri=https%3A%2F%2Fgodtoolsapp.com%2F&action=signup&scope="
+)
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
@@ -146,7 +150,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_signup -> {
-            launchLogin(true)
+            openUrl(URI_SIGNUP)
             true
         }
         R.id.action_logout -> {
