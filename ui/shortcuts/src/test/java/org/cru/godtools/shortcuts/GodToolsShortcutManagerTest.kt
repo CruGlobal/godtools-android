@@ -8,12 +8,15 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
@@ -24,6 +27,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.base.FileManager
@@ -196,11 +200,12 @@ class GodToolsShortcutManagerTest {
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() {
         assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
 
+        dao.stub { on { get(any<Query<Tool>>()) } doReturn emptyList() }
+        ioDispatcher.pauseDispatcher()
+        coroutineScope.resumeDispatcher()
+
         ExceptionRaisingTree.plant().use {
-            ioDispatcher.pauseDispatcher()
-            coroutineScope.resumeDispatcher()
-            val job = coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }
-            job.cancel()
+            coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.cancel()
             ioDispatcher.resumeDispatcher()
         }
     }
