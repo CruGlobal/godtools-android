@@ -48,17 +48,11 @@ before_install:
 jobs:
   fast_finish: true
   include:
-  - name: "Build App"
-    stage: test
-
-    install: skip
-    script: ./gradlew clean assemble --continue --stacktrace --parallel
-
   - name: "Static Analysis"
     stage: test
 
     install: skip
-    script: ./gradlew check -x test --continue --stacktrace --parallel
+    script: ./gradlew assemble check -x test --continue --stacktrace --parallel
 
   - name: "Unit Tests"
     stage: test
