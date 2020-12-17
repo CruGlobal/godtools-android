@@ -65,7 +65,7 @@ buildscript {
                 loader            : '1.1.0',
                 multidex          : '2.0.1',
                 recyclerView      : '1.1.0',
-                room              : '2.2.5',
+                room              : '2.2.6',
                 swipeRefreshLayout: '1.1.0',
                 test              : '1.2.0',
                 testJUnit         : '1.1.2',
