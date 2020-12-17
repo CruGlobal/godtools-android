@@ -43,6 +43,7 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
+import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.article.ui.categories.createCategoriesIntent
 import org.cru.godtools.base.FileManager
@@ -304,16 +305,14 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
-            ?.let { dao.find<Attachment>(it) }
-            ?.localFilename
+            ?.let { dao.find<Attachment>(it)?.localFilename }
             ?.let { fileManager.getFile(it) }
             ?.let {
                 try {
-                    // TODO: create a suspend extension method to async load an image in a coroutine
                     Picasso.get().load(it)
                         .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                         .centerCrop()
-                        .get()
+                        .getBitmap()
                 } catch (e: IOException) {
                     null
                 }
