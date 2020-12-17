@@ -45,6 +45,9 @@ android {
 
             buildConfigField "String", "OKTA_CLIENT_ID", "\"0oatqowo16nlzqJRV0h7\""
             buildConfigField "String", "OKTA_DISCOVERY_URI", "\"https://cru.oktapreview.com\""
+
+            buildConfigField "String", "THEKEY_URI", "\"https://stage.thekey.me/cas/login\""
+            buildConfigField "String", "THEKEY_CLIENT_ID", "\"5337397229970887848\""
         }
         production {
             dimension "env"
@@ -53,6 +56,9 @@ android {
 
             buildConfigField "String", "OKTA_CLIENT_ID", "\"0oa1ju0zx08vYGgbB0h8\""
             buildConfigField "String", "OKTA_DISCOVERY_URI", "\"https://signon.okta.com\""
+
+            buildConfigField "String", "THEKEY_URI", "\"https://thekey.me/cas/login\""
+            buildConfigField "String", "THEKEY_CLIENT_ID", "\"5337397229970887848\""
         }
     }
 
