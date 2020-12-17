@@ -29,6 +29,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
+    testImplementation "org.ccci.gto.android.testing:gto-support-timber:${deps.gtoSupport}"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

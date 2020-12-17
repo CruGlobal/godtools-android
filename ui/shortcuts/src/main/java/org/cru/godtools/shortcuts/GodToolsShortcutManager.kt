@@ -230,19 +230,24 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         updatePinnedShortcuts(shortcuts)
     }
 
+    @VisibleForTesting
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) = try {
+    internal suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) =
         withContext(ioDispatcher) {
-            shortcutManager?.dynamicShortcuts = Query.select<Tool>()
+            val dynamicShortcuts = Query.select<Tool>()
                 .where(ToolTable.FIELD_ADDED.eq(true))
                 .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
-                .get(dao)
+                .get(dao).asSequence()
                 .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
                 .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
+                .toList()
+
+            try {
+                shortcutManager?.dynamicShortcuts = dynamicShortcuts
+            } catch (e: IllegalStateException) {
+                Timber.tag("GodToolsShortcutManager").e(e, "Error updating dynamic shortcuts")
+            }
         }
-    } catch (e: IllegalStateException) {
-        Timber.tag("GodToolsShortcutManager").e(e, "Error updating dynamic shortcuts")
-    }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     private fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {

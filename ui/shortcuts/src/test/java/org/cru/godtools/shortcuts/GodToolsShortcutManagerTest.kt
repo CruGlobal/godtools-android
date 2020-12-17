@@ -8,12 +8,14 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
@@ -21,8 +23,12 @@ import com.nhaarman.mockitokotlin2.whenever
 import java.util.EnumSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
@@ -57,6 +63,7 @@ class GodToolsShortcutManagerTest {
     private lateinit var fileManager: FileManager
     private lateinit var settings: Settings
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
+    private val ioDispatcher = TestCoroutineDispatcher()
 
     private lateinit var shortcutManager: GodToolsShortcutManager
 
@@ -83,15 +90,14 @@ class GodToolsShortcutManagerTest {
         fileManager = mock()
         settings = mock()
 
-        shortcutManager = GodToolsShortcutManager(
-            app, dao, eventBus, fileManager, settings,
-            coroutineScope, coroutineScope.coroutineContext
-        )
+        shortcutManager =
+            GodToolsShortcutManager(app, dao, eventBus, fileManager, settings, coroutineScope, ioDispatcher)
     }
 
     @After
     fun cleanup() {
         shortcutManager.shutdown()
+        ioDispatcher.cleanupTestCoroutines()
         coroutineScope.cleanupTestCoroutines()
     }
 
@@ -187,6 +193,20 @@ class GodToolsShortcutManagerTest {
         )
         coroutineScope.advanceUntilIdle()
         verifyZeroInteractions(dao)
+    }
+
+    @Test
+    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() {
+        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
+
+        dao.stub { on { get(any<Query<Tool>>()) } doReturn emptyList() }
+        ioDispatcher.pauseDispatcher()
+        coroutineScope.resumeDispatcher()
+
+        ExceptionRaisingTree.plant().use {
+            coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.cancel()
+            ioDispatcher.resumeDispatcher()
+        }
     }
     // endregion Update Existing Shortcuts
 }
