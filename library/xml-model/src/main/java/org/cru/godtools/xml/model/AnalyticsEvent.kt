@@ -6,6 +6,9 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.xmlpull.v1.XmlPullParser
+import timber.log.Timber
+
+private const val TAG = "XmlAnalyticsEvent"
 
 private const val XML_EVENT = "event"
 private const val XML_ACTION = "action"
@@ -47,15 +50,20 @@ class AnalyticsEvent {
     val attributes: Map<String, String>
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(delay: Int = 0) {
-        action = null
+    constructor(
+        action: String? = null,
+        delay: Int = 0,
+        systems: Set<AnalyticsSystem>? = null,
+        attributes: Map<String, String>? = null
+    ) {
+        this.action = action
         this.delay = delay
-        systems = emptySet()
+        this.systems = systems.orEmpty()
         trigger = Trigger.DEFAULT
-        attributes = emptyMap()
+        this.attributes = attributes.orEmpty()
     }
 
-    internal constructor(parser: XmlPullParser) {
+    internal constructor(parent: Base, parser: XmlPullParser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENT)
 
         action = parser.getAttributeValue(null, XML_ACTION)
@@ -78,6 +86,13 @@ class AnalyticsEvent {
                 parser.skipTag()
             }
         }
+
+        // Log a non-fatal warning if this is an adobe analytics event
+        if (systems.contains(AnalyticsSystem.ADOBE)) {
+            val manifest = parent.manifest
+            val message = "tool: ${manifest.code} locale: ${manifest.locale} action: $action"
+            Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Event $message"), message)
+        }
     }
 
     fun isTriggerType(vararg types: Trigger) = types.contains(trigger)
@@ -87,7 +102,7 @@ class AnalyticsEvent {
         internal const val XML_EVENTS = "events"
 
         @WorkerThread
-        fun fromEventsXml(parser: XmlPullParser): Collection<AnalyticsEvent> {
+        fun fromEventsXml(parent: Base, parser: XmlPullParser): Collection<AnalyticsEvent> {
             parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENTS)
 
             return buildList {
@@ -96,7 +111,7 @@ class AnalyticsEvent {
 
                     when (parser.namespace) {
                         XMLNS_ANALYTICS -> when (parser.name) {
-                            XML_EVENT -> add(AnalyticsEvent(parser))
+                            XML_EVENT -> add(AnalyticsEvent(parent, parser))
                             else -> parser.skipTag()
                         }
                         else -> parser.skipTag()
