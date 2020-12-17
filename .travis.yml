@@ -18,7 +18,6 @@ branches:
     - master
 
 stages:
-- compile
 - test
 - name: deploy
   if: type = push AND branch = develop
@@ -49,26 +48,14 @@ before_install:
 jobs:
   fast_finish: true
   include:
-  - name: "Build Debug"
-    stage: compile
-
-    install: skip
-    script: ./gradlew clean assembleDebug --continue --stacktrace --parallel
-
-  - name: "Build Release"
+  - name: "Static Analysis"
     stage: test
 
     install: skip
-    script: ./gradlew clean assembleRelease --continue --stacktrace --parallel
-
-  - name: "Static Analysis"
-    stage: compile
-
-    install: skip
-    script: ./gradlew check -x test --continue --stacktrace --parallel
+    script: ./gradlew assemble check -x test --continue --stacktrace --parallel
 
   - name: "Unit Tests"
-    stage: compile
+    stage: test
 
     install: skip
     script: ./gradlew test jacocoTestReport --continue --stacktrace --parallel --max-workers 2
