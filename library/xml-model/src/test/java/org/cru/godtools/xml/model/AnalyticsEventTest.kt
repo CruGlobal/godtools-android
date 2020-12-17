@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 class AnalyticsEventTest {
     @Test
     fun testParseAnalyticsEvent() {
-        val event = AnalyticsEvent(getXmlParserForResource("analytics_event.xml"))
+        val event = AnalyticsEvent(Manifest(), getXmlParserForResource("analytics_event.xml"))
         assertThat(event.action, equalTo("test"))
         AnalyticsSystem.values().filterNot { it == AnalyticsSystem.ADOBE }.forEach {
             assertFalse(event.isForSystem(it))
@@ -32,7 +32,7 @@ class AnalyticsEventTest {
 
     @Test
     fun testParseAnalyticsEvents() {
-        val events = AnalyticsEvent.fromEventsXml(getXmlParserForResource("analytics_events.xml"))
+        val events = AnalyticsEvent.fromEventsXml(Manifest(), getXmlParserForResource("analytics_events.xml"))
         assertThat(
             events,
             containsInAnyOrder(

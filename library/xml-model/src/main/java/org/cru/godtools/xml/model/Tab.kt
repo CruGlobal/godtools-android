@@ -29,7 +29,7 @@ class Tab internal constructor(parent: Tabs, val position: Int, parser: XmlPullP
         content = parseContent(parser) {
             when (parser.namespace) {
                 XMLNS_ANALYTICS -> when (parser.name) {
-                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
+                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 }
                 XMLNS_CONTENT -> when (parser.name) {
                     XML_LABEL -> label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)

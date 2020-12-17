@@ -63,7 +63,7 @@ class AnalyticsEvent {
         this.attributes = attributes.orEmpty()
     }
 
-    internal constructor(parser: XmlPullParser) {
+    internal constructor(parent: Base, parser: XmlPullParser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENT)
 
         action = parser.getAttributeValue(null, XML_ACTION)
@@ -88,8 +88,13 @@ class AnalyticsEvent {
         }
 
         // Log a non-fatal warning if this is an adobe analytics event
-        if (systems.contains(AnalyticsSystem.ADOBE))
-            Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Event"), "action: $action")
+        if (systems.contains(AnalyticsSystem.ADOBE)) {
+            val manifest = parent.manifest
+            Timber.tag(TAG).e(
+                UnsupportedOperationException("XML Adobe Analytics Event"),
+                "action: $action tool: ${manifest.code} locale: ${manifest.locale}"
+            )
+        }
     }
 
     fun isTriggerType(vararg types: Trigger) = types.contains(trigger)
@@ -99,7 +104,7 @@ class AnalyticsEvent {
         internal const val XML_EVENTS = "events"
 
         @WorkerThread
-        fun fromEventsXml(parser: XmlPullParser): Collection<AnalyticsEvent> {
+        fun fromEventsXml(parent: Base, parser: XmlPullParser): Collection<AnalyticsEvent> {
             parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENTS)
 
             return buildList {
@@ -108,7 +113,7 @@ class AnalyticsEvent {
 
                     when (parser.namespace) {
                         XMLNS_ANALYTICS -> when (parser.name) {
-                            XML_EVENT -> add(AnalyticsEvent(parser))
+                            XML_EVENT -> add(AnalyticsEvent(parent, parser))
                             else -> parser.skipTag()
                         }
                         else -> parser.skipTag()

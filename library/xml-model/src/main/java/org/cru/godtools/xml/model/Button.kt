@@ -52,7 +52,7 @@ class Button : Content, Styles {
             val name = parser.name
             when {
                 ns == XMLNS_ANALYTICS && name == AnalyticsEvent.XML_EVENTS ->
-                    analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
+                    analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 ns == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(this, parser)
                 else -> parser.skipTag()
             }

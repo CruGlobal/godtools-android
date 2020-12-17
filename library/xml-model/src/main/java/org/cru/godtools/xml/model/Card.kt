@@ -71,7 +71,7 @@ class Card : BaseModel, Styles, Parent {
         content = parseContent(parser) {
             when (parser.namespace) {
                 XMLNS_ANALYTICS -> when (parser.name) {
-                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
+                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 }
                 XMLNS_TRACT -> when (parser.name) {
                     XML_LABEL -> label = Text.fromNestedXml(this@Card, parser, XMLNS_TRACT, XML_LABEL)

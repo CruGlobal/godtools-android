@@ -37,7 +37,7 @@ class Hero : BaseModel, Parent, Styles {
         content = parseContent(parser) {
             when (parser.namespace) {
                 XMLNS_ANALYTICS -> when (parser.name) {
-                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(parser)
+                    AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 }
                 XMLNS_TRACT -> when (parser.name) {
                     XML_HEADING -> heading = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_HEADING)
