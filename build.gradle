@@ -113,7 +113,7 @@ plugins {
     id "com.vanniktech.android.junit.jacoco" version "0.16.0"
     id "de.undercouch.download" version "4.1.1" apply false
     id "org.ajoberstar.grgit" version "4.1.0"
-    id "org.jlleitschuh.gradle.ktlint" version "9.2.1"
+    id "org.jlleitschuh.gradle.ktlint" version "9.4.1"
 }
 
 version '5.4.2-SNAPSHOT'
