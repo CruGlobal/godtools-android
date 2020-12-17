@@ -92,7 +92,7 @@ class AnalyticsEvent {
             val manifest = parent.manifest
             Timber.tag(TAG).e(
                 UnsupportedOperationException("XML Adobe Analytics Event"),
-                "action: $action tool: ${manifest.code} locale: ${manifest.locale}"
+                "tool: ${manifest.code} locale: ${manifest.locale} action: $action"
             )
         }
     }
