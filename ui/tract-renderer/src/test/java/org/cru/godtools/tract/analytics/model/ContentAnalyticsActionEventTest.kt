@@ -17,6 +17,6 @@ class ContentAnalyticsActionEventTest {
 
         val firebaseEvent =
             ContentAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(AnalyticsSystem.FIREBASE)))
-        assertEquals("a b_c.d-e", firebaseEvent.firebaseEventName)
+        assertEquals("A b_c.d-e", firebaseEvent.firebaseEventName)
     }
 }

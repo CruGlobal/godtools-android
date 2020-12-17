@@ -15,7 +15,7 @@ open class AnalyticsActionEvent(
     systems: Collection<AnalyticsSystem>? = null
 ) : AnalyticsBaseEvent(locale, systems) {
     companion object {
-        fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_")
+        fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_").toLowerCase(Locale.ROOT)
     }
 
     constructor(action: String, label: String? = null, locale: Locale? = null, system: AnalyticsSystem) :

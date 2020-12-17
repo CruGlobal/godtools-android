@@ -25,6 +25,6 @@ class AnalyticsActionEventTest {
 
     @Test
     fun testSanitizeAdobeNameForFirebase() {
-        assertEquals("a_b_c_d", "a.b c-d".sanitizeAdobeNameForFirebase())
+        assertEquals("a_b_c_d", "a.B c-d".sanitizeAdobeNameForFirebase())
     }
 }

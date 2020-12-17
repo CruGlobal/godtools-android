@@ -8,10 +8,11 @@ import org.cru.godtools.xml.model.AnalyticsEvent
 class ContentAnalyticsActionEvent(@VisibleForTesting internal val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty()) {
     override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
-    override val adobeAttributes: Map<String, *>? get() = event.attributes
-    override val firebaseEventName = if (isForSystem(AnalyticsSystem.ADOBE)) {
-        event.action?.sanitizeAdobeNameForFirebase().orEmpty().toLowerCase()
-    } else {
-        super.firebaseEventName.toLowerCase()
+
+    override val adobeAttributes get() = event.attributes
+
+    override val firebaseEventName get() = when {
+        isForSystem(AnalyticsSystem.ADOBE) -> event.action?.sanitizeAdobeNameForFirebase().orEmpty()
+        else -> super.firebaseEventName
     }
 }
