@@ -90,10 +90,8 @@ class AnalyticsEvent {
         // Log a non-fatal warning if this is an adobe analytics event
         if (systems.contains(AnalyticsSystem.ADOBE)) {
             val manifest = parent.manifest
-            Timber.tag(TAG).e(
-                UnsupportedOperationException("XML Adobe Analytics Event"),
-                "tool: ${manifest.code} locale: ${manifest.locale} action: $action"
-            )
+            val message = "tool: ${manifest.code} locale: ${manifest.locale} action: $action"
+            Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Event $message"), message)
         }
     }
 
