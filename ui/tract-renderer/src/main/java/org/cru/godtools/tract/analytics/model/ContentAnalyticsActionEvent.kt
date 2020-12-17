@@ -10,7 +10,7 @@ class ContentAnalyticsActionEvent(@VisibleForTesting internal val event: Analyti
     override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
     override val adobeAttributes: Map<String, *>? get() = event.attributes
     override val firebaseEventName = if (isForSystem(AnalyticsSystem.ADOBE)) {
-        event.action?.replace(Regex("[ \\-]"), "_").orEmpty().toLowerCase()
+        event.action?.sanitizeAdobeNameForFirebase().orEmpty().toLowerCase()
     } else {
         super.firebaseEventName.toLowerCase()
     }

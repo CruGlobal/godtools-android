@@ -50,12 +50,17 @@ class AnalyticsEvent {
     val attributes: Map<String, String>
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(delay: Int = 0) {
-        action = null
+    constructor(
+        action: String? = null,
+        delay: Int = 0,
+        systems: Set<AnalyticsSystem>? = null,
+        attributes: Map<String, String>? = null
+    ) {
+        this.action = action
         this.delay = delay
-        systems = emptySet()
+        this.systems = systems.orEmpty()
         trigger = Trigger.DEFAULT
-        attributes = emptyMap()
+        this.attributes = attributes.orEmpty()
     }
 
     internal constructor(parser: XmlPullParser) {
