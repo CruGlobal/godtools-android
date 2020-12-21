@@ -96,15 +96,12 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     // region Pages
     @Inject
     lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
-    private val tipPageAdapter by lazy {
-        tipPageAdapterFactory.create(this).also {
-            it.callbacks = this
-            dataModel.tip.observe(this, it)
-        }
-    }
 
     private fun TractTipBinding.setupPages() {
-        pages.adapter = tipPageAdapter
+        pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner).also {
+            it.callbacks = this@TipBottomSheetDialogFragment
+            dataModel.tip.observe(viewLifecycleOwner, it)
+        }
         pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
         })
