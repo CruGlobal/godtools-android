@@ -21,6 +21,8 @@ class TipPageController @AssistedInject internal constructor(
         binding.controller = this
     }
 
+    override val lifecycleOwner get() = binding.lifecycleOwner
+
     var callbacks: TipCallbacks?
         get() = binding.callbacks
         set(value) {
