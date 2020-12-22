@@ -43,8 +43,8 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @Singleton
-class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), CoroutinesFlowDao,
-    LiveDataDao {
+class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
+    AbstractDao(database), CoroutinesFlowDao, LiveDataDao {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     override val liveDataRegistry = LiveDataRegistry()
 
