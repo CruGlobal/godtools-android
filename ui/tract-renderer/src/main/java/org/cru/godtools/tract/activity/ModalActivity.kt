@@ -32,14 +32,15 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 internal fun Activity.startModalActivity(modal: Modal) = startActivity(
-    Intent(this, ModalActivity::class.java).putExtras(Bundle(4).apply {
-        putString(EXTRA_TOOL, modal.manifest.code)
-        putLocale(EXTRA_LANGUAGE, modal.manifest.locale)
-        putString(EXTRA_PAGE, modal.page.id)
-        putString(EXTRA_MODAL, modal.id)
-    }),
-    ActivityOptionsCompat.makeCustomAnimation(this, R.anim.activity_fade_in, R.anim.activity_fade_out)
-        .toBundle()
+    Intent(this, ModalActivity::class.java).putExtras(
+        Bundle(4).apply {
+            putString(EXTRA_TOOL, modal.manifest.code)
+            putLocale(EXTRA_LANGUAGE, modal.manifest.locale)
+            putString(EXTRA_PAGE, modal.page.id)
+            putString(EXTRA_MODAL, modal.id)
+        }
+    ),
+    ActivityOptionsCompat.makeCustomAnimation(this, R.anim.activity_fade_in, R.anim.activity_fade_out).toBundle()
 )
 
 @AndroidEntryPoint

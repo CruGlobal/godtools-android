@@ -124,8 +124,7 @@ class ArticlesFragmentDataModel @ViewModelInject constructor(
         }
     }
 
-    internal val articles =
-        toolCode.switchCombineWith(locale, tags) { tool, locale, tags ->
+    internal val articles = toolCode.switchCombineWith(locale, tags) { tool, locale, tags ->
         when {
             tool == null || locale == null -> emptyLiveData<List<Article>>()
             tags == null -> articleDao.getArticles(tool, locale)

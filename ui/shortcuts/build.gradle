@@ -23,6 +23,7 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
