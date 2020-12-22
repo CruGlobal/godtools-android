@@ -2,6 +2,7 @@ package org.cru.godtools.sync
 
 import android.content.ContentResolver
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.work.WorkManager
 import java.io.IOException
 import javax.inject.Inject
@@ -69,30 +70,31 @@ class GodToolsSyncService @Inject internal constructor(
         requireNotNull(syncTasks[T::class.java] as? T) { "${T::class.simpleName} not injected" }.block()
 
     // region Sync Tasks
-    fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
-        putInt(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES)
-        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-    })
+    fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(
+        bundleOf(
+            EXTRA_SYNCTYPE to SYNCTYPE_LANGUAGES,
+            ContentResolver.SYNC_EXTRAS_MANUAL to force
+        )
+    )
 
-    fun syncTools(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
-        putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOLS)
-        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-    })
+    fun syncTools(force: Boolean): SyncTask = GtSyncTask(
+        bundleOf(
+            EXTRA_SYNCTYPE to SYNCTYPE_TOOLS,
+            ContentResolver.SYNC_EXTRAS_MANUAL to force
+        )
+    )
 
-    fun syncToolShares(): SyncTask = GtSyncTask(Bundle(1).apply {
-        putInt(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES)
-    })
+    fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
+        bundleOf(
+            EXTRA_SYNCTYPE to SYNCTYPE_GLOBAL_ACTIVITY,
+            ContentResolver.SYNC_EXTRAS_MANUAL to force
+        )
+    )
 
-    fun syncFollowups(): SyncTask = GtSyncTask(Bundle(1).apply {
-        putInt(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS)
-    })
+    fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
+    fun syncFollowups(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_FOLLOWUPS))
 
-    fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(Bundle(2).apply {
-        putInt(EXTRA_SYNCTYPE, SYNCTYPE_GLOBAL_ACTIVITY)
-        putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, force)
-    })
-
-    private inner class GtSyncTask(internal val args: Bundle) : SyncTask {
+    private inner class GtSyncTask(val args: Bundle) : SyncTask {
         override fun sync() = processSyncTask(this)
     }
     // endregion Sync Tasks
