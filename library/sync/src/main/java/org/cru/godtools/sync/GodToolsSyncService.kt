@@ -66,8 +66,7 @@ class GodToolsSyncService @Inject internal constructor(
     }
 
     private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) =
-        ((syncTasks[T::class.java] ?: throw IllegalStateException("${T::class.java.simpleName} not injected")).get()
-            as T).block()
+        requireNotNull(syncTasks[T::class.java] as? T) { "${T::class.simpleName} not injected" }.block()
 
     // region Sync Tasks
     fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(Bundle(2).apply {
