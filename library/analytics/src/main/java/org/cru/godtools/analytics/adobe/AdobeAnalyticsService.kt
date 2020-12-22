@@ -124,11 +124,12 @@ class AdobeAnalyticsService @Inject internal constructor(
     private fun AnalyticsActionEvent.track() {
         val userProfile = userProfileStateFlow.value
         analyticsExecutor.execute {
-            Analytics.trackAction(action, buildMap {
+            val contextData = buildMap<String, Any?> {
                 baseContextData(userProfile, this@track)
                 previousScreenName?.let { put(ADOBE_ATTR_SCREEN_NAME, it) }
                 adobeAttributes?.let { putAll(it) }
-            })
+            }
+            Analytics.trackAction(action, contextData)
         }
     }
 
@@ -188,7 +189,8 @@ class AdobeAnalyticsService @Inject internal constructor(
             mutableMapOf(
                 VISITOR_ID_GUID to userProfile?.ssoGuid,
                 VISITOR_ID_MASTER_PERSON_ID to userProfile?.grMasterPersonId
-            ), when {
+            ),
+            when {
                 userProfile != null -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_AUTHENTICATED
                 else -> VisitorIDAuthenticationState.VISITOR_ID_AUTHENTICATION_STATE_LOGGED_OUT
             }

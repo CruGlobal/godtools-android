@@ -97,7 +97,8 @@ class TractActivityDataModelTest {
         argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer).onChanged(capture())
             assertThat(
-                lastValue, allOf(
+                lastValue,
+                allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
@@ -129,11 +130,14 @@ class TractActivityDataModelTest {
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
         argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(
-                aMapWithSize(2),
-                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-            ))
+            assertThat(
+                firstValue,
+                allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
+                )
+            )
             assertThat(lastValue, allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)))
         }
     }
@@ -152,16 +156,22 @@ class TractActivityDataModelTest {
         verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
         argumentCaptor<Map<Locale, Manifest?>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(
-                aMapWithSize(2),
-                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
-            ))
-            assertThat(lastValue, allOf(
-                aMapWithSize(2),
-                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-            ))
+            assertThat(
+                firstValue,
+                allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
+                )
+            )
+            assertThat(
+                lastValue,
+                allOf(
+                    aMapWithSize(2),
+                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                    hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
+                )
+            )
         }
     }
     // endregion Property: manifests
@@ -183,7 +193,8 @@ class TractActivityDataModelTest {
         argumentCaptor<Map<Locale, Translation?>> {
             verify(observer).onChanged(capture())
             assertThat(
-                lastValue, allOf(
+                lastValue,
+                allOf(
                     aMapWithSize(3),
                     hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Translation?>(Locale.FRENCH, null),
@@ -217,14 +228,16 @@ class TractActivityDataModelTest {
         argumentCaptor<Map<Locale, Translation?>> {
             verify(observer, times(2)).onChanged(capture())
             assertThat(
-                firstValue, allOf(
+                firstValue,
+                allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Translation?>(Locale.FRENCH, null)
                 )
             )
             assertThat(
-                lastValue, allOf(
+                lastValue,
+                allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Translation?>(Locale.FRENCH, french.value)

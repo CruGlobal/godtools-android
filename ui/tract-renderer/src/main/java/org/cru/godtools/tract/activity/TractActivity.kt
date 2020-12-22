@@ -78,8 +78,11 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
 
 @AndroidEntryPoint
-class TractActivity : BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
-    TabLayout.OnTabSelectedListener, ManifestPagerAdapter.Callbacks, TipBottomSheetDialogFragment.Callbacks {
+class TractActivity :
+    BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
+    TabLayout.OnTabSelectedListener,
+    ManifestPagerAdapter.Callbacks,
+    TipBottomSheetDialogFragment.Callbacks {
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
