@@ -10,20 +10,10 @@ class ContentAnalyticsActionEvent(@VisibleForTesting internal val event: Analyti
     AnalyticsActionEvent(action = event.action.orEmpty()) {
     override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
 
-    override val adobeAttributes get() = event.attributes
-
-    override val firebaseEventName get() = when {
-        isForSystem(AnalyticsSystem.ADOBE) -> event.action?.sanitizeAdobeNameForFirebase().orEmpty()
-        else -> super.firebaseEventName
-    }
-
     override val firebaseParams
         get() = Bundle().apply {
             when {
                 event.isForSystem(AnalyticsSystem.FIREBASE) -> event.attributes.forEach { putString(it.key, it.value) }
-                event.isForSystem(AnalyticsSystem.ADOBE) -> {
-                    event.attributes.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value) }
-                }
             }
         }
 }

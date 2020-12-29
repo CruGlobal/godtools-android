@@ -42,6 +42,7 @@ private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
 private const val PARAM_APP_SECTION = "cru_sitesection"
 private const val PARAM_APP_SUB_SECTION = "cru_sitesubsection"
 private const val PARAM_CONTENT_LANGUAGE = "cru_contentlanguage"
+const val PARAM_LANGUAGE_SECONDARY = "cru_contentlanguagesecondary"
 
 @Singleton
 class FirebaseAnalyticsService @VisibleForTesting internal constructor(
@@ -67,7 +68,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE) || event.isForSystem(AnalyticsSystem.ADOBE)) when (event) {
+        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
             is AnalyticsScreenEvent -> handleScreenEvent(event)
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
