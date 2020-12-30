@@ -15,7 +15,7 @@ class ToggleLanguageAnalyticsActionEvent(tool: String?, locale: Locale) :
 
     override val appSection = tool
     @OptIn(ExperimentalStdlibApi::class)
-    override val adobeAttributes = buildMap<String, Any> {
+    override val firebaseParams = buildMap<String, Any> {
         put(PARAM_LANGUAGE_SECONDARY, toLanguageTag(locale))
     }
 }

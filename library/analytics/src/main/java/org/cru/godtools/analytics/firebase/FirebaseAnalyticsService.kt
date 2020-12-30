@@ -87,8 +87,12 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     }
 
     @MainThread
-    private fun handleActionEvent(event: AnalyticsActionEvent) =
-        firebase.logEvent(event.firebaseEventName, event.firebaseParams)
+    private fun handleActionEvent(event: AnalyticsActionEvent) {
+        val bundle = Bundle().apply {
+            event.firebaseParams?.forEach { putString(it.key, it.value?.toString()) }
+        }
+        firebase.logEvent(event.firebaseEventName, bundle)
+    }
 
     init {
         oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
