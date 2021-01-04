@@ -88,10 +88,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
     @MainThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        val bundle = Bundle().apply {
-            event.firebaseParams?.forEach { putString(it.key, it.value?.toString()) }
-        }
-        firebase.logEvent(event.firebaseEventName, bundle)
+        firebase.logEvent(event.firebaseEventName, event.firebaseParams)
     }
 
     init {
