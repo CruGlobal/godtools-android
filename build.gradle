@@ -3,7 +3,6 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 buildscript {
     ext {
         deps = [
-                adobeMobileServices: '4.18.2',
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.3',

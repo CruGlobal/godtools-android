@@ -3,10 +3,6 @@ package org.cru.godtools.ui.tools.analytics.model
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 
-object ToolOpenTapAnalyticsActionEvent : AnalyticsActionEvent("Tool Open Tap", system = AnalyticsSystem.ADOBE) {
-    override val firebaseEventName = "tool_open_tap"
-}
+object ToolOpenTapAnalyticsActionEvent : AnalyticsActionEvent("tool_open_tap", system = AnalyticsSystem.FIREBASE)
 object AboutToolButtonAnalyticsActionEvent :
-    AnalyticsActionEvent("About Tool Open Button", system = AnalyticsSystem.ADOBE) {
-    override val firebaseEventName = "about_tool_open_button"
-}
+    AnalyticsActionEvent("about_tool_open_button", system = AnalyticsSystem.FIREBASE)

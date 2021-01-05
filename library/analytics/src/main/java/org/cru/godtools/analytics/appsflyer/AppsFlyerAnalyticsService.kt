@@ -14,12 +14,7 @@ import com.appsflyer.AppsFlyerLib
 import com.karumi.weak.weak
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.cru.godtools.analytics.BuildConfig
-import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
@@ -107,11 +102,6 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
         }
         app.registerActivityLifecycleCallbacks(this)
         eventBus.register(this)
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val mcId = adobeMarketingCloudId
-            withContext(Dispatchers.Main) { appsFlyer.setAdditionalData(hashMapOf("marketingCloudID" to mcId)) }
-        }
     }
 }
 

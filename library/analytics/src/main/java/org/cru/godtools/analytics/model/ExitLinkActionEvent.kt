@@ -1,12 +1,14 @@
 package org.cru.godtools.analytics.model
 
 import android.net.Uri
+import android.os.Bundle
 
-private const val ACTION_EXIT_LINK = "Exit Link Engaged"
-private const val ADOBE_EXIT_LINK = "cru.mobileexitlink"
+private const val ACTION_EXIT_LINK = "exit_link_engaged"
+private const val FIREBASE_PARAM_EXIT_LINK = "cru_mobileexitlink"
 
-class ExitLinkActionEvent(link: Uri) : AnalyticsActionEvent(action = ACTION_EXIT_LINK) {
-    override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.ADOBE
-    override val adobeAttributes = mapOf<String, Any>(ADOBE_EXIT_LINK to link.toString())
-    override val firebaseEventName = "exit_link_engaged"
+class ExitLinkActionEvent(private val link: Uri) : AnalyticsActionEvent(action = ACTION_EXIT_LINK) {
+    override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.FIREBASE
+    override val firebaseParams get() = Bundle().apply {
+        putString(FIREBASE_PARAM_EXIT_LINK, link.toString())
+    }
 }

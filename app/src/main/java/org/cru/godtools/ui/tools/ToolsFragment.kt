@@ -39,7 +39,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
-import org.cru.godtools.tutorial.analytics.model.ADOBE_TUTORIAL_HOME_DISMISS
+import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.widget.BannerType
@@ -151,7 +151,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     private fun bannerSecondaryCallback() {
         when (dataModel.banner.value) {
             BannerType.TUTORIAL_TRAINING -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ADOBE_TUTORIAL_HOME_DISMISS))
+                eventBus.post(TutorialAnalyticsActionEvent(TUTORIAL_HOME_DISMISS))
                 settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING)
             }
         }

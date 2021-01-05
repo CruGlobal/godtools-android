@@ -1,7 +1,7 @@
 package org.cru.godtools.analytics.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.analytics.adobe.ADOBE_ATTR_LANGUAGE_SECONDARY
+import org.cru.godtools.analytics.firebase.PARAM_LANGUAGE_SECONDARY
 import org.cru.godtools.analytics.model.AnalyticsActionEvent.Companion.sanitizeAdobeNameForFirebase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -14,7 +14,7 @@ class AnalyticsActionEventTest {
     @Test
     fun testFirebaseParamsAdobeMigration() {
         val event = object : AnalyticsActionEvent("") {
-            override val adobeAttributes = mapOf(ADOBE_ATTR_LANGUAGE_SECONDARY to "en")
+            override val adobeAttributes = mapOf(PARAM_LANGUAGE_SECONDARY to "en")
         }
 
         val firebaseParams = event.firebaseParams

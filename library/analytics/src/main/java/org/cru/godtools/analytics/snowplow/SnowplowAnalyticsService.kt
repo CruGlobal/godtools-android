@@ -28,7 +28,6 @@ import org.ccci.gto.android.common.snowplow.events.CustomScreenView
 import org.ccci.gto.android.common.snowplow.events.CustomStructured
 import org.ccci.gto.android.common.snowplow.utils.TimberLogger
 import org.cru.godtools.analytics.BuildConfig
-import org.cru.godtools.analytics.adobe.adobeMarketingCloudId
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -42,7 +41,6 @@ private const val SNOWPLOW_NAMESPACE = "godtools-android"
 private const val CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3"
 private const val CONTEXT_SCHEMA_SCORING = "iglu:org.cru/content-scoring/jsonschema/1-0-0"
 
-private const val CONTEXT_ATTR_ID_MCID = "mcid"
 private const val CONTEXT_ATTR_ID_GUID = "sso_guid"
 private const val CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id"
 private const val CONTEXT_ATTR_SCORING_URI = "uri"
@@ -127,7 +125,6 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
-        adobeMarketingCloudId?.let { put(CONTEXT_ATTR_ID_MCID, it) }
 
         userProfileStateFlow.value?.let { profile ->
             profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
