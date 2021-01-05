@@ -9,14 +9,14 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 
 private const val ACTION_TOGGLE_LANGUAGE = "parallel_language_toggled"
 
-class ToggleLanguageAnalyticsActionEvent(tool: String?, locale: Locale) :
+class ToggleLanguageAnalyticsActionEvent(tool: String?, private val selectedLocale: Locale) :
     AnalyticsActionEvent(action = ACTION_TOGGLE_LANGUAGE) {
     override fun isForSystem(system: AnalyticsSystem) =
         system === AnalyticsSystem.FIREBASE || system === AnalyticsSystem.FACEBOOK
 
     override val appSection = tool
-    @OptIn(ExperimentalStdlibApi::class)
-    override val firebaseParams = Bundle().apply {
-        putString(PARAM_LANGUAGE_SECONDARY, toLanguageTag(locale))
+
+    override val firebaseParams get() = Bundle().apply {
+        putString(PARAM_LANGUAGE_SECONDARY, toLanguageTag(selectedLocale))
     }
 }
