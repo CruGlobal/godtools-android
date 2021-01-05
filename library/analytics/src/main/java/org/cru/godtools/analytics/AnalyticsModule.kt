@@ -9,7 +9,6 @@ import dagger.multibindings.ElementsIntoSet
 import dagger.multibindings.IntoSet
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
-import org.cru.godtools.analytics.adobe.AdobeAnalyticsService
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService
 import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
@@ -22,11 +21,6 @@ object AnalyticsModule {
     @Provides
     @Reusable
     internal fun analyticsEventBusIndex(): SubscriberInfoIndex = AnalyticsEventBusIndex()
-
-    @Provides
-    @ElementsIntoSet
-    @EagerSingleton(threadMode = ThreadMode.MAIN)
-    internal fun mainEagerSingletons(adobe: AdobeAnalyticsService) = setOf<Any>(adobe)
 
     @Provides
     @ElementsIntoSet

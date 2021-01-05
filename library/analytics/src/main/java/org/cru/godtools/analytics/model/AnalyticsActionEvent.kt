@@ -24,8 +24,7 @@ open class AnalyticsActionEvent(
     open val adobeAttributes: Map<String, *>? get() = null
 
     open val firebaseEventName get() = action
-    open val firebaseParams
-        get() = Bundle().apply {
+    open val firebaseParams get() = Bundle().apply {
         adobeAttributes?.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value?.toString()) }
     }
 

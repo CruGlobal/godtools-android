@@ -68,7 +68,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
+        if (event.isForSystem(AnalyticsSystem.FIREBASE) || event.isForSystem(AnalyticsSystem.ADOBE)) when (event) {
             is AnalyticsScreenEvent -> handleScreenEvent(event)
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
