@@ -28,7 +28,7 @@ buildscript {
                 lightweightStream  : '1.2.1',
                 lottie             : '3.5.0',
                 materialDesign     : '1.2.1',
-                mockito            : '3.6.28',
+                mockito            : '3.7.0',
                 mockitoKotlin      : '2.1.0',
                 moshi              : '1.11.0',
                 okhttp3            : '3.12.12',
