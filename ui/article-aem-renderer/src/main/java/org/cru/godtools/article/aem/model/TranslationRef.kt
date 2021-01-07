@@ -34,14 +34,15 @@ class TranslationRef(@field:Embedded @field:PrimaryKey val key: Key) {
         foreignKeys = [
             ForeignKey(
                 entity = TranslationRef::class,
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                parentColumns = ["tool", "language", "version"], childColumns = ["tool", "language", "version"]
+                parentColumns = ["tool", "language", "version"], childColumns = ["tool", "language", "version"],
+                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
             ),
             ForeignKey(
                 entity = AemImport::class,
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                parentColumns = ["uri"], childColumns = ["aemImportUri"]
-            )]
+                parentColumns = ["uri"], childColumns = ["aemImportUri"],
+                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+            )
+        ]
     )
     class TranslationAemImport(@field:Embedded val translation: Key, val aemImportUri: Uri) {
         constructor(translation: Key, aemImport: AemImport) : this(translation, aemImport.uri)

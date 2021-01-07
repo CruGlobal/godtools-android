@@ -59,10 +59,11 @@ class TabsController private constructor(
         binding.tabs.removeAllTabs()
         model?.tabs?.forEach {
             binding.tabs.apply {
-                addTab(newTab().apply {
+                val tab = newTab().apply {
                     setBackgroundTint(primaryColor)
                     text = it.label?.text
-                })
+                }
+                addTab(tab)
             }
         }
 

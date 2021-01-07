@@ -37,17 +37,23 @@ interface AemImportDao {
     fun updateLastProcessed(aemImportUri: Uri, date: Date)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         DELETE FROM aemImportArticles
-        WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)""")
+        WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)
+        """
+    )
     fun removeOldArticles(aemImportUri: Uri, currentArticleUris: List<@JvmSuppressWildcards Uri>)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         DELETE FROM aemImports
         WHERE
             uri NOT IN (SELECT aemImportUri FROM translationAemImports) AND
-            lastAccessed < :lastAccessedBefore""")
+            lastAccessed < :lastAccessedBefore
+        """
+    )
     fun removeOrphanedAemImports(lastAccessedBefore: Date)
 
     @WorkerThread

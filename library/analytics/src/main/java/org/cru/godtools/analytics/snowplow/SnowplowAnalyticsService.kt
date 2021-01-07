@@ -124,13 +124,15 @@ class SnowplowAnalyticsService @Inject internal constructor(
 
     @WorkerThread
     @OptIn(ExperimentalStdlibApi::class)
-    private fun idContext() = SelfDescribingJson(CONTEXT_SCHEMA_IDS, buildMap<String, String> {
-
-        userProfileStateFlow.value?.let { profile ->
-            profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
-            profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
+    private fun idContext() = SelfDescribingJson(
+        CONTEXT_SCHEMA_IDS,
+        buildMap<String, String> {
+            userProfileStateFlow.value?.let { profile ->
+                profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
+                profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
+            }
         }
-    })
+    )
 
     private fun AnalyticsBaseEvent.contentScoringContext() = SelfDescribingJson(
         CONTEXT_SCHEMA_SCORING, mapOf(CONTEXT_ATTR_SCORING_URI to snowplowContentScoringUri.toString())
