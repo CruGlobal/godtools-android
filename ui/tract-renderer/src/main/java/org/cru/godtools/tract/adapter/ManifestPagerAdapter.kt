@@ -11,7 +11,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.support.v4.util.IdUtils
-import org.ccci.gto.android.common.viewpager.adapter.BaseDataBindingPagerAdapter
+import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.model.Event
@@ -27,14 +27,11 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-// XXX: we override BaseDataBindingPagerAdapter instead of DataBindingPagerAdapter to prevent DataBindingPagerAdapter
-//      from setting the lifecycleOwner for the databinding.
 class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
-) : BaseDataBindingPagerAdapter<TractPageBinding, DataBindingViewHolder<TractPageBinding>>(lifecycleOwner),
-    PageController.Callbacks, Observer<Manifest?> {
+) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
     @AssistedInject.Factory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner): ManifestPagerAdapter
@@ -75,14 +72,15 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         manifest = t
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup) = DataBindingViewHolder(
-        TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).also { binding ->
-            binding.bindController(pageControllerFactory, lifecycleOwner).also {
-                it.callbacks = this
-                it.isTipsEnabled = showTips
-            }
+    override fun onCreateViewDataBinding(parent: ViewGroup) =
+        TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+    override fun onViewDataBindingCreated(binding: TractPageBinding) {
+        binding.bindController(pageControllerFactory, lifecycleOwner).also {
+            it.callbacks = this
+            it.isTipsEnabled = showTips
         }
-    )
+    }
 
     override fun onBindViewDataBinding(
         holder: DataBindingViewHolder<TractPageBinding>,
