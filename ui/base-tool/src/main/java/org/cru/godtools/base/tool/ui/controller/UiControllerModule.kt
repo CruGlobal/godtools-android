@@ -8,6 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
 import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Text
 
 @MapKey
@@ -18,6 +19,11 @@ annotation class ContentKey(val value: KClass<out Base>)
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class UiControllerModule {
+    @Binds
+    @IntoMap
+    @ContentKey(Link::class)
+    internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
+
     @Binds
     @IntoMap
     @ContentKey(Text::class)
