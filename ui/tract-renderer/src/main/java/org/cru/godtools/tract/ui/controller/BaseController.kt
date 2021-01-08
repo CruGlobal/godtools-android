@@ -40,7 +40,7 @@ abstract class BaseController<T : Base> protected constructor(
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
         }
-    internal open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
+    open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
 
     var model: T? = null
         set(value) {
