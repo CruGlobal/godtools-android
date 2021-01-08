@@ -25,37 +25,47 @@ class Article(@field:PrimaryKey val uri: Uri) {
 
     @Ignore
     var tags = emptyList<String>()
+    internal val tagObjects get() = tags.map { Tag(this, it) }
 
     @Ignore
     var resources = emptyList<Resource>()
 
-    val tagObjects: List<Tag>
-        @RestrictTo(RestrictTo.Scope.LIBRARY)
-        get() = tags.map { Tag(this, it) }
-
     @Immutable
-    @Entity(tableName = "articleTags",
-            primaryKeys = ["articleUri", "tag"],
-            foreignKeys = [
-                ForeignKey(entity = Article::class,
-                        onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                        parentColumns = ["uri"], childColumns = ["articleUri"])])
+    @Entity(
+        tableName = "articleTags",
+        primaryKeys = ["articleUri", "tag"],
+        foreignKeys = [
+            ForeignKey(
+                entity = Article::class,
+                parentColumns = ["uri"], childColumns = ["articleUri"],
+                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+            )
+        ]
+    )
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     data class Tag(val articleUri: Uri, val tag: String) {
         constructor(article: Article, tag: String) : this(article.uri, tag)
     }
 
     @Immutable
-    @Entity(tableName = "articleResources",
-            primaryKeys = ["articleUri", "resourceUri"],
-            indices = [Index("resourceUri")],
-            foreignKeys = [
-                ForeignKey(entity = Article::class,
-                        onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                        parentColumns = ["uri"], childColumns = ["articleUri"]),
-                ForeignKey(entity = Resource::class,
-                        onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                        parentColumns = ["uri"], childColumns = ["resourceUri"])])
+    @Entity(
+        tableName = "articleResources",
+        primaryKeys = ["articleUri", "resourceUri"],
+        indices = [Index("resourceUri")],
+        foreignKeys = [
+            ForeignKey(
+                entity = Article::class,
+                parentColumns = ["uri"], childColumns = ["articleUri"],
+                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+            ),
+            ForeignKey(
+                entity = Resource::class,
+                parentColumns = ["uri"], childColumns = ["resourceUri"],
+                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+            )
+        ]
+    )
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     data class ArticleResource(val articleUri: Uri, val resourceUri: Uri) {
         constructor(article: Article, resource: Resource) : this(article.uri, resource.uri)
     }

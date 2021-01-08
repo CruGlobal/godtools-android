@@ -38,9 +38,9 @@ abstract class TranslationRepository internal constructor(private val db: Articl
 
         // create and link all AEM Import objects
         uris.map { AemImport(it) }
-                .apply { db.aemImportDao().insertOrIgnore(this) }
-                .map { TranslationAemImport(translationKey, it) }
-                .apply { db.translationDao().insertOrIgnore(this) }
+            .apply { db.aemImportDao().insertOrIgnore(this) }
+            .map { TranslationAemImport(translationKey, it) }
+            .apply { db.translationDao().insertOrIgnore(this) }
 
         // mark translation as processed
         markProcessed(translationKey, true)
@@ -53,8 +53,8 @@ abstract class TranslationRepository internal constructor(private val db: Articl
     open fun removeMissingTranslations(translationsToKeep: List<Translation>) {
         val valid = translationsToKeep.map { it.toTranslationRefKey() }.toSet()
         db.translationDao().all
-                .filterNot { valid.contains(it.key) }
-                .apply { db.translationDao().remove(this) }
+            .filterNot { valid.contains(it.key) }
+            .apply { db.translationDao().remove(this) }
         db.aemImportRepository().removeOrphanedAemImports()
     }
 }

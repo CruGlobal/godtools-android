@@ -17,16 +17,22 @@ interface ResourceDao {
     fun insertOrIgnore(resource: Resource)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         UPDATE resources
         SET contentType = :contentType, localFileName = :fileName, dateDownloaded = :downloadDate
-        WHERE uri = :uri""")
+        WHERE uri = :uri
+        """
+    )
     fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         DELETE FROM resources
-        WHERE uri NOT IN (SELECT resourceUri FROM articleResources)""")
+        WHERE uri NOT IN (SELECT resourceUri FROM articleResources)
+        """
+    )
     fun removeOrphanedResources()
 
     @WorkerThread
@@ -38,10 +44,12 @@ interface ResourceDao {
     fun getAll(): List<Resource>
 
     @WorkerThread
-    @Query("""
+    @Query(
+        """
         SELECT r.*
         FROM resources AS r JOIN articleResources AS a ON a.resourceUri = r.uri
         WHERE a.articleUri = :uri
-        """)
+        """
+    )
     fun getAllForArticle(uri: Uri): List<Resource>
 }

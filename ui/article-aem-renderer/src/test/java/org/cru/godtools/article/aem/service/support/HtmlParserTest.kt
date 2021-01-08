@@ -20,7 +20,8 @@ class HtmlParserTest {
         }
         val urls = extractResources(article).map { it.uri }
         assertThat(
-            urls, containsInAnyOrder(
+            urls,
+            containsInAnyOrder(
                 Uri.parse("http://cdn2-www.cru.org/clientlibs/A.main.min.css.cf.yZHv2yPfJ7.css"),
                 Uri.parse("https://cdn2-www.cru.org/clientlibs/A.main.min.css.cf.yZHv2yPfJ7.css"),
                 Uri.parse("https://example.com/path/A.main.min.css.pagespeed.cf.yZHv2yPfJ7.css"),

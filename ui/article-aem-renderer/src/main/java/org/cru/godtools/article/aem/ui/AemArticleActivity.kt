@@ -91,28 +91,25 @@ class AemArticleActivity :
     }
     // endregion Lifecycle
 
+    // region Intent parsing
     /**
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        articleUri = processDeepLink()
-                ?: intent?.extras?.getParcelable(EXTRA_ARTICLE)
-                ?: return false
-
+        articleUri = processDeepLink() ?: intent?.extras?.getParcelable(EXTRA_ARTICLE) ?: return false
         return true
     }
 
     private fun processDeepLink() = when {
-        isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+        intent.isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
         else -> null
     }
 
-    private fun isValidDeepLink() = intent?.action == Intent.ACTION_VIEW &&
-        intent.data?.let {
-            (it.scheme == "http" || it.scheme == "https") &&
-                it.host == "godtoolsapp.com" &&
-                it.path == "/article/aem"
-        } == true
+    private fun Intent?.isValidDeepLink() =
+        this != null && action == Intent.ACTION_VIEW && data?.isValidDeepLink() == true
+    private fun Uri.isValidDeepLink() =
+        (scheme == "http" || scheme == "https") && host == "godtoolsapp.com" && path == "/article/aem"
+    // endregion Intent parsing
 
     private val dataModel: AemArticleViewModel by viewModels()
 
@@ -149,7 +146,7 @@ class AemArticleActivity :
     private fun syncData() {
         lifecycleScope.launch {
             val future = when {
-                isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
+                intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
                 else -> aemArticleManager.downloadArticle(articleUri, false)
             }
             Futures.nonCancellationPropagating(future).await()

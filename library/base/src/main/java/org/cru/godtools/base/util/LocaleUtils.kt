@@ -34,11 +34,11 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
 
 fun Context.localizeIfPossible(locale: Locale?) = locale?.let { localize(it) } ?: this
 
-private fun Context.getLanguageNameStringRes(locale: Locale): String? {
-    return when (val stringId = resources.getIdentifier(
-        "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().toLowerCase(Locale.ENGLISH)}", "string", packageName
-    )) {
+private fun Context.getLanguageNameStringRes(locale: Locale) =
+    when (val stringId = resources.getIdentifier(locale.languageNameStringRes, "string", packageName)) {
         0 -> null
         else -> resources.getString(stringId)
     }
-}
+
+private val Locale.languageNameStringRes
+    get() = "$STRING_RES_LANGUAGE_NAME_PREFIX${toString().toLowerCase(Locale.ENGLISH)}"
