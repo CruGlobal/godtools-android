@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
-    private val modelClass: KClass<T>,
+    /*private*/ val modelClass: KClass<T>,
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
@@ -69,7 +69,7 @@ abstract class BaseController<T : Base> protected constructor(
     // endregion Lifecycle
 
     fun supportsModel(model: Base?) = modelClass.isInstance(model)
-    internal fun releaseTo(cache: UiControllerCache) = cache.release(modelClass, this)
+//    internal fun releaseTo(cache: UiControllerCache) = cache.release(modelClass, this)
 
     protected open fun updateLayoutDirection() {
         // HACK: In theory we should be able to set this on the root page only.
