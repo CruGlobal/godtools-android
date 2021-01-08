@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
-import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.tract.util.TestLifecycleOwner
 import org.cru.godtools.xml.model.AnalyticsEvent

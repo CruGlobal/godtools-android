@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.analytics.model
+package org.cru.godtools.base.tool.analytics.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.analytics.model.AnalyticsSystem
