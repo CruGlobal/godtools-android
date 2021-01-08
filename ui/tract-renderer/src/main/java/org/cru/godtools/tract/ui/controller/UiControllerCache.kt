@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.xml.model.Base
 import timber.log.Timber
 

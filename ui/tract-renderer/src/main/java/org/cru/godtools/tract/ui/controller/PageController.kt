@@ -18,6 +18,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card

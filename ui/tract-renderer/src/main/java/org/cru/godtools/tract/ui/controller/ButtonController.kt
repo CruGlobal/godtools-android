@@ -6,6 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.tract.databinding.TractContentButtonBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger

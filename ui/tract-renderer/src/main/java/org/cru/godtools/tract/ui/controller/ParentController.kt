@@ -6,6 +6,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
 import kotlin.reflect.KClass
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
 
