@@ -12,7 +12,7 @@ import org.cru.godtools.xml.model.Parent
 abstract class ParentController<T> protected constructor(
     clazz: KClass<T>,
     root: View,
-    parentController: BaseController<*>?,
+    parentController: BaseController<*>? = null,
     cacheFactory: UiControllerCache.Factory? = null
 ) : BaseController<T>(clazz, root, parentController) where T : Parent {
     // region Lifecycle
