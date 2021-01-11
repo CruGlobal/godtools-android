@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.controller
+package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,13 +11,12 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.tract.databinding.TractContentTabsBinding
+import org.cru.godtools.base.tool.databinding.ToolContentTabsBinding
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.primaryColor
 
 class TabsController private constructor(
-    private val binding: TractContentTabsBinding,
+    private val binding: ToolContentTabsBinding,
     parentController: BaseController<*>,
     tabControllerFactory: TabController.Factory
 ) : BaseController<Tabs>(Tabs::class, binding.root, parentController), OnTabSelectedListener {
@@ -27,7 +26,7 @@ class TabsController private constructor(
         @Assisted parentController: BaseController<*>,
         tabControllerFactory: TabController.Factory
     ) : this(
-        TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        ToolContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         parentController,
         tabControllerFactory
     )

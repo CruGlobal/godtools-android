@@ -10,6 +10,7 @@ import kotlin.reflect.KClass
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Link
+import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 
 @MapKey
@@ -29,6 +30,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Link::class)
     internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Tabs::class)
+    internal abstract fun tabsControllerFactory(factory: TabsController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap

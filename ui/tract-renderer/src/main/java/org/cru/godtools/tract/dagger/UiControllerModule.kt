@@ -13,7 +13,6 @@ import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.ImageController
 import org.cru.godtools.tract.ui.controller.InputController
 import org.cru.godtools.tract.ui.controller.ParagraphController
-import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.VideoController
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Animation
@@ -22,7 +21,6 @@ import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Paragraph
-import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
 
@@ -63,11 +61,6 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Paragraph::class)
     internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @ContentKey(Tabs::class)
-    internal abstract fun tabsControllerFactory(factory: TabsController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
