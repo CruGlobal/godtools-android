@@ -2,6 +2,9 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.ViewGroup
 import androidx.core.util.Pools
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
@@ -20,7 +23,15 @@ import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
 import timber.log.Timber
 
-internal class UiControllerCache(private val parent: ViewGroup, private val parentController: BaseController<*>?) {
+class UiControllerCache @AssistedInject internal constructor(
+    @Assisted private val parent: ViewGroup,
+    @Assisted private val parentController: BaseController<*>?
+) {
+    @AssistedFactory
+    interface Factory {
+        fun create(parent: ViewGroup, parentController: BaseController<*>?): UiControllerCache
+    }
+
     private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()
 
     @Suppress("UNCHECKED_CAST")
