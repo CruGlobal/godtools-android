@@ -61,6 +61,8 @@ class PageControllerTest {
     lateinit var eventBus: EventBus
     @Inject
     lateinit var settings: Settings
+    @Inject
+    lateinit var cardControllerFactory: CardController.Factory
     private val baseLifecycleOwner = TestLifecycleOwner()
 
     private lateinit var controller: PageController
@@ -70,7 +72,7 @@ class PageControllerTest {
         hiltRule.inject()
         val activity = Robolectric.buildActivity(TestActivity::class.java).create().get()
         binding = TractPageBinding.inflate(LayoutInflater.from(activity))
-        controller = PageController(binding, baseLifecycleOwner, dao, eventBus, settings)
+        controller = PageController(binding, baseLifecycleOwner, dao, eventBus, settings, cardControllerFactory)
         baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.RESUMED
     }
 

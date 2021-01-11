@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.lifecycle.Lifecycle
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
@@ -15,10 +18,24 @@ import org.cru.godtools.xml.model.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
-    pageController: PageController
-) : ParentController<Card>(Card::class, binding.root, pageController) {
-    constructor(parent: ViewGroup, pageController: PageController) :
-        this(TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false), pageController)
+    pageController: PageController,
+    cacheFactory: UiControllerCache.Factory
+) : ParentController<Card>(Card::class, binding.root, pageController, cacheFactory) {
+    @AssistedInject
+    internal constructor(
+        @Assisted parent: ViewGroup,
+        @Assisted pageController: PageController,
+        cacheFactory: UiControllerCache.Factory
+    ) : this(
+        binding = TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        pageController = pageController,
+        cacheFactory = cacheFactory
+    )
+
+    @AssistedFactory
+    interface Factory {
+        fun create(parent: ViewGroup, pageController: PageController): CardController
+    }
 
     interface Callbacks {
         fun onToggleCard(controller: CardController)
