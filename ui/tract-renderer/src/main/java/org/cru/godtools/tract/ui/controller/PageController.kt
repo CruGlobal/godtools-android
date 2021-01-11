@@ -33,6 +33,7 @@ class PageController @AssistedInject internal constructor(
     override val dao: GodToolsDao,
     override val eventBus: EventBus,
     private val settings: Settings,
+    heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
     @AssistedFactory
@@ -52,7 +53,7 @@ class PageController @AssistedInject internal constructor(
             .also { binding.lifecycleOwner = it }
 
     @VisibleForTesting
-    internal val heroController = binding.hero.bindController(this)
+    internal val heroController = heroControllerFactory.create(binding.hero, this)
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {

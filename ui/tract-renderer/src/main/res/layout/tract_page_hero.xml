@@ -6,7 +6,6 @@
     <data>
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
-        <variable name="controller" type="org.cru.godtools.tract.ui.controller.HeroController" />
         <variable name="model" type="org.cru.godtools.xml.model.Hero" />
     </data>
 
