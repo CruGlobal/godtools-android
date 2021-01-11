@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.controller
+package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,18 +6,17 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
-import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.tract.databinding.TractContentButtonBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Button
 
 internal class ButtonController private constructor(
-    private val binding: TractContentButtonBinding,
+    private val binding: ToolContentButtonBinding,
     parentController: BaseController<*>
 ) : BaseController<Button>(Button::class, binding.root, parentController) {
     @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
-        this(TractContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+        this(ToolContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     @AssistedFactory
     interface Factory : BaseController.Factory<ButtonController>

@@ -8,7 +8,6 @@ import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ContentKey
 import org.cru.godtools.tract.ui.controller.AnimationController
-import org.cru.godtools.tract.ui.controller.ButtonController
 import org.cru.godtools.tract.ui.controller.FallbackController
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.ImageController
@@ -18,7 +17,6 @@ import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.VideoController
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Animation
-import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
@@ -35,11 +33,6 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Animation::class)
     internal abstract fun animationControllerFactory(factory: AnimationController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @ContentKey(Button::class)
-    internal abstract fun buttonControllerFactory(factory: ButtonController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
