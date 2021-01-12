@@ -8,13 +8,11 @@ import dagger.assisted.AssistedInject
 import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
-import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
-import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
 import timber.log.Timber
@@ -43,13 +41,11 @@ class UiControllerCache @AssistedInject internal constructor(
 
     private fun <T : Base> createController(clazz: KClass<T>) =
         controllerFactories[clazz.java]?.create(parent, parentController) as BaseController<T>? ?: when (clazz) {
-            Animation::class -> AnimationController(parent, parentController)
             Button::class -> ButtonController(parent, parentController)
             Image::class -> ImageController(parent, parentController)
             InlineTip::class -> InlineTipController(parent, parentController)
             Input::class -> InputController(parent, parentController)
             Link::class -> LinkController(parent, parentController)
-            Text::class -> TextController(parent, parentController)
             Video::class -> VideoController(parent, parentController)
             else -> {
                 val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
