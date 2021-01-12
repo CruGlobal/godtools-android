@@ -14,12 +14,15 @@ private const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
 private val DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X
 private val DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER
 
-private const val XML_PAGE = "page"
 private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
 
 class Page : BaseModel, Styles {
+    companion object {
+        internal const val XML_PAGE = "page"
+    }
+
     override val page get() = this
 
     val id get() = fileName ?: "${manifest.code}-$position"

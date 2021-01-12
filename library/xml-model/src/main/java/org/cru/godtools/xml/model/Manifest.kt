@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
+import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.tips.Tip
 import org.xmlpull.v1.XmlPullParser
 
@@ -245,8 +246,19 @@ class Manifest : BaseModel, Styles {
                             val position = size
                             parser.skipTag()
 
-                            if (srcFile != null)
-                                add(async { parseFile(srcFile).use { Page(this@Manifest, position, fileName, it) } })
+                            if (srcFile != null) {
+                                val page = async {
+                                    parseFile(srcFile).use {
+                                        if (it.namespace == XMLNS_TRACT && it.name == Page.XML_PAGE) {
+                                            Page(this@Manifest, position, fileName, it)
+                                        } else {
+                                            it.skipTag()
+                                            null
+                                        }
+                                    }
+                                }
+                                add(page)
+                            }
                         }
                         else -> parser.skipTag()
                     }
@@ -261,7 +273,7 @@ class Manifest : BaseModel, Styles {
                     else -> parser.skipTag()
                 }
             }
-        }.awaitAll()
+        }.awaitAll().filterNotNull()
         return@runBlocking result
     }
 
