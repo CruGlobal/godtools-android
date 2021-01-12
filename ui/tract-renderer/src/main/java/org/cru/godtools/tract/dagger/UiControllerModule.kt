@@ -16,6 +16,7 @@ import org.cru.godtools.tract.ui.controller.LinkController
 import org.cru.godtools.tract.ui.controller.ParagraphController
 import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.TextController
+import org.cru.godtools.tract.ui.controller.VideoController
 import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
@@ -26,6 +27,7 @@ import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.Video
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -79,4 +81,9 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Text::class)
     internal abstract fun textControllerFactory(factory: TextController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Video::class)
+    internal abstract fun videoControllerFactory(factory: VideoController.Factory): BaseController.Factory<*>
 }

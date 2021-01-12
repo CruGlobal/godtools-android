@@ -2,15 +2,21 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractContentVideoBinding
 import org.cru.godtools.xml.model.Video
 
 internal class VideoController private constructor(
     private val binding: TractContentVideoBinding,
-    parentController: BaseController<*>?
+    parentController: BaseController<*>
 ) : BaseController<Video>(Video::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+    @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
         this(TractContentVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+
+    @AssistedFactory
+    interface Factory : BaseController.Factory<VideoController>
 
     init {
         binding.controller = this
