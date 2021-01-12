@@ -25,11 +25,11 @@ import timber.log.Timber
 
 class UiControllerCache @AssistedInject internal constructor(
     @Assisted private val parent: ViewGroup,
-    @Assisted private val parentController: BaseController<*>?
+    @Assisted private val parentController: BaseController<*>
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(parent: ViewGroup, parentController: BaseController<*>?): UiControllerCache
+        fun create(parent: ViewGroup, parentController: BaseController<*>): UiControllerCache
     }
 
     private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()
