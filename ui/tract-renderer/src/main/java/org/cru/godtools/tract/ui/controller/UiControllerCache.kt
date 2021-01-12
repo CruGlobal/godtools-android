@@ -25,7 +25,8 @@ import timber.log.Timber
 
 class UiControllerCache @AssistedInject internal constructor(
     @Assisted private val parent: ViewGroup,
-    @Assisted private val parentController: BaseController<*>
+    @Assisted private val parentController: BaseController<*>,
+    private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>> = emptyMap()
 ) {
     @AssistedFactory
     interface Factory {
@@ -44,24 +45,25 @@ class UiControllerCache @AssistedInject internal constructor(
         clazz.pool.release(instance)
     }
 
-    private fun <T : Base> createController(clazz: KClass<T>) = when (clazz) {
-        Animation::class -> AnimationController(parent, parentController)
-        Button::class -> ButtonController(parent, parentController)
-        Fallback::class -> FallbackController(parent, parentController)
-        Form::class -> FormController(parent, parentController)
-        Image::class -> ImageController(parent, parentController)
-        InlineTip::class -> InlineTipController(parent, parentController)
-        Input::class -> InputController(parent, parentController)
-        Link::class -> LinkController(parent, parentController)
-        Paragraph::class -> ParagraphController(parent, parentController)
-        Tabs::class -> TabsController(parent, parentController)
-        Text::class -> TextController(parent, parentController)
-        Video::class -> VideoController(parent, parentController)
-        else -> {
-            val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
-            if (ApplicationUtils.isDebuggable(parent.context)) throw e
-            Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
-            null
-        }
-    } as BaseController<T>?
+    private fun <T : Base> createController(clazz: KClass<T>) =
+        controllerFactories[clazz.java]?.create(parent, parentController) as BaseController<T>? ?: when (clazz) {
+            Animation::class -> AnimationController(parent, parentController)
+            Button::class -> ButtonController(parent, parentController)
+            Fallback::class -> FallbackController(parent, parentController)
+            Form::class -> FormController(parent, parentController)
+            Image::class -> ImageController(parent, parentController)
+            InlineTip::class -> InlineTipController(parent, parentController)
+            Input::class -> InputController(parent, parentController)
+            Link::class -> LinkController(parent, parentController)
+            Paragraph::class -> ParagraphController(parent, parentController)
+            Tabs::class -> TabsController(parent, parentController)
+            Text::class -> TextController(parent, parentController)
+            Video::class -> VideoController(parent, parentController)
+            else -> {
+                val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
+                if (ApplicationUtils.isDebuggable(parent.context)) throw e
+                Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
+                null
+            }
+        } as BaseController<T>?
 }
