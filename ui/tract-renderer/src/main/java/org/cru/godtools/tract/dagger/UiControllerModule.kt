@@ -9,10 +9,12 @@ import org.cru.godtools.tract.ui.controller.BaseController
 import org.cru.godtools.tract.ui.controller.FallbackController
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.ParagraphController
+import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.TextController
 import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 
 @Module
@@ -32,6 +34,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Paragraph::class)
     internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Tabs::class)
+    internal abstract fun tabsControllerFactory(factory: TabsController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap

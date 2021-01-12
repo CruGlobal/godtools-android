@@ -14,7 +14,6 @@ import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
-import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
@@ -50,7 +49,6 @@ class UiControllerCache @AssistedInject internal constructor(
             InlineTip::class -> InlineTipController(parent, parentController)
             Input::class -> InputController(parent, parentController)
             Link::class -> LinkController(parent, parentController)
-            Tabs::class -> TabsController(parent, parentController)
             Text::class -> TextController(parent, parentController)
             Video::class -> VideoController(parent, parentController)
             else -> {
