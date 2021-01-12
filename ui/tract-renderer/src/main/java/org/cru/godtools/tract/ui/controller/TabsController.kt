@@ -17,16 +17,24 @@ import org.cru.godtools.xml.model.primaryColor
 
 class TabsController private constructor(
     private val binding: TractContentTabsBinding,
-    parentController: BaseController<*>
+    parentController: BaseController<*>,
+    tabControllerFactory: TabController.Factory
 ) : BaseController<Tabs>(Tabs::class, binding.root, parentController), OnTabSelectedListener {
     @AssistedInject
-    internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
-        this(TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+    constructor(
+        @Assisted parent: ViewGroup,
+        @Assisted parentController: BaseController<*>,
+        tabControllerFactory: TabController.Factory
+    ) : this(
+        TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        parentController,
+        tabControllerFactory
+    )
 
     @AssistedFactory
     interface Factory : BaseController.Factory<TabsController>
 
-    private val tabController = binding.tab.bindController(this)
+    private val tabController = tabControllerFactory.create(binding.tab, this)
 
     init {
         binding.tabs.addOnTabSelectedListener(this)

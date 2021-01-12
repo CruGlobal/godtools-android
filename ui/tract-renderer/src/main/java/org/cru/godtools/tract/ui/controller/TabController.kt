@@ -1,13 +1,20 @@
 package org.cru.godtools.tract.ui.controller
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractContentTabBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Tab
 
-class TabController internal constructor(private val binding: TractContentTabBinding, tabsController: TabsController) :
-    ParentController<Tab>(Tab::class, binding.content, tabsController) {
-    init {
-        binding.controller = this
+class TabController @AssistedInject internal constructor(
+    @Assisted private val binding: TractContentTabBinding,
+    @Assisted tabsController: TabsController,
+    cacheFactory: UiControllerCache.Factory
+) : ParentController<Tab>(Tab::class, binding.content, tabsController, cacheFactory) {
+    @AssistedFactory
+    interface Factory {
+        fun create(binding: TractContentTabBinding, tabsController: TabsController): TabController
     }
 
     override val contentContainer get() = binding.content
@@ -16,6 +23,3 @@ class TabController internal constructor(private val binding: TractContentTabBin
         triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
     }
 }
-
-internal fun TractContentTabBinding.bindController(tabsController: TabsController) =
-    controller ?: TabController(this, tabsController)
