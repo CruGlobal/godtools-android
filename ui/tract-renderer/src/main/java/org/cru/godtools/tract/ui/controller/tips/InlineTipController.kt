@@ -2,16 +2,22 @@ package org.cru.godtools.tract.ui.controller.tips
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractContentInlineTipBinding
 import org.cru.godtools.tract.ui.controller.BaseController
 import org.cru.godtools.xml.model.tips.InlineTip
 
 internal class InlineTipController private constructor(
     private val binding: TractContentInlineTipBinding,
-    parentController: BaseController<*>?
+    parentController: BaseController<*>
 ) : BaseController<InlineTip>(InlineTip::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+    @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
         this(TractContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+
+    @AssistedFactory
+    interface Factory : BaseController.Factory<InlineTipController>
 
     init {
         binding.lifecycleOwner = lifecycleOwner
