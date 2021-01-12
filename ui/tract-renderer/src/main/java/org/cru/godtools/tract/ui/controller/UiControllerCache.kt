@@ -9,7 +9,6 @@ import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
@@ -41,7 +40,6 @@ class UiControllerCache @AssistedInject internal constructor(
 
     private fun <T : Base> createController(clazz: KClass<T>) =
         controllerFactories[clazz.java]?.create(parent, parentController) as BaseController<T>? ?: when (clazz) {
-            Button::class -> ButtonController(parent, parentController)
             Image::class -> ImageController(parent, parentController)
             InlineTip::class -> InlineTipController(parent, parentController)
             Input::class -> InputController(parent, parentController)

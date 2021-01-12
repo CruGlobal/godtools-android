@@ -7,12 +7,14 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.tract.ui.controller.AnimationController
 import org.cru.godtools.tract.ui.controller.BaseController
+import org.cru.godtools.tract.ui.controller.ButtonController
 import org.cru.godtools.tract.ui.controller.FallbackController
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.ParagraphController
 import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.TextController
 import org.cru.godtools.xml.model.Animation
+import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Paragraph
@@ -26,6 +28,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Animation::class)
     internal abstract fun animationControllerFactory(factory: AnimationController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Button::class)
+    internal abstract fun buttonControllerFactory(factory: ButtonController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
