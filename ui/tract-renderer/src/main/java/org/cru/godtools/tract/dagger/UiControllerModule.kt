@@ -12,6 +12,7 @@ import org.cru.godtools.tract.ui.controller.FallbackController
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.ImageController
 import org.cru.godtools.tract.ui.controller.InputController
+import org.cru.godtools.tract.ui.controller.LinkController
 import org.cru.godtools.tract.ui.controller.ParagraphController
 import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.TextController
@@ -21,6 +22,7 @@ import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
+import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
@@ -57,6 +59,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Input::class)
     internal abstract fun inputControllerFactory(factory: InputController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Link::class)
+    internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
