@@ -16,7 +16,6 @@ import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
-import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
@@ -55,7 +54,6 @@ class UiControllerCache @AssistedInject internal constructor(
             InlineTip::class -> InlineTipController(parent, parentController)
             Input::class -> InputController(parent, parentController)
             Link::class -> LinkController(parent, parentController)
-            Paragraph::class -> ParagraphController(parent, parentController)
             Tabs::class -> TabsController(parent, parentController)
             Text::class -> TextController(parent, parentController)
             Video::class -> VideoController(parent, parentController)
