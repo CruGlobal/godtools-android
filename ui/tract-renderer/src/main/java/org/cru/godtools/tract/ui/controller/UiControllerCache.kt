@@ -11,7 +11,6 @@ import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
-import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Input
@@ -48,7 +47,6 @@ class UiControllerCache @AssistedInject internal constructor(
         controllerFactories[clazz.java]?.create(parent, parentController) as BaseController<T>? ?: when (clazz) {
             Animation::class -> AnimationController(parent, parentController)
             Button::class -> ButtonController(parent, parentController)
-            Fallback::class -> FallbackController(parent, parentController)
             Form::class -> FormController(parent, parentController)
             Image::class -> ImageController(parent, parentController)
             InlineTip::class -> InlineTipController(parent, parentController)
