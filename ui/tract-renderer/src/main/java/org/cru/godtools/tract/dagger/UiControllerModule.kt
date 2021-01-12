@@ -10,6 +10,7 @@ import org.cru.godtools.tract.ui.controller.BaseController
 import org.cru.godtools.tract.ui.controller.ButtonController
 import org.cru.godtools.tract.ui.controller.FallbackController
 import org.cru.godtools.tract.ui.controller.FormController
+import org.cru.godtools.tract.ui.controller.ImageController
 import org.cru.godtools.tract.ui.controller.ParagraphController
 import org.cru.godtools.tract.ui.controller.TabsController
 import org.cru.godtools.tract.ui.controller.TextController
@@ -17,6 +18,7 @@ import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Form
+import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
@@ -43,6 +45,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Form::class)
     internal abstract fun formControllerFactory(factory: FormController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Image::class)
+    internal abstract fun imageControllerFactory(factory: ImageController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
