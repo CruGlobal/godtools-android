@@ -22,7 +22,7 @@ import timber.log.Timber
 class UiControllerCache @AssistedInject internal constructor(
     @Assisted private val parent: ViewGroup,
     @Assisted private val parentController: BaseController<*>,
-    private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>> = emptyMap()
+    private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>>
 ) {
     @AssistedFactory
     interface Factory {
