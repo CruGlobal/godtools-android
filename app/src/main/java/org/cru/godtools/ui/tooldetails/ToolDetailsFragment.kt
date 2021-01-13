@@ -45,8 +45,10 @@ class ToolDetailsFragment() :
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
+
     @Inject
     internal lateinit var manifestManager: Lazy<ManifestManager>
+
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
@@ -82,7 +84,6 @@ class ToolDetailsFragment() :
         when (requestCode) {
             REQUEST_TUTORIAL_TIPS -> when (resultCode) {
                 Activity.RESULT_OK -> {
-                    settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
                     val code = dataModel.tipsTool ?: return
                     val type = dataModel.tipsType ?: return
                     val language = dataModel.tipsLanguage ?: return
@@ -149,9 +150,6 @@ class ToolDetailsFragment() :
         val code = tool?.code ?: return
         val locale = translation?.languageCode ?: return
 
-        dataModel.tipsLanguage = locale
-        dataModel.tipsTool = code
-        dataModel.tipsType = tool.type
         launchTrainingTips(code, tool.type, locale, false)
     }
 
@@ -159,11 +157,17 @@ class ToolDetailsFragment() :
         code: String,
         type: Tool.Type,
         locale: Locale,
-        force: Boolean
+        skipTutorial: Boolean
     ) {
-        if (force || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code"))
+        if (skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")) {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
             requireActivity().openToolActivity(code, type, locale, showTips = true)
-        else startActivityForResult(context?.buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
+        } else {
+            dataModel.tipsLanguage = locale
+            dataModel.tipsTool = code
+            dataModel.tipsType = type
+            startActivityForResult(requireContext().buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
+        }
     }
     // endregion Data Binding
 

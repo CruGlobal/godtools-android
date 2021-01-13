@@ -80,12 +80,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
             finish()
             true
         }
-        R.id.action_live_share_skip -> {
-            setResult(RESULT_OK)
-            finish()
-            true
-        }
-        R.id.action_tips_skip -> {
+        R.id.action_live_share_skip, R.id.action_tips_skip -> {
             setResult(RESULT_OK)
             finish()
             true
