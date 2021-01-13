@@ -28,10 +28,13 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
-import org.cru.godtools.tutorial.activity.START_TUTORIAL
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
+
+const val REQUEST_TUTORIAL_TIPS = 102
 
 @AndroidEntryPoint
 class ToolDetailsFragment() :
@@ -77,13 +80,13 @@ class ToolDetailsFragment() :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            START_TUTORIAL -> when (resultCode) {
+            REQUEST_TUTORIAL_TIPS -> when (resultCode) {
                 Activity.RESULT_OK -> {
                     settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
                     dataModel.tipsTool?.let {
                         tool -> dataModel.tipsType?.let {
                         type -> dataModel.tipsLanguage?.let {
-                        language -> requireActivity().openToolActivity(tool, type, language) } } }
+                        language -> requireActivity().openToolActivity(tool, type, language, showTips = true) } } }
                 }
                 else -> super.onActivityResult(requestCode, resultCode, data)
             }
@@ -144,15 +147,26 @@ class ToolDetailsFragment() :
 
     fun openToolTraining(tool: Tool?, translation: Translation?) {
         val code = tool?.code ?: return
-        translation?.languageCode ?: return
+        val locale = translation?.languageCode ?: return
 
         activity?.run {
             val isToolDiscovered = settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
             dataModel.tipsLanguage = translation.languageCode
             dataModel.tipsTool = code
             dataModel.tipsType = tool.type
-            launchTrainingTips(tool, tool.type, translation, isToolDiscovered, false)
+            launchTrainingTips(code, tool.type, locale, isToolDiscovered, false)
         }
+    }
+
+    private fun launchTrainingTips(
+        code: String,
+        type: Tool.Type,
+        locale: Locale,
+        isDiscovered: Boolean = false,
+        force: Boolean
+    ) {
+        if (force || isDiscovered) requireActivity().openToolActivity(code, type, locale, showTips = true)
+        else startActivityForResult(context?.buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
     }
     // endregion Data Binding
 

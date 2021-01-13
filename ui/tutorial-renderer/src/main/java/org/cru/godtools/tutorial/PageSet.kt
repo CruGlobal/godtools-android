@@ -65,6 +65,7 @@ enum class PageSet(
         )
     ),
     TIPS(
+        menu = R.menu.tutorial_tips_menu,
         analyticsBaseScreenName = "tutorial-tips",
         pages = listOf(
             Page.TIPS_LEARN,

@@ -34,9 +34,9 @@ class ToolDetailsFragmentDataModel @ViewModelInject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
-    @Assisted private val savedStateHandle: SavedStateHandle,
     settings: Settings,
-    private val shortcutManager: GodToolsShortcutManager
+    private val shortcutManager: GodToolsShortcutManager,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val toolCode = MutableLiveData<String>()
     private val distinctToolCode: LiveData<String> = toolCode.distinctUntilChanged()

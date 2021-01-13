@@ -29,8 +29,6 @@ import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 private const val ARG_PAGE_SET = "pageSet"
 private const val ARG_FRMT_ARGS = "formatArgs"
 
-const val START_TUTORIAL = 102
-
 fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
     Intent(this, TutorialActivity::class.java)
         .putExtra(ARG_PAGE_SET, pageSet)
@@ -38,13 +36,10 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = 
 
 @JvmOverloads
 fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
-    startActivityForResult(buildTutorialActivityIntent(pageSet, stringArgs), START_TUTORIAL)
+    startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
-    companion object {
-        const val FORMAT_ARG_TOOL_NAME = "toolName"
-    }
 
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
@@ -81,11 +76,16 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.onboarding_action_skip, R.id.action_tips_skip -> {
+        R.id.onboarding_action_skip -> {
             finish()
             true
         }
         R.id.action_live_share_skip -> {
+            setResult(RESULT_OK)
+            finish()
+            true
+        }
+        R.id.action_tips_skip -> {
             setResult(RESULT_OK)
             finish()
             true
