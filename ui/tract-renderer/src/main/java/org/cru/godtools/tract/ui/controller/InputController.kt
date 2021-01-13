@@ -12,8 +12,8 @@ class InputController private constructor(
     private val binding: TractContentInputBinding,
     parentController: BaseController<*>?
 ) : BaseController<Input>(Input::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     init {
         binding.controller = this

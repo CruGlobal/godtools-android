@@ -9,8 +9,8 @@ internal class ImageController private constructor(
     private val binding: TractContentImageBinding,
     parentController: BaseController<*>?
 ) : BaseController<Image>(Image::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentImageBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentImageBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     init {
         binding.controller = this

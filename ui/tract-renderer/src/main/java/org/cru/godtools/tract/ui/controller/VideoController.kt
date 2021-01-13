@@ -9,8 +9,8 @@ internal class VideoController private constructor(
     private val binding: TractContentVideoBinding,
     parentController: BaseController<*>?
 ) : BaseController<Video>(Video::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     init {
         binding.controller = this
