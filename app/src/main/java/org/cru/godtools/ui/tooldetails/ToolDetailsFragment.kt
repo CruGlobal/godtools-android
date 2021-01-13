@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.tooldetails
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -19,7 +21,6 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -27,9 +28,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
-import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.TutorialActivity.Companion.FORMAT_ARG_TOOL_NAME
-import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.tutorial.activity.START_TUTORIAL
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
@@ -74,6 +73,22 @@ class ToolDetailsFragment() :
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_tool_details, menu)
         menu.setupPinShortcutAction()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            START_TUTORIAL -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
+                    dataModel.tipsTool?.let {
+                        tool -> dataModel.tipsType?.let {
+                        type -> dataModel.tipsLanguage?.let {
+                        language -> requireActivity().openToolActivity(tool, type, language) } } }
+                }
+                else -> super.onActivityResult(requestCode, resultCode, data)
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun onLinkClicked(url: String) {
@@ -129,17 +144,14 @@ class ToolDetailsFragment() :
 
     fun openToolTraining(tool: Tool?, translation: Translation?) {
         val code = tool?.code ?: return
-        val locale = translation?.languageCode ?: return
+        translation?.languageCode ?: return
 
         activity?.run {
-            openToolActivity(code, tool.type, locale, showTips = true)
-            if (settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_TIPS$code") < 3) {
-                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
-                startTutorialActivity(
-                    PageSet.TIPS,
-                    Bundle().apply { putString(FORMAT_ARG_TOOL_NAME, translation.getName(tool).toString()) }
-                )
-            }
+            val isToolDiscovered = settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
+            dataModel.tipsLanguage = translation.languageCode
+            dataModel.tipsTool = code
+            dataModel.tipsType = tool.type
+            launchTrainingTips(tool, tool.type, translation, isToolDiscovered, false)
         }
     }
     // endregion Data Binding

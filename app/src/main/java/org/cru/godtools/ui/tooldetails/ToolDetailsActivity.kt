@@ -10,14 +10,38 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.activity.TutorialActivity
+import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
+import org.cru.godtools.util.openToolActivity
 
 fun Activity.startToolDetailsActivity(toolCode: String) {
     startActivity(
         Intent(this, ToolDetailsActivity::class.java)
             .putExtras(BaseActivity.buildExtras(this))
             .putExtra(EXTRA_TOOL, toolCode)
+    )
+}
+
+fun Activity.launchTrainingTips(
+    tool: Tool?,
+    type: Tool.Type,
+    translation: Translation,
+    isDiscovered: Boolean = false,
+    force: Boolean
+) {
+    val code = tool?.code ?: return
+    val locale = translation?.languageCode
+
+    if (force || isDiscovered) openToolActivity(code, type, locale, showTips = true)
+    else startTutorialActivity(PageSet.TIPS, Bundle().apply {
+        putString(TutorialActivity.FORMAT_ARG_TOOL_NAME, translation.getName(tool).toString())
+    }
     )
 }
 

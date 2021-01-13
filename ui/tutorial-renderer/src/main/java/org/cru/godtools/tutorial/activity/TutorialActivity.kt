@@ -29,6 +29,8 @@ import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 private const val ARG_PAGE_SET = "pageSet"
 private const val ARG_FRMT_ARGS = "formatArgs"
 
+const val START_TUTORIAL = 102
+
 fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
     Intent(this, TutorialActivity::class.java)
         .putExtra(ARG_PAGE_SET, pageSet)
@@ -36,7 +38,7 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = 
 
 @JvmOverloads
 fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
-    startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
+    startActivityForResult(buildTutorialActivityIntent(pageSet, stringArgs), START_TUTORIAL)
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
@@ -183,7 +185,10 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
                 setResult(RESULT_OK)
                 finish()
             }
-            R.id.action_training_finish, R.id.action_tips_finish -> finish()
+            R.id.action_training_finish, R.id.action_tips_finish -> {
+                setResult(RESULT_OK)
+                finish()
+            }
         }
     }
     // endregion TutorialCallbacks

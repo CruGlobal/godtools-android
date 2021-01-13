@@ -1,12 +1,15 @@
 package org.cru.godtools.ui.tooldetails
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -23,10 +26,15 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
+private const val KEY_TIPS_LANGUAGE = "KEY_TIPS_LANGUAGE"
+private const val KEY_TIPS_TOOL = "KEY_TIPS_TOOL"
+private const val KEY_TIPS_TYPE = "KEY_TIPS_TYPE"
+
 class ToolDetailsFragmentDataModel @ViewModelInject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
+    @Assisted private val savedStateHandle: SavedStateHandle,
     settings: Settings,
     private val shortcutManager: GodToolsShortcutManager
 ) : ViewModel() {
@@ -64,4 +72,18 @@ class ToolDetailsFragmentDataModel @ViewModelInject constructor(
     val availableLanguages = distinctToolCode
         .switchMap { Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(it)).getAsLiveData(dao) }
         .map { it.map { translation -> translation.languageCode }.distinct() }
+
+    //    region tipsSavedState
+    var tipsLanguage: Locale?
+        get() = savedStateHandle.get<Locale>(KEY_TIPS_LANGUAGE)
+        set(value) = savedStateHandle.set(KEY_TIPS_LANGUAGE, value)
+
+    var tipsTool: String?
+        get() = savedStateHandle.get<String>(KEY_TIPS_TOOL)
+        set(value) = savedStateHandle.set(KEY_TIPS_TOOL, value)
+
+    var tipsType: Tool.Type?
+        get() = savedStateHandle.get<Tool.Type>(KEY_TIPS_TYPE)
+        set(value) = savedStateHandle.set(KEY_TIPS_TYPE, value)
+    //    endregion tipsSavedState
 }
