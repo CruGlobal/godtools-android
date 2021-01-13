@@ -34,7 +34,7 @@ import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionE
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
 
-const val REQUEST_TUTORIAL_TIPS = 102
+private const val REQUEST_TUTORIAL_TIPS = 102
 
 @AndroidEntryPoint
 class ToolDetailsFragment() :
@@ -83,10 +83,10 @@ class ToolDetailsFragment() :
             REQUEST_TUTORIAL_TIPS -> when (resultCode) {
                 Activity.RESULT_OK -> {
                     settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
-                    dataModel.tipsTool?.let {
-                        tool -> dataModel.tipsType?.let {
-                        type -> dataModel.tipsLanguage?.let {
-                        language -> requireActivity().openToolActivity(tool, type, language, showTips = true) } } }
+                    val code = dataModel.tipsTool ?: return
+                    val type = dataModel.tipsType ?: return
+                    val language = dataModel.tipsLanguage ?: return
+                    launchTrainingTips(code, type, language, true)
                 }
                 else -> super.onActivityResult(requestCode, resultCode, data)
             }
@@ -149,23 +149,20 @@ class ToolDetailsFragment() :
         val code = tool?.code ?: return
         val locale = translation?.languageCode ?: return
 
-        activity?.run {
-            val isToolDiscovered = settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
-            dataModel.tipsLanguage = translation.languageCode
-            dataModel.tipsTool = code
-            dataModel.tipsType = tool.type
-            launchTrainingTips(code, tool.type, locale, isToolDiscovered, false)
-        }
+        dataModel.tipsLanguage = locale
+        dataModel.tipsTool = code
+        dataModel.tipsType = tool.type
+        launchTrainingTips(code, tool.type, locale, false)
     }
 
     private fun launchTrainingTips(
         code: String,
         type: Tool.Type,
         locale: Locale,
-        isDiscovered: Boolean = false,
         force: Boolean
     ) {
-        if (force || isDiscovered) requireActivity().openToolActivity(code, type, locale, showTips = true)
+        if (force || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code"))
+            requireActivity().openToolActivity(code, type, locale, showTips = true)
         else startActivityForResult(context?.buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
     }
     // endregion Data Binding
