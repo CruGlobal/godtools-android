@@ -15,7 +15,7 @@ buildscript {
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.1.1',
-                gtoSupport         : '3.7.1-SNAPSHOT',
+                gtoSupport         : '3.7.1',
                 guava              : '30.1-android',
                 hamcrest           : '2.2',
                 hilt               : '2.30.1-alpha',
@@ -115,7 +115,7 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "9.4.1"
 }
 
-version '5.4.2-SNAPSHOT'
+version '5.4.2'
 ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 
 // define dependency versions for this project
