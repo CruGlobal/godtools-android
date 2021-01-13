@@ -9,8 +9,8 @@ class FallbackController(
     binding: TractContentFallbackBinding,
     parentController: BaseController<*>?
 ) : ParentController<Fallback>(Fallback::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentFallbackBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentFallbackBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     override val contentContainer = binding.root
     override val contentToRender get() = model?.content?.take(1)

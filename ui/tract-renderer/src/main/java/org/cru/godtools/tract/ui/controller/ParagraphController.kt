@@ -9,8 +9,8 @@ class ParagraphController private constructor(
     private val binding: TractContentParagraphBinding,
     parentController: BaseController<*>?
 ) : ParentController<Paragraph>(Paragraph::class, binding.content, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     override val contentContainer get() = binding.content
 }

@@ -10,8 +10,8 @@ internal class AnimationController private constructor(
     private val binding: TractContentAnimationBinding,
     parentController: BaseController<*>?
 ) : BaseController<Animation>(Animation::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentViewHolder: BaseController<*>?) :
-        this(TractContentAnimationBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentViewHolder)
+    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+        this(TractContentAnimationBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
 
     init {
         binding.controller = this
