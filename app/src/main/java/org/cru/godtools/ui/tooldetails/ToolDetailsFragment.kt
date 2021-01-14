@@ -160,7 +160,7 @@ class ToolDetailsFragment() :
         skipTutorial: Boolean
     ) {
         if (skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")) {
-            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS${dataModel.tipsTool}")
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
             requireActivity().openToolActivity(code, type, locale, showTips = true)
         } else {
             dataModel.tipsLanguage = locale
