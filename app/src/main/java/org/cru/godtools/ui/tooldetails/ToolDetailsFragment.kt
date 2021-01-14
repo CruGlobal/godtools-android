@@ -45,10 +45,8 @@ class ToolDetailsFragment() :
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
-
     @Inject
     internal lateinit var manifestManager: Lazy<ManifestManager>
-
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
@@ -153,12 +151,7 @@ class ToolDetailsFragment() :
         launchTrainingTips(code, tool.type, locale, false)
     }
 
-    private fun launchTrainingTips(
-        code: String,
-        type: Tool.Type,
-        locale: Locale,
-        skipTutorial: Boolean
-    ) {
+    private fun launchTrainingTips(code: String, type: Tool.Type, locale: Locale, skipTutorial: Boolean) {
         if (skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")) {
             settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
             requireActivity().openToolActivity(code, type, locale, showTips = true)

@@ -73,7 +73,7 @@ class ToolDetailsFragmentDataModel @ViewModelInject constructor(
         .switchMap { Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(it)).getAsLiveData(dao) }
         .map { it.map { translation -> translation.languageCode }.distinct() }
 
-    //    region tipsSavedState
+    // region tipsSavedState
     var tipsLanguage: Locale?
         get() = savedStateHandle.get<Locale>(KEY_TIPS_LANGUAGE)
         set(value) = savedStateHandle.set(KEY_TIPS_LANGUAGE, value)
@@ -85,5 +85,5 @@ class ToolDetailsFragmentDataModel @ViewModelInject constructor(
     var tipsType: Tool.Type?
         get() = savedStateHandle.get<Tool.Type>(KEY_TIPS_TYPE)
         set(value) = savedStateHandle.set(KEY_TIPS_TYPE, value)
-    //    endregion tipsSavedState
+    // endregion tipsSavedState
 }
