@@ -40,9 +40,6 @@ fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null)
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
-    companion object {
-        const val FORMAT_ARG_TOOL_NAME = "toolName"
-    }
 
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
@@ -79,11 +76,11 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.onboarding_action_skip, R.id.action_tips_skip -> {
+        R.id.onboarding_action_skip -> {
             finish()
             true
         }
-        R.id.action_live_share_skip -> {
+        R.id.action_live_share_skip, R.id.action_tips_skip -> {
             setResult(RESULT_OK)
             finish()
             true
@@ -179,11 +176,10 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
-            R.id.action_live_share_finish -> {
+            R.id.action_live_share_finish, R.id.action_training_finish, R.id.action_tips_finish -> {
                 setResult(RESULT_OK)
                 finish()
             }
-            R.id.action_training_finish, R.id.action_tips_finish -> finish()
         }
     }
     // endregion TutorialCallbacks
