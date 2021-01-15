@@ -6,16 +6,15 @@ buildscript {
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.3',
-                assistedInject     : '0.6.0',
                 circleindicator    : '2.1.4',
-                dagger             : '2.30.1',
+                dagger             : '2.31',
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.70.0',
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.1.1',
-                gtoSupport         : '3.7.1',
+                gtoSupport         : '3.7.2-SNAPSHOT',
                 guava              : '30.1-android',
                 hamcrest           : '2.2',
                 hilt               : '2.30.1-alpha',
@@ -162,9 +161,6 @@ allprojects {
 
                 // use regular moshi library instead of moshi-kotlin, any Kotlin moshi models should use moshi-kotlin-codegen instead
                 substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
-
-                // HACK: utilize https://github.com/square/AssistedInject/pull/121 until it is in an official release
-                substitute module('com.squareup.inject:assisted-inject-processor-dagger2') with module('com.github.frett.AssistedInject:assisted-inject-processor-dagger2:a298fbf')
             }
         }
     }

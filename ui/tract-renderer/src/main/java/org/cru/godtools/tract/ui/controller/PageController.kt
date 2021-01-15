@@ -6,8 +6,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
@@ -33,7 +34,7 @@ class PageController @AssistedInject internal constructor(
     override val eventBus: EventBus,
     private val settings: Settings
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?): PageController
     }

@@ -1,7 +1,8 @@
 package org.cru.godtools.tract.ui.controller
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractContentModalBinding
 import org.cru.godtools.xml.model.Modal
 import org.greenrobot.eventbus.EventBus
@@ -10,7 +11,7 @@ class ModalController @AssistedInject internal constructor(
     @Assisted private val binding: TractContentModalBinding,
     override val eventBus: EventBus
 ) : ParentController<Modal>(Modal::class, binding.root, null) {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(binding: TractContentModalBinding): ModalController
     }

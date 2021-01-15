@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.controller.tips.TipPageController
@@ -16,7 +17,7 @@ class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     private val controllerFactory: TipPageController.Factory
 ) : SimpleDataBindingAdapter<TractTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner): TipPageAdapter
     }

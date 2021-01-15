@@ -1,6 +1,5 @@
 package org.cru.godtools.sync
 
-import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,7 +13,6 @@ import org.cru.godtools.sync.work.SyncFollowupWorker
 import org.cru.godtools.sync.work.SyncToolSharesWorker
 
 @Module
-@AssistedModule
 @InstallIn(SingletonComponent::class)
 abstract class SyncModule {
     @Multibinds
@@ -23,10 +21,11 @@ abstract class SyncModule {
     @Binds
     @IntoMap
     @WorkerKey(SyncFollowupWorker::class)
-    abstract fun syncFollowupWorker(syncFollowupWorker: SyncFollowupWorker.Factory): AssistedWorkerFactory
+    abstract fun syncFollowupWorker(factory: SyncFollowupWorker.Factory): AssistedWorkerFactory<SyncFollowupWorker>
 
     @Binds
     @IntoMap
     @WorkerKey(SyncToolSharesWorker::class)
-    abstract fun syncToolSharesWorker(syncFollowupWorker: SyncToolSharesWorker.Factory): AssistedWorkerFactory
+    abstract fun syncToolSharesWorker(factory: SyncToolSharesWorker.Factory):
+        AssistedWorkerFactory<SyncToolSharesWorker>
 }
