@@ -7,8 +7,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
@@ -32,7 +33,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
 ) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner): ManifestPagerAdapter
     }

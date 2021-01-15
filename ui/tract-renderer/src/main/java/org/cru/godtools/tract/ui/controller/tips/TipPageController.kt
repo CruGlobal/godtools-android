@@ -1,7 +1,8 @@
 package org.cru.godtools.tract.ui.controller.tips
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.controller.ParentController
 import org.cru.godtools.tract.ui.tips.TipCallbacks
@@ -12,7 +13,7 @@ class TipPageController @AssistedInject internal constructor(
     @Assisted private val binding: TractTipPageBinding,
     override val eventBus: EventBus
 ) : ParentController<TipPage>(TipPage::class, binding.root, null) {
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(binding: TractTipPageBinding): TipPageController
     }
