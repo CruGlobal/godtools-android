@@ -30,8 +30,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${deps.kotlinCoroutines}"
 
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
-
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
     implementation "com.google.firebase:firebase-messaging:${deps.firebase.messaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
@@ -56,7 +54,6 @@ dependencies {
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
-    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
