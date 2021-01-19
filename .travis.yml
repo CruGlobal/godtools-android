@@ -31,6 +31,8 @@ cache:
     - $HOME/.android/build-cache
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    # robolectric stores the test environments in the maven repo, this avoids having to re-download them every time
+    - $HOME/.m2
 
 before_install:
   # Install SDK license so Android Gradle plugin can install deps.
