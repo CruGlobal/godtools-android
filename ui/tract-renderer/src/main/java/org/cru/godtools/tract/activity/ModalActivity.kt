@@ -7,10 +7,10 @@ import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityOptionsCompat
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
@@ -98,7 +98,8 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     }
 }
 
-class ModalActivityDataModel @ViewModelInject constructor(manifestManager: ManifestManager) :
+@HiltViewModel
+class ModalActivityDataModel @Inject constructor(manifestManager: ManifestManager) :
     LatestPublishedManifestDataModel(manifestManager) {
     val pageId = MutableLiveData<String?>()
     val modalId = MutableLiveData<String?>()

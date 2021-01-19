@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
@@ -14,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.GlobalScope
@@ -141,7 +141,8 @@ class TipBottomSheetDialogFragment() : BaseBottomSheetDialogFragment<TractTipBin
     }
 }
 
-internal class TipBottomSheetDialogFragmentDataModel @ViewModelInject constructor(
+@HiltViewModel
+internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
     dao: GodToolsDao,
     manifestManager: ManifestManager
 ) : LatestPublishedManifestDataModel(manifestManager) {
