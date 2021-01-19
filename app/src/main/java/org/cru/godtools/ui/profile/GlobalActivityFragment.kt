@@ -2,9 +2,10 @@ package org.cru.godtools.ui.profile
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -28,6 +29,7 @@ class GlobalActivityFragment :
     }
 }
 
-class GlobalActivityFragmentViewModel @ViewModelInject constructor(dao: GodToolsDao) : ViewModel() {
+@HiltViewModel
+class GlobalActivityFragmentViewModel @Inject constructor(dao: GodToolsDao) : ViewModel() {
     val globalActivity = dao.findLiveData<GlobalActivityAnalytics>(1)
 }
