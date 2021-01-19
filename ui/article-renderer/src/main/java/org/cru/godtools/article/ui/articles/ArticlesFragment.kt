@@ -3,11 +3,11 @@ package org.cru.godtools.article.ui.articles
 import android.os.Bundle
 import androidx.concurrent.futures.await
 import androidx.fragment.app.viewModels
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +111,8 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     // endregion View Logic
 }
 
-class ArticlesFragmentDataModel @ViewModelInject constructor(
+@HiltViewModel
+class ArticlesFragmentDataModel @Inject constructor(
     manifestManager: ManifestManager,
     private val articleDao: ArticleDao
 ) : LatestPublishedManifestDataModel(manifestManager) {
