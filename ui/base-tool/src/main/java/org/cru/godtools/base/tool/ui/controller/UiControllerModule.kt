@@ -11,6 +11,7 @@ import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Link
+import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 
@@ -36,6 +37,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Link::class)
     internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Paragraph::class)
+    internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
