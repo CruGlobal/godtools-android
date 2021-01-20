@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.tool.ui.controller.ContentKey
 import org.cru.godtools.tract.ui.controller.AnimationController
 import org.cru.godtools.tract.ui.controller.ButtonController
 import org.cru.godtools.tract.ui.controller.FallbackController
@@ -15,7 +16,6 @@ import org.cru.godtools.tract.ui.controller.InputController
 import org.cru.godtools.tract.ui.controller.LinkController
 import org.cru.godtools.tract.ui.controller.ParagraphController
 import org.cru.godtools.tract.ui.controller.TabsController
-import org.cru.godtools.tract.ui.controller.TextController
 import org.cru.godtools.tract.ui.controller.VideoController
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
 import org.cru.godtools.xml.model.Animation
@@ -27,7 +27,6 @@ import org.cru.godtools.xml.model.Input
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
-import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
 import org.cru.godtools.xml.model.tips.InlineTip
 
@@ -83,11 +82,6 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Tabs::class)
     internal abstract fun tabsControllerFactory(factory: TabsController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @ContentKey(Text::class)
-    internal abstract fun textControllerFactory(factory: TextController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
