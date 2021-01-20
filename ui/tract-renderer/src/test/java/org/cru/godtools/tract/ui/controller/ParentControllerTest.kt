@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import org.cru.godtools.base.tool.ui.controller.UiControllerCache
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Manifest
