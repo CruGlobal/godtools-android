@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.UiControllerCache
 import org.cru.godtools.tract.databinding.TractContentParagraphBinding
 import org.cru.godtools.xml.model.Form
