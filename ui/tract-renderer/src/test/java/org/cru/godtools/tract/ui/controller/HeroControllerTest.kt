@@ -48,7 +48,7 @@ class HeroControllerTest {
         }
         baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.CREATED
 
-        controller = HeroController(binding, pageController)
+        controller = HeroController(binding, pageController, mock())
     }
 
     @After

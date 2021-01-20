@@ -12,7 +12,8 @@ import org.cru.godtools.xml.model.Parent
 abstract class ParentController<T> protected constructor(
     clazz: KClass<T>,
     root: View,
-    parentController: BaseController<*>?
+    parentController: BaseController<*>? = null,
+    cacheFactory: UiControllerCache.Factory
 ) : BaseController<T>(clazz, root, parentController) where T : Parent {
     // region Lifecycle
     @CallSuper
@@ -38,7 +39,7 @@ abstract class ParentController<T> protected constructor(
 
     // region Child Content
     protected abstract val contentContainer: ViewGroup
-    private val childCache by lazy { UiControllerCache(contentContainer, this) }
+    private val childCache by lazy { cacheFactory.create(contentContainer, this) }
     private var children: List<BaseController<Content>>? = null
 
     protected open val contentToRender get() = model?.content

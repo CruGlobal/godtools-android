@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.ui.controller
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -30,6 +31,10 @@ abstract class BaseController<T : Base> protected constructor(
     internal val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
+    interface Factory<U : BaseController<*>> {
+        fun create(parent: ViewGroup, parentController: BaseController<*>): U
+    }
+
     protected open val dao: GodToolsDao
         get() {
             checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }

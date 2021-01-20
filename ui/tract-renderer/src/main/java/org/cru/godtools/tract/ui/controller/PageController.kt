@@ -32,7 +32,9 @@ class PageController @AssistedInject internal constructor(
     @Assisted baseLifecycleOwner: LifecycleOwner?,
     override val dao: GodToolsDao,
     override val eventBus: EventBus,
-    private val settings: Settings
+    private val settings: Settings,
+    heroControllerFactory: HeroController.Factory,
+    private val cardControllerFactory: CardController.Factory
 ) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
     @AssistedFactory
     interface Factory {
@@ -51,7 +53,7 @@ class PageController @AssistedInject internal constructor(
             .also { binding.lifecycleOwner = it }
 
     @VisibleForTesting
-    internal val heroController = binding.hero.bindController(this)
+    internal val heroController = heroControllerFactory.create(binding.hero, this)
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {
@@ -185,7 +187,9 @@ class PageController @AssistedInject internal constructor(
             }
 
             // create and bind any needed view holders
-            cardControllers = holders.map { it ?: recycledCardControllers.acquire() ?: CardController(parent, this) }
+            cardControllers = holders.map {
+                it ?: recycledCardControllers.acquire() ?: cardControllerFactory.create(parent, this)
+            }
             cardControllers.forEachIndexed { i, it ->
                 it.model = visibleCards.getOrNull(i)
                 if (parent !== it.root.parent) parent.addCard(it.root, i)

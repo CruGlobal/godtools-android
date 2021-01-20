@@ -4,16 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentInputBinding
 import org.cru.godtools.xml.model.Input
 
 class InputController private constructor(
     private val binding: TractContentInputBinding,
-    parentController: BaseController<*>?
+    parentController: BaseController<*>
 ) : BaseController<Input>(Input::class, binding.root, parentController) {
-    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
+    @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
         this(TractContentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+
+    @AssistedFactory
+    interface Factory : BaseController.Factory<InputController>
 
     init {
         binding.controller = this

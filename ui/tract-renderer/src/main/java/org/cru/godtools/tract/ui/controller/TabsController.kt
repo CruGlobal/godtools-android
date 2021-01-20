@@ -6,6 +6,9 @@ import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractContentTabsBinding
@@ -14,12 +17,24 @@ import org.cru.godtools.xml.model.primaryColor
 
 class TabsController private constructor(
     private val binding: TractContentTabsBinding,
-    parentController: BaseController<*>?
+    parentController: BaseController<*>,
+    tabControllerFactory: TabController.Factory
 ) : BaseController<Tabs>(Tabs::class, binding.root, parentController), OnTabSelectedListener {
-    internal constructor(parent: ViewGroup, parentController: BaseController<*>?) :
-        this(TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+    @AssistedInject
+    constructor(
+        @Assisted parent: ViewGroup,
+        @Assisted parentController: BaseController<*>,
+        tabControllerFactory: TabController.Factory
+    ) : this(
+        TractContentTabsBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        parentController,
+        tabControllerFactory
+    )
 
-    private val tabController = binding.tab.bindController(this)
+    @AssistedFactory
+    interface Factory : BaseController.Factory<TabsController>
+
+    private val tabController = tabControllerFactory.create(binding.tab, this)
 
     init {
         binding.tabs.addOnTabSelectedListener(this)

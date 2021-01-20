@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable name="controller" type="org.cru.godtools.tract.ui.controller.TabController" />
-    </data>
-
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
