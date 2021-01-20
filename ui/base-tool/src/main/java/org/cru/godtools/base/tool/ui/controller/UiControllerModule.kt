@@ -15,6 +15,7 @@ import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.Video
 
 @MapKey
 @Retention(AnnotationRetention.RUNTIME)
@@ -58,4 +59,9 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Text::class)
     internal abstract fun textControllerFactory(factory: TextController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Video::class)
+    internal abstract fun videoControllerFactory(factory: VideoController.Factory): BaseController.Factory<*>
 }
