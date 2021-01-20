@@ -10,6 +10,7 @@ import kotlin.reflect.KClass
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
+import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.Tabs
@@ -32,6 +33,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Fallback::class)
     internal abstract fun fallbackControllerFactory(factory: FallbackController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Image::class)
+    internal abstract fun imageControllerFactory(factory: ImageController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
