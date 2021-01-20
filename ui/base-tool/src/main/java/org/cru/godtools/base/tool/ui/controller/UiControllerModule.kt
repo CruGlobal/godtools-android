@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
+import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
@@ -25,6 +26,11 @@ annotation class ContentKey(val value: KClass<out Base>)
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class UiControllerModule {
+    @Binds
+    @IntoMap
+    @ContentKey(Animation::class)
+    internal abstract fun animationControllerFactory(factory: AnimationController.Factory): BaseController.Factory<*>
+
     @Binds
     @IntoMap
     @ContentKey(Button::class)
