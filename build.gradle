@@ -13,7 +13,7 @@ buildscript {
                 facebookFlipper    : '0.71.0',
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
-                gradleAndroidPlugin: '4.1.1',
+                gradleAndroidPlugin: '4.1.2',
                 gtoSupport         : '3.7.2-SNAPSHOT',
                 guava              : '30.1-android',
                 hamcrest           : '2.2',
