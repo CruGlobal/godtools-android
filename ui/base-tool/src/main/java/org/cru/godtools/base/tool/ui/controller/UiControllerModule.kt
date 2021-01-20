@@ -9,6 +9,7 @@ import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
+import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
@@ -25,6 +26,11 @@ abstract class UiControllerModule {
     @IntoMap
     @ContentKey(Button::class)
     internal abstract fun buttonControllerFactory(factory: ButtonController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @ContentKey(Fallback::class)
+    internal abstract fun fallbackControllerFactory(factory: FallbackController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
