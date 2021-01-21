@@ -147,7 +147,7 @@ class Manifest : BaseModel, Styles {
             when (parser.namespace) {
                 XMLNS_MANIFEST -> when (parser.name) {
                     XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
-                    XML_CATEGORIES -> categoriesData = parseCategories(parser)
+                    XML_CATEGORIES -> categoriesData = parser.parseCategories()
                     XML_PAGES -> pagesData = parsePages(parser, parseFile)
                     XML_RESOURCES -> resourcesData = parseResources(parser)
                     XML_TIPS -> tipsData = parser.parseTips(parseFile)
@@ -205,20 +205,18 @@ class Manifest : BaseModel, Styles {
     fun findTip(id: String?) = tips[id]
 
     @WorkerThread
-    private fun parseCategories(parser: XmlPullParser): List<Category> {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES)
+    private fun XmlPullParser.parseCategories() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES)
 
-        return buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        Category.XML_CATEGORY -> add(Category(this@Manifest, parser))
-                        else -> parser.skipTag()
-                    }
-                    else -> parser.skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    Category.XML_CATEGORY -> add(Category(this@Manifest, this@parseCategories))
+                    else -> skipTag()
                 }
+                else -> skipTag()
             }
         }
     }
