@@ -294,7 +294,7 @@ class Manifest : BaseModel, Styles {
                     XMLNS_MANIFEST -> when (name) {
                         XML_TIPS_TIP -> {
                             val id = getAttributeValue(null, XML_TIPS_TIP_ID)
-                            val src = getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                            val src = getAttributeValue(null, XML_TIPS_TIP_SRC)
                             if (id != null && src != null)
                                 add(async { parseFile(src).use { Tip(this@Manifest, id, it) } })
                         }
