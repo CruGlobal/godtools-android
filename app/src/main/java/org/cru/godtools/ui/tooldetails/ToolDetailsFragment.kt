@@ -179,10 +179,12 @@ class ToolDetailsFragment() :
     // endregion Pages
 
     // region Training Tips
+    private val selectedTool by viewModels<SelectedToolSavedState>()
+
     private fun launchTrainingTips(
-        code: String? = dataModel.tipsTool,
-        type: Tool.Type? = dataModel.tipsType,
-        locale: Locale? = dataModel.tipsLanguage,
+        code: String? = selectedTool.tool,
+        type: Tool.Type? = selectedTool.type,
+        locale: Locale? = selectedTool.language,
         skipTutorial: Boolean = false
     ) = when {
         code == null || type == null || locale == null -> Unit
@@ -191,9 +193,9 @@ class ToolDetailsFragment() :
             requireActivity().openToolActivity(code, type, locale, showTips = true)
         }
         else -> {
-            dataModel.tipsTool = code
-            dataModel.tipsLanguage = locale
-            dataModel.tipsType = type
+            selectedTool.tool = code
+            selectedTool.type = type
+            selectedTool.language = locale
             startActivityForResult(requireContext().buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
         }
     }
