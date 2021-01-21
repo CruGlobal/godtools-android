@@ -16,6 +16,7 @@ class Modal : BaseModel, Parent, Styles {
         internal const val XML_MODAL = "modal"
     }
 
+    val page: TractPage
     val id get() = "${page.id}-$position"
     private val position: Int
 
@@ -39,7 +40,8 @@ class Modal : BaseModel, Parent, Styles {
     override val textAlign get() = Text.Align.CENTER
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: Base, position: Int) : super(parent) {
+    internal constructor(parent: TractPage, position: Int) : super(parent) {
+        page = parent
         this.position = position
         title = null
         content = emptyList()
@@ -47,7 +49,8 @@ class Modal : BaseModel, Parent, Styles {
         dismissListeners = emptySet()
     }
 
-    internal constructor(parent: Base, position: Int, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: TractPage, position: Int, parser: XmlPullParser) : super(parent) {
+        page = parent
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODAL)

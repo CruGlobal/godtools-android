@@ -12,7 +12,7 @@ private const val XML_NUMBER = "number"
 private const val XML_TITLE = "title"
 private const val XML_TIP = "tip"
 
-class Header internal constructor(parent: TractPage, parser: XmlPullParser) : BaseModel(parent), Styles {
+class Header internal constructor(private val page: TractPage, parser: XmlPullParser) : BaseModel(page), Styles {
     companion object {
         internal const val XML_HEADER = "header"
     }

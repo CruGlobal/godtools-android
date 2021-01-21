@@ -17,6 +17,8 @@ class Card : BaseModel, Styles, Parent {
         internal const val XML_CARD = "card"
     }
 
+    val page: TractPage
+
     val id get() = "${page.id}-$position"
     val position: Int
     val visiblePosition get() = page.visibleCards.indexOf(this).takeUnless { it == -1 }
@@ -48,6 +50,7 @@ class Card : BaseModel, Styles, Parent {
     val tips get() = contentTips
 
     internal constructor(parent: TractPage, position: Int, parser: XmlPullParser) : super(parent) {
+        page = parent
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD)
@@ -89,6 +92,7 @@ class Card : BaseModel, Styles, Parent {
         isHidden: Boolean = false,
         content: ((Card) -> List<Content>?)? = null
     ) : super(parent) {
+        page = parent
         this.position = position
 
         this.isHidden = isHidden
