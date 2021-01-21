@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="org.cru.godtools.xml.model.CallToActionKt" />
+        <import type="org.cru.godtools.xml.model.tract.CallToActionKt" />
 
-        <variable name="page" type="org.cru.godtools.xml.model.TractPage" />
-        <variable name="callToAction" type="org.cru.godtools.xml.model.CallToAction" />
+        <variable name="page" type="org.cru.godtools.xml.model.tract.TractPage" />
+        <variable name="callToAction" type="org.cru.godtools.xml.model.tract.CallToAction" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
     </data>

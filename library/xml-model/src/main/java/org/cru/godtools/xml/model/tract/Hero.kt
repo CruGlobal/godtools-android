@@ -1,17 +1,25 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.model.AnalyticsEvent
+import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.Parent
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.parseContent
 import org.xmlpull.v1.XmlPullParser
-
-private const val XML_HEADING = "heading"
 
 class Hero : BaseModel, Parent, Styles {
     companion object {
         internal const val XML_HERO = "hero"
+
+        private const val XML_HEADING = "heading"
     }
 
     val analyticsEvents: Collection<AnalyticsEvent>

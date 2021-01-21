@@ -21,10 +21,10 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
-import org.cru.godtools.xml.model.Card
-import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.Modal
+import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 

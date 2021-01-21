@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
@@ -6,6 +6,11 @@ import androidx.annotation.VisibleForTesting
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.XMLNS_TRAINING
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.primaryColor
+import org.cru.godtools.xml.model.stylesParent
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_CONTROL_COLOR = "control-color"
@@ -13,8 +18,7 @@ private const val XML_TIP = "tip"
 
 class CallToAction : BaseModel {
     companion object {
-        // TODO: make this internal
-        const val XML_CALL_TO_ACTION = "call-to-action"
+        internal const val XML_CALL_TO_ACTION = "call-to-action"
     }
 
     private val page: TractPage

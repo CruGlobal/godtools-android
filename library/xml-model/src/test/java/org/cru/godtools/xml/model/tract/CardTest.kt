@@ -1,7 +1,10 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.xml.model.TOOL_CODE
 import org.cru.godtools.xml.model.tips.InlineTip
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.util.getXmlParserForResource

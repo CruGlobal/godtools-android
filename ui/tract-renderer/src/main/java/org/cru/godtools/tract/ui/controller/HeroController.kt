@@ -11,7 +11,7 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.UiControllerCache
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.Hero
+import org.cru.godtools.xml.model.tract.Hero
 
 class HeroController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageHeroBinding,

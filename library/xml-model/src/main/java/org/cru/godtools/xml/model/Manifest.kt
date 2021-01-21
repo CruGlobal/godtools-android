@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.TractPage
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_MANIFEST = "manifest"

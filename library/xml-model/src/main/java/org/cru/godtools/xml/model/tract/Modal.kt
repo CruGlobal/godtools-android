@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -7,6 +7,12 @@ import androidx.annotation.RestrictTo
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.Parent
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.parseContent
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TITLE = "title"

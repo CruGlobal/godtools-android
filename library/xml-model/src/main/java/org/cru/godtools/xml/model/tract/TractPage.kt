@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -7,6 +7,17 @@ import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.ImageGravity
+import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
+import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
+import org.cru.godtools.xml.model.primaryColor
+import org.cru.godtools.xml.model.primaryTextColor
+import org.cru.godtools.xml.model.textColor
 import org.xmlpull.v1.XmlPullParser
 
 @ColorInt

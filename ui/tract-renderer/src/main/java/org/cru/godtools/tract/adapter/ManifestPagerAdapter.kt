@@ -19,11 +19,11 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController
-import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.Modal
+import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

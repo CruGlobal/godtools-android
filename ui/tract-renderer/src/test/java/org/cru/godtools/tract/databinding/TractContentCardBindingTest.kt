@@ -9,11 +9,11 @@ import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
 import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.CallToAction
-import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.CallToAction
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

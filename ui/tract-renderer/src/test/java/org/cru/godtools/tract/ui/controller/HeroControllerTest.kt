@@ -18,8 +18,8 @@ import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.cru.godtools.tract.util.TestLifecycleOwner
 import org.cru.godtools.xml.model.AnalyticsEvent
-import org.cru.godtools.xml.model.Hero
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.tract.Hero
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before

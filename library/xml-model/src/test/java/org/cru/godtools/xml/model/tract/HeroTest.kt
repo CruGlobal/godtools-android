@@ -1,6 +1,10 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.xml.model.Image
+import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains

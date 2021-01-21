@@ -22,9 +22,9 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.util.TestLifecycleOwner
-import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.TractPage
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
