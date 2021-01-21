@@ -1,6 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -78,19 +78,12 @@ class ToolDetailsFragment() :
         menu.setupPinShortcutAction()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_TUTORIAL_TIPS -> when (resultCode) {
-                Activity.RESULT_OK -> {
-                    val code = dataModel.tipsTool ?: return
-                    val type = dataModel.tipsType ?: return
-                    val language = dataModel.tipsLanguage ?: return
-                    launchTrainingTips(code, type, language, true)
-                }
-                else -> super.onActivityResult(requestCode, resultCode, data)
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
+        REQUEST_TUTORIAL_TIPS -> when (resultCode) {
+            RESULT_OK -> launchTrainingTips(skipTutorial = true)
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
+        else -> super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onLinkClicked(url: String) {
@@ -144,24 +137,8 @@ class ToolDetailsFragment() :
         eventBus.post(AboutToolButtonAnalyticsActionEvent)
     }
 
-    fun openToolTraining(tool: Tool?, translation: Translation?) {
-        val code = tool?.code ?: return
-        val locale = translation?.languageCode ?: return
-
-        launchTrainingTips(code, tool.type, locale, false)
-    }
-
-    private fun launchTrainingTips(code: String, type: Tool.Type, locale: Locale, skipTutorial: Boolean) {
-        if (skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")) {
-            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
-            requireActivity().openToolActivity(code, type, locale, showTips = true)
-        } else {
-            dataModel.tipsLanguage = locale
-            dataModel.tipsTool = code
-            dataModel.tipsType = type
-            startActivityForResult(requireContext().buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
-        }
-    }
+    fun openToolTraining(tool: Tool?, translation: Translation?) =
+        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
     // endregion Data Binding
 
     // region Pin Shortcut
@@ -200,4 +177,25 @@ class ToolDetailsFragment() :
         dataModel.availableLanguages.observe(viewLifecycleOwner) { mediator.notifyChanged() }
     }
     // endregion Pages
+
+    // region Training Tips
+    private fun launchTrainingTips(
+        code: String? = dataModel.tipsTool,
+        type: Tool.Type? = dataModel.tipsType,
+        locale: Locale? = dataModel.tipsLanguage,
+        skipTutorial: Boolean = false
+    ) = when {
+        code == null || type == null || locale == null -> Unit
+        skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
+            requireActivity().openToolActivity(code, type, locale, showTips = true)
+        }
+        else -> {
+            dataModel.tipsTool = code
+            dataModel.tipsLanguage = locale
+            dataModel.tipsType = type
+            startActivityForResult(requireContext().buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
+        }
+    }
+    // endregion Training Tips
 }
