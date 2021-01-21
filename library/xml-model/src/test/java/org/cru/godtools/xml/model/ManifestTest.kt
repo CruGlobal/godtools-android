@@ -12,7 +12,7 @@ class ManifestTest {
     @Test
     fun verifyParseEmptyManifest() {
         val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_empty.xml")) { TODO() }
-        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }
@@ -22,9 +22,9 @@ class ManifestTest {
         val manifest = Manifest(
             TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_pages.xml")
         ) { getXmlParserForResource(it) }
-        assertEquals(2, manifest.pages.size)
-        assertEquals(0, manifest.pages[0].position)
-        assertEquals(1, manifest.pages[1].position)
+        assertEquals(2, manifest.tractPages.size)
+        assertEquals(0, manifest.tractPages[0].position)
+        assertEquals(1, manifest.tractPages[1].position)
     }
 
     @Test
@@ -32,7 +32,7 @@ class ManifestTest {
         val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips.xml")) {
             getXmlParserForResource(it)
         }
-        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(1, manifest.tips.size)
         assertEquals("tip1", manifest.findTip("tip1")!!.id)
@@ -43,7 +43,7 @@ class ManifestTest {
         val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips_invalid.xml")) {
             getXmlParserForResource(it)
         }
-        assertEquals(0, manifest.pages.size)
+        assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }

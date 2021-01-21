@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -7,6 +7,17 @@ import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.ImageGravity
+import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
+import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
+import org.cru.godtools.xml.model.primaryColor
+import org.cru.godtools.xml.model.primaryTextColor
+import org.cru.godtools.xml.model.textColor
 import org.xmlpull.v1.XmlPullParser
 
 @ColorInt
@@ -19,9 +30,7 @@ private const val XML_CARD_TEXT_COLOR = "card-text-color"
 private const val XML_CARDS = "cards"
 private const val XML_MODALS = "modals"
 
-class Page : BaseModel, Styles {
-    override val page get() = this
-
+class TractPage : BaseModel, Styles {
     val id get() = fileName ?: "${manifest.code}-$position"
     val position: Int
 
@@ -67,8 +76,8 @@ class Page : BaseModel, Styles {
         manifest: Manifest,
         position: Int = 0,
         fileName: String? = null,
-        cards: ((Page) -> List<Card>?)? = null,
-        callToAction: ((Page) -> CallToAction?)? = null
+        cards: ((TractPage) -> List<Card>?)? = null,
+        callToAction: ((TractPage) -> CallToAction?)? = null
     ) : super(manifest) {
         this.position = position
         this.fileName = fileName
@@ -158,7 +167,7 @@ class Page : BaseModel, Styles {
 
             when (namespace) {
                 XMLNS_TRACT -> when (name) {
-                    Card.XML_CARD -> add(Card(this@Page, size, this@parseCardsXml))
+                    Card.XML_CARD -> add(Card(this@TractPage, size, this@parseCardsXml))
                     else -> skipTag()
                 }
                 else -> skipTag()
@@ -175,7 +184,7 @@ class Page : BaseModel, Styles {
 
             when (namespace) {
                 XMLNS_TRACT -> when (name) {
-                    Modal.XML_MODAL -> add(Modal(this@Page, size, this@parseModalsXml))
+                    Modal.XML_MODAL -> add(Modal(this@TractPage, size, this@parseModalsXml))
                     else -> skipTag()
                 }
                 else -> skipTag()
@@ -183,10 +192,10 @@ class Page : BaseModel, Styles {
         }
     }
 
-    val isLastPage get() = position == manifest.pages.size - 1
+    val isLastPage get() = position == manifest.tractPages.size - 1
 }
 
 @get:ColorInt
-val Page?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
-val Page?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-val Page?.backgroundImageGravity: Int get() = (this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY).gravity
+val TractPage?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
+val TractPage?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+val TractPage?.backgroundImageGravity get() = (this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY).gravity

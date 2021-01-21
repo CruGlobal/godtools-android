@@ -1,4 +1,4 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -6,13 +6,17 @@ import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.XMLNS_TRAINING
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_NUMBER = "number"
 private const val XML_TITLE = "title"
 private const val XML_TIP = "tip"
 
-class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseModel(parent), Styles {
+class Header internal constructor(private val page: TractPage, parser: XmlPullParser) : BaseModel(page), Styles {
     companion object {
         internal const val XML_HEADER = "header"
     }

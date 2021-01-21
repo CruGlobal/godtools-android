@@ -1,7 +1,10 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.TOOL_CODE
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
@@ -12,7 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PageTest {
+class TractPageTest {
     private lateinit var manifest: Manifest
 
     @Before
@@ -50,5 +53,5 @@ class PageTest {
         assertEquals("Modal 2", page.modals[1].title!!.text)
     }
 
-    private fun parsePageXml(file: String) = Page(manifest, 0, null, getXmlParserForResource(file))
+    private fun parsePageXml(file: String) = TractPage(manifest, 0, null, getXmlParserForResource(file))
 }

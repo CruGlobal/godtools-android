@@ -27,7 +27,7 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController
 import org.cru.godtools.tract.ui.controller.bindController
-import org.cru.godtools.xml.model.Modal
+import org.cru.godtools.xml.model.tract.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -105,6 +105,6 @@ class ModalActivityDataModel @ViewModelInject constructor(manifestManager: Manif
 
     val modal =
         manifest.combineWith(pageId.distinctUntilChanged(), modalId.distinctUntilChanged()) { manifest, page, modal ->
-            manifest?.findPage(page)?.findModal(modal)
+            manifest?.findTractPage(page)?.findModal(modal)
         }
 }

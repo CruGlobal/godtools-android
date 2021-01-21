@@ -19,11 +19,11 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController
-import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.Page
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.Modal
+import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -39,7 +39,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     }
 
     interface Callbacks {
-        fun onUpdateActiveCard(page: Page, card: Card?)
+        fun onUpdateActiveCard(page: TractPage, card: Card?)
         fun showModal(modal: Modal)
         fun showTip(tip: Tip)
         fun goToPage(position: Int)
@@ -59,11 +59,11 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         eventBus.register(lifecycleOwner, this)
     }
 
-    override fun getCount() = manifest?.pages?.size ?: 0
-    private fun getItem(position: Int) = manifest?.pages?.getOrNull(position)
+    override fun getCount() = manifest?.tractPages?.size ?: 0
+    private fun getItem(position: Int) = manifest?.tractPages?.getOrNull(position)
     override fun getItemId(position: Int) = getItem(position)?.id?.let { IdUtils.convertId(it) } ?: NO_ID
     override fun getItemPositionFromId(id: Long) =
-        manifest?.pages?.indexOfFirst { id == IdUtils.convertId(it.id) } ?: PagerAdapter.POSITION_NONE
+        manifest?.tractPages?.indexOfFirst { id == IdUtils.convertId(it.id) } ?: PagerAdapter.POSITION_NONE
 
     private val primaryItemController get() = primaryItemBinding?.controller
     private val primaryItemPage get() = primaryItemController?.model
@@ -128,7 +128,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     // endregion Lifecycle
 
     // region PageController.Callbacks
-    override fun onUpdateActiveCard(page: Page?, card: Card?) {
+    override fun onUpdateActiveCard(page: TractPage?, card: Card?) {
         if (page == null) return
         if (primaryItemPage != page) return
 

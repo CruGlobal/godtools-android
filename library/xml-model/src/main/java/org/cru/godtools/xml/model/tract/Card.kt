@@ -1,10 +1,24 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.xml.model.tract
 
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_TRACT
+import org.cru.godtools.xml.model.AnalyticsEvent
+import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.ImageGravity
+import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.xml.model.Parent
+import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.backgroundColor
+import org.cru.godtools.xml.model.contentTips
+import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
+import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
+import org.cru.godtools.xml.model.parseContent
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_LABEL = "label"
@@ -16,6 +30,8 @@ class Card : BaseModel, Styles, Parent {
     companion object {
         internal const val XML_CARD = "card"
     }
+
+    val page: TractPage
 
     val id get() = "${page.id}-$position"
     val position: Int
@@ -47,7 +63,8 @@ class Card : BaseModel, Styles, Parent {
     override val content: List<Content>
     val tips get() = contentTips
 
-    internal constructor(parent: Page, position: Int, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: TractPage, position: Int, parser: XmlPullParser) : super(parent) {
+        page = parent
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD)
@@ -84,11 +101,12 @@ class Card : BaseModel, Styles, Parent {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
-        parent: Page,
+        parent: TractPage,
         position: Int = 0,
         isHidden: Boolean = false,
         content: ((Card) -> List<Content>?)? = null
     ) : super(parent) {
+        page = parent
         this.position = position
 
         this.isHidden = isHidden

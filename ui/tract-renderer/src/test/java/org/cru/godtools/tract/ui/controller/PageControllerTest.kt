@@ -22,9 +22,9 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.util.TestLifecycleOwner
-import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.tract.Card
+import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -88,7 +88,7 @@ class PageControllerTest {
 
     @Test
     fun verifyOnToggleCard() {
-        controller.model = Page(Manifest(), cards = { listOf(Card(it)) })
+        controller.model = TractPage(Manifest(), cards = { listOf(Card(it)) })
 
         val cardController = controller.cardControllers.first()
         assertNull(binding.pageContentLayout.activeCard)
@@ -101,7 +101,7 @@ class PageControllerTest {
     @Test
     fun verifyUpdateChildrenLifecycles() {
         controller.lifecycleOwner!!.maxState = Lifecycle.State.RESUMED
-        controller.model = Page(Manifest(), cards = { listOf(Card(it), Card(it)) })
+        controller.model = TractPage(Manifest(), cards = { listOf(Card(it), Card(it)) })
 
         // initially hero is visible
         assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)

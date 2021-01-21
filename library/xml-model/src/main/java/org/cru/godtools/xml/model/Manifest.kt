@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.xml.model.tract.TractPage
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_MANIFEST = "manifest"
@@ -99,7 +100,7 @@ class Manifest : BaseModel, Styles {
     val title: String? get() = _title?.text
 
     val categories: List<Category>
-    val pages: List<Page>
+    val tractPages: List<TractPage>
     val aemImports: List<Uri>
 
     @VisibleForTesting
@@ -158,7 +159,7 @@ class Manifest : BaseModel, Styles {
         _title = title
         aemImports = pagesData?.aemImports.orEmpty()
         categories = categoriesData.orEmpty()
-        pages = pagesData?.pages.orEmpty()
+        tractPages = pagesData?.tractPages.orEmpty()
         resources = resourcesData.orEmpty()
         tips = tipsData?.associateBy { it.id }.orEmpty()
     }
@@ -191,7 +192,7 @@ class Manifest : BaseModel, Styles {
         _title = null
         aemImports = emptyList()
         categories = emptyList()
-        pages = emptyList()
+        tractPages = emptyList()
         resources = emptyMap()
         this.tips = tips?.invoke(this)?.associateBy { it.id }.orEmpty()
     }
@@ -200,7 +201,7 @@ class Manifest : BaseModel, Styles {
     override fun getResource(name: String?) = name?.let { resources[name] }
 
     fun findCategory(category: String?) = categories.firstOrNull { it.id == category }
-    fun findPage(id: String?) = pages.firstOrNull { it.id.equals(id, ignoreCase = true) }
+    fun findTractPage(id: String?) = tractPages.firstOrNull { it.id.equals(id, ignoreCase = true) }
     fun findTip(id: String?) = tips[id]
 
     @WorkerThread
@@ -223,7 +224,7 @@ class Manifest : BaseModel, Styles {
     }
 
     private class PagesData {
-        var pages: List<Page>? = null
+        var tractPages: List<TractPage>? = null
         val aemImports = mutableListOf<Uri>()
     }
 
@@ -233,7 +234,7 @@ class Manifest : BaseModel, Styles {
 
         // process any child elements
         val result = PagesData()
-        result.pages = buildList {
+        result.tractPages = buildList {
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
@@ -242,11 +243,11 @@ class Manifest : BaseModel, Styles {
                         XML_PAGES_PAGE -> {
                             val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
                             val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                            val position = size
+                            val pos = size
                             parser.skipTag()
 
                             if (srcFile != null)
-                                add(async { parseFile(srcFile).use { Page(this@Manifest, position, fileName, it) } })
+                                add(async { parseFile(srcFile).use { TractPage(this@Manifest, pos, fileName, it) } })
                         }
                         else -> parser.skipTag()
                     }

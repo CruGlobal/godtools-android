@@ -21,7 +21,6 @@ abstract class BaseModel internal constructor(private val parent: Base? = null) 
 
     override val manifest: Manifest
         get() = parent?.manifest ?: throw IllegalStateException("No manifest found in model ancestors")
-    override val page: Page get() = parent?.page ?: throw IllegalStateException("No page found in model ancestors")
 
     internal open fun getResource(name: String?): Resource? = manifest.getResource(name)
 

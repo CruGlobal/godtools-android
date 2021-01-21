@@ -6,7 +6,7 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.UiControllerCache
 import org.cru.godtools.tract.databinding.TractContentModalBinding
-import org.cru.godtools.xml.model.Modal
+import org.cru.godtools.xml.model.tract.Modal
 import org.greenrobot.eventbus.EventBus
 
 class ModalController @AssistedInject internal constructor(

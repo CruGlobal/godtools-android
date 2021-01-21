@@ -15,10 +15,10 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.CallToAction
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Page
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.tract.CallToAction
+import org.cru.godtools.xml.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +29,7 @@ import org.robolectric.Robolectric
 class TractPageCallToActionBindingTest {
     private lateinit var binding: TractPageCallToActionBinding
 
-    private lateinit var page: Page
+    private lateinit var page: TractPage
 
     @Before
     fun setup() {
@@ -42,7 +42,7 @@ class TractPageCallToActionBindingTest {
         binding.controller = mock()
         binding.executePendingBindings()
 
-        page = spy(Page(Manifest(), 0))
+        page = spy(TractPage(Manifest(), 0))
     }
 
     // region Arrow Tests
