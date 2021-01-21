@@ -40,7 +40,6 @@ fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null)
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
-
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
 
     // region Lifecycle

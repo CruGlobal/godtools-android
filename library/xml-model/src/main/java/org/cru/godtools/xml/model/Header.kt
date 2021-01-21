@@ -13,6 +13,10 @@ private const val XML_TITLE = "title"
 private const val XML_TIP = "tip"
 
 class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseModel(parent), Styles {
+    companion object {
+        internal const val XML_HEADER = "header"
+    }
+
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt
@@ -50,17 +54,6 @@ class Header internal constructor(parent: Page, parser: XmlPullParser) : BaseMod
         }
         this.number = number
         this.title = title
-    }
-
-    companion object {
-        internal const val XML_HEADER = "header"
-
-        @JvmStatic
-        @Deprecated(
-            "Use constructor directly",
-            ReplaceWith("Header(parent, parser)", "org.cru.godtools.xml.model.Header")
-        )
-        fun fromXml(parent: Page, parser: XmlPullParser) = Header(parent, parser)
     }
 }
 
