@@ -47,7 +47,7 @@ class Card : BaseModel, Styles, Parent {
     override val content: List<Content>
     val tips get() = contentTips
 
-    internal constructor(parent: Page, position: Int, parser: XmlPullParser) : super(parent) {
+    internal constructor(parent: TractPage, position: Int, parser: XmlPullParser) : super(parent) {
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD)
@@ -84,7 +84,7 @@ class Card : BaseModel, Styles, Parent {
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
-        parent: Page,
+        parent: TractPage,
         position: Int = 0,
         isHidden: Boolean = false,
         content: ((Card) -> List<Content>?)? = null

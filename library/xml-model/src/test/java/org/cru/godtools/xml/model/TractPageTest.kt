@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PageTest {
+class TractPageTest {
     private lateinit var manifest: Manifest
 
     @Before
@@ -50,5 +50,5 @@ class PageTest {
         assertEquals("Modal 2", page.modals[1].title!!.text)
     }
 
-    private fun parsePageXml(file: String) = Page(manifest, 0, null, getXmlParserForResource(file))
+    private fun parsePageXml(file: String) = TractPage(manifest, 0, null, getXmlParserForResource(file))
 }

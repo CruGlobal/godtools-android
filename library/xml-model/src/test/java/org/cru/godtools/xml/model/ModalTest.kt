@@ -16,11 +16,11 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ModalTest {
-    private lateinit var page: Page
+    private lateinit var page: TractPage
 
     @Before
     fun setupPage() {
-        page = Page(Manifest(TOOL_CODE), 0)
+        page = TractPage(Manifest(TOOL_CODE), 0)
     }
 
     @Test

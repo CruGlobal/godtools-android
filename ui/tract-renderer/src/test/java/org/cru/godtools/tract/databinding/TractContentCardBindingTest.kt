@@ -12,7 +12,7 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.CallToAction
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -29,7 +29,7 @@ class TractContentCardBindingTest {
 
     private lateinit var binding: TractContentCardBinding
 
-    private lateinit var page: Page
+    private lateinit var page: TractPage
     private val card get() = page.cards[0]
     private val callToAction get() = page.callToAction
     private lateinit var tip: Tip
@@ -42,7 +42,7 @@ class TractContentCardBindingTest {
         binding = TractContentCardBinding.inflate(LayoutInflater.from(context), null, false)
 
         tip = Tip(id = "tip")
-        page = Page(Manifest(), cards = { listOf(spy(Card(it))) }, callToAction = { spy(CallToAction(it)) })
+        page = TractPage(Manifest(), cards = { listOf(spy(Card(it))) }, callToAction = { spy(CallToAction(it)) })
     }
 
     // region Tips Indicator

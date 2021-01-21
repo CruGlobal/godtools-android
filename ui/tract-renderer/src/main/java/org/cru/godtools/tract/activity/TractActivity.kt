@@ -65,7 +65,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.backgroundColor
 import org.cru.godtools.xml.model.navBarColor
 import org.cru.godtools.xml.model.navBarControlColor
@@ -200,7 +200,7 @@ class TractActivity :
         checkForPageEvent(event)
     }
 
-    override fun onUpdateActiveCard(page: Page, card: Card?) {
+    override fun onUpdateActiveCard(page: TractPage, card: Card?) {
         trackTractPage(page, card)
         sendLiveShareNavigationEvent(page, card)
     }
@@ -411,7 +411,7 @@ class TractActivity :
     }
 
     private fun trackTractPage(
-        page: Page? = pagerAdapter.primaryItem?.binding?.controller?.model,
+        page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
         card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard
     ) {
         if (page == null) return
@@ -515,7 +515,7 @@ class TractActivity :
         }
     }
 
-    private fun sendLiveShareNavigationEvent(page: Page, card: Card?) {
+    private fun sendLiveShareNavigationEvent(page: TractPage, card: Card?) {
         publisherController.sendNavigationEvent(
             NavigationEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
         )

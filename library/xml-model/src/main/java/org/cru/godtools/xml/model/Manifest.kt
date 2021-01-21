@@ -99,7 +99,7 @@ class Manifest : BaseModel, Styles {
     val title: String? get() = _title?.text
 
     val categories: List<Category>
-    val pages: List<Page>
+    val pages: List<TractPage>
     val aemImports: List<Uri>
 
     @VisibleForTesting
@@ -223,7 +223,7 @@ class Manifest : BaseModel, Styles {
     }
 
     private class PagesData {
-        var pages: List<Page>? = null
+        var pages: List<TractPage>? = null
         val aemImports = mutableListOf<Uri>()
     }
 
@@ -242,11 +242,11 @@ class Manifest : BaseModel, Styles {
                         XML_PAGES_PAGE -> {
                             val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
                             val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                            val position = size
+                            val pos = size
                             parser.skipTag()
 
                             if (srcFile != null)
-                                add(async { parseFile(srcFile).use { Page(this@Manifest, position, fileName, it) } })
+                                add(async { parseFile(srcFile).use { TractPage(this@Manifest, pos, fileName, it) } })
                         }
                         else -> parser.skipTag()
                     }

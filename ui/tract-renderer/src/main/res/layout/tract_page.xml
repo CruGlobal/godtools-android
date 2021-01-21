@@ -6,12 +6,12 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.BaseKt" />
-        <import type="org.cru.godtools.xml.model.PageKt" />
+        <import type="org.cru.godtools.xml.model.TractPageKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
         <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
-        <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="page" type="org.cru.godtools.xml.model.TractPage" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
         <variable name="isVisible" type="Boolean" />
         <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />
@@ -24,7 +24,7 @@
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{PageKt.getBackgroundColor(page)}">
+        android:background="@{TractPageKt.getBackgroundColor(page)}">
 
         <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
             android:id="@+id/background_image"
@@ -33,9 +33,9 @@
             android:adjustViewBounds="true"
             android:cropToPadding="false"
             android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
-            app:gravity="@{PageKt.getBackgroundImageGravity(page)}"
+            app:gravity="@{TractPageKt.getBackgroundImageGravity(page)}"
             app:picassoFile="@{page.backgroundImage}"
-            app:scaleType="@{PageKt.getBackgroundImageScaleType(page)}"
+            app:scaleType="@{TractPageKt.getBackgroundImageScaleType(page)}"
             app:visibleIf="@{page.backgroundImage != null}" />
 
         <org.cru.godtools.tract.widget.PageContentLayout

@@ -23,7 +23,7 @@ import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
@@ -36,14 +36,17 @@ class PageController @AssistedInject internal constructor(
     private val settings: Settings,
     heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
-) : BaseController<Page>(Page::class, binding.root), CardController.Callbacks, PageContentLayout.OnActiveCardListener {
+) : BaseController<TractPage>(TractPage::class, binding.root),
+    CardController.Callbacks,
+    PageContentLayout.OnActiveCardListener {
+
     @AssistedFactory
     interface Factory {
         fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?): PageController
     }
 
     interface Callbacks {
-        fun onUpdateActiveCard(page: Page?, card: Card?)
+        fun onUpdateActiveCard(page: TractPage?, card: Card?)
         fun showModal(modal: Modal)
         fun showTip(tip: Tip)
         fun goToNextPage()

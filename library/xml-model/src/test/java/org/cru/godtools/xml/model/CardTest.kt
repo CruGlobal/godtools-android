@@ -31,13 +31,13 @@ class CardTest {
     }
 
     private fun parseCardXml(file: String) =
-        Page(Manifest(TOOL_CODE), 0, null, getXmlParserForResource(file)).let { it.cards[0] }
+        TractPage(Manifest(TOOL_CODE), 0, null, getXmlParserForResource(file)).let { it.cards[0] }
 
     @Test
     fun verifyCardTips() {
         val tip1 = Tip(id = "tip1")
         val tip2 = Tip(id = "tip2")
-        val page = Page(Manifest(tips = { listOf(tip1, tip2) }))
+        val page = TractPage(Manifest(tips = { listOf(tip1, tip2) }))
         val card = Card(
             page,
             content = {
@@ -56,7 +56,7 @@ class CardTest {
 
     @Test
     fun verifyCardIsLastVisibleCard() {
-        val page = Page(
+        val page = TractPage(
             Manifest(),
             cards = { listOf(Card(it, isHidden = false), Card(it, isHidden = false), Card(it, isHidden = true)) }
         )

@@ -5,7 +5,7 @@
     <data>
         <import type="org.cru.godtools.xml.model.CallToActionKt" />
 
-        <variable name="page" type="org.cru.godtools.xml.model.Page" />
+        <variable name="page" type="org.cru.godtools.xml.model.TractPage" />
         <variable name="callToAction" type="org.cru.godtools.xml.model.CallToAction" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />

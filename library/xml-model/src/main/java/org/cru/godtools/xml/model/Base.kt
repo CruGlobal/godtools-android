@@ -7,7 +7,7 @@ interface Base {
     val stylesParent: Styles?
 
     val manifest: Manifest
-    val page: Page
+    val page: TractPage
 
     val layoutDirection get() = TextUtils.getLayoutDirectionFromLocale(manifest.locale)
 }

@@ -22,7 +22,7 @@ import org.cru.godtools.tract.ui.controller.bindController
 import org.cru.godtools.xml.model.Card
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Modal
-import org.cru.godtools.xml.model.Page
+import org.cru.godtools.xml.model.TractPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -39,7 +39,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     }
 
     interface Callbacks {
-        fun onUpdateActiveCard(page: Page, card: Card?)
+        fun onUpdateActiveCard(page: TractPage, card: Card?)
         fun showModal(modal: Modal)
         fun showTip(tip: Tip)
         fun goToPage(position: Int)
@@ -128,7 +128,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     // endregion Lifecycle
 
     // region PageController.Callbacks
-    override fun onUpdateActiveCard(page: Page?, card: Card?) {
+    override fun onUpdateActiveCard(page: TractPage?, card: Card?) {
         if (page == null) return
         if (primaryItemPage != page) return
 

@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 class HeaderTest {
     @Test
     fun testParseHeader() {
-        val page = Page(Manifest(TOOL_CODE), 0, null, getXmlParserForResource("header.xml"))
+        val page = TractPage(Manifest(TOOL_CODE), 0, null, getXmlParserForResource("header.xml"))
         val header = page.header!!
         assertEquals("5", header.number!!.text)
         assertEquals("title", header.title!!.text)
