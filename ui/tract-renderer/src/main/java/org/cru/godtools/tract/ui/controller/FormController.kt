@@ -6,11 +6,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.tract.databinding.TractContentParagraphBinding
+import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.tool.ui.controller.ParentController
+import org.cru.godtools.base.tool.ui.controller.UiControllerCache
+import org.cru.godtools.tract.databinding.TractContentFormBinding
 import org.cru.godtools.xml.model.Form
 
 class FormController private constructor(
-    private val binding: TractContentParagraphBinding,
+    private val binding: TractContentFormBinding,
     parentController: BaseController<*>,
     cacheFactory: UiControllerCache.Factory
 ) : ParentController<Form>(Form::class, binding.content, parentController, cacheFactory) {
@@ -20,7 +23,7 @@ class FormController private constructor(
         @Assisted parentController: BaseController<*>,
         cacheFactory: UiControllerCache.Factory
     ) : this(
-        TractContentParagraphBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        TractContentFormBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         parentController,
         cacheFactory
     )

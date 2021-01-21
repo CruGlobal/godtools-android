@@ -1,15 +1,15 @@
-package org.cru.godtools.tract.ui.controller
+package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.tract.databinding.TractContentFallbackBinding
+import org.cru.godtools.base.tool.databinding.ToolContentFallbackBinding
 import org.cru.godtools.xml.model.Fallback
 
 class FallbackController(
-    binding: TractContentFallbackBinding,
+    binding: ToolContentFallbackBinding,
     parentController: BaseController<*>,
     cacheFactory: UiControllerCache.Factory
 ) : ParentController<Fallback>(Fallback::class, binding.root, parentController, cacheFactory) {
@@ -19,7 +19,7 @@ class FallbackController(
         @Assisted parentController: BaseController<*>,
         cacheFactory: UiControllerCache.Factory
     ) : this(
-        TractContentFallbackBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        ToolContentFallbackBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         parentController,
         cacheFactory
     )

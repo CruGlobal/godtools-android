@@ -4,6 +4,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        viewBinding = true
     }
 }
 
@@ -31,13 +32,17 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-lottie:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "com.airbnb.android:lottie:${deps.lottie}"
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 

@@ -4,7 +4,7 @@
         <import type="org.cru.godtools.xml.model.BaseKt" />
         <import type="org.cru.godtools.xml.model.StylesKt" />
 
-        <variable name="controller" type="org.cru.godtools.tract.ui.controller.LinkController" />
+        <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.LinkController" />
         <variable name="model" type="org.cru.godtools.xml.model.Link" />
     </data>
 
@@ -12,8 +12,8 @@
         android:id="@+id/content_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
-        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+        android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tool_content_margin_horizontal"
         android:gravity="center_vertical"
         android:minHeight="32dp"
         android:saveEnabled="false"

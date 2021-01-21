@@ -1,8 +1,10 @@
-package org.cru.godtools.tract.ui.controller
+package org.cru.godtools.base.tool.ui.controller
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -17,8 +19,8 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.model.TrainingTip
-import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.layoutDirection
@@ -28,7 +30,8 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
-    internal val root: View,
+    @VisibleForTesting(otherwise = PROTECTED)
+    val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
     interface Factory<U : BaseController<*>> {
@@ -40,7 +43,8 @@ abstract class BaseController<T : Base> protected constructor(
             checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }
             return parentController.dao
         }
-    internal open val eventBus: EventBus
+    @VisibleForTesting(otherwise = PROTECTED)
+    open val eventBus: EventBus
         get() {
             checkNotNull(parentController) { "No EventBus found in controller ancestors" }
             return parentController.eventBus
@@ -63,9 +67,9 @@ abstract class BaseController<T : Base> protected constructor(
         updateLayoutDirection()
     }
 
-    internal open fun onValidate() = true
-    internal open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
-    internal open fun onContentEvent(event: Event) = Unit
+    open fun onValidate() = true
+    open fun onBuildEvent(builder: Event.Builder, recursive: Boolean) = Unit
+    open fun onContentEvent(event: Event) = Unit
     // endregion Lifecycle
 
     fun supportsModel(model: Base?) = modelClass.isInstance(model)
@@ -113,7 +117,7 @@ abstract class BaseController<T : Base> protected constructor(
     }
 
     // region Tips
-    internal open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
 
     open fun showTip(tip: Tip?) {
         parentController?.showTip(tip)
