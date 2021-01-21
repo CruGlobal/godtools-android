@@ -149,7 +149,7 @@ class Manifest : BaseModel, Styles {
                     XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
                     XML_CATEGORIES -> categoriesData = parser.parseCategories()
                     XML_PAGES -> pagesData = parsePages(parser, parseFile)
-                    XML_RESOURCES -> resourcesData = parseResources(parser)
+                    XML_RESOURCES -> resourcesData = parser.parseResources()
                     XML_TIPS -> tipsData = parser.parseTips(parseFile)
                     else -> parser.skipTag()
                 }
@@ -265,23 +265,21 @@ class Manifest : BaseModel, Styles {
     }
 
     @WorkerThread
-    private fun parseResources(parser: XmlPullParser): Map<String?, Resource> {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_RESOURCES)
+    private fun XmlPullParser.parseResources() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_RESOURCES)
 
-        return buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        Resource.XML_RESOURCE -> add(Resource(this@Manifest, parser))
-                        else -> parser.skipTag()
-                    }
-                    else -> parser.skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    Resource.XML_RESOURCE -> add(Resource(this@Manifest, this@parseResources))
+                    else -> skipTag()
                 }
+                else -> skipTag()
             }
-        }.associateBy { it.name }
-    }
+        }
+    }.associateBy { it.name }
 
     @WorkerThread
     private fun XmlPullParser.parseTips(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
