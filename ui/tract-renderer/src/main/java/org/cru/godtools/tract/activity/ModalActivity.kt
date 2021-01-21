@@ -105,6 +105,6 @@ class ModalActivityDataModel @ViewModelInject constructor(manifestManager: Manif
 
     val modal =
         manifest.combineWith(pageId.distinctUntilChanged(), modalId.distinctUntilChanged()) { manifest, page, modal ->
-            manifest?.findPage(page)?.findModal(modal)
+            manifest?.findTractPage(page)?.findModal(modal)
         }
 }

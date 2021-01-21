@@ -390,7 +390,7 @@ class TractActivity :
     }
 
     private fun checkForPageEvent(event: Event) {
-        activeManifest?.pages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
+        activeManifest?.tractPages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
     }
 
     // region ManifestPagerAdapter.Callbacks

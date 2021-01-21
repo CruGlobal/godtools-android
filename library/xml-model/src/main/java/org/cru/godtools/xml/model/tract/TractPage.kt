@@ -192,7 +192,7 @@ class TractPage : BaseModel, Styles {
         }
     }
 
-    val isLastPage get() = position == manifest.pages.size - 1
+    val isLastPage get() = position == manifest.tractPages.size - 1
 }
 
 @get:ColorInt
