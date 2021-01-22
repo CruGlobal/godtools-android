@@ -143,9 +143,10 @@ class Manifest : BaseModel, Styles {
         val categories = mutableListOf<Category>()
         val resources = mutableListOf<Resource>()
         val tips: List<Tip>
-        val tractPages = mutableListOf<TractPage>()
+        val tractPages: List<TractPage>
         runBlocking {
             val tipsTasks = mutableListOf<Deferred<Tip>>()
+            val tractPageTasks = mutableListOf<Deferred<TractPage>>()
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
@@ -154,9 +155,9 @@ class Manifest : BaseModel, Styles {
                         XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
                         XML_CATEGORIES -> categories += parser.parseCategories()
                         XML_PAGES -> {
-                            val result = parser.parsePages(parseFile)
+                            val result = parser.parsePages(this, parseFile)
                             aemImports += result.aemImports
-                            tractPages += result.tractPages
+                            tractPageTasks += result.tractPageTasks
                         }
                         XML_RESOURCES -> resources += parser.parseResources()
                         XML_TIPS -> tipsTasks += parser.parseTips(this, parseFile)
@@ -168,6 +169,7 @@ class Manifest : BaseModel, Styles {
 
             // await any deferred parsing
             tips = tipsTasks.awaitAll()
+            tractPages = tractPageTasks.awaitAll()
         }
         _title = title
         this.aemImports = aemImports
@@ -236,44 +238,46 @@ class Manifest : BaseModel, Styles {
 
     private class PagesData {
         val aemImports = mutableListOf<Uri>()
-        lateinit var tractPages: List<TractPage>
+        val tractPageTasks = mutableListOf<Deferred<TractPage>>()
     }
 
     @WorkerThread
-    private fun XmlPullParser.parsePages(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun XmlPullParser.parsePages(
+        scope: CoroutineScope,
+        parseFile: suspend (String) -> CloseableXmlPullParser
+    ) = PagesData().also { result ->
         require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
-        val result = PagesData()
-        result.tractPages = buildList {
-            while (next() != XmlPullParser.END_TAG) {
-                if (eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (namespace) {
-                    XMLNS_MANIFEST -> when (name) {
-                        XML_PAGES_PAGE -> {
-                            val fileName = getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
-                            val srcFile = getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                            val pos = size
-                            skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    XML_PAGES_PAGE -> {
+                        val fileName = getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                        val src = getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                        skipTag()
 
-                            if (srcFile != null)
-                                add(async { parseFile(srcFile).use { TractPage(this@Manifest, pos, fileName, it) } })
+                        if (src != null) {
+                            val pos = result.tractPageTasks.size
+                            result.tractPageTasks += scope.async {
+                                parseFile(src).use { TractPage(this@Manifest, pos, fileName, it) }
+                            }
                         }
-                        else -> skipTag()
-                    }
-                    XMLNS_ARTICLE -> when (name) {
-                        XML_PAGES_AEM_IMPORT -> {
-                            getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)?.let { result.aemImports.add(it) }
-                            skipTag()
-                        }
-                        else -> skipTag()
                     }
                     else -> skipTag()
                 }
+                XMLNS_ARTICLE -> when (name) {
+                    XML_PAGES_AEM_IMPORT -> {
+                        getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)?.let { result.aemImports += it }
+                        skipTag()
+                    }
+                    else -> skipTag()
+                }
+                else -> skipTag()
             }
-        }.awaitAll()
-        return@runBlocking result
+        }
     }
 
     @WorkerThread
