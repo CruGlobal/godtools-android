@@ -55,4 +55,10 @@ class ContentTest {
         val content = Content.fromXml(Manifest(), getXmlParserForResource("fallback.xml"), true)
         assertTrue(content is Fallback)
     }
+
+    @Test
+    fun testFromXmlSpacer() {
+        val content = Content.fromXml(Manifest(), getXmlParserForResource("spacer.xml"), true)
+        assertTrue(content is Spacer)
+    }
 }
