@@ -7,6 +7,8 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -137,31 +139,44 @@ class Manifest : BaseModel, Styles {
 
         // process any child elements
         var title: Text? = null
-        var categoriesData: List<Category>? = null
-        var pagesData: PagesData? = null
-        var resourcesData: Map<String?, Resource>? = null
-        var tipsData: List<Tip>? = null
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        val aemImports = mutableListOf<Uri>()
+        val categories = mutableListOf<Category>()
+        val resources = mutableListOf<Resource>()
+        val tips: List<Tip>
+        val tractPages: List<TractPage>
+        runBlocking {
+            val tipsTasks = mutableListOf<Deferred<Tip>>()
+            val tractPageTasks = mutableListOf<Deferred<TractPage>>()
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_MANIFEST -> when (parser.name) {
-                    XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
-                    XML_CATEGORIES -> categoriesData = parseCategories(parser)
-                    XML_PAGES -> pagesData = parsePages(parser, parseFile)
-                    XML_RESOURCES -> resourcesData = parseResources(parser)
-                    XML_TIPS -> tipsData = parser.parseTips(parseFile)
+                when (parser.namespace) {
+                    XMLNS_MANIFEST -> when (parser.name) {
+                        XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
+                        XML_CATEGORIES -> categories += parser.parseCategories()
+                        XML_PAGES -> {
+                            val result = parser.parsePages(this, parseFile)
+                            aemImports += result.aemImports
+                            tractPageTasks += result.tractPageTasks
+                        }
+                        XML_RESOURCES -> resources += parser.parseResources()
+                        XML_TIPS -> tipsTasks += parser.parseTips(this, parseFile)
+                        else -> parser.skipTag()
+                    }
                     else -> parser.skipTag()
                 }
-                else -> parser.skipTag()
             }
+
+            // await any deferred parsing
+            tips = tipsTasks.awaitAll()
+            tractPages = tractPageTasks.awaitAll()
         }
         _title = title
-        aemImports = pagesData?.aemImports.orEmpty()
-        categories = categoriesData.orEmpty()
-        tractPages = pagesData?.tractPages.orEmpty()
-        resources = resourcesData.orEmpty()
-        tips = tipsData?.associateBy { it.id }.orEmpty()
+        this.aemImports = aemImports
+        this.categories = categories
+        this.resources = resources.associateBy { it.name }
+        this.tips = tips.associateBy { it.id }
+        this.tractPages = tractPages
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
@@ -205,88 +220,85 @@ class Manifest : BaseModel, Styles {
     fun findTip(id: String?) = tips[id]
 
     @WorkerThread
-    private fun parseCategories(parser: XmlPullParser): List<Category> {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES)
+    private fun XmlPullParser.parseCategories() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES)
 
-        return buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        Category.XML_CATEGORY -> add(Category(this@Manifest, parser))
-                        else -> parser.skipTag()
-                    }
-                    else -> parser.skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    Category.XML_CATEGORY -> add(Category(this@Manifest, this@parseCategories))
+                    else -> skipTag()
                 }
+                else -> skipTag()
             }
         }
     }
 
     private class PagesData {
-        var tractPages: List<TractPage>? = null
         val aemImports = mutableListOf<Uri>()
+        val tractPageTasks = mutableListOf<Deferred<TractPage>>()
     }
 
     @WorkerThread
-    private fun parsePages(parser: XmlPullParser, parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
+    private fun XmlPullParser.parsePages(
+        scope: CoroutineScope,
+        parseFile: suspend (String) -> CloseableXmlPullParser
+    ) = PagesData().also { result ->
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
-        val result = PagesData()
-        result.tractPages = buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        XML_PAGES_PAGE -> {
-                            val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
-                            val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
-                            val pos = size
-                            parser.skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    XML_PAGES_PAGE -> {
+                        val fileName = getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                        val src = getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                        skipTag()
 
-                            if (srcFile != null)
-                                add(async { parseFile(srcFile).use { TractPage(this@Manifest, pos, fileName, it) } })
+                        if (src != null) {
+                            val pos = result.tractPageTasks.size
+                            result.tractPageTasks += scope.async {
+                                parseFile(src).use { TractPage(this@Manifest, pos, fileName, it) }
+                            }
                         }
-                        else -> parser.skipTag()
                     }
-                    XMLNS_ARTICLE -> when (parser.name) {
-                        XML_PAGES_AEM_IMPORT -> {
-                            parser.getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)
-                                ?.let { result.aemImports.add(it) }
-                            parser.skipTag()
-                        }
-                        else -> parser.skipTag()
-                    }
-                    else -> parser.skipTag()
+                    else -> skipTag()
                 }
+                XMLNS_ARTICLE -> when (name) {
+                    XML_PAGES_AEM_IMPORT -> {
+                        getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)?.let { result.aemImports += it }
+                        skipTag()
+                    }
+                    else -> skipTag()
+                }
+                else -> skipTag()
             }
-        }.awaitAll()
-        return@runBlocking result
+        }
     }
 
     @WorkerThread
-    private fun parseResources(parser: XmlPullParser): Map<String?, Resource> {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_RESOURCES)
+    private fun XmlPullParser.parseResources() = buildList {
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_RESOURCES)
 
-        return buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (next() != XmlPullParser.END_TAG) {
+            if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
-                        Resource.XML_RESOURCE -> add(Resource(this@Manifest, parser))
-                        else -> parser.skipTag()
-                    }
-                    else -> parser.skipTag()
+            when (namespace) {
+                XMLNS_MANIFEST -> when (name) {
+                    Resource.XML_RESOURCE -> add(Resource(this@Manifest, this@parseResources))
+                    else -> skipTag()
                 }
+                else -> skipTag()
             }
-        }.associateBy { it.name }
+        }
     }
 
     @WorkerThread
-    private fun XmlPullParser.parseTips(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun XmlPullParser.parseTips(scope: CoroutineScope, parseFile: suspend (String) -> CloseableXmlPullParser) =
         buildList {
             while (next() != XmlPullParser.END_TAG) {
                 if (eventType != XmlPullParser.START_TAG) continue
@@ -297,15 +309,14 @@ class Manifest : BaseModel, Styles {
                             val id = getAttributeValue(null, XML_TIPS_TIP_ID)
                             val src = getAttributeValue(null, XML_TIPS_TIP_SRC)
                             if (id != null && src != null)
-                                add(async { parseFile(src).use { Tip(this@Manifest, id, it) } })
+                                add(scope.async { parseFile(src).use { Tip(this@Manifest, id, it) } })
                         }
                     }
                 }
 
                 skipTag()
             }
-        }.awaitAll()
-    }
+        }
 }
 
 @get:ColorInt

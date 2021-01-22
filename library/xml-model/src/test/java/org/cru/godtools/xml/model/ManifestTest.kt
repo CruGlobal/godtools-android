@@ -11,17 +11,17 @@ import org.junit.runner.RunWith
 class ManifestTest {
     @Test
     fun verifyParseEmptyManifest() {
-        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_empty.xml")) { TODO() }
+        val manifest = parseManifest("manifest_empty.xml")
+        assertEquals(0, manifest.aemImports.size)
         assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }
 
     @Test
-    fun verifyParseManifestPages() {
-        val manifest = Manifest(
-            TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_pages.xml")
-        ) { getXmlParserForResource(it) }
+    fun verifyParseManifestTractPages() {
+        val manifest = parseManifest("manifest_pages.xml")
+        assertEquals(Manifest.Type.TRACT, manifest.type)
         assertEquals(2, manifest.tractPages.size)
         assertEquals(0, manifest.tractPages[0].position)
         assertEquals(1, manifest.tractPages[1].position)
@@ -29,9 +29,7 @@ class ManifestTest {
 
     @Test
     fun verifyParseManifestWithTips() {
-        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips.xml")) {
-            getXmlParserForResource(it)
-        }
+        val manifest = parseManifest("manifest_tips.xml")
         assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(1, manifest.tips.size)
@@ -40,11 +38,12 @@ class ManifestTest {
 
     @Test
     fun verifyParseManifestWithInvalidTips() {
-        val manifest = Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource("manifest_tips_invalid.xml")) {
-            getXmlParserForResource(it)
-        }
+        val manifest = parseManifest("manifest_tips_invalid.xml")
         assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }
+
+    private fun parseManifest(name: String) =
+        Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource(name)) { getXmlParserForResource(it) }
 }
