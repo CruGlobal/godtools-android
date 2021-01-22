@@ -17,6 +17,7 @@ import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.ParagraphController
+import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
@@ -26,6 +27,7 @@ import org.cru.godtools.xml.model.Fallback
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Link
 import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.xml.model.Spacer
 import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
@@ -73,6 +75,11 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Paragraph::class)
     internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Spacer::class)
+    internal abstract fun spacerControllerFactory(factory: SpacerController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
