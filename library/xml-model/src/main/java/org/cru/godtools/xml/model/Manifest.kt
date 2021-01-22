@@ -7,6 +7,8 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -140,28 +142,34 @@ class Manifest : BaseModel, Styles {
         var categoriesData: List<Category>? = null
         var pagesData: PagesData? = null
         var resourcesData: Map<String?, Resource>? = null
-        var tipsData: List<Tip>? = null
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
+        val tipsData: List<Tip>
+        runBlocking {
+            val tips = mutableListOf<Deferred<Tip>>()
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) continue
 
-            when (parser.namespace) {
-                XMLNS_MANIFEST -> when (parser.name) {
-                    XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE)
-                    XML_CATEGORIES -> categoriesData = parser.parseCategories()
-                    XML_PAGES -> pagesData = parsePages(parser, parseFile)
-                    XML_RESOURCES -> resourcesData = parser.parseResources()
-                    XML_TIPS -> tipsData = parser.parseTips(parseFile)
+                when (parser.namespace) {
+                    XMLNS_MANIFEST -> when (parser.name) {
+                        XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
+                        XML_CATEGORIES -> categoriesData = parser.parseCategories()
+                        XML_PAGES -> pagesData = parsePages(parser, parseFile)
+                        XML_RESOURCES -> resourcesData = parser.parseResources()
+                        XML_TIPS -> tips.addAll(parser.parseTips(this, parseFile))
+                        else -> parser.skipTag()
+                    }
                     else -> parser.skipTag()
                 }
-                else -> parser.skipTag()
             }
+
+            // await any deferred parsing
+            tipsData = tips.awaitAll()
         }
         _title = title
         aemImports = pagesData?.aemImports.orEmpty()
         categories = categoriesData.orEmpty()
         tractPages = pagesData?.tractPages.orEmpty()
         resources = resourcesData.orEmpty()
-        tips = tipsData?.associateBy { it.id }.orEmpty()
+        tips = tipsData.associateBy { it.id }
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
@@ -282,7 +290,7 @@ class Manifest : BaseModel, Styles {
     }.associateBy { it.name }
 
     @WorkerThread
-    private fun XmlPullParser.parseTips(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
+    private fun XmlPullParser.parseTips(scope: CoroutineScope, parseFile: suspend (String) -> CloseableXmlPullParser) =
         buildList {
             while (next() != XmlPullParser.END_TAG) {
                 if (eventType != XmlPullParser.START_TAG) continue
@@ -293,15 +301,14 @@ class Manifest : BaseModel, Styles {
                             val id = getAttributeValue(null, XML_TIPS_TIP_ID)
                             val src = getAttributeValue(null, XML_TIPS_TIP_SRC)
                             if (id != null && src != null)
-                                add(async { parseFile(src).use { Tip(this@Manifest, id, it) } })
+                                add(scope.async { parseFile(src).use { Tip(this@Manifest, id, it) } })
                         }
                     }
                 }
 
                 skipTag()
             }
-        }.awaitAll()
-    }
+        }
 }
 
 @get:ColorInt
