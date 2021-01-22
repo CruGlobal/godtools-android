@@ -139,22 +139,27 @@ class Manifest : BaseModel, Styles {
 
         // process any child elements
         var title: Text? = null
-        var categoriesData: List<Category>? = null
-        var pagesData: PagesData? = null
-        var resourcesData: Map<String?, Resource>? = null
-        val tipsData: List<Tip>
+        val aemImports = mutableListOf<Uri>()
+        val categories = mutableListOf<Category>()
+        val resources = mutableListOf<Resource>()
+        val tips: List<Tip>
+        val tractPages = mutableListOf<TractPage>()
         runBlocking {
-            val tips = mutableListOf<Deferred<Tip>>()
+            val tipsTasks = mutableListOf<Deferred<Tip>>()
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
                 when (parser.namespace) {
                     XMLNS_MANIFEST -> when (parser.name) {
                         XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
-                        XML_CATEGORIES -> categoriesData = parser.parseCategories()
-                        XML_PAGES -> pagesData = parsePages(parser, parseFile)
-                        XML_RESOURCES -> resourcesData = parser.parseResources()
-                        XML_TIPS -> tips.addAll(parser.parseTips(this, parseFile))
+                        XML_CATEGORIES -> categories += parser.parseCategories()
+                        XML_PAGES -> {
+                            val result = parsePages(parser, parseFile)
+                            aemImports += result.aemImports
+                            tractPages += result.tractPages
+                        }
+                        XML_RESOURCES -> resources += parser.parseResources()
+                        XML_TIPS -> tipsTasks += parser.parseTips(this, parseFile)
                         else -> parser.skipTag()
                     }
                     else -> parser.skipTag()
@@ -162,14 +167,14 @@ class Manifest : BaseModel, Styles {
             }
 
             // await any deferred parsing
-            tipsData = tips.awaitAll()
+            tips = tipsTasks.awaitAll()
         }
         _title = title
-        aemImports = pagesData?.aemImports.orEmpty()
-        categories = categoriesData.orEmpty()
-        tractPages = pagesData?.tractPages.orEmpty()
-        resources = resourcesData.orEmpty()
-        tips = tipsData.associateBy { it.id }
+        this.aemImports = aemImports
+        this.categories = categories
+        this.resources = resources.associateBy { it.name }
+        this.tips = tips.associateBy { it.id }
+        this.tractPages = tractPages
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
@@ -230,8 +235,8 @@ class Manifest : BaseModel, Styles {
     }
 
     private class PagesData {
-        var tractPages: List<TractPage>? = null
         val aemImports = mutableListOf<Uri>()
+        lateinit var tractPages: List<TractPage>
     }
 
     @WorkerThread
@@ -287,7 +292,7 @@ class Manifest : BaseModel, Styles {
                 else -> skipTag()
             }
         }
-    }.associateBy { it.name }
+    }
 
     @WorkerThread
     private fun XmlPullParser.parseTips(scope: CoroutineScope, parseFile: suspend (String) -> CloseableXmlPullParser) =
