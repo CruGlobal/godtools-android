@@ -7,7 +7,7 @@ buildscript {
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.3',
                 circleindicator    : '2.1.4',
-                dagger             : '2.31.1',
+                dagger             : '2.31.2',
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
                 facebookFlipper    : '0.71.0',
