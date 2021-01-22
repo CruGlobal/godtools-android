@@ -154,7 +154,7 @@ class Manifest : BaseModel, Styles {
                         XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
                         XML_CATEGORIES -> categories += parser.parseCategories()
                         XML_PAGES -> {
-                            val result = parsePages(parser, parseFile)
+                            val result = parser.parsePages(parseFile)
                             aemImports += result.aemImports
                             tractPages += result.tractPages
                         }
@@ -240,37 +240,36 @@ class Manifest : BaseModel, Styles {
     }
 
     @WorkerThread
-    private fun parsePages(parser: XmlPullParser, parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
-        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
+    private fun XmlPullParser.parsePages(parseFile: suspend (String) -> CloseableXmlPullParser) = runBlocking {
+        require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES)
 
         // process any child elements
         val result = PagesData()
         result.tractPages = buildList {
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+            while (next() != XmlPullParser.END_TAG) {
+                if (eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_MANIFEST -> when (parser.name) {
+                when (namespace) {
+                    XMLNS_MANIFEST -> when (name) {
                         XML_PAGES_PAGE -> {
-                            val fileName = parser.getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
-                            val srcFile = parser.getAttributeValue(null, XML_PAGES_PAGE_SRC)
+                            val fileName = getAttributeValue(null, XML_PAGES_PAGE_FILENAME)
+                            val srcFile = getAttributeValue(null, XML_PAGES_PAGE_SRC)
                             val pos = size
-                            parser.skipTag()
+                            skipTag()
 
                             if (srcFile != null)
                                 add(async { parseFile(srcFile).use { TractPage(this@Manifest, pos, fileName, it) } })
                         }
-                        else -> parser.skipTag()
+                        else -> skipTag()
                     }
-                    XMLNS_ARTICLE -> when (parser.name) {
+                    XMLNS_ARTICLE -> when (name) {
                         XML_PAGES_AEM_IMPORT -> {
-                            parser.getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)
-                                ?.let { result.aemImports.add(it) }
-                            parser.skipTag()
+                            getAttributeValueAsUriOrNull(XML_PAGES_AEM_IMPORT_SRC)?.let { result.aemImports.add(it) }
+                            skipTag()
                         }
-                        else -> parser.skipTag()
+                        else -> skipTag()
                     }
-                    else -> parser.skipTag()
+                    else -> skipTag()
                 }
             }
         }.awaitAll()
