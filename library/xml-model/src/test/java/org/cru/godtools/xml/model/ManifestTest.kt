@@ -8,8 +8,19 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class ManifestTest {
+    @Test
+    fun testManifestTypeParsing() {
+        assertNull(Manifest.Type.parseOrNull(null))
+        assertEquals(Manifest.Type.ARTICLE, Manifest.Type.parseOrNull("article"))
+        assertEquals(Manifest.Type.LESSON, Manifest.Type.parseOrNull("lesson"))
+        assertEquals(Manifest.Type.TRACT, Manifest.Type.parseOrNull("tract"))
+        assertEquals(Manifest.Type.UNKNOWN, Manifest.Type.parseOrNull("nasldkja"))
+    }
+}
+
+@RunWith(AndroidJUnit4::class)
+class ManifestParsingRobolectricTest {
     @Test
     fun testParseEmptyManifest() {
         val manifest = parseManifest("manifest_empty.xml")

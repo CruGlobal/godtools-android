@@ -23,6 +23,7 @@ import org.xmlpull.v1.XmlPullParser
 private const val XML_MANIFEST = "manifest"
 private const val XML_TYPE = "type"
 private const val XML_TYPE_ARTICLE = "article"
+private const val XML_TYPE_LESSON = "lesson"
 private const val XML_TYPE_TRACT = "tract"
 private const val XML_TITLE = "title"
 private const val XML_NAVBAR_COLOR = "navbar-color"
@@ -58,13 +59,14 @@ class Manifest : BaseModel, Styles {
     }
 
     enum class Type {
-        TRACT, ARTICLE, UNKNOWN;
+        TRACT, ARTICLE, LESSON, UNKNOWN;
 
         companion object {
             val DEFAULT = TRACT
 
             fun parseOrNull(value: String?) = when (value) {
                 XML_TYPE_ARTICLE -> ARTICLE
+                XML_TYPE_LESSON -> LESSON
                 XML_TYPE_TRACT -> TRACT
                 null -> null
                 else -> UNKNOWN
