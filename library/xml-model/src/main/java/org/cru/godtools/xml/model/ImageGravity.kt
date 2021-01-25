@@ -81,5 +81,5 @@ inline class ImageGravity(internal val gravity: Int) {
     }
 }
 
-internal fun XmlPullParser?.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
-    ImageGravity.parse(this?.getAttributeValue(null, name), defaultGravity)
+internal fun XmlPullParser.getAttributeValueAsImageGravity(name: String, defaultGravity: ImageGravity) =
+    ImageGravity.parse(getAttributeValue(null, name), defaultGravity)
