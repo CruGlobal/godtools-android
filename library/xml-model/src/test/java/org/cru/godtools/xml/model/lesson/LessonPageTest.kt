@@ -2,8 +2,13 @@ package org.cru.godtools.xml.model.lesson
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.util.getXmlParserForResource
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.empty
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,7 +25,14 @@ class LessonPageTest {
     @Test
     fun testParseEmptyPage() {
         val page = parsePageXml("page_empty.xml")
-        assertEquals(0, page.content.size)
+        assertThat(page.content, `is`(empty()))
+    }
+
+    @Test
+    fun testParsePage() {
+        val page = parsePageXml("page.xml")
+        assertEquals(1, page.content.size)
+        assertTrue(page.content[0] is Text)
     }
 
     private fun parsePageXml(file: String, manifest: Manifest = this.manifest) =

@@ -42,10 +42,10 @@ class LessonPage : BaseModel, Parent {
             when (parser.namespace) {
                 XMLNS_LESSON -> when (parser.name) {
                     XML_CONTENT -> content = parseContent(parser)
+                    else -> parser.skipTag()
                 }
+                else -> parser.skipTag()
             }
-
-            parser.skipTag()
         }
         this.content = content.orEmpty()
     }

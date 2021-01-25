@@ -1,0 +1,6 @@
+<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    xmlns="https://mobile-content-api.cru.org/xmlns/lesson">
+    <content>
+        <content:text />
+    </content>
+</page>
