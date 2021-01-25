@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
+import org.cru.godtools.xml.model.lesson.LessonPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.TractPage
 import org.xmlpull.v1.XmlPullParser
@@ -104,6 +105,7 @@ class Manifest : BaseModel, Styles {
     val title: String? get() = _title?.text
 
     val categories: List<Category>
+    val lessonPages: List<LessonPage>
     val tractPages: List<TractPage>
     val aemImports: List<Uri>
 
@@ -143,10 +145,12 @@ class Manifest : BaseModel, Styles {
         var title: Text? = null
         val aemImports = mutableListOf<Uri>()
         val categories = mutableListOf<Category>()
+        val lessonPages: List<LessonPage>
         val resources = mutableListOf<Resource>()
         val tips: List<Tip>
         val tractPages: List<TractPage>
         runBlocking {
+            val lessonPageTasks = mutableListOf<Deferred<LessonPage>>()
             val tipsTasks = mutableListOf<Deferred<Tip>>()
             val tractPageTasks = mutableListOf<Deferred<TractPage>>()
             while (parser.next() != XmlPullParser.END_TAG) {
@@ -159,6 +163,7 @@ class Manifest : BaseModel, Styles {
                         XML_PAGES -> {
                             val result = parser.parsePages(this, parseFile)
                             aemImports += result.aemImports
+                            lessonPageTasks += result.lessonPageTasks
                             tractPageTasks += result.tractPageTasks
                         }
                         XML_RESOURCES -> resources += parser.parseResources()
@@ -171,11 +176,13 @@ class Manifest : BaseModel, Styles {
 
             // await any deferred parsing
             tips = tipsTasks.awaitAll()
+            lessonPages = lessonPageTasks.awaitAll()
             tractPages = tractPageTasks.awaitAll()
         }
         _title = title
         this.aemImports = aemImports
         this.categories = categories
+        this.lessonPages = lessonPages
         this.resources = resources.associateBy { it.name }
         this.tips = tips.associateBy { it.id }
         this.tractPages = tractPages
@@ -209,6 +216,7 @@ class Manifest : BaseModel, Styles {
         _title = null
         aemImports = emptyList()
         categories = emptyList()
+        lessonPages = emptyList()
         tractPages = emptyList()
         resources = emptyMap()
         this.tips = tips?.invoke(this)?.associateBy { it.id }.orEmpty()
@@ -240,6 +248,7 @@ class Manifest : BaseModel, Styles {
 
     private class PagesData {
         val aemImports = mutableListOf<Uri>()
+        val lessonPageTasks = mutableListOf<Deferred<LessonPage>>()
         val tractPageTasks = mutableListOf<Deferred<TractPage>>()
     }
 
@@ -262,9 +271,20 @@ class Manifest : BaseModel, Styles {
                         skipTag()
 
                         if (src != null) {
-                            val pos = result.tractPageTasks.size
-                            result.tractPageTasks += scope.async {
-                                parseFile(src).use { TractPage(this@Manifest, pos, fileName, it) }
+                            @Suppress("NON_EXHAUSTIVE_WHEN")
+                            when (type) {
+                                Type.LESSON -> {
+                                    val pos = result.lessonPageTasks.size
+                                    result.lessonPageTasks += scope.async {
+                                        parseFile(src).use { LessonPage(this@Manifest, pos, fileName, it) }
+                                    }
+                                }
+                                Type.TRACT -> {
+                                    val pos = result.tractPageTasks.size
+                                    result.tractPageTasks += scope.async {
+                                        parseFile(src).use { TractPage(this@Manifest, pos, fileName, it) }
+                                    }
+                                }
                             }
                         }
                     }
