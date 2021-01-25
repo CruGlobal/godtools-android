@@ -6,7 +6,7 @@ buildscript {
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
                 appsFlyer          : '5.4.3',
-                circleindicator    : '2.1.4',
+                circleindicator    : '2.1.6',
                 dagger             : '2.31.2',
                 eventbus           : '3.2.0',
                 facebook           : '7.1.0',
