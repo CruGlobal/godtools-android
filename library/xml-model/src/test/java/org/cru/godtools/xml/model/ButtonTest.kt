@@ -6,11 +6,16 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.xml.model.tract.Modal
+import org.cru.godtools.xml.model.tract.TractPage
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.instanceOf
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -57,6 +62,32 @@ class ButtonTest {
     fun testButtonTypeUnknown() {
         val button = Button(manifest, type = Button.Type.UNKNOWN)
         assertTrue(button.isIgnored)
+    }
+
+    @Test
+    fun testButtonColorFallbackBehavior() {
+        assertThat(Button(manifest).buttonColor, equalTo(manifest.primaryColor))
+        assertThat(
+            Button(manifest, color = Color.GREEN).buttonColor,
+            allOf(equalTo(Color.GREEN), not(equalTo(manifest.primaryColor)))
+        )
+
+        val page = TractPage(manifest, primaryColor = Color.BLUE)
+        assertThat(Button(page).buttonColor, allOf(equalTo(page.primaryColor), not(equalTo(manifest.primaryColor))))
+        assertThat(
+            Button(page, color = Color.GREEN).buttonColor,
+            allOf(equalTo(Color.GREEN), not(equalTo(page.primaryColor)), not(equalTo(manifest.primaryColor)))
+        )
+
+        val modal = Modal(page)
+        assertThat(
+            Button(modal).buttonColor,
+            allOf(equalTo(modal.buttonColor), not(page.primaryColor), not(manifest.primaryColor))
+        )
+        assertThat(
+            Button(modal, color = Color.GREEN).buttonColor,
+            allOf(equalTo(Color.GREEN), not(modal.buttonColor), not(page.primaryColor), not(manifest.primaryColor))
+        )
     }
 
     @Test

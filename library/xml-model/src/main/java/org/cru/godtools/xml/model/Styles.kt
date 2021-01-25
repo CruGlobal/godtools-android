@@ -19,7 +19,7 @@ interface Styles : Base {
     val textColor: Int get() = stylesParent.textColor
 
     @get:ColorInt
-    val buttonColor: Int get() = stylesParent.buttonColor
+    val buttonColor: Int? get() = stylesParent?.buttonColor
 
     @get:DimenRes
     val textSize: Int get() = stylesParent.textSize
@@ -31,8 +31,6 @@ interface Styles : Base {
 val Styles?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMARY_COLOR
 @get:ColorInt
 val Styles?.primaryTextColor get() = this?.primaryTextColor ?: Manifest.DEFAULT_PRIMARY_TEXT_COLOR
-@get:ColorInt
-val Styles?.buttonColor get() = this?.buttonColor ?: primaryColor
 @get:ColorInt
 val Styles?.textColor get() = this?.textColor ?: Manifest.DEFAULT_TEXT_COLOR
 @get:DimenRes

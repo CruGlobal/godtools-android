@@ -46,7 +46,7 @@ class Modal : BaseModel, Parent, Styles {
     override val textAlign get() = Text.Align.CENTER
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: TractPage, position: Int) : super(parent) {
+    internal constructor(parent: TractPage, position: Int = 0) : super(parent) {
         page = parent
         this.position = position
         title = null

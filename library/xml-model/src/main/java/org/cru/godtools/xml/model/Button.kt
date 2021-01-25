@@ -62,11 +62,16 @@ class Button : Content, Styles {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: Base, type: Type = Type.DEFAULT, text: ((Button) -> Text?)? = null) : super(parent) {
+    internal constructor(
+        parent: Base,
+        type: Type = Type.DEFAULT,
+        @ColorInt color: Int? = null,
+        text: ((Button) -> Text?)? = null
+    ) : super(parent) {
         this.type = type
         events = emptySet()
         url = null
-        _buttonColor = null
+        _buttonColor = color
 
         analyticsEvents = emptySet()
         this.text = text?.invoke(this)
@@ -79,7 +84,7 @@ class Button : Content, Styles {
     @ColorInt
     private val _buttonColor: Int?
     @get:ColorInt
-    override val buttonColor: Int get() = _buttonColor ?: stylesParent.buttonColor
+    override val buttonColor: Int get() = _buttonColor ?: stylesParent.let { it?.buttonColor ?: it.primaryColor }
 
     val text: Text?
     override val textAlign get() = Text.Align.CENTER
@@ -90,5 +95,5 @@ class Button : Content, Styles {
     override val isIgnored get() = super.isIgnored || type == Type.UNKNOWN
 }
 
-val Button?.buttonColor get() = this?.buttonColor ?: stylesParent.buttonColor
+val Button?.buttonColor get() = this?.buttonColor ?: stylesParent.primaryColor
 val Button?.textColor get() = this?.textColor ?: stylesParent.primaryTextColor
