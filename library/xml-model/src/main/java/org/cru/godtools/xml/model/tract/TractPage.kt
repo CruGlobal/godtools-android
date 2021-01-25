@@ -106,47 +106,45 @@ class TractPage : BaseModel, Styles {
         manifest: Manifest,
         position: Int,
         fileName: String?,
-        parser: XmlPullParser?
+        parser: XmlPullParser
     ) : super(manifest) {
         this.position = position
         this.fileName = fileName
 
-        parser?.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
+        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE)
 
-        listeners = parser?.let { parseEvents(it, XML_LISTENERS) }.orEmpty()
-        _primaryColor = parser?.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR)
-        _primaryTextColor = parser?.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR)
-        _textColor = parser?.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
-        _cardTextColor = parser?.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
+        listeners = parseEvents(parser, XML_LISTENERS)
+        _primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR)
+        _primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR)
+        _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
+        _cardTextColor = parser.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
 
-        backgroundColor = parser?.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
-        _backgroundImage = parser?.getAttributeValue(null, XML_BACKGROUND_IMAGE)
+        backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
+        _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
         backgroundImageGravity =
             parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
-        backgroundImageScaleType = parser?.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
+        backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
+        // process any child elements
         var header: Header? = null
         var hero: Hero? = null
         var cards: List<Card>? = null
         var modals: List<Modal>? = null
         var callToAction: CallToAction? = null
-        if (parser != null) {
-            // process any child elements
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) continue
 
-                when (parser.namespace) {
-                    XMLNS_TRACT -> when (parser.name) {
-                        Header.XML_HEADER -> header = Header(this, parser)
-                        Hero.XML_HERO -> hero = Hero(this, parser)
-                        XML_CARDS -> cards = parser.parseCardsXml()
-                        XML_MODALS -> modals = parser.parseModalsXml()
-                        CallToAction.XML_CALL_TO_ACTION -> callToAction = CallToAction(this, parser)
-                        else -> parser.skipTag()
-                    }
+            when (parser.namespace) {
+                XMLNS_TRACT -> when (parser.name) {
+                    Header.XML_HEADER -> header = Header(this, parser)
+                    Hero.XML_HERO -> hero = Hero(this, parser)
+                    XML_CARDS -> cards = parser.parseCardsXml()
+                    XML_MODALS -> modals = parser.parseModalsXml()
+                    CallToAction.XML_CALL_TO_ACTION -> callToAction = CallToAction(this, parser)
                     else -> parser.skipTag()
                 }
+                else -> parser.skipTag()
             }
         }
         this.header = header
