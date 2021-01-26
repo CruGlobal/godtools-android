@@ -13,6 +13,9 @@ private const val XML_COLOR = "color"
 private const val XML_TYPE = "type"
 private const val XML_TYPE_EVENT = "event"
 private const val XML_TYPE_URL = "url"
+private const val XML_STYLE = "style"
+private const val XML_STYLE_CONTAINED = "contained"
+private const val XML_STYLE_OUTLINED = "outlined"
 private const val XML_URL = "url"
 
 class Button : Content, Styles {
@@ -34,12 +37,28 @@ class Button : Content, Styles {
         }
     }
 
+    enum class Style {
+        CONTAINED, OUTLINED, UNKNOWN;
+
+        companion object {
+            internal val DEFAULT = CONTAINED
+        }
+    }
+    private fun String?.parseStyleOrNull() = when (this) {
+        null -> null
+        XML_STYLE_CONTAINED -> Style.CONTAINED
+        XML_STYLE_OUTLINED -> Style.OUTLINED
+        else -> Style.UNKNOWN
+    }
+
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_BUTTON)
 
         type = Type.parseOrNull(parser.getAttributeValue(null, XML_TYPE)) ?: Type.DEFAULT
         events = parseEvents(parser, XML_EVENTS)
         url = parser.getAttributeValueAsUriOrNull(XML_URL)
+
+        style = parser.getAttributeValue(null, XML_STYLE).parseStyleOrNull() ?: Style.DEFAULT
         _buttonColor = parser.getAttributeValueAsColorOrNull(XML_COLOR)
 
         // process any child elements
@@ -65,12 +84,15 @@ class Button : Content, Styles {
     internal constructor(
         parent: Base,
         type: Type = Type.DEFAULT,
+        style: Style = Style.DEFAULT,
         @ColorInt color: Int? = null,
         text: ((Button) -> Text?)? = null
     ) : super(parent) {
         this.type = type
         events = emptySet()
         url = null
+
+        this.style = style
         _buttonColor = color
 
         analyticsEvents = emptySet()
@@ -80,6 +102,8 @@ class Button : Content, Styles {
     val type: Type
     val events: Set<Event.Id>
     val url: Uri?
+
+    val style: Style
 
     @ColorInt
     private val _buttonColor: Int?
@@ -92,7 +116,7 @@ class Button : Content, Styles {
 
     val analyticsEvents: Collection<AnalyticsEvent>
 
-    override val isIgnored get() = super.isIgnored || type == Type.UNKNOWN
+    override val isIgnored get() = super.isIgnored || type == Type.UNKNOWN || style == Style.UNKNOWN
 }
 
 val Button?.buttonColor get() = this?.buttonColor ?: stylesParent.primaryColor

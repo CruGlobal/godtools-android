@@ -37,6 +37,7 @@ class ButtonTest {
         val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
         val button = Button(manifest, getXmlParserForResource("button_event.xml"))
         assertFalse(button.isIgnored)
+        assertEquals(Button.Style.CONTAINED, button.style)
         assertThat(button.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("event button", button.text!!.text)
         assertEquals(Color.RED, button.buttonColor)
@@ -46,6 +47,7 @@ class ButtonTest {
     fun testParseButtonUrl() {
         val button = Button(manifest, getXmlParserForResource("button_url.xml"))
         assertFalse(button.isIgnored)
+        assertEquals(Button.Style.OUTLINED, button.style)
         assertEquals(Button.Type.URL, button.type)
         assertEquals("https://www.google.com/", button.url!!.toString())
         assertEquals("url button", button.text!!.text)
@@ -61,6 +63,12 @@ class ButtonTest {
     @Test
     fun testButtonTypeUnknown() {
         val button = Button(manifest, type = Button.Type.UNKNOWN)
+        assertTrue(button.isIgnored)
+    }
+
+    @Test
+    fun testButtonStyleUnknown() {
+        val button = Button(manifest, style = Button.Style.UNKNOWN)
         assertTrue(button.isIgnored)
     }
 
