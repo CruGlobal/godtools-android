@@ -13,6 +13,7 @@ import org.cru.godtools.xml.model.Text
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
@@ -33,6 +34,16 @@ class UiControllerCacheTest {
         imageFactory = mock { on { create(parent, parentController) } doAnswer { mock() } }
         cache = UiControllerCache(parent, parentController, mapOf(Image::class.java to imageFactory))
     }
+
+    // region acquire()
+    @Test
+    fun testAcquireReusesReleased() {
+        val image = mock<BaseController<Image>>()
+        cache.release(Image::class, image)
+        val image2 = cache.acquire(Image::class)
+        assertSame(image, image2)
+    }
+    // endregion acquire()
 
     // region createController()
     @Test
