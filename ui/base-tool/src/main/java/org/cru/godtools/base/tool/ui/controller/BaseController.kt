@@ -72,7 +72,7 @@ abstract class BaseController<T : Base> protected constructor(
     open fun onContentEvent(event: Event) = Unit
     // endregion Lifecycle
 
-    fun supportsModel(model: Base?) = modelClass.isInstance(model)
+    fun supportsModel(model: Base) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = cache.release(modelClass, this)
 
     protected open fun updateLayoutDirection() {
