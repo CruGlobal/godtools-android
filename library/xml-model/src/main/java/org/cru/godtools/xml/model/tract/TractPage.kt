@@ -3,6 +3,7 @@ package org.cru.godtools.xml.model.tract
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
@@ -34,7 +35,8 @@ class TractPage : BaseModel, Styles {
     val id get() = fileName ?: "${manifest.code}-$position"
     val position: Int
 
-    private val fileName: String?
+    @VisibleForTesting
+    internal val fileName: String?
     val listeners: Set<Event.Id>
 
     @ColorInt

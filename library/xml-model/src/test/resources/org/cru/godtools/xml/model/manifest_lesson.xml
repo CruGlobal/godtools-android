@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<manifest xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    type="lesson" xmlns="https://mobile-content-api.cru.org/xmlns/manifest">
+    <title>
+        <content:text>title</content:text>
+    </title>
+
+    <pages>
+        <page filename="page0.xml" src="lesson/page_empty.xml" />
+    </pages>
+</manifest>
