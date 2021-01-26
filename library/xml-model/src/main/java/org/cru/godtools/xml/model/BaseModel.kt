@@ -17,7 +17,7 @@ abstract class BaseModel internal constructor(private val parent: Base? = null) 
         internal const val XML_DISMISS_LISTENERS = "dismiss-listeners"
     }
 
-    override val stylesParent: Styles? get() = parent as? Styles ?: parent.stylesParent
+    override val stylesParent: Styles? get() = parent as? Styles ?: parent?.stylesParent
 
     override val manifest: Manifest
         get() = parent?.manifest ?: throw IllegalStateException("No manifest found in model ancestors")
