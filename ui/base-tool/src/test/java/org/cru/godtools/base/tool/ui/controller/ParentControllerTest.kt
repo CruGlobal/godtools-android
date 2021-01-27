@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.ui.controller
 
 import android.content.Context
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
@@ -13,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Manifest
@@ -103,8 +103,6 @@ class ParentControllerTest {
         Paragraph::class,
         contentContainer,
         null,
-        object : UiControllerCache.Factory {
-            override fun create(parent: ViewGroup, parentController: BaseController<*>) = cache
-        }
+        UiControllerCache.Factory { _, _ -> cache }
     )
 }

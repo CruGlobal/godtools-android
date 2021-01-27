@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.base.tool.ui.controller.UiControllerType
+import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.InputController
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController

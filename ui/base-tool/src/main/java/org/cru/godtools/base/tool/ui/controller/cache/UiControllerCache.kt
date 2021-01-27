@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.ui.controller
+package org.cru.godtools.base.tool.ui.controller.cache
 
 import android.view.ViewGroup
 import androidx.core.util.Pools
@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.xml.model.Base
 import timber.log.Timber
 
@@ -16,7 +17,7 @@ class UiControllerCache @AssistedInject internal constructor(
     private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>>
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(parent: ViewGroup, parentController: BaseController<*>): UiControllerCache
     }
 
