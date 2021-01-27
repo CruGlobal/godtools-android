@@ -14,7 +14,7 @@ import timber.log.Timber
 class UiControllerCache @AssistedInject internal constructor(
     @Assisted private val parent: ViewGroup,
     @Assisted private val parentController: BaseController<*>,
-    private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>>
+    private val controllerFactories: Map<UiControllerType, @JvmSuppressWildcards BaseController.Factory<*>>
 ) {
     @AssistedFactory
     fun interface Factory {
@@ -34,10 +34,12 @@ class UiControllerCache @AssistedInject internal constructor(
     }
 
     private fun <T : Base> createController(clazz: KClass<T>) =
-        controllerFactories[clazz.java]?.create(parent, parentController) as BaseController<T>? ?: run {
+        controllerFactories[clazz.uiControllerType()]?.create(parent, parentController) as BaseController<T>? ?: run {
             val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
             if (ApplicationUtils.isDebuggable(parent.context)) throw e
             Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
             null
         }
+
+    private fun KClass<out Base>.uiControllerType() = UiControllerType.create(this)
 }

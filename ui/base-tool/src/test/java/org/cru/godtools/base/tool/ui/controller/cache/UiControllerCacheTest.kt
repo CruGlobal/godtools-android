@@ -33,7 +33,8 @@ class UiControllerCacheTest {
         parent = mock(defaultAnswer = RETURNS_DEEP_STUBS)
         parentController = mock()
         imageFactory = mock { on { create(parent, parentController) } doAnswer { mock() } }
-        cache = UiControllerCache(parent, parentController, mapOf(Image::class.java to imageFactory))
+        cache =
+            UiControllerCache(parent, parentController, mapOf(UiControllerType.create(Image::class) to imageFactory))
     }
 
     // region acquire()
