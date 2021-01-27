@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
+import dagger.multibindings.Multibinds
 import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ButtonController
@@ -28,6 +29,9 @@ import org.cru.godtools.xml.model.Video
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class UiControllerModule {
+    @Multibinds
+    abstract fun variationResolvers(): Set<VariationResolver>
+
     @Binds
     @IntoMap
     @UiControllerType(Animation::class)

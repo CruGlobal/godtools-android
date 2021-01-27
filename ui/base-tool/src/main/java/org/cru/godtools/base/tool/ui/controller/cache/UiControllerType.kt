@@ -7,8 +7,11 @@ import org.cru.godtools.xml.model.Base
 @MapKey(unwrapValue = false)
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER)
-annotation class UiControllerType(val value: KClass<out Base>) {
+annotation class UiControllerType(val value: KClass<out Base>, val variation: Int = DEFAULT_VARIATION) {
     companion object {
-        fun create(value: KClass<out Base>) = UiControllerTypeCreator.createUiControllerType(value.java)
+        const val DEFAULT_VARIATION = 1
+
+        fun create(value: KClass<out Base>, variation: Int = DEFAULT_VARIATION) =
+            UiControllerTypeCreator.createUiControllerType(value.java, variation)
     }
 }

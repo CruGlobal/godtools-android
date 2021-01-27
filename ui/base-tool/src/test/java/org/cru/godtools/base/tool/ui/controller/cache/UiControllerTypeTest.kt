@@ -6,10 +6,10 @@ import org.junit.Test
 
 class UiControllerTypeTest {
     @Test
-    @UiControllerType(Image::class)
+    @UiControllerType(Image::class, 13)
     fun testUiControllerTypeAnnotation() {
         val expected = this::testUiControllerTypeAnnotation.annotations.first { it is UiControllerType }
-        val autoAnnotation = UiControllerType.create(Image::class)
+        val autoAnnotation = UiControllerType.create(Image::class, 13)
 
         assertEquals(expected, autoAnnotation)
         assertEquals(expected.hashCode(), autoAnnotation.hashCode())
