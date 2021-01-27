@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool
+package org.cru.godtools.base.tool.ui.controller.cache
 
 import dagger.Binds
 import dagger.Module
@@ -15,7 +15,6 @@ import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
-import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType
 import org.cru.godtools.xml.model.Animation
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Fallback
