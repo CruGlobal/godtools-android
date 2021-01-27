@@ -6,6 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentParagraphBinding
+import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.xml.model.Paragraph
 
 class ParagraphController private constructor(

@@ -4,7 +4,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.ParentController
-import org.cru.godtools.base.tool.ui.controller.UiControllerCache
+import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.tips.TipCallbacks
 import org.cru.godtools.xml.model.tips.TipPage

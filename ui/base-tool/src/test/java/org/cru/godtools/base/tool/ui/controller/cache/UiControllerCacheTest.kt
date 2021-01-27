@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.ui.controller
+package org.cru.godtools.base.tool.ui.controller.cache
 
 import android.content.pm.ApplicationInfo
 import android.view.ViewGroup
@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Text
 import org.junit.Assert.assertNotNull
