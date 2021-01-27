@@ -21,23 +21,21 @@ class UiControllerCache @AssistedInject internal constructor(
         fun create(parent: ViewGroup, parentController: BaseController<*>): UiControllerCache
     }
 
-    private val pools = mutableMapOf<KClass<*>, Pools.Pool<BaseController<*>>>()
+    private val pools = mutableMapOf<UiControllerType, Pools.Pool<BaseController<*>>>()
+    private val UiControllerType.pool get() = pools.getOrPut(this) { Pools.SimplePool(5) }
 
-    @Suppress("UNCHECKED_CAST")
-    private val <T : Base> KClass<T>.pool get() = pools[this] as? Pools.Pool<BaseController<T>>
-        ?: Pools.SimplePool<BaseController<T>>(5).also { pools[this] = it as Pools.Pool<BaseController<*>> }
-
-    fun <T : Base> acquire(clazz: KClass<T>) = clazz.pool.acquire() ?: createController(clazz)
+    fun <T : Base> acquire(clazz: KClass<T>) =
+        (clazz.uiControllerType().pool.acquire() ?: clazz.uiControllerType().createController()) as? BaseController<T>
     fun <T : Base> release(clazz: KClass<T>, instance: BaseController<T>) {
         instance.model = null
-        clazz.pool.release(instance)
+        clazz.uiControllerType().pool.release(instance)
     }
 
-    private fun <T : Base> createController(clazz: KClass<T>) =
-        controllerFactories[clazz.uiControllerType()]?.create(parent, parentController) as BaseController<T>? ?: run {
-            val e = IllegalArgumentException("Unsupported Content class specified: ${clazz.simpleName}")
+    private fun UiControllerType.createController() =
+        controllerFactories[this]?.create(parent, parentController) ?: run {
+            val e = IllegalArgumentException("Unsupported Content type specified: $this")
             if (ApplicationUtils.isDebuggable(parent.context)) throw e
-            Timber.e(e, "Unsupported Content class specified: %s", clazz.simpleName)
+            Timber.e(e, "Unsupported Content type specified: %s", toString())
             null
         }
 
