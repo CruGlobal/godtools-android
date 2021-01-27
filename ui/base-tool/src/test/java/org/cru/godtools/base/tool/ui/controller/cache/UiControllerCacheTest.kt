@@ -40,9 +40,10 @@ class UiControllerCacheTest {
     // region acquire()
     @Test
     fun testAcquireReusesReleased() {
+        val model = mock<Image>()
         val image = mock<BaseController<Image>>()
-        cache.release(Image::class, image)
-        val image2 = cache.acquire(Image::class)
+        cache.release(model, image)
+        val image2 = cache.acquire(model)
         assertSame(image, image2)
     }
     // endregion acquire()
@@ -50,13 +51,14 @@ class UiControllerCacheTest {
     // region createController()
     @Test
     fun testCreateController() {
-        val controller = cache.acquire(Image::class)
+        val model = mock<Image>()
+        val controller = cache.acquire(model)
         assertNotNull(controller)
         verify(imageFactory).create(parent, parentController)
         verifyNoMoreInteractions(imageFactory)
         clearInvocations(imageFactory)
 
-        val controller2 = cache.acquire(Image::class)
+        val controller2 = cache.acquire(model)
         assertNotNull(controller2)
         assertNotSame(controller, controller2)
         verify(imageFactory).create(parent, parentController)
@@ -66,7 +68,7 @@ class UiControllerCacheTest {
     @Test(expected = IllegalArgumentException::class)
     fun testCreateControllerFactoryMissingDebug() {
         parent.context.applicationInfo.flags = ApplicationInfo.FLAG_DEBUGGABLE
-        cache.acquire(Text::class)
+        cache.acquire(mock<Text>())
     }
 
     @Test
@@ -75,7 +77,7 @@ class UiControllerCacheTest {
         Timber.plant(tree)
 
         try {
-            val controller = cache.acquire(Text::class)
+            val controller = cache.acquire(mock<Text>())
             assertNull(controller)
             verifyNoInteractions(imageFactory)
             verify(tree).e(any<IllegalArgumentException>(), any(), anyVararg())

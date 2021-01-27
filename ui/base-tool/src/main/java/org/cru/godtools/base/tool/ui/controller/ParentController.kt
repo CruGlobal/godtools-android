@@ -55,7 +55,7 @@ abstract class ParentController<T> protected constructor(
             if (next == null) next = existing.removeFirstOrNull()
 
             val child = next?.takeIf { it.supportsModel(model) }?.also { next = null }
-                ?: childCache.acquire(model.javaClass.kotlin)
+                ?: childCache.acquire(model)
                     ?.also { contentContainer.addView(it.root, contentContainer.indexOfChild(next?.root)) }
             child?.model = model
             child

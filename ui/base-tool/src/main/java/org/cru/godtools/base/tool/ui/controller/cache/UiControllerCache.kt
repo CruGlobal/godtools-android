@@ -5,7 +5,6 @@ import androidx.core.util.Pools
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlin.reflect.KClass
 import org.ccci.gto.android.common.app.ApplicationUtils
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.xml.model.Base
@@ -24,11 +23,11 @@ class UiControllerCache @AssistedInject internal constructor(
     private val pools = mutableMapOf<UiControllerType, Pools.Pool<BaseController<*>>>()
     private val UiControllerType.pool get() = pools.getOrPut(this) { Pools.SimplePool(5) }
 
-    fun <T : Base> acquire(clazz: KClass<T>) =
-        (clazz.uiControllerType().pool.acquire() ?: clazz.uiControllerType().createController()) as? BaseController<T>
-    fun <T : Base> release(clazz: KClass<T>, instance: BaseController<T>) {
+    fun <T : Base> acquire(model: T) =
+        model.uiControllerType().let { (it.pool.acquire() ?: it.createController()) as? BaseController<T> }
+    fun <T : Base> release(model: T, instance: BaseController<T>) {
         instance.model = null
-        clazz.uiControllerType().pool.release(instance)
+        model.uiControllerType().pool.release(instance)
     }
 
     private fun UiControllerType.createController() =
@@ -39,5 +38,5 @@ class UiControllerCache @AssistedInject internal constructor(
             null
         }
 
-    private fun KClass<out Base>.uiControllerType() = UiControllerType.create(this)
+    private fun Base.uiControllerType() = UiControllerType.create(javaClass.kotlin)
 }
