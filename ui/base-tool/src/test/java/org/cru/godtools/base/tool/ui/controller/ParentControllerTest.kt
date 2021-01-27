@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.ui.controller
 
 import android.content.Context
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
@@ -103,8 +102,6 @@ class ParentControllerTest {
         Paragraph::class,
         contentContainer,
         null,
-        object : UiControllerCache.Factory {
-            override fun create(parent: ViewGroup, parentController: BaseController<*>) = cache
-        }
+        UiControllerCache.Factory { _, _ -> cache }
     )
 }

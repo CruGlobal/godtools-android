@@ -16,7 +16,7 @@ class UiControllerCache @AssistedInject internal constructor(
     private val controllerFactories: Map<Class<out Base>, @JvmSuppressWildcards BaseController.Factory<*>>
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(parent: ViewGroup, parentController: BaseController<*>): UiControllerCache
     }
 
