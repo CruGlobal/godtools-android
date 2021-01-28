@@ -9,6 +9,7 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
+import org.cru.godtools.base.tool.databinding.ToolContentButtonOutlinedBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Button
@@ -47,4 +48,15 @@ internal class ContainedButtonController @AssistedInject internal constructor(
 ) {
     @AssistedFactory
     interface Factory : BaseController.Factory<ContainedButtonController>
+}
+
+internal class OutlinedButtonController @AssistedInject internal constructor(
+    @Assisted parent: ViewGroup,
+    @Assisted parentController: BaseController<*>
+) : ButtonController<ToolContentButtonOutlinedBinding>(
+    ToolContentButtonOutlinedBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+    parentController
+) {
+    @AssistedFactory
+    interface Factory : BaseController.Factory<OutlinedButtonController>
 }

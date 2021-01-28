@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.GodTools.Tool" />
+    <style name="Theme.GodTools.Tool">
+        <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>
+    </style>
 
     <style name="Theme.GodTools.Tool.AppBar">
         <item name="windowActionBar">false</item>
