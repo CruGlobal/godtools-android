@@ -39,6 +39,7 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation "com.google.auto.value:auto-value-annotations:${deps.autoValue}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.hilt}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
@@ -47,9 +48,11 @@ dependencies {
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
+    kapt "com.google.auto.value:auto-value:${deps.autoValue}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 
     testImplementation project(':ui:tract-renderer')
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -43,8 +44,8 @@ class ParentControllerTest {
         context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
         contentContainer = LinearLayout(context)
         cache = mock {
-            on { acquire(Text::class) } doAnswer { mock { on { root } doReturn TextView(context) } }
-            on { acquire(Image::class) } doAnswer { mock { on { root } doReturn ImageView(context) } }
+            on { acquire(any<Text>()) } doAnswer { mock { on { root } doReturn TextView(context) } }
+            on { acquire(any<Image>()) } doAnswer { mock { on { root } doReturn ImageView(context) } }
         }
         controller = ConcreteParentController(contentContainer, cache)
     }
