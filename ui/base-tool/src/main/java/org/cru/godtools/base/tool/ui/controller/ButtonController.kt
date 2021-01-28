@@ -12,6 +12,7 @@ import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.base.tool.databinding.ToolContentButtonOutlinedBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
+import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
 
 internal sealed class ButtonController<T : ViewDataBinding>(
@@ -48,6 +49,9 @@ internal class ContainedButtonController @AssistedInject internal constructor(
 ) {
     @AssistedFactory
     interface Factory : BaseController.Factory<ContainedButtonController>
+
+    override fun supportsModel(model: Base) =
+        super.supportsModel(model) && model is Button && model.style == Button.Style.CONTAINED
 }
 
 internal class OutlinedButtonController @AssistedInject internal constructor(
@@ -59,4 +63,7 @@ internal class OutlinedButtonController @AssistedInject internal constructor(
 ) {
     @AssistedFactory
     interface Factory : BaseController.Factory<OutlinedButtonController>
+
+    override fun supportsModel(model: Base) =
+        super.supportsModel(model) && model is Button && model.style == Button.Style.OUTLINED
 }

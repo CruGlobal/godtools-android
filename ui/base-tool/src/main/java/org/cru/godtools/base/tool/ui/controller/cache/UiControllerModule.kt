@@ -2,17 +2,20 @@ package org.cru.godtools.base.tool.ui.controller.cache
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
+import dagger.multibindings.IntoSet
 import dagger.multibindings.Multibinds
 import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.base.tool.ui.controller.ButtonController
 import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FallbackController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
+import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
@@ -27,6 +30,9 @@ import org.cru.godtools.xml.model.Tabs
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.Video
 
+private const val VARIATION_BUTTON_CONTAINED = 1
+private const val VARIATION_BUTTON_OUTLINED = 2
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class UiControllerModule {
@@ -40,8 +46,13 @@ abstract class UiControllerModule {
 
     @Binds
     @IntoMap
-    @UiControllerType(Button::class)
-    internal abstract fun buttonControllerFactory(factory: ContainedButtonController.Factory): BaseController.Factory<*>
+    @UiControllerType(Button::class, VARIATION_BUTTON_CONTAINED)
+    internal abstract fun containedButtonFactory(factory: ContainedButtonController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Button::class, VARIATION_BUTTON_OUTLINED)
+    internal abstract fun outlinedButtonFactory(factory: OutlinedButtonController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
@@ -77,4 +88,17 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Video::class)
     internal abstract fun videoControllerFactory(factory: VideoController.Factory): BaseController.Factory<*>
+
+    companion object {
+        @Provides
+        @Reusable
+        @IntoSet
+        fun buttonVariationResolver() = VariationResolver {
+            when ((it as? Button)?.style) {
+                Button.Style.CONTAINED -> VARIATION_BUTTON_CONTAINED
+                Button.Style.OUTLINED -> VARIATION_BUTTON_OUTLINED
+                else -> null
+            }
+        }
+    }
 }
