@@ -2,32 +2,28 @@ package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Button
 
-internal class ButtonController private constructor(
-    private val binding: ToolContentButtonBinding,
+internal sealed class ButtonController<T : ViewDataBinding>(
+    private val binding: T,
     parentController: BaseController<*>
 ) : BaseController<Button>(Button::class, binding.root, parentController) {
-    @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
-        this(ToolContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
-
-    @AssistedFactory
-    interface Factory : BaseController.Factory<ButtonController>
-
     init {
-        binding.controller = this
+        binding.setVariable(BR.controller, this)
     }
 
     public override fun onBind() {
         super.onBind()
-        binding.model = model
+        binding.setVariable(BR.model, model)
     }
 
     fun click() {
@@ -40,4 +36,15 @@ internal class ButtonController private constructor(
             Button.Type.EVENT -> sendEvents(model?.events)
         }
     }
+}
+
+internal class ContainedButtonController @AssistedInject internal constructor(
+    @Assisted parent: ViewGroup,
+    @Assisted parentController: BaseController<*>
+) : ButtonController<ToolContentButtonBinding>(
+    ToolContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+    parentController
+) {
+    @AssistedFactory
+    interface Factory : BaseController.Factory<ContainedButtonController>
 }

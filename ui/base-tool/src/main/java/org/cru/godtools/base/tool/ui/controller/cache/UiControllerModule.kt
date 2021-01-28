@@ -9,6 +9,7 @@ import dagger.multibindings.Multibinds
 import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ButtonController
+import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FallbackController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
@@ -40,7 +41,7 @@ abstract class UiControllerModule {
     @Binds
     @IntoMap
     @UiControllerType(Button::class)
-    internal abstract fun buttonControllerFactory(factory: ButtonController.Factory): BaseController.Factory<*>
+    internal abstract fun buttonControllerFactory(factory: ContainedButtonController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
