@@ -31,7 +31,6 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
-    @VisibleForTesting(otherwise = PROTECTED)
     val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
