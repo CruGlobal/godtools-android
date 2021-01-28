@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.GodTools.Tool">
+        <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Content.Button</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>
     </style>
 
