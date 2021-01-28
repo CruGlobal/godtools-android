@@ -37,13 +37,7 @@ class Button : Content, Styles {
         }
     }
 
-    enum class Style {
-        CONTAINED, OUTLINED, UNKNOWN;
-
-        companion object {
-            internal val DEFAULT = CONTAINED
-        }
-    }
+    enum class Style { CONTAINED, OUTLINED, UNKNOWN }
     private fun String?.parseStyleOrNull() = when (this) {
         null -> null
         XML_STYLE_CONTAINED -> Style.CONTAINED
@@ -58,7 +52,7 @@ class Button : Content, Styles {
         events = parseEvents(parser, XML_EVENTS)
         url = parser.getAttributeValueAsUriOrNull(XML_URL)
 
-        style = parser.getAttributeValue(null, XML_STYLE).parseStyleOrNull() ?: Style.DEFAULT
+        _style = parser.getAttributeValue(null, XML_STYLE).parseStyleOrNull()
         _buttonColor = parser.getAttributeValueAsColorOrNull(XML_COLOR)
 
         // process any child elements
@@ -84,7 +78,7 @@ class Button : Content, Styles {
     internal constructor(
         parent: Base,
         type: Type = Type.DEFAULT,
-        style: Style = Style.DEFAULT,
+        style: Style? = null,
         @ColorInt color: Int? = null,
         text: ((Button) -> Text?)? = null
     ) : super(parent) {
@@ -92,7 +86,7 @@ class Button : Content, Styles {
         events = emptySet()
         url = null
 
-        this.style = style
+        _style = style
         _buttonColor = color
 
         analyticsEvents = emptySet()
@@ -103,7 +97,8 @@ class Button : Content, Styles {
     val events: Set<Event.Id>
     val url: Uri?
 
-    val style: Style
+    private val _style: Style?
+    val style: Style get() = _style ?: stylesParent.buttonStyle
 
     @ColorInt
     private val _buttonColor: Int?

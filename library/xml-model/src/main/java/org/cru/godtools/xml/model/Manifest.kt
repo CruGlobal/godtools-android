@@ -57,6 +57,8 @@ class Manifest : BaseModel, Styles {
         val DEFAULT_PRIMARY_TEXT_COLOR = Color.WHITE
         @ColorInt
         val DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90)
+
+        internal val DEFAULT_BUTTON_STYLE = Button.Style.CONTAINED
     }
 
     enum class Type {
@@ -85,6 +87,8 @@ class Manifest : BaseModel, Styles {
     override val primaryTextColor: Int
     @ColorInt
     override val textColor: Int
+
+    override val buttonStyle get() = DEFAULT_BUTTON_STYLE
 
     @ColorInt
     val backgroundColor: Int

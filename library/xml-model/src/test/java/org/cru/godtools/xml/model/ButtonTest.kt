@@ -73,6 +73,16 @@ class ButtonTest {
     }
 
     @Test
+    fun testButtonStyleUtilizesStylesDefault() {
+        val parent = mock<Styles>()
+        val button = Button(parent)
+        whenever(parent.buttonStyle).thenReturn(Button.Style.CONTAINED)
+        assertEquals(Button.Style.CONTAINED, button.style)
+        whenever(parent.buttonStyle).thenReturn(Button.Style.OUTLINED)
+        assertEquals(Button.Style.OUTLINED, button.style)
+    }
+
+    @Test
     fun testButtonColorFallbackBehavior() {
         assertThat(Button(manifest).buttonColor, equalTo(manifest.primaryColor))
         assertThat(
