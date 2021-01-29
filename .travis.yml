@@ -16,6 +16,7 @@ branches:
   only:
     - develop
     - master
+    - /^maint\/v(\d+\.){1,}x$/
 
 stages:
 - test

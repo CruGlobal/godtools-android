@@ -128,9 +128,13 @@ android {
             buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools\""
         }
     }
+    bundle {
+        language.enableSplit = false
+    }
     dynamicFeatures = [
             ':feature:bundledcontent',
     ]
+
     sourceSets {
         qa {
             java.srcDir 'src/debug/java'

@@ -209,4 +209,19 @@ class GodToolsShortcutManagerTest {
         }
     }
     // endregion Update Existing Shortcuts
+
+    // region Instant App
+    @Test
+    fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() {
+        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
+
+        // Instant Apps don't have access to the system ShortcutManager
+        whenever(app.getSystemService<ShortcutManager>()).thenReturn(null)
+        coroutineScope.resumeDispatcher()
+        clearInvocations(dao)
+
+        coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }
+        verifyZeroInteractions(dao)
+    }
+    // endregion Instant App
 }
