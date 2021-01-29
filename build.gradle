@@ -115,7 +115,7 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "9.4.1"
 }
 
-version '5.4.3'
+version '5.4.4-SNAPSHOT'
 ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 
 // define dependency versions for this project
