@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 /* Value constants */
 private const val USER_PROP_APP_NAME = "cru_appname"
-private const val VALUE_APP_NAME_GODTOOLS = "GodTools"
+private const val VALUE_APP_NAME_GODTOOLS = "GodTools App"
 
 private const val USER_PROP_APP_TYPE = "godtools_app_type"
 private const val VALUE_APP_TYPE_INSTANT = "instant"
