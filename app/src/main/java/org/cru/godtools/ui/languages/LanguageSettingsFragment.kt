@@ -2,10 +2,11 @@ package org.cru.godtools.ui.languages
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.R
@@ -34,7 +35,8 @@ class LanguageSettingsFragment :
     override fun editParallelLanguage() = requireActivity().startLanguageSelectionActivity(false)
 }
 
-class LanguageSettingsFragmentDataModel @ViewModelInject constructor(dao: GodToolsDao, settings: Settings) :
+@HiltViewModel
+class LanguageSettingsFragmentDataModel @Inject constructor(dao: GodToolsDao, settings: Settings) :
     ViewModel() {
     val primaryLanguage = settings.primaryLanguageLiveData.switchMap { dao.findLiveData<Language>(it) }
     val parallelLanguage =

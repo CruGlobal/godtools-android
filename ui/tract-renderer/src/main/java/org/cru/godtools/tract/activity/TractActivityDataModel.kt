@@ -2,8 +2,6 @@ package org.cru.godtools.tract.activity
 
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -11,7 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
+import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -37,12 +37,13 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 private const val STATE_LIVE_SHARE_TUTORIAL_SHOWN = "liveShareTutorialShown"
 
-class TractActivityDataModel @ViewModelInject constructor(
+@HiltViewModel
+class TractActivityDataModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
-    @Assisted private val savedState: SavedStateHandle
+    private val savedState: SavedStateHandle
 ) : ViewModel() {
     val tool = MutableLiveData<String?>()
     val isInitialSyncFinished = MutableLiveData(false)

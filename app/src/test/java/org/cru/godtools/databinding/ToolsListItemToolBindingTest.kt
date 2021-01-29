@@ -17,7 +17,6 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.ToolsAdapterToolViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -33,7 +32,6 @@ import org.robolectric.annotation.Config
 class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
     private lateinit var callbacks: ToolsAdapterCallbacks
-    private lateinit var viewModel: ToolsAdapterToolViewModel
     private val tool = Tool().apply {
         type = Tool.Type.TRACT
         code = "test"
@@ -56,7 +54,6 @@ class ToolsListItemToolBindingTest {
     fun createBinding() {
         val activityController = Robolectric.buildActivity(MainActivity::class.java)
         callbacks = mock()
-        viewModel = mock()
 
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()

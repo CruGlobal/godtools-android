@@ -17,15 +17,15 @@ import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.Simple
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Tool
 
-private const val VIEW_MODEL_KEY_PREFIX =
-    "org.cru.godtools.ui.tools.ToolsAdapter:org.cru.godtools.ui.tools.ToolsAdapterToolViewModel"
 private typealias VH = DataBindingDraggableItemViewHolder<ToolsListItemToolBinding>
 
-class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val viewModelProvider: ViewModelProvider) :
+class ToolsAdapter(lifecycleOwner: LifecycleOwner, viewModelProvider: ViewModelProvider) :
     SimpleDataBindingDraggableItemAdapter<ToolsListItemToolBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
     }
+
+    private val viewModel = viewModelProvider.get(ToolsAdapterViewModel::class.java)
 
     val callbacks = ObservableField<ToolsAdapterCallbacks>()
     private var tools: List<Tool>? = null
@@ -54,16 +54,14 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val viewModelProvider
 
     override fun onBindViewDataBinding(binding: ToolsListItemToolBinding, position: Int) {
         val tool = getItem(position)
-        val code = tool?.code
-        val viewModel = viewModelProvider.get("$VIEW_MODEL_KEY_PREFIX:$code", ToolsAdapterToolViewModel::class.java)
-            .also { it.toolCode.value = code }
+        val toolViewModel = tool?.code?.let { viewModel.getToolViewModel(it) }
 
         binding.tool = tool
-        binding.setDownloadProgress(viewModel.downloadProgress)
-        binding.setBanner(viewModel.banner)
-        binding.primaryTranslation = viewModel.firstTranslation
-        binding.parallelTranslation = viewModel.parallelTranslation
-        binding.parallelLanguage = viewModel.parallelLanguage
+        binding.setDownloadProgress(toolViewModel?.downloadProgress)
+        binding.setBanner(toolViewModel?.banner)
+        binding.primaryTranslation = toolViewModel?.firstTranslation
+        binding.parallelTranslation = toolViewModel?.parallelTranslation
+        binding.parallelLanguage = toolViewModel?.parallelLanguage
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

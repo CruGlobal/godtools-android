@@ -35,7 +35,6 @@ dependencies {
     implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.activity}"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:${deps.androidX.hilt}"
     api "androidx.lifecycle:lifecycle-common-java8:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
@@ -64,7 +63,6 @@ dependencies {
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
-    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"

@@ -8,16 +8,18 @@ import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.article.aem.R
 import org.cru.godtools.article.aem.db.ArticleDao
 
-internal class AemArticleViewModel @ViewModelInject constructor(
+@HiltViewModel
+internal class AemArticleViewModel @Inject constructor(
     application: Application,
     private val articleDao: ArticleDao,
     private val webViewClient: ArticleWebViewClient

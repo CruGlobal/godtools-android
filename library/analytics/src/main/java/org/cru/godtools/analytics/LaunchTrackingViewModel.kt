@@ -1,17 +1,18 @@
 package org.cru.godtools.analytics
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.cru.godtools.analytics.model.LaunchAnalyticsActionEvent
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 
-class LaunchTrackingViewModel @ViewModelInject constructor(
+@HiltViewModel
+class LaunchTrackingViewModel @Inject constructor(
     private val eventBus: EventBus,
     private val settings: Settings,
-    @Assisted private val state: SavedStateHandle
+    private val state: SavedStateHandle
 ) : ViewModel() {
     private var launchTracked: Boolean
         get() = state.get<Boolean>("launchTracked") ?: false
