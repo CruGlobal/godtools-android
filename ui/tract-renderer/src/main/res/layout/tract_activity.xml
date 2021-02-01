@@ -9,7 +9,10 @@
         <import type="java.util.Locale" />
         <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState" />
         <import type="org.cru.godtools.download.manager.DownloadProgress" />
+        <import type="org.cru.godtools.xml.model.Manifest" />
+        <import type="org.cru.godtools.xml.model.ManifestKt" />
 
+        <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
         <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
@@ -35,7 +38,7 @@
             app:progress="@{progress}"
             app:toolState="@{toolState}" />
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,13 +50,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:cropToPadding="false" />
+                android:cropToPadding="false"
+                app:gravity="@{ManifestKt.getBackgroundImageGravity(manifest)}"
+                app:picassoFile="@{manifest.backgroundImage}"
+                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}" />
 
             <org.cru.godtools.tract.widget.HackyRtlViewPager
                 android:id="@+id/pages"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </RelativeLayout>
+        </FrameLayout>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
