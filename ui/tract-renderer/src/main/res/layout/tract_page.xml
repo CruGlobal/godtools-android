@@ -20,19 +20,17 @@
         <variable name="isCallToActionTipComplete" type="LiveData&lt;Boolean&gt;" />
     </data>
 
-    <RelativeLayout
-        android:id="@+id/pageView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@{TractPageKt.getBackgroundColor(page)}">
 
         <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
-            android:id="@+id/background_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:cropToPadding="false"
             android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
+            android:scaleType="matrix"
             app:gravity="@{TractPageKt.getBackgroundImageGravity(page)}"
             app:picassoFile="@{page.backgroundImage}"
             app:scaleType="@{TractPageKt.getBackgroundImageScaleType(page)}"
@@ -113,5 +111,5 @@
                 app:visibleIf="@{enableTips &amp;&amp; page.callToAction.tip != null}"
                 tools:src="@drawable/ic_tips_tip" />
         </org.cru.godtools.tract.widget.PageContentLayout>
-    </RelativeLayout>
+    </FrameLayout>
 </layout>
