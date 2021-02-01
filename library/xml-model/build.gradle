@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':library:analytics')
-    implementation project(':library:base')
+    api project(':library:base')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
 
