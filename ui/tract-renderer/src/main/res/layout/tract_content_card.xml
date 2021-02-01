@@ -110,9 +110,10 @@
                     <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
                         android:id="@+id/background_image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:cropToPadding="false"
+                        android:scaleType="matrix"
                         app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
                         app:picassoFile="@{model.backgroundImage}"
                         app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />

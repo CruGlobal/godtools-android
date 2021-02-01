@@ -1,5 +1,7 @@
 package org.cru.godtools.base.tool.widget
 
+import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.annotation.AttrRes
@@ -69,8 +71,48 @@ interface ScaledPicassoImageView : PicassoImageView {
                 }
             }
         }
+
+        fun onSetImageDrawable() {
+            updateImageMatrix()
+        }
+
+        private fun updateImageMatrix() {
+            if (mView.scaleType != ImageView.ScaleType.MATRIX) return
+            val drawable = mView.drawable ?: return
+
+            val dwidth = drawable.intrinsicWidth.toFloat()
+            val dheight = drawable.intrinsicHeight.toFloat()
+            val vwidth = mView.run { width - paddingLeft - paddingRight }.toFloat()
+            val vheight = mView.run { height - paddingTop - paddingBottom }.toFloat()
+
+            mView.imageMatrix = Matrix().apply {
+                val widthScale = vwidth / dwidth
+                val heightScale = vheight / dheight
+                val scale = when (scaleType) {
+                    ImageScaleType.FILL_X -> widthScale
+                    ImageScaleType.FILL_Y -> heightScale
+                    ImageScaleType.FILL -> if (widthScale > heightScale) widthScale else heightScale
+                    ImageScaleType.FIT -> if (widthScale > heightScale) heightScale else widthScale
+                }
+                setScale(scale, scale)
+
+                postTranslate(
+                    when (gravityHorizontal) {
+                        GravityHorizontal.LEFT -> 0f
+                        GravityHorizontal.CENTER -> (vwidth - (dwidth * scale)) / 2
+                        GravityHorizontal.RIGHT -> vwidth - (dwidth * scale)
+                    },
+                    when (gravityVertical) {
+                        GravityVertical.TOP -> 0f
+                        GravityVertical.CENTER -> (vheight - (dheight * scale)) / 2
+                        GravityVertical.BOTTOM -> vheight - (dheight * scale)
+                    }
+                )
+            }
+        }
     }
 
+    fun setImageDrawable(drawable: Drawable?)
     fun setScaleType(type: ImageScaleType)
     fun setGravityHorizontal(gravity: GravityHorizontal)
     fun setGravityVertical(gravity: GravityVertical)
