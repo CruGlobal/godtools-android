@@ -98,26 +98,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <FrameLayout
+                <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+                    android:id="@+id/background_image"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    android:scaleType="matrix"
+                    app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
                     app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/content_scroll_view">
-
-                    <!-- We need the FrameLayout parent to handle image alignment when the image doesn't fill the entire background -->
-                    <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
-                        android:id="@+id/background_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:adjustViewBounds="true"
-                        android:cropToPadding="false"
-                        android:scaleType="matrix"
-                        app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
-                        app:picassoFile="@{model.backgroundImage}"
-                        app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />
-                </FrameLayout>
+                    app:layout_constraintTop_toTopOf="@id/content_scroll_view"
+                    app:picassoFile="@{model.backgroundImage}"
+                    app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />
 
                 <org.ccci.gto.android.common.widget.HackyNestedScrollView
                     android:id="@+id/content_scroll_view"
