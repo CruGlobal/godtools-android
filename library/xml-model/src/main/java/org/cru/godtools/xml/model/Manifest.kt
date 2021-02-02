@@ -55,6 +55,10 @@ class Manifest : BaseModel, Styles {
         val DEFAULT_PRIMARY_COLOR = Color.argb(255, 59, 164, 219)
         @ColorInt
         val DEFAULT_PRIMARY_TEXT_COLOR = Color.WHITE
+
+        @ColorInt
+        internal val DEFAULT_LESSON_NAV_BAR_COLOR = Color.TRANSPARENT
+
         @ColorInt
         val DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90)
 
@@ -93,11 +97,11 @@ class Manifest : BaseModel, Styles {
     @ColorInt
     private val _navBarColor: Int?
     @get:ColorInt
-    val navBarColor get() = _navBarColor ?: primaryColor
+    val navBarColor get() = _navBarColor ?: if (type == Type.LESSON) DEFAULT_LESSON_NAV_BAR_COLOR else primaryColor
     @ColorInt
     private val _navBarControlColor: Int?
     @get:ColorInt
-    val navBarControlColor get() = _navBarControlColor ?: primaryTextColor
+    val navBarControlColor get() = _navBarControlColor ?: if (type == Type.LESSON) primaryColor else primaryTextColor
 
     @ColorInt
     val backgroundColor: Int
@@ -360,6 +364,11 @@ val Manifest?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMAR
 val Manifest?.navBarColor get() = this?.navBarColor ?: primaryColor
 @get:ColorInt
 val Manifest?.navBarControlColor get() = this?.navBarControlColor ?: primaryTextColor
+
+@get:ColorInt
+val Manifest?.lessonNavBarColor get() = this?.navBarColor ?: Manifest.DEFAULT_LESSON_NAV_BAR_COLOR
+@get:ColorInt
+val Manifest?.lessonNavBarControlColor get() = this?.navBarControlColor ?: primaryColor
 
 @get:ColorInt
 val Manifest?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
