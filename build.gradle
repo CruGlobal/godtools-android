@@ -36,7 +36,7 @@ buildscript {
                 picasso            : '2.8',
                 picassoTransforms  : '2.3.1',
                 retrofit2          : '2.6.4',
-                robolectric        : '4.5',
+                robolectric        : '4.5.1',
                 scarlet            : '0.1.11',
                 snowplow           : '1.7.1',
                 splitties          : '3.0.0-beta01',
