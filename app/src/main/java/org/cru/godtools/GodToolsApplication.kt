@@ -34,7 +34,7 @@ open class GodToolsApplication : Application() {
         }
 
         // configure components
-        configureLanguageFallacks()
+        configureLanguageFallbacks()
 
         super.onCreate()
 
@@ -47,7 +47,7 @@ open class GodToolsApplication : Application() {
         SplitCompat.install(this)
     }
 
-    private fun configureLanguageFallacks() {
+    private fun configureLanguageFallbacks() {
         // These fallbacks are used for JesusFilm
         LocaleUtils.addFallback("abs", "ms")
         LocaleUtils.addFallback("pmy", "ms")
