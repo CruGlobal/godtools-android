@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.xml.util.getXmlParserForResource
@@ -74,6 +75,28 @@ class ManifestParsingRobolectricTest {
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }
+
+    // region navbar colors
+    @Test
+    fun testNavBarColors() {
+        val nullManifest: Manifest? = null
+        assertEquals(Manifest.DEFAULT_PRIMARY_COLOR, nullManifest.navBarColor)
+        assertEquals(Manifest.DEFAULT_PRIMARY_TEXT_COLOR, nullManifest.navBarControlColor)
+
+        val manifestPrimary = Manifest(primaryColor = Color.GREEN, primaryTextColor = Color.BLUE)
+        assertEquals(Color.GREEN, (manifestPrimary as Manifest?).navBarColor)
+        assertEquals(Color.BLUE, (manifestPrimary as Manifest?).navBarControlColor)
+
+        val manifestNavBar = Manifest(
+            primaryColor = Color.RED,
+            primaryTextColor = Color.RED,
+            navBarColor = Color.GREEN,
+            navBarControlColor = Color.BLUE
+        )
+        assertEquals(Color.GREEN, (manifestNavBar as Manifest?).navBarColor)
+        assertEquals(Color.BLUE, (manifestNavBar as Manifest?).navBarControlColor)
+    }
+    // endregion navbar colors
 
     private fun parseManifest(name: String) =
         Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource(name)) { getXmlParserForResource(it) }
