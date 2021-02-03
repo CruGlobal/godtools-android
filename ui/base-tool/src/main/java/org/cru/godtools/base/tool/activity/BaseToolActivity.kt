@@ -73,6 +73,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     @CallSuper
     override fun onBindingChanged() {
+        binding.setVariable(BR.manifest, activeManifestLiveData)
         binding.setVariable(BR.progress, activeDownloadProgressLiveData)
         binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
@@ -137,14 +138,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     private fun setupToolbar() {
         activeManifestLiveData.observe(this) { manifest ->
             toolbar?.apply {
-                // set toolbar background color
-                setBackgroundColor(manifest.navBarColor)
-
                 // set text & controls color
-                val controlColor = manifest.navBarControlColor
-                navigationIcon = navigationIcon.tint(controlColor)
-                setTitleTextColor(controlColor)
-                setSubtitleTextColor(controlColor)
+                navigationIcon = navigationIcon.tint(manifest.navBarControlColor)
             }
             updateToolbarTitle()
             updateToolbarMenu(manifest)
