@@ -73,6 +73,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@{ManifestKt.getNavBarColor(manifest)}"
                 app:elevation="0dp"
+                app:menuItemIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:navigationIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:overflowIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:subtitleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}"

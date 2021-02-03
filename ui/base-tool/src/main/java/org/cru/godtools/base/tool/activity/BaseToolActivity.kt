@@ -10,7 +10,6 @@ import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.view.forEach
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,7 +38,6 @@ import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
-import org.cru.godtools.base.ui.util.tint
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -47,7 +45,6 @@ import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarColor
-import org.cru.godtools.xml.model.navBarControlColor
 import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
@@ -85,13 +82,18 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_tool, menu)
-        menu.setupToolbarMenu()
         menu.setupShareMenuItem()
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        updateToolbarMenu()
+        updateShareMenuItem()
+
+        // invalidate the binding to force it to re-color the updated menu
+        // TODO: this is a very brute-force way of forcing a recoloring of menu items.
+        //       We should try and figure out a more targeted solution at some point.
+        binding.invalidateAll()
+
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -129,29 +131,15 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     // region Toolbar update logic
-    private var toolbarMenu: Menu? = null
-
-    private fun Menu.setupToolbarMenu() {
-        toolbarMenu = this
-    }
-
     private fun setupToolbar() {
-        activeManifestLiveData.observe(this) { manifest ->
+        activeManifestLiveData.observe(this) {
             updateToolbarTitle()
-            updateToolbarMenu(manifest)
+            updateShareMenuItem()
         }
     }
 
     protected open fun updateToolbarTitle() {
         title = activeManifest?.title.orEmpty()
-    }
-
-    private fun updateToolbarMenu(manifest: Manifest? = activeManifest) {
-        // tint all action icons
-        val controlColor = manifest.navBarControlColor
-        toolbarMenu?.forEach { it.icon = it.icon.tint(controlColor) }
-
-        updateShareMenuItem()
     }
     // endregion Toolbar update logic
 
