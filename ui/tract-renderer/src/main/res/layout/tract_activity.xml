@@ -74,6 +74,7 @@
                 android:background="@{ManifestKt.getNavBarColor(manifest)}"
                 app:elevation="0dp"
                 app:navigationIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:overflowIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:subtitleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:titleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}">
 

@@ -9,3 +9,8 @@ import org.cru.godtools.base.ui.util.tint
 internal fun Toolbar.setNavigationIconTint(@ColorInt color: Int) {
     navigationIcon = navigationIcon.tint(color)
 }
+
+@BindingAdapter("overflowIconTint")
+internal fun Toolbar.setOverflowIconTint(@ColorInt color: Int) {
+    overflowIcon = overflowIcon.tint(color)
+}

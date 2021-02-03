@@ -149,7 +149,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     private fun updateToolbarMenu(manifest: Manifest? = activeManifest) {
         // tint all action icons
         val controlColor = manifest.navBarControlColor
-        toolbar?.apply { overflowIcon = overflowIcon.tint(controlColor) }
         toolbarMenu?.forEach { it.icon = it.icon.tint(controlColor) }
 
         updateShareMenuItem()

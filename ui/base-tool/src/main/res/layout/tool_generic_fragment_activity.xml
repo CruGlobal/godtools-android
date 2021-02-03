@@ -29,6 +29,7 @@
                 android:background="@{ManifestKt.getNavBarColor(manifest)}"
                 android:theme="@style/ThemeOverlay.GodTools.Toolbar.AppBar"
                 app:navigationIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:overflowIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:subtitleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}"
                 app:titleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}" />
         </com.google.android.material.appbar.AppBarLayout>
