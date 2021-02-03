@@ -1,5 +1,3 @@
-@file:JvmName("DrawableUtils")
-
 package org.cru.godtools.base.ui.util
 
 import android.graphics.drawable.Drawable
