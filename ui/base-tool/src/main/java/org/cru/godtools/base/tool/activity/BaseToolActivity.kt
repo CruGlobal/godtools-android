@@ -137,10 +137,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     private fun setupToolbar() {
         activeManifestLiveData.observe(this) { manifest ->
-            toolbar?.apply {
-                // set text & controls color
-                navigationIcon = navigationIcon.tint(manifest.navBarControlColor)
-            }
             updateToolbarTitle()
             updateToolbarMenu(manifest)
         }
