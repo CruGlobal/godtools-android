@@ -90,10 +90,10 @@ class Manifest : BaseModel, Styles {
     override val primaryColor: Int
     @ColorInt
     override val primaryTextColor: Int
-    @ColorInt
-    override val textColor: Int
 
     override val buttonStyle get() = DEFAULT_BUTTON_STYLE
+    @ColorInt
+    override val textColor: Int
 
     @ColorInt
     private val _navBarColor: Int?
