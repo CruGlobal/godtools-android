@@ -10,7 +10,7 @@ android {
 
 dependencies {
     implementation project(':library:base')
-    implementation project(':library:db')
+    api project(':library:db')
     api project(':library:download-manager')
     implementation project(':library:model')
     api project(':library:sync')
