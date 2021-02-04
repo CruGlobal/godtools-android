@@ -20,6 +20,9 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
     }
     // endregion Lifecycle
 
+    // region UI
+    override val toolbar get() = binding.appbar
+
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
@@ -31,4 +34,5 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
         pages.adapter = lessonPageAdapter
     }
     // endregion Pages
+    // endregion UI
 }
