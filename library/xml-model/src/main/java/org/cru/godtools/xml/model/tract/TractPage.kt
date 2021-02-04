@@ -73,6 +73,11 @@ class TractPage : BaseModel, Styles {
     @get:ColorInt
     val cardTextColor get() = _cardTextColor ?: textColor
 
+    @ColorInt
+    private val _cardBackgroundColor: Int?
+    @get:ColorInt
+    val cardBackgroundColor get() = _cardBackgroundColor ?: manifest.cardBackgroundColor
+
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
         manifest: Manifest,
@@ -95,6 +100,7 @@ class TractPage : BaseModel, Styles {
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+        _cardBackgroundColor = null
 
         header = null
         hero = null
@@ -127,6 +133,8 @@ class TractPage : BaseModel, Styles {
             parser.getAttributeValueAsImageGravity(XML_BACKGROUND_IMAGE_GRAVITY, DEFAULT_BACKGROUND_IMAGE_GRAVITY)
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        _cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XML_CARD_BACKGROUND_COLOR)
 
         // process any child elements
         var header: Header? = null

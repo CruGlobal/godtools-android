@@ -12,6 +12,7 @@ abstract class BaseModel internal constructor(private val parent: Base? = null) 
         internal const val XML_BACKGROUND_IMAGE = "background-image"
         internal const val XML_BACKGROUND_IMAGE_GRAVITY = "background-image-align"
         internal const val XML_BACKGROUND_IMAGE_SCALE_TYPE = "background-image-scale-type"
+        internal const val XML_CARD_BACKGROUND_COLOR = "card-background-color"
         internal const val XML_EVENTS = "events"
         internal const val XML_LISTENERS = "listeners"
         internal const val XML_DISMISS_LISTENERS = "dismiss-listeners"

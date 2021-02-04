@@ -53,11 +53,10 @@ class Card : BaseModel, Styles, Parent {
     @get:ColorInt
     override val textColor get() = _textColor ?: page.cardTextColor
 
-    // TODO: implement card-background-color on Page & Manifest
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt
-    internal val backgroundColor get() = _backgroundColor ?: manifest.backgroundColor
+    internal val backgroundColor get() = _backgroundColor ?: page.cardBackgroundColor ?: manifest.cardBackgroundColor ?: manifest.backgroundColor
 
     val label: Text?
     override val content: List<Content>
@@ -103,6 +102,7 @@ class Card : BaseModel, Styles, Parent {
     constructor(
         parent: TractPage,
         position: Int = 0,
+        backgroundColor: Int? = null,
         isHidden: Boolean = false,
         content: ((Card) -> List<Content>?)? = null
     ) : super(parent) {
@@ -114,7 +114,7 @@ class Card : BaseModel, Styles, Parent {
         dismissListeners = emptySet()
         analyticsEvents = emptySet()
 
-        _backgroundColor = null
+        _backgroundColor = backgroundColor
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
@@ -126,7 +126,6 @@ class Card : BaseModel, Styles, Parent {
     }
 }
 
-// TODO: implement card-background-color on Page & Manifest
 @get:ColorInt
 val Card?.backgroundColor get() = this?.backgroundColor ?: this?.manifest.backgroundColor
 val Card?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY

@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model.tract
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.Manifest
@@ -11,10 +12,12 @@ import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -28,6 +31,7 @@ class CardTest {
         val card = parseCardXml("card.xml")
         assertEquals("$TOOL_CODE-0-0", card.id)
         assertEquals("Card 1", card.label!!.text)
+        assertEquals(Color.RED, card.backgroundColor)
         assertThat(card.listeners, containsInAnyOrder(*listenerEvents.toTypedArray()))
         assertThat(card.dismissListeners, containsInAnyOrder(*dismissListenerEvents.toTypedArray()))
         assertThat(card.content, contains(instanceOf(Paragraph::class.java)))
@@ -67,5 +71,22 @@ class CardTest {
         assertFalse(page.cards[0].isLastVisibleCard)
         assertTrue(page.cards[1].isLastVisibleCard)
         assertFalse(page.cards[2].isLastVisibleCard)
+    }
+
+    @Test
+    fun testCardBackgroundColorFallbackBehaviorForTractPage() {
+        val page = TractPage(
+            Manifest(),
+            cards = { listOf(Card(it, isHidden = false), Card(it, isHidden = false), Card(it, isHidden = true)) }
+        )
+        val card = Card(page, content = {
+            listOf(
+                InlineTip(it, "tip1"),
+                Paragraph(it, content = { listOf(InlineTip(it, "tip2")) }),
+                InlineTip(it, "tip3"),
+                InlineTip(it, "tip1"),
+            )
+        })
+        assertThat(card.backgroundColor, equalTo(page.cardBackgroundColor))
     }
 }

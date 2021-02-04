@@ -43,6 +43,8 @@ class TractPageTest {
         assertThat(page.cards, hasSize(2))
         assertEquals("Card 1", page.cards[0].label!!.text)
         assertEquals("Card 2", page.cards[1].label!!.text)
+        assertEquals(page.cards[0].backgroundColor, page.cardBackgroundColor)
+        assertEquals(page.cards[1].backgroundColor, page.cardBackgroundColor)
     }
 
     @Test

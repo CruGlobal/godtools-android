@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
+import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.lesson.LessonPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.TractPage
@@ -94,6 +95,9 @@ class Manifest : BaseModel, Styles {
     val backgroundImageScaleType: ImageScaleType
 
     @ColorInt
+    val cardBackgroundColor: Int?
+
+    @ColorInt
     val navBarColor: Int?
     @ColorInt
     val navBarControlColor: Int?
@@ -136,6 +140,7 @@ class Manifest : BaseModel, Styles {
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
+        cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XMLNS_TRACT, XML_CARD_BACKGROUND_COLOR)
         navBarColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_COLOR)
         navBarControlColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_CONTROL_COLOR)
 
@@ -207,6 +212,7 @@ class Manifest : BaseModel, Styles {
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+        cardBackgroundColor = null
 
         navBarColor = null
         navBarControlColor = null
