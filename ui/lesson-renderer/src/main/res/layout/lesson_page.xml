@@ -14,6 +14,8 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/lesson_content_horiz_margin"
+            android:layout_marginRight="@dimen/lesson_content_horiz_margin"
             android:orientation="vertical" />
     </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 </layout>
