@@ -5,9 +5,15 @@
         <variable name="model" type="org.cru.godtools.xml.model.lesson.LessonPage" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/content"
+    <org.ccci.gto.android.common.widget.HackyNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </org.ccci.gto.android.common.widget.HackyNestedScrollView>
 </layout>
