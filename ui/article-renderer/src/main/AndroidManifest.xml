@@ -6,19 +6,11 @@
             android:name=".ui.categories.CategoriesActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool.AppBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.MainActivity" />
-        </activity>
+            android:theme="@style/Theme.GodTools.Tool.AppBar" />
         <activity
             android:name=".ui.articles.ArticlesActivity"
             android:parentActivityName=".ui.categories.CategoriesActivity"
             android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool.AppBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cru.godtools.article.ui.categories.CategoriesActivity" />
-        </activity>
+            android:theme="@style/Theme.GodTools.Tool.AppBar" />
     </application>
 </manifest>
