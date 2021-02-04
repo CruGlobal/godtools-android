@@ -1,0 +1,19 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    buildFeatures {
+        dataBinding = true
+    }
+}
+
+dependencies {
+    api project(":ui:base-tool")
+
+    implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
+
+    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
+
+    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+
+    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+}

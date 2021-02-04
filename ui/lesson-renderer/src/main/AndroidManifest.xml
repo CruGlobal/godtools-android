@@ -1,3 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.cru.godtools.tool.lesson">
+
+    <application>
+        <activity
+            android:name=".ui.LessonActivity"
+            android:screenOrientation="@integer/default_screen_orientation" />
+    </application>
 </manifest>
