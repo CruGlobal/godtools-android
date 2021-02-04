@@ -21,7 +21,13 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
     // endregion Lifecycle
 
     // region UI
+    // region Toolbar
     override val toolbar get() = binding.appbar
+
+    override fun updateToolbarTitle() {
+        title = ""
+    }
+    // endregion Toolbar
 
     // region Pages
     @Inject
