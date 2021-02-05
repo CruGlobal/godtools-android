@@ -95,7 +95,9 @@ class Manifest : BaseModel, Styles {
     val backgroundImageScaleType: ImageScaleType
 
     @ColorInt
-    val cardBackgroundColor: Int?
+    private val _cardBackgroundColor: Int?
+    @get:ColorInt
+    val cardBackgroundColor: Int get() = _cardBackgroundColor ?: manifest.backgroundColor
 
     @ColorInt
     val navBarColor: Int?
@@ -140,7 +142,7 @@ class Manifest : BaseModel, Styles {
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
-        cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XMLNS_TRACT, XML_CARD_BACKGROUND_COLOR)
+        _cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XMLNS_TRACT, XML_CARD_BACKGROUND_COLOR)
         navBarColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_COLOR)
         navBarControlColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_CONTROL_COLOR)
 
@@ -212,7 +214,7 @@ class Manifest : BaseModel, Styles {
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-        cardBackgroundColor = null
+        _cardBackgroundColor = null
 
         navBarColor = null
         navBarControlColor = null

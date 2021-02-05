@@ -56,7 +56,7 @@ class Card : BaseModel, Styles, Parent {
     @ColorInt
     private val _backgroundColor: Int?
     @get:ColorInt
-    internal val backgroundColor get() = _backgroundColor ?: page.cardBackgroundColor ?: manifest.cardBackgroundColor ?: manifest.backgroundColor
+    internal val backgroundColor get() = _backgroundColor ?: page.cardBackgroundColor
 
     val label: Text?
     override val content: List<Content>
