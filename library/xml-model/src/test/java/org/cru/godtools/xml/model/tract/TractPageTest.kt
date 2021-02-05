@@ -43,8 +43,6 @@ class TractPageTest {
         assertThat(page.cards, hasSize(2))
         assertEquals("Card 1", page.cards[0].label!!.text)
         assertEquals("Card 2", page.cards[1].label!!.text)
-        assertEquals(page.cards[0].backgroundColor, page.cardBackgroundColor)
-        assertEquals(page.cards[1].backgroundColor, page.cardBackgroundColor)
     }
 
     @Test
@@ -53,6 +51,12 @@ class TractPageTest {
         assertThat(page.modals, hasSize(2))
         assertEquals("Modal 1", page.modals[0].title!!.text)
         assertEquals("Modal 2", page.modals[1].title!!.text)
+    }
+
+    @Test
+    fun testCardBackgroundColorFallbackBehavior() {
+        val page = parsePageXml("page_cards.xml")
+        assertEquals(page.cardBackgroundColor, manifest.cardBackgroundColor)
     }
 
     private fun parsePageXml(file: String) = TractPage(manifest, 0, null, getXmlParserForResource(file))

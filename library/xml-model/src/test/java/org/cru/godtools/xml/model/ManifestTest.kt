@@ -75,6 +75,12 @@ class ManifestParsingRobolectricTest {
         assertEquals(0, manifest.tips.size)
     }
 
+    @Test
+    fun testCardBackgroundColorFallbackBehavior() {
+        val manifest = parseManifest("manifest_tract.xml")
+        assertEquals(manifest.cardBackgroundColor, manifest.backgroundColor)
+    }
+
     private fun parseManifest(name: String) =
         Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource(name)) { getXmlParserForResource(it) }
 }

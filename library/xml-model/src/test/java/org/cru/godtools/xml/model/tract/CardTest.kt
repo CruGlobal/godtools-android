@@ -14,8 +14,10 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.instanceOf
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +30,7 @@ class CardTest {
         val listenerEvents = Event.Id.parse(TOOL_CODE, "listener1 listener2")
         val dismissListenerEvents = Event.Id.parse(TOOL_CODE, "dismiss-listener1 dismiss-listener2")
 
-        val card = parseCardXml("card.xml")
+        val card = parseCardXml("card.xml", )
         assertEquals("$TOOL_CODE-0-0", card.id)
         assertEquals("Card 1", card.label!!.text)
         assertEquals(Color.RED, card.backgroundColor)
@@ -74,19 +76,9 @@ class CardTest {
     }
 
     @Test
-    fun testCardBackgroundColorFallbackBehaviorForTractPage() {
-        val page = TractPage(
-            Manifest(),
-            cards = { listOf(Card(it, isHidden = false), Card(it, isHidden = false), Card(it, isHidden = true)) }
-        )
-        val card = Card(page, content = {
-            listOf(
-                InlineTip(it, "tip1"),
-                Paragraph(it, content = { listOf(InlineTip(it, "tip2")) }),
-                InlineTip(it, "tip3"),
-                InlineTip(it, "tip1"),
-            )
-        })
+    fun testCardBackgroundColorFallbackBehavior() {
+        val page = TractPage(Manifest(), cardBackgroundColor = Color.GREEN)
+        val card = Card(page, backgroundColor = null)
         assertThat(card.backgroundColor, equalTo(page.cardBackgroundColor))
     }
 }

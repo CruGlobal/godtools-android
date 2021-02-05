@@ -83,6 +83,7 @@ class TractPage : BaseModel, Styles {
         manifest: Manifest,
         position: Int = 0,
         fileName: String? = null,
+        cardBackgroundColor: Int? = null,
         cards: ((TractPage) -> List<Card>?)? = null,
         callToAction: ((TractPage) -> CallToAction?)? = null
     ) : super(manifest) {
@@ -100,7 +101,7 @@ class TractPage : BaseModel, Styles {
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-        _cardBackgroundColor = null
+        _cardBackgroundColor = cardBackgroundColor
 
         header = null
         hero = null

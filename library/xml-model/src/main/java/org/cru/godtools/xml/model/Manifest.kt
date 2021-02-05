@@ -97,7 +97,7 @@ class Manifest : BaseModel, Styles {
     @ColorInt
     private val _cardBackgroundColor: Int?
     @get:ColorInt
-    val cardBackgroundColor: Int get() = _cardBackgroundColor ?: manifest.backgroundColor
+    val cardBackgroundColor: Int get() = _cardBackgroundColor ?: backgroundColor
 
     @ColorInt
     val navBarColor: Int?
