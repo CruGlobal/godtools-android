@@ -71,7 +71,13 @@
                 android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:elevation="0dp">
+                android:background="@{ManifestKt.getNavBarColor(manifest)}"
+                app:elevation="0dp"
+                app:menuItemIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:navigationIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:overflowIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:subtitleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:titleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}">
 
                 <androidx.appcompat.widget.AppCompatTabLayout
                     android:id="@+id/language_toggle"

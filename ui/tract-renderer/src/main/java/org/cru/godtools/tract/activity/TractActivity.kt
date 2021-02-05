@@ -285,7 +285,6 @@ class TractActivity :
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
 
     private fun setupBinding() {
-        binding.manifest = dataModel.activeManifest
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
     }
