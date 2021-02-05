@@ -10,6 +10,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
@@ -17,6 +18,7 @@
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
-        app:backgroundColor="@{ButtonKt.getButtonColor(model)}"
-        app:defaultTextColor="@{ButtonKt.getTextColor(model)}" />
+        app:defaultTextColor="@{ButtonKt.getButtonColor(model)}"
+        app:rippleColor="@{ButtonKt.getButtonColor(model)}"
+        app:strokeColor="@{ButtonKt.getButtonColor(model)}" />
 </layout>

@@ -83,6 +83,7 @@ class TractPage : BaseModel, Styles {
         manifest: Manifest,
         position: Int = 0,
         fileName: String? = null,
+        @ColorInt primaryColor: Int? = null,
         cardBackgroundColor: Int? = null,
         cards: ((TractPage) -> List<Card>?)? = null,
         callToAction: ((TractPage) -> CallToAction?)? = null
@@ -92,7 +93,7 @@ class TractPage : BaseModel, Styles {
 
         listeners = emptySet()
 
-        _primaryColor = null
+        _primaryColor = primaryColor
         _primaryTextColor = null
         _textColor = null
         _cardTextColor = null

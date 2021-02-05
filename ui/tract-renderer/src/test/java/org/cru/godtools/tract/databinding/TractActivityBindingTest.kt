@@ -7,16 +7,21 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.EnumSet
+import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.tract.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
 class TractActivityBindingTest {
+    @get:Rule
+    val picassoSingletonRule = PicassoSingletonRule()
+
     private lateinit var binding: TractActivityBinding
 
     @Before

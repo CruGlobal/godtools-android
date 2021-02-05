@@ -39,7 +39,6 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
-import org.cru.godtools.base.tool.model.view.bindBackgroundImage
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -297,10 +296,7 @@ class TractActivity :
     }
 
     private fun setupBackground() {
-        dataModel.activeManifest.observe(this) {
-            window.decorView.setBackgroundColor(it.backgroundColor)
-            binding.backgroundImage.bindBackgroundImage(it)
-        }
+        dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
     }
 
     // region Language Toggle

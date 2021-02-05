@@ -8,6 +8,7 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
@@ -38,6 +39,8 @@ class Modal : BaseModel, Parent, Styles {
     override val primaryTextColor get() = Color.WHITE
     @get:ColorInt
     override val textColor get() = Color.WHITE
+
+    override val buttonStyle get() = Button.Style.OUTLINED
     @get:ColorInt
     override val buttonColor get() = Color.WHITE
 
@@ -46,7 +49,7 @@ class Modal : BaseModel, Parent, Styles {
     override val textAlign get() = Text.Align.CENTER
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    internal constructor(parent: TractPage, position: Int) : super(parent) {
+    internal constructor(parent: TractPage, position: Int = 0) : super(parent) {
         page = parent
         this.position = position
         title = null

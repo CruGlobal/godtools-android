@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.instantapps.InstantApps
+import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
@@ -24,8 +25,16 @@ open class GodToolsApplication : Application() {
         // Enable application monitoring
         initializeCrashlytics()
 
+        // TODO: remove this logic once the minimum Android version is Android 10 or higher.
+        //       Also ensure we are no longer seeing missing splits errors showing up in Crashlytics.
+        if (MissingSplitsManagerFactory.create(this).disableAppIfMissingRequiredSplits()) {
+            Timber.tag("GodToolsApplication")
+                .e(IllegalStateException("Missing Splits"), "App is missing splits, it was probably sideloaded.")
+            return
+        }
+
         // configure components
-        configureLanguageFallacks()
+        configureLanguageFallbacks()
 
         super.onCreate()
 
@@ -38,7 +47,7 @@ open class GodToolsApplication : Application() {
         SplitCompat.install(this)
     }
 
-    private fun configureLanguageFallacks() {
+    private fun configureLanguageFallbacks() {
         // These fallbacks are used for JesusFilm
         LocaleUtils.addFallback("abs", "ms")
         LocaleUtils.addFallback("pmy", "ms")

@@ -31,7 +31,6 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
-    @VisibleForTesting(otherwise = PROTECTED)
     val root: View,
     private val parentController: BaseController<*>? = null
 ) : Observer<T?> {
@@ -73,7 +72,7 @@ abstract class BaseController<T : Base> protected constructor(
     open fun onContentEvent(event: Event) = Unit
     // endregion Lifecycle
 
-    fun supportsModel(model: Base) = modelClass.isInstance(model)
+    open fun supportsModel(model: Base) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = model?.let { cache.release(it, this) }
 
     protected open fun updateLayoutDirection() {

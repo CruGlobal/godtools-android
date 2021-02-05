@@ -1,6 +1,7 @@
 package org.cru.godtools.base.tool.widget
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
@@ -26,5 +27,10 @@ class SimpleScaledPicassoImageView @JvmOverloads constructor(
 
     override fun setGravityVertical(gravity: GravityVertical) {
         helper.gravityVertical = gravity
+    }
+
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
+        helper.onSetImageDrawable()
     }
 }
