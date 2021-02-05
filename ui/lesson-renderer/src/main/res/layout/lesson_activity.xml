@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
@@ -42,10 +43,13 @@
                 android:layout_height="match_parent"
                 app:visibleIf="@{toolState == ToolState.LOADED}">
 
+                <!-- TODO: switch to progress.setProgressCompat(p + 1, true) once this bug is fixed:
+                           https://github.com/material-components/material-components-android/issues/2051 -->
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/pages"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:onPageSelected="@{(p) -> progress.setProgress(p + 1)}" />
             </FrameLayout>
         </FrameLayout>
 
@@ -65,7 +69,22 @@
                 app:navigationIconTint="@{ManifestKt.getLessonNavBarControlColor(manifest)}"
                 app:overflowIconTint="@{ManifestKt.getLessonNavBarControlColor(manifest)}"
                 app:subtitleTextColor="@{ManifestKt.getLessonNavBarControlColor(manifest)}"
-                app:titleTextColor="@{ManifestKt.getLessonNavBarControlColor(manifest)}" />
+                app:titleTextColor="@{ManifestKt.getLessonNavBarControlColor(manifest)}">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progress"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:max="@{manifest.lessonPages.size(), default=1}"
+                    android:progress="@{pages.getCurrentItem() + 1, default=1}"
+                    app:indicatorColor="@{ManifestKt.getLessonNavBarControlColor(manifest)}"
+                    app:trackCornerRadius="4dp"
+                    app:trackThickness="8dp"
+                    app:visibleIf="@{toolState == ToolState.LOADED}"
+                    tools:max="2"
+                    tools:progress="1" />
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
