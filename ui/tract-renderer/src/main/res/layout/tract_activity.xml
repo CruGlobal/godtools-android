@@ -14,8 +14,8 @@
 
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
-        <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
+        <variable name="loadingProgress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
     </data>
 
@@ -35,7 +35,7 @@
 
         <include
             layout="@layout/activity_tool_loading"
-            app:progress="@{progress}"
+            app:progress="@{loadingProgress}"
             app:toolState="@{toolState}" />
 
         <FrameLayout
