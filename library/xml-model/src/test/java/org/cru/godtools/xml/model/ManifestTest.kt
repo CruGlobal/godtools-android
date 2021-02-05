@@ -76,6 +76,12 @@ class ManifestParsingRobolectricTest {
         assertEquals(0, manifest.tips.size)
     }
 
+    @Test
+    fun testCardBackgroundColorFallbackBehavior() {
+        assertEquals(Color.GREEN, Manifest(cardBackgroundColor = Color.GREEN).cardBackgroundColor)
+        assertEquals(Color.BLUE, Manifest(backgroundColor = Color.BLUE).cardBackgroundColor)
+    }
+
     // region navbar colors
     @Test
     fun testNavBarColors() {

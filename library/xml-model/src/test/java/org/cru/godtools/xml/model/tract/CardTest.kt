@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model.tract
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.Manifest
@@ -28,6 +29,7 @@ class CardTest {
         val card = parseCardXml("card.xml")
         assertEquals("$TOOL_CODE-0-0", card.id)
         assertEquals("Card 1", card.label!!.text)
+        assertEquals(Color.RED, card.backgroundColor)
         assertThat(card.listeners, containsInAnyOrder(*listenerEvents.toTypedArray()))
         assertThat(card.dismissListeners, containsInAnyOrder(*dismissListenerEvents.toTypedArray()))
         assertThat(card.content, contains(instanceOf(Paragraph::class.java)))
@@ -67,5 +69,12 @@ class CardTest {
         assertFalse(page.cards[0].isLastVisibleCard)
         assertTrue(page.cards[1].isLastVisibleCard)
         assertFalse(page.cards[2].isLastVisibleCard)
+    }
+
+    @Test
+    fun testCardBackgroundColorFallbackBehavior() {
+        val page = TractPage(Manifest(), cardBackgroundColor = Color.GREEN)
+        assertEquals(Color.GREEN, Card(page).backgroundColor)
+        assertEquals(Color.BLUE, Card(page, backgroundColor = Color.BLUE).backgroundColor)
     }
 }

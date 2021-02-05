@@ -2,7 +2,9 @@
 <page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
     xmlns="https://mobile-content-api.cru.org/xmlns/tract">
     <cards>
-        <card listeners="listener1 listener2" dismiss-listeners="dismiss-listener1 dismiss-listener2">
+        <card background-color="rgba(255,0,0,1)"
+            dismiss-listeners="dismiss-listener1 dismiss-listener2"
+            listeners="listener1 listener2">
             <label>
                 <content:text>Card 1</content:text>
             </label>

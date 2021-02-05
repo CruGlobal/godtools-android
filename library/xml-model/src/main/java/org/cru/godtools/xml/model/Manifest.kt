@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
+import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.lesson.LessonPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.TractPage
@@ -111,6 +112,11 @@ class Manifest : BaseModel, Styles {
     val backgroundImageScaleType: ImageScaleType
 
     @ColorInt
+    private val _cardBackgroundColor: Int?
+    @get:ColorInt
+    val cardBackgroundColor: Int get() = _cardBackgroundColor ?: backgroundColor
+
+    @ColorInt
     internal val categoryLabelColor: Int?
 
     private val _title: Text?
@@ -150,6 +156,7 @@ class Manifest : BaseModel, Styles {
 
         _navBarColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_COLOR)
         _navBarControlColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_CONTROL_COLOR)
+        _cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XMLNS_TRACT, XML_CARD_BACKGROUND_COLOR)
 
         categoryLabelColor = parser.getAttributeValueAsColorOrNull(XML_CATEGORY_LABEL_COLOR)
 
@@ -209,6 +216,8 @@ class Manifest : BaseModel, Styles {
         primaryTextColor: Int = DEFAULT_PRIMARY_TEXT_COLOR,
         navBarColor: Int? = null,
         navBarControlColor: Int? = null,
+        backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
+        cardBackgroundColor: Int? = null,
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
@@ -219,10 +228,11 @@ class Manifest : BaseModel, Styles {
         this.primaryTextColor = primaryTextColor
         textColor = DEFAULT_TEXT_COLOR
 
-        backgroundColor = DEFAULT_BACKGROUND_COLOR
+        this.backgroundColor = backgroundColor
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+        _cardBackgroundColor = cardBackgroundColor
 
         _navBarColor = navBarColor
         _navBarControlColor = navBarControlColor
