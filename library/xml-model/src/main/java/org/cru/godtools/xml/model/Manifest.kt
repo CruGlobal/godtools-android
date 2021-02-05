@@ -200,6 +200,8 @@ class Manifest : BaseModel, Styles {
         code: String = "",
         locale: Locale = Locale.ENGLISH,
         type: Type = Type.DEFAULT,
+        backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
+        cardBackgroundColor: Int? = null,
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
@@ -210,11 +212,11 @@ class Manifest : BaseModel, Styles {
         primaryTextColor = DEFAULT_PRIMARY_TEXT_COLOR
         textColor = DEFAULT_TEXT_COLOR
 
-        backgroundColor = DEFAULT_BACKGROUND_COLOR
+        this.backgroundColor = backgroundColor
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
-        _cardBackgroundColor = null
+        _cardBackgroundColor = cardBackgroundColor
 
         navBarColor = null
         navBarControlColor = null

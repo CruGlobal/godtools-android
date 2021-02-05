@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.xml.util.getXmlParserForResource
@@ -77,8 +78,8 @@ class ManifestParsingRobolectricTest {
 
     @Test
     fun testCardBackgroundColorFallbackBehavior() {
-        val manifest = parseManifest("manifest_tract.xml")
-        assertEquals(manifest.cardBackgroundColor, manifest.backgroundColor)
+        assertEquals(Color.GREEN, Manifest(cardBackgroundColor = Color.GREEN).cardBackgroundColor)
+        assertEquals(Color.BLUE, Manifest(backgroundColor = Color.BLUE).cardBackgroundColor)
     }
 
     private fun parseManifest(name: String) =

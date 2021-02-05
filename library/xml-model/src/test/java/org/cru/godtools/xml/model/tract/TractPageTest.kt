@@ -55,8 +55,8 @@ class TractPageTest {
 
     @Test
     fun testCardBackgroundColorFallbackBehavior() {
-        val page = parsePageXml("page_cards.xml")
-        assertEquals(page.cardBackgroundColor, manifest.cardBackgroundColor)
+        assertEquals(Color.GREEN, TractPage(Manifest(), cardBackgroundColor = Color.GREEN).cardBackgroundColor)
+        assertEquals(Color.BLUE, TractPage(Manifest(cardBackgroundColor = Color.BLUE)).cardBackgroundColor)
     }
 
     private fun parsePageXml(file: String) = TractPage(manifest, 0, null, getXmlParserForResource(file))

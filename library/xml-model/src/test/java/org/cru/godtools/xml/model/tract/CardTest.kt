@@ -12,7 +12,6 @@ import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
-import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -75,7 +74,7 @@ class CardTest {
     @Test
     fun testCardBackgroundColorFallbackBehavior() {
         val page = TractPage(Manifest(), cardBackgroundColor = Color.GREEN)
-        val card = Card(page, backgroundColor = null)
-        assertThat(card.backgroundColor, equalTo(page.cardBackgroundColor))
+        assertEquals(Color.GREEN, Card(page).backgroundColor)
+        assertEquals(Color.BLUE, Card(page, backgroundColor = Color.BLUE).backgroundColor)
     }
 }
