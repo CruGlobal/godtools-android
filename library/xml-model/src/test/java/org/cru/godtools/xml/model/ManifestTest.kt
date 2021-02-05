@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.xml.util.getXmlParserForResource
@@ -74,6 +75,58 @@ class ManifestParsingRobolectricTest {
         assertEquals(0, manifest.resources.size)
         assertEquals(0, manifest.tips.size)
     }
+
+    // region navbar colors
+    @Test
+    fun testNavBarColors() {
+        val manifestNull: Manifest? = null
+        assertEquals(Manifest.DEFAULT_PRIMARY_COLOR, manifestNull.navBarColor)
+        assertEquals(Manifest.DEFAULT_PRIMARY_TEXT_COLOR, manifestNull.navBarControlColor)
+
+        val manifestPrimary = Manifest(primaryColor = Color.GREEN, primaryTextColor = Color.BLUE)
+        assertEquals(Color.GREEN, manifestPrimary.navBarColor)
+        assertEquals(Color.GREEN, (manifestPrimary as Manifest?).navBarColor)
+        assertEquals(Color.BLUE, manifestPrimary.navBarControlColor)
+        assertEquals(Color.BLUE, (manifestPrimary as Manifest?).navBarControlColor)
+
+        val manifestNavBar = Manifest(
+            primaryColor = Color.RED,
+            primaryTextColor = Color.RED,
+            navBarColor = Color.GREEN,
+            navBarControlColor = Color.BLUE
+        )
+        assertEquals(Color.GREEN, manifestNavBar.navBarColor)
+        assertEquals(Color.GREEN, (manifestNavBar as Manifest?).navBarColor)
+        assertEquals(Color.BLUE, manifestNavBar.navBarControlColor)
+        assertEquals(Color.BLUE, (manifestNavBar as Manifest?).navBarControlColor)
+    }
+
+    @Test
+    fun testLessonNavBarColors() {
+        val manifestNull: Manifest? = null
+        assertEquals(Manifest.DEFAULT_LESSON_NAV_BAR_COLOR, manifestNull.lessonNavBarColor)
+        assertEquals(Manifest.DEFAULT_PRIMARY_COLOR, manifestNull.lessonNavBarControlColor)
+
+        val manifestPrimary =
+            Manifest(type = Manifest.Type.LESSON, primaryColor = Color.GREEN, primaryTextColor = Color.RED)
+        assertEquals(Manifest.DEFAULT_LESSON_NAV_BAR_COLOR, manifestPrimary.navBarColor)
+        assertEquals(Manifest.DEFAULT_LESSON_NAV_BAR_COLOR, manifestPrimary.lessonNavBarColor)
+        assertEquals(Color.GREEN, manifestPrimary.navBarControlColor)
+        assertEquals(Color.GREEN, manifestPrimary.lessonNavBarControlColor)
+
+        val manifestNavBar = Manifest(
+            type = Manifest.Type.LESSON,
+            primaryColor = Color.RED,
+            primaryTextColor = Color.RED,
+            navBarColor = Color.GREEN,
+            navBarControlColor = Color.BLUE
+        )
+        assertEquals(Color.GREEN, manifestNavBar.navBarColor)
+        assertEquals(Color.GREEN, manifestNavBar.lessonNavBarColor)
+        assertEquals(Color.BLUE, manifestNavBar.navBarControlColor)
+        assertEquals(Color.BLUE, manifestNavBar.lessonNavBarControlColor)
+    }
+    // endregion navbar colors
 
     private fun parseManifest(name: String) =
         Manifest(TOOL_CODE, Locale.ENGLISH, getXmlParserForResource(name)) { getXmlParserForResource(it) }

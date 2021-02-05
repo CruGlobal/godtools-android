@@ -55,6 +55,10 @@ class Manifest : BaseModel, Styles {
         val DEFAULT_PRIMARY_COLOR = Color.argb(255, 59, 164, 219)
         @ColorInt
         val DEFAULT_PRIMARY_TEXT_COLOR = Color.WHITE
+
+        @ColorInt
+        internal val DEFAULT_LESSON_NAV_BAR_COLOR = Color.TRANSPARENT
+
         @ColorInt
         val DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90)
 
@@ -91,16 +95,20 @@ class Manifest : BaseModel, Styles {
     override val buttonStyle get() = DEFAULT_BUTTON_STYLE
 
     @ColorInt
+    private val _navBarColor: Int?
+    @get:ColorInt
+    val navBarColor get() = _navBarColor ?: if (type == Type.LESSON) DEFAULT_LESSON_NAV_BAR_COLOR else primaryColor
+    @ColorInt
+    private val _navBarControlColor: Int?
+    @get:ColorInt
+    val navBarControlColor get() = _navBarControlColor ?: if (type == Type.LESSON) primaryColor else primaryTextColor
+
+    @ColorInt
     val backgroundColor: Int
     private val _backgroundImage: String?
     val backgroundImage get() = getResource(_backgroundImage)
     internal val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
-
-    @ColorInt
-    val navBarColor: Int?
-    @ColorInt
-    val navBarControlColor: Int?
 
     @ColorInt
     internal val categoryLabelColor: Int?
@@ -140,8 +148,8 @@ class Manifest : BaseModel, Styles {
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
-        navBarColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_COLOR)
-        navBarControlColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_CONTROL_COLOR)
+        _navBarColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_COLOR)
+        _navBarControlColor = parser.getAttributeValueAsColorOrNull(XML_NAVBAR_CONTROL_COLOR)
 
         categoryLabelColor = parser.getAttributeValueAsColorOrNull(XML_CATEGORY_LABEL_COLOR)
 
@@ -197,14 +205,18 @@ class Manifest : BaseModel, Styles {
         code: String = "",
         locale: Locale = Locale.ENGLISH,
         type: Type = Type.DEFAULT,
+        primaryColor: Int = DEFAULT_PRIMARY_COLOR,
+        primaryTextColor: Int = DEFAULT_PRIMARY_TEXT_COLOR,
+        navBarColor: Int? = null,
+        navBarControlColor: Int? = null,
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
         this.locale = locale
         this.type = type
 
-        primaryColor = DEFAULT_PRIMARY_COLOR
-        primaryTextColor = DEFAULT_PRIMARY_TEXT_COLOR
+        this.primaryColor = primaryColor
+        this.primaryTextColor = primaryTextColor
         textColor = DEFAULT_TEXT_COLOR
 
         backgroundColor = DEFAULT_BACKGROUND_COLOR
@@ -212,8 +224,8 @@ class Manifest : BaseModel, Styles {
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
-        navBarColor = null
-        navBarControlColor = null
+        _navBarColor = navBarColor
+        _navBarControlColor = navBarControlColor
 
         categoryLabelColor = null
 
@@ -352,6 +364,11 @@ val Manifest?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMAR
 val Manifest?.navBarColor get() = this?.navBarColor ?: primaryColor
 @get:ColorInt
 val Manifest?.navBarControlColor get() = this?.navBarControlColor ?: primaryTextColor
+
+@get:ColorInt
+val Manifest?.lessonNavBarColor get() = this?.navBarColor ?: Manifest.DEFAULT_LESSON_NAV_BAR_COLOR
+@get:ColorInt
+val Manifest?.lessonNavBarControlColor get() = this?.navBarControlColor ?: primaryColor
 
 @get:ColorInt
 val Manifest?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
