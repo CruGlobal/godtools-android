@@ -368,9 +368,6 @@ class Manifest : BaseModel, Styles {
 }
 
 @get:ColorInt
-val Manifest?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMARY_COLOR
-
-@get:ColorInt
 val Manifest?.navBarColor get() = this?.navBarColor ?: primaryColor
 @get:ColorInt
 val Manifest?.navBarControlColor get() = this?.navBarControlColor ?: primaryTextColor

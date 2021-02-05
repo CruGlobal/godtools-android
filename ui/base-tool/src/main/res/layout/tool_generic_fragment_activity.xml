@@ -10,8 +10,8 @@
         <import type="org.cru.godtools.xml.model.ManifestKt" />
 
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
-        <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
+        <variable name="loadingProgress" type="LiveData&lt;DownloadProgress&gt;" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -42,7 +42,7 @@
 
             <include
                 layout="@layout/activity_tool_loading"
-                app:progress="@{progress}"
+                app:progress="@{loadingProgress}"
                 app:toolState="@{toolState}" />
 
             <include

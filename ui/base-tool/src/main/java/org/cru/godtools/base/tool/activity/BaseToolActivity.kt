@@ -71,7 +71,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @CallSuper
     override fun onBindingChanged() {
         binding.setVariable(BR.manifest, activeManifestLiveData)
-        binding.setVariable(BR.progress, activeDownloadProgressLiveData)
+        binding.setVariable(BR.loadingProgress, activeDownloadProgressLiveData)
         binding.setVariable(BR.toolState, activeToolStateLiveData)
     }
 
