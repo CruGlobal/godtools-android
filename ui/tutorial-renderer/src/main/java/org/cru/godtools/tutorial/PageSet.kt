@@ -29,6 +29,7 @@ enum class PageSet(
             Locale.ENGLISH,
             Locale("es"),
             Locale.FRENCH,
+            Locale("hi"),
             Locale("in"),
             Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
