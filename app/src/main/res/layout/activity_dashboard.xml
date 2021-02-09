@@ -31,20 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.GodTools.Toolbar.AppBar"
-                    app:displayOptions="showHome">
-                    <androidx.appcompat.widget.AppCompatTabLayout
-                        android:id="@id/appbar_tabs"
-                        style="@style/Widget.GodTools.TabLayout.AppBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/appbar_tabs_height">
-                        <com.google.android.material.tabs.TabItem
-                            android:text="@string/nav_favorite_tools"
-                            tools:ignore="RequiredSize" />
-                        <com.google.android.material.tabs.TabItem
-                            android:text="@string/nav_all_tools"
-                            tools:ignore="RequiredSize" />
-                    </androidx.appcompat.widget.AppCompatTabLayout>
-                </androidx.appcompat.widget.Toolbar>
+                    app:displayOptions="showHome" />
             </com.google.android.material.appbar.AppBarLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
