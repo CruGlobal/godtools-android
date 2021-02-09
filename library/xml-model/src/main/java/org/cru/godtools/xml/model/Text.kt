@@ -8,6 +8,7 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
+private const val XML_RESOURCE = "resource"
 private const val XML_TEXT_ALIGN = "text-align"
 private const val XML_TEXT_ALIGN_START = "start"
 private const val XML_TEXT_ALIGN_CENTER = "center"
@@ -44,18 +45,28 @@ class Text : Content {
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
+    private val imageStartName: String?
+    val imageStart get() = getResource(imageStartName)
+    private val imageEndName: String?
+    val imageEnd get() = getResource(imageEndName)
+
+
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
         parent: Base,
         text: String? = null,
         textScale: Double? = null,
         @ColorInt textColor: Int? = null,
-        textAlign: Align? = null
+        textAlign: Align? = null,
+        imageStart: String? = null,
+        imageEnd: String? = null
     ) : super(parent) {
         this.text = text
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
+        this.imageStartName = imageStart
+        this.imageEndName = imageEnd
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
@@ -64,6 +75,9 @@ class Text : Content {
         _textAlign = Align.parseOrNull(parser.getAttributeValue(null, XML_TEXT_ALIGN))
         _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
         _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
+
+        imageStartName = parser.getAttributeValue(null, XML_RESOURCE)
+        imageEndName = parser.getAttributeValue(null, XML_RESOURCE)
 
         text = parser.nextText()
     }
