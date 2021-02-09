@@ -8,7 +8,8 @@ import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
-private const val XML_RESOURCE = "resource"
+private const val XML_IMAGE_START = "image-start"
+private const val XML_IMAGE_END = "image-end"
 private const val XML_TEXT_ALIGN = "text-align"
 private const val XML_TEXT_ALIGN_START = "start"
 private const val XML_TEXT_ALIGN_CENTER = "center"
@@ -65,8 +66,8 @@ class Text : Content {
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
-        this.imageStartName = imageStart
-        this.imageEndName = imageEnd
+        imageStartName = imageStart
+        imageEndName = imageEnd
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
@@ -76,8 +77,8 @@ class Text : Content {
         _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
         _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
 
-        imageStartName = parser.getAttributeValue(null, XML_RESOURCE)
-        imageEndName = parser.getAttributeValue(null, XML_RESOURCE)
+        imageStartName = parser.getAttributeValue(null, XML_IMAGE_START)
+        imageEndName = parser.getAttributeValue(null, XML_IMAGE_END)
 
         text = parser.nextText()
     }
