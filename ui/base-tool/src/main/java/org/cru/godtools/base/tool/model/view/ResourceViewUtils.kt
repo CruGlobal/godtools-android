@@ -14,10 +14,6 @@ import org.cru.godtools.xml.model.layoutDirection
 fun PicassoImageView.setPicassoResource(resource: Resource?) =
     setPicassoFile(resource?.localName?.let { context.fileManager.getFileBlocking(it) })
 
-fun ScaledPicassoImageView.bindBackgroundImage(resource: Resource?, scale: ImageScaleType, gravity: Int) =
-    bindBackgroundImage(resource, scale, ImageGravity(gravity))
-
-@JvmSynthetic
 fun ScaledPicassoImageView.bindBackgroundImage(resource: Resource?, scale: ImageScaleType, gravity: ImageGravity) {
     val view = asImageView()
 
