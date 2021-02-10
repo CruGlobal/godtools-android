@@ -9,4 +9,6 @@ internal class DashboardSavedState(private val savedState: SavedStateHandle) : V
     var selectedPage: Page
         get() = savedState[ATTR_SELECTED_PAGE] ?: Page.DEFAULT
         set(value) { savedState[ATTR_SELECTED_PAGE] = value }
+
+    val selectedPageLiveData get() = savedState.getLiveData(ATTR_SELECTED_PAGE, Page.DEFAULT)
 }

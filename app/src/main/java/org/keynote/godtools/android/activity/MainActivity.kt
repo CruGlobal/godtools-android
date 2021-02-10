@@ -35,7 +35,8 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
-class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFragment.Callbacks {
+class MainActivity :
+    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsFragment.Callbacks {
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
@@ -50,8 +51,9 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
 
     override fun onBindingChanged() {
         super.onBindingChanged()
-        binding.setupBottomNavigation()
         showPage(savedState.selectedPage)
+        binding.selectedPage = savedState.selectedPageLiveData
+        binding.setupBottomNavigation()
     }
 
     override fun onResume() {
@@ -76,7 +78,6 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
     }
 
     // region UI
-    override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
     override val toolbar get() = binding.appbar
     override val drawerLayout get() = binding.drawerLayout
     override val drawerMenu get() = binding.drawerMenu
@@ -122,7 +123,6 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
     // endregion ToolsFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
-        bottomNav.selectedItemId = savedState.selectedPage.id
         bottomNav.setOnNavigationItemSelectedListener {
             Page.findPage(it.itemId)?.let { showPage(it) }
             true
