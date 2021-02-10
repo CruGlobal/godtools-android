@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.material.transition.MaterialFadeThrough
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -89,7 +90,12 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
         val fragment = when (page) {
             Page.ALL_TOOLS -> ToolsFragment(MODE_ALL)
             Page.FAVORITE_TOOLS -> ToolsFragment(MODE_ADDED)
+        }.apply {
+            val transition = MaterialFadeThrough()
+            enterTransition = transition
+            exitTransition = transition
         }
+
         supportFragmentManager.commit {
             replace(R.id.frame, fragment)
             setPrimaryNavigationFragment(fragment)
