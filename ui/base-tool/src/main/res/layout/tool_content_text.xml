@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
+        android:drawableStart="@{model.imageStart}"
         android:saveEnabled="false"
         android:text="@{model}"
         android:textIsSelectable="true" />
