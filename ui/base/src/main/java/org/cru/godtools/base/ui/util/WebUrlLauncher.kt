@@ -14,7 +14,7 @@ import timber.log.Timber
 fun Context.openUrl(url: Uri) = try {
     CustomTabsIntent.Builder()
         .setShowTitle(false)
-        .enableUrlBarHiding()
+        .setUrlBarHidingEnabled(true)
         // XXX: we use gt_blue_dark to force white text & action buttons for now
         .setToolbarColor(ContextCompat.getColor(this, R.color.gt_blue_dark))
         .setInstantAppsEnabled(true)
