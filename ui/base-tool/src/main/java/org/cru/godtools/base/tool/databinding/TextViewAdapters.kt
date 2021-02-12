@@ -15,11 +15,11 @@ import org.cru.godtools.xml.model.Text
 fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextColor: Int?) =
     text.bindTo(this, textSize, defaultTextColor)
 
-@BindingAdapter("android:drawableStart", "startImageSize")
-fun TextView.bindDrawableStartResource(resource: Resource?, startImageSize: Int) {
+@BindingAdapter("android:drawableStart", "drawableStartSize")
+fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: Int) {
     val target = TextViewDrawableStartTarget.of(this)
     val file = resource?.localName?.let { context.fileManager.getFileBlocking(it) }
-    val imageSize = (startImageSize * resources.displayMetrics.density).toInt()
+    val imageSize = (drawableStartSize * resources.displayMetrics.density).toInt()
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
@@ -30,11 +30,11 @@ fun TextView.bindDrawableStartResource(resource: Resource?, startImageSize: Int)
     }
 }
 
-@BindingAdapter("android:drawableEnd", "endImageSize")
-fun TextView.bindDrawableEndResource(resource: Resource?, endImageSize: Int) {
+@BindingAdapter("android:drawableEnd", "drawableEndSize")
+fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) {
     val target = TextViewDrawableEndTarget.of(this)
     val file = resource?.localName?.let { context.fileManager.getFileBlocking(it) }
-    val imageSize = (endImageSize * resources.displayMetrics.density).toInt()
+    val imageSize = (drawableEndSize * resources.displayMetrics.density).toInt()
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
