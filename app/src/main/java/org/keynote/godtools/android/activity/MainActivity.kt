@@ -32,6 +32,7 @@ import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
@@ -89,6 +90,7 @@ class MainActivity :
         if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 
         val fragment = when (page) {
+            Page.LESSONS -> ToolsFragment(MODE_LESSONS)
             Page.ALL_TOOLS -> ToolsFragment(MODE_ALL)
             Page.FAVORITE_TOOLS -> ToolsFragment(MODE_ADDED)
         }.apply {
