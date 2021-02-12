@@ -17,7 +17,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@{ManifestKt.getBackgroundColor(manifest)}">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -42,6 +43,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:visibleIf="@{toolState == ToolState.LOADED}">
+
+                <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    app:gravity="@{ManifestKt.getBackgroundImageGravity(manifest)}"
+                    app:picassoFile="@{manifest.backgroundImage}"
+                    app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}" />
 
                 <!-- TODO: switch to progress.setProgressCompat(p + 1, true) once this bug is fixed:
                            https://github.com/material-components/material-components-android/issues/2051 -->
