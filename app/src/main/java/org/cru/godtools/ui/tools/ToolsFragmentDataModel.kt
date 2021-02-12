@@ -18,6 +18,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -28,7 +29,12 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
     val mode = MutableLiveData(MODE_ADDED)
 
     val tools = mode.distinctUntilChanged().switchMap { mode ->
-        var where = ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE))
+        var where = ToolTable.FIELD_TYPE.`in`(
+            *when (mode) {
+                MODE_LESSONS -> constants(Tool.Type.LESSON)
+                else -> constants(Tool.Type.TRACT, Tool.Type.ARTICLE)
+            }
+        )
         if (mode == MODE_ADDED) where = where.and(ToolTable.FIELD_ADDED.eq(true))
         Query.select<Tool>()
             .where(where)
