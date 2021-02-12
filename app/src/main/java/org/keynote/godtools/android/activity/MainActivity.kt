@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.MainThread
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.transition.MaterialFadeThrough
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
@@ -27,6 +25,8 @@ import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.ui.dashboard.DashboardSavedState
+import org.cru.godtools.ui.dashboard.Page
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
@@ -35,20 +35,26 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
-class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFragment.Callbacks {
-    private enum class Tab(val listMode: Int) { FAVORITE_TOOLS(MODE_ADDED), ALL_TOOLS(MODE_ALL) }
-
+class MainActivity :
+    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsFragment.Callbacks {
+    private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         triggerOnboardingIfNecessary()
-        loadInitialFragmentIfNeeded()
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu)
         .also { menuInflater.inflate(R.menu.activity_main, menu) }
+
+    override fun onBindingChanged() {
+        super.onBindingChanged()
+        showPage(savedState.selectedPage)
+        binding.selectedPage = savedState.selectedPageLiveData
+        binding.setupBottomNavigation()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -59,16 +65,6 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
         super.onSyncData(helper, force)
         syncService.syncFollowups().sync()
         syncService.syncToolShares().sync()
-    }
-
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        when (val it = Tab.values().getOrNull(tab.position)) {
-            null -> {
-                // The tab selection logic is brittle, so throw an error in unrecognized scenarios
-                if (BuildConfig.DEBUG) error("Unrecognized tab!! something changed with the navigation tabs")
-            }
-            else -> showToolsFragment(it)
-        }
     }
     // endregion Lifecycle
 
@@ -82,27 +78,30 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
     }
 
     // region UI
-    override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
     override val toolbar get() = binding.appbar
     override val drawerLayout get() = binding.drawerLayout
     override val drawerMenu get() = binding.drawerMenu
-    override val navigationTabs get() = binding.appbarTabs
 
     override val isShowNavigationDrawerIndicator get() = true
 
-    // region Tool List
-    @MainThread
-    private fun loadInitialFragmentIfNeeded() {
-        if (supportFragmentManager.primaryNavigationFragment == null) showToolsFragment(Tab.FAVORITE_TOOLS)
-    }
+    private fun showPage(page: Page) {
+        // short-circuit if the page is already displayed
+        if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 
-    private fun showToolsFragment(tab: Tab) {
+        val fragment = when (page) {
+            Page.ALL_TOOLS -> ToolsFragment(MODE_ALL)
+            Page.FAVORITE_TOOLS -> ToolsFragment(MODE_ADDED)
+        }.apply {
+            val transition = MaterialFadeThrough()
+            enterTransition = transition
+            exitTransition = transition
+        }
+
         supportFragmentManager.commit {
-            val fragment = ToolsFragment(tab.listMode)
             replace(R.id.frame, fragment)
             setPrimaryNavigationFragment(fragment)
         }
-        selectNavigationTabIfNecessary(navigationTabs.getTabAt(tab.ordinal))
+        savedState.selectedPage = page
     }
 
     // region ToolsFragment.Callbacks
@@ -120,9 +119,15 @@ class MainActivity : BasePlatformActivity<ActivityDashboardBinding>(), ToolsFrag
         code?.let { startToolDetailsActivity(code) }
     }
 
-    override fun onNoToolsAvailableAction() = showToolsFragment(Tab.ALL_TOOLS)
+    override fun onNoToolsAvailableAction() = showPage(Page.ALL_TOOLS)
     // endregion ToolsFragment.Callbacks
-    // endregion Tool List
+
+    private fun ActivityDashboardBinding.setupBottomNavigation() {
+        bottomNav.setOnNavigationItemSelectedListener {
+            Page.findPage(it.itemId)?.let { showPage(it) }
+            true
+        }
+    }
     // endregion UI
 
     // region Feature Discovery
