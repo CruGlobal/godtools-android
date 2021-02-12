@@ -9,6 +9,7 @@ private const val JSON_API_TYPE = "resource"
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
 private const val JSON_TYPE_ARTICLE = "article"
+private const val JSON_TYPE_LESSON = "lesson"
 private const val JSON_ABBREVIATION = "abbreviation"
 private const val JSON_NAME = "name"
 private const val JSON_CATEGORY = "attr-category"
@@ -28,7 +29,7 @@ class Tool : Base() {
     }
 
     enum class Type(val json: String?) {
-        TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), UNKNOWN(null);
+        TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), LESSON(JSON_TYPE_LESSON), UNKNOWN(null);
 
         companion object {
             val DEFAULT = UNKNOWN

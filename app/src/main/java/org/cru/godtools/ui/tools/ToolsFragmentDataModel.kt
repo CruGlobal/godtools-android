@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
@@ -27,11 +28,10 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
     val mode = MutableLiveData(MODE_ADDED)
 
     val tools = mode.distinctUntilChanged().switchMap { mode ->
+        var where = ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE))
+        if (mode == MODE_ADDED) where = where.and(ToolTable.FIELD_ADDED.eq(true))
         Query.select<Tool>()
-            .where(
-                ToolTable.FIELD_TYPE.ne(Tool.Type.UNKNOWN)
-                    .run { if (mode == MODE_ADDED) and(ToolTable.FIELD_ADDED.eq(true)) else this }
-            )
+            .where(where)
             .orderBy(if (mode == MODE_ADDED) ToolTable.SQL_ORDER_BY_ORDER else ToolTable.COLUMN_DEFAULT_ORDER)
             .getAsLiveData(dao)
     }
