@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="model" type="org.cru.godtools.xml.model.Text" />
     </data>
@@ -9,7 +10,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
+        android:drawableStart="@{model.startImage}"
+        android:drawableEnd="@{model.endImage}"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
         android:saveEnabled="false"
         android:text="@{model}"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        app:drawableStartSize="@{model.startImageSize}"
+        app:drawableEndSize="@{model.endImageSize}" />
 </layout>
