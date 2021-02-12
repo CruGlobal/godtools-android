@@ -23,6 +23,7 @@ fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: I
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
+            .centerInside()
             .into(target)
     } else {
         Picasso.get().cancelRequest(target)
@@ -38,6 +39,7 @@ fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) 
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
+            .centerInside()
             .into(target)
     } else {
         Picasso.get().cancelRequest(target)

@@ -12,6 +12,8 @@
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
         android:drawableStart="@{model.startImage}"
         android:drawableEnd="@{model.endImage}"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
         android:saveEnabled="false"
         android:text="@{model}"
         android:textIsSelectable="true"
