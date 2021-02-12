@@ -42,7 +42,7 @@ class TextTest {
     fun testTextStartImageNull() {
         val text = Text(mockManifest(), "text", startImage = null)
         assertEquals(null, text.startImage)
-        assertEquals(40, text.startImageSize)
+        assertEquals(DEFAULT_IMAGE_SIZE, text.startImageSize)
     }
 
     @Test
@@ -58,6 +58,6 @@ class TextTest {
     fun testTextEndImageNull() {
         val text = Text(mockManifest(), "text", endImage = null)
         assertEquals(null, text.endImage)
-        assertEquals(40, text.endImageSize)
+        assertEquals(DEFAULT_IMAGE_SIZE, text.endImageSize)
     }
 }

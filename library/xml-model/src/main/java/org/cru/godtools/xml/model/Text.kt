@@ -4,6 +4,7 @@ import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
+import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
@@ -19,7 +20,9 @@ private const val XML_TEXT_ALIGN_END = "end"
 private const val XML_TEXT_SCALE = "text-scale"
 
 private const val DEFAULT_TEXT_SCALE = 1.0
-private const val DEFAULT_IMAGE_SIZE = 40
+
+@VisibleForTesting
+internal const val DEFAULT_IMAGE_SIZE = 40
 
 class Text : Content {
     enum class Align(val gravity: Int) {
