@@ -3,6 +3,8 @@ package org.cru.godtools.xml.model
 import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
+import androidx.annotation.Dimension
+import androidx.annotation.Dimension.DP
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
@@ -26,6 +28,7 @@ class Text : Content {
         @VisibleForTesting
         internal const val DEFAULT_TEXT_SCALE = 1.0
         @VisibleForTesting
+        @Dimension(unit = DP)
         internal const val DEFAULT_IMAGE_SIZE = 40
     }
 
@@ -58,10 +61,12 @@ class Text : Content {
     @VisibleForTesting
     internal val startImageName: String?
     val startImage get() = getResource(startImageName)
+    @Dimension(unit = DP)
     val startImageSize: Int
     @VisibleForTesting
     internal val endImageName: String?
     val endImage get() = getResource(endImageName)
+    @Dimension(unit = DP)
     val endImageSize: Int
 
     @RestrictTo(RestrictTo.Scope.TESTS)
@@ -72,9 +77,9 @@ class Text : Content {
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
         startImage: String? = null,
-        startImageSize: Int = DEFAULT_IMAGE_SIZE,
+        @Dimension(unit = DP) startImageSize: Int = DEFAULT_IMAGE_SIZE,
         endImage: String? = null,
-        endImageSize: Int = DEFAULT_IMAGE_SIZE,
+        @Dimension(unit = DP) endImageSize: Int = DEFAULT_IMAGE_SIZE,
     ) : super(parent) {
         this.text = text
         _textAlign = textAlign
