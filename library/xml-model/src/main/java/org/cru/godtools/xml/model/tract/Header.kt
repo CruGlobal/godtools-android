@@ -10,6 +10,7 @@ import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_NUMBER = "number"
@@ -49,8 +50,8 @@ class Header internal constructor(private val page: TractPage, parser: XmlPullPa
 
             when (parser.namespace) {
                 XMLNS_TRACT -> when (parser.name) {
-                    XML_NUMBER -> number = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_NUMBER)
-                    XML_TITLE -> title = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_TITLE)
+                    XML_NUMBER -> number = parser.parseTextChild(this, XMLNS_TRACT, XML_NUMBER)
+                    XML_TITLE -> title = parser.parseTextChild(this, XMLNS_TRACT, XML_TITLE)
                     else -> parser.skipTag()
                 }
                 else -> parser.skipTag()

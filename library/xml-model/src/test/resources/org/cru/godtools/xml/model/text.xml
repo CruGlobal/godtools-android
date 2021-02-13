@@ -1,9 +1,0 @@
-<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    xmlns="https://mobile-content-api.cru.org/xmlns/tract">
-    <hero>
-        <content:paragraph>
-            <content:text>Text 1</content:text>
-            <content:text restrictTo="mobile" text-align="end" text-color="rgba(0,255,0,1)" text-scale="1.23" text-style="bold italic">Text 2</content:text>
-        </content:paragraph>
-    </hero>
-</page>

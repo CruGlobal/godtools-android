@@ -2,7 +2,6 @@ package org.cru.godtools.ui.tools
 
 import android.app.Dialog
 import android.graphics.drawable.NinePatchDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
@@ -19,6 +18,9 @@ import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
@@ -101,7 +103,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     }
 
     override fun onToolsReordered(vararg ids: Long) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute {
+        GlobalScope.launch(Dispatchers.IO) {
             dao.updateToolOrder(*ids)
             eventBus.post(ToolUpdateEvent)
         }

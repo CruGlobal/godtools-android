@@ -34,7 +34,7 @@ class Category internal constructor(manifest: Manifest, parser: XmlPullParser) :
                 val name = parser.name
                 when {
                     ns == XMLNS_MANIFEST && name == XML_LABEL ->
-                        label = Text.fromNestedXml(this@Category, parser, XMLNS_MANIFEST, XML_LABEL)
+                        label = parser.parseTextChild(this@Category, XMLNS_MANIFEST, XML_LABEL)
                     ns == XMLNS_ARTICLE && name == XML_AEM_TAG -> {
                         add(parser.getAttributeValue(null, XML_ID))
                         parser.skipTag()

@@ -3,6 +3,8 @@ package org.cru.godtools.xml.model
 import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
+import androidx.annotation.Dimension
+import androidx.annotation.Dimension.DP
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
@@ -19,17 +21,21 @@ private const val XML_TEXT_ALIGN_CENTER = "center"
 private const val XML_TEXT_ALIGN_END = "end"
 private const val XML_TEXT_SCALE = "text-scale"
 
-private const val DEFAULT_TEXT_SCALE = 1.0
-
-@VisibleForTesting
-internal const val DEFAULT_IMAGE_SIZE = 40
-
 class Text : Content {
+    companion object {
+        internal const val XML_TEXT = "text"
+
+        @VisibleForTesting
+        internal const val DEFAULT_TEXT_SCALE = 1.0
+        @VisibleForTesting
+        @Dimension(unit = DP)
+        internal const val DEFAULT_IMAGE_SIZE = 40
+    }
+
     enum class Align(val gravity: Int) {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
 
         companion object {
-            @JvmField
             val DEFAULT = START
 
             fun parseOrNull(value: String?) = when (value) {
@@ -52,12 +58,16 @@ class Text : Content {
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
-    private val endImageName: String?
-    val endImage get() = getResource(endImageName)
-    val endImageSize: Int
-    private val startImageName: String?
+    @VisibleForTesting
+    internal val startImageName: String?
     val startImage get() = getResource(startImageName)
+    @Dimension(unit = DP)
     val startImageSize: Int
+    @VisibleForTesting
+    internal val endImageName: String?
+    val endImage get() = getResource(endImageName)
+    @Dimension(unit = DP)
+    val endImageSize: Int
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
@@ -66,19 +76,19 @@ class Text : Content {
         textScale: Double? = null,
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
-        endImage: String? = null,
         startImage: String? = null,
-        endImageSize: Int = DEFAULT_IMAGE_SIZE,
-        startImageSize: Int = DEFAULT_IMAGE_SIZE
+        @Dimension(unit = DP) startImageSize: Int = DEFAULT_IMAGE_SIZE,
+        endImage: String? = null,
+        @Dimension(unit = DP) endImageSize: Int = DEFAULT_IMAGE_SIZE,
     ) : super(parent) {
         this.text = text
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
         startImageName = startImage
+        this.startImageSize = startImageSize
         endImageName = endImage
         this.endImageSize = endImageSize
-        this.startImageSize = startImageSize
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
@@ -89,41 +99,15 @@ class Text : Content {
         _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
 
         startImageName = parser.getAttributeValue(null, XML_START_IMAGE)
+        startImageSize = parser.getAttributeValue(null, XML_START_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
         endImageName = parser.getAttributeValue(null, XML_END_IMAGE)
         endImageSize = parser.getAttributeValue(null, XML_END_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
-        startImageSize = parser.getAttributeValue(null, XML_START_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
+
         text = parser.nextText()
     }
 
     @ColorInt
     fun getTextColor(@ColorInt defColor: Int) = _textColor ?: defColor
-
-    companion object {
-        internal const val XML_TEXT = "text"
-
-        internal fun fromNestedXml(
-            parent: Base,
-            parser: XmlPullParser,
-            parentNamespace: String?,
-            parentName: String
-        ): Text? {
-            parser.require(XmlPullParser.START_TAG, parentNamespace, parentName)
-
-            // process any child elements
-            var text: Text? = null
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
-
-                val ns = parser.namespace
-                val name = parser.name
-                when {
-                    ns == XMLNS_CONTENT && name == XML_TEXT -> text = Text(parent, parser)
-                    else -> parser.skipTag()
-                }
-            }
-            return text
-        }
-    }
 }
 
 @get:ColorInt
@@ -135,6 +119,33 @@ val Text?.text get() = this?.text
 val Text?.textAlign get() = this?.textAlign ?: Text.Align.DEFAULT
 @get:ColorInt
 val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
-val Text?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
+val Text?.textScale get() = this?.textScale ?: Text.DEFAULT_TEXT_SCALE
 @get:DimenRes
 val Text?.textSize get() = stylesParent.textSize
+
+internal fun XmlPullParser.parseTextChild(
+    parent: Base,
+    parentNamespace: String?,
+    parentName: String,
+    block: () -> Unit = { }
+): Text? {
+    require(XmlPullParser.START_TAG, parentNamespace, parentName)
+
+    // process any child elements
+    var text: Text? = null
+    while (next() != XmlPullParser.END_TAG) {
+        if (eventType != XmlPullParser.START_TAG) continue
+
+        // execute any custom parsing logic from the call-site
+        // if the block consumes the tag, the parser will be on an END_TAG after returning
+        block()
+        if (eventType == XmlPullParser.END_TAG) continue
+
+        // parse text node
+        when {
+            namespace == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(parent, this)
+            else -> skipTag()
+        }
+    }
+    return text
+}

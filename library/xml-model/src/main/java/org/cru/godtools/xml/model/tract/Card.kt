@@ -19,6 +19,7 @@ import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
 import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
 import org.cru.godtools.xml.model.parseContent
+import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_LABEL = "label"
@@ -90,7 +91,7 @@ class Card : BaseModel, Styles, Parent {
                     AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 }
                 XMLNS_TRACT -> when (parser.name) {
-                    XML_LABEL -> label = Text.fromNestedXml(this@Card, parser, XMLNS_TRACT, XML_LABEL)
+                    XML_LABEL -> label = parser.parseTextChild(this@Card, XMLNS_TRACT, XML_LABEL)
                 }
             }
         }

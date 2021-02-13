@@ -13,6 +13,7 @@ import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.parseContent
+import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser
 
 class Hero : BaseModel, Parent, Styles {
@@ -48,7 +49,7 @@ class Hero : BaseModel, Parent, Styles {
                     AnalyticsEvent.XML_EVENTS -> analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
                 }
                 XMLNS_TRACT -> when (parser.name) {
-                    XML_HEADING -> heading = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_HEADING)
+                    XML_HEADING -> heading = parser.parseTextChild(this, XMLNS_TRACT, XML_HEADING)
                 }
             }
         }

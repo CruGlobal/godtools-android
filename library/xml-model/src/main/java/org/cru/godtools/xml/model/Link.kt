@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -20,21 +19,13 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
         events = parseEvents(parser, XML_EVENTS)
 
         // process any child elements
-        var analyticsEvents: Collection<AnalyticsEvent> = emptyList()
-        var text: Text? = null
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
-
-            val ns = parser.namespace
-            val name = parser.name
+        val analyticsEvents = mutableListOf<AnalyticsEvent>()
+        text = parser.parseTextChild(this, XMLNS_CONTENT, XML_LINK) {
             when {
-                ns == XMLNS_ANALYTICS && name == AnalyticsEvent.XML_EVENTS ->
-                    analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
-                ns == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(this, parser)
-                else -> parser.skipTag()
+                parser.namespace == XMLNS_ANALYTICS && parser.name == AnalyticsEvent.XML_EVENTS ->
+                    analyticsEvents += AnalyticsEvent.fromEventsXml(this, parser)
             }
         }
         this.analyticsEvents = analyticsEvents
-        this.text = text
     }
 }

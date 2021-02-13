@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
-import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.cru.godtools.xml.XMLNS_CONTENT
@@ -56,22 +55,14 @@ class Button : Content, Styles {
         _buttonColor = parser.getAttributeValueAsColorOrNull(XML_COLOR)
 
         // process any child elements
-        var analyticsEvents: Collection<AnalyticsEvent> = emptySet()
-        var text: Text? = null
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.eventType != XmlPullParser.START_TAG) continue
-
-            val ns = parser.namespace
-            val name = parser.name
+        val analyticsEvents = mutableListOf<AnalyticsEvent>()
+        text = parser.parseTextChild(this, XMLNS_CONTENT, XML_BUTTON) {
             when {
-                ns == XMLNS_ANALYTICS && name == AnalyticsEvent.XML_EVENTS ->
-                    analyticsEvents = AnalyticsEvent.fromEventsXml(this, parser)
-                ns == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(this, parser)
-                else -> parser.skipTag()
+                parser.namespace == XMLNS_ANALYTICS && parser.name == AnalyticsEvent.XML_EVENTS ->
+                    analyticsEvents += AnalyticsEvent.fromEventsXml(this, parser)
             }
         }
         this.analyticsEvents = analyticsEvents
-        this.text = text
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
