@@ -19,11 +19,11 @@ class TextTest {
         val text = Text(manifest, getXmlParserForResource("text_defaults.xml"))
 
         assertEquals("Text Defaults", text.text)
-        assertEquals(DEFAULT_TEXT_SCALE, text.textScale, 0.001)
+        assertEquals(Text.DEFAULT_TEXT_SCALE, text.textScale, 0.001)
         assertEquals(Manifest.DEFAULT_TEXT_COLOR, text.textColor)
         assertEquals(Text.Align.DEFAULT, text.textAlign)
-        assertEquals(DEFAULT_IMAGE_SIZE, text.startImageSize)
-        assertEquals(DEFAULT_IMAGE_SIZE, text.endImageSize)
+        assertEquals(Text.DEFAULT_IMAGE_SIZE, text.startImageSize)
+        assertEquals(Text.DEFAULT_IMAGE_SIZE, text.endImageSize)
     }
 
     @Test

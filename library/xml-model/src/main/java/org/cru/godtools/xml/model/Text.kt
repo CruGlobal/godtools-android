@@ -19,12 +19,16 @@ private const val XML_TEXT_ALIGN_CENTER = "center"
 private const val XML_TEXT_ALIGN_END = "end"
 private const val XML_TEXT_SCALE = "text-scale"
 
-@VisibleForTesting
-internal const val DEFAULT_TEXT_SCALE = 1.0
-@VisibleForTesting
-internal const val DEFAULT_IMAGE_SIZE = 40
-
 class Text : Content {
+    companion object {
+        internal const val XML_TEXT = "text"
+
+        @VisibleForTesting
+        internal const val DEFAULT_TEXT_SCALE = 1.0
+        @VisibleForTesting
+        internal const val DEFAULT_IMAGE_SIZE = 40
+    }
+
     enum class Align(val gravity: Int) {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
 
@@ -100,10 +104,6 @@ class Text : Content {
 
     @ColorInt
     fun getTextColor(@ColorInt defColor: Int) = _textColor ?: defColor
-
-    companion object {
-        internal const val XML_TEXT = "text"
-    }
 }
 
 @get:ColorInt
@@ -115,7 +115,7 @@ val Text?.text get() = this?.text
 val Text?.textAlign get() = this?.textAlign ?: Text.Align.DEFAULT
 @get:ColorInt
 val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
-val Text?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
+val Text?.textScale get() = this?.textScale ?: Text.DEFAULT_TEXT_SCALE
 @get:DimenRes
 val Text?.textSize get() = stylesParent.textSize
 
