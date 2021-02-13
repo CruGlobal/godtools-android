@@ -103,29 +103,6 @@ class Text : Content {
 
     companion object {
         internal const val XML_TEXT = "text"
-
-        internal fun fromNestedXml(
-            parent: Base,
-            parser: XmlPullParser,
-            parentNamespace: String?,
-            parentName: String
-        ): Text? {
-            parser.require(XmlPullParser.START_TAG, parentNamespace, parentName)
-
-            // process any child elements
-            var text: Text? = null
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.eventType != XmlPullParser.START_TAG) continue
-
-                val ns = parser.namespace
-                val name = parser.name
-                when {
-                    ns == XMLNS_CONTENT && name == XML_TEXT -> text = Text(parent, parser)
-                    else -> parser.skipTag()
-                }
-            }
-            return text
-        }
     }
 }
 
@@ -141,3 +118,30 @@ val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
 val Text?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
 @get:DimenRes
 val Text?.textSize get() = stylesParent.textSize
+
+internal fun XmlPullParser.parseTextChild(
+    parent: Base,
+    parentNamespace: String?,
+    parentName: String,
+    block: () -> Unit = { }
+): Text? {
+    require(XmlPullParser.START_TAG, parentNamespace, parentName)
+
+    // process any child elements
+    var text: Text? = null
+    while (next() != XmlPullParser.END_TAG) {
+        if (eventType != XmlPullParser.START_TAG) continue
+
+        // execute any custom parsing logic from the call-site
+        // if the block consumes the tag, the parser will be on an END_TAG after returning
+        block()
+        if (eventType == XmlPullParser.END_TAG) continue
+
+        // parse text node
+        when {
+            namespace == XMLNS_CONTENT && name == Text.XML_TEXT -> text = Text(parent, this)
+            else -> skipTag()
+        }
+    }
+    return text
+}

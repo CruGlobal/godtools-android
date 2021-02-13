@@ -71,8 +71,8 @@ class Input : Content {
 
             when (parser.namespace) {
                 XMLNS_CONTENT -> when (parser.name) {
-                    XML_LABEL -> label = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_LABEL)
-                    XML_PLACEHOLDER -> placeholder = Text.fromNestedXml(this, parser, XMLNS_CONTENT, XML_PLACEHOLDER)
+                    XML_LABEL -> label = parser.parseTextChild(this, XMLNS_CONTENT, XML_LABEL)
+                    XML_PLACEHOLDER -> placeholder = parser.parseTextChild(this, XMLNS_CONTENT, XML_PLACEHOLDER)
                     else -> parser.skipTag()
                 }
                 else -> parser.skipTag()

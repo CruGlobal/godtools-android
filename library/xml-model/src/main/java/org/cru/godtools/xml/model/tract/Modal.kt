@@ -14,6 +14,7 @@ import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.parseContent
+import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TITLE = "title"
@@ -72,7 +73,7 @@ class Modal : BaseModel, Parent, Styles {
         content = parseContent(parser) {
             when (parser.namespace) {
                 XMLNS_TRACT -> when (parser.name) {
-                    XML_TITLE -> title = Text.fromNestedXml(this@Modal, parser, XMLNS_TRACT, XML_TITLE)
+                    XML_TITLE -> title = parser.parseTextChild(this@Modal, XMLNS_TRACT, XML_TITLE)
                 }
             }
         }

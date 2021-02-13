@@ -177,7 +177,7 @@ class Manifest : BaseModel, Styles {
 
                 when (parser.namespace) {
                     XMLNS_MANIFEST -> when (parser.name) {
-                        XML_TITLE -> title = Text.fromNestedXml(this@Manifest, parser, XMLNS_MANIFEST, XML_TITLE)
+                        XML_TITLE -> title = parser.parseTextChild(this@Manifest, XMLNS_MANIFEST, XML_TITLE)
                         XML_CATEGORIES -> categories += parser.parseCategories()
                         XML_PAGES -> {
                             val result = parser.parsePages(this, parseFile)

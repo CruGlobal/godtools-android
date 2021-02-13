@@ -9,6 +9,7 @@ import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
+import org.cru.godtools.xml.model.parseTextChild
 import org.cru.godtools.xml.model.primaryColor
 import org.cru.godtools.xml.model.stylesParent
 import org.xmlpull.v1.XmlPullParser
@@ -50,7 +51,7 @@ class CallToAction : BaseModel {
         _controlColor = parser.getAttributeValueAsColorOrNull(XML_CONTROL_COLOR)
         tipId = parser.getAttributeValue(XMLNS_TRAINING, XML_TIP)
 
-        label = Text.fromNestedXml(this, parser, XMLNS_TRACT, XML_CALL_TO_ACTION)
+        label = parser.parseTextChild(this, XMLNS_TRACT, XML_CALL_TO_ACTION)
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
