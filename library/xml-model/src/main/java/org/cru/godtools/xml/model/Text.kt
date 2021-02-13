@@ -52,12 +52,12 @@ class Text : Content {
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
-    private val endImageName: String?
-    val endImage get() = getResource(endImageName)
-    val endImageSize: Int
     private val startImageName: String?
     val startImage get() = getResource(startImageName)
     val startImageSize: Int
+    private val endImageName: String?
+    val endImage get() = getResource(endImageName)
+    val endImageSize: Int
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     constructor(
@@ -66,19 +66,19 @@ class Text : Content {
         textScale: Double? = null,
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
-        endImage: String? = null,
         startImage: String? = null,
+        startImageSize: Int = DEFAULT_IMAGE_SIZE,
+        endImage: String? = null,
         endImageSize: Int = DEFAULT_IMAGE_SIZE,
-        startImageSize: Int = DEFAULT_IMAGE_SIZE
     ) : super(parent) {
         this.text = text
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
         startImageName = startImage
+        this.startImageSize = startImageSize
         endImageName = endImage
         this.endImageSize = endImageSize
-        this.startImageSize = startImageSize
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {
@@ -89,9 +89,10 @@ class Text : Content {
         _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
 
         startImageName = parser.getAttributeValue(null, XML_START_IMAGE)
+        startImageSize = parser.getAttributeValue(null, XML_START_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
         endImageName = parser.getAttributeValue(null, XML_END_IMAGE)
         endImageSize = parser.getAttributeValue(null, XML_END_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
-        startImageSize = parser.getAttributeValue(null, XML_START_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
+
         text = parser.nextText()
     }
 
