@@ -33,7 +33,6 @@ class Text : Content {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
 
         companion object {
-            @JvmField
             val DEFAULT = START
 
             fun parseOrNull(value: String?) = when (value) {
