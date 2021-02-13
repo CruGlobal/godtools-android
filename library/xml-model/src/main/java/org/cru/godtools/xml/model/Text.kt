@@ -19,8 +19,8 @@ private const val XML_TEXT_ALIGN_CENTER = "center"
 private const val XML_TEXT_ALIGN_END = "end"
 private const val XML_TEXT_SCALE = "text-scale"
 
-private const val DEFAULT_TEXT_SCALE = 1.0
-
+@VisibleForTesting
+internal const val DEFAULT_TEXT_SCALE = 1.0
 @VisibleForTesting
 internal const val DEFAULT_IMAGE_SIZE = 40
 
@@ -52,10 +52,12 @@ class Text : Content {
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
 
-    private val startImageName: String?
+    @VisibleForTesting
+    internal val startImageName: String?
     val startImage get() = getResource(startImageName)
     val startImageSize: Int
-    private val endImageName: String?
+    @VisibleForTesting
+    internal val endImageName: String?
     val endImage get() = getResource(endImageName)
     val endImageSize: Int
 
