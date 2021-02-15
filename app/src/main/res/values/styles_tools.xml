@@ -33,6 +33,12 @@
         <item name="android:drawablePadding">4dp</item>
     </style>
 
+    <style name="Widget.GodTools.Tools.Card.Lesson.Info" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.Lesson.Info</item>
+        <item name="drawableTint">@color/gray_80</item>
+        <item name="android:drawablePadding">4dp</item>
+    </style>
+
     <style name="TextAppearance.GodTools.Tools.Card.Title" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">16sp</item>
@@ -46,6 +52,11 @@
 
     <style name="TextAppearance.GodTools.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_BE</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tools.Card.Lesson.Info" parent="TextAppearance.GodTools.Small">
+        <item name="android:textColor">@color/gray_80</item>
         <item name="android:textSize">12sp</item>
     </style>
 
