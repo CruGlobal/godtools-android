@@ -10,5 +10,5 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
     when (type) {
         Type.TRACT -> startTractActivity(code, *languages, showTips = showTips)
         Type.ARTICLE -> startCategoriesActivity(code, languages[0])
-        Type.UNKNOWN -> Unit
+        Type.LESSON, Type.UNKNOWN -> Unit
     }

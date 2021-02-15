@@ -2,6 +2,7 @@
 <resources>
     <!-- Tools List UI -->
     <eat-comment />
+    <string name="nav_lessons">Learn</string>
     <string name="nav_favorite_tools">Favorites</string>
     <string name="nav_all_tools">All Tools</string>
     <string name="action_tools_about">About</string>
@@ -11,6 +12,8 @@
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancel</string>
     <string name="tools_list_favorites_banner_text">Make a tool available offline by tapping the heart icon which adds it to your favorites.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Dismiss</string>
+    <string name="tools_list_lesson_info_length">%1$d Min Read</string>
+    <string name="tools_list_lesson_info_language_available">Available in %1$s</string>
 
     <!-- Tool Details UI -->
     <eat-comment />

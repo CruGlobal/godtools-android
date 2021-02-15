@@ -25,6 +25,7 @@ import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
 import org.cru.godtools.ui.dashboard.Page
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
@@ -32,11 +33,13 @@ import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
+import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
 class MainActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsFragment.Callbacks {
+    private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
@@ -89,6 +92,7 @@ class MainActivity :
         if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 
         val fragment = when (page) {
+            Page.LESSONS -> ToolsFragment(MODE_LESSONS)
             Page.ALL_TOOLS -> ToolsFragment(MODE_ALL)
             Page.FAVORITE_TOOLS -> ToolsFragment(MODE_ADDED)
         }.apply {
@@ -123,6 +127,9 @@ class MainActivity :
     // endregion ToolsFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
+        bottomNav.menu.findItem(R.id.action_lessons)?.let { lessons ->
+            dataModel.lessons.observe(this@MainActivity) { lessons.isVisible = !it.isNullOrEmpty() }
+        }
         bottomNav.setOnNavigationItemSelectedListener {
             Page.findPage(it.itemId)?.let { showPage(it) }
             true
