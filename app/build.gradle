@@ -163,6 +163,7 @@ dependencies {
 
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
+    implementation project(':ui:lesson-renderer')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
     implementation project(':ui:tutorial-renderer')
