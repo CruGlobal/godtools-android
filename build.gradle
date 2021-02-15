@@ -21,7 +21,7 @@ buildscript {
                 hilt               : '2.32-alpha',
                 jacoco             : '0.8.6',
                 jsoup              : '1.13.1',
-                junit              : '4.13.1',
+                junit              : '4.13.2',
                 kotlin             : '1.4.30',
                 kotlinCoroutines   : '1.4.2',
                 leakcanary         : '2.6',
