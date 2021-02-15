@@ -48,6 +48,9 @@ class ToolsAdapterViewModel @Inject constructor(
         internal val parallelTranslation =
             settings.parallelLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(tool, it) }
 
+        internal val firstLanguage = firstTranslation.switchMap { t ->
+            t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
+        }
         internal val parallelLanguage = parallelTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }

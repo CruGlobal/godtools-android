@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.MainThread
 import androidx.databinding.ObservableField
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,13 +15,18 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange
 import com.karumi.weak.weak
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleDataBindingDraggableItemAdapter
+import org.cru.godtools.BR
+import org.cru.godtools.databinding.ToolsListItemLessonBinding
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Tool
 
-private typealias VH = DataBindingDraggableItemViewHolder<ToolsListItemToolBinding>
+private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
+
+private const val VIEW_TYPE_TOOL = 1
+private const val VIEW_TYPE_LESSON = 2
 
 class ToolsAdapter(lifecycleOwner: LifecycleOwner, viewModelProvider: ViewModelProvider) :
-    SimpleDataBindingDraggableItemAdapter<ToolsListItemToolBinding>(lifecycleOwner), Observer<List<Tool>> {
+    SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
     }
@@ -48,20 +54,27 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, viewModelProvider: ViewModelP
         tools = t
     }
 
-    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            .also { it.callbacks = callbacks }
+    override fun getItemViewType(position: Int) = when (getItem(position)?.type) {
+        Tool.Type.LESSON -> VIEW_TYPE_LESSON
+        else -> VIEW_TYPE_TOOL
+    }
 
-    override fun onBindViewDataBinding(binding: ToolsListItemToolBinding, position: Int) {
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
+        VIEW_TYPE_LESSON -> ToolsListItemLessonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        else -> ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    }.also { it.setVariable(BR.callbacks, callbacks) }
+
+    override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         val tool = getItem(position)
         val toolViewModel = tool?.code?.let { viewModel.getToolViewModel(it) }
 
-        binding.tool = tool
-        binding.setDownloadProgress(toolViewModel?.downloadProgress)
-        binding.setBanner(toolViewModel?.banner)
-        binding.primaryTranslation = toolViewModel?.firstTranslation
-        binding.parallelTranslation = toolViewModel?.parallelTranslation
-        binding.parallelLanguage = toolViewModel?.parallelLanguage
+        binding.setVariable(BR.tool, tool)
+        binding.setVariable(BR.downloadProgress, toolViewModel?.downloadProgress)
+        binding.setVariable(BR.banner, toolViewModel?.banner)
+        binding.setVariable(BR.primaryTranslation, toolViewModel?.firstTranslation)
+        binding.setVariable(BR.primaryLanguage, toolViewModel?.firstLanguage)
+        binding.setVariable(BR.parallelTranslation, toolViewModel?.parallelTranslation)
+        binding.setVariable(BR.parallelLanguage, toolViewModel?.parallelLanguage)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
