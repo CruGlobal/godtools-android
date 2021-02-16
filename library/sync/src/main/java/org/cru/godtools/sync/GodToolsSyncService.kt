@@ -2,6 +2,7 @@ package org.cru.godtools.sync
 
 import android.content.ContentResolver
 import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.core.os.bundleOf
 import androidx.work.WorkManager
 import java.io.IOException
@@ -33,12 +34,18 @@ private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 
 @Singleton
-class GodToolsSyncService @Inject internal constructor(
+class GodToolsSyncService @VisibleForTesting internal constructor(
     private val eventBus: EventBus,
     private val workManager: WorkManager,
-    private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
+    private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
+    private val coroutineScope: CoroutineScope
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    @Inject
+    internal constructor(
+        eventBus: EventBus,
+        workManager: WorkManager,
+        syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
+    ) : this(eventBus, workManager, syncTasks, CoroutineScope(Dispatchers.IO + SupervisorJob()))
 
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
