@@ -28,9 +28,10 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-${{ github.ref }}-
+            ${{ runner.os }}-gradle-${{ github.base_ref }}-
       - name: Run Static Analysis
         run: ./gradlew assemble check -x test --continue --stacktrace --parallel
 
@@ -48,16 +49,18 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-${{ github.ref }}-
+            ${{ runner.os }}-gradle-${{ github.base_ref }}-
       - name: Cache Maven
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-maven-${{ github.ref }}-
+            ${{ runner.os }}-maven-${{ github.base_ref }}-
       - name: Run Unit Tests
         run: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
       - name: Codecov
@@ -82,9 +85,10 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-${{ github.ref }}-
+            ${{ runner.os }}-gradle-${{ github.base_ref }}-
       - name: Configure QA Keystore
         env:
           BETA_KEYSTORE_PASSWORD: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
