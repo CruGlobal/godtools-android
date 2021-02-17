@@ -1,0 +1,59 @@
+name: Build App
+
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+
+jobs:
+  cancel-previous:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Static Analysis
+        run: ./gradlew assemble check -x test --continue --stacktrace --parallel
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run Unit Tests
+        run: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          verbose: true
+
+  qa_build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    needs: [static, tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Configure QA Keystore
+        run: |
+          echo firebaseAppDistributionKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+          echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+      - name: Build App
+        run: ./gradlew clean :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
+      - name: Decrypt Firebase API Key
+        run: openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
+      - name: Upload Build to Firebase
+        run: ./gradlew appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --parallel
