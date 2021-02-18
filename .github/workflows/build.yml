@@ -68,6 +68,12 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
+      - name: Archive Unit Test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-results
+          path: "**/build/reports/tests/"
 
   qa_build:
     name: Deploy QA Build
