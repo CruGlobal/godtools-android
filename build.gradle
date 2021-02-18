@@ -33,7 +33,7 @@ buildscript {
                 moshi              : '1.11.0',
                 okhttp3            : '3.12.13',
                 okta               : '1.0.16',
-                picasso            : '2.8',
+                picasso            : '2.71828',
                 picassoTransforms  : '2.3.1',
                 retrofit2          : '2.6.4',
                 robolectric        : '4.5.1',
