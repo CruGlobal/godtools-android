@@ -89,6 +89,6 @@ class AccordionController private constructor(
                 model?.id?.takeUnless { it == accordionController.activeSection.value }
         }
 
-        override val contentContainer get() = binding.content
+        override val childContainer get() = binding.content
     }
 }

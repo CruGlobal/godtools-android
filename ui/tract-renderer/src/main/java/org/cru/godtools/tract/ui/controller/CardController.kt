@@ -79,7 +79,7 @@ class CardController private constructor(
     }
     // endregion Lifecycle
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     private fun processDismissEvent(event: Event) {
         if (model?.dismissListeners?.contains(event.id) == true) dismissCard()
