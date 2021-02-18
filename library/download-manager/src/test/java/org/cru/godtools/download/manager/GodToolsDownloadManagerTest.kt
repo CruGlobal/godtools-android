@@ -15,6 +15,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.nullableArgumentCaptor
 import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.stubbing
 import com.nhaarman.mockitokotlin2.times
@@ -594,20 +595,27 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyCleanupFilesystem() {
-        val orphan = getTmpFile(true)
+        val orphan = spy(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
-        val keep = getTmpFile(true)
+        val keep = spy(getTmpFile(true))
         dao.stub {
             on { get(argThat<Query<*>> { table.type == TranslationFile::class.java }) } doReturn listOf(translation)
             on { get(argThat<Query<*>> { table.type == LocalFile::class.java }) } doReturn listOf(localFile)
-            on { find<LocalFile>(keep.name) } doReturn LocalFile(keep.name)
+            val keepLocalFile = LocalFile(keep.name)
+            on { find<LocalFile>(keep.name) } doReturn keepLocalFile
+        }
+        fileManager.stub {
+            onBlocking { getFile(keep.name) } doReturn keep
+            onBlocking { getFile(orphan.name) } doReturn orphan
         }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
         runBlocking { downloadManager.cleanFilesystem() }
         verify(dao).delete(translation)
         verify(dao).delete(localFile)
+        verify(orphan).delete()
+        verify(keep, never()).delete()
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
     }
     // endregion Cleanup

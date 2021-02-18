@@ -93,6 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{@string/tools_list_lesson_info_length(2)}"
+                android:drawableEnd="@{primaryLanguage != null ? @drawable/ic_bullet : null}"
                 tools:ignore="MissingConstraints"
                 tools:text="@string/tools_list_lesson_info_length" />
 
@@ -103,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{@string/tools_list_lesson_info_language_available(primaryLanguage.getDisplayName(context))}"
                 app:drawableEndCompat="@drawable/ic_tool_checkmark"
-                app:drawableStartCompat="@drawable/ic_bullet"
+                app:visibleIf="@{primaryLanguage != null}"
                 tools:ignore="MissingConstraints"
                 tools:text="@string/tools_list_lesson_info_language_available" />
         </androidx.constraintlayout.widget.ConstraintLayout>

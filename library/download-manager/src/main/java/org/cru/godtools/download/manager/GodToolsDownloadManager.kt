@@ -9,7 +9,6 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.common.io.CountingInputStream
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
@@ -454,7 +453,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     .get(dao)
                     .forEach {
                         dao.delete(it)
-                        it.getFile(fileManager)?.delete()
+                        it.getFile(fileManager).delete()
                     }
 
                 // delete any orphaned files
@@ -482,9 +481,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
-        val file = localFile.getFile(fileManager)
-            ?: throw FileNotFoundException("${localFile.filename} (File could not be created)")
-
-        withContext(Dispatchers.IO) { file.outputStream().use { copyTo(it) } }
+        withContext(Dispatchers.IO) { localFile.getFile(fileManager).outputStream().use { copyTo(it) } }
     }
 }

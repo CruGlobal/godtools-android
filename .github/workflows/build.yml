@@ -31,9 +31,15 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
       - name: Run Static Analysis
         run: ./gradlew assemble check -x test --continue --stacktrace --parallel
+      - name: Archive ktlint results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: ktlint-results
+          path: "**/build/reports/ktlint/"
 
   tests:
     name: Unit Tests
@@ -52,7 +58,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
       - name: Cache Maven
         uses: actions/cache@v2
         with:
@@ -60,7 +66,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-maven-${{ github.ref }}-
-            ${{ runner.os }}-maven-${{ github.base_ref }}-
+            ${{ runner.os }}-maven-refs/heads/${{ github.base_ref }}-
       - name: Run Unit Tests
         run: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
       - name: Codecov
@@ -68,6 +74,12 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
+      - name: Archive Unit Test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-results
+          path: "**/build/reports/tests/"
 
   qa_build:
     name: Deploy QA Build
@@ -88,7 +100,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
       - name: Configure QA Keystore
         env:
           BETA_KEYSTORE_PASSWORD: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
