@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  reviewers:
+  - frett
+  assignees:
+  - frett
+  ignore:
+  - dependency-name: com.squareup.okhttp3:okhttp
+    versions:
+    - ">= 3.13.a"
+  - dependency-name: com.squareup.retrofit2:converter-scalars
+    versions:
+    - ">= 2.7.a"
+  - dependency-name: com.squareup.retrofit2:retrofit
+    versions:
+    - ">= 2.7.a"
