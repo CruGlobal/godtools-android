@@ -34,6 +34,12 @@ jobs:
             ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
       - name: Run Static Analysis
         run: ./gradlew assemble check -x test --continue --stacktrace --parallel
+      - name: Archive ktlint results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: ktlint-results
+          path: "**/build/reports/ktlint/"
 
   tests:
     name: Unit Tests
