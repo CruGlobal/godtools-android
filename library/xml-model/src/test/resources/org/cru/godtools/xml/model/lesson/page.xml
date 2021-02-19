@@ -1,4 +1,5 @@
-<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content" background-color="rgba(255,0,0,1)"
+    background-image="background.png" background-image-align="top end" background-image-scale-type="fit"
     xmlns="https://mobile-content-api.cru.org/xmlns/lesson">
     <content>
         <content:text />

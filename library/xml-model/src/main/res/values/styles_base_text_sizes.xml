@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_size_base">16sp</dimen>
+
     <dimen name="text_size_category">30sp</dimen>
+
+    <!-- region Lesson text sizes -->
+    <dimen name="text_size_lesson">20sp</dimen>
+    <!-- endregion Lesson text sizes -->
+
+    <!-- region Tract text sizes -->
     <dimen name="text_size_header">18sp</dimen>
     <dimen name="text_size_header_number">54sp</dimen>
     <dimen name="text_size_hero">16sp</dimen>
@@ -9,6 +16,10 @@
     <dimen name="text_size_card_label">18sp</dimen>
     <dimen name="text_size_modal">18sp</dimen>
     <dimen name="text_size_modal_title">54sp</dimen>
+    <!-- endregion Tract text sizes -->
+
+    <!-- region Tip text sizes -->
     <dimen name="text_size_tip_label">16sp</dimen>
     <dimen name="text_size_tip_content">16sp</dimen>
+    <!-- endregion Tip text sizes -->
 </resources>

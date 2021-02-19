@@ -18,8 +18,8 @@ import org.cru.godtools.xml.model.Manifest
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,
-    private val requireTool: Boolean = true,
-    private val supportedType: Manifest.Type? = null
+    private val requireTool: Boolean,
+    private val supportedType: Manifest.Type?
 ) : BaseToolActivity<B>(contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 

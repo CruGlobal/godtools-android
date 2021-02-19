@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.xml.model.lesson.LessonPageKt" />
+        <import type="org.cru.godtools.xml.model.StylesKt" />
+
+        <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
+        <variable name="model" type="org.cru.godtools.xml.model.lesson.LessonPage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{LessonPageKt.getBackgroundColor(model)}"
+        android:paddingTop="?attr/actionBarSize">
+
+        <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cropToPadding="false"
+            android:scaleType="matrix"
+            app:gravity="@{LessonPageKt.getBackgroundImageGravity(model)}"
+            app:picassoFile="@{model.backgroundImage}"
+            app:scaleType="@{LessonPageKt.getBackgroundImageScaleType(model)}"
+            app:visibleIf="@{model.backgroundImage != null}" />
+
+        <org.ccci.gto.android.common.widget.HackyNestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/lesson_content_horiz_margin"
+                android:layout_marginRight="@dimen/lesson_content_horiz_margin"
+                android:orientation="vertical" />
+        </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

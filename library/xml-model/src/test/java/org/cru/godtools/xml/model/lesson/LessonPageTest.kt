@@ -1,6 +1,9 @@
 package org.cru.godtools.xml.model.lesson
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.xml.model.ImageGravity
+import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.util.getXmlParserForResource
@@ -33,6 +36,10 @@ class LessonPageTest {
         val page = parsePageXml("page.xml")
         assertEquals(1, page.content.size)
         assertTrue(page.content[0] is Text)
+        assertEquals("background.png", page._backgroundImage)
+        assertEquals(Color.RED, page.backgroundColor)
+        assertEquals(ImageGravity.TOP or ImageGravity.END, page.backgroundImageGravity)
+        assertEquals(ImageScaleType.FIT, page.backgroundImageScaleType)
     }
 
     private fun parsePageXml(file: String, manifest: Manifest = this.manifest) =
