@@ -48,26 +48,13 @@ abstract class ParentController<T> protected constructor(
     protected open val contentToRender get() = model?.content
 
     @UiThread
-    @OptIn(ExperimentalStdlibApi::class)
     private fun bindContent() {
-        val existing = children.orEmpty().toMutableList()
-
-        var next: BaseController<Content>? = null
-        children = contentToRender?.mapNotNull { model ->
-            if (next == null) next = existing.removeFirstOrNull()
-
-            val child = next?.takeIf { it.supportsModel(model) }?.also { next = null }
-                ?: childCache.acquire(model)
-                    ?.also { contentContainer.addView(it.root, contentContainer.indexOfChild(next?.root)) }
-            child?.model = model
-            child
-        }
-
-        next?.let { existing.add(it) }
-        existing.forEach {
-            contentContainer.removeView(it.root)
-            it.releaseTo(childCache)
-        }
+        children = contentContainer.bindModels(
+            models = contentToRender.orEmpty(),
+            existing = children.orEmpty().toMutableList(),
+            acquireController = { childCache.acquire(it) },
+            releaseController = { it.releaseTo(childCache) }
+        )
     }
     // endregion Child Content
 }
