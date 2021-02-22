@@ -61,6 +61,7 @@ abstract class Content : BaseModel {
                     Form.XML_FORM -> Form(parent, parser)
                     Input.XML_INPUT -> Input(parent, parser)
                     Link.XML_LINK -> Link(parent, parser)
+                    Spacer.XML_SPACER -> Spacer(parent, parser)
                     else -> {
                         if (consumeUnrecognizedTags) parser.skipTag()
                         null
