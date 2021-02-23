@@ -38,11 +38,6 @@ abstract class BaseController<T : Base> protected constructor(
         fun create(parent: ViewGroup, parentController: BaseController<*>): U
     }
 
-    protected open val dao: GodToolsDao
-        get() {
-            checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }
-            return parentController.dao
-        }
     @VisibleForTesting(otherwise = PROTECTED)
     open val eventBus: EventBus
         get() {
@@ -123,11 +118,11 @@ abstract class BaseController<T : Base> protected constructor(
         parentController?.showTip(tip)
     }
 
-    protected fun isTipComplete(tipId: String?): LiveData<Boolean> {
+    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
         return when {
             manifest == null || tipId == null -> ImmutableLiveData(false)
-            else -> dao.findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
+            else -> findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
                 .distinctUntilChanged()
         }
     }

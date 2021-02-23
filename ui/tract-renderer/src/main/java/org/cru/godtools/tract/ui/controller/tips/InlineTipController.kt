@@ -8,13 +8,23 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.tract.databinding.TractContentInlineTipBinding
 import org.cru.godtools.xml.model.tips.InlineTip
+import org.keynote.godtools.android.db.GodToolsDao
 
 internal class InlineTipController private constructor(
     private val binding: TractContentInlineTipBinding,
-    parentController: BaseController<*>
+    parentController: BaseController<*>,
+    private val dao: GodToolsDao
 ) : BaseController<InlineTip>(InlineTip::class, binding.root, parentController) {
-    @AssistedInject internal constructor(@Assisted parent: ViewGroup, @Assisted parentController: BaseController<*>) :
-        this(TractContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false), parentController)
+    @AssistedInject
+    internal constructor(
+        @Assisted parent: ViewGroup,
+        @Assisted parentController: BaseController<*>,
+        dao: GodToolsDao
+    ) : this(
+        TractContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        parentController,
+        dao
+    )
 
     @AssistedFactory
     interface Factory : BaseController.Factory<InlineTipController>
@@ -28,6 +38,6 @@ internal class InlineTipController private constructor(
     public override fun onBind() {
         super.onBind()
         binding.model = model
-        binding.isCompleted = isTipComplete(model?.id)
+        binding.isCompleted = dao.isTipComplete(model?.id)
     }
 }
