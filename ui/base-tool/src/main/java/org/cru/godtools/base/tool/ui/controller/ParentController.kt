@@ -9,13 +9,15 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
+import org.greenrobot.eventbus.EventBus
 
 abstract class ParentController<T> protected constructor(
     clazz: KClass<T>,
     root: View,
     parentController: BaseController<*>? = null,
-    cacheFactory: UiControllerCache.Factory
-) : BaseController<T>(clazz, root, parentController) where T : Parent {
+    cacheFactory: UiControllerCache.Factory,
+    eventBus: EventBus? = null
+) : BaseController<T>(clazz, root, parentController, eventBus) where T : Parent {
     // region Lifecycle
     @CallSuper
     override fun onBind() {

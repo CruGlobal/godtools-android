@@ -32,11 +32,11 @@ class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
     private val dao: GodToolsDao,
-    override val eventBus: EventBus,
+    eventBus: EventBus,
     private val settings: Settings,
     heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
-) : BaseController<TractPage>(TractPage::class, binding.root),
+) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
     CardController.Callbacks,
     PageContentLayout.OnActiveCardListener {
 

@@ -32,18 +32,18 @@ import org.keynote.godtools.android.db.GodToolsDao
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
     val root: View,
-    private val parentController: BaseController<*>? = null
+    private val parentController: BaseController<*>? = null,
+    eventBus: EventBus? = null
 ) : Observer<T?> {
     interface Factory<U : BaseController<*>> {
         fun create(parent: ViewGroup, parentController: BaseController<*>): U
     }
 
+    private val _eventBus = eventBus
     @VisibleForTesting(otherwise = PROTECTED)
-    open val eventBus: EventBus
-        get() {
-            checkNotNull(parentController) { "No EventBus found in controller ancestors" }
-            return parentController.eventBus
-        }
+    val eventBus: EventBus
+        get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
+
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
 
     var model: T? = null
