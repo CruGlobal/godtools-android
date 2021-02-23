@@ -23,6 +23,8 @@ class LessonPageController @AssistedInject constructor(
         binding.controller = this
     }
 
+    override val lifecycleOwner get() = binding.lifecycleOwner
+
     override fun onBind() {
         super.onBind()
         binding.model = model

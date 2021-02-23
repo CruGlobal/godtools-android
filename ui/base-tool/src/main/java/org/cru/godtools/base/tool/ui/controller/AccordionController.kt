@@ -2,6 +2,7 @@ package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -36,19 +37,25 @@ class AccordionController private constructor(
     }
     // endregion Lifecycle
 
+    // region Sections
+    internal var activeSection = MutableLiveData<String?>(null)
     private var sectionControllers = emptyList<SectionController>()
 
     private fun bindSections() {
+        // update the active section
+        if (activeSection.value !in model?.sections?.map { it.id }.orEmpty()) activeSection.value = null
+
         sectionControllers = binding.sections.bindModels(
             model?.sections.orEmpty(),
             sectionControllers.toMutableList(),
             acquireController = { sectionFactory.create(binding.sections, this) }
         )
     }
+    // endregion Sections
 
     class SectionController private constructor(
         private val binding: ToolContentAccordionSectionBinding,
-        accordionController: AccordionController,
+        private val accordionController: AccordionController,
         cacheFactory: UiControllerCache.Factory
     ) : ParentController<Accordion.Section>(Accordion.Section::class, binding.root, accordionController, cacheFactory) {
         @AssistedInject
@@ -67,10 +74,20 @@ class AccordionController private constructor(
             fun create(parent: ViewGroup, accordionController: AccordionController): SectionController
         }
 
+        init {
+            binding.lifecycleOwner = lifecycleOwner
+            binding.controller = this
+            binding.activeSection = accordionController.activeSection
+        }
+
         override fun onBind() {
             super.onBind()
             binding.model = model
-            binding.selected = true
+        }
+
+        fun toggleSection() {
+            accordionController.activeSection.value =
+                model?.id?.takeUnless { it == accordionController.activeSection.value }
         }
 
         override val contentContainer get() = binding.content

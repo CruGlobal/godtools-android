@@ -34,10 +34,14 @@ class Accordion : Content {
     }
 
     class Section : BaseModel, Parent {
+        private val accordion: Accordion
+        val id: String get() = "section-${accordion.sections.indexOf(this)}"
+
         val header: Text?
         override val content: List<Content>
 
         internal constructor(parent: Accordion, parser: XmlPullParser) : super(parent) {
+            accordion = parent
             parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_SECTION)
 
             // process any child elements

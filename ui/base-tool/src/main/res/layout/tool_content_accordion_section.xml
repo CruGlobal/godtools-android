@@ -6,8 +6,9 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
+        <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.AccordionController.SectionController" />
         <variable name="model" type="org.cru.godtools.xml.model.Accordion.Section" />
-        <variable name="selected" type="boolean" />
+        <variable name="activeSection" type="LiveData&lt;String&gt;" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
+        android:onClick="@{() -> controller.toggleSection()}"
         app:cardCornerRadius="@dimen/tool_content_accordion_section_card_corner_radius"
         app:cardElevation="@dimen/tool_content_accordion_section_card_elevation"
         app:cardMaxElevation="@dimen/tool_content_accordion_section_card_elevation">
@@ -28,7 +30,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="8dp"
-                android:src="@{selected ? @drawable/ic_collapse_24dp : @drawable/ic_expand_24dp}"
+                android:src="@{model.id.equals(activeSection) ? @drawable/ic_collapse_24dp : @drawable/ic_expand_24dp}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/ic_expand_24dp" />
@@ -60,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:orientation="vertical"
-                app:visibleIf="@{selected}"
+                app:visibleIf="@{model.id.equals(activeSection)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/header" />
         </androidx.constraintlayout.widget.ConstraintLayout>
