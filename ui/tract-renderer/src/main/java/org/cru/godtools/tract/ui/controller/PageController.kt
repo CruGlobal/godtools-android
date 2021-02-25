@@ -31,12 +31,12 @@ import org.keynote.godtools.android.db.GodToolsDao
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
-    override val dao: GodToolsDao,
-    override val eventBus: EventBus,
+    private val dao: GodToolsDao,
+    eventBus: EventBus,
     private val settings: Settings,
     heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
-) : BaseController<TractPage>(TractPage::class, binding.root),
+) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
     CardController.Callbacks,
     PageContentLayout.OnActiveCardListener {
 
@@ -80,8 +80,8 @@ class PageController @AssistedInject internal constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-        binding.isHeaderTipComplete = isTipComplete(model?.header?.tip?.id)
-        binding.isCallToActionTipComplete = isTipComplete(model?.callToAction?.tip?.id)
+        binding.isHeaderTipComplete = dao.isTipComplete(model?.header?.tip?.id)
+        binding.isCallToActionTipComplete = dao.isTipComplete(model?.callToAction?.tip?.id)
         heroController.model = model?.hero
         updateVisibleCards()
     }

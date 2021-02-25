@@ -11,9 +11,9 @@ import org.greenrobot.eventbus.EventBus
 
 class ModalController @AssistedInject internal constructor(
     @Assisted private val binding: TractContentModalBinding,
-    override val eventBus: EventBus,
+    eventBus: EventBus,
     cacheFactory: UiControllerCache.Factory
-) : ParentController<Modal>(Modal::class, binding.root, cacheFactory = cacheFactory) {
+) : ParentController<Modal>(Modal::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(binding: TractContentModalBinding): ModalController

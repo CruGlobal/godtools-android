@@ -32,23 +32,18 @@ import org.keynote.godtools.android.db.GodToolsDao
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
     val root: View,
-    private val parentController: BaseController<*>? = null
+    private val parentController: BaseController<*>? = null,
+    eventBus: EventBus? = null
 ) : Observer<T?> {
     interface Factory<U : BaseController<*>> {
         fun create(parent: ViewGroup, parentController: BaseController<*>): U
     }
 
-    protected open val dao: GodToolsDao
-        get() {
-            checkNotNull(parentController) { "No GodToolsDao found in controller ancestors" }
-            return parentController.dao
-        }
+    private val _eventBus = eventBus
     @VisibleForTesting(otherwise = PROTECTED)
-    open val eventBus: EventBus
-        get() {
-            checkNotNull(parentController) { "No EventBus found in controller ancestors" }
-            return parentController.eventBus
-        }
+    val eventBus: EventBus
+        get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
+
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
 
     var model: T? = null
@@ -123,11 +118,11 @@ abstract class BaseController<T : Base> protected constructor(
         parentController?.showTip(tip)
     }
 
-    protected fun isTipComplete(tipId: String?): LiveData<Boolean> {
+    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
         return when {
             manifest == null || tipId == null -> ImmutableLiveData(false)
-            else -> dao.findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
+            else -> findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
                 .distinctUntilChanged()
         }
     }

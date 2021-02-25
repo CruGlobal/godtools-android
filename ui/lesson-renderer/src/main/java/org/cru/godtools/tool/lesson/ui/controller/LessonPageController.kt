@@ -7,11 +7,13 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.xml.model.lesson.LessonPage
+import org.greenrobot.eventbus.EventBus
 
 class LessonPageController @AssistedInject constructor(
     @Assisted private val binding: LessonPageBinding,
-    cacheFactory: UiControllerCache.Factory
-) : ParentController<LessonPage>(LessonPage::class, binding.root, cacheFactory = cacheFactory) {
+    cacheFactory: UiControllerCache.Factory,
+    eventBus: EventBus
+) : ParentController<LessonPage>(LessonPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(binding: LessonPageBinding): LessonPageController

@@ -14,11 +14,13 @@ import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Button
+import org.greenrobot.eventbus.EventBus
 
 internal sealed class ButtonController<T : ViewDataBinding>(
     private val binding: T,
-    parentController: BaseController<*>
-) : BaseController<Button>(Button::class, binding.root, parentController) {
+    parentController: BaseController<*>,
+    eventBus: EventBus
+) : BaseController<Button>(Button::class, binding.root, parentController, eventBus) {
     init {
         binding.setVariable(BR.controller, this)
     }
@@ -42,10 +44,12 @@ internal sealed class ButtonController<T : ViewDataBinding>(
 
 internal class ContainedButtonController @AssistedInject internal constructor(
     @Assisted parent: ViewGroup,
-    @Assisted parentController: BaseController<*>
+    @Assisted parentController: BaseController<*>,
+    eventBus: EventBus
 ) : ButtonController<ToolContentButtonBinding>(
     ToolContentButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-    parentController
+    parentController,
+    eventBus
 ) {
     @AssistedFactory
     interface Factory : BaseController.Factory<ContainedButtonController>
@@ -56,10 +60,12 @@ internal class ContainedButtonController @AssistedInject internal constructor(
 
 internal class OutlinedButtonController @AssistedInject internal constructor(
     @Assisted parent: ViewGroup,
-    @Assisted parentController: BaseController<*>
+    @Assisted parentController: BaseController<*>,
+    eventBus: EventBus
 ) : ButtonController<ToolContentButtonOutlinedBinding>(
     ToolContentButtonOutlinedBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-    parentController
+    parentController,
+    eventBus
 ) {
     @AssistedFactory
     interface Factory : BaseController.Factory<OutlinedButtonController>

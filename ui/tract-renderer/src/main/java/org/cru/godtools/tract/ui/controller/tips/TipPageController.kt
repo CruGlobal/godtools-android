@@ -12,9 +12,9 @@ import org.greenrobot.eventbus.EventBus
 
 class TipPageController @AssistedInject internal constructor(
     @Assisted private val binding: TractTipPageBinding,
-    override val eventBus: EventBus,
+    eventBus: EventBus,
     cacheFactory: UiControllerCache.Factory
-) : ParentController<TipPage>(TipPage::class, binding.root, cacheFactory = cacheFactory) {
+) : ParentController<TipPage>(TipPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(binding: TractTipPageBinding): TipPageController
