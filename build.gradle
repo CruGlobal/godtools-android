@@ -18,7 +18,7 @@ buildscript {
                 gtoSupport         : '3.7.2-SNAPSHOT',
                 guava              : '30.1-android',
                 hamcrest           : '2.2',
-                hilt               : '2.32-alpha',
+                hilt               : '2.33-beta',
                 jacoco             : '0.8.6',
                 jsoup              : '1.13.1',
                 junit              : '4.13.2',
