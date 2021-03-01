@@ -78,7 +78,6 @@ internal class Tasks @Inject constructor(
                 LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
                     // add all device languages and fallbacks
                     .onEach { launch { downloadManager.pinLanguage(it) } }
-                    .asSequence()
                     // set the first available language as the primary language
                     .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
 
