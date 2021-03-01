@@ -60,9 +60,9 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:orientation="vertical"
-                app:visibleIf="@{model.id.equals(activeSection)}"
+                android:paddingBottom="8dp"
+                app:accordionSectionVisibleIf="@{model.id.equals(activeSection)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/header" />
         </androidx.constraintlayout.widget.ConstraintLayout>
