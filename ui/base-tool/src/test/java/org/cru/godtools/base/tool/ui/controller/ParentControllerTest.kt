@@ -1,6 +1,7 @@
 package org.cru.godtools.base.tool.ui.controller
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
@@ -11,10 +12,10 @@ import androidx.core.view.children
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tract.R
+import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Image
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Paragraph
@@ -44,8 +45,8 @@ class ParentControllerTest {
         context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
         contentContainer = LinearLayout(context)
         cache = mock {
-            on { acquire(any<Text>()) } doAnswer { mock { on { root } doReturn TextView(context) } }
-            on { acquire(any<Image>()) } doAnswer { mock { on { root } doReturn ImageView(context) } }
+            on { acquire(any<Text>()) } doAnswer { testController(TextView(context)) }
+            on { acquire(any<Image>()) } doAnswer { testController(ImageView(context)) }
         }
         controller = ConcreteParentController(contentContainer, cache)
     }
@@ -106,4 +107,6 @@ class ParentControllerTest {
         null,
         UiControllerCache.Factory { _, _ -> cache }
     )
+
+    private inline fun <reified T : Base> testController(root: View) = object : BaseController<T>(T::class, root) {}
 }

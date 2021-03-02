@@ -1,0 +1,14 @@
+<content:accordion xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    <content:section>
+        <content:header>
+            <content:text>Section 1</content:text>
+        </content:header>
+        <content:text>Text</content:text>
+    </content:section>
+    <content:section>
+        <content:header>
+            <content:text>Section 2</content:text>
+        </content:header>
+        <content:image resource="blank.png" />
+    </content:section>
+</content:accordion>

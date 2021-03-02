@@ -127,4 +127,34 @@ abstract class BaseController<T : Base> protected constructor(
         }
     }
     // endregion Tips
+
+    // region UI
+    /**
+     * This method provides a mechanism for binding arbitrary model controllers to a ViewGroup
+     */
+    protected fun <T : Base, C : BaseController<T>> ViewGroup.bindModels(
+        models: List<T>,
+        existing: MutableList<C>,
+        acquireController: (model: T) -> C?,
+        releaseController: ((controller: C) -> Unit)? = null
+    ): List<C> {
+        var next: C? = null
+        try {
+            return models.mapNotNull { model ->
+                if (next == null) next = existing.removeFirstOrNull()
+
+                val child = next?.takeIf { it.supportsModel(model) }?.also { next = null }
+                    ?: acquireController(model)?.also { addView(it.root, indexOfChild(next?.root)) }
+                child?.model = model
+                child
+            }
+        } finally {
+            next?.let { existing.add(it) }
+            existing.forEach {
+                removeView(it.root)
+                releaseController?.invoke(it)
+            }
+        }
+    }
+    // endregion UI
 }

@@ -51,6 +51,7 @@ abstract class Content : BaseModel {
                             true -> Fallback(parent, parser)
                             else -> Paragraph(parent, parser)
                         }
+                    Accordion.XML_ACCORDION -> Accordion(parent, parser)
                     Tabs.XML_TABS -> Tabs(parent, parser)
                     Text.XML_TEXT -> Text(parent, parser)
                     Image.XML_IMAGE -> Image(parent, parser)

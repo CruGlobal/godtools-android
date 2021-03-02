@@ -1,6 +1,8 @@
 package org.cru.godtools.tract.ui.controller
 
+import android.view.LayoutInflater
 import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.doReturn
@@ -41,7 +43,7 @@ class HeroControllerTest {
         Dispatchers.setMain(mainDispatcher)
 
         eventBus = mock()
-        val binding: TractPageHeroBinding = mock { on { root } doReturn mock() }
+        val binding = TractPageHeroBinding.inflate(LayoutInflater.from(ApplicationProvider.getApplicationContext()))
         val pageController: PageController = mock {
             on { lifecycleOwner } doReturn ConstrainedStateLifecycleOwner(baseLifecycleOwner)
             on { eventBus } doReturn eventBus
