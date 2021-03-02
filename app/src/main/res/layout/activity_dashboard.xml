@@ -9,7 +9,7 @@
         <variable name="selectedPage" type="LiveData&lt;org.cru.godtools.ui.dashboard.Page&gt;" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
+    <org.ccci.gto.android.common.androidx.drawerlayout.widget.HackyDrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,5 +60,5 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:menu="@menu/activity_generic_left_menu" />
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </org.ccci.gto.android.common.androidx.drawerlayout.widget.HackyDrawerLayout>
 </layout>
