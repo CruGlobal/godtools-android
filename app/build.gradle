@@ -176,6 +176,7 @@ dependencies {
     implementation "androidx.work:work-runtime:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-drawerlayout:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
