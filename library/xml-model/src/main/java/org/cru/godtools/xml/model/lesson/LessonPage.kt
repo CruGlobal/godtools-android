@@ -5,6 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.XMLNS_LESSON
 import org.cru.godtools.xml.model.BaseModel
@@ -35,6 +36,8 @@ class LessonPage : BaseModel, Parent, Styles {
     @VisibleForTesting
     internal val fileName: String?
 
+    val listeners: Set<Event.Id>
+
     @ColorInt
     val backgroundColor: Int
     @VisibleForTesting
@@ -58,6 +61,8 @@ class LessonPage : BaseModel, Parent, Styles {
         this.position = position
 
         parser.require(XmlPullParser.START_TAG, XMLNS_LESSON, XML_PAGE)
+
+        listeners = parseEvents(parser, XML_LISTENERS)
 
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
         _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)

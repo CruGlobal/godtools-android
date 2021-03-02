@@ -2,9 +2,11 @@ package org.cru.godtools.xml.model.lesson
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.TOOL_CODE
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,7 +24,7 @@ class LessonPageTest {
 
     @Before
     fun setup() {
-        manifest = Manifest(type = Manifest.Type.LESSON)
+        manifest = Manifest(TOOL_CODE, type = Manifest.Type.LESSON)
     }
 
     @Test
@@ -40,6 +42,7 @@ class LessonPageTest {
         assertEquals(Color.RED, page.backgroundColor)
         assertEquals(ImageGravity.TOP or ImageGravity.END, page.backgroundImageGravity)
         assertEquals(ImageScaleType.FIT, page.backgroundImageScaleType)
+        assertEquals(Event.Id.parse(TOOL_CODE, "lesson_page_event1"), page.listeners)
     }
 
     private fun parsePageXml(file: String, manifest: Manifest = this.manifest) =
