@@ -13,6 +13,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -28,14 +29,9 @@ class LessonPageTest {
     }
 
     @Test
-    fun testParseEmptyPage() {
-        val page = parsePageXml("page_empty.xml")
-        assertThat(page.content, `is`(empty()))
-    }
-
-    @Test
     fun testParsePage() {
         val page = parsePageXml("page.xml")
+        assertFalse(page.isHidden)
         assertEquals(1, page.content.size)
         assertTrue(page.content[0] is Text)
         assertEquals("background.png", page._backgroundImage)
@@ -43,6 +39,18 @@ class LessonPageTest {
         assertEquals(ImageGravity.TOP or ImageGravity.END, page.backgroundImageGravity)
         assertEquals(ImageScaleType.FIT, page.backgroundImageScaleType)
         assertEquals(Event.Id.parse(TOOL_CODE, "lesson_page_event1"), page.listeners)
+    }
+
+    @Test
+    fun testParsePageEmpty() {
+        val page = parsePageXml("page_empty.xml")
+        assertThat(page.content, `is`(empty()))
+    }
+
+    @Test
+    fun testParsePageHidden() {
+        val page = parsePageXml("page_hidden.xml")
+        assertTrue(page.isHidden)
     }
 
     private fun parsePageXml(file: String, manifest: Manifest = this.manifest) =

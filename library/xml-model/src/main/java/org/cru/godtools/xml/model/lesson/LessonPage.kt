@@ -22,6 +22,7 @@ import org.cru.godtools.xml.model.parseContent
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_PAGE = "page"
+private const val XML_HIDDEN = "hidden"
 private const val XML_CONTENT = "content"
 
 @ColorInt
@@ -36,6 +37,7 @@ class LessonPage : BaseModel, Parent, Styles {
     @VisibleForTesting
     internal val fileName: String?
 
+    val isHidden: Boolean
     val listeners: Set<Event.Id>
 
     @ColorInt
@@ -62,6 +64,7 @@ class LessonPage : BaseModel, Parent, Styles {
 
         parser.require(XmlPullParser.START_TAG, XMLNS_LESSON, XML_PAGE)
 
+        isHidden = parser.getAttributeValue(null, XML_HIDDEN)?.toBoolean() ?: false
         listeners = parseEvents(parser, XML_LISTENERS)
 
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
