@@ -21,6 +21,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.xml.model.lesson.LessonPage
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
@@ -39,9 +40,10 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
         eventBus.register(this, this)
     }
 
-    override fun onContentChanged() {
-        super.onContentChanged()
+    override fun onBindingChanged() {
+        super.onBindingChanged()
         binding.setupPages()
+        setupProgressIndicator()
     }
 
     @MainThread
@@ -60,6 +62,22 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
     }
     // endregion Toolbar
 
+    // region Progress Indicator
+    private fun setupProgressIndicator() {
+        dataModel.pages.observe(this@LessonActivity) { updateProgressIndicator(pages = it) }
+    }
+
+    private fun updateProgressIndicator(
+        position: Int = binding.pages.currentItem,
+        pages: List<LessonPage>? = dataModel.pages.value
+    ) {
+        binding.progress.max = pages?.count { !it.isHidden } ?: 0
+        // TODO: switch to setProgressCompat(p, true) once this bug is fixed:
+        //       https://github.com/material-components/material-components-android/issues/2051
+        binding.progress.progress = pages?.subList(0, position + 1)?.count { !it.isHidden } ?: 0
+    }
+    // endregion Progress Indicator
+
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
@@ -70,12 +88,18 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
         dataModel.pages.observe(this@LessonActivity) { lessonPages ->
             pages.whileMaintainingVisibleCurrentItem { lessonPageAdapter.pages = lessonPages }
         }
+
         pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 if (state == SCROLL_STATE_IDLE) {
                     val currentItemId = dataModel.pages.value?.getOrNull(pages.currentItem)?.id
                     dataModel.visiblePages.removeAll { it != currentItemId }
+                    updateProgressIndicator()
                 }
+            }
+
+            override fun onPageSelected(position: Int) {
+                updateProgressIndicator(position = position)
             }
         })
     }
