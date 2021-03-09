@@ -114,6 +114,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
      */
     protected val activeManifest get() = activeManifestLiveData.value
 
+    // region Status Bar / Toolbar logic
+    override val toolbar get() = when (val it = binding) {
+        is ToolGenericFragmentActivityBinding -> it.appbar
+        else -> super.toolbar
+    }
+
     private fun setupStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.apply {
@@ -125,12 +131,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    override val toolbar get() = when (val it = binding) {
-        is ToolGenericFragmentActivityBinding -> it.appbar
-        else -> super.toolbar
-    }
-
-    // region Toolbar update logic
     private fun setupToolbar() {
         activeManifestLiveData.observe(this) {
             updateToolbarTitle()
@@ -141,7 +141,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     protected open fun updateToolbarTitle() {
         title = activeManifest?.title.orEmpty()
     }
-    // endregion Toolbar update logic
+    // endregion Status Bar / Toolbar logic
 
     // region Share tool logic
     private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
