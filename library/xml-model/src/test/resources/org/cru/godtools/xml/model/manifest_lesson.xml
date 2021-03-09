@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    type="lesson" xmlns="https://mobile-content-api.cru.org/xmlns/manifest">
+    type="lesson" xmlns="https://mobile-content-api.cru.org/xmlns/manifest" dismiss-listeners="dismiss_event">
     <title>
         <content:text>title</content:text>
     </title>
