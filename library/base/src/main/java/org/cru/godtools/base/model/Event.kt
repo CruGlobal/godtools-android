@@ -1,21 +1,20 @@
 package org.cru.godtools.base.model
 
+import androidx.annotation.VisibleForTesting
 import java.util.Locale
-import javax.annotation.concurrent.Immutable
 
 class Event private constructor(builder: Builder) {
     val id = builder.id
     val locale = builder.locale
     val fields = builder.fields.toMap()
 
-    @Immutable
-    class Id internal constructor(val namespace: String, val name: String) {
+    data class Id @VisibleForTesting internal constructor(val namespace: String, val name: String) {
         override fun equals(other: Any?) = other is Id &&
             namespace.equals(other.namespace, ignoreCase = true) &&
             name.equals(other.name, ignoreCase = true)
 
         override fun hashCode() =
-            (namespace.toLowerCase(Locale.US).hashCode() * 31) + name.toLowerCase(Locale.US).hashCode()
+            (namespace.toLowerCase(Locale.ROOT).hashCode() * 31) + name.toLowerCase(Locale.ROOT).hashCode()
 
         override fun toString() = "$namespace:$name"
 
@@ -23,7 +22,7 @@ class Event private constructor(builder: Builder) {
             val FOLLOWUP_EVENT = Id("followup", "send")
 
             fun parse(defaultNamespace: String, raw: String?) = raw
-                ?.split("\\s+".toRegex())
+                ?.split(Regex("\\s+"))
                 ?.mapNotNull {
                     val components = it.split(':', limit = 2)
                     when {
@@ -37,29 +36,14 @@ class Event private constructor(builder: Builder) {
     }
 
     class Builder {
-        lateinit var id: Id
-        var locale: Locale? = null
-        val fields = mutableMapOf<String, String>()
+        internal lateinit var id: Id
+        internal var locale: Locale? = null
+        internal val fields = mutableMapOf<String, String>()
 
-        fun id(id: Id): Builder {
-            this.id = id
-            return this
-        }
-
-        fun locale(locale: Locale): Builder {
-            this.locale = locale
-            return this
-        }
-
-        fun field(name: String, value: String): Builder {
-            this.fields[name] = value
-            return this
-        }
+        fun id(id: Id) = apply { this.id = id }
+        fun locale(locale: Locale) = apply { this.locale = locale }
+        fun field(name: String, value: String) = apply { fields[name] = value }
 
         fun build() = Event(this)
-    }
-
-    companion object {
-        fun builder() = Builder()
     }
 }
