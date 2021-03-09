@@ -81,7 +81,7 @@ abstract class BaseController<T : Base> protected constructor(
         if (!validate(ids)) return
 
         // try letting a parent build the event object
-        val builder = Event.builder()
+        val builder = Event.Builder()
         model?.manifest?.locale?.let { builder.locale(it) }
 
         // populate the event with our local state if it wasn't populated by a parent
