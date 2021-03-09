@@ -3,12 +3,9 @@ package org.cru.godtools.base.model
 import java.util.Locale
 import javax.annotation.concurrent.Immutable
 
-class Event internal constructor(builder: Builder) {
-    @JvmField
+class Event private constructor(builder: Builder) {
     val id = builder.id
-    @JvmField
     val locale = builder.locale
-    @JvmField
     val fields = builder.fields.toMap()
 
     @Immutable
@@ -23,10 +20,8 @@ class Event internal constructor(builder: Builder) {
         override fun toString() = "$namespace:$name"
 
         companion object {
-            @JvmField
             val FOLLOWUP_EVENT = Id("followup", "send")
 
-            @JvmStatic
             fun parse(defaultNamespace: String, raw: String?) = raw
                 ?.split("\\s+".toRegex())
                 ?.mapNotNull {
@@ -65,7 +60,6 @@ class Event internal constructor(builder: Builder) {
     }
 
     companion object {
-        @JvmStatic
         fun builder() = Builder()
     }
 }
