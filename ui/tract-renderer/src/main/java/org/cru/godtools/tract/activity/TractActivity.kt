@@ -187,6 +187,7 @@ class TractActivity :
 
     override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
+        propagateEventToPage(event)
     }
 
     override fun onUpdateActiveCard(page: TractPage, card: Card?) {
@@ -372,6 +373,10 @@ class TractActivity :
 
     private fun checkForPageEvent(event: Event) {
         activeManifest?.tractPages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
+    }
+
+    private fun propagateEventToPage(event: Event) {
+        pagerAdapter.onContentEvent(event)
     }
 
     // region ManifestPagerAdapter.Callbacks

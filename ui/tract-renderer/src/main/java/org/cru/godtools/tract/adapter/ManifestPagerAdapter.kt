@@ -114,8 +114,6 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         }
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onContentEvent(event: Event) {
         primaryItemController?.onContentEvent(event)
     }
