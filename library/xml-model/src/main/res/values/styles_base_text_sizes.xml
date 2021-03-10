@@ -5,7 +5,7 @@
     <dimen name="text_size_category">30sp</dimen>
 
     <!-- region Lesson text sizes -->
-    <dimen name="text_size_lesson">20sp</dimen>
+    <dimen name="text_size_lesson">18sp</dimen>
     <!-- endregion Lesson text sizes -->
 
     <!-- region Tract text sizes -->
