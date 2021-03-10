@@ -247,11 +247,21 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processContentEvent(event: Event) {
+        checkForManifestEvent(event)
+        if (isFinishing) return
         onContentEvent(event)
     }
 
     @MainThread
     protected open fun onContentEvent(event: Event) = Unit
+
+    private fun checkForManifestEvent(event: Event) {
+        val manifest = activeManifest ?: return
+        if (event.id in manifest.dismissListeners) {
+            finish()
+            return
+        }
+    }
     // endregion Content Event Logic
 
     // region Feature Discovery
