@@ -3,5 +3,5 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
 
-    testImplementation 'org.json:json:20201115'
+    testImplementation 'org.json:json:20210307'
 }
