@@ -1,8 +1,6 @@
 package org.cru.godtools.tool.lesson.ui
 
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.annotation.MainThread
 import androidx.lifecycle.distinctUntilChanged
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
@@ -12,7 +10,6 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
-import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
@@ -22,8 +19,6 @@ import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.lesson.LessonPage
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
@@ -35,20 +30,13 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
     override val dataModel: LessonActivityDataModel by viewModels()
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        eventBus.register(this, this)
-    }
-
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.setupPages()
         setupProgressIndicator()
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onContentEvent(event: Event) {
+    override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
     }
     // endregion Lifecycle
