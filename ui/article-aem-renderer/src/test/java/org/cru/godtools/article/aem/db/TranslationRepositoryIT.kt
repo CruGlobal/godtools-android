@@ -17,7 +17,7 @@ private val URI2 = Uri.parse("https://example.com/content/experience-fragments/o
 
 @RunWith(AndroidJUnit4::class)
 class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
-    private val repository get() = mDb.translationRepository()
+    private val repository get() = db.translationRepository()
 
     @Test
     fun verifyAddAemImportsTranslationAlreadyPresent() {
@@ -27,7 +27,7 @@ class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
             languageCode = Locale.ENGLISH
             version = 1
         }
-        mDb.translationDao().insertOrIgnore(TranslationRef(translation.toTranslationRefKey()!!))
+        db.translationDao().insertOrIgnore(TranslationRef(translation.toTranslationRefKey()!!))
 
         // perform test
         assertFalse(repository.isProcessed(translation))
@@ -35,7 +35,7 @@ class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
         assertTrue(repository.isProcessed(translation))
 
         // TODO: test AemImports once we define dao methods for reading AemImports
-        val aemImport = mDb.aemImportDao().find(URI1)
+        val aemImport = db.aemImportDao().find(URI1)
         assertEquals(URI1, aemImport!!.uri)
     }
 }
