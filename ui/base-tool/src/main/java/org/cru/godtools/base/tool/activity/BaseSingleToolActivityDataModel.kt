@@ -10,7 +10,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
-internal class BaseSingleToolActivityDataModel @Inject constructor(
+open class BaseSingleToolActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager

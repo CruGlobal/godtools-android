@@ -48,13 +48,10 @@
                 app:picassoFile="@{manifest.backgroundImage}"
                 app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}" />
 
-            <!-- TODO: switch to progress.setProgressCompat(p + 1, true) once this bug is fixed:
-                       https://github.com/material-components/material-components-android/issues/2051 -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pages"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:onPageSelected="@{(p) -> progress.setProgress(p + 1)}" />
+                android:layout_height="match_parent" />
         </FrameLayout>
 
         <androidx.appcompat.widget.Toolbar
@@ -75,8 +72,8 @@
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:max="@{manifest.lessonPages.size(), default=1}"
-                android:progress="@{pages.getCurrentItem() + 1, default=1}"
+                android:max="1"
+                android:progress="1"
                 app:indicatorColor="@{ManifestKt.getLessonNavBarControlColor(manifest)}"
                 app:trackCornerRadius="4dp"
                 app:trackThickness="8dp"

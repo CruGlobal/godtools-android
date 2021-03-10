@@ -23,7 +23,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 ) : BaseToolActivity<B>(contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
-    private val dataModel: BaseSingleToolActivityDataModel by viewModels()
+    protected open val dataModel: BaseSingleToolActivityDataModel by viewModels()
     protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
 
     // region Lifecycle

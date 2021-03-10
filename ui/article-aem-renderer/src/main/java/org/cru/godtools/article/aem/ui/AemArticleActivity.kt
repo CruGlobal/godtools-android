@@ -111,13 +111,13 @@ class AemArticleActivity :
         (scheme == "http" || scheme == "https") && host == "godtoolsapp.com" && path == "/article/aem"
     // endregion Intent parsing
 
-    private val dataModel: AemArticleViewModel by viewModels()
+    private val articleDataModel: AemArticleViewModel by viewModels()
 
     private fun setupDataModel() {
-        dataModel.articleUri.value = articleUri
+        articleDataModel.articleUri.value = articleUri
 
-        dataModel.article.observe(this) { updateShareMenuItem() }
-        dataModel.article.observe(this) { onUpdateArticle(it) }
+        articleDataModel.article.observe(this) { updateShareMenuItem() }
+        articleDataModel.article.observe(this) { onUpdateArticle(it) }
     }
 
     private fun sendAnalyticsEventIfNeededAndPossible() {
@@ -156,13 +156,13 @@ class AemArticleActivity :
     // endregion Sync logic
 
     // region Share Link logic
-    override val shareMenuItemVisible by lazy { dataModel.article.map { it?.canonicalUri != null } }
-    override val shareLinkTitle get() = dataModel.article.value?.title ?: super.shareLinkTitle
-    override val shareLinkUri get() = dataModel.article.value?.run { shareUri?.toString() ?: canonicalUri?.toString() }
+    override val shareMenuItemVisible by lazy { articleDataModel.article.map { it?.canonicalUri != null } }
+    override val shareLinkTitle get() = articleDataModel.article.value?.title ?: super.shareLinkTitle
+    override val shareLinkUri get() = articleDataModel.article.value?.let { it.shareUri ?: it.canonicalUri }?.toString()
     // endregion Share Link logic
 
     override val activeToolStateLiveData by lazy {
-        dataModel.article.combineWith(syncFinished) { article, syncFinished ->
+        articleDataModel.article.combineWith(syncFinished) { article, syncFinished ->
             when {
                 article?.content != null -> ToolState.LOADED
                 !syncFinished -> ToolState.LOADING
