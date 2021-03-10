@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
@@ -238,7 +239,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         val dynamicShortcuts = withContext(ioDispatcher) {
             Query.select<Tool>()
-                .where(ToolTable.FIELD_ADDED.eq(true))
+                .where(
+                    ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.ARTICLE, Tool.Type.TRACT))
+                        .and(ToolTable.FIELD_ADDED.eq(true))
+                )
                 .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
                 .get(dao).asSequence()
                 .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
