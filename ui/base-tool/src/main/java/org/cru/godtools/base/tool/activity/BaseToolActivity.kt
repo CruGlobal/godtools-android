@@ -24,13 +24,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.util.graphics.toHslColor
-import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
-import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
@@ -308,16 +307,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))
-
-        eventBus.post(
-            when {
-                settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) -> ToolOpenedAnalyticsActionEvent
-                else -> FirstToolOpenedAnalyticsActionEvent
-            }
-        )
-        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
-
+        eventBus.post(ToolOpenedAnalyticsActionEvent(first = !settings.isFeatureDiscovered(FEATURE_TOOL_OPENED)))
         if (intent.isShortcutLaunch) eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
+
+        settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
 
         GlobalScope.launch { dao.updateSharesDelta(tool, 1) }
     }
