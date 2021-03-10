@@ -54,18 +54,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
 
-    private val shortcutLaunch get() = intent?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
-
-        // track if activity was launched by a shortcut
-        if (savedInstanceState == null && shortcutLaunch) {
-            eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
-        }
     }
 
     @CallSuper
@@ -324,8 +317,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         )
         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
 
+        if (intent.isShortcutLaunch) eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
+
         GlobalScope.launch { dao.updateSharesDelta(tool, 1) }
     }
+
+    private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
 
     override fun setTitle(title: CharSequence) =
         super.setTitle(title.applyTypefaceSpan(activeManifest?.getTypeface(this)))
