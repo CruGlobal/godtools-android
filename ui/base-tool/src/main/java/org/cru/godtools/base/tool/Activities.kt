@@ -11,6 +11,8 @@ import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 
+const val SHORTCUT_LAUNCH = "org.cru.godtools.tool.SHORTCUT_LAUNCH"
+
 // region LessonActivity
 private const val ACTIVITY_CLASS_LESSON = "org.cru.godtools.tool.lesson.ui.LessonActivity"
 
@@ -27,8 +29,6 @@ fun Context.createLessonActivityIntent(toolCode: String, language: Locale) =
 private const val ACTIVITY_CLASS_TRACT = "org.cru.godtools.tract.activity.TractActivity"
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.tract.activity.TractActivity.SHOW_TIPS"
-
-const val SHORTCUT_LAUNCH = "org.cru.godtools.tool.SHORTCUT_LAUNCH"
 
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
     startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))

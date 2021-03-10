@@ -24,13 +24,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.util.graphics.toHslColor
-import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
-import org.cru.godtools.base.tool.analytics.model.FirstToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
@@ -54,18 +53,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
 
-    private val shortcutLaunch get() = intent?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
-
-        // track if activity was launched by a shortcut
-        if (savedInstanceState == null && shortcutLaunch) {
-            eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
-        }
     }
 
     @CallSuper
@@ -114,6 +106,12 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
      */
     protected val activeManifest get() = activeManifestLiveData.value
 
+    // region Status Bar / Toolbar logic
+    override val toolbar get() = when (val it = binding) {
+        is ToolGenericFragmentActivityBinding -> it.appbar
+        else -> super.toolbar
+    }
+
     private fun setupStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.apply {
@@ -125,12 +123,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    override val toolbar get() = when (val it = binding) {
-        is ToolGenericFragmentActivityBinding -> it.appbar
-        else -> super.toolbar
-    }
-
-    // region Toolbar update logic
     private fun setupToolbar() {
         activeManifestLiveData.observe(this) {
             updateToolbarTitle()
@@ -141,7 +133,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     protected open fun updateToolbarTitle() {
         title = activeManifest?.title.orEmpty()
     }
-    // endregion Toolbar update logic
+    // endregion Status Bar / Toolbar logic
 
     // region Share tool logic
     private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
@@ -315,17 +307,15 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected fun trackToolOpen(tool: String) {
         eventBus.post(ToolUsedEvent(tool))
+        eventBus.post(ToolOpenedAnalyticsActionEvent(first = !settings.isFeatureDiscovered(FEATURE_TOOL_OPENED)))
+        if (intent.isShortcutLaunch) eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
 
-        eventBus.post(
-            when {
-                settings.isFeatureDiscovered(Settings.FEATURE_TOOL_OPENED) -> ToolOpenedAnalyticsActionEvent
-                else -> FirstToolOpenedAnalyticsActionEvent
-            }
-        )
-        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_OPENED)
+        settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
 
         GlobalScope.launch { dao.updateSharesDelta(tool, 1) }
     }
+
+    private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
 
     override fun setTitle(title: CharSequence) =
         super.setTitle(title.applyTypefaceSpan(activeManifest?.getTypeface(this)))
