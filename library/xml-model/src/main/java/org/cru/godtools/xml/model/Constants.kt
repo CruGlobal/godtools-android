@@ -1,4 +1,4 @@
-package org.cru.godtools.xml
+package org.cru.godtools.xml.model
 
 internal const val SUPPORTED_VERSION = 1
 

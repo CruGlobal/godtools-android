@@ -8,7 +8,6 @@ import androidx.annotation.Dimension.DP
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_END_IMAGE = "end-image"

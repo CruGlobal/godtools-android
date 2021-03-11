@@ -1,8 +1,6 @@
 package org.cru.godtools.xml.model
 
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_ANALYTICS
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser) {

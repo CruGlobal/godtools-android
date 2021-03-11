@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.model
 
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_FILENAME = "filename"

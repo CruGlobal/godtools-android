@@ -2,8 +2,6 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_ARTICLE
-import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_ID = "id"

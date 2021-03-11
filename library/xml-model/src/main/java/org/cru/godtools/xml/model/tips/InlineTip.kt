@@ -2,9 +2,9 @@ package org.cru.godtools.xml.model.tips
 
 import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.Base
 import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.XMLNS_TRAINING
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_ID = "id"

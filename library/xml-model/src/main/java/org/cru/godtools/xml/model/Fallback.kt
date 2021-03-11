@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.RestrictTo
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
