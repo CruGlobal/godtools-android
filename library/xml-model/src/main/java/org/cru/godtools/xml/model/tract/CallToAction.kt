@@ -8,6 +8,7 @@ import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.XMLNS_TRACT
 import org.cru.godtools.xml.model.XMLNS_TRAINING
+import org.cru.godtools.xml.model.XML_EVENTS
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.parseTextChild
 import org.cru.godtools.xml.model.primaryColor

@@ -9,6 +9,7 @@ import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.XMLNS_TRACT
 import org.cru.godtools.xml.model.XMLNS_TRAINING
+import org.cru.godtools.xml.model.XML_BACKGROUND_COLOR
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser

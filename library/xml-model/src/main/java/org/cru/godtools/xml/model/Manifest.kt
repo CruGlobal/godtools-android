@@ -18,6 +18,7 @@ import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.lesson.LessonPage
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.TractPage
+import org.cru.godtools.xml.model.tract.XML_CARD_BACKGROUND_COLOR
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_MANIFEST = "manifest"
