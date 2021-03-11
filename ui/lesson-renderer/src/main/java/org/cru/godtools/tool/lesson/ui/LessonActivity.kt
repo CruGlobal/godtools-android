@@ -22,11 +22,13 @@ import org.cru.godtools.xml.model.lesson.LessonPage
 import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
-class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
-    contentLayoutId = R.layout.lesson_activity,
-    requireTool = true,
-    supportedType = Manifest.Type.LESSON
-) {
+class LessonActivity :
+    BaseSingleToolActivity<LessonActivityBinding>(
+        contentLayoutId = R.layout.lesson_activity,
+        requireTool = true,
+        supportedType = Manifest.Type.LESSON
+    ),
+    LessonPageAdapter.Callbacks {
     override val dataModel: LessonActivityDataModel by viewModels()
 
     // region Lifecycle
@@ -69,7 +71,7 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
-    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this) }
+    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this).also { it.callbacks = this } }
 
     private fun LessonActivityBinding.setupPages() {
         pages.adapter = lessonPageAdapter
@@ -100,6 +102,14 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
                 binding.pages.currentItem = it
             }
         }
+    }
+
+    override fun goToPreviousPage() {
+        binding.pages.currentItem -= 1
+    }
+
+    override fun goToNextPage() {
+        binding.pages.currentItem += 1
     }
     // endregion Pages
     // endregion UI
