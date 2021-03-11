@@ -62,7 +62,7 @@ class LessonActivity : BaseSingleToolActivity<LessonActivityBinding>(
         binding.progress.max = pages?.count { !it.isHidden } ?: 0
         // TODO: switch to setProgressCompat(p, true) once this bug is fixed:
         //       https://github.com/material-components/material-components-android/issues/2051
-        binding.progress.progress = pages?.subList(0, position + 1)?.count { !it.isHidden } ?: 0
+        binding.progress.progress = pages?.take(position + 1)?.count { !it.isHidden } ?: 0
     }
     // endregion Progress Indicator
 
