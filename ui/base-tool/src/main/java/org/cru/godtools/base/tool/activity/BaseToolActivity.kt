@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
@@ -23,9 +24,11 @@ import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
@@ -44,6 +47,8 @@ import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarColor
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
@@ -58,6 +63,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
+        eventBus.register(this, this)
     }
 
     @CallSuper
@@ -236,6 +242,27 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected abstract fun cacheTools()
     // endregion Tool sync/download logic
+
+    // region Content Event Logic
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun processContentEvent(event: Event) {
+        checkForManifestEvent(event)
+        if (isFinishing) return
+        onContentEvent(event)
+    }
+
+    @MainThread
+    protected open fun onContentEvent(event: Event) = Unit
+
+    private fun checkForManifestEvent(event: Event) {
+        val manifest = activeManifest ?: return
+        if (event.id in manifest.dismissListeners) {
+            finish()
+            return
+        }
+    }
+    // endregion Content Event Logic
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null

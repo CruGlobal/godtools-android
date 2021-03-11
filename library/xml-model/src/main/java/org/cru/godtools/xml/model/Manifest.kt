@@ -14,6 +14,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.XMLNS_ARTICLE
 import org.cru.godtools.xml.XMLNS_MANIFEST
 import org.cru.godtools.xml.XMLNS_TRACT
@@ -86,6 +87,8 @@ class Manifest : BaseModel, Styles {
     val locale: Locale
     val type: Type
 
+    val dismissListeners: Set<Event.Id>
+
     @ColorInt
     override val primaryColor: Int
     @ColorInt
@@ -142,6 +145,8 @@ class Manifest : BaseModel, Styles {
         this.code = code
         this.locale = locale
         type = Type.parseOrNull(parser.getAttributeValue(null, XML_TYPE)) ?: Type.DEFAULT
+
+        dismissListeners = parseEvents(parser, XML_DISMISS_LISTENERS)
 
         primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR) ?: DEFAULT_PRIMARY_COLOR
         primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR) ?: DEFAULT_PRIMARY_TEXT_COLOR
@@ -223,6 +228,8 @@ class Manifest : BaseModel, Styles {
         this.code = code
         this.locale = locale
         this.type = type
+
+        dismissListeners = emptySet()
 
         this.primaryColor = primaryColor
         this.primaryTextColor = primaryTextColor

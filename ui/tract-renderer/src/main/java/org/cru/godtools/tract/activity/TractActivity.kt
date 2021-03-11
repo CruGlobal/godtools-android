@@ -11,7 +11,6 @@ import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
-import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -69,8 +68,6 @@ import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.Card
 import org.cru.godtools.xml.model.tract.Modal
 import org.cru.godtools.xml.model.tract.TractPage
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
 
@@ -143,11 +140,6 @@ class TractActivity :
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        eventBus.register(this)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, -1, "instantapp")
@@ -193,10 +185,9 @@ class TractActivity :
         showNextFeatureDiscovery()
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onContentEvent(event: Event) {
+    override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
+        propagateEventToPage(event)
     }
 
     override fun onUpdateActiveCard(page: TractPage, card: Card?) {
@@ -207,11 +198,6 @@ class TractActivity :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(EXTRA_INITIAL_PAGE, initialPage)
-    }
-
-    override fun onStop() {
-        eventBus.unregister(this)
-        super.onStop()
     }
     // endregion Lifecycle
 
@@ -387,6 +373,10 @@ class TractActivity :
 
     private fun checkForPageEvent(event: Event) {
         activeManifest?.tractPages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
+    }
+
+    private fun propagateEventToPage(event: Event) {
+        pagerAdapter.onContentEvent(event)
     }
 
     // region ManifestPagerAdapter.Callbacks

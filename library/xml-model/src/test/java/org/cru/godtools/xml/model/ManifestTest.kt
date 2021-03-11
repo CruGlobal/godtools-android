@@ -3,6 +3,7 @@ package org.cru.godtools.xml.model
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
+import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -41,6 +42,7 @@ class ManifestParsingRobolectricTest {
         val manifest = parseManifest("manifest_lesson.xml")
         assertEquals("title", manifest.title)
         assertEquals(Manifest.Type.LESSON, manifest.type)
+        assertEquals(Event.Id.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
         assertThat(manifest.tractPages, `is`(empty()))
         assertEquals(1, manifest.lessonPages.size)
         assertEquals("page0.xml", manifest.lessonPages[0].fileName)
