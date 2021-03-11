@@ -15,6 +15,7 @@ buildscript {
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.1.2',
+                grpc               : '1.36.0',
                 gtoSupport         : '3.7.2-SNAPSHOT',
                 guava              : '30.1-android',
                 hamcrest           : '2.2',
@@ -151,6 +152,14 @@ allprojects {
             // XXX: Force okhttp3 to older version to support older versions of Android.
             // XXX: This can go away once we bump minimum android version to API-21+
             force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
+
+            // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
+            //      Remove this override once FIAM depends on v1.30.0+ of grpc
+            //      https://github.com/grpc/grpc-java/pull/6912
+            //      https://jira.cru.org/projects/GT/issues/GT-1122
+            force "io.grpc:grpc-okhttp:${deps.grpc}"
+            force "io.grpc:grpc-protobuf-lite:${deps.grpc}"
+            force "io.grpc:grpc-stub:${deps.grpc}"
 
             dependencySubstitution {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
