@@ -5,6 +5,7 @@
         <activity
             android:name=".ui.LessonActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation" />
+            android:screenOrientation="@integer/default_screen_orientation"
+            android:theme="@style/Theme.GodTools.Tool.Activity.Lesson" />
     </application>
 </manifest>
