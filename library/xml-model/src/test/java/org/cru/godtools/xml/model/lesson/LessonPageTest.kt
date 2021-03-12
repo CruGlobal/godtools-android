@@ -25,13 +25,14 @@ class LessonPageTest {
 
     @Before
     fun setup() {
-        manifest = Manifest(TOOL_CODE, type = Manifest.Type.LESSON)
+        manifest = Manifest(TOOL_CODE, type = Manifest.Type.LESSON, lessonControlColor = Color.RED)
     }
 
     @Test
     fun testParsePage() {
         val page = parsePageXml("page.xml")
         assertFalse(page.isHidden)
+        assertEquals(Color.GREEN, page.controlColor)
         assertEquals(1, page.content.size)
         assertTrue(page.content[0] is Text)
         assertEquals("background.png", page._backgroundImage)
@@ -44,6 +45,7 @@ class LessonPageTest {
     @Test
     fun testParsePageEmpty() {
         val page = parsePageXml("page_empty.xml")
+        assertEquals(Color.RED, page.controlColor)
         assertThat(page.content, `is`(empty()))
     }
 

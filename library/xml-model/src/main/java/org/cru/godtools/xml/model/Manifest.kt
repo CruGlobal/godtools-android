@@ -229,6 +229,7 @@ class Manifest : BaseModel, Styles {
         navBarControlColor: Int? = null,
         backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
         cardBackgroundColor: Int? = null,
+        lessonControlColor: Int = DEFAULT_LESSON_CONTROL_COLOR,
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
@@ -252,7 +253,7 @@ class Manifest : BaseModel, Styles {
 
         categoryLabelColor = null
 
-        lessonControlColor = DEFAULT_LESSON_CONTROL_COLOR
+        this.lessonControlColor = lessonControlColor
 
         _title = null
         aemImports = emptyList()
