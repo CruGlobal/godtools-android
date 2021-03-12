@@ -5,7 +5,6 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
         <import type="org.cru.godtools.xml.model.lesson.LessonPageKt" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
@@ -57,7 +56,7 @@
             android:src="@drawable/ic_action_previous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tint="@{StylesKt.getPrimaryColor(model)}"
+            app:tint="@{LessonPageKt.getControlColor(model)}"
             app:visibleIf="@{!isFirstPage}" />
 
         <ImageView
@@ -69,7 +68,7 @@
             android:src="@drawable/ic_action_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@{StylesKt.getPrimaryColor(model)}"
+            app:tint="@{LessonPageKt.getControlColor(model)}"
             app:visibleIf="@{!isLastPage}" />
 
         <androidx.constraintlayout.widget.Barrier
