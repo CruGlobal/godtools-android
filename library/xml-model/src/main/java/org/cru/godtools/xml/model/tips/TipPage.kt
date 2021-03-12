@@ -1,9 +1,9 @@
 package org.cru.godtools.xml.model.tips
 
-import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.Parent
+import org.cru.godtools.xml.model.XMLNS_TRAINING
 import org.cru.godtools.xml.model.parseContent
 import org.xmlpull.v1.XmlPullParser
 

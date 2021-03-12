@@ -17,7 +17,7 @@ class ArticleRoomDatabaseTest : BaseArticleRoomDatabaseIT() {
 
     @Test
     fun verifyGetAllArticles() {
-        val articleDao = mDb.articleDao()
+        val articleDao = db.articleDao()
         val articles = articleDao.allArticles
         articles.observeForever { }
         for (i in 0..11) articleDao.insertOrIgnore(Article(Uri.parse("test:" + i + "aaslf" + i)))

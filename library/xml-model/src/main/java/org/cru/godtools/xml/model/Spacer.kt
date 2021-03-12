@@ -2,7 +2,6 @@ package org.cru.godtools.xml.model
 
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 class Spacer : Content {

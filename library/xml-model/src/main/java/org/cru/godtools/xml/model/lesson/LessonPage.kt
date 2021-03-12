@@ -7,7 +7,6 @@ import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
-import org.cru.godtools.xml.XMLNS_LESSON
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.ImageGravity
@@ -15,6 +14,12 @@ import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.XMLNS_LESSON
+import org.cru.godtools.xml.model.XML_BACKGROUND_COLOR
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_GRAVITY
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_SCALE_TYPE
+import org.cru.godtools.xml.model.XML_LISTENERS
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
 import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull

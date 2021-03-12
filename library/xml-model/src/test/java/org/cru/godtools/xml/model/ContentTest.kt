@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.xml.SUPPORTED_VERSION
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -4,7 +4,6 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.xml.XMLNS_ANALYTICS
 import org.xmlpull.v1.XmlPullParser
 import timber.log.Timber
 

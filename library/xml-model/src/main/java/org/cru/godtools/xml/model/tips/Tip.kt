@@ -3,10 +3,10 @@ package org.cru.godtools.xml.model.tips
 import androidx.annotation.RestrictTo
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.xml.R
-import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Styles
+import org.cru.godtools.xml.model.XMLNS_TRAINING
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_TIP = "tip"

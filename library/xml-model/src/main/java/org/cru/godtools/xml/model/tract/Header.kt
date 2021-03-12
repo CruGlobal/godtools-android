@@ -4,11 +4,12 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.VisibleForTesting
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.xml.XMLNS_TRACT
-import org.cru.godtools.xml.XMLNS_TRAINING
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.XMLNS_TRACT
+import org.cru.godtools.xml.model.XMLNS_TRAINING
+import org.cru.godtools.xml.model.XML_BACKGROUND_COLOR
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.parseTextChild
 import org.xmlpull.v1.XmlPullParser

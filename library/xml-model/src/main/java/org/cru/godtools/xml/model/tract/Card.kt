@@ -3,8 +3,6 @@ package org.cru.godtools.xml.model.tract
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_ANALYTICS
-import org.cru.godtools.xml.XMLNS_TRACT
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
@@ -13,6 +11,15 @@ import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
+import org.cru.godtools.xml.model.XMLNS_ANALYTICS
+import org.cru.godtools.xml.model.XMLNS_TRACT
+import org.cru.godtools.xml.model.XML_BACKGROUND_COLOR
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_GRAVITY
+import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_SCALE_TYPE
+import org.cru.godtools.xml.model.XML_DISMISS_LISTENERS
+import org.cru.godtools.xml.model.XML_LISTENERS
+import org.cru.godtools.xml.model.XML_TEXT_COLOR
 import org.cru.godtools.xml.model.backgroundColor
 import org.cru.godtools.xml.model.contentTips
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull

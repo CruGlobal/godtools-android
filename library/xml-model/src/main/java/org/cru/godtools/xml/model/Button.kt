@@ -4,8 +4,6 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.XMLNS_ANALYTICS
-import org.cru.godtools.xml.XMLNS_CONTENT
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_COLOR = "color"
