@@ -7,10 +7,10 @@ dependencies {
 
     implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
+    api "androidx.hilt:hilt-work:${deps.androidX.hilt}"
     api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
@@ -19,6 +19,7 @@ dependencies {
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
+    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
 }
