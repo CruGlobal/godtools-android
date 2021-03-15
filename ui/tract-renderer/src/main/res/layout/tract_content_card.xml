@@ -91,7 +91,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_above="@id/label_divider"
                     android:onClick="@{() -> controller.toggleCard()}"
                     app:layout_constraintBottom_toTopOf="@id/label_divider"
                     app:layout_constraintEnd_toEndOf="parent"
