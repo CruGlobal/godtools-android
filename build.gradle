@@ -10,7 +10,7 @@ buildscript {
                 circleindicator    : '2.1.6',
                 dagger             : '2.33',
                 eventbus           : '3.2.0',
-                facebook           : '7.1.0',
+                facebook           : '9.1.0',
                 facebookFlipper    : '0.74.0',
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
