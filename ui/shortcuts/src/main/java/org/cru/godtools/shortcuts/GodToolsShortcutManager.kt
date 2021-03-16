@@ -101,8 +101,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @AnyThread
     fun onUpdateSystemLocale(result: BroadcastReceiver.PendingResult) {
         coroutineScope.launch {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
-            updatePendingShortcuts()
+            refreshShortcutsNow()
             result.finish()
         }
     }
@@ -266,6 +265,11 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Update Existing Shortcuts
+
+    internal suspend fun refreshShortcutsNow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
+        updatePendingShortcuts()
+    }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
