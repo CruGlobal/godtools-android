@@ -307,8 +307,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
-            ?.let { dao.find<Attachment>(it)?.localFilename }
-            ?.let { fileManager.getFile(it) }
+            ?.let { dao.find<Attachment>(it) }
+            ?.getFile(fileManager)
             ?.let {
                 try {
                     Picasso.get().load(it)
