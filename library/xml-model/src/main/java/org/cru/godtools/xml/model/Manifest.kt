@@ -15,7 +15,9 @@ import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.xml.model.lesson.DEFAULT_LESSON_CONTROL_COLOR
 import org.cru.godtools.xml.model.lesson.LessonPage
+import org.cru.godtools.xml.model.lesson.XML_CONTROL_COLOR
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.TractPage
 import org.cru.godtools.xml.model.tract.XML_CARD_BACKGROUND_COLOR
@@ -120,6 +122,9 @@ class Manifest : BaseModel, Styles {
     @ColorInt
     internal val categoryLabelColor: Int?
 
+    @ColorInt
+    internal val lessonControlColor: Int
+
     private val _title: Text?
     val title: String? get() = _title?.text
 
@@ -162,6 +167,9 @@ class Manifest : BaseModel, Styles {
         _cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XMLNS_TRACT, XML_CARD_BACKGROUND_COLOR)
 
         categoryLabelColor = parser.getAttributeValueAsColorOrNull(XML_CATEGORY_LABEL_COLOR)
+
+        lessonControlColor =
+            parser.getAttributeValueAsColorOrNull(XMLNS_LESSON, XML_CONTROL_COLOR) ?: DEFAULT_LESSON_CONTROL_COLOR
 
         // process any child elements
         var title: Text? = null
@@ -221,6 +229,7 @@ class Manifest : BaseModel, Styles {
         navBarControlColor: Int? = null,
         backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
         cardBackgroundColor: Int? = null,
+        lessonControlColor: Int = DEFAULT_LESSON_CONTROL_COLOR,
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
@@ -243,6 +252,8 @@ class Manifest : BaseModel, Styles {
         _navBarControlColor = navBarControlColor
 
         categoryLabelColor = null
+
+        this.lessonControlColor = lessonControlColor
 
         _title = null
         aemImports = emptyList()

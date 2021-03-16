@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.base.model.Event
+import org.cru.godtools.xml.model.lesson.DEFAULT_LESSON_CONTROL_COLOR
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -30,6 +31,7 @@ class ManifestParsingRobolectricTest {
     fun testParseEmptyManifest() {
         val manifest = parseManifest("manifest_empty.xml")
         assertNull(manifest.title)
+        assertEquals(DEFAULT_LESSON_CONTROL_COLOR, manifest.lessonControlColor)
         assertEquals(0, manifest.aemImports.size)
         assertThat(manifest.lessonPages, `is`(empty()))
         assertThat(manifest.tractPages, `is`(empty()))
@@ -42,6 +44,7 @@ class ManifestParsingRobolectricTest {
         val manifest = parseManifest("manifest_lesson.xml")
         assertEquals("title", manifest.title)
         assertEquals(Manifest.Type.LESSON, manifest.type)
+        assertEquals(Color.RED, manifest.lessonControlColor)
         assertEquals(Event.Id.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
         assertThat(manifest.tractPages, `is`(empty()))
         assertEquals(1, manifest.lessonPages.size)

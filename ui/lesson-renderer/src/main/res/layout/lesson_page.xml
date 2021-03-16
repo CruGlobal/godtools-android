@@ -2,11 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="androidx.databinding.ObservableField" />
+        <import type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
         <import type="org.cru.godtools.xml.model.lesson.LessonPageKt" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
 
+        <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
         <variable name="model" type="org.cru.godtools.xml.model.lesson.LessonPage" />
+        <variable name="isFirstPage" type="boolean" />
+        <variable name="isLastPage" type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/navigation_actions"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -42,5 +46,36 @@
                 android:layout_marginRight="@dimen/lesson_content_horiz_margin"
                 android:orientation="vertical" />
         </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+
+        <ImageView
+            android:id="@+id/action_previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="@{() -> callbacks.goToPreviousPage()}"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@{LessonPageKt.getControlColor(model)}"
+            app:visibleIf="@{!isFirstPage}" />
+
+        <ImageView
+            android:id="@+id/action_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="@{() -> callbacks.goToNextPage()}"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@{LessonPageKt.getControlColor(model)}"
+            app:visibleIf="@{!isLastPage}" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/navigation_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="action_previous,action_next" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

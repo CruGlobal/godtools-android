@@ -53,6 +53,11 @@ class LessonPage : BaseModel, Parent, Styles {
     val backgroundImageGravity: ImageGravity
     val backgroundImageScaleType: ImageScaleType
 
+    @ColorInt
+    private val _controlColor: Int?
+    @get:ColorInt
+    val controlColor get() = _controlColor ?: manifest.lessonControlColor
+
     override val textSize get() = R.dimen.text_size_lesson
 
     override val content: List<Content>
@@ -79,6 +84,8 @@ class LessonPage : BaseModel, Parent, Styles {
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
+        _controlColor = parser.getAttributeValueAsColorOrNull(XML_CONTROL_COLOR)
+
         val content = mutableListOf<Content>()
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
@@ -99,3 +106,6 @@ class LessonPage : BaseModel, Parent, Styles {
 val LessonPage?.backgroundColor get() = this?.backgroundColor ?: DEFAULT_BACKGROUND_COLOR
 val LessonPage?.backgroundImageScaleType get() = this?.backgroundImageScaleType ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 val LessonPage?.backgroundImageGravity get() = this?.backgroundImageGravity ?: DEFAULT_BACKGROUND_IMAGE_GRAVITY
+
+@get:ColorInt
+val LessonPage?.controlColor get() = this?.controlColor ?: DEFAULT_LESSON_CONTROL_COLOR

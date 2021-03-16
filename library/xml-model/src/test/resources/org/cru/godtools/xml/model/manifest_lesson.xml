@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <manifest xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    type="lesson" xmlns="https://mobile-content-api.cru.org/xmlns/manifest" dismiss-listeners="dismiss_event">
+    xmlns:lesson="https://mobile-content-api.cru.org/xmlns/lesson"
+    dismiss-listeners="dismiss_event" type="lesson" xmlns="https://mobile-content-api.cru.org/xmlns/manifest"
+    lesson:control-color="rgba(255,0,0,1)">
     <title>
         <content:text>title</content:text>
     </title>
