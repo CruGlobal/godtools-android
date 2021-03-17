@@ -138,8 +138,7 @@ class MainActivity :
     // endregion UI
 
     // region Feature Discovery
-    @JvmField
-    protected var featureDiscovery: TapTargetView? = null
+    private var featureDiscovery: TapTargetView? = null
     override fun isFeatureDiscoveryVisible() = super.isFeatureDiscoveryVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
