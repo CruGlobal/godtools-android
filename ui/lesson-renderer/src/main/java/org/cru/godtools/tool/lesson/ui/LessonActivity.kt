@@ -16,6 +16,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.tool.lesson.R
+import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.lesson.LessonPage
@@ -36,6 +37,11 @@ class LessonActivity :
         super.onBindingChanged()
         binding.setupPages()
         setupProgressIndicator()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        trackPageInAnalytics()
     }
 
     override fun onContentEvent(event: Event) {
@@ -90,6 +96,7 @@ class LessonActivity :
 
             override fun onPageSelected(position: Int) {
                 updateProgressIndicator(position = position)
+                trackPageInAnalytics(dataModel.pages.value?.getOrNull(position))
             }
         })
     }
@@ -113,6 +120,10 @@ class LessonActivity :
     }
     // endregion Pages
     // endregion UI
+
+    private fun trackPageInAnalytics(page: LessonPage? = dataModel.pages.value?.getOrNull(binding.pages.currentItem)) {
+        page?.let { eventBus.post(LessonPageAnalyticsScreenEvent(page)) }
+    }
 }
 
 @HiltViewModel
