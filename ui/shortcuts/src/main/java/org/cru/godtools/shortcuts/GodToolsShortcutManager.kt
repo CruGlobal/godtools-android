@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -98,15 +97,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     // region Events
-    @AnyThread
-    fun onUpdateSystemLocale(result: BroadcastReceiver.PendingResult) {
-        coroutineScope.launch {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
-            updatePendingShortcuts()
-            result.finish()
-        }
-    }
-
     @AnyThread
     @Subscribe
     fun onToolUpdate(event: ToolUpdateEvent) {
@@ -266,6 +256,11 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Update Existing Shortcuts
+
+    internal suspend fun refreshShortcutsNow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
+        updatePendingShortcuts()
+    }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
