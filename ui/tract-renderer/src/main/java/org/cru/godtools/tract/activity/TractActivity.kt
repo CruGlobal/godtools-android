@@ -400,10 +400,7 @@ class TractActivity :
         page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
         card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard
     ) {
-        if (page == null) return
-        eventBus.post(
-            TractPageAnalyticsScreenEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
-        )
+        page?.let { eventBus.post(TractPageAnalyticsScreenEvent(page, card)) }
     }
 
     // region Active Translation management
