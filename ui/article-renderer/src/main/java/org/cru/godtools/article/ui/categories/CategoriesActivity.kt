@@ -12,8 +12,6 @@ import org.cru.godtools.article.R
 import org.cru.godtools.article.ui.articles.startArticlesActivity
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
-import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
-import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.xml.model.Category
 
@@ -40,11 +38,6 @@ class CategoriesActivity :
     override fun onStart() {
         super.onStart()
         loadPrimaryFragmentIfNeeded()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        eventBus.post(ToolAnalyticsScreenEvent(SCREEN_CATEGORIES, tool, locale))
     }
 
     override fun onCategorySelected(category: Category?) = startArticlesActivity(tool, locale, category?.id)

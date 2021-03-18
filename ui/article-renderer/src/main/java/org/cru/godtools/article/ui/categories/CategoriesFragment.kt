@@ -5,17 +5,24 @@ import android.view.View
 import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
 import org.cru.godtools.article.R
 import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
+import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.xml.model.Category
+import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
 class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, CategorySelectedListener {
     constructor() : super(R.layout.article_categories_fragment)
     constructor(code: String, locale: Locale) : super(R.layout.article_categories_fragment, code, locale)
+
+    @Inject
+    internal lateinit var eventBus: EventBus
 
     override val View.viewBinding get() = ArticleCategoriesFragmentBinding.bind(this)
 
@@ -23,6 +30,11 @@ class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, C
     override fun onBindingCreated(binding: ArticleCategoriesFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.setupCategoriesView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        eventBus.post(ToolAnalyticsScreenEvent(SCREEN_CATEGORIES, tool, locale))
     }
 
     override fun onCategorySelected(category: Category?) {

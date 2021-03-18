@@ -15,8 +15,10 @@ abstract class BaseToolFragment<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         this.locale = locale
     }
 
-    private var tool by arg<String>()
-    private var locale by arg<Locale>()
+    protected var tool by arg<String>()
+        private set
+    protected var locale by arg<Locale>()
+        private set
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
