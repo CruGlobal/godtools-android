@@ -3,6 +3,7 @@ package org.cru.godtools.model
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.base.FileManager
 
 private const val JSON_API_TYPE = "attachment"
 private const val JSON_RESOURCE = "resource"
@@ -30,4 +31,6 @@ class Attachment : Base() {
             val extension = filename?.substringAfterLast('.', "bin") ?: "bin"
             "$sha256.$extension"
         }
+
+    suspend fun getFile(manager: FileManager) = localFilename?.let { manager.getFile(it) }
 }

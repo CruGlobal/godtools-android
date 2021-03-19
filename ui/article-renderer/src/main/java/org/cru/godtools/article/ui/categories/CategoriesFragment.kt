@@ -31,18 +31,14 @@ class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, C
     // endregion Lifecycle
 
     // region Categories View
-    private val categoriesAdapter by lazy {
-        CategoriesAdapter(this).also {
-            it.callbacks.set(this)
-            toolDataModel.manifest.map { it?.categories }.observe(this, it)
-        }
-    }
-
     private fun ArticleCategoriesFragmentBinding.setupCategoriesView() {
         categories.apply {
             setHasFixedSize(true)
             addItemDecoration(VerticalSpaceItemDecoration(R.dimen.categories_list_gap))
-            adapter = categoriesAdapter
+            adapter = CategoriesAdapter(viewLifecycleOwner).apply {
+                callbacks.set(this@CategoriesFragment)
+                toolDataModel.manifest.map { it?.categories }.observe(viewLifecycleOwner, this)
+            }
         }
     }
     // endregion Categories View
