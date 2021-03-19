@@ -18,9 +18,6 @@
                 <data android:host="godtoolsapp.com" />
                 <data android:path="/article/aem" />
             </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cru.godtools.article.ui.articles.ArticlesActivity" />
         </activity>
     </application>
 </manifest>
