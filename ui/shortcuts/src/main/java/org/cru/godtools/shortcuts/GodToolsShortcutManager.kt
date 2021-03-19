@@ -45,7 +45,7 @@ import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.article.ui.categories.createCategoriesIntent
+import org.cru.godtools.article.ui.createArticlesIntent
 import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
@@ -293,7 +293,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // generate the target intent for this shortcut
         val intent = when (tool.type) {
             Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
-            Tool.Type.ARTICLE -> context.createCategoriesIntent(code, locales[0])
+            Tool.Type.ARTICLE -> context.createArticlesIntent(code, locales[0])
             else -> return@withContext null
         }
         intent.action = Intent.ACTION_VIEW

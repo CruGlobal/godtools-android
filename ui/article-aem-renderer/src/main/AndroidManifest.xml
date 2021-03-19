@@ -4,7 +4,7 @@
     <application>
         <activity
             android:name=".ui.AemArticleActivity"
-            android:parentActivityName="org.cru.godtools.article.ui.articles.ArticlesActivity"
+            android:parentActivityName="org.cru.godtools.article.ui.ArticlesActivity"
             android:screenOrientation="user"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <intent-filter android:autoVerify="true">
