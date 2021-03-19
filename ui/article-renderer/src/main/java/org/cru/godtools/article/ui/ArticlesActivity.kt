@@ -42,7 +42,7 @@ class ArticlesActivity :
         super.onCreate(savedInstanceState)
         if (isFinishing) return
         if (savedInstanceState == null) trackToolOpen(tool)
-        loadPrimaryFragmentIfNeeded()
+        setupFragments()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when {
@@ -60,9 +60,22 @@ class ArticlesActivity :
     }
     // endregion Lifecycle
 
+    override fun updateToolbarTitle() {
+        primaryNavigationFragmentTitle?.let {
+            title = it
+            return
+        }
+
+        super.updateToolbarTitle()
+    }
+
     // region Fragments
     @MainThread
-    private fun loadPrimaryFragmentIfNeeded() {
+    private fun setupFragments() {
+        // update the toolbar title when there is a change to the fragment back stack
+        supportFragmentManager.addOnBackStackChangedListener { updateToolbarTitle() }
+
+        // load the primaryNavigationFragment if one doesn't already exist
         dataModel.manifest.notNull().observeOnce(this) {
             if (supportFragmentManager.primaryNavigationFragment != null) return@observeOnce
 
@@ -73,11 +86,17 @@ class ArticlesActivity :
         }
     }
 
+    private val primaryNavigationFragmentTitle
+        get() = when (val f = supportFragmentManager.primaryNavigationFragment) {
+            is ArticlesFragment -> dataModel.manifest.value?.findCategory(f.category)?.label?.text
+            else -> null
+        }
+
     private fun showFragment(fragment: Fragment, addToBackStack: Boolean = false) = supportFragmentManager.commit {
         setReorderingAllowed(true)
-        if (addToBackStack) addToBackStack(null)
         replace(R.id.frame, fragment)
         setPrimaryNavigationFragment(fragment)
+        if (addToBackStack) addToBackStack(null) else runOnCommit { updateToolbarTitle() }
     }
 
     private fun articlesFragment(category: Category? = null) = ArticlesFragment(tool, locale, category?.id)

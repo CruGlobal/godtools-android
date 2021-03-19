@@ -44,7 +44,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
         fun onArticleSelected(article: Article?)
     }
 
-    private var category by argOrNull<String>()
+    internal var category by argOrNull<String>()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
