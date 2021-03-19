@@ -7,15 +7,5 @@
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool.AppBar" />
-        <activity
-            android:name=".ui.categories.CategoriesActivity"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
-            android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool.AppBar" />
-        <activity
-            android:name=".ui.articles.ArticlesActivity"
-            android:parentActivityName=".ui.categories.CategoriesActivity"
-            android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool.AppBar" />
     </application>
 </manifest>
