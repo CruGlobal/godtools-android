@@ -9,8 +9,6 @@ import org.cru.godtools.article.EXTRA_CATEGORY
 import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.ui.startAemArticleActivity
-import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
-import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
@@ -34,11 +32,6 @@ class ArticlesActivity :
     override fun onStart() {
         super.onStart()
         loadPrimaryFragmentIfNeeded()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        sendAnalyticsEvent()
     }
 
     override fun onArticleSelected(article: Article?) {
@@ -70,12 +63,5 @@ class ArticlesActivity :
 
         // otherwise default to the default toolbar title
         super.updateToolbarTitle()
-    }
-
-    private fun sendAnalyticsEvent() {
-        when {
-            category != null -> category?.let { ArticlesCategoryAnalyticsScreenEvent(tool, locale, it) }
-            else -> ArticlesAnalyticsScreenEvent(tool, locale)
-        }?.let { eventBus.post(it) }
     }
 }

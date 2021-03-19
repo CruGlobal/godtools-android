@@ -20,10 +20,13 @@ import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
+import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
+import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
 import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.argOrNull
 
 @AndroidEntryPoint
@@ -54,6 +57,11 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
         binding.manifest = toolDataModel.manifest
         binding.setupArticlesView()
         binding.setupSwipeRefresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sendAnalyticsEvent()
     }
 
     /**
@@ -109,6 +117,16 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
         isSyncing.observe(viewLifecycleOwner) { refresh.isRefreshing = it }
     }
     // endregion View Logic
+
+    @Inject
+    internal lateinit var eventBus: EventBus
+
+    private fun sendAnalyticsEvent() {
+        when {
+            category != null -> category?.let { ArticlesCategoryAnalyticsScreenEvent(tool, locale, it) }
+            else -> ArticlesAnalyticsScreenEvent(tool, locale)
+        }?.let { eventBus.post(it) }
+    }
 }
 
 @HiltViewModel
