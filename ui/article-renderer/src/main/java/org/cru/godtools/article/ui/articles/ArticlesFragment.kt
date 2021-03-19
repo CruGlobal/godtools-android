@@ -89,17 +89,13 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
 
     // region View Logic
     // region ArticlesView
-    private val articlesAdapter by lazy {
-        ArticlesAdapter(this, toolDataModel.manifest).also {
-            it.callbacks.set(this)
-            toolDataModel.articles.observe(this, it)
-        }
-    }
-
     private fun FragmentArticlesBinding.setupArticlesView() {
         articles.apply {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter = articlesAdapter
+            adapter = ArticlesAdapter(viewLifecycleOwner, toolDataModel.manifest).apply {
+                callbacks.set(this@ArticlesFragment)
+                toolDataModel.articles.observe(viewLifecycleOwner, this)
+            }
         }
     }
     // endregion ArticlesView
