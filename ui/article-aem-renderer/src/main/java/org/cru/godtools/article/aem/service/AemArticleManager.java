@@ -113,7 +113,6 @@ public class AemArticleManager {
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
-    final Map<Uri, Object> mGenerateShareUriLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
     final Object mCleanOrphanedFilesLock = new Object();
@@ -582,7 +581,6 @@ public class AemArticleManager {
     // region PriorityRunnable Tasks
 
     private static final int PRIORITY_CLEANER = Integer.MIN_VALUE;
-    private static final int PRIORITY_GENERATE_SHARE_LINK = -50;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
