@@ -20,6 +20,8 @@ abstract class FileManager(protected val context: Context, private val dirName: 
     suspend fun createDir() = dirCreated.await()
     suspend fun getDir() = dirTask.await()
 
+    suspend fun createTmpFile(prefix: String, suffix: String? = null): File =
+        withContext(Dispatchers.IO) { File.createTempFile(prefix, suffix, dirTask.await()) }
     suspend fun getFile(filename: String) = File(dirTask.await(), filename)
 
     @Throws(FileNotFoundException::class)
