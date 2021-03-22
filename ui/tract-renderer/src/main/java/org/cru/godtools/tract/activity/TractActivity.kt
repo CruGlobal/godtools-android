@@ -56,7 +56,6 @@ import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
-import org.cru.godtools.tract.util.ViewUtils
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -300,9 +299,8 @@ class TractActivity :
                 selectedColor = if (controlColor.toHsvColor().value > 0.6) Color.BLACK else Color.WHITE
             }
 
-            // update colors for tab text, and background
+            // update colors for tab text
             binding.languageToggle.setTabTextColors(controlColor, selectedColor)
-            ViewUtils.setBackgroundTint(binding.languageToggle, controlColor)
         }
 
         languageToggleController = LanguageToggleController(binding.languageToggle).also { controller ->
