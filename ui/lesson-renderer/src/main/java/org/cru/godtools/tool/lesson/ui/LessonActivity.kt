@@ -2,11 +2,14 @@ package org.cru.godtools.tool.lesson.ui
 
 import androidx.activity.viewModels
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
@@ -82,9 +85,12 @@ class LessonActivity :
         pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 if (state == SCROLL_STATE_IDLE) {
-                    val currentItemId = dataModel.pages.value?.getOrNull(pages.currentItem)?.id
-                    dataModel.visiblePages.removeAll { it != currentItemId }
-                    updateProgressIndicator()
+                    // HACK: execute this on the next frame to avoid updating the visible pages during a scroll callback
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        // remove any visible pages that are no longer the active page
+                        val currentItemId = dataModel.pages.value?.getOrNull(pages.currentItem)?.id
+                        dataModel.visiblePages.removeAll { it != currentItemId }
+                    }
                 }
             }
 

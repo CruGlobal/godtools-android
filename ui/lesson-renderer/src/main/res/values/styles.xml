@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="lesson_content_horiz_margin">16dp</dimen>
+
+    <style name="Theme.GodTools.Tool.Activity.Lesson" parent="Theme.GodTools.Tool.AppBar">
+        <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Lesson.Content.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Lesson.Content.Button.OutlinedButton</item>
+    </style>
+
+    <!-- region Button Styles -->
+    <style name="Widget.GodTools.Tool.Lesson.Content.Button" parent="Widget.GodTools.Tool.Content.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tool.Lesson.Content.Button</item>
+    </style>
+
+    <style name="Widget.GodTools.Tool.Lesson.Content.Button.OutlinedButton" parent="Widget.GodTools.Tool.Content.Button.OutlinedButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tool.Lesson.Content.Button</item>
+    </style>
+
+    <style name="ShapeAppearance.GodTools.Tool.Lesson.Content.Button" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSize">50%</item>
+    </style>
+    <!-- endregion Button Styles -->
 </resources>
