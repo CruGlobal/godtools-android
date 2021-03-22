@@ -1,23 +1,17 @@
 package org.cru.godtools.article.aem.service;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.google.common.hash.HashCode;
-import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.article.aem.api.AemApi;
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
@@ -29,7 +23,6 @@ import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.AemFileManager;
-import org.cru.godtools.article.aem.util.ResourceUtilsKt;
 import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -46,13 +39,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.DigestOutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,9 +49,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -76,7 +60,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import androidx.room.InvalidationTracker;
-import dagger.hilt.android.qualifiers.ApplicationContext;
 import kotlin.sequences.SequencesKt;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -103,7 +86,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
     private final ArticleRoomDatabase mAemDb;
     private final AemApi mApi;
-    private final Context mContext;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
@@ -125,12 +107,11 @@ public class AemArticleManager extends KotlinAemArticleManager {
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     @Inject
-    AemArticleManager(@ApplicationContext @NonNull final Context context, final EventBus eventBus,
-                      final GodToolsDao dao, final AemApi api, final ManifestManager manifestManager,
-                      final ArticleRoomDatabase aemDb, final AemFileManager fileManager) {
+    AemArticleManager(final EventBus eventBus, final GodToolsDao dao, final AemApi api,
+                      final ManifestManager manifestManager, final ArticleRoomDatabase aemDb,
+                      final AemFileManager fileManager) {
         super(aemDb, fileManager);
         mApi = api;
-        mContext = context.getApplicationContext();
         mAemDb = aemDb;
         mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = dao;
@@ -447,7 +428,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
             final Response<ResponseBody> response = mApi.downloadResource(uri).execute();
             final ResponseBody responseBody = response.body();
             if (response.code() == 200 && responseBody != null) {
-                final File file = streamResource(responseBody.byteStream());
+                final File file = writeToDisk(responseBody.byteStream());
                 if (file != null) {
                     resource.setContentType(responseBody.contentType());
                     resource.setLocalFileName(file.getName());
@@ -475,68 +456,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         Stream.of(resources)
                 .filter(Resource::needsDownload)
                 .forEach(r -> enqueueDownloadResource(r.getUri(), false));
-    }
-
-    @Nullable
-    private File streamResource(@NonNull final InputStream in) throws IOException {
-        // short-circuit if the resources directory isn't valid
-        if (!ResourceUtilsKt.ensureResourcesDirExists(mContext)) {
-            return null;
-        }
-
-        // create MessageDigest to dedup files
-        MessageDigest digest;
-        try {
-            digest = MessageDigest.getInstance("SHA-1");
-        } catch (final NoSuchAlgorithmException e) {
-            digest = null;
-            Timber.tag(TAG)
-                    .d(e, "Unable to create MessageDigest to dedup AEM resources");
-        }
-
-        // lock the file system for writing this resource
-        final Lock lock = LOCK_FILESYSTEM.readLock();
-        try {
-            lock.lock();
-
-            // stream resource to temporary file
-            final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
-            final Closer closer = Closer.create();
-            try {
-                OutputStream out = closer.register(new FileOutputStream(tmpFile));
-                if (digest != null) {
-                    out = closer.register(new DigestOutputStream(out, digest));
-                }
-                IOUtils.copy(in, out);
-                out.flush();
-                out.close();
-            } catch (final Throwable t) {
-                throw closer.rethrow(t);
-            } finally {
-                closer.close();
-            }
-
-            // rename temporary file to name based on digest
-            if (digest != null) {
-                final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
-                final File file = ResourceUtilsKt.getFile(mContext, hash);
-                if (file.exists()) {
-                    //noinspection ResultOfMethodCallIgnored
-                    tmpFile.delete();
-                    return file;
-                } else if (tmpFile.renameTo(file)) {
-                    return file;
-                } else {
-                    Timber.tag(TAG)
-                            .d("cannot rename tmp file %s to %s", tmpFile, file);
-                }
-            }
-
-            // default to returning the temporary file
-            return tmpFile;
-        } finally {
-            lock.unlock();
-        }
     }
 
     private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
