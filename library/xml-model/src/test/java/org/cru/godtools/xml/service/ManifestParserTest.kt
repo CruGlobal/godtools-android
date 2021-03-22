@@ -8,7 +8,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.Locale
 import kotlinx.coroutines.runBlocking
-import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.xml.model.TOOL_CODE
 import org.cru.godtools.xml.util.getInputStreamForResource
 import org.junit.Assert.assertNotNull
@@ -21,7 +21,7 @@ private const val MANIFEST = "manifest.xml"
 
 @RunWith(AndroidJUnit4::class)
 class ManifestParserTest {
-    private lateinit var fileManager: FileManager
+    private lateinit var fileManager: ToolFileManager
 
     private lateinit var parser: ManifestParser
 

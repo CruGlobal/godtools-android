@@ -14,13 +14,13 @@ import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
-import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.xml.model.Manifest
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
 @Singleton
-class ManifestParser @Inject internal constructor(private val fileManager: FileManager) {
+class ManifestParser @Inject internal constructor(private val fileManager: ToolFileManager) {
     private val cache = WeakLruCache<String, Result.Data>(6)
     private val loadingMutex = MutexMap()
 

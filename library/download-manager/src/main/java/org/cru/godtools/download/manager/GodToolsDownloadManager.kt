@@ -43,8 +43,8 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
-import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -102,7 +102,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
-    private val fileManager: FileManager,
+    private val fileManager: ToolFileManager,
     private val settings: Settings,
     private val translationsApi: TranslationsApi,
     private val coroutineScope: CoroutineScope,
@@ -113,7 +113,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: FileManager,
+        fileManager: ToolFileManager,
         settings: Settings,
         translationsApi: TranslationsApi
     ) : this(
@@ -218,7 +218,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadAttachment(attachmentId: Long) {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -253,7 +253,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importAttachment(attachmentId: Long, data: InputStream) {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -303,7 +303,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
 
         translationsMutex.withLock(key) {
             dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
@@ -322,7 +322,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
@@ -413,12 +413,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun detectMissingFiles() {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
 
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // get the set of all downloaded files
-                val files = fileManager.getResourcesDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
+                val files = fileManager.getDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
                 // check for missing files
                 Query.select<LocalFile>().get(dao)
@@ -430,7 +430,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun cleanFilesystem() {
-        if (!fileManager.createResourcesDir()) return
+        if (!fileManager.createDir()) return
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded
@@ -457,7 +457,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     }
 
                 // delete any orphaned files
-                fileManager.getResourcesDir().listFiles()
+                fileManager.getDir().listFiles()
                     ?.filter { dao.find<LocalFile>(it.name) == null }
                     ?.forEach { it.delete() }
             }
