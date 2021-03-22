@@ -39,7 +39,7 @@ class BaseDataSyncTasksTest {
     fun verifyStoreLanguage() {
         // setup test
         val language = Language().apply {
-            setId(1L)
+            id = 1
             code = Locale("lt")
         }
 
@@ -54,12 +54,12 @@ class BaseDataSyncTasksTest {
     fun verifyStoreLanguageChangingCode() {
         // setup test
         val language = Language().apply {
-            setId(1L)
+            id = 1
             code = Locale("lt")
             isAdded = false
         }
         val originalLanguage = Language().apply {
-            setId(1L)
+            id = 1
             code = Locale.forLanguageTag("lt-LT")
             isAdded = true
         }

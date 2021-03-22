@@ -84,8 +84,9 @@
                     style="@style/Widget.GodTools.TabLayout.AppBar"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/appbar_tabs_height"
-                    app:visibleIf="@{visibleLocales.size > 1 || (visibleLocales.size() == 1 &amp;&amp; !visibleLocales.contains(activeLocale))}"
-                    app:tabBackground="@drawable/bkg_tab_label_tintable" />
+                    app:backgroundTintCompat="@{ManifestKt.getNavBarControlColor(manifest)}"
+                    app:tabBackground="@drawable/bkg_tab_label_tintable"
+                    app:visibleIf="@{visibleLocales.size > 1 || (visibleLocales.size() == 1 &amp;&amp; !visibleLocales.contains(activeLocale))}" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

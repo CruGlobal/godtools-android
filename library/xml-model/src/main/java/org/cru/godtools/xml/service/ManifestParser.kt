@@ -57,7 +57,6 @@ internal fun InputStream.xmlPullParser() = CloseableXmlPullParser().also {
 sealed class Result {
     class Data(val manifest: Manifest) : Result()
 
-    internal object Success : Result()
     open class Error : Result() {
         object Corrupted : Error()
         object NotFound : Error()
