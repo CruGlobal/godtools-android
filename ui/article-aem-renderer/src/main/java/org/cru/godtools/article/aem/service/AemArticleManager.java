@@ -28,6 +28,7 @@ import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
+import org.cru.godtools.article.aem.util.AemFileManager;
 import org.cru.godtools.article.aem.util.ResourceUtilsKt;
 import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.tool.service.ManifestManager;
@@ -91,7 +92,7 @@ import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
  * This class hold all the logic for maintaining a local cache of AEM Articles.
  */
 @Singleton
-public class AemArticleManager {
+public class AemArticleManager extends KotlinAemArticleManager {
     private static final String TAG = "AemArticleManager";
 
     private static final int MSG_CLEAN = 1;
@@ -109,7 +110,6 @@ public class AemArticleManager {
     private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
-    private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
@@ -127,7 +127,8 @@ public class AemArticleManager {
     @Inject
     AemArticleManager(@ApplicationContext @NonNull final Context context, final EventBus eventBus,
                       final GodToolsDao dao, final AemApi api, final ManifestManager manifestManager,
-                      final ArticleRoomDatabase aemDb) {
+                      final ArticleRoomDatabase aemDb, final AemFileManager fileManager) {
+        super(aemDb, fileManager);
         mApi = api;
         mContext = context.getApplicationContext();
         mAemDb = aemDb;
@@ -458,29 +459,6 @@ public class AemArticleManager {
         } catch (final IOException e) {
             Timber.tag(TAG)
                     .d(e, "Error downloading attachment %s", uri);
-        }
-    }
-
-    @WorkerThread
-    void cleanOrphanedFiles() {
-        // lock the filesystem before removing any orphaned files
-        final Lock lock = LOCK_FILESYSTEM.writeLock();
-        try {
-            lock.lock();
-
-            // determine which files are still being referenced
-            final Set<File> valid = Stream.of(mAemDb.resourceDao().getAll())
-                    .map(r -> r.getLocalFile(mContext))
-                    .collect(Collectors.toSet());
-
-            // delete any files not referenced
-            //noinspection ResultOfMethodCallIgnored
-            Optional.ofNullable(ResourceUtilsKt.getResourcesDir(mContext).listFiles())
-                    .map(Stream::of).stream().flatMap(s -> s)
-                    .filterNot(valid::contains)
-                    .forEach(File::delete);
-        } finally {
-            lock.unlock();
         }
     }
 

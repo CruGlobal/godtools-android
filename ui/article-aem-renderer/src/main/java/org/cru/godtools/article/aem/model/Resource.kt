@@ -9,6 +9,7 @@ import java.io.FileInputStream
 import java.util.Date
 import okhttp3.MediaType
 import org.cru.godtools.article.aem.util.getFile
+import org.cru.godtools.base.FileManager
 
 @Entity(tableName = TABLE_NAME_RESOURCE)
 class Resource(@field:PrimaryKey val uri: Uri) {
@@ -29,6 +30,8 @@ class Resource(@field:PrimaryKey val uri: Uri) {
     fun getLocalFile(context: Context): File? {
         return getFile(context, localFileName)
     }
+
+    suspend fun getLocalFile(fileManager: FileManager) = localFileName?.let { fileManager.getFile(it) }
 
     fun getInputStream(context: Context) = getLocalFile(context)?.let { FileInputStream(it) }
 }

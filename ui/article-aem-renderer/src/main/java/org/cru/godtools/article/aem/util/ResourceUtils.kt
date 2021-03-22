@@ -14,8 +14,6 @@ import org.jetbrains.annotations.Contract
 @WorkerThread
 fun ensureResourcesDirExists(context: Context) = runBlocking { context.aemFileManager.createDir() }
 
-fun getResourcesDir(context: Context) = runBlocking { context.aemFileManager.getDir() }
-
 @Contract("_,null -> null; _,!null -> !null")
 fun getFile(context: Context, name: String?) = name?.let { context.aemFileManager.getFileBlocking(name) }
 
