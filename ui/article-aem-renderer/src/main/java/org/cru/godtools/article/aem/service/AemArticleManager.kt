@@ -7,9 +7,9 @@ import java.io.InputStream
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.concurrent.locks.ReadWriteLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.withLock
+import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.util.AemFileManager
 import timber.log.Timber
@@ -20,14 +20,11 @@ open class KotlinAemArticleManager(
     private val aemDb: ArticleRoomDatabase,
     private val fileManager: AemFileManager
 ) {
-    companion object {
-        @JvmField
-        val LOCK_FILESYSTEM: ReadWriteLock = ReentrantReadWriteLock()
-    }
+    private val filesystemMutex = ReadWriteMutex()
 
     @Throws(IOException::class)
-    fun InputStream.writeToDisk(): File? {
-        if (!runBlocking { fileManager.createDir() }) return null
+    fun InputStream.writeToDisk(): File? = runBlocking {
+        if (!fileManager.createDir()) return@runBlocking null
 
         // create a MessageDigest to dedup files
         val digest = try {
@@ -38,58 +35,44 @@ open class KotlinAemArticleManager(
         }
 
         // lock the file system for writing this resource
-        val lock = LOCK_FILESYSTEM.readLock()
-        return try {
-            lock.lock()
+        filesystemMutex.read.withLock {
+            // write the stream to a temporary file
+            val tmpFile = fileManager.createTmpFile("aem-").apply {
+                (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
+                    .use { copyTo(it) }
+            }
 
-            runBlocking {
-                // write the stream to a temporary file
-                val tmpFile = fileManager.createTmpFile("aem-").apply {
-                    (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
-                        .use { copyTo(it) }
+            // rename temporary file based on digest
+            if (digest == null) return@runBlocking tmpFile
+            val file = fileManager.getFile("${digest.digest().toHexString()}.bin")
+            return@runBlocking when {
+                file.exists() -> {
+                    tmpFile.delete()
+                    file
                 }
-
-                // rename temporary file based on digest
-                if (digest == null) return@runBlocking tmpFile
-                val file = fileManager.getFile("${digest.digest().toHexString()}.bin")
-                return@runBlocking when {
-                    file.exists() -> {
-                        tmpFile.delete()
-                        file
-                    }
-                    tmpFile.renameTo(file) -> file
-                    else -> {
-                        Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, file)
-                        tmpFile
-                    }
+                tmpFile.renameTo(file) -> file
+                else -> {
+                    Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, file)
+                    tmpFile
                 }
             }
-        } finally {
-            lock.unlock()
         }
     }
 
     @WorkerThread
-    protected fun cleanOrphanedFiles() {
-        if (!runBlocking { fileManager.createDir() }) return
+    protected fun cleanOrphanedFiles() = runBlocking {
+        if (!fileManager.createDir()) return@runBlocking null
 
         // lock the filesystem before removing any orphaned files
-        val lock = LOCK_FILESYSTEM.writeLock()
-        try {
-            lock.lock()
+        filesystemMutex.write.withLock {
+            // determine which files are still being referenced
+            val valid = aemDb.resourceDao().getAll()
+                .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fileManager) }
 
-            runBlocking {
-                // determine which files are still being referenced
-                val valid = aemDb.resourceDao().getAll()
-                    .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fileManager) }
-
-                // delete any files not referenced
-                fileManager.getDir().listFiles()
-                    ?.filterNot { it in valid }
-                    ?.forEach { it.delete() }
-            }
-        } finally {
-            lock.unlock()
+            // delete any files not referenced
+            fileManager.getDir().listFiles()
+                ?.filterNot { it in valid }
+                ?.forEach { it.delete() }
         }
     }
 }
