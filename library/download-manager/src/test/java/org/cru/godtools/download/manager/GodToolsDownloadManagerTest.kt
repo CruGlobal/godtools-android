@@ -263,7 +263,7 @@ class GodToolsDownloadManagerTest {
 
     // region Attachments
     private val attachment = Attachment().apply {
-        setId(1)
+        id = 1
         filename = "image.jpg"
         sha256 = "sha256"
     }
@@ -415,7 +415,7 @@ class GodToolsDownloadManagerTest {
 
     // region Translations
     private val translation = Translation().apply {
-        setId(Random.nextLong())
+        id = Random.nextLong()
         toolCode = TOOL
         languageCode = Locale.FRENCH
         isDownloaded = false

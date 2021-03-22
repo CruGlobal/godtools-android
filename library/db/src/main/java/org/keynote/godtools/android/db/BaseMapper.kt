@@ -16,6 +16,6 @@ internal abstract class BaseMapper<T : Base> : AbstractMapper<T>() {
     }
 
     override fun toObject(c: Cursor): T = super.toObject(c).apply {
-        setId(c.getLong(COLUMN_ID, Base.INVALID_ID))
+        id = c.getLong(COLUMN_ID, Base.INVALID_ID)
     }
 }
