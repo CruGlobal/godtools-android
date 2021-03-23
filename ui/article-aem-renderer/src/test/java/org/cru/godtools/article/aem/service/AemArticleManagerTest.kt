@@ -74,7 +74,7 @@ class AemArticleManagerTest {
 
     // region Download Resource
     @Test
-    fun testDownloadResource() {
+    fun testDownloadResource() = runBlocking {
         val resourceDao = aemDb.resourceDao()
         val data = "testDownloadResource()"
         val uri = mock<Uri>()
@@ -101,7 +101,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `Don't download resource if it doesn't exist in the database`() {
+    fun `Don't download resource if it doesn't exist in the database`() = runBlocking {
         val uri = mock<Uri>()
         articleManager.downloadResource(uri, false)
         verify(aemDb.resourceDao()).find(uri)
@@ -109,7 +109,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `Don't download resource if it has already been downloaded`() {
+    fun `Don't download resource if it has already been downloaded`() = runBlocking {
         val uri = mock<Uri>()
         val resource = mock<Resource> { on { needsDownload() } doReturn false }
         whenever(aemDb.resourceDao().find(uri)).thenReturn(resource)

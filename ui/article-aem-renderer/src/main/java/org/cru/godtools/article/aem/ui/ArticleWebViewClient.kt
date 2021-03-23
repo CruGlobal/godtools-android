@@ -14,6 +14,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import kotlinx.coroutines.runBlocking
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManager
@@ -62,7 +63,7 @@ internal class ArticleWebViewClient @Inject constructor(
         // attempt to download the file if we haven't downloaded it already
         try {
             // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-            aemArticleManager.enqueueDownloadResource(resource.uri, false).get()
+            runBlocking { aemArticleManager.downloadResource(resource.uri, false) }
         } catch (e: InterruptedException) {
             // propagate thread interruption
             Thread.currentThread().interrupt()

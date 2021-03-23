@@ -1,6 +1,7 @@
 package org.cru.godtools.article.aem.service
 
 import android.net.Uri
+import androidx.annotation.AnyThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -19,15 +20,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
+import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
+import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
@@ -48,15 +52,22 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 ) {
     private val filesystemMutex = ReadWriteMutex()
+    private val resourceMutex = MutexMap()
 
     // region Download Resource
+    @Deprecated("Utilize downloadResource directly to avoid the ListenableFuture wrapper object")
+    @AnyThread
+    fun enqueueDownloadResource(uri: Uri, force: Boolean) =
+        coroutineScope.async { downloadResource(uri, force) }.asListenableFuture()
+
     @WorkerThread
-    fun downloadResource(uri: Uri, force: Boolean) {
-        runBlocking {
+    suspend fun downloadResource(uri: Uri, force: Boolean) {
+        val resourceDao = aemDb.resourceDao()
+
+        resourceMutex.withLock(uri) {
             // short-circuit if the resource doesn't exist or it doesn't need to be downloaded
-            val resourceDao = aemDb.resourceDao()
             val resource = resourceDao.find(uri)
-            if (resource == null || (!force && !resource.needsDownload())) return@runBlocking
+            if (resource == null || (!force && !resource.needsDownload())) return
 
             // download the resource
             try {

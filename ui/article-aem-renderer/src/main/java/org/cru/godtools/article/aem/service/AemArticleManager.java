@@ -83,12 +83,10 @@ public class AemArticleManager extends KotlinAemArticleManager {
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
-    final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
 
     // Task de-dup related objects
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
-    private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     @Inject
     AemArticleManager(final EventBus eventBus, final GodToolsDao dao, final AemApi api,
@@ -189,22 +187,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         final DownloadArticleTask task = new DownloadArticleTask(uri);
         task.updateTask(force);
         mDownloadArticleTasks.put(uri, task);
-        mExecutor.execute(task);
-        return task.mResult;
-    }
-
-    @AnyThread
-    public ListenableFuture<Boolean> enqueueDownloadResource(@NonNull final Uri uri, final boolean force) {
-        // try updating a task that is currently enqueued
-        final DownloadResourceTask existing = mDownloadResourceTasks.get(uri);
-        if (existing != null && existing.updateTask(force)) {
-            return existing.mResult;
-        }
-
-        // create a new sync task
-        final DownloadResourceTask task = new DownloadResourceTask(uri);
-        task.updateTask(force);
-        mDownloadResourceTasks.put(uri, task);
         mExecutor.execute(task);
         return task.mResult;
     }
@@ -376,7 +358,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
     // region PriorityRunnable Tasks
     private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
-    private static final int PRIORITY_DOWNLOAD_RESOURCE = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
     abstract class UniqueTask implements PriorityRunnable {
@@ -466,29 +447,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         @Override
         boolean runTask() {
             downloadArticleTask(mUri, mForce);
-            return true;
-        }
-    }
-
-    class DownloadResourceTask extends UniqueUriBasedTask {
-        DownloadResourceTask(@NonNull final Uri uri) {
-            super(uri);
-        }
-
-        @Override
-        public int getPriority() {
-            return PRIORITY_DOWNLOAD_RESOURCE;
-        }
-
-        @NonNull
-        @Override
-        Object getLock() {
-            return ThreadUtils.getLock(mDownloadResourceLocks, mUri);
-        }
-
-        @Override
-        boolean runTask() {
-            downloadResource(mUri, mForce);
             return true;
         }
     }
