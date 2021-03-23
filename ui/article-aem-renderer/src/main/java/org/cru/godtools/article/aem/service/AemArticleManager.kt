@@ -1,5 +1,7 @@
 package org.cru.godtools.article.aem.service
 
+import androidx.annotation.RestrictTo
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.room.InvalidationTracker
 import java.io.File
@@ -8,9 +10,11 @@ import java.io.InputStream
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -29,15 +33,16 @@ import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
 
-private const val CLEANUP_DELAY = HOUR_IN_MS
-private const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+@VisibleForTesting
+internal const val CLEANUP_DELAY = HOUR_IN_MS
+@VisibleForTesting
+internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 
-open class KotlinAemArticleManager(
+open class KotlinAemArticleManager @JvmOverloads constructor(
     private val aemDb: ArticleRoomDatabase,
-    private val fileManager: AemFileManager
-) {
+    private val fileManager: AemFileManager,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-
+) {
     private val filesystemMutex = ReadWriteMutex()
 
     @Throws(IOException::class)
@@ -114,6 +119,14 @@ open class KotlinAemArticleManager(
         })
     }
     // endregion Cleanup
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal suspend fun shutdown() {
+        cleanupActor.close()
+        val job = coroutineScope.coroutineContext[Job]
+        if (job is CompletableJob) job.complete()
+        job?.join()
+    }
 }
 
 private fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }
