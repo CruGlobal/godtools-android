@@ -8,6 +8,7 @@ import androidx.room.InvalidationTracker
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.net.HttpURLConnection.HTTP_OK
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -23,6 +24,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
@@ -33,7 +35,9 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
+import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.util.AemFileManager
+import org.cru.godtools.article.aem.util.addExtension
 import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
@@ -52,6 +56,30 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
 
+    // region Download Article
+    @WorkerThread
+    protected fun downloadArticleTask(uri: Uri, force: Boolean) = runBlocking {
+        // short-circuit if there isn't an Article for the specified Uri or if the article doesn't need to be downloaded
+        val article = aemDb.articleDao().find(uri) ?: return@runBlocking
+        if (article.uuid == article.contentUuid && !force) return@runBlocking
+
+        // download the article html
+        try {
+            api.downloadArticle(article.uri.addExtension("html")).takeIf { it.code() == HTTP_OK }?.let { response ->
+                article.apply {
+                    contentUuid = uuid
+                    content = response.body()
+                    resources = extractResources()
+                }
+                aemDb.articleRepository().updateContent(article)
+                aemDb.resourceDao().getAllForArticle(article.uri).downloadResourcesNeedingUpdate()
+            }
+        } catch (e: IOException) {
+            Timber.tag(TAG).d(e, "Error downloading article")
+        }
+    }
+    // endregion Download Article
+
     // region Download Resource
     @WorkerThread
     protected fun Collection<Resource>.downloadResourcesNeedingUpdate() {
@@ -69,7 +97,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
 
             // download the resource
             try {
-                api.downloadResource(uri).takeIf { it.code() == 200 }?.body()?.let { response ->
+                api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
                     response.byteStream().use {
                         it.writeToDisk { file ->
                             resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())

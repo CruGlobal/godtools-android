@@ -16,7 +16,6 @@ import org.cru.godtools.article.aem.db.TranslationRepository;
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.Article;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
-import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.AemFileManager;
 import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.tool.service.ManifestManager;
@@ -53,11 +52,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import kotlin.sequences.SequencesKt;
-import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 
@@ -66,8 +63,6 @@ import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
  */
 @Singleton
 public class AemArticleManager extends KotlinAemArticleManager {
-    private static final String TAG = "AemArticleManager";
-
     private static final int TASK_CONCURRENCY = 10;
     private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
 
@@ -304,41 +299,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
         // enqueue a sync of the AemImport
         enqueueSyncAemImport(uri, false);
-    }
-
-    /**
-     * This task will download the html content for a specific article.
-     */
-    @WorkerThread
-    @GuardedBy("mDownloadArticleLocks")
-    void downloadArticleTask(@NonNull final Uri uri, final boolean force) {
-        // short-circuit if there isn't an Article for the specified Uri
-        final Article article = mAemDb.articleDao().find(uri);
-        if (article == null) {
-            return;
-        }
-
-        // short-circuit if the Article isn't stale and we aren't forcing a download
-        if (article.getUuid().equals(article.getContentUuid()) && !force) {
-            return;
-        }
-
-        // download the article html
-        try {
-            final Response<String> response =
-                    mApi.downloadArticle(UriUtils.addExtension(article.getUri(), "html")).execute();
-            if (response.code() == HTTP_OK) {
-                article.setContentUuid(article.getUuid());
-                article.setContent(response.body());
-                article.setResources(HtmlParserKt.extractResources(article));
-                mAemDb.articleRepository().updateContent(article);
-
-                downloadResourcesNeedingUpdate(mAemDb.resourceDao().getAllForArticle(article.getUri()));
-            }
-        } catch (final IOException e) {
-            Timber.tag(TAG)
-                    .d(e, "Error downloading article");
-        }
     }
     // endregion Tasks
 

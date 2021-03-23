@@ -18,7 +18,7 @@ class HtmlParserTest {
         val article = Article(Uri.parse("https://example.com/path/")).apply {
             content = loadHtml("HtmlParserTest_extract_urls.html")
         }
-        val urls = extractResources(article).map { it.uri }
+        val urls = article.extractResources().map { it.uri }
         assertThat(
             urls,
             containsInAnyOrder(

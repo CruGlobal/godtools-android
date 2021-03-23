@@ -15,7 +15,7 @@ interface AemApi {
     fun getJson(@Url uri: Uri, @Query("_") timestamp: Long): Call<JSONObject?>
 
     @GET
-    fun downloadArticle(@Url uri: Uri): Call<String?>
+    suspend fun downloadArticle(@Url uri: Uri): Response<String?>
 
     @GET
     @Streaming
