@@ -13,6 +13,7 @@ import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.nhaarman.mockitokotlin2.whenever
+import java.io.File
 import java.security.MessageDigest
 import java.util.Date
 import kotlin.io.path.ExperimentalPathApi
@@ -125,17 +126,20 @@ class AemArticleManagerTest {
     @Test
     fun testWriteToDisk() = runBlocking {
         val data = "testWriteToDisk()"
-        val file = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
+        lateinit var file: File
+        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file = it } } }
         assertNotNull(file)
-        assertArrayEquals(data.toByteArray(), file!!.readBytes())
+        assertArrayEquals(data.toByteArray(), file.readBytes())
     }
 
     @Test
     fun testWriteToDiskDedup() = runBlocking {
         val data = "testWriteToDiskDedup()"
 
-        val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
-        val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
+        lateinit var file1: File
+        lateinit var file2: File
+        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
+        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
 
         assertEquals(file1, file2)
     }
@@ -147,11 +151,13 @@ class AemArticleManagerTest {
 
             val data = "testWriteToDiskNoDedupWithoutDigest()"
 
-            val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
-            val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
+            lateinit var file1: File
+            lateinit var file2: File
+            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
+            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
 
             assertNotEquals(file1, file2)
-            assertNotEquals(file1!!.name, file2!!.name)
+            assertNotEquals(file1.name, file2.name)
             assertThat(file1.name, startsWith("aem-"))
             assertThat(file2.name, startsWith("aem-"))
         }

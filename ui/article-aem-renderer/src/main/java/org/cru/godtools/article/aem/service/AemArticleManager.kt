@@ -62,7 +62,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             try {
                 api.downloadResource(uri).takeIf { it.code() == 200 }?.body()?.let { response ->
                     response.byteStream().use {
-                        it.writeToDisk()?.let { file ->
+                        it.writeToDisk { file ->
                             resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
                         }
                     }
@@ -75,7 +75,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
 
     @VisibleForTesting
     @Throws(IOException::class)
-    internal suspend fun InputStream.writeToDisk(): File? {
+    internal suspend fun InputStream.writeToDisk(onSuccess: (File) -> Unit): File? {
         if (!fileManager.createDir()) return null
 
         // create a MessageDigest to dedup files
@@ -95,19 +95,19 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             }
 
             // rename temporary file based on digest
-            if (digest == null) return tmpFile
-            val file = fileManager.getFile("${digest.digest().toHexString()}.bin")
+            val dedup = digest?.let { fileManager.getFile("${it.digest().toHexString()}.bin") }
             return when {
-                file.exists() -> {
+                dedup == null -> tmpFile
+                dedup.exists() -> {
                     tmpFile.delete()
-                    file
+                    dedup
                 }
-                tmpFile.renameTo(file) -> file
+                tmpFile.renameTo(dedup) -> dedup
                 else -> {
-                    Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, file)
+                    Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
                     tmpFile
                 }
-            }
+            }.also(onSuccess)
         }
     }
     // endregion Download Resource
