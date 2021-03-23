@@ -1,9 +1,6 @@
 package org.cru.godtools.article.aem.service;
 
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 
 import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.Futures;
@@ -78,17 +75,13 @@ import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
 public class AemArticleManager extends KotlinAemArticleManager {
     private static final String TAG = "AemArticleManager";
 
-    private static final int MSG_CLEAN = 1;
-
     private static final int TASK_CONCURRENCY = 10;
     private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
-    private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private final ArticleRoomDatabase mAemDb;
     private final AemApi mApi;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
@@ -97,11 +90,8 @@ public class AemArticleManager extends KotlinAemArticleManager {
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
-    final Object mCleanOrphanedFilesLock = new Object();
 
     // Task de-dup related objects
-    @Nullable
-    private CleanOrphanedFilesTask mCleanOrphanedFilesTask;
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
@@ -126,9 +116,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         // TODO: maybe these sync tasks should be triggered elsewhere?
         enqueueExtractAemImportsFromManifests();
         enqueueSyncStaleAemImports();
-
-        // perform an initial clean of any orphaned files
-        enqueueCleanOrphanedFiles();
     }
 
     // region Lifecycle
@@ -228,30 +215,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         mExecutor.execute(task);
         return task.mResult;
     }
-
-    @AnyThread
-    void scheduleCleanOrphanedFiles() {
-        // remove any pending executions
-        mHandler.removeMessages(MSG_CLEAN);
-
-        // schedule another execution
-        final Message m = Message.obtain(mHandler, this::enqueueCleanOrphanedFiles);
-        m.what = MSG_CLEAN;
-        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
-    }
-
-    @AnyThread
-    void enqueueCleanOrphanedFiles() {
-        // try updating a task that is currently enqueued
-        if (mCleanOrphanedFilesTask != null && !mCleanOrphanedFilesTask.mStarted) {
-            return;
-        }
-
-        // otherwise create a new task
-        mCleanOrphanedFilesTask = new CleanOrphanedFilesTask();
-        mExecutor.execute(mCleanOrphanedFilesTask);
-    }
-
     // endregion Task Scheduling Methods
 
     // region Tasks
@@ -476,8 +439,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
     }
 
     // region PriorityRunnable Tasks
-
-    private static final int PRIORITY_CLEANER = Integer.MIN_VALUE;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
@@ -595,26 +556,5 @@ public class AemArticleManager extends KotlinAemArticleManager {
             return true;
         }
     }
-
-    class CleanOrphanedFilesTask extends UniqueTask {
-        @Override
-        public int getPriority() {
-            return PRIORITY_CLEANER;
-        }
-
-        @NonNull
-        @Override
-        Object getLock() {
-            return mCleanOrphanedFilesLock;
-        }
-
-        @Override
-        boolean runTask() {
-            cleanOrphanedFiles();
-            scheduleCleanOrphanedFiles();
-            return true;
-        }
-    }
-
     // endregion PriorityRunnable Tasks
 }

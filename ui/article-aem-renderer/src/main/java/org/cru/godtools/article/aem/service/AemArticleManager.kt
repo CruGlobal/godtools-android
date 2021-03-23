@@ -7,8 +7,19 @@ import java.io.InputStream
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeoutOrNull
+import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
+import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.util.AemFileManager
@@ -16,10 +27,15 @@ import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
 
+private const val CLEANUP_DELAY = HOUR_IN_MS
+private const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+
 open class KotlinAemArticleManager(
     private val aemDb: ArticleRoomDatabase,
     private val fileManager: AemFileManager
 ) {
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
     private val filesystemMutex = ReadWriteMutex()
 
     @Throws(IOException::class)
@@ -59,9 +75,21 @@ open class KotlinAemArticleManager(
         }
     }
 
+    // region Cleanup
+    private object RunCleanup
+
+    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+    private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
+        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveOrNull() }
+        while (!channel.isClosedForReceive) {
+            cleanOrphanedFiles()
+            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveOrNull() }
+        }
+    }
+
     @WorkerThread
-    protected fun cleanOrphanedFiles() = runBlocking {
-        if (!fileManager.createDir()) return@runBlocking null
+    private suspend fun cleanOrphanedFiles() {
+        if (!fileManager.createDir()) return
 
         // lock the filesystem before removing any orphaned files
         filesystemMutex.write.withLock {
@@ -75,6 +103,9 @@ open class KotlinAemArticleManager(
                 ?.forEach { it.delete() }
         }
     }
+
+    fun enqueueCleanOrphanedFiles() = cleanupActor.offer(RunCleanup)
+    // endregion Cleanup
 }
 
 private fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }
