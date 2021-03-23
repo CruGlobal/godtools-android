@@ -15,7 +15,6 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.article.aem.db.TranslationRepository;
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.Article;
-import org.cru.godtools.article.aem.model.Resource;
 import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.service.support.HtmlParserKt;
 import org.cru.godtools.article.aem.util.AemFileManager;
@@ -347,13 +346,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
     static long roundTimestamp(final long timestamp, final long interval) {
         // always round down for simplicity
         return timestamp - (timestamp % interval);
-    }
-
-    @WorkerThread
-    private void downloadResourcesNeedingUpdate(@NonNull final List<Resource> resources) {
-        Stream.of(resources)
-                .filter(Resource::needsDownload)
-                .forEach(r -> enqueueDownloadResource(r.getUri(), false));
     }
 
     // region PriorityRunnable Tasks

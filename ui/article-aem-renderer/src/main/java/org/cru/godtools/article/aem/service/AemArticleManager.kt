@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem.service
 
 import android.net.Uri
-import androidx.annotation.AnyThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -20,11 +19,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
-import kotlinx.coroutines.guava.asListenableFuture
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
@@ -55,10 +53,10 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val resourceMutex = MutexMap()
 
     // region Download Resource
-    @Deprecated("Utilize downloadResource directly to avoid the ListenableFuture wrapper object")
-    @AnyThread
-    fun enqueueDownloadResource(uri: Uri, force: Boolean) =
-        coroutineScope.async { downloadResource(uri, force) }.asListenableFuture()
+    @WorkerThread
+    protected fun Collection<Resource>.downloadResourcesNeedingUpdate() {
+        filter { it.needsDownload() }.forEach { coroutineScope.launch { downloadResource(it.uri, false) } }
+    }
 
     @WorkerThread
     suspend fun downloadResource(uri: Uri, force: Boolean) {
