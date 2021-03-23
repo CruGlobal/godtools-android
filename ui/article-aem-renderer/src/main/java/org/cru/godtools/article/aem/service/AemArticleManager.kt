@@ -1,6 +1,7 @@
 package org.cru.godtools.article.aem.service
 
 import android.net.Uri
+import androidx.annotation.AnyThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -20,11 +21,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
+import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
@@ -53,29 +55,39 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val fileManager: AemFileManager,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 ) {
+    private val articleMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
 
     // region Download Article
-    @WorkerThread
-    protected fun downloadArticleTask(uri: Uri, force: Boolean) = runBlocking {
-        // short-circuit if there isn't an Article for the specified Uri or if the article doesn't need to be downloaded
-        val article = aemDb.articleDao().find(uri) ?: return@runBlocking
-        if (article.uuid == article.contentUuid && !force) return@runBlocking
+    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
+    @AnyThread
+    protected fun downloadArticleAsync(uri: Uri, force: Boolean) = coroutineScope.async {
+        downloadArticle(uri, force)
+        true
+    }.asListenableFuture()
 
-        // download the article html
-        try {
-            api.downloadArticle(article.uri.addExtension("html")).takeIf { it.code() == HTTP_OK }?.let { response ->
-                article.apply {
-                    contentUuid = uuid
-                    content = response.body()
-                    resources = extractResources()
+    @WorkerThread
+    suspend fun downloadArticle(uri: Uri, force: Boolean) {
+        articleMutex.withLock(uri) {
+            // short-circuit if there isn't an Article for the specified Uri or if the article doesn't need to be downloaded
+            val article = aemDb.articleDao().find(uri) ?: return
+            if (article.uuid == article.contentUuid && !force) return
+
+            // download the article html
+            try {
+                api.downloadArticle(article.uri.addExtension("html")).takeIf { it.code() == HTTP_OK }?.let { response ->
+                    article.apply {
+                        contentUuid = uuid
+                        content = response.body()
+                        resources = extractResources()
+                    }
+                    aemDb.articleRepository().updateContent(article)
+                    aemDb.resourceDao().getAllForArticle(article.uri).downloadResourcesNeedingUpdate()
                 }
-                aemDb.articleRepository().updateContent(article)
-                aemDb.resourceDao().getAllForArticle(article.uri).downloadResourcesNeedingUpdate()
+            } catch (e: IOException) {
+                Timber.tag(TAG).d(e, "Error downloading article")
             }
-        } catch (e: IOException) {
-            Timber.tag(TAG).d(e, "Error downloading article")
         }
     }
     // endregion Download Article

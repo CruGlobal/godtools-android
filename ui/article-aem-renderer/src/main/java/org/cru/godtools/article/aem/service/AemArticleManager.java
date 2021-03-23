@@ -76,11 +76,9 @@ public class AemArticleManager extends KotlinAemArticleManager {
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
-    final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
 
     // Task de-dup related objects
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
-    private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
 
     @Inject
     AemArticleManager(final EventBus eventBus, final GodToolsDao dao, final AemApi api,
@@ -165,24 +163,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
         final ListenableFuture<?> syncAemImportTask =
                 Futures.transformAsync(deeplinkTask, t -> enqueueSyncAemImport(uri, false), directExecutor());
-        return Futures.transformAsync(syncAemImportTask, t -> downloadArticle(uri, false), directExecutor());
-    }
-
-    @NonNull
-    @AnyThread
-    public ListenableFuture<Boolean> downloadArticle(@NonNull final Uri uri, final boolean force) {
-        // try updating a task that is currently enqueued
-        final DownloadArticleTask existing = mDownloadArticleTasks.get(uri);
-        if (existing != null && existing.updateTask(force)) {
-            return existing.mResult;
-        }
-
-        // create a new sync task
-        final DownloadArticleTask task = new DownloadArticleTask(uri);
-        task.updateTask(force);
-        mDownloadArticleTasks.put(uri, task);
-        mExecutor.execute(task);
-        return task.mResult;
+        return Futures.transformAsync(syncAemImportTask, t -> downloadArticleAsync(uri, false), directExecutor());
     }
     // endregion Task Scheduling Methods
 
@@ -286,7 +267,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
         // enqueue a couple article specific tasks
         for (final Article article : articles) {
-            downloadArticle(article.getUri(), false);
+            downloadArticleAsync(article.getUri(), false);
         }
     }
 
@@ -310,7 +291,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
     // region PriorityRunnable Tasks
     private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
-    private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
     abstract class UniqueTask implements PriorityRunnable {
         volatile boolean mForce = false;
@@ -376,29 +356,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         @Override
         boolean runTask() {
             syncAemImportTask(mUri, mForce);
-            return true;
-        }
-    }
-
-    class DownloadArticleTask extends UniqueUriBasedTask {
-        DownloadArticleTask(@NonNull final Uri uri) {
-            super(uri);
-        }
-
-        @Override
-        public int getPriority() {
-            return PRIORITY_DOWNLOAD_ARTICLE;
-        }
-
-        @NonNull
-        @Override
-        Object getLock() {
-            return ThreadUtils.getLock(mDownloadArticleLocks, mUri);
-        }
-
-        @Override
-        boolean runTask() {
-            downloadArticleTask(mUri, mForce);
             return true;
         }
     }
