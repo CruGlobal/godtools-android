@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.service
 
+import androidx.room.InvalidationTracker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import java.security.MessageDigest
@@ -24,13 +25,15 @@ class AemArticleManagerTest {
     private val testDir = createTempDirectory().toFile()
 
     private lateinit var aemDb: ArticleRoomDatabase
+    private lateinit var invalidationTracker: InvalidationTracker
     private lateinit var fileManager: AemFileManager
 
     private lateinit var articleManager: KotlinAemArticleManager
 
     @Before
     fun setup() {
-        aemDb = mock()
+        invalidationTracker = mock()
+        aemDb = mock { on { invalidationTracker } doReturn invalidationTracker }
         fileManager = AemFileManager(mock { on { filesDir } doReturn testDir })
 
         articleManager = KotlinAemArticleManager(aemDb, fileManager)

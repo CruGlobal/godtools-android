@@ -41,7 +41,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +55,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import androidx.room.InvalidationTracker;
 import kotlin.sequences.SequencesKt;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -66,7 +64,6 @@ import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
-import static org.cru.godtools.article.aem.model.Constants.TABLE_NAME_RESOURCE;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
@@ -103,7 +100,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         super(aemDb, fileManager);
         mApi = api;
         mAemDb = aemDb;
-        mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = dao;
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
@@ -419,23 +415,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         Stream.of(resources)
                 .filter(Resource::needsDownload)
                 .forEach(r -> enqueueDownloadResource(r.getUri(), false));
-    }
-
-    private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
-        RoomDatabaseChangeTracker(@NonNull final String firstTable, final String... rest) {
-            super(firstTable, rest);
-        }
-
-        @Override
-        public void onInvalidated(@NonNull final Set<String> tables) {
-            for (final String table : tables) {
-                switch (table) {
-                    case TABLE_NAME_RESOURCE:
-                        enqueueCleanOrphanedFiles();
-                        break;
-                }
-            }
-        }
     }
 
     // region PriorityRunnable Tasks

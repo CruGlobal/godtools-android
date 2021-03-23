@@ -1,6 +1,7 @@
 package org.cru.godtools.article.aem.service
 
 import androidx.annotation.WorkerThread
+import androidx.room.InvalidationTracker
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -22,6 +23,7 @@ import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileManager
 import timber.log.Timber
 
@@ -104,7 +106,13 @@ open class KotlinAemArticleManager(
         }
     }
 
-    fun enqueueCleanOrphanedFiles() = cleanupActor.offer(RunCleanup)
+    init {
+        aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
+            override fun onInvalidated(tables: Set<String>) {
+                if (Resource.TABLE_NAME in tables) cleanupActor.offer(RunCleanup)
+            }
+        })
+    }
     // endregion Cleanup
 }
 

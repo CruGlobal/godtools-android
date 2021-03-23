@@ -11,8 +11,12 @@ import okhttp3.MediaType
 import org.cru.godtools.article.aem.util.getFile
 import org.cru.godtools.base.FileManager
 
-@Entity(tableName = TABLE_NAME_RESOURCE)
+@Entity(tableName = Resource.TABLE_NAME)
 class Resource(@field:PrimaryKey val uri: Uri) {
+    companion object {
+        internal const val TABLE_NAME = "resources"
+    }
+
     var contentType: MediaType? = null
     var localFileName: String? = null
     var dateDownloaded: Date? = null
