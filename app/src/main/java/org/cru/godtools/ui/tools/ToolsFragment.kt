@@ -31,6 +31,8 @@ import org.cru.godtools.analytics.firebase.model.ACTION_IAM_MY_TOOLS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ALL_TOOLS
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LESSONS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ToolsFragmentBinding
@@ -129,9 +131,10 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
         when (mode) {
             MODE_ALL -> eventBus.post(AnalyticsScreenEvent(SCREEN_ALL_TOOLS))
             MODE_ADDED -> {
-                eventBus.post(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_HOME))
+                eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS))
             }
+            MODE_LESSONS -> eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
         }
     }
 
