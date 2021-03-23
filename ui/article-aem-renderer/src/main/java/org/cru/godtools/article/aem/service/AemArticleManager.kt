@@ -27,6 +27,7 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
@@ -38,6 +39,7 @@ import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
+import org.cru.godtools.article.aem.service.support.findAemArticles
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.article.aem.util.addExtension
 import timber.log.Timber
@@ -48,6 +50,7 @@ private const val TAG = "AemArticleManager"
 internal const val CLEANUP_DELAY = HOUR_IN_MS
 @VisibleForTesting
 internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+private const val CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS
 
 open class KotlinAemArticleManager @JvmOverloads constructor(
     private val aemDb: ArticleRoomDatabase,
@@ -58,6 +61,36 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val articleMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
+
+    // region AEM Import
+    /**
+     * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
+     *
+     * @param baseUri The base AEM Import URL to sync
+     * @param force   This flag indicates that this sync should ignore the lastUpdated time
+     */
+    @WorkerThread
+    protected fun syncAemImport(baseUri: Uri, force: Boolean) = runBlocking {
+        if (!baseUri.isAbsolute || !baseUri.isHierarchical) return@runBlocking
+        val aemImport = aemDb.aemImportDao().find(baseUri)?.takeIf { force || it.isStale() } ?: return@runBlocking
+
+        // fetch the raw json
+        val t = System.currentTimeMillis().let { if (force) it else it.roundTimestamp(CACHE_BUSTING_INTERVAL_JSON) }
+        val json = try {
+            api.getJson(baseUri.addExtension("9999.json"), t).takeIf { it.code() == HTTP_OK }?.body()
+        } catch (e: IOException) {
+            Timber.tag(TAG).v(e, "Error downloading AEM json")
+            null
+        } ?: return@runBlocking
+
+        // parse & store articles
+        val articles = json.findAemArticles(baseUri).toList()
+        aemDb.aemImportRepository().processAemImportSync(aemImport, articles)
+
+        // launch download of all the articles
+        articles.forEach { coroutineScope.launch { downloadArticle(it.uri, false) } }
+    }
+    // endregion AEM Import
 
     // region Download Article
     @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
@@ -209,3 +242,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
 }
 
 private fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }
+
+// always round down for simplicity
+@VisibleForTesting
+internal fun Long.roundTimestamp(interval: Long) = this - this % interval

@@ -14,10 +14,7 @@ import org.cru.godtools.article.aem.api.AemApi;
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.article.aem.db.TranslationRepository;
 import org.cru.godtools.article.aem.model.AemImport;
-import org.cru.godtools.article.aem.model.Article;
-import org.cru.godtools.article.aem.service.support.AemJsonParserKt;
 import org.cru.godtools.article.aem.util.AemFileManager;
-import org.cru.godtools.article.aem.util.UriUtils;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
@@ -27,12 +24,10 @@ import org.cru.godtools.xml.model.Manifest;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,17 +41,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
-import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import kotlin.sequences.SequencesKt;
-import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static java.util.Collections.synchronizedMap;
-import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
@@ -64,10 +55,8 @@ import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 @Singleton
 public class AemArticleManager extends KotlinAemArticleManager {
     private static final int TASK_CONCURRENCY = 10;
-    private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
 
     private final ArticleRoomDatabase mAemDb;
-    private final AemApi mApi;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
     private final ManifestManager mManifestManager;
@@ -85,7 +74,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
                       final ManifestManager manifestManager, final ArticleRoomDatabase aemDb,
                       final AemFileManager fileManager) {
         super(aemDb, api, fileManager);
-        mApi = api;
         mAemDb = aemDb;
         mDao = dao;
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
@@ -220,57 +208,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
                 .forEach(i -> enqueueSyncAemImport(i.getUri(), false));
     }
 
-    /**
-     * This task is responsible for syncing an individual AEM Import url to the AEM Article database.
-     *
-     * @param baseUri The base AEM Import URL to sync
-     * @param force   This flag indicates that this sync should ignore the lastUpdated time
-     */
-    @WorkerThread
-    @GuardedBy("mSyncAemImportLocks")
-    void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
-        // short-circuit if this isn't an hierarchical absolute URL
-        if (!(baseUri.isHierarchical() && baseUri.isAbsolute())) {
-            return;
-        }
-
-        // short-circuit if there isn't an AemImport for the specified Uri
-        final AemImport aemImport = mAemDb.aemImportDao().find(baseUri);
-        if (aemImport == null) {
-            return;
-        }
-
-        // short-circuit if the AEM Import isn't stale and we aren't forcing a sync
-        if (!aemImport.isStale() && !force) {
-            return;
-        }
-
-        // fetch the raw json
-        JSONObject json = null;
-        try {
-            final long timestamp = force ? System.currentTimeMillis() :
-                    roundTimestamp(System.currentTimeMillis(), CACHE_BUSTING_INTERVAL_JSON);
-            json = mApi.getJson(UriUtils.addExtension(baseUri, "9999.json"), timestamp)
-                    .execute()
-                    .body();
-        } catch (final IOException e) {
-            Timber.tag("AEMDownloadManager")
-                    .v(e, "Error downloading AEM json");
-        }
-        if (json == null) {
-            return;
-        }
-
-        // parse & store articles
-        final List<Article> articles = SequencesKt.toList(AemJsonParserKt.findAemArticles(json, baseUri));
-        mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
-
-        // enqueue a couple article specific tasks
-        for (final Article article : articles) {
-            downloadArticleAsync(article.getUri(), false);
-        }
-    }
-
     @WorkerThread
     void createAemImportForDeeplinkedArticleTask(@NonNull final Uri uri) {
         // create & access an AemImport to trigger the download pipeline
@@ -282,12 +219,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         enqueueSyncAemImport(uri, false);
     }
     // endregion Tasks
-
-    @VisibleForTesting
-    static long roundTimestamp(final long timestamp, final long interval) {
-        // always round down for simplicity
-        return timestamp - (timestamp % interval);
-    }
 
     // region PriorityRunnable Tasks
     private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
@@ -355,7 +286,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
         @Override
         boolean runTask() {
-            syncAemImportTask(mUri, mForce);
+            syncAemImport(mUri, mForce);
             return true;
         }
     }

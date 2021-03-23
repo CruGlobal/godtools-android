@@ -214,6 +214,6 @@ class AemArticleManagerTest {
 
     @Test
     fun testRoundTimestamp() {
-        assertEquals(15000, AemArticleManager.roundTimestamp(15234, 1000))
+        assertEquals(15000, 15234L.roundTimestamp(1000))
     }
 }
