@@ -1,40 +1,54 @@
 package org.cru.godtools.article.aem.service
 
+import android.net.Uri
 import androidx.room.InvalidationTracker
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.nhaarman.mockitokotlin2.whenever
 import java.security.MessageDigest
+import java.util.Date
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
+import okhttp3.MediaType
+import okhttp3.ResponseBody
+import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.greaterThanOrEqualTo
+import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.hamcrest.Matchers.startsWith
 import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assume.assumeNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.Mockito.mockStatic
+import org.mockito.Mockito.verifyNoInteractions
+import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalPathApi::class)
 class AemArticleManagerTest {
     private val testDir = createTempDirectory().toFile()
 
     private lateinit var aemDb: ArticleRoomDatabase
+    private lateinit var api: AemApi
     private lateinit var fileManager: AemFileManager
     private lateinit var testScope: TestCoroutineScope
 
@@ -43,10 +57,11 @@ class AemArticleManagerTest {
     @Before
     fun setup() {
         aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        api = mock()
         fileManager = spy(AemFileManager(mock { on { filesDir } doReturn testDir }))
         testScope = TestCoroutineScope().apply { pauseDispatcher() }
 
-        articleManager = KotlinAemArticleManager(aemDb, fileManager, testScope)
+        articleManager = KotlinAemArticleManager(aemDb, api, fileManager, testScope)
     }
 
     @After
@@ -56,9 +71,59 @@ class AemArticleManagerTest {
         testDir.deleteRecursively()
     }
 
+    // region Download Resource
+    @Test
+    fun testDownloadResource() {
+        val resourceDao = aemDb.resourceDao()
+        val data = "testDownloadResource()"
+        val uri = mock<Uri>()
+        val mediaType = MediaType.get("image/jpg")
+        val resource = mock<Resource> { on { needsDownload() } doReturn true }
+        whenever(resourceDao.find(uri)).thenReturn(resource)
+        wheneverDownloadingResource(uri)
+            .thenReturn(Response.success(ResponseBody.create(mediaType, data.toByteArray())))
+
+        val startTime = System.currentTimeMillis()
+        articleManager.downloadResource(uri, false)
+        val endTime = System.currentTimeMillis()
+        verify(aemDb.resourceDao()).find(uri)
+        verifyBlocking(api) { downloadResource(uri) }
+
+        val type = argumentCaptor<MediaType>()
+        val fileName = argumentCaptor<String>()
+        val date = argumentCaptor<Date>()
+        verify(resourceDao).updateLocalFile(eq(uri), type.capture(), fileName.capture(), date.capture())
+        assertEquals(mediaType, type.firstValue)
+        assertThat(date.firstValue.time, allOf(greaterThanOrEqualTo(startTime), lessThanOrEqualTo(endTime)))
+        val file = runBlocking { fileManager.getFile(fileName.firstValue) }
+        assertArrayEquals(data.toByteArray(), file.readBytes())
+    }
+
+    @Test
+    fun `Don't download resource if it doesn't exist in the database`() {
+        val uri = mock<Uri>()
+        articleManager.downloadResource(uri, false)
+        verify(aemDb.resourceDao()).find(uri)
+        verifyNoInteractions(api)
+    }
+
+    @Test
+    fun `Don't download resource if it has already been downloaded`() {
+        val uri = mock<Uri>()
+        val resource = mock<Resource> { on { needsDownload() } doReturn false }
+        whenever(aemDb.resourceDao().find(uri)).thenReturn(resource)
+
+        articleManager.downloadResource(uri, false)
+        verify(aemDb.resourceDao()).find(uri)
+        verify(resource).needsDownload()
+        verifyNoInteractions(api)
+    }
+
+    private fun wheneverDownloadingResource(uri: Uri = any()) = runBlocking { whenever(api.downloadResource(uri)) }
+
     // region InputStream.writeToDisk()
     @Test
-    fun testWriteToDisk() {
+    fun testWriteToDisk() = runBlocking {
         val data = "testWriteToDisk()"
         val file = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
         assertNotNull(file)
@@ -66,21 +131,17 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun testWriteToDiskDedup() {
-        assumeNotNull(MessageDigest.getInstance("SHA-1"))
+    fun testWriteToDiskDedup() = runBlocking {
         val data = "testWriteToDiskDedup()"
-        val digestName = MessageDigest.getInstance("SHA-1").digest(data.toByteArray())
-            .joinToString("", postfix = ".bin") { String.format("%02x", it) }
 
         val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
         val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk() } }
 
         assertEquals(file1, file2)
-        assertEquals(digestName, file1!!.name)
     }
 
     @Test
-    fun testWriteToDiskNoDedupWithoutDigest() {
+    fun testWriteToDiskNoDedupWithoutDigest() = runBlocking {
         mockStatic(MessageDigest::class.java).use {
             it.`when`<MessageDigest?> { MessageDigest.getInstance("SHA-1") } doReturn null
 
@@ -96,6 +157,7 @@ class AemArticleManagerTest {
         }
     }
     // endregion InputStream.writeToDisk()
+    // endregion Download Resource
 
     // region cleanupActor
     @Test

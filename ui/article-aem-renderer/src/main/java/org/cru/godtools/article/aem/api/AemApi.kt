@@ -4,6 +4,7 @@ import android.net.Uri
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Streaming
@@ -18,5 +19,5 @@ interface AemApi {
 
     @GET
     @Streaming
-    fun downloadResource(@Url uri: Uri): Call<ResponseBody?>
+    suspend fun downloadResource(@Url uri: Uri): Response<ResponseBody?>
 }

@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.service
 
+import android.net.Uri
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -10,6 +11,7 @@ import java.io.InputStream
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.Date
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
+import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileManager
@@ -40,14 +43,40 @@ internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 
 open class KotlinAemArticleManager @JvmOverloads constructor(
     private val aemDb: ArticleRoomDatabase,
+    private val api: AemApi,
     private val fileManager: AemFileManager,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 ) {
     private val filesystemMutex = ReadWriteMutex()
 
+    // region Download Resource
+    @WorkerThread
+    fun downloadResource(uri: Uri, force: Boolean) {
+        runBlocking {
+            // short-circuit if the resource doesn't exist or it doesn't need to be downloaded
+            val resourceDao = aemDb.resourceDao()
+            val resource = resourceDao.find(uri)
+            if (resource == null || (!force && !resource.needsDownload())) return@runBlocking
+
+            // download the resource
+            try {
+                api.downloadResource(uri).takeIf { it.code() == 200 }?.body()?.let { response ->
+                    response.byteStream().use {
+                        it.writeToDisk()?.let { file ->
+                            resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
+            }
+        }
+    }
+
+    @VisibleForTesting
     @Throws(IOException::class)
-    fun InputStream.writeToDisk(): File? = runBlocking {
-        if (!fileManager.createDir()) return@runBlocking null
+    internal suspend fun InputStream.writeToDisk(): File? {
+        if (!fileManager.createDir()) return null
 
         // create a MessageDigest to dedup files
         val digest = try {
@@ -66,9 +95,9 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             }
 
             // rename temporary file based on digest
-            if (digest == null) return@runBlocking tmpFile
+            if (digest == null) return tmpFile
             val file = fileManager.getFile("${digest.digest().toHexString()}.bin")
-            return@runBlocking when {
+            return when {
                 file.exists() -> {
                     tmpFile.delete()
                     file
@@ -81,6 +110,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             }
         }
     }
+    // endregion Download Resource
 
     // region Cleanup
     private object RunCleanup

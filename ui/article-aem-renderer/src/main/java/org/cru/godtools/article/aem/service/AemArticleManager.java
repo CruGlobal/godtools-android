@@ -12,7 +12,6 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.article.aem.api.AemApi;
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.article.aem.db.ResourceDao;
 import org.cru.godtools.article.aem.db.TranslationRepository;
 import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.model.Article;
@@ -35,7 +34,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +54,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import kotlin.sequences.SequencesKt;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -97,7 +94,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
     AemArticleManager(final EventBus eventBus, final GodToolsDao dao, final AemApi api,
                       final ManifestManager manifestManager, final ArticleRoomDatabase aemDb,
                       final AemFileManager fileManager) {
-        super(aemDb, fileManager);
+        super(aemDb, api, fileManager);
         mApi = api;
         mAemDb = aemDb;
         mDao = dao;
@@ -362,46 +359,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
                     .d(e, "Error downloading article");
         }
     }
-
-    /**
-     * This task will download an attachment.
-     */
-    @WorkerThread
-    @GuardedBy("mDownloadResourceLocks")
-    void downloadResourceTask(@NonNull final Uri uri, final boolean force) {
-        final ResourceDao resourceDao = mAemDb.resourceDao();
-
-        // short-circuit if there isn't an Attachment for the specified Uri
-        final Resource resource = resourceDao.find(uri);
-        if (resource == null) {
-            return;
-        }
-
-        // short-circuit if the Resource isn't stale and we aren't forcing a download
-        if (!force && !resource.needsDownload()) {
-            return;
-        }
-
-        // download the resource
-        try {
-            final Response<ResponseBody> response = mApi.downloadResource(uri).execute();
-            final ResponseBody responseBody = response.body();
-            if (response.code() == 200 && responseBody != null) {
-                final File file = writeToDisk(responseBody.byteStream());
-                if (file != null) {
-                    resource.setContentType(responseBody.contentType());
-                    resource.setLocalFileName(file.getName());
-                    resource.setDateDownloaded(new Date());
-                    resourceDao.updateLocalFile(resource.getUri(), resource.getContentType(),
-                                                resource.getLocalFileName(), resource.getDateDownloaded());
-                }
-            }
-        } catch (final IOException e) {
-            Timber.tag(TAG)
-                    .d(e, "Error downloading attachment %s", uri);
-        }
-    }
-
     // endregion Tasks
 
     @VisibleForTesting
@@ -531,7 +488,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
 
         @Override
         boolean runTask() {
-            downloadResourceTask(mUri, mForce);
+            downloadResource(mUri, mForce);
             return true;
         }
     }
