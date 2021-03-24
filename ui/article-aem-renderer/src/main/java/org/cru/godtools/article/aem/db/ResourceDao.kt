@@ -35,9 +35,9 @@ interface ResourceDao {
     )
     fun removeOrphanedResources()
 
-    @WorkerThread
+    @AnyThread
     @Query("SELECT * FROM resources WHERE uri = :uri")
-    fun find(uri: Uri): Resource?
+    suspend fun find(uri: Uri): Resource?
 
     @WorkerThread
     @Query("SELECT * FROM resources")

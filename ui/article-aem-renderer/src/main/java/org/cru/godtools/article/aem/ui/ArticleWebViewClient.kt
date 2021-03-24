@@ -12,7 +12,6 @@ import com.karumi.weak.weak
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.article.aem.db.ResourceDao
@@ -47,7 +46,7 @@ internal class ArticleWebViewClient @Inject constructor(
 
     @WorkerThread
     private fun Uri.getResponseFromFile(context: Context): WebResourceResponse? {
-        val resource = getResource() ?: return null
+        val resource = findResource(this) ?: return null
         val type = resource.contentType
         val data = resource.getData(context) ?: return null
         return WebResourceResponse(
@@ -56,24 +55,16 @@ internal class ArticleWebViewClient @Inject constructor(
         )
     }
 
-    private fun Uri.getResource(): Resource? {
-        val resource = resourceDao.find(this) ?: return null
-        if (resource.isDownloaded) return resource
+    private fun findResource(uri: Uri) = runBlocking {
+        val resource = resourceDao.find(uri) ?: return@runBlocking null
+        if (resource.isDownloaded) return@runBlocking resource
 
         // attempt to download the file if we haven't downloaded it already
-        try {
-            // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
-            runBlocking { aemArticleManager.downloadResource(resource.uri, false) }
-        } catch (e: InterruptedException) {
-            // propagate thread interruption
-            Thread.currentThread().interrupt()
-            return null
-        } catch (e: ExecutionException) {
-            Timber.tag(TAG).d(e.cause, "Error downloading resource when trying to render an article")
-        }
+        // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
+        aemArticleManager.downloadResource(resource.uri, false)
 
         // refresh resource since we may have just downloaded it
-        return resourceDao.find(this)
+        return@runBlocking resourceDao.find(uri)
     }
 
     private fun Resource.getData(context: Context) =
