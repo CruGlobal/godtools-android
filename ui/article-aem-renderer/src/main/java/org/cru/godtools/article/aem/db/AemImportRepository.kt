@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.db
 
+import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Transaction
@@ -39,8 +40,8 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
     }
 
     @Transaction
-    @WorkerThread
-    open fun accessAemImport(import: AemImport) {
+    @AnyThread
+    open suspend fun accessAemImport(import: AemImport) {
         with(db.aemImportDao()) {
             insertOrIgnore(import)
             updateLastAccessed(import.uri, import.lastAccessed)

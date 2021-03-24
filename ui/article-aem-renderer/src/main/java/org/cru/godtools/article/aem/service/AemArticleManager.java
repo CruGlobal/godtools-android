@@ -1,18 +1,14 @@
 package org.cru.godtools.article.aem.service;
 
-import android.net.Uri;
-
 import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.article.aem.api.AemApi;
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.article.aem.db.TranslationRepository;
-import org.cru.godtools.article.aem.model.AemImport;
 import org.cru.godtools.article.aem.util.AemFileManager;
 import org.cru.godtools.base.tool.service.ManifestManager;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -27,7 +23,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -41,8 +36,6 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-
-import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
@@ -108,21 +101,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
                         .map(uri -> enqueueSyncAemImport(uri, force))
                         .toList());
     }
-
-    @NonNull
-    @AnyThread
-    public ListenableFuture<Boolean> downloadDeeplinkedArticle(@NonNull final Uri uri) {
-        // create an AemImport for the deeplinked article
-        final SettableFuture<Boolean> deeplinkTask = SettableFuture.create();
-        mExecutor.execute(() -> {
-            createAemImportForDeeplinkedArticleTask(uri);
-            deeplinkTask.set(true);
-        });
-
-        final ListenableFuture<?> syncAemImportTask =
-                Futures.transformAsync(deeplinkTask, t -> enqueueSyncAemImport(uri, false), directExecutor());
-        return Futures.transformAsync(syncAemImportTask, t -> downloadArticleAsync(uri, false), directExecutor());
-    }
     // endregion Task Scheduling Methods
 
     // region Tasks
@@ -166,17 +144,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
             // prune any translations that we no longer have downloaded.
             repository.removeMissingTranslations(translations);
         }
-    }
-
-    @WorkerThread
-    void createAemImportForDeeplinkedArticleTask(@NonNull final Uri uri) {
-        // create & access an AemImport to trigger the download pipeline
-        final AemImport aemImport = new AemImport(uri);
-        aemImport.setLastAccessed(new Date());
-        mAemDb.aemImportRepository().accessAemImport(aemImport);
-
-        // enqueue a sync of the AemImport
-        enqueueSyncAemImport(uri, false);
     }
     // endregion Tasks
 }

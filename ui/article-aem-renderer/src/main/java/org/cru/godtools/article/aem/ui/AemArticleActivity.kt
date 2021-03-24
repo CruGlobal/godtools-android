@@ -17,7 +17,6 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
@@ -146,7 +145,7 @@ class AemArticleActivity :
         lifecycleScope.launch(Dispatchers.Main) {
             GlobalScope.launch {
                 when {
-                    intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri).await()
+                    intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
                     else -> aemArticleManager.downloadArticle(articleUri, false)
                 }
             }.join()

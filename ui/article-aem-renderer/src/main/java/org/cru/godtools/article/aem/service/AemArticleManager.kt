@@ -36,6 +36,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
@@ -61,6 +62,15 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val articleMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
+
+    // region Deeplinked Article
+    @AnyThread
+    suspend fun downloadDeeplinkedArticle(uri: Uri) {
+        aemDb.aemImportRepository().accessAemImport(AemImport(uri).apply { lastAccessed = Date() })
+        syncAemImport(uri, false)
+        downloadArticle(uri, false)
+    }
+    // endregion Deeplinked Article
 
     // region AEM Import
     @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
