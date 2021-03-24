@@ -25,6 +25,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
@@ -42,6 +43,7 @@ import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.article.aem.util.addExtension
+import org.cru.godtools.xml.model.Manifest
 import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
@@ -79,6 +81,15 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
         syncAemImport(uri, force)
         true
     }.asListenableFuture()
+
+    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
+    protected fun syncAemImportsFromManifestAsync(manifest: Manifest?, force: Boolean) =
+        coroutineScope.async { syncAemImportsFromManifest(manifest, force) }.asListenableFuture()
+
+    @AnyThread
+    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
+        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
+    }
 
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.

@@ -1,9 +1,5 @@
 package org.cru.godtools.article.aem.service;
 
-import com.annimon.stream.Stream;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.article.aem.api.AemApi;
@@ -34,7 +30,6 @@ import javax.inject.Singleton;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 /**
@@ -89,18 +84,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
             mExecutor.execute(this::extractAemImportsFromManifestsTask);
         }
     }
-
-    @AnyThread
-    public ListenableFuture<?> enqueueSyncManifestAemImports(@Nullable final Manifest manifest, final boolean force) {
-        if (manifest == null) {
-            return Futures.immediateFuture(null);
-        }
-
-        return Futures.successfulAsList(
-                Stream.of(manifest.getAemImports())
-                        .map(uri -> enqueueSyncAemImport(uri, force))
-                        .toList());
-    }
     // endregion Task Scheduling Methods
 
     // region Tasks
@@ -132,7 +115,7 @@ public class AemArticleManager extends KotlinAemArticleManager {
                     final Manifest manifest = mManifestManager.getManifestBlocking(translation);
                     if (manifest != null) {
                         repository.addAemImports(translation, manifest.getAemImports());
-                        enqueueSyncManifestAemImports(manifest, false);
+                        syncAemImportsFromManifestAsync(manifest, false);
                     }
                 } catch (InterruptedException e) {
                     // return immediately if interrupted
