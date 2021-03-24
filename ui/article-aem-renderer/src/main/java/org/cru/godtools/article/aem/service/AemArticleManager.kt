@@ -27,7 +27,6 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
@@ -58,11 +57,19 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     private val fileManager: AemFileManager,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 ) {
+    private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
 
     // region AEM Import
+    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
+    @AnyThread
+    protected fun enqueueSyncAemImport(uri: Uri, force: Boolean) = coroutineScope.async {
+        syncAemImport(uri, force)
+        true
+    }.asListenableFuture()
+
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
      *
@@ -70,25 +77,27 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
      * @param force   This flag indicates that this sync should ignore the lastUpdated time
      */
     @WorkerThread
-    protected fun syncAemImport(baseUri: Uri, force: Boolean) = runBlocking {
-        if (!baseUri.isAbsolute || !baseUri.isHierarchical) return@runBlocking
-        val aemImport = aemDb.aemImportDao().find(baseUri)?.takeIf { force || it.isStale() } ?: return@runBlocking
+    private suspend fun syncAemImport(baseUri: Uri, force: Boolean) {
+        if (!baseUri.isAbsolute || !baseUri.isHierarchical) return
+        aemImportMutex.withLock(baseUri) {
+            val aemImport = aemDb.aemImportDao().find(baseUri)?.takeIf { force || it.isStale() } ?: return
 
-        // fetch the raw json
-        val t = System.currentTimeMillis().let { if (force) it else it.roundTimestamp(CACHE_BUSTING_INTERVAL_JSON) }
-        val json = try {
-            api.getJson(baseUri.addExtension("9999.json"), t).takeIf { it.code() == HTTP_OK }?.body()
-        } catch (e: IOException) {
-            Timber.tag(TAG).v(e, "Error downloading AEM json")
-            null
-        } ?: return@runBlocking
+            // fetch the raw json
+            val t = System.currentTimeMillis().let { if (force) it else it.roundTimestamp(CACHE_BUSTING_INTERVAL_JSON) }
+            val json = try {
+                api.getJson(baseUri.addExtension("9999.json"), t).takeIf { it.code() == HTTP_OK }?.body()
+            } catch (e: IOException) {
+                Timber.tag(TAG).v(e, "Error downloading AEM json")
+                null
+            } ?: return
 
-        // parse & store articles
-        val articles = json.findAemArticles(baseUri).toList()
-        aemDb.aemImportRepository().processAemImportSync(aemImport, articles)
+            // parse & store articles
+            val articles = json.findAemArticles(baseUri).toList()
+            aemDb.aemImportRepository().processAemImportSync(aemImport, articles)
 
-        // launch download of all the articles
-        articles.forEach { coroutineScope.launch { downloadArticle(it.uri, false) } }
+            // launch download of all the articles
+            articles.forEach { coroutineScope.launch { downloadArticle(it.uri, false) } }
+        }
     }
     // endregion AEM Import
 

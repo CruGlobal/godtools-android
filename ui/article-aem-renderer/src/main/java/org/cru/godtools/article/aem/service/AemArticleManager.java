@@ -9,7 +9,6 @@ import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.article.aem.api.AemApi;
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.article.aem.db.TranslationRepository;
@@ -29,9 +28,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -43,11 +40,9 @@ import javax.inject.Singleton;
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static java.util.Collections.synchronizedMap;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.
@@ -64,10 +59,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
-    final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
-
-    // Task de-dup related objects
-    private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
 
     @Inject
     AemArticleManager(final EventBus eventBus, final GodToolsDao dao, final AemApi api,
@@ -122,21 +113,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
     @AnyThread
     private void enqueueSyncStaleAemImports() {
         mExecutor.execute(this::syncStaleAemImportsTask);
-    }
-
-    @AnyThread
-    private ListenableFuture<Boolean> enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
-        final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
-        if (existing != null && existing.updateTask(force)) {
-            return existing.mResult;
-        }
-
-        // create a new sync task
-        final SyncAemImportTask task = new SyncAemImportTask(uri);
-        task.updateTask(force);
-        mSyncAemImportTasks.put(uri, task);
-        mExecutor.execute(task);
-        return task.mResult;
     }
 
     @NonNull
@@ -219,76 +195,4 @@ public class AemArticleManager extends KotlinAemArticleManager {
         enqueueSyncAemImport(uri, false);
     }
     // endregion Tasks
-
-    // region PriorityRunnable Tasks
-    private static final int PRIORITY_SYNC_AEM_IMPORT = -40;
-
-    abstract class UniqueTask implements PriorityRunnable {
-        volatile boolean mForce = false;
-        volatile boolean mStarted = false;
-        final SettableFuture<Boolean> mResult = SettableFuture.create();
-
-        /**
-         * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
-         * forcing it.
-         *
-         * @param force whether to force this sync to execute
-         * @return true if the task hasn't started so the update was successful, false if the task has started.
-         */
-        final synchronized boolean updateTask(final boolean force) {
-            if (!mStarted) {
-                mForce = mForce || force;
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void run() {
-            synchronized (getLock()) {
-                synchronized (this) {
-                    mStarted = true;
-                }
-                mResult.set(runTask());
-            }
-        }
-
-        @NonNull
-        abstract Object getLock();
-
-        abstract boolean runTask();
-    }
-
-    abstract class UniqueUriBasedTask extends UniqueTask {
-        @NonNull
-        final Uri mUri;
-
-        UniqueUriBasedTask(@NonNull final Uri uri) {
-            mUri = uri;
-        }
-    }
-
-    class SyncAemImportTask extends UniqueUriBasedTask {
-        SyncAemImportTask(@NonNull final Uri uri) {
-            super(uri);
-        }
-
-        @Override
-        public int getPriority() {
-            return PRIORITY_SYNC_AEM_IMPORT;
-        }
-
-        @NonNull
-        @Override
-        Object getLock() {
-            return ThreadUtils.getLock(mSyncAemImportLocks, mUri);
-        }
-
-        @Override
-        boolean runTask() {
-            syncAemImport(mUri, mForce);
-            return true;
-        }
-    }
-    // endregion PriorityRunnable Tasks
 }
