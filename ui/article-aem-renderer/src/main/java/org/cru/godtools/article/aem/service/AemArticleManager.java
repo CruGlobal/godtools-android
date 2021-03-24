@@ -77,7 +77,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
         // trigger some base sync tasks
         // TODO: maybe these sync tasks should be triggered elsewhere?
         enqueueExtractAemImportsFromManifests();
-        enqueueSyncStaleAemImports();
     }
 
     // region Lifecycle
@@ -108,11 +107,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
                 Stream.of(manifest.getAemImports())
                         .map(uri -> enqueueSyncAemImport(uri, force))
                         .toList());
-    }
-
-    @AnyThread
-    private void enqueueSyncStaleAemImports() {
-        mExecutor.execute(this::syncStaleAemImportsTask);
     }
 
     @NonNull
@@ -172,16 +166,6 @@ public class AemArticleManager extends KotlinAemArticleManager {
             // prune any translations that we no longer have downloaded.
             repository.removeMissingTranslations(translations);
         }
-    }
-
-    /**
-     * This task is responsible for triggering syncs of any stale Aem Imports
-     */
-    @WorkerThread
-    void syncStaleAemImportsTask() {
-        Stream.of(mAemDb.aemImportDao().getAll())
-                .filter(AemImport::isStale)
-                .forEach(i -> enqueueSyncAemImport(i.getUri(), false));
     }
 
     @WorkerThread

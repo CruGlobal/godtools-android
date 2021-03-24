@@ -99,6 +99,12 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             articles.forEach { coroutineScope.launch { downloadArticle(it.uri, false) } }
         }
     }
+
+    init {
+        aemDb.aemImportDao().all
+            .filter { it.isStale() }
+            .forEach { coroutineScope.launch { syncAemImport(it.uri, false) } }
+    }
     // endregion AEM Import
 
     // region Download Article
