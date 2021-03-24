@@ -136,7 +136,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
         true
     }.asListenableFuture()
 
-    @WorkerThread
+    @AnyThread
     suspend fun downloadArticle(uri: Uri, force: Boolean) {
         articleMutex.withLock(uri) {
             // short-circuit if there isn't an Article for the specified Uri or if the article doesn't need to be downloaded
@@ -162,7 +162,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     // endregion Download Article
 
     // region Download Resource
-    @WorkerThread
+    @AnyThread
     protected fun Collection<Resource>.downloadResourcesNeedingUpdate() {
         filter { it.needsDownload() }.forEach { coroutineScope.launch { downloadResource(it.uri, false) } }
     }

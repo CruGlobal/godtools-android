@@ -52,22 +52,22 @@ interface ArticleDao {
     )
     fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
 
-    @WorkerThread
+    @AnyThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
-    fun updateContent(uri: Uri, uuid: String?, content: String?)
+    suspend fun updateContent(uri: Uri, uuid: String?, content: String?)
 
     @WorkerThread
     @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
     fun removeAllTags(articleUri: Uri)
 
-    @WorkerThread
+    @AnyThread
     @Query(
         """
         DELETE FROM articleResources
         WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)
         """
     )
-    fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
+    suspend fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
 
     @Query(
         """
@@ -77,9 +77,9 @@ interface ArticleDao {
     )
     fun removeOrphanedArticles()
 
-    @WorkerThread
+    @AnyThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
-    fun find(uri: Uri): Article?
+    suspend fun find(uri: Uri): Article?
 
     @AnyThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
