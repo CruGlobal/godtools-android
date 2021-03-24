@@ -29,6 +29,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
@@ -167,7 +168,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
         filter { it.needsDownload() }.forEach { coroutineScope.launch { downloadResource(it.uri, false) } }
     }
 
-    @WorkerThread
+    @AnyThread
     suspend fun downloadResource(uri: Uri, force: Boolean) {
         val resourceDao = aemDb.resourceDao()
 
@@ -177,16 +178,18 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
             if (resource == null || (!force && !resource.needsDownload())) return
 
             // download the resource
-            try {
-                api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
-                    response.byteStream().use {
-                        it.writeToDisk { file ->
-                            resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
+            withContext(Dispatchers.IO) {
+                try {
+                    api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
+                        response.byteStream().use {
+                            it.writeToDisk { file ->
+                                resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
+                            }
                         }
                     }
+                } catch (e: IOException) {
+                    Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
                 }
-            } catch (e: IOException) {
-                Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
             }
         }
     }
