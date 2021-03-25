@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem.ui
 
 import android.app.Activity
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.webkit.WebResourceResponse
@@ -17,6 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManager
+import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.base.ui.util.openUrl
 import timber.log.Timber
 
@@ -24,6 +24,7 @@ private const val TAG = "ArticleWebViewClient"
 
 internal class ArticleWebViewClient @Inject constructor(
     private val aemArticleManager: AemArticleManager,
+    private val aemFileManager: AemFileManager,
     private val resourceDao: ResourceDao
 ) : WebViewClient() {
     var activity: Activity? by weak()
@@ -36,7 +37,7 @@ internal class ArticleWebViewClient @Inject constructor(
     override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
         val uri = Uri.parse(url)
         if (uri.scheme == "data") return null
-        return uri.getResponseFromFile(view.context) ?: notFoundResponse()
+        return uri.getResponseFromFile() ?: notFoundResponse()
     }
 
     private fun notFoundResponse() = WebResourceResponse(null, null, null).apply {
@@ -45,10 +46,10 @@ internal class ArticleWebViewClient @Inject constructor(
     }
 
     @WorkerThread
-    private fun Uri.getResponseFromFile(context: Context): WebResourceResponse? {
+    private fun Uri.getResponseFromFile(): WebResourceResponse? {
         val resource = findResource(this) ?: return null
         val type = resource.contentType
-        val data = resource.getData(context) ?: return null
+        val data = resource.getData() ?: return null
         return WebResourceResponse(
             type?.let { "${type.type()}/${type.subtype()}" } ?: "application/octet-stream",
             type?.charset()?.name(), data
@@ -67,9 +68,9 @@ internal class ArticleWebViewClient @Inject constructor(
         return@runBlocking resourceDao.find(uri)
     }
 
-    private fun Resource.getData(context: Context) =
+    private fun Resource.getData() = runBlocking {
         try {
-            getInputStream(context)
+            getInputStream(aemFileManager)
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.
@@ -80,4 +81,5 @@ internal class ArticleWebViewClient @Inject constructor(
             Timber.tag(TAG).d(e, "Error opening local file")
             null
         }
+    }
 }
