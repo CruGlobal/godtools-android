@@ -9,11 +9,11 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.stub
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
@@ -56,6 +56,7 @@ import org.mockito.Mockito.CALLS_REAL_METHODS
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.verification.VerificationMode
 import retrofit2.Response
 
 @RunWith(AndroidJUnit4::class)
@@ -266,27 +267,34 @@ class AemArticleManagerTest {
     // endregion Download Resource
 
     // region cleanupActor
+    private fun setupCleanupActor() {
+        runBlocking { whenever(fileManager.createDir()) doReturn true }
+    }
+
     @Test
-    fun verifyCleanupActorRunsAfterDelay() {
+    fun `testCleanupActor - Runs after pre-set delays`() {
+        setupCleanupActor()
+
         testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
-        assertCleanupActorRan(times = 0)
+        assertCleanupActorRan(never())
         testScope.advanceTimeBy(1)
         assertCleanupActorRan()
 
         testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        assertCleanupActorRan(times = 0)
+        assertCleanupActorRan(never())
         testScope.advanceTimeBy(1)
         assertCleanupActorRan()
     }
 
     @Test
-    fun verifyCleanupActorRunsAfterDbInvalidation() {
+    fun `testCleanupActor - Runs after db invalidation`() {
+        setupCleanupActor()
         val captor = argumentCaptor<InvalidationTracker.Observer>()
         verify(aemDb.invalidationTracker).addObserver(captor.capture())
         val observer = captor.firstValue
 
         // multiple invalidations should be conflated to a single invalidation
-        assertCleanupActorRan(times = 0)
+        assertCleanupActorRan(never())
         repeat(10) { observer.onInvalidated(setOf(Resource.TABLE_NAME)) }
         testScope.runCurrent()
         assertCleanupActorRan()
@@ -294,21 +302,18 @@ class AemArticleManagerTest {
 
         // any invalidations should reset the cleanup delay counter
         testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        assertCleanupActorRan(times = 0)
+        assertCleanupActorRan(never())
         testScope.advanceTimeBy(1)
         assertCleanupActorRan()
     }
 
-    private fun assertCleanupActorRan(times: Int = 1) {
-        val resourcesDao = aemDb.resourceDao()
-        inOrder(resourcesDao, fileManager) {
-            repeat(times) {
-                verify(resourcesDao).getAll()
-                runBlocking { verify(fileManager).getDir() }
-            }
-            verifyNoMoreInteractions()
-        }
-        clearInvocations(resourcesDao, fileManager)
+    private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
+        val resourceDao = aemDb.resourceDao()
+        verifyBlocking(fileManager, mode) { createDir() }
+        verify(resourceDao, mode).getAll()
+        verifyBlocking(fileManager, mode) { getDir() }
+        verifyNoMoreInteractions(resourceDao, fileManager)
+        clearInvocations(resourceDao, fileManager)
     }
     // endregion cleanupActor
 
