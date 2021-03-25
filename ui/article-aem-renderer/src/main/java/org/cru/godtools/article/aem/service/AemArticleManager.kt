@@ -14,6 +14,8 @@ import java.security.DigestOutputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Date
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,14 +72,24 @@ internal val QUERY_ARTICLE_TRANSLATIONS = Query.select<Translation>()
     .join(TranslationTable.SQL_JOIN_TOOL)
     .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
 
-open class KotlinAemArticleManager @JvmOverloads constructor(
+@Singleton
+class AemArticleManager @VisibleForTesting internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
     private val dao: GodToolsDao,
     private val fileManager: AemFileManager,
     private val manifestManager: ManifestManager,
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val coroutineScope: CoroutineScope
 ) {
+    @Inject
+    internal constructor(
+        aemDb: ArticleRoomDatabase,
+        api: AemApi,
+        dao: GodToolsDao,
+        fileManager: AemFileManager,
+        manifestManager: ManifestManager
+    ) : this(aemDb, api, dao, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
     private val filesystemMutex = ReadWriteMutex()

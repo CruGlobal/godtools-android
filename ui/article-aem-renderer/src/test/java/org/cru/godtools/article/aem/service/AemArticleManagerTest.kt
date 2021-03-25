@@ -70,7 +70,7 @@ class AemArticleManagerTest {
     private lateinit var manifestManager: ManifestManager
     private lateinit var testScope: TestCoroutineScope
 
-    private lateinit var articleManager: KotlinAemArticleManager
+    private lateinit var articleManager: AemArticleManager
 
     private val articleTranslationsChannel = Channel<List<Translation>>()
 
