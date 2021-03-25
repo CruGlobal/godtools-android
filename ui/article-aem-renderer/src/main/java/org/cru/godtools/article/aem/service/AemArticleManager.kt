@@ -23,14 +23,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.guava.asListenableFuture
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
@@ -105,10 +103,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Deeplinked Article
 
     // region Translations
-    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
-    protected fun syncAemImportsFromManifestAsync(manifest: Manifest?, force: Boolean) =
-        coroutineScope.async { syncAemImportsFromManifest(manifest, force) }.asListenableFuture()
-
     @AnyThread
     suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
         manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
@@ -133,13 +127,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Translations
 
     // region AEM Import
-    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
-    @AnyThread
-    protected fun enqueueSyncAemImport(uri: Uri, force: Boolean) = coroutineScope.async {
-        syncAemImport(uri, force)
-        true
-    }.asListenableFuture()
-
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
      *
@@ -178,13 +165,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion AEM Import
 
     // region Download Article
-    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
-    @AnyThread
-    protected fun downloadArticleAsync(uri: Uri, force: Boolean) = coroutineScope.async {
-        downloadArticle(uri, force)
-        true
-    }.asListenableFuture()
-
     @AnyThread
     suspend fun downloadArticle(uri: Uri, force: Boolean) {
         articleMutex.withLock(uri) {
