@@ -52,7 +52,7 @@ class ManifestManager @Inject constructor(
     fun getManifestBlocking(translation: Translation) = runBlocking { getManifest(translation) }
     private fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
 
-    private suspend fun getManifest(translation: Translation): Manifest? {
+    suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null
         val toolCode = translation.toolCode ?: return null
         return when (val result = manifestParser.parse(manifestFileName, toolCode, translation.languageCode)) {

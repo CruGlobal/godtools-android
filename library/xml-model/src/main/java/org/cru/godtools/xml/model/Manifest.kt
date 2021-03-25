@@ -230,6 +230,7 @@ class Manifest : BaseModel, Styles {
         backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
         cardBackgroundColor: Int? = null,
         lessonControlColor: Int = DEFAULT_LESSON_CONTROL_COLOR,
+        aemImports: List<Uri> = emptyList(),
         tips: ((Manifest) -> List<Tip>?)? = null
     ) : super() {
         this.code = code
@@ -256,7 +257,7 @@ class Manifest : BaseModel, Styles {
         this.lessonControlColor = lessonControlColor
 
         _title = null
-        aemImports = emptyList()
+        this.aemImports = aemImports
         categories = emptyList()
         lessonPages = emptyList()
         tractPages = emptyList()

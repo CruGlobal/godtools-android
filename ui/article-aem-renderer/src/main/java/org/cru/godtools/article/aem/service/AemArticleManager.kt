@@ -26,13 +26,17 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.guava.asListenableFuture
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -44,7 +48,13 @@ import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.article.aem.util.addExtension
+import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.xml.model.Manifest
+import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
+import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
@@ -55,10 +65,17 @@ internal const val CLEANUP_DELAY = HOUR_IN_MS
 internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 private const val CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS
 
+@VisibleForTesting
+internal val QUERY_ARTICLE_TRANSLATIONS = Query.select<Translation>()
+    .join(TranslationTable.SQL_JOIN_TOOL)
+    .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
+
 open class KotlinAemArticleManager @JvmOverloads constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
+    private val dao: GodToolsDao,
     private val fileManager: AemFileManager,
+    private val manifestManager: ManifestManager,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 ) {
     private val aemImportMutex = MutexMap()
@@ -75,14 +92,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     }
     // endregion Deeplinked Article
 
-    // region AEM Import
-    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
-    @AnyThread
-    protected fun enqueueSyncAemImport(uri: Uri, force: Boolean) = coroutineScope.async {
-        syncAemImport(uri, force)
-        true
-    }.asListenableFuture()
-
+    // region Translations
     @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
     protected fun syncAemImportsFromManifestAsync(manifest: Manifest?, force: Boolean) =
         coroutineScope.async { syncAemImportsFromManifest(manifest, force) }.asListenableFuture()
@@ -91,6 +101,32 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
     suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
         manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
     }
+
+    private val articleTranslationsJob = coroutineScope.launch {
+        val repository = aemDb.translationRepository()
+        dao.getAsFlow(QUERY_ARTICLE_TRANSLATIONS).conflate().collect { translations ->
+            translations.filterNot { repository.isProcessed(it) }.map { translation ->
+                launch {
+                    manifestManager.getManifest(translation)?.let { manifest ->
+                        repository.addAemImports(translation, manifest.aemImports)
+                        coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
+                    }
+                }
+            }.joinAll()
+
+            // prune any translations that we no longer have downloaded.
+            repository.removeMissingTranslations(translations)
+        }
+    }
+    // endregion Translations
+
+    // region AEM Import
+    @Deprecated("Use the coroutines method instead of wrapping it in a ListenableFuture")
+    @AnyThread
+    protected fun enqueueSyncAemImport(uri: Uri, force: Boolean) = coroutineScope.async {
+        syncAemImport(uri, force)
+        true
+    }.asListenableFuture()
 
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
@@ -273,6 +309,7 @@ open class KotlinAemArticleManager @JvmOverloads constructor(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal suspend fun shutdown() {
+        articleTranslationsJob.cancel()
         cleanupActor.close()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
