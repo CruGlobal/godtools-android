@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.spy
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -45,15 +46,15 @@ class TextTest {
     fun testStartImage() {
         val resource = mock<Resource>()
         val manifest = spy(Manifest()) { on { getResource("image.png") } doReturn resource }
-        assertEquals(resource, Text(manifest, "text", startImage = "image.png").startImage)
-        assertNull(Text(manifest, "text", startImage = null).startImage)
+        assertSame(resource, Text(manifest, startImage = "image.png").startImage)
+        assertNull(Text(manifest, startImage = null).startImage)
     }
 
     @Test
     fun testEndImage() {
         val resource = mock<Resource>()
         val manifest = spy(Manifest()) { on { getResource("image.png") } doReturn resource }
-        assertEquals(resource, Text(manifest, "text", endImage = "image.png").endImage)
-        assertNull(Text(manifest, "text", endImage = null).endImage)
+        assertSame(resource, Text(manifest, endImage = "image.png").endImage)
+        assertNull(Text(manifest, endImage = null).endImage)
     }
 }
