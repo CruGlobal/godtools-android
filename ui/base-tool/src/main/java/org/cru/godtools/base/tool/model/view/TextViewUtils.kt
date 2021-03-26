@@ -1,5 +1,3 @@
-@file:JvmName("TextViewUtils")
-
 package org.cru.godtools.base.tool.model.view
 
 import android.content.Context
@@ -7,19 +5,11 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.DimenRes
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.defaultTextColor
 import org.cru.godtools.xml.model.textAlign
 import org.cru.godtools.xml.model.textScale
 import org.cru.godtools.xml.model.textSize
-
-@JvmOverloads
-@JvmName("bind")
-fun Text?.bindTo(view: TextView?, @DimenRes textSize: Int? = null, @ColorInt defaultTextColor: Int? = null) {
-    if (view == null) return
-    bindTo(view, textSize?.let { view.context.resources.getDimension(it) }, defaultTextColor)
-}
 
 internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
     view.text = this?.text

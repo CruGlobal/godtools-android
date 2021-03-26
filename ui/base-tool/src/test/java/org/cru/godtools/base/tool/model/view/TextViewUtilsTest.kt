@@ -41,11 +41,12 @@ class TextViewUtilsTest {
 
     @Test
     fun verifyBindTextDefaults() {
+        val baseTextSize = activity.resources.getDimension(R.dimen.text_size_header)
         val text = Text(Manifest(), "text", 1.5, null, Text.Align.END)
-        text.bindTo(view, R.dimen.text_size_header, Color.GREEN)
+        text.bindTo(view, baseTextSize, Color.GREEN)
         assertEquals("text", view.text)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
         assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
-        assertEquals(1.5f * activity.resources.getDimension(R.dimen.text_size_header), view.textSize, 0.001f)
+        assertEquals(1.5f * baseTextSize, view.textSize, 0.001f)
     }
 }
