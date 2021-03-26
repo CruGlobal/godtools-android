@@ -21,14 +21,14 @@ class FileManagerTest {
         context = mock {
             on { filesDir } doReturn rootDir
         }
-        fileManager = FileManager(context)
+        fileManager = object : FileManager(context, "resources") {}
     }
 
     @Test
-    fun verifyCreateResourcesDir() {
+    fun testCreateDir() {
         runBlocking {
-            assertTrue(fileManager.createResourcesDir())
-            assertEquals(File(rootDir, "resources"), fileManager.getResourcesDir())
+            assertTrue(fileManager.createDir())
+            assertEquals(File(rootDir, "resources"), fileManager.getDir())
         }
     }
 }

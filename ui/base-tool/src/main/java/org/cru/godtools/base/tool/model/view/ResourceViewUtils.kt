@@ -4,15 +4,15 @@ import android.view.View
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.PicassoImageView
-import org.cru.godtools.base.fileManager
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView
+import org.cru.godtools.base.toolFileManager
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Resource
 import org.cru.godtools.xml.model.layoutDirection
 
 fun PicassoImageView.setPicassoResource(resource: Resource?) =
-    setPicassoFile(resource?.localName?.let { context.fileManager.getFileBlocking(it) })
+    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
 
 fun ScaledPicassoImageView.bindBackgroundImage(resource: Resource?, scale: ImageScaleType, gravity: ImageGravity) {
     val view = asImageView()

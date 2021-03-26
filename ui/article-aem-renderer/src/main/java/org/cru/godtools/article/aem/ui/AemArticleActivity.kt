@@ -12,14 +12,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
-import com.google.common.util.concurrent.Futures
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
@@ -144,13 +142,14 @@ class AemArticleActivity :
     private val syncFinished = MutableLiveData(false)
 
     private fun syncData() {
-        lifecycleScope.launch {
-            val future = when {
-                intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
-                else -> aemArticleManager.downloadArticle(articleUri, false)
-            }
-            Futures.nonCancellationPropagating(future).await()
-            withContext(Dispatchers.Main) { syncFinished.value = true }
+        lifecycleScope.launch(Dispatchers.Main) {
+            GlobalScope.launch {
+                when {
+                    intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
+                    else -> aemArticleManager.downloadArticle(articleUri, false)
+                }
+            }.join()
+            syncFinished.value = true
         }
     }
     // endregion Sync logic

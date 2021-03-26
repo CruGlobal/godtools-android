@@ -1,6 +1,7 @@
 package org.cru.godtools.article.aem.db
 
 import android.net.Uri
+import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Insert
@@ -35,15 +36,15 @@ interface ResourceDao {
     )
     fun removeOrphanedResources()
 
-    @WorkerThread
+    @AnyThread
     @Query("SELECT * FROM resources WHERE uri = :uri")
-    fun find(uri: Uri): Resource?
+    suspend fun find(uri: Uri): Resource?
 
     @WorkerThread
     @Query("SELECT * FROM resources")
     fun getAll(): List<Resource>
 
-    @WorkerThread
+    @AnyThread
     @Query(
         """
         SELECT r.*
@@ -51,5 +52,5 @@ interface ResourceDao {
         WHERE a.articleUri = :uri
         """
     )
-    fun getAllForArticle(uri: Uri): List<Resource>
+    suspend fun getAllForArticle(uri: Uri): List<Resource>
 }

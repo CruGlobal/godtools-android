@@ -46,8 +46,8 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.article.ui.createArticlesIntent
-import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
@@ -73,7 +73,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @ApplicationContext private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
-    private val fileManager: FileManager,
+    private val fileManager: ToolFileManager,
     private val settings: Settings,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
@@ -83,7 +83,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @ApplicationContext context: Context,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: FileManager,
+        fileManager: ToolFileManager,
         settings: Settings
     ) : this(context, dao, eventBus, fileManager, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 

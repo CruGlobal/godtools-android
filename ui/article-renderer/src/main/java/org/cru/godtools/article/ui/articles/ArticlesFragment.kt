@@ -1,7 +1,6 @@
 package org.cru.godtools.article.ui.articles
 
 import android.os.Bundle
-import androidx.concurrent.futures.await
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -90,7 +89,7 @@ class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdap
     private fun syncData(force: Boolean = false) {
         lifecycleScope.launch(Dispatchers.Main.immediate) {
             isSyncing.value = true
-            aemArticleManager.enqueueSyncManifestAemImports(toolDataModel.manifest.value, force).await()
+            aemArticleManager.syncAemImportsFromManifest(toolDataModel.manifest.value, force)
             isSyncing.value = false
         }
     }

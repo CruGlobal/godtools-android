@@ -36,8 +36,8 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
-import org.cru.godtools.base.FileManager
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -84,7 +84,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var attachmentsApi: AttachmentsApi
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
-    private lateinit var fileManager: FileManager
+    private lateinit var fileManager: ToolFileManager
     private lateinit var settings: Settings
     private lateinit var translationsApi: TranslationsApi
     private lateinit var testScope: TestCoroutineScope
@@ -108,8 +108,8 @@ class GodToolsDownloadManagerTest {
         }
         eventBus = mock()
         fileManager = mock {
-            onBlocking { getResourcesDir() } doReturn resourcesDir
-            onBlocking { createResourcesDir() } doReturn true
+            onBlocking { getDir() } doReturn resourcesDir
+            onBlocking { createDir() } doReturn true
         }
         observer = mock()
         settings = mock()
@@ -364,7 +364,7 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentUnableToCreateResourcesDir() {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         fileManager.stub {
-            onBlocking { createResourcesDir() } doReturn false
+            onBlocking { createDir() } doReturn false
             onBlocking { getFile(attachment) } doReturn file
         }
 
@@ -410,7 +410,7 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
-    private suspend fun FileManager.getFile(attachment: Attachment) = getFile(attachment.localFilename!!)
+    private suspend fun ToolFileManager.getFile(attachment: Attachment) = getFile(attachment.localFilename!!)
     // endregion Attachments
 
     // region Translations
@@ -567,14 +567,14 @@ class GodToolsDownloadManagerTest {
     private fun assertCleanupActorRan(times: Int = 1) {
         inOrder(dao, fileManager) {
             repeat(times) {
-                runBlocking { verify(fileManager).getResourcesDir() }
+                runBlocking { verify(fileManager).getDir() }
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == TranslationFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
-                runBlocking { verify(fileManager).getResourcesDir() }
+                runBlocking { verify(fileManager).getDir() }
             }
             verify(dao, never()).get(any<Query<*>>())
-            runBlocking { verify(fileManager, never()).getResourcesDir() }
+            runBlocking { verify(fileManager, never()).getDir() }
         }
     }
 
@@ -584,7 +584,7 @@ class GodToolsDownloadManagerTest {
         val missingFile = getTmpFile()
         whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
         fileManager.stub {
-            onBlocking { getResourcesDir() } doReturn file.parentFile!!
+            onBlocking { getDir() } doReturn file.parentFile!!
             onBlocking { getFile(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
         }
 
