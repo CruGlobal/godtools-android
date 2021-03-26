@@ -93,6 +93,7 @@ class Text : Content {
         textScale: Double? = null,
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
+        textStyles: Set<Style> = emptySet(),
         startImage: String? = null,
         endImage: String? = null,
     ) : super(parent) {
@@ -100,7 +101,7 @@ class Text : Content {
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
-        textStyles = emptySet()
+        this.textStyles = textStyles
         startImageName = startImage
         startImageSize = DEFAULT_IMAGE_SIZE
         endImageName = endImage
