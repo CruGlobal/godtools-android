@@ -19,6 +19,10 @@ private const val XML_TEXT_ALIGN_START = "start"
 private const val XML_TEXT_ALIGN_CENTER = "center"
 private const val XML_TEXT_ALIGN_END = "end"
 private const val XML_TEXT_SCALE = "text-scale"
+private const val XML_TEXT_STYLE = "text-style"
+private const val XML_TEXT_STYLE_BOLD = "bold"
+private const val XML_TEXT_STYLE_ITALIC = "italic"
+private const val XML_TEXT_STYLE_UNDERLINE = "underline"
 
 class Text : Content {
     companion object {
@@ -46,6 +50,19 @@ class Text : Content {
         }
     }
 
+    enum class Style {
+        BOLD, ITALIC, UNDERLINE;
+
+        companion object {
+            internal fun parseOrNull(value: String?) = when (value) {
+                XML_TEXT_STYLE_BOLD -> BOLD
+                XML_TEXT_STYLE_ITALIC -> ITALIC
+                XML_TEXT_STYLE_UNDERLINE -> UNDERLINE
+                else -> null
+            }
+        }
+    }
+
     val text: String?
 
     private val _textAlign: Align?
@@ -56,6 +73,7 @@ class Text : Content {
     val textColor get() = _textColor ?: defaultTextColor
     private val _textScale: Double?
     val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
+    val textStyles: Set<Style>
 
     @VisibleForTesting
     internal val startImageName: String?
@@ -82,6 +100,7 @@ class Text : Content {
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
+        textStyles = emptySet()
         startImageName = startImage
         startImageSize = DEFAULT_IMAGE_SIZE
         endImageName = endImage
@@ -94,6 +113,7 @@ class Text : Content {
         _textAlign = Align.parseOrNull(parser.getAttributeValue(null, XML_TEXT_ALIGN))
         _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
         _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
+        textStyles = parser.getAttributeValueAsTextStylesOrNull(XML_TEXT_STYLE).orEmpty()
 
         startImageName = parser.getAttributeValue(null, XML_START_IMAGE)
         startImageSize = parser.getAttributeValue(null, XML_START_IMAGE_SIZE)?.toIntOrNull() ?: DEFAULT_IMAGE_SIZE
@@ -146,3 +166,7 @@ internal fun XmlPullParser.parseTextChild(
     }
     return text
 }
+
+private fun XmlPullParser.getAttributeValueAsTextStylesOrNull(name: String) =
+    getAttributeValue(null, name)?.let { REGEX_SEQUENCE_SEPARATOR.split(it) }
+        ?.mapNotNullTo(mutableSetOf()) { Text.Style.parseOrNull(it) }
