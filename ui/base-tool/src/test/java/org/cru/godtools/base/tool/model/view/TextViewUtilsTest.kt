@@ -2,6 +2,7 @@ package org.cru.godtools.base.tool.model.view
 
 import android.app.Activity
 import android.graphics.Color
+import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.graphics.Typeface.BOLD_ITALIC
 import android.graphics.Typeface.NORMAL
 import android.view.Gravity
@@ -11,11 +12,14 @@ import org.cru.godtools.xml.R
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Text
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.android.controller.ActivityController
+import splitties.bitflags.hasFlag
 
 @RunWith(AndroidJUnit4::class)
 class TextViewUtilsTest {
@@ -47,6 +51,7 @@ class TextViewUtilsTest {
         assertEquals(Text.Align.CENTER.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(2 * activity.resources.getDimension(R.dimen.text_size_base), view.textSize, 0.001f)
         assertEquals(BOLD_ITALIC, view.typeface.style)
+        assertTrue(view.paintFlags.hasFlag(UNDERLINE_TEXT_FLAG))
     }
 
     @Test
@@ -59,5 +64,6 @@ class TextViewUtilsTest {
         assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(1.5f * baseTextSize, view.textSize, 0.001f)
         assertEquals(NORMAL, view.typeface?.style ?: NORMAL)
+        assertFalse(view.paintFlags.hasFlag(UNDERLINE_TEXT_FLAG))
     }
 }
