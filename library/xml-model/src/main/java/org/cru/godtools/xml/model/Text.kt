@@ -76,18 +76,16 @@ class Text : Content {
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
         startImage: String? = null,
-        @Dimension(unit = DP) startImageSize: Int = DEFAULT_IMAGE_SIZE,
         endImage: String? = null,
-        @Dimension(unit = DP) endImageSize: Int = DEFAULT_IMAGE_SIZE,
     ) : super(parent) {
         this.text = text
         _textAlign = textAlign
         _textColor = textColor
         _textScale = textScale
         startImageName = startImage
-        this.startImageSize = startImageSize
+        startImageSize = DEFAULT_IMAGE_SIZE
         endImageName = endImage
-        this.endImageSize = endImageSize
+        endImageSize = DEFAULT_IMAGE_SIZE
     }
 
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {

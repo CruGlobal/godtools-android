@@ -37,10 +37,10 @@ abstract class TranslationRepository internal constructor(private val db: Articl
         db.translationDao().insertOrIgnore(TranslationRef(translationKey))
 
         // create and link all AEM Import objects
-        uris.map { AemImport(it) }
-            .apply { db.aemImportDao().insertOrIgnore(this) }
-            .map { TranslationAemImport(translationKey, it) }
-            .apply { db.translationDao().insertOrIgnore(this) }
+        val imports = uris.map { AemImport(it) }
+        val translationImports = imports.map { TranslationAemImport(translationKey, it) }
+        db.aemImportDao().insertOrIgnore(imports)
+        db.translationDao().insertOrIgnore(translationImports)
 
         // mark translation as processed
         markProcessed(translationKey, true)
