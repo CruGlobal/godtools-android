@@ -11,7 +11,7 @@ buildscript {
                 dagger             : '2.33',
                 eventbus           : '3.2.0',
                 facebook           : '9.1.0',
-                facebookFlipper    : '0.82.0',
+                facebookFlipper    : '0.82.1',
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.1.3',
