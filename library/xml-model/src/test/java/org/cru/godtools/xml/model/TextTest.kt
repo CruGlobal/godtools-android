@@ -6,6 +6,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import org.cru.godtools.xml.util.getXmlParserForResource
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.empty
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
@@ -14,8 +17,9 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class TextTest {
+    // region Parsing
     @Test
-    fun testParseTextDefaults() {
+    fun `testTextParsing - Defaults`() {
         val manifest = spy(Manifest())
         val text = Text(manifest, getXmlParserForResource("text_defaults.xml"))
 
@@ -25,10 +29,11 @@ class TextTest {
         assertEquals(Text.Align.DEFAULT, text.textAlign)
         assertEquals(Text.DEFAULT_IMAGE_SIZE, text.startImageSize)
         assertEquals(Text.DEFAULT_IMAGE_SIZE, text.endImageSize)
+        assertThat(text.textStyles, empty())
     }
 
     @Test
-    fun testParseTextAttributes() {
+    fun `testTextParsing - Attributes`() {
         val parent = mock<Base>()
         val text = Text(parent, getXmlParserForResource("text_attributes.xml"))
 
@@ -40,7 +45,9 @@ class TextTest {
         assertEquals(5, text.startImageSize)
         assertEquals("end.png", text.endImageName)
         assertEquals(11, text.endImageSize)
+        assertThat(text.textStyles, containsInAnyOrder(Text.Style.BOLD, Text.Style.ITALIC))
     }
+    // endregion Parsing
 
     @Test
     fun testStartImage() {
