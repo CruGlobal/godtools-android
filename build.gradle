@@ -60,7 +60,7 @@ buildscript {
                 databinding       : deps.gradleAndroidPlugin,
                 fragment          : '1.3.2',
                 hilt              : '1.0.0-beta01',
-                lifecycle         : '2.2.0',
+                lifecycle         : '2.3.0',
                 loader            : '1.1.0',
                 multidex          : '2.0.1',
                 recyclerView      : '1.1.0',

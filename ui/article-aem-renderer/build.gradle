@@ -30,7 +30,6 @@ dependencies {
 
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
     implementation "androidx.room:room-ktx:${deps.androidX.room}"
     api "androidx.room:room-runtime:${deps.androidX.room}"
