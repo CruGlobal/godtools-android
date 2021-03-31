@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.xmlpull.v1.XmlPullParser
 
@@ -11,11 +10,15 @@ private const val XML_AEM_TAG = "aem-tag"
 
 @OptIn(ExperimentalStdlibApi::class)
 class Category internal constructor(manifest: Manifest, parser: XmlPullParser) : BaseModel(manifest) {
+    companion object {
+        internal const val XML_CATEGORY = "category"
+    }
+
     val id: String?
     val label: Text?
     val aemTags: Set<String>
     private val _banner: String?
-    val banner: Resource? get() = getResource(_banner)
+    val banner get() = getResource(_banner)
 
     init {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORY)
@@ -25,7 +28,7 @@ class Category internal constructor(manifest: Manifest, parser: XmlPullParser) :
 
         var label: Text? = null
         aemTags = buildSet<String> {
-            parsingChildren@ while (parser.next() != XmlPullParser.END_TAG) {
+            while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.eventType != XmlPullParser.START_TAG) continue
 
                 val ns = parser.namespace
@@ -42,18 +45,5 @@ class Category internal constructor(manifest: Manifest, parser: XmlPullParser) :
             }
         }
         this.label = label
-    }
-
-    companion object {
-        // TODO: make this internal
-        const val XML_CATEGORY = "category"
-
-        @JvmStatic
-        @WorkerThread
-        @Deprecated(
-            "Use constructor instead",
-            ReplaceWith("Category(manifest, parser)", "org.cru.godtools.xml.model.Category")
-        )
-        fun fromXml(manifest: Manifest, parser: XmlPullParser) = Category(manifest, parser)
     }
 }
