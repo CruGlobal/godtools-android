@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -21,7 +22,6 @@ import org.cru.godtools.sync.SyncModule
 import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
-import org.cru.godtools.tract.util.TestLifecycleOwner
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tract.Card
 import org.cru.godtools.xml.model.tract.TractPage
@@ -65,7 +65,7 @@ class PageControllerTest {
     lateinit var heroControllerFactory: HeroController.Factory
     @Inject
     lateinit var cardControllerFactory: CardController.Factory
-    private val baseLifecycleOwner = TestLifecycleOwner()
+    private val baseLifecycleOwner = TestLifecycleOwner(Lifecycle.State.RESUMED)
 
     private lateinit var controller: PageController
 
@@ -83,7 +83,6 @@ class PageControllerTest {
             heroControllerFactory,
             cardControllerFactory
         )
-        baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.RESUMED
     }
 
     @Test

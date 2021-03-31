@@ -11,7 +11,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.model.Translation
@@ -47,9 +46,6 @@ class ManifestManager @Inject constructor(
                 }
             }
 
-    @WorkerThread
-    @Throws(InterruptedException::class)
-    fun getManifestBlocking(translation: Translation) = runBlocking { getManifest(translation) }
     private fun getManifestLiveData(translation: Translation) = liveData { emit(getManifest(translation)) }
 
     suspend fun getManifest(translation: Translation): Manifest? {
