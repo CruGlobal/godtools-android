@@ -40,6 +40,12 @@ jobs:
         with:
           name: ktlint-results
           path: "**/build/reports/ktlint/"
+      - name: Archive lint results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint-results
+          path: "**/build/reports/lint-results.*"
 
   tests:
     name: Unit Tests
