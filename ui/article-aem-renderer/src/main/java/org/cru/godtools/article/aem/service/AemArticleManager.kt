@@ -192,7 +192,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     // region Download Resource
     @AnyThread
-    protected fun Collection<Resource>.downloadResourcesNeedingUpdate() {
+    private fun Collection<Resource>.downloadResourcesNeedingUpdate() {
         filter { it.needsDownload() }.forEach { coroutineScope.launch { downloadResource(it.uri, false) } }
     }
 
