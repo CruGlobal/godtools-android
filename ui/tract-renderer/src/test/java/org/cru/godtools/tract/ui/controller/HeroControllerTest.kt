@@ -2,6 +2,7 @@ package org.cru.godtools.tract.ui.controller
 
 import android.view.LayoutInflater
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.argThat
@@ -18,7 +19,6 @@ import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
-import org.cru.godtools.tract.util.TestLifecycleOwner
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tract.Hero
@@ -32,7 +32,7 @@ import org.mockito.Mockito.verifyNoInteractions
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class HeroControllerTest {
-    private val baseLifecycleOwner = TestLifecycleOwner()
+    private val baseLifecycleOwner = TestLifecycleOwner(Lifecycle.State.CREATED)
     private lateinit var eventBus: EventBus
     private val mainDispatcher = TestCoroutineDispatcher()
 
@@ -48,7 +48,6 @@ class HeroControllerTest {
             on { lifecycleOwner } doReturn ConstrainedStateLifecycleOwner(baseLifecycleOwner)
             on { eventBus } doReturn eventBus
         }
-        baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.CREATED
 
         controller = HeroController(binding, pageController, mock())
     }
@@ -69,7 +68,7 @@ class HeroControllerTest {
 
         // event1 with no delay
         mainDispatcher.pauseDispatcher()
-        baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+        baseLifecycleOwner.currentState = Lifecycle.State.RESUMED
         mainDispatcher.runCurrent()
         verify(eventBus).post(argThat<ContentAnalyticsActionEvent> { event == event1 })
         verifyNoMoreInteractions(eventBus)
@@ -84,7 +83,7 @@ class HeroControllerTest {
         // event3 with 2 second delay, lifecycle is paused before event can fire
         mainDispatcher.advanceTimeBy(999)
         verifyNoMoreInteractions(eventBus)
-        baseLifecycleOwner.lifecycleRegistry.currentState = Lifecycle.State.STARTED
+        baseLifecycleOwner.currentState = Lifecycle.State.STARTED
         mainDispatcher.advanceUntilIdle()
         verify(eventBus, never()).post(argThat<ContentAnalyticsActionEvent> { event == event3 })
         verifyNoMoreInteractions(eventBus)
