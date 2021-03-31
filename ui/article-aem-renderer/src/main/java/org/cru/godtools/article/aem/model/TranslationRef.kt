@@ -11,12 +11,10 @@ import javax.annotation.concurrent.Immutable
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 
-fun Translation?.toTranslationRefKey(): TranslationRef.Key? {
-    return this?.run {
-        val tool = toolCode ?: return null
-        val language = languageCode.takeUnless { it == Language.INVALID_CODE } ?: return null
-        TranslationRef.Key(tool, language, version)
-    }
+fun Translation.toTranslationRefKey(): TranslationRef.Key? {
+    val tool = toolCode ?: return null
+    val language = languageCode.takeUnless { it == Language.INVALID_CODE } ?: return null
+    return TranslationRef.Key(tool, language, version)
 }
 
 @Entity(tableName = "translations")
