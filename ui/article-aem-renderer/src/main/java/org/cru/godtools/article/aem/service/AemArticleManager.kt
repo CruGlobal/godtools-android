@@ -168,7 +168,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     @AnyThread
     suspend fun downloadArticle(uri: Uri, force: Boolean) {
         articleMutex.withLock(uri) {
-            // short-circuit if there isn't an Article for the specified Uri or if the article doesn't need to be downloaded
+            // short-circuit if there isn't an Article for the uri or if the article doesn't need to be downloaded
             val article = aemDb.articleDao().find(uri) ?: return
             if (article.uuid == article.contentUuid && !force) return
 
