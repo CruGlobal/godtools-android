@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">تعذر فتح %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">دعوة إلى الإنجيل</string>
+    <string name="tool_category_articles">المقالات</string>
+    <string name="tool_category_conversation_starter">باديء المحادثة</string>
+    <string name="tool_category_growth">النمو المسيحي</string>
+    <string name="tool_category_training">التدريب</string>
+    <!-- Sharing -->
+    <string name="share_general_message">سينقلك هذا الرابط إلى إصدار ويب لما كنا نتحدث عنه اليوم: %1$s \n\n
+
+يمكن تنزيل التطبيق من https://godtoolsapp.com \n\n
+
+لنتحدث أكثر!</string>
+</resources>

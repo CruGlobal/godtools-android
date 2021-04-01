@@ -21,7 +21,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">ມາຟັງກັນວ່າ ພຣະຜູ້ເປັນເຈົ້າຈະຊົງນຳເຮົາຢ່າງໃດ!</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">80+ ພາສາ</string>
+    <string name="feature_discovery_title_language_settings">90+ ພາສາ</string>
     <string name="menu_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_primary">ພາສາຫຼັກ</string>

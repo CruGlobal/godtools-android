@@ -21,7 +21,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">신이 어떻게 움직이는지 들어보세요!</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">80개 이상의 언어</string>
+    <string name="feature_discovery_title_language_settings">90개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>
     <string name="title_language_settings">언어 설정</string>
     <string name="title_language_primary">기본 언어</string>

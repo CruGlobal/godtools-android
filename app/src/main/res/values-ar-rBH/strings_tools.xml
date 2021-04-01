@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_favorite_tools">المفضلة</string>
+    <string name="nav_all_tools">كل الأدوات</string>
+    <string name="action_tools_about">حول</string>
+    <string name="action_tools_open">فتح</string>
+    <string name="tools_list_remove_favorite_dialog_title">إزالة “%1$s” من المفضلة؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>
+    <string name="tools_list_favorites_banner_text">اجعل الأداة متوفرة في وضع عدم الاتصال عبر النقر على أيقونة القلب الذي يضيفها إلى المفضلة.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">تجاهل</string>
     <!-- Tool Details UI -->
+    <string name="menu_add_to_home">إضافة إلى الشاشة الرئيسية</string>
     <string name="action_tools_open_tool">فتح أداة</string>
+    <string name="action_tools_add_favorite">إضافة إلى المفضلة</string>
+    <string name="action_tools_remove_favorite">إزالة من المفضلة</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d مشاهدة</item>
+        <item quantity="other">%1$,d مشاهدات</item>
+        <item quantity="few">%1$,d مشاهدات</item>
+        <item quantity="many">%1$,d مشاهدات</item>
+        <item quantity="two">%1$,d مشاهدتين</item>
+        <item quantity="zero">%1$,d مشاهدة</item>
+    </plurals>
+    <string name="label_tools_about">حول</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d لغة</item>
+        <item quantity="other">%1$,d لغات</item>
+        <item quantity="few">%1$,d لغات</item>
+        <item quantity="many">%1$,d لغات</item>
+        <item quantity="two">%1$,d لغتين</item>
+        <item quantity="zero">%1$,d لغة</item>
+    </plurals>
 </resources>

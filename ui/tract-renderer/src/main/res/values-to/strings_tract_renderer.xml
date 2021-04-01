@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tract_card_previous">Foki ki mui</string>
-    <string name="tract_card_next">Peesi hoko</string>
+    <string name="tract_card_previous">Foki</string>
+    <string name="tract_card_next">Hoko mai</string>
     <!-- Live Sharing -->
     <!-- Training Tips -->
     <!-- Tip Types -->
