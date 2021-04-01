@@ -2,7 +2,7 @@
 <resources>
     <!-- Tools List UI -->
     <eat-comment />
-    <string name="nav_lessons">Learn</string>
+    <string name="nav_lessons">Lessons</string>
     <string name="nav_favorite_tools">Favorites</string>
     <string name="nav_all_tools">All Tools</string>
     <string name="action_tools_about">About</string>
