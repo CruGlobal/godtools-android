@@ -20,7 +20,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Kuule, kuinka Jumala liikkuu!</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">80+ kieltä</string>
+    <string name="feature_discovery_title_language_settings">90+ kieltä</string>
     <string name="menu_language_settings">Kieliasetukset</string>
     <string name="title_language_settings">Kieliasetukset</string>
     <string name="title_language_primary">Ensisijainen kieli</string>

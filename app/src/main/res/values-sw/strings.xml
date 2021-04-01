@@ -21,7 +21,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Sikiliza namna Mungu anavyotembea!</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Lugha Themanini na Zaidi</string>
+    <string name="feature_discovery_title_language_settings">Lugha Tisini na Zaidi</string>
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_primary">Lugha ya Msingi</string>

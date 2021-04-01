@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tool">شارك</string>
+    <string name="share_tool_title">شارك \"%1$s\" باستعمال</string>
+    <string name="tool_not_found">لا يمكن إيجاد الأداة التي طلبتها</string>
+    <string name="tool_loading">جاري تحميل الأداة التي طلبتها…</string>
+    <string name="tool_offline">الأداة التي طلبتها تستلزم فتح الاتصال بالإنترنت</string>
+    <string name="feature_discovery_title_share_tool">شارك رابطاً</string>
+    <string name="feature_discovery_desc_share_tool">أرسل هذه الأداة إلى صديق بالضغط على هذه الأيقونة</string>
+</resources>

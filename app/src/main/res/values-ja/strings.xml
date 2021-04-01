@@ -21,7 +21,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">神とのストーリーを聞いてみましょう。</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">80種類以上の言語</string>
+    <string name="feature_discovery_title_language_settings">90種類以上の言語</string>
     <string name="menu_language_settings">言語設定</string>
     <string name="title_language_settings">言語設定</string>
     <string name="title_language_primary">第1言語</string>

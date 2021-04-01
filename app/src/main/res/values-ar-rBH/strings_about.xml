@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_about">حول</string>
+    <string name="general_about_1">GodTools يساعدك على مشاركة إيمانك بطريقة سهلة وواضحة.</string>
+    <string name="general_about_2">هذه الأدوات تساعدك على الشرح لشخص ما كيفية بدئهم علاقة مع الرب عبر يسوع المسيح، حتى و لو لم تشارك إيمانك من قبل أو كانوا يتحدثون لغة مختلفة.</string>
+    <string name="general_about_3">اختر من عدة أدوات استناداً على تفضيلاتك و جمهورك. ليست كل الأدوات متوفرة في كل لغة.</string>
+    <string name="general_about_4">الروابط للمصادر الأخرى يتم إدراجها في نهاية كل أداة.</string>
+    <string name="general_about_5">الاتصال بالشبكة ضروري لتحميل كل أداة و/ أو لغة جديدة. بمجرد تحميلها، يمكن استعمالها خارج الشبكة.</string>
+    <string name="general_about_6">ألديك أسئلة؟ اقتراحات؟ طلبات؟ اتصل بنا على support@godtoolsapp.com</string>
+    <string name="general_about_7">إصدار عبر الشبكة لهذه الأدوات يمكن إيجاده على knowgod.com. أدرجه على موقعك الخاص!</string>
+    <string name="general_about_8">زر موقع godtoolsapp.com لمزيد من المعلومات.</string>
+    <string name="general_about_9">بمجرد المبادرة في مشاركة إيمانك، تذكر بأن الرب هو الذي يغير القلب. امنح حبك لكل واحد جيداً بالإستماع من أجل الفهم.</string>
+    <string name="general_about_10">\"اجعل محادثتك دائماً ملأى بالنعم، متبلة بالملح، بحيث يمكنك معرفة كيفية إجابة كل واحد.\" كولوسي 4:6</string>
+</resources>

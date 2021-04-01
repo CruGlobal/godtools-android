@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">इस टूल को किसी के भी साथ साझा करना सीखें</string>
+    <string name="tutorial_tips_learn_text">ईश्वर के साथ अपने संबंधों की शुरुआत कैसे की जाए, वार्तालाप को इस विषय पर लाने में यह टूल मदद करता है। दिए गए सुझावों का उपयोग कर विषयवस्तु को साझा करना सीखें, ताकि आप किसी से भी बात करने के लिए तैयार रह सकें।</string>
+    <string name="tutorial_tips_light_headline">पथप्रदर्शन के लिए सुझाव</string>
+    <string name="tutorial_tips_light_text1">इस प्रशिक्षण की चुनिंदा स्क्रीन्स पर आपको ऊपर दिखाए गए चिन्हों में से एक दिखेगा। उसे दबाकर सुझाव पाएं कि स्क्रीन की सामग्री के विषय में किस तरह बात करनी है।</string>
+    <string name="tutorial_tips_light_text2">यदि किसी स्क्रीन पर कोई चिन्ह नहीं है, तो सुझाव यह है कि सामग्री पढ़ लें और आवश्यकतानुसार चर्चा करें।</string>
+    <string name="tutorial_tips_start_headline">सुझावों पर रोशनी</string>
+    <string name="tutorial_tips_start_text">यदि कोई सुझाव उजला हो जाता है, तो आपने प्रशिक्षण का वह भाग पूरा कर लिया है। सुझावों पर तब तक अभ्यास करें जब तक आपमें टूल को समझाने का आत्मविश्वास नहीं आ जाता।</string>
+    <string name="tutorial_tips_action_continue">जारी रखें</string>
+    <string name="tutorial_tips_action_skip">छोड़ें</string>
+    <string name="tutorial_tips_action_start">प्रशिक्षण शुरू करें</string>
+</resources>
