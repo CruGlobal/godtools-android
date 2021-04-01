@@ -9,7 +9,8 @@ interface Parent : Base {
 internal inline val Parent.contentTips get() = content.flatMap { it.tips }
 
 /**
- * @param block Custom parsing logic, if the block processes the current tag, it should advance the parser to the END_TAG event.
+ * @param block Custom parsing logic, if the block processes the current tag,
+ * it should advance the parser to the END_TAG event.
  */
 @OptIn(ExperimentalStdlibApi::class)
 internal inline fun Parent.parseContent(
