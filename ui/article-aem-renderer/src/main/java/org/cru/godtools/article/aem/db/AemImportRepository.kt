@@ -1,6 +1,5 @@
 package org.cru.godtools.article.aem.db
 
-import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Transaction
@@ -12,8 +11,7 @@ import org.cru.godtools.article.aem.model.Article
 @Dao
 abstract class AemImportRepository internal constructor(private val db: ArticleRoomDatabase) {
     @Transaction
-    @WorkerThread
-    open fun processAemImportSync(aemImport: AemImport, articles: List<Article>) {
+    open suspend fun processAemImportSync(aemImport: AemImport, articles: List<Article>) {
         // insert/update any supplied articles
         with(db.articleDao()) {
             articles.forEach {
@@ -40,7 +38,6 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
     }
 
     @Transaction
-    @AnyThread
     open suspend fun accessAemImport(import: AemImport) {
         with(db.aemImportDao()) {
             insertOrIgnore(import)

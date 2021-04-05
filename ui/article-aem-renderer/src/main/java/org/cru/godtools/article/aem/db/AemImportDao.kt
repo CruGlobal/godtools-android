@@ -56,7 +56,6 @@ interface AemImportDao {
     )
     fun removeOrphanedAemImports(lastAccessedBefore: Date)
 
-    @WorkerThread
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
-    fun find(uri: Uri?): AemImport?
+    suspend fun find(uri: Uri?): AemImport?
 }

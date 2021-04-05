@@ -103,7 +103,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Deeplinked Article
 
     // region Translations
-    @AnyThread
     suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
         manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
     }
@@ -133,7 +132,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
      * @param baseUri The base AEM Import URL to sync
      * @param force   This flag indicates that this sync should ignore the lastUpdated time
      */
-    @WorkerThread
     private suspend fun syncAemImport(baseUri: Uri, force: Boolean) {
         if (!baseUri.isAbsolute || !baseUri.isHierarchical) return
         aemImportMutex.withLock(baseUri) {

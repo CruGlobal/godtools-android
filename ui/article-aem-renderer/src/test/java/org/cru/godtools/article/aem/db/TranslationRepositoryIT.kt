@@ -3,6 +3,7 @@ package org.cru.godtools.article.aem.db
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
+import kotlinx.coroutines.runBlocking
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
 import org.cru.godtools.model.Translation
@@ -35,7 +36,7 @@ class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
         assertTrue(repository.isProcessed(translation))
 
         // TODO: test AemImports once we define dao methods for reading AemImports
-        val aemImport = db.aemImportDao().find(URI1)
+        val aemImport = runBlocking { db.aemImportDao().find(URI1) }
         assertEquals(URI1, aemImport!!.uri)
     }
 }
