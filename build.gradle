@@ -72,7 +72,7 @@ buildscript {
                 work              : '2.5.0',
         ]
         deps.firebase = [
-                core          : '18.0.2',
+                core          : '18.0.3',
                 crashlytics   : '17.4.1',
                 inAppMessaging: '19.1.5',
                 messaging     : '21.1.0',
