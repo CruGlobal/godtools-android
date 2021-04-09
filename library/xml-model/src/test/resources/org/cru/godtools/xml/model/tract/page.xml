@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    background-color="rgba(255, 0, 0, 1)" background-image-align="start top"
-    background-image-scale-type="fill" xmlns="https://mobile-content-api.cru.org/xmlns/tract">
+<page xmlns="https://mobile-content-api.cru.org/xmlns/tract"
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
+    background-color="rgba(255, 0, 0, 1)" background-image-align="start top" background-image-scale-type="fill"
+    text-scale="1.2345">
     <header>
         <title>
             <content:text>header</content:text>

@@ -230,6 +230,7 @@ class Manifest : BaseModel, Styles {
         navBarColor: Int? = null,
         navBarControlColor: Int? = null,
         backgroundColor: Int = DEFAULT_BACKGROUND_COLOR,
+        textScale: Double = DEFAULT_TEXT_SCALE,
         cardBackgroundColor: Int? = null,
         lessonControlColor: Int = DEFAULT_LESSON_CONTROL_COLOR,
         aemImports: List<Uri> = emptyList(),
@@ -244,7 +245,7 @@ class Manifest : BaseModel, Styles {
         this.primaryColor = primaryColor
         this.primaryTextColor = primaryTextColor
         textColor = DEFAULT_TEXT_COLOR
-        textScale = DEFAULT_TEXT_SCALE
+        this.textScale = textScale
 
         this.backgroundColor = backgroundColor
         _backgroundImage = null
