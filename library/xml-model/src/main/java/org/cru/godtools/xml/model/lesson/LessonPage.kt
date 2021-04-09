@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
-import org.cru.godtools.xml.R
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
 import org.cru.godtools.xml.model.ImageGravity
@@ -57,8 +56,6 @@ class LessonPage : BaseModel, Parent, Styles {
     private val _controlColor: Int?
     @get:ColorInt
     val controlColor get() = _controlColor ?: manifest.lessonControlColor
-
-    override val textSize get() = R.dimen.text_size_lesson
 
     override val content: List<Content>
 
