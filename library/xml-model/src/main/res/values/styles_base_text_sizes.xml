@@ -4,10 +4,6 @@
 
     <dimen name="text_size_category">30sp</dimen>
 
-    <!-- region Lesson text sizes -->
-    <dimen name="text_size_lesson">24sp</dimen>
-    <!-- endregion Lesson text sizes -->
-
     <!-- region Tract text sizes -->
     <dimen name="text_size_header">18sp</dimen>
     <dimen name="text_size_header_number">54sp</dimen>
