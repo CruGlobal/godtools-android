@@ -29,7 +29,7 @@ open class AnalyticsActionEvent(
     }
 
     override val snowplowPageTitle = listOfNotNull(action, label).joinToString(" : ")
-    override val snowplowContentScoringUri: Uri.Builder = super.snowplowContentScoringUri
+    override val snowplowContentScoringUri: Uri.Builder get() = super.snowplowContentScoringUri
         .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
         .appendPath(action)
 }
