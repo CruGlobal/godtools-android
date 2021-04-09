@@ -64,4 +64,14 @@ class TextTest {
         assertSame(resource, Text(manifest, endImage = "image.png").endImage)
         assertNull(Text(manifest, endImage = null).endImage)
     }
+
+    @Test
+    fun testTextScale() {
+        assertEquals(DEFAULT_TEXT_SCALE, Text(mock()).textScale, 0.001)
+        assertEquals(2.0, Text(mock(), textScale = 2.0).textScale, 0.001)
+
+        val parent: Styles = mock { on { textScale } doReturn 3.0 }
+        assertEquals(3.0, Text(parent).textScale, 0.001)
+        assertEquals(6.0, Text(parent, textScale = 2.0).textScale, 0.001)
+    }
 }
