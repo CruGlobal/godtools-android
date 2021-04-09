@@ -68,8 +68,8 @@ class Text : Content {
     private val _textColor: Int?
     @get:ColorInt
     val textColor get() = _textColor ?: defaultTextColor
-    private val _textScale: Double?
-    val textScale get() = _textScale ?: DEFAULT_TEXT_SCALE
+    private val _textScale: Double
+    val textScale get() = _textScale * stylesParent.textScale
     val textStyles: Set<Style>
 
     @VisibleForTesting
@@ -87,7 +87,7 @@ class Text : Content {
     constructor(
         parent: Base,
         text: String? = null,
-        textScale: Double? = null,
+        textScale: Double = DEFAULT_TEXT_SCALE,
         @ColorInt textColor: Int? = null,
         textAlign: Align? = null,
         textStyles: Set<Style> = emptySet(),
@@ -110,7 +110,7 @@ class Text : Content {
 
         _textAlign = Align.parseOrNull(parser.getAttributeValue(null, XML_TEXT_ALIGN))
         _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
-        _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull()
+        _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull() ?: DEFAULT_TEXT_SCALE
         textStyles = parser.getAttributeValueAsTextStylesOrNull(XML_TEXT_STYLE).orEmpty()
 
         startImageName = parser.getAttributeValue(null, XML_START_IMAGE)

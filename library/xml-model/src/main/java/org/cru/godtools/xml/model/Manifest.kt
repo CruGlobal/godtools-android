@@ -97,7 +97,7 @@ class Manifest : BaseModel, Styles {
     override val buttonStyle get() = DEFAULT_BUTTON_STYLE
     @ColorInt
     override val textColor: Int
-    private val _textScale: Double
+    override val textScale: Double
 
     @ColorInt
     private val _navBarColor: Int?
@@ -155,7 +155,7 @@ class Manifest : BaseModel, Styles {
         primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR) ?: DEFAULT_PRIMARY_COLOR
         primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR) ?: DEFAULT_PRIMARY_TEXT_COLOR
         textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR) ?: DEFAULT_TEXT_COLOR
-        _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull() ?: DEFAULT_TEXT_SCALE
+        textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull() ?: DEFAULT_TEXT_SCALE
 
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
         _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
@@ -244,7 +244,7 @@ class Manifest : BaseModel, Styles {
         this.primaryColor = primaryColor
         this.primaryTextColor = primaryTextColor
         textColor = DEFAULT_TEXT_COLOR
-        _textScale = DEFAULT_TEXT_SCALE
+        textScale = DEFAULT_TEXT_SCALE
 
         this.backgroundColor = backgroundColor
         _backgroundImage = null
