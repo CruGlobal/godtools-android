@@ -15,6 +15,7 @@ internal const val XMLNS_TRAINING = "https://mobile-content-api.cru.org/xmlns/tr
 internal const val XML_PRIMARY_COLOR = "primary-color"
 internal const val XML_PRIMARY_TEXT_COLOR = "primary-text-color"
 internal const val XML_TEXT_COLOR = "text-color"
+internal const val XML_TEXT_SCALE = "text-scale"
 internal const val XML_BACKGROUND_COLOR = "background-color"
 internal const val XML_BACKGROUND_IMAGE = "background-image"
 internal const val XML_BACKGROUND_IMAGE_GRAVITY = "background-image-align"

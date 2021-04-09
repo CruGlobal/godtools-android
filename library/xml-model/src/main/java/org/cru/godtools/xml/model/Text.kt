@@ -18,7 +18,6 @@ private const val XML_TEXT_ALIGN = "text-align"
 private const val XML_TEXT_ALIGN_START = "start"
 private const val XML_TEXT_ALIGN_CENTER = "center"
 private const val XML_TEXT_ALIGN_END = "end"
-private const val XML_TEXT_SCALE = "text-scale"
 private const val XML_TEXT_STYLE = "text-style"
 private const val XML_TEXT_STYLE_BOLD = "bold"
 private const val XML_TEXT_STYLE_ITALIC = "italic"
@@ -28,8 +27,6 @@ class Text : Content {
     companion object {
         internal const val XML_TEXT = "text"
 
-        @VisibleForTesting
-        internal const val DEFAULT_TEXT_SCALE = 1.0
         @VisibleForTesting
         @Dimension(unit = DP)
         internal const val DEFAULT_IMAGE_SIZE = 40
@@ -137,7 +134,7 @@ val Text?.text get() = this?.text
 val Text?.textAlign get() = this?.textAlign ?: Text.Align.DEFAULT
 @get:ColorInt
 val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
-val Text?.textScale get() = this?.textScale ?: Text.DEFAULT_TEXT_SCALE
+val Text?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
 @get:DimenRes
 val Text?.textSize get() = stylesParent.textSize
 

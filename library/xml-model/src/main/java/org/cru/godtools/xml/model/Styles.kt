@@ -6,6 +6,7 @@ import org.cru.godtools.xml.R
 
 @DimenRes
 private val DEFAULT_TEXT_SIZE = R.dimen.text_size_base
+internal const val DEFAULT_TEXT_SCALE = 1.0
 private val DEFAULT_TEXT_ALIGN = Text.Align.DEFAULT
 
 interface Styles : Base {
