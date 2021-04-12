@@ -8,6 +8,7 @@ import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.DEFAULT_TEXT_SCALE
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
@@ -21,12 +22,14 @@ import org.cru.godtools.xml.model.XML_LISTENERS
 import org.cru.godtools.xml.model.XML_PRIMARY_COLOR
 import org.cru.godtools.xml.model.XML_PRIMARY_TEXT_COLOR
 import org.cru.godtools.xml.model.XML_TEXT_COLOR
+import org.cru.godtools.xml.model.XML_TEXT_SCALE
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
 import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
 import org.cru.godtools.xml.model.primaryColor
 import org.cru.godtools.xml.model.primaryTextColor
 import org.cru.godtools.xml.model.textColor
+import org.cru.godtools.xml.model.textScale
 import org.xmlpull.v1.XmlPullParser
 
 @ColorInt
@@ -75,6 +78,8 @@ class TractPage : BaseModel, Styles {
     private val _textColor: Int?
     @get:ColorInt
     override val textColor get() = _textColor ?: stylesParent.textColor
+    private val _textScale: Double
+    override val textScale get() = _textScale * stylesParent.textScale
 
     @ColorInt
     private val _cardTextColor: Int?
@@ -92,6 +97,7 @@ class TractPage : BaseModel, Styles {
         position: Int = 0,
         fileName: String? = null,
         @ColorInt primaryColor: Int? = null,
+        textScale: Double = DEFAULT_TEXT_SCALE,
         cardBackgroundColor: Int? = null,
         cards: ((TractPage) -> List<Card>?)? = null,
         callToAction: ((TractPage) -> CallToAction?)? = null
@@ -103,14 +109,17 @@ class TractPage : BaseModel, Styles {
 
         _primaryColor = primaryColor
         _primaryTextColor = null
-        _textColor = null
-        _cardTextColor = null
 
         backgroundColor = DEFAULT_BACKGROUND_COLOR
         _backgroundImage = null
         backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
         backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        _textColor = null
+        _textScale = textScale
+
         _cardBackgroundColor = cardBackgroundColor
+        _cardTextColor = null
 
         header = null
         hero = null
@@ -134,8 +143,6 @@ class TractPage : BaseModel, Styles {
         listeners = parseEvents(parser, XML_LISTENERS)
         _primaryColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_COLOR)
         _primaryTextColor = parser.getAttributeValueAsColorOrNull(XML_PRIMARY_TEXT_COLOR)
-        _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
-        _cardTextColor = parser.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
 
         backgroundColor = parser.getAttributeValueAsColorOrNull(XML_BACKGROUND_COLOR) ?: DEFAULT_BACKGROUND_COLOR
         _backgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE)
@@ -144,7 +151,11 @@ class TractPage : BaseModel, Styles {
         backgroundImageScaleType = parser.getAttributeValueAsImageScaleTypeOrNull(XML_BACKGROUND_IMAGE_SCALE_TYPE)
             ?: DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
 
+        _textColor = parser.getAttributeValueAsColorOrNull(XML_TEXT_COLOR)
+        _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull() ?: DEFAULT_TEXT_SCALE
+
         _cardBackgroundColor = parser.getAttributeValueAsColorOrNull(XML_CARD_BACKGROUND_COLOR)
+        _cardTextColor = parser.getAttributeValueAsColorOrNull(XML_CARD_TEXT_COLOR)
 
         // process any child elements
         var header: Header? = null

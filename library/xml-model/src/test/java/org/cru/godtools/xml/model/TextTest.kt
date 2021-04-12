@@ -24,7 +24,7 @@ class TextTest {
         val text = Text(manifest, getXmlParserForResource("text_defaults.xml"))
 
         assertEquals("Text Defaults", text.text)
-        assertEquals(Text.DEFAULT_TEXT_SCALE, text.textScale, 0.001)
+        assertEquals(DEFAULT_TEXT_SCALE * text.stylesParent.textScale, text.textScale, 0.001)
         assertEquals(Manifest.DEFAULT_TEXT_COLOR, text.textColor)
         assertEquals(Text.Align.DEFAULT, text.textAlign)
         assertEquals(Text.DEFAULT_IMAGE_SIZE, text.startImageSize)
@@ -63,5 +63,15 @@ class TextTest {
         val manifest = spy(Manifest()) { on { getResource("image.png") } doReturn resource }
         assertSame(resource, Text(manifest, endImage = "image.png").endImage)
         assertNull(Text(manifest, endImage = null).endImage)
+    }
+
+    @Test
+    fun testTextScale() {
+        assertEquals(DEFAULT_TEXT_SCALE, Text(mock()).textScale, 0.001)
+        assertEquals(2.0, Text(mock(), textScale = 2.0).textScale, 0.001)
+
+        val parent: Styles = mock { on { textScale } doReturn 3.0 }
+        assertEquals(3.0, Text(parent).textScale, 0.001)
+        assertEquals(6.0, Text(parent, textScale = 2.0).textScale, 0.001)
     }
 }

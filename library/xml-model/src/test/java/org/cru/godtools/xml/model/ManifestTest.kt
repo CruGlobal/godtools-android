@@ -28,10 +28,11 @@ class ManifestTest {
 @RunWith(AndroidJUnit4::class)
 class ManifestParsingRobolectricTest {
     @Test
-    fun testParseEmptyManifest() {
+    fun `parseManifest - Empty Manifest`() {
         val manifest = parseManifest("manifest_empty.xml")
         assertNull(manifest.title)
         assertEquals(DEFAULT_LESSON_CONTROL_COLOR, manifest.lessonControlColor)
+        assertEquals(DEFAULT_TEXT_SCALE, manifest.textScale, 0.0001)
         assertEquals(0, manifest.aemImports.size)
         assertThat(manifest.lessonPages, `is`(empty()))
         assertThat(manifest.tractPages, `is`(empty()))
@@ -40,7 +41,7 @@ class ManifestParsingRobolectricTest {
     }
 
     @Test
-    fun testParseManifestLesson() {
+    fun `parseManifest - Lesson Manifest`() {
         val manifest = parseManifest("manifest_lesson.xml")
         assertEquals("title", manifest.title)
         assertEquals(Manifest.Type.LESSON, manifest.type)
@@ -52,9 +53,10 @@ class ManifestParsingRobolectricTest {
     }
 
     @Test
-    fun testParseManifestTract() {
+    fun `parseManifest - Tract Manifest`() {
         val manifest = parseManifest("manifest_tract.xml")
         assertEquals("title", manifest.title)
+        assertEquals(1.2345, manifest.textScale, 0.00001)
         assertEquals(Manifest.Type.TRACT, manifest.type)
         assertThat(manifest.lessonPages, `is`(empty()))
         assertEquals(2, manifest.tractPages.size)
@@ -65,7 +67,7 @@ class ManifestParsingRobolectricTest {
     }
 
     @Test
-    fun testParseManifestWithTips() {
+    fun `parseManifest - Manifest Containing Tips`() {
         val manifest = parseManifest("manifest_tips.xml")
         assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)
@@ -74,7 +76,7 @@ class ManifestParsingRobolectricTest {
     }
 
     @Test
-    fun testParseManifestWithInvalidTips() {
+    fun `parseManifest - Manifest With Invalid Tips`() {
         val manifest = parseManifest("manifest_tips_invalid.xml")
         assertEquals(0, manifest.tractPages.size)
         assertEquals(0, manifest.resources.size)

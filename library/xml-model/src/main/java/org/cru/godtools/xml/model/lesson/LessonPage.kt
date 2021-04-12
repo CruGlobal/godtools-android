@@ -2,12 +2,14 @@ package org.cru.godtools.xml.model.lesson
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.DEFAULT_TEXT_SCALE
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
@@ -19,10 +21,12 @@ import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE
 import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_GRAVITY
 import org.cru.godtools.xml.model.XML_BACKGROUND_IMAGE_SCALE_TYPE
 import org.cru.godtools.xml.model.XML_LISTENERS
+import org.cru.godtools.xml.model.XML_TEXT_SCALE
 import org.cru.godtools.xml.model.getAttributeValueAsColorOrNull
 import org.cru.godtools.xml.model.getAttributeValueAsImageGravity
 import org.cru.godtools.xml.model.getAttributeValueAsImageScaleTypeOrNull
 import org.cru.godtools.xml.model.parseContent
+import org.cru.godtools.xml.model.textScale
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_PAGE = "page"
@@ -57,6 +61,9 @@ class LessonPage : BaseModel, Parent, Styles {
     @get:ColorInt
     val controlColor get() = _controlColor ?: manifest.lessonControlColor
 
+    private val _textScale: Double
+    override val textScale get() = _textScale * stylesParent.textScale
+
     override val content: List<Content>
 
     @WorkerThread
@@ -83,6 +90,8 @@ class LessonPage : BaseModel, Parent, Styles {
 
         _controlColor = parser.getAttributeValueAsColorOrNull(XML_CONTROL_COLOR)
 
+        _textScale = parser.getAttributeValue(null, XML_TEXT_SCALE)?.toDoubleOrNull() ?: DEFAULT_TEXT_SCALE
+
         val content = mutableListOf<Content>()
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) continue
@@ -96,6 +105,31 @@ class LessonPage : BaseModel, Parent, Styles {
             }
         }
         this.content = content
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    internal constructor(
+        manifest: Manifest,
+        position: Int = 0,
+        fileName: String? = null,
+        textScale: Double = DEFAULT_TEXT_SCALE
+    ) : super(manifest) {
+        this.fileName = fileName
+        this.position = position
+
+        isHidden = false
+        listeners = emptySet()
+
+        backgroundColor = DEFAULT_BACKGROUND_COLOR
+        _backgroundImage = null
+        backgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY
+        backgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE
+
+        _controlColor = null
+
+        _textScale = textScale
+
+        content = emptyList()
     }
 }
 

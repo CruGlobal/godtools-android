@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest xmlns="https://mobile-content-api.cru.org/xmlns/manifest"
-    xmlns:content="https://mobile-content-api.cru.org/xmlns/content">
+    xmlns:content="https://mobile-content-api.cru.org/xmlns/content" text-scale="1.2345">
     <title>
         <content:text>title</content:text>
     </title>

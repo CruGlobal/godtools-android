@@ -1,6 +1,6 @@
 <page xmlns:content="https://mobile-content-api.cru.org/xmlns/content" background-color="rgba(255,0,0,1)"
     background-image="background.png" background-image-align="top end" background-image-scale-type="fit"
-    control-color="rgba(0,255,0,1)" listeners="lesson_page_event1"
+    control-color="rgba(0,255,0,1)" listeners="lesson_page_event1" text-scale="1.2345"
     xmlns="https://mobile-content-api.cru.org/xmlns/lesson">
     <content>
         <content:text />
