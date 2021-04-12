@@ -128,9 +128,6 @@ class Text : Content {
 @get:ColorInt
 val Text?.defaultTextColor get() = stylesParent.textColor
 
-@Deprecated("Use null-safe accessor directly", ReplaceWith("this?.text"))
-val Text?.text get() = this?.text
-
 val Text?.textAlign get() = this?.textAlign ?: Text.Align.DEFAULT
 @get:ColorInt
 val Text?.textColor get() = this?.textColor ?: stylesParent.textColor
