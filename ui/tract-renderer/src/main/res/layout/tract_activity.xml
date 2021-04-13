@@ -53,7 +53,8 @@
                 android:cropToPadding="false"
                 app:gravity="@{ManifestKt.getBackgroundImageGravity(manifest)}"
                 app:picassoFile="@{manifest.backgroundImage}"
-                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}" />
+                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}"
+                app:visibleIf="@{manifest.backgroundImage != null}" />
 
             <org.cru.godtools.tract.widget.HackyRtlViewPager
                 android:id="@+id/pages"

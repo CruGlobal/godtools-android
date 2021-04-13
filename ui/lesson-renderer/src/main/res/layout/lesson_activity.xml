@@ -46,7 +46,8 @@
                 android:cropToPadding="false"
                 app:gravity="@{ManifestKt.getBackgroundImageGravity(manifest)}"
                 app:picassoFile="@{manifest.backgroundImage}"
-                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}" />
+                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}"
+                app:visibleIf="@{manifest.backgroundImage != null}" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pages"

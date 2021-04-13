@@ -21,7 +21,7 @@ interface ScaledPicassoImageView : PicassoImageView {
     class ScaleHelper(view: ImageView, attrs: AttributeSet?, @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int) :
         PicassoImageView.Helper(view, attrs, defStyleAttr, defStyleRes) {
 
-        var scaleType = ImageScaleType.FIT
+        var scaleType: ImageScaleType? = null
             set(value) {
                 val changed = value != field
                 field = value
@@ -43,12 +43,11 @@ interface ScaledPicassoImageView : PicassoImageView {
         init {
             view.context.withStyledAttributes(attrs, R.styleable.ScaledPicassoImageView, defStyleAttr, defStyleRes) {
                 scaleType = ImageScaleType.values().getOrNull(getInt(R.styleable.ScaledPicassoImageView_scaleType, -1))
-                    ?: scaleType
             }
         }
 
         override fun onSetUpdateScale(update: RequestCreator, size: Dimension) {
-            when (scaleType) {
+            when (val scaleType = scaleType) {
                 ImageScaleType.FILL, ImageScaleType.FILL_X, ImageScaleType.FILL_Y -> {
                     if (size.width > 0 && scaleType == ImageScaleType.FILL_X) {
                         update.resize(size.width, 0).onlyScaleDown()
@@ -60,15 +59,14 @@ interface ScaledPicassoImageView : PicassoImageView {
 
                     // crop with gravity
                     update.transform(
-                        ScaledCropTransformation(
-                            size.width, size.height, scaleType, gravityHorizontal, gravityVertical
-                        )
+                        ScaledCropTransformation(size.width, size.height, scaleType, gravityHorizontal, gravityVertical)
                     )
                 }
                 ImageScaleType.FIT -> {
                     update.resize(size.width, size.height).onlyScaleDown()
                     update.centerInside()
                 }
+                else -> super.onSetUpdateScale(update, size)
             }
         }
 
@@ -78,6 +76,7 @@ interface ScaledPicassoImageView : PicassoImageView {
 
         private fun updateImageMatrix() {
             if (mView.scaleType != ImageView.ScaleType.MATRIX) return
+            val scaleType = scaleType ?: return
             val drawable = mView.drawable ?: return
 
             val dwidth = drawable.intrinsicWidth.toFloat()
@@ -113,7 +112,7 @@ interface ScaledPicassoImageView : PicassoImageView {
     }
 
     fun setImageDrawable(drawable: Drawable?)
-    var scaleType: ImageScaleType
+    var scaleType: ImageScaleType?
     fun setGravityHorizontal(gravity: GravityHorizontal)
     fun setGravityVertical(gravity: GravityVertical)
 }

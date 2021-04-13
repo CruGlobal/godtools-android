@@ -14,27 +14,29 @@ import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Resource
 import org.cru.godtools.xml.model.layoutDirection
 
-@BindingAdapter("picassoFile")
+private const val PICASSO_FILE = "picassoFile"
+
+@BindingAdapter(PICASSO_FILE)
 internal fun SimplePicassoImageView.setPicassoFile(resource: Resource?) = setPicassoResource(resource)
 
-@BindingAdapter("picassoFile", "scaleType", "gravity", requireAll = false)
+@BindingAdapter(PICASSO_FILE, "scaleType", "gravity")
 internal fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
     scaleType: ImageScaleType?,
     gravity: Int?
-) = bindScaledResource(
-    resource, scaleType ?: ImageScaleType.FIT, gravity?.let { ImageGravity(it) } ?: ImageGravity.CENTER
-)
+) = bindScaledResource(resource, scaleType, gravity?.let { ImageGravity(it) } ?: ImageGravity.CENTER)
+
+private fun PicassoImageView.setPicassoResource(resource: Resource?) =
+    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
 
 private fun ScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
-    scale: ImageScaleType = scaleType,
-    gravity: ImageGravity?
+    scaleType: ImageScaleType? = this.scaleType,
+    gravity: ImageGravity? = null
 ) {
     toggleBatchUpdates(true)
-    asImageView().visibility = if (resource != null) View.VISIBLE else View.GONE
     setPicassoResource(resource)
-    scaleType = scale
+    this.scaleType = scaleType
     gravity?.let {
         val ltr = resource.layoutDirection != View.LAYOUT_DIRECTION_RTL
         setGravityHorizontal(
@@ -54,6 +56,3 @@ private fun ScaledPicassoImageView.bindScaledResource(
     }
     toggleBatchUpdates(false)
 }
-
-private fun PicassoImageView.setPicassoResource(resource: Resource?) =
-    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
