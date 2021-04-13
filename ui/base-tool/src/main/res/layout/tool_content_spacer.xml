@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Space xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="org.cru.godtools.xml.model.Spacer.Mode" />
+        <import type="org.ccci.gto.android.common.util.DimensionUtils" />
+
+        <variable name="model" type="org.cru.godtools.xml.model.Spacer" />
+    </data>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@{model.mode == Mode.FIXED ? DimensionUtils.dpToPixelSize(model.height, context) : 0, default=`0dp`}"
+        android:layout_weight="@{model.mode == Mode.AUTO ? 1 : 0, default=0}" />
+</layout>
