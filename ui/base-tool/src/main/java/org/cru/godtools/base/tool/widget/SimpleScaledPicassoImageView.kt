@@ -7,7 +7,6 @@ import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView.ScaleHelper
-import org.cru.godtools.xml.model.ImageScaleType
 
 class SimpleScaledPicassoImageView @JvmOverloads constructor(
     context: Context,
@@ -17,9 +16,11 @@ class SimpleScaledPicassoImageView @JvmOverloads constructor(
 ) : SimplePicassoImageView(context, attrs, defStyleAttr), ScaledPicassoImageView {
     override val helper = ScaleHelper(this, attrs, defStyleAttr, defStyleRes)
 
-    override fun setScaleType(type: ImageScaleType) {
-        helper.scaleType = type
-    }
+    override var scaleType
+        get() = helper.scaleType
+        set(value) {
+            helper.scaleType = value
+        }
 
     override fun setGravityHorizontal(gravity: GravityHorizontal) {
         helper.gravityHorizontal = gravity

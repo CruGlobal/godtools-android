@@ -113,7 +113,7 @@ interface ScaledPicassoImageView : PicassoImageView {
     }
 
     fun setImageDrawable(drawable: Drawable?)
-    fun setScaleType(type: ImageScaleType)
+    var scaleType: ImageScaleType
     fun setGravityHorizontal(gravity: GravityHorizontal)
     fun setGravityVertical(gravity: GravityVertical)
 }
