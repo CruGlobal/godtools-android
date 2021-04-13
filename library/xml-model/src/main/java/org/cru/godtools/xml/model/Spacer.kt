@@ -1,5 +1,6 @@
 package org.cru.godtools.xml.model
 
+import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
 import org.xmlpull.v1.XmlPullParser
@@ -39,5 +40,11 @@ class Spacer : Content {
         height = parser.getAttributeValue(null, XML_HEIGHT)?.toIntOrNull()?.coerceAtLeast(0) ?: 0
 
         parser.skipTag()
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(parent: Base, mode: Mode = Mode.AUTO, height: Int = 0) : super(parent) {
+        this.mode = mode
+        this.height = height
     }
 }
