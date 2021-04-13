@@ -1,4 +1,4 @@
-package org.cru.godtools.databinding
+package org.cru.godtools.base.ui.databinding
 
 import android.view.View
 import androidx.databinding.BindingAdapter
