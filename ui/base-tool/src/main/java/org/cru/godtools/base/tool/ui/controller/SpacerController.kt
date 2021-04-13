@@ -18,4 +18,9 @@ class SpacerController private constructor(
 
     @AssistedFactory
     interface Factory : BaseController.Factory<SpacerController>
+
+    override fun onBind() {
+        super.onBind()
+        binding.model = model
+    }
 }
