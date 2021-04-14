@@ -110,7 +110,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/content_scroll_view"
                     app:picassoFile="@{model.backgroundImage}"
-                    app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}" />
+                    app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}"
+                    app:visibleIf="@{model.backgroundImage != null}" />
 
                 <org.ccci.gto.android.common.widget.HackyNestedScrollView
                     android:id="@+id/content_scroll_view"

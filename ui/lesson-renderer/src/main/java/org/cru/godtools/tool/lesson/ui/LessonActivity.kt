@@ -84,6 +84,7 @@ class LessonActivity :
 
     private fun LessonActivityBinding.setupPages() {
         pages.adapter = lessonPageAdapter
+        pages.offscreenPageLimit = 1
         dataModel.pages.observe(this@LessonActivity) { lessonPages ->
             pages.whileMaintainingVisibleCurrentItem { lessonPageAdapter.pages = lessonPages }
         }
