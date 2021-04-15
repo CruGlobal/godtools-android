@@ -120,10 +120,9 @@ jobs:
           echo firebaseAppDistributionKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
       - name: Build App
         run: ./gradlew clean :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
-      - name: Decrypt Firebase API Key
+      - name: Import Firebase API Key
         env:
-          FIREBASE_API_KEY_KEY: ${{ secrets.FIREBASE_API_KEY_KEY }}
-          FIREBASE_API_KEY_IV: ${{ secrets.FIREBASE_API_KEY_IV }}
-        run: openssl aes-256-cbc -K $FIREBASE_API_KEY_KEY -iv $FIREBASE_API_KEY_IV -in firebase/firebase_api_key.json.enc -out firebase/firebase_api_key.json -d
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+        run: echo $FIREBASE_API_KEY > firebase/firebase_api_key.json
       - name: Upload Build to Firebase
         run: ./gradlew appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --parallel
