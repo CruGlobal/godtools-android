@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import com.squareup.picasso.Picasso
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -17,6 +18,7 @@ import org.ccci.gto.android.common.androidx.work.TimberLogger
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.service.AccountListRegistrationService
 
 @Module(
@@ -34,6 +36,11 @@ abstract class ServicesModule {
 
     @Binds
     @IntoSet
+    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN, on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED)
+    abstract fun eagerPicasso(picasso: Picasso): Any
+
+    @Binds
+    @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
     abstract fun eagerWorkManager(workManager: WorkManager): Any
 
@@ -45,5 +52,11 @@ abstract class ServicesModule {
             TimberLogger(Log.ERROR).install()
             return WorkManager.getInstance(context)
         }
+
+        @Provides
+        @Singleton
+        fun picasso(@ApplicationContext context: Context) = Picasso.Builder(context)
+            .loggingEnabled(BuildConfig.DEBUG)
+            .build().also { Picasso.setSingletonInstance(it) }
     }
 }
