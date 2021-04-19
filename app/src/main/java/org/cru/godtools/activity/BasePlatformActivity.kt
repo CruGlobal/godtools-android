@@ -26,6 +26,7 @@ import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -119,26 +120,21 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     protected open fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) = Unit
 
     @CallSuper
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home ->
-                drawerLayout
-                    ?.takeIf { drawerToggle?.isDrawerIndicatorEnabled ?: false }
-                    ?.apply {
-                        // handle drawer navigation toggle
-                        when {
-                            isDrawerVisible(GravityCompat.START) -> closeDrawer(GravityCompat.START)
-                            else -> openDrawer(GravityCompat.START)
-                        }
-                        return true
-                    }
-            R.id.action_switch_language -> {
-                startLanguageSettingsActivity()
-                return true
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            val layout = drawerLayout?.takeIf { drawerToggle?.isDrawerIndicatorEnabled == true }
+            if (layout != null) {
+                layout.toggleDrawer(GravityCompat.START)
+                true
+            } else {
+                super.onOptionsItemSelected(item)
             }
         }
-
-        return super.onOptionsItemSelected(item)
+        R.id.action_switch_language -> {
+            startLanguageSettingsActivity()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     @CallSuper

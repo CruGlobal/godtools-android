@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.databinding
+package org.cru.godtools.base.tool.databinding
 
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView

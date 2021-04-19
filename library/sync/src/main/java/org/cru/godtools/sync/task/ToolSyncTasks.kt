@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.annotation.AnyThread
 import androidx.collection.SimpleArrayMap
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_OK
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +55,7 @@ class ToolSyncTasks @Inject internal constructor(
 
             // fetch tools from the API, short-circuit if this response is invalid
             val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
-                .takeIf { it.code() == 200 }?.body() ?: return@withContext false
+                .takeIf { it.code() == HTTP_OK }?.body() ?: return@withContext false
 
             // store fetched tools
             val events = SimpleArrayMap<Class<*>, Any>()

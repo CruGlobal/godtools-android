@@ -36,9 +36,7 @@ inline class ImageGravity(internal val gravity: Int) {
 
         internal val NONE = ImageGravity(0)
 
-        internal fun parse(raw: String?, defaultGravity: ImageGravity = CENTER): ImageGravity {
-            if (raw == null) return defaultGravity
-
+        internal fun parse(raw: String?, defaultGravity: ImageGravity = CENTER) = raw?.let {
             try {
                 var gravity = defaultGravity.gravity
                 var seenX = false
@@ -72,12 +70,12 @@ inline class ImageGravity(internal val gravity: Int) {
                     }
                 }
 
-                return ImageGravity(gravity)
+                ImageGravity(gravity)
             } catch (e: IllegalArgumentException) {
                 Timber.tag("ImageGravity").e(e, "error parsing ImageGravity")
-                return defaultGravity
+                null
             }
-        }
+        } ?: defaultGravity
     }
 }
 

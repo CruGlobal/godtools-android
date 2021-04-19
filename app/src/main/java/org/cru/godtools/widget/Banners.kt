@@ -1,4 +1,3 @@
-@file:JvmName("Banners")
 package org.cru.godtools.widget
 
 import android.view.View
@@ -61,20 +60,19 @@ private fun Banner.updateUi(
     }
 }
 
-private var Banner.state: BannerState
-    get() = getTag(R.id.banner_state) as? BannerState ?: BannerState(this).also { state = it }
-    set(value) = setTag(R.id.banner_state, value)
+private val Banner.state
+    get() = getTag(R.id.banner_state) as? BannerState ?: BannerState(this).also { setTag(R.id.banner_state, it) }
 
 private class BannerState(private val banner: Banner) {
-    internal var animate: Boolean = true
+    var animate: Boolean = true
 
-    internal var type: BannerType? = null
+    var type: BannerType? = null
         set(value) {
             field = value
             updateDisplayedBanner()
         }
-    internal var primaryCallback: BannerInterface.OnClickListener? = null
-    internal var secondaryCallback: BannerInterface.OnClickListener? = null
+    var primaryCallback: BannerInterface.OnClickListener? = null
+    var secondaryCallback: BannerInterface.OnClickListener? = null
 
     private var visibleType: BannerType? = null
         set(value) {

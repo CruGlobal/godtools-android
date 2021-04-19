@@ -49,7 +49,7 @@ class CardController private constructor(
     override val lifecycleOwner =
         pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.STARTED) }
 
-    private val callbacks: Callbacks? = pageController
+    private val callbacks: Callbacks = pageController
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {
@@ -85,8 +85,8 @@ class CardController private constructor(
         if (model?.dismissListeners?.contains(event.id) == true) dismissCard()
     }
 
-    fun toggleCard() = callbacks?.onToggleCard(this)
-    fun nextCard() = callbacks?.onNextCard()
-    fun previousCard() = callbacks?.onPreviousCard()
-    private fun dismissCard() = callbacks?.onDismissCard(this)
+    fun toggleCard() = callbacks.onToggleCard(this)
+    fun nextCard() = callbacks.onNextCard()
+    fun previousCard() = callbacks.onPreviousCard()
+    private fun dismissCard() = callbacks.onDismissCard(this)
 }

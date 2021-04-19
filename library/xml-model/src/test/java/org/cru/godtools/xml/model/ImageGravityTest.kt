@@ -8,7 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ImageGravityTest {
-    val none = ImageGravity(0)
+    private val none = ImageGravity(0)
 
     @Test
     fun verifyParse() {
