@@ -6,7 +6,7 @@
         <variable name="model" type="org.cru.godtools.xml.model.Image" />
     </data>
 
-    <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+    <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
@@ -14,6 +14,5 @@
         android:adjustViewBounds="true"
         android:onClick="@{() -> controller.sendEvents(model.events)}"
         android:scaleType="centerCrop"
-        app:picassoFile="@{model.resource}"
-        app:scaleType="fill_x" />
+        app:picassoFile="@{model.resource}" />
 </layout>
