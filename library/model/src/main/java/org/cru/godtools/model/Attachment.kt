@@ -33,4 +33,5 @@ class Attachment : Base() {
         }
 
     suspend fun getFile(manager: FileManager) = localFilename?.let { manager.getFile(it) }
+    fun getFileBlocking(manager: FileManager) = localFilename?.let { manager.getFileBlocking(it) }
 }
