@@ -13,7 +13,7 @@ import org.cru.godtools.base.ui.R
 
 // region recueVideo()
 @BindingAdapter("recue")
-fun YouTubePlayerView.recueVideo(recue: Boolean) {
+internal fun YouTubePlayerView.recueVideo(recue: Boolean) {
     recueListener.enabled = recue
 }
 
@@ -42,10 +42,10 @@ internal class RecueYouTubePlayerListener : AbstractYouTubePlayerListener() {
 
 // region updateVideo()
 @BindingAdapter("videoId")
-fun YouTubePlayerView.updateVideo(videoId: String?) = updateVideo(videoId, false)
+internal fun YouTubePlayerView.updateVideo(videoId: String?) = updateVideo(videoId, false)
 
 @BindingAdapter("videoId", "autoPlay")
-fun YouTubePlayerView.updateVideo(videoId: String?, autoPlay: Boolean) {
+internal fun YouTubePlayerView.updateVideo(videoId: String?, autoPlay: Boolean) {
     getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
         override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
             when {
