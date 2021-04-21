@@ -11,6 +11,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import org.cru.godtools.base.ui.R
 
+@BindingAdapter("pauseVideoWhen")
+internal fun YouTubePlayerView.pauseVideoWhen(pause: Boolean) {
+    if (!pause) return
+    getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+        override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) = youTubePlayer.pause()
+    })
+}
+
 // region recueVideo()
 @BindingAdapter("recue")
 internal fun YouTubePlayerView.recueVideo(recue: Boolean) {
