@@ -20,6 +20,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import com.squareup.picasso.Picasso
 import java.util.EnumSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
@@ -61,6 +62,7 @@ class GodToolsShortcutManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fileManager: ToolFileManager
+    private lateinit var picasso: Picasso
     private lateinit var settings: Settings
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
     private val ioDispatcher = TestCoroutineDispatcher()
@@ -88,10 +90,11 @@ class GodToolsShortcutManagerTest {
         dao = mock()
         eventBus = mock()
         fileManager = mock()
+        picasso = mock()
         settings = mock()
 
         shortcutManager =
-            GodToolsShortcutManager(app, dao, eventBus, fileManager, settings, coroutineScope, ioDispatcher)
+            GodToolsShortcutManager(app, dao, eventBus, fileManager, picasso, settings, coroutineScope, ioDispatcher)
     }
 
     @After
