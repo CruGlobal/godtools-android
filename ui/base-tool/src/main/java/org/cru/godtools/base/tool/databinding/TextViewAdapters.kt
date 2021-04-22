@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableEndTarget
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
+import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.model.view.bindTo
 import org.cru.godtools.base.toolFileManager
 import org.cru.godtools.xml.model.Resource
@@ -19,7 +20,7 @@ fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextCo
 fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: Int) {
     val target = TextViewDrawableStartTarget.of(this)
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
-    val imageSize = (drawableStartSize * resources.displayMetrics.density).toInt()
+    val imageSize = dpToPixelSize(drawableStartSize, resources)
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
@@ -35,7 +36,7 @@ fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: I
 fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) {
     val target = TextViewDrawableEndTarget.of(this)
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
-    val imageSize = (drawableEndSize * resources.displayMetrics.density).toInt()
+    val imageSize = dpToPixelSize(drawableEndSize, resources)
     if (file != null) {
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
