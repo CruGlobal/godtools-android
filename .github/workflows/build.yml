@@ -28,10 +28,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-gradle-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-
       - name: Run Static Analysis
         run: ./gradlew assemble check -x test --continue --stacktrace --parallel
       - name: Archive ktlint results
@@ -65,18 +64,16 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-gradle-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-
       - name: Cache Maven
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-maven-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ github.ref }}-
-            ${{ runner.os }}-maven-refs/heads/${{ github.base_ref }}-
+            ${{ runner.os }}-maven-
       - name: Run Unit Tests
         run: ./gradlew test jacocoTestReport --continue --stacktrace --parallel
       - name: Codecov
@@ -107,10 +104,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-gradle-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ github.ref }}-
-            ${{ runner.os }}-gradle-refs/heads/${{ github.base_ref }}-
+            ${{ runner.os }}-gradle-
       - name: Configure QA Keystore
         env:
           BETA_KEYSTORE_PASSWORD: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
