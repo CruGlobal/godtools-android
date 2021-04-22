@@ -75,16 +75,16 @@ interface ScaledPicassoImageView : PicassoImageView {
         }
 
         private fun updateImageMatrix() {
-            if (mView.scaleType != ImageView.ScaleType.MATRIX) return
+            if (imageView.scaleType != ImageView.ScaleType.MATRIX) return
             val scaleType = scaleType ?: return
-            val drawable = mView.drawable ?: return
+            val drawable = imageView.drawable ?: return
 
             val dwidth = drawable.intrinsicWidth.toFloat()
             val dheight = drawable.intrinsicHeight.toFloat()
-            val vwidth = mView.run { width - paddingLeft - paddingRight }.toFloat()
-            val vheight = mView.run { height - paddingTop - paddingBottom }.toFloat()
+            val vwidth = imageView.run { width - paddingLeft - paddingRight }.toFloat()
+            val vheight = imageView.run { height - paddingTop - paddingBottom }.toFloat()
 
-            mView.imageMatrix = Matrix().apply {
+            imageView.imageMatrix = Matrix().apply {
                 val widthScale = vwidth / dwidth
                 val heightScale = vheight / dheight
                 val scale = when (scaleType) {

@@ -1,12 +1,12 @@
 package org.cru.godtools.base.tool.databinding
 
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-import org.cru.godtools.base.tool.widget.ScaledPicassoImageView
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
 import org.cru.godtools.base.toolFileManager
 import org.cru.godtools.xml.model.ImageGravity
@@ -26,10 +26,7 @@ internal fun SimpleScaledPicassoImageView.bindScaledResource(
     gravity: Int?
 ) = bindScaledResource(resource, scaleType, gravity?.let { ImageGravity(it) } ?: ImageGravity.CENTER)
 
-private fun PicassoImageView.setPicassoResource(resource: Resource?) =
-    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
-
-private fun ScaledPicassoImageView.bindScaledResource(
+private fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
     scaleType: ImageScaleType? = this.scaleType,
     gravity: ImageGravity? = null
@@ -56,3 +53,6 @@ private fun ScaledPicassoImageView.bindScaledResource(
     }
     toggleBatchUpdates(false)
 }
+
+private fun <T> T.setPicassoResource(resource: Resource?) where T : ImageView, T : PicassoImageView =
+    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
