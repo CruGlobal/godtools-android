@@ -47,16 +47,16 @@ abstract class ServicesModule {
     companion object {
         @Provides
         @Singleton
+        fun picasso(@ApplicationContext context: Context) = Picasso.Builder(context)
+            .loggingEnabled(BuildConfig.DEBUG)
+            .build().also { Picasso.setSingletonInstance(it) }
+
+        @Provides
+        @Singleton
         fun workManager(@ApplicationContext context: Context, workerFactory: HiltWorkerFactory): WorkManager {
             WorkManager.initialize(context, Configuration.Builder().setWorkerFactory(workerFactory).build())
             TimberLogger(Log.ERROR).install()
             return WorkManager.getInstance(context)
         }
-
-        @Provides
-        @Singleton
-        fun picasso(@ApplicationContext context: Context) = Picasso.Builder(context)
-            .loggingEnabled(BuildConfig.DEBUG)
-            .build().also { Picasso.setSingletonInstance(it) }
     }
 }
