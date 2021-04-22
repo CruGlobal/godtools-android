@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
+import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
@@ -18,8 +19,13 @@ import org.cru.godtools.base.tool.picasso.transformation.ScaledCropTransformatio
 import org.cru.godtools.xml.model.ImageScaleType
 
 interface ScaledPicassoImageView : PicassoImageView {
-    class ScaleHelper(view: ImageView, attrs: AttributeSet?, @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int) :
-        PicassoImageView.Helper(view, attrs, defStyleAttr, defStyleRes) {
+    class ScaleHelper(
+        view: ImageView,
+        attrs: AttributeSet?,
+        @AttrRes defStyleAttr: Int,
+        @StyleRes defStyleRes: Int,
+        picasso: Picasso
+    ) : PicassoImageView.Helper(view, attrs, defStyleAttr, defStyleRes, picasso) {
 
         var scaleType: ImageScaleType? = null
             set(value) {
