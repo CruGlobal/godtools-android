@@ -2,12 +2,13 @@ package org.cru.godtools.tract.databinding
 
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
-import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
+import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tips.Tip
@@ -21,11 +22,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
+import org.robolectric.annotation.Config
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Config(application = HiltTestApplication::class)
 class TractContentCardBindingTest {
     @get:Rule
-    val picassoSingletonRule = PicassoSingletonRule()
+    var hiltRule = HiltAndroidRule(this)
 
     private lateinit var binding: TractContentCardBinding
 
@@ -36,10 +40,9 @@ class TractContentCardBindingTest {
 
     @Before
     fun setup() {
-        val activity = Robolectric.buildActivity(AppCompatActivity::class.java).get()
-        val context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
+        val activity = Robolectric.buildActivity(HiltTestActivity::class.java).get()
 
-        binding = TractContentCardBinding.inflate(LayoutInflater.from(context), null, false)
+        binding = TractContentCardBinding.inflate(LayoutInflater.from(activity), null, false)
 
         tip = Tip(id = "tip")
         page = TractPage(Manifest(), cards = { listOf(spy(Card(it))) }, callToAction = { spy(CallToAction(it)) })

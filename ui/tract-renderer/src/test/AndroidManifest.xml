@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.tract">
+
+    <application>
+        <activity
+            android:name="org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity"
+            android:theme="@style/Theme.GodTools.Tract.Activity.Tract" />
+    </application>
+</manifest>
