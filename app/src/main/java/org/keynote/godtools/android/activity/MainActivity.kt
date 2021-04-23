@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.transition.MaterialFadeThrough
@@ -49,8 +50,10 @@ class MainActivity :
         triggerOnboardingIfNecessary()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu)
-        .also { menuInflater.inflate(R.menu.activity_main, menu) }
+    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
+        menuInflater.inflate(R.menu.activity_main, menu)
+        menu.observeSelectedPageChanges()
+    }
 
     override fun onBindingChanged() {
         super.onBindingChanged()
@@ -106,6 +109,14 @@ class MainActivity :
             setPrimaryNavigationFragment(fragment)
         }
         savedState.selectedPage = page
+    }
+
+    private var selectedPageMenuObserver: Observer<Page>? = null
+    private fun Menu.observeSelectedPageChanges() {
+        selectedPageMenuObserver?.let { savedState.selectedPageLiveData.removeObserver(it) }
+        selectedPageMenuObserver = Observer<Page> {
+            findItem(R.id.action_switch_language)?.isVisible = it != Page.LESSONS
+        }.also { savedState.selectedPageLiveData.observe(this@MainActivity, it) }
     }
 
     // region ToolsFragment.Callbacks
