@@ -41,7 +41,7 @@ dependencies {
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
     implementation "com.google.auto.value:auto-value-annotations:${deps.autoValue}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.louiscad.splitties:splitties-bitflags:${deps.splitties}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
@@ -50,7 +50,7 @@ dependencies {
 
     kapt "com.google.auto.value:auto-value:${deps.autoValue}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
 
     testImplementation project(':ui:tract-renderer')
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"

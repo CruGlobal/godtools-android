@@ -25,12 +25,12 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
-    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
 }
 
 apply from: 'download_initial_content.gradle'

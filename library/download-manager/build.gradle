@@ -18,7 +18,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
@@ -26,5 +26,5 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
 }

@@ -14,12 +14,12 @@ dependencies {
     api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
 }
