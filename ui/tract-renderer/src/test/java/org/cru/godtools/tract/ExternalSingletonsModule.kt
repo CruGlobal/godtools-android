@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -28,11 +29,13 @@ import org.mockito.Mockito.RETURNS_DEEP_STUBS
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [AnalyticsModule::class,
+    replaces = [
+        AnalyticsModule::class,
         ApiModule::class,
         DownloadManagerModule::class,
         SyncModule::class,
-        SyncTaskModule::class]
+        SyncTaskModule::class
+    ]
 )
 class ExternalSingletonsModule {
     @get:Provides
@@ -55,6 +58,8 @@ class ExternalSingletonsModule {
             on { getLatestPublishedManifestLiveData(any(), any()) } doAnswer { ImmutableLiveData(null) }
         }
     }
+    @get:Provides
+    val picasso by lazy { mock<Picasso>(defaultAnswer = RETURNS_DEEP_STUBS) }
     @get:Provides
     val referenceLifecycle by lazy { mock<ReferenceLifecycle>() }
     @get:Provides

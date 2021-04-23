@@ -21,7 +21,6 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
@@ -49,8 +48,6 @@ class TractActivityTest {
     var hiltRule = HiltAndroidRule(this)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
-    @get:Rule
-    val picassoSingletonRule = PicassoSingletonRule()
 
     private val context: Context get() = getInstrumentation().context
     @Inject
