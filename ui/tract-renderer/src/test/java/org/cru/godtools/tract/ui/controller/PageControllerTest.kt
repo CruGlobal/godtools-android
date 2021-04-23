@@ -11,15 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import dagger.hilt.android.testing.UninstallModules
 import javax.inject.Inject
-import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
-import org.cru.godtools.analytics.AnalyticsModule
-import org.cru.godtools.api.ApiModule
 import org.cru.godtools.base.Settings
-import org.cru.godtools.download.manager.DownloadManagerModule
-import org.cru.godtools.sync.SyncModule
-import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.xml.model.Manifest
@@ -37,13 +30,6 @@ import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
 @HiltAndroidTest
-@UninstallModules(
-    AnalyticsModule::class,
-    ApiModule::class,
-    DownloadManagerModule::class,
-    SyncModule::class,
-    SyncTaskModule::class
-)
 @RunWith(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class PageControllerTest {
@@ -51,8 +37,6 @@ class PageControllerTest {
     var hiltRule = HiltAndroidRule(this)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
-    @get:Rule
-    val picassoSingletonRule = PicassoSingletonRule()
 
     private lateinit var binding: TractPageBinding
     @Inject
