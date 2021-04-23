@@ -31,7 +31,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
     testImplementation "org.ccci.gto.android.testing:gto-support-timber:${deps.gtoSupport}"
@@ -39,6 +39,6 @@ dependencies {
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.hilt}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

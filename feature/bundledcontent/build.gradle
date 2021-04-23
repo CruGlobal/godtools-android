@@ -6,7 +6,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.hilt}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
 }
