@@ -224,6 +224,11 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+
+    testImplementation "com.google.dagger:hilt-android-testing:${deps.dagger}"
+    testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
+
+    kaptTest "com.google.dagger:hilt-compiler:${deps.dagger}"
 }
 
 apply plugin: 'com.google.gms.google-services'

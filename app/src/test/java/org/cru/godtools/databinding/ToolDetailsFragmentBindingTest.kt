@@ -1,29 +1,36 @@
 package org.cru.godtools.databinding
 
-import android.app.Application
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.ui.tooldetails.ToolDetailsActivity
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
+import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tips.Tip
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class)
+@Config(application = HiltTestApplication::class)
 class ToolDetailsFragmentBindingTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     private lateinit var binding: ToolDetailsFragmentBinding
 
     @Before
     fun createBinding() {
-        val activityController = Robolectric.buildActivity(ToolDetailsActivity::class.java)
-        binding = ToolDetailsFragmentBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
+        val activity = Robolectric.buildActivity(HiltTestActivity::class.java).get()
+        binding = ToolDetailsFragmentBinding.inflate(LayoutInflater.from(activity), null, false)
     }
 
     @Test
