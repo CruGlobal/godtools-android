@@ -10,6 +10,8 @@ class ContentAnalyticsActionEvent(@VisibleForTesting val event: AnalyticsEvent) 
     AnalyticsActionEvent(action = event.action.orEmpty()) {
     override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
 
+    override val appSection get() = event.manifest.code
+
     override val adobeAttributes get() = event.attributes
 
     override val firebaseEventName get() = when {
