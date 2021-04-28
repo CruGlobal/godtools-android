@@ -18,7 +18,7 @@ interface AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(import: AemImport)
+    fun insertOrIgnore(aemImport: AemImport)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
