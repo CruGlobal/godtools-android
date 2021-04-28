@@ -38,10 +38,10 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
     }
 
     @Transaction
-    open suspend fun accessAemImport(import: AemImport) {
+    open suspend fun accessAemImport(aemImport: AemImport) {
         with(db.aemImportDao()) {
-            insertOrIgnore(import)
-            updateLastAccessed(import.uri, import.lastAccessed)
+            insertOrIgnore(aemImport)
+            updateLastAccessed(aemImport.uri, aemImport.lastAccessed)
         }
     }
 
