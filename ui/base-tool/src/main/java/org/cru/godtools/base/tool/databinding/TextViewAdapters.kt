@@ -22,6 +22,7 @@ fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: I
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
     val imageSize = dpToPixelSize(drawableStartSize, resources)
     if (file != null) {
+        // TODO: figure out how to provide Picasso Singleton from Dagger
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
             .centerInside()
@@ -38,6 +39,7 @@ fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) 
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
     val imageSize = dpToPixelSize(drawableEndSize, resources)
     if (file != null) {
+        // TODO: figure out how to provide Picasso Singleton from Dagger
         Picasso.get().load(file)
             .resize(imageSize, imageSize)
             .centerInside()

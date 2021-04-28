@@ -70,10 +70,11 @@ internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
     private val fileManager: ToolFileManager,
+    private val picasso: Picasso,
     private val settings: Settings,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
@@ -84,8 +85,17 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         eventBus: EventBus,
         fileManager: ToolFileManager,
+        picasso: Picasso,
         settings: Settings
-    ) : this(context, dao, eventBus, fileManager, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    ) : this(
+        context,
+        dao,
+        eventBus,
+        fileManager,
+        picasso,
+        settings,
+        CoroutineScope(Dispatchers.Default + SupervisorJob())
+    )
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
@@ -311,7 +321,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             ?.getFile(fileManager)
             ?.let {
                 try {
-                    Picasso.get().load(it)
+                    picasso.load(it)
                         .resizeDimen(R.dimen.adaptive_app_icon_size, R.dimen.adaptive_app_icon_size)
                         .centerCrop()
                         .getBitmap()

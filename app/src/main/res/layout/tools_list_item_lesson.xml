@@ -34,7 +34,7 @@
             android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}"
             android:minHeight="160dp">
 
-            <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+            <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"

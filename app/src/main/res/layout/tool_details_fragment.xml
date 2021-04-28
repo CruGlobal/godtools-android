@@ -34,7 +34,7 @@
                 android:background="@color/white"
                 android:elevation="4dp">
 
-                <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+                <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                     android:id="@+id/image_banner"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

@@ -1,6 +1,5 @@
 package org.cru.godtools.databinding
 
-import android.app.Application
 import android.view.LayoutInflater
 import android.view.View
 import androidx.databinding.ObservableField
@@ -12,7 +11,11 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
+import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -21,15 +24,19 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.activity.MainActivity
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@Config(application = Application::class)
+@Config(application = HiltTestApplication::class)
 class ToolsListItemToolBindingTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     private lateinit var binding: ToolsListItemToolBinding
     private lateinit var callbacks: ToolsAdapterCallbacks
     private val tool = Tool().apply {
@@ -52,11 +59,11 @@ class ToolsListItemToolBindingTest {
 
     @Before
     fun createBinding() {
-        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val activity = Robolectric.buildActivity(HiltTestActivity::class.java).get()
         callbacks = mock()
 
-        binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
-        binding.lifecycleOwner = activityController.get()
+        binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activity), null, false)
+        binding.lifecycleOwner = activity
         binding.callbacks = ObservableField(callbacks)
         binding.tool = tool
         binding.primaryTranslation = MutableLiveData(primaryTranslation)

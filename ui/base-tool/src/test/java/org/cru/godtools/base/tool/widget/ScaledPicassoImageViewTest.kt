@@ -33,7 +33,7 @@ class ScaledPicassoImageViewTest {
             on { isInEditMode } doReturn true
             on { drawable } doReturn drawable
         }
-        helper = ScaledPicassoImageView.ScaleHelper(view, null, 0, 0)
+        helper = ScaledPicassoImageView.ScaleHelper(view, null, 0, 0, mock())
     }
 
     // region scaleType = MATRIX

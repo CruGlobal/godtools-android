@@ -6,7 +6,7 @@
         <variable name="model" type="org.cru.godtools.xml.model.Image" />
     </data>
 
-    <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+    <org.cru.godtools.base.ui.view.DaggerPicassoImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"

@@ -1,3 +1,5 @@
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -26,11 +28,14 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
 }

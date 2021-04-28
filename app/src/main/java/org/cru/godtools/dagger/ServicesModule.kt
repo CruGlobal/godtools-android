@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.androidx.work.TimberLogger
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.service.AccountListRegistrationService
 
 @Module(
@@ -36,20 +35,13 @@ abstract class ServicesModule {
 
     @Binds
     @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN, on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED)
-    abstract fun eagerPicasso(picasso: Picasso): Any
-
-    @Binds
-    @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
     abstract fun eagerWorkManager(workManager: WorkManager): Any
 
     companion object {
         @Provides
         @Singleton
-        fun picasso(@ApplicationContext context: Context) = Picasso.Builder(context)
-            .loggingEnabled(BuildConfig.DEBUG)
-            .build().also { Picasso.setSingletonInstance(it) }
+        fun picasso() = Picasso.get()
 
         @Provides
         @Singleton

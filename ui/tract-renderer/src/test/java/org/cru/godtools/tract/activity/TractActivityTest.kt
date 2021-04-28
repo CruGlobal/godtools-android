@@ -17,21 +17,14 @@ import com.nhaarman.mockitokotlin2.whenever
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import dagger.hilt.android.testing.UninstallModules
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.testing.picasso.PicassoSingletonRule
-import org.cru.godtools.analytics.AnalyticsModule
-import org.cru.godtools.api.ApiModule
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
-import org.cru.godtools.sync.SyncModule
-import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.cru.godtools.xml.model.Manifest
@@ -48,13 +41,6 @@ import org.mockito.Mockito.mockStatic
 import org.robolectric.annotation.Config
 
 @HiltAndroidTest
-@UninstallModules(
-    AnalyticsModule::class,
-    ApiModule::class,
-    DownloadManagerModule::class,
-    SyncModule::class,
-    SyncTaskModule::class
-)
 @RunWith(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class TractActivityTest {
@@ -62,8 +48,6 @@ class TractActivityTest {
     var hiltRule = HiltAndroidRule(this)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
-    @get:Rule
-    val picassoSingletonRule = PicassoSingletonRule()
 
     private val context: Context get() = getInstrumentation().context
     @Inject
