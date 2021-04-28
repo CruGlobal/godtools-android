@@ -27,7 +27,7 @@ private const val XML_ATTRIBUTE_KEY = "key"
 private const val XML_ATTRIBUTE_VALUE = "value"
 
 @OptIn(ExperimentalStdlibApi::class)
-class AnalyticsEvent {
+class AnalyticsEvent : BaseModel {
     enum class Trigger {
         SELECTED, VISIBLE, HIDDEN, DEFAULT, UNKNOWN;
 
@@ -62,7 +62,7 @@ class AnalyticsEvent {
         this.attributes = attributes.orEmpty()
     }
 
-    internal constructor(parent: Base, parser: XmlPullParser) {
+    internal constructor(parent: Base, parser: XmlPullParser) : super(parent) {
         parser.require(XmlPullParser.START_TAG, XMLNS_ANALYTICS, XML_EVENT)
 
         action = parser.getAttributeValue(null, XML_ACTION)
@@ -88,7 +88,6 @@ class AnalyticsEvent {
 
         // Log a non-fatal warning if this is an adobe analytics event
         if (systems.contains(AnalyticsSystem.ADOBE)) {
-            val manifest = parent.manifest
             val message = "tool: ${manifest.code} locale: ${manifest.locale} action: $action"
             Timber.tag(TAG).e(UnsupportedOperationException("XML Adobe Analytics Event $message"), message)
         }
