@@ -88,7 +88,13 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
     @MainThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        firebase.logEvent(event.firebaseEventName, event.firebaseParams)
+        val params = Bundle().apply {
+            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
+            event.appSection?.let { putString(PARAM_APP_SECTION, it) }
+            event.appSubSection?.let { putString(PARAM_APP_SUB_SECTION, it) }
+            putAll(event.firebaseParams)
+        }
+        firebase.logEvent(event.firebaseEventName, params)
     }
 
     init {
