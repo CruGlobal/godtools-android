@@ -107,7 +107,6 @@ buildscript {
 }
 
 plugins {
-    id "com.getkeepsafe.dexcount" version "2.0.0" apply false
     id "com.vanniktech.android.junit.jacoco" version "0.16.0"
     id "de.undercouch.download" version "4.1.1" apply false
     id "org.ajoberstar.grgit" version "4.1.0"
