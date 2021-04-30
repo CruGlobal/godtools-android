@@ -3,5 +3,6 @@
     "config:base",
     ":switchToGradleLite"
   ],
+  "labels": [ "dependencies" ],
   "dependencyDashboard": true
 }
