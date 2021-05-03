@@ -12,9 +12,8 @@ import org.cru.godtools.article.aem.model.AemImport.AemImportArticle
 
 @Dao
 interface AemImportDao {
-    @get:WorkerThread
-    @get:Query("SELECT * FROM aemImports")
-    val all: List<AemImport>
+    @Query("SELECT * FROM aemImports")
+    suspend fun getAll(): List<AemImport>
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
