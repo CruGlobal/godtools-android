@@ -156,9 +156,11 @@ class AemArticleManager @VisibleForTesting internal constructor(
     }
 
     init {
-        aemDb.aemImportDao().all
-            .filter { it.isStale() }
-            .forEach { coroutineScope.launch { syncAemImport(it.uri, false) } }
+        coroutineScope.launch {
+            aemDb.aemImportDao().getAll()
+                .filter { it.isStale() }
+                .forEach { launch { syncAemImport(it.uri, false) } }
+        }
     }
     // endregion AEM Import
 

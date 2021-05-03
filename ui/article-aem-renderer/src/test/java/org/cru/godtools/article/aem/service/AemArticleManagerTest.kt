@@ -77,7 +77,9 @@ class AemArticleManagerTest {
 
     @Before
     fun setup() {
-        aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS) {
+            onBlocking { aemImportDao().getAll() } doReturn emptyList()
+        }
         api = mock()
         dao = mock {
             on { getAsFlow(QUERY_ARTICLE_TRANSLATIONS) } doReturn articleTranslationsChannel.consumeAsFlow()
