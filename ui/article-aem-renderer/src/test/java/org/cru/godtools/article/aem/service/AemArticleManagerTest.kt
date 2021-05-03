@@ -110,9 +110,9 @@ class AemArticleManagerTest {
         val uri = mock<Uri>()
         val manifest = Manifest(aemImports = listOf(uri))
         val repository = aemDb.translationRepository()
-        runBlocking {
-            whenever(manifestManager.getManifest(translation)) doReturn manifest
-            whenever(articleManager.syncAemImportsFromManifest(any(), any())) doReturn null
+        stub {
+            onBlocking { manifestManager.getManifest(translation) } doReturn manifest
+            onBlocking { articleManager.syncAemImportsFromManifest(any(), any()) } doReturn null
         }
 
         startArticleTranslationsJob()
