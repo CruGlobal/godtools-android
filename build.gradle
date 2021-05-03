@@ -128,11 +128,17 @@ ext {
 // configure dependency resolution
 allprojects {
     repositories {
+        maven {
+            url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/'
+            content {
+                includeGroup 'org.ccci.gto.android'
+                includeGroup 'org.ccci.gto.android.testing'
+            }
+        }
         google()
         mavenCentral()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
     }
 
     configurations.all { configuration ->
