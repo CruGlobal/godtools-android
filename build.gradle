@@ -39,7 +39,7 @@ buildscript {
                 scarlet            : '0.1.11',
                 snowplow           : '1.7.1',
                 splitties          : '3.0.0-beta01',
-                taptargetview      : '1.13.0',
+                taptargetview      : '1.13.2',
                 timber             : '4.7.1',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
