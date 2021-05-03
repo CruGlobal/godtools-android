@@ -135,10 +135,13 @@ allprojects {
                 includeGroup 'org.ccci.gto.android.testing'
             }
         }
+        maven {
+            url 'https://jitpack.io'
+            content { includeGroupByRegex 'com\\.github\\..*' }
+        }
         google()
         mavenCentral()
         jcenter()
-        maven { url "https://jitpack.io" }
     }
 
     configurations.all { configuration ->
