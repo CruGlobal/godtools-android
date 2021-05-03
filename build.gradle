@@ -93,7 +93,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${deps.gradleAndroidPlugin}"
@@ -128,10 +128,20 @@ ext {
 // configure dependency resolution
 allprojects {
     repositories {
+        maven {
+            url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/'
+            content {
+                includeGroup 'org.ccci.gto.android'
+                includeGroup 'org.ccci.gto.android.testing'
+            }
+        }
+        maven {
+            url 'https://jitpack.io'
+            content { includeGroupByRegex 'com\\.github\\..*' }
+        }
         google()
+        mavenCentral()
         jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
     }
 
     configurations.all { configuration ->
