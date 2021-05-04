@@ -3,7 +3,7 @@ package org.cru.godtools.base.tool.service
 import androidx.annotation.MainThread
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.xml.model.Event
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

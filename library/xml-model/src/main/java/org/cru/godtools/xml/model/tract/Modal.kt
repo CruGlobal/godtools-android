@@ -4,11 +4,11 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.RestrictTo
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.R
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text

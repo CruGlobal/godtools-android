@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.lesson.DEFAULT_LESSON_CONTROL_COLOR
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat

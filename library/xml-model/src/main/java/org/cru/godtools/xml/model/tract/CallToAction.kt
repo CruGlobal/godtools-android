@@ -3,8 +3,8 @@ package org.cru.godtools.xml.model.tract
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.XMLNS_TRACT
 import org.cru.godtools.xml.model.XMLNS_TRAINING

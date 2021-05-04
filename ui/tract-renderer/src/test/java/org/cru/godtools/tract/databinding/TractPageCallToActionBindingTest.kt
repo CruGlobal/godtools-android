@@ -13,8 +13,8 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.R
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.tract.CallToAction

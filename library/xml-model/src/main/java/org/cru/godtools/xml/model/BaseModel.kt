@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 abstract class BaseModel internal constructor(private val parent: Base? = null) : Base {

@@ -15,10 +15,10 @@ import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.tips.Tip
 import org.cru.godtools.xml.model.tract.Card

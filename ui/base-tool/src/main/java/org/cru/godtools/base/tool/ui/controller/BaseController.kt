@@ -18,12 +18,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.findLiveData
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.layoutDirection
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus

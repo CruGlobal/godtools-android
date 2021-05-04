@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.tract.Modal
 import org.cru.godtools.xml.model.tract.TractPage
 import org.cru.godtools.xml.util.getXmlParserForResource

@@ -28,7 +28,6 @@ import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
@@ -45,6 +44,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarColor
 import org.greenrobot.eventbus.Subscribe

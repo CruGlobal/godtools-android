@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_LABEL = "label"

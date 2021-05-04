@@ -1,4 +1,4 @@
-package org.cru.godtools.base.model
+package org.cru.godtools.xml.model
 
 import androidx.annotation.VisibleForTesting
 import java.util.Locale

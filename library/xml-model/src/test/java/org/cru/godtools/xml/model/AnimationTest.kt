@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder

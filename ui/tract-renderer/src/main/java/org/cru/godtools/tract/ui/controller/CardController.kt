@@ -11,11 +11,11 @@ import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tract.databinding.TractContentCardBinding
 import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.tract.Card
 
 class CardController private constructor(

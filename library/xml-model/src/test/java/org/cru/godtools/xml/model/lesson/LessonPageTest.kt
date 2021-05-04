@@ -2,8 +2,8 @@ package org.cru.godtools.xml.model.lesson
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.DEFAULT_TEXT_SCALE
+import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest

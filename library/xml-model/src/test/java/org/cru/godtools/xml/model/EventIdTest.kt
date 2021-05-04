@@ -1,7 +1,7 @@
-package org.cru.godtools.base.model
+package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event.Id.Companion.FOLLOWUP_EVENT
-import org.cru.godtools.base.model.Event.Id.Companion.parse
+import org.cru.godtools.xml.model.Event.Id.Companion.FOLLOWUP_EVENT
+import org.cru.godtools.xml.model.Event.Id.Companion.parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
