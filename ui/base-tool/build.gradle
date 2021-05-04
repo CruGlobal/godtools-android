@@ -50,6 +50,8 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
+    debugImplementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+
     kapt "com.google.auto.value:auto-value:${deps.autoValue}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
