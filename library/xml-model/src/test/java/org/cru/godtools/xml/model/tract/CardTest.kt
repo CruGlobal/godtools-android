@@ -2,7 +2,7 @@ package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.xml.model.Event
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Paragraph
 import org.cru.godtools.xml.model.TOOL_CODE
@@ -23,8 +23,8 @@ import org.junit.runner.RunWith
 class CardTest {
     @Test
     fun verifyParseCard() {
-        val listenerEvents = Event.Id.parse(TOOL_CODE, "listener1 listener2")
-        val dismissListenerEvents = Event.Id.parse(TOOL_CODE, "dismiss-listener1 dismiss-listener2")
+        val listenerEvents = EventId.parse(TOOL_CODE, "listener1 listener2")
+        val dismissListenerEvents = EventId.parse(TOOL_CODE, "dismiss-listener1 dismiss-listener2")
 
         val card = parseCardXml("card.xml")
         assertEquals("$TOOL_CODE-0-0", card.id)

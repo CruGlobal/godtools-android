@@ -22,7 +22,7 @@ class LinkTest {
 
     @Test
     fun testParseLink() {
-        val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
+        val events = EventId.parse(TOOL_CODE, "ns:event1 event2")
         val link = Link(manifest, getXmlParserForResource("link.xml"))
         assertThat(link.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("Test", link.text!!.text)

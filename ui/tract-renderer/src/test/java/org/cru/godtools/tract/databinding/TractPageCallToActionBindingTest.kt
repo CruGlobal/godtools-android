@@ -14,7 +14,7 @@ import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.Event
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.tract.CallToAction
@@ -58,7 +58,7 @@ class TractPageCallToActionBindingTest {
     fun verifyArrowVisibilityLastPageWithEvents() {
         whenever(page.isLastPage).thenReturn(true)
         binding.page = page
-        binding.callToAction = CallToAction(page, events = setOf(Event.Id.FOLLOWUP_EVENT))
+        binding.callToAction = CallToAction(page, events = setOf(EventId.FOLLOWUP_EVENT))
         binding.executePendingBindings()
         assertEquals(View.VISIBLE, binding.callToActionArrow.visibility)
     }
@@ -92,7 +92,7 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowOnClickEvents() {
-        binding.callToAction = CallToAction(page, events = setOf(Event.Id.FOLLOWUP_EVENT))
+        binding.callToAction = CallToAction(page, events = setOf(EventId.FOLLOWUP_EVENT))
         binding.executePendingBindings()
 
         binding.callToActionArrow.performClick()

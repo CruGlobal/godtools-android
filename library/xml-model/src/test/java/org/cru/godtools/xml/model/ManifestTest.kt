@@ -45,7 +45,7 @@ class ManifestParsingRobolectricTest {
         assertEquals("title", manifest.title)
         assertEquals(Manifest.Type.LESSON, manifest.type)
         assertEquals(Color.RED, manifest.lessonControlColor)
-        assertEquals(Event.Id.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
+        assertEquals(EventId.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
         assertThat(manifest.tractPages, `is`(empty()))
         assertEquals(1, manifest.lessonPages.size)
         assertEquals("page0.xml", manifest.lessonPages[0].fileName)

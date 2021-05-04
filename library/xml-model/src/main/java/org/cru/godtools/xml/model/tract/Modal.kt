@@ -8,7 +8,7 @@ import org.cru.godtools.xml.R
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Button
 import org.cru.godtools.xml.model.Content
-import org.cru.godtools.xml.model.Event
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.Parent
 import org.cru.godtools.xml.model.Styles
 import org.cru.godtools.xml.model.Text
@@ -33,8 +33,8 @@ class Modal : BaseModel, Parent, Styles {
     val title: Text?
     override val content: List<Content>
 
-    val listeners: Set<Event.Id>
-    val dismissListeners: Set<Event.Id>
+    val listeners: Set<EventId>
+    val dismissListeners: Set<EventId>
 
     @get:ColorInt
     override val primaryColor get() = Color.TRANSPARENT

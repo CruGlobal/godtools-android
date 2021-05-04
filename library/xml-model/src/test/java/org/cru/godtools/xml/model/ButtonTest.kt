@@ -33,7 +33,7 @@ class ButtonTest {
 
     @Test
     fun testParseButtonEvent() {
-        val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
+        val events = EventId.parse(TOOL_CODE, "ns:event1 event2")
         val button = Button(manifest, getXmlParserForResource("button_event.xml"))
         assertFalse(button.isIgnored)
         assertEquals(Button.Style.CONTAINED, button.style)

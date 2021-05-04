@@ -13,7 +13,7 @@ class Image : Content {
         internal const val XML_IMAGE = "image"
     }
 
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     @VisibleForTesting
     internal val resourceName: String?
     val resource get() = getResource(resourceName)

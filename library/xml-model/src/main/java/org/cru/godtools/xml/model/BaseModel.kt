@@ -12,5 +12,5 @@ abstract class BaseModel internal constructor(private val parent: Base? = null) 
 
     private val defaultEventNamespace get() = manifest.code
     internal fun parseEvents(parser: XmlPullParser, attribute: String) =
-        Event.Id.parse(defaultEventNamespace, parser.getAttributeValue(null, attribute))
+        EventId.parse(defaultEventNamespace, parser.getAttributeValue(null, attribute))
 }

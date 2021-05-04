@@ -23,9 +23,9 @@ class Animation : Content {
     val loop: Boolean
     val autoPlay: Boolean
 
-    val events: Set<Event.Id>
-    val playListeners: Set<Event.Id>
-    val stopListeners: Set<Event.Id>
+    val events: Set<EventId>
+    val playListeners: Set<EventId>
+    val stopListeners: Set<EventId>
 
     @WorkerThread
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {

@@ -86,7 +86,7 @@ class Manifest : BaseModel, Styles {
     val locale: Locale
     val type: Type
 
-    val dismissListeners: Set<Event.Id>
+    val dismissListeners: Set<EventId>
 
     @ColorInt
     override val primaryColor: Int

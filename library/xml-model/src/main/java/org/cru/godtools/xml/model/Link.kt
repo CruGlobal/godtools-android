@@ -8,7 +8,7 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
     }
 
     val analyticsEvents: Collection<AnalyticsEvent>
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     val text: Text?
 
     init {

@@ -82,7 +82,7 @@ class Button : Content, Styles {
     }
 
     val type: Type
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     val url: Uri?
 
     private val _style: Style?
