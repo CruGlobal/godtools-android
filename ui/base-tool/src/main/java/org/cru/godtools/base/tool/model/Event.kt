@@ -1,6 +1,7 @@
-package org.cru.godtools.xml.model
+package org.cru.godtools.base.tool.model
 
 import java.util.Locale
+import org.cru.godtools.xml.model.EventId
 
 class Event private constructor(builder: Builder) {
     val id = builder.id

@@ -36,6 +36,7 @@ import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.model.view.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
@@ -44,7 +45,6 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
-import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.Manifest
 import org.cru.godtools.xml.model.navBarColor
 import org.greenrobot.eventbus.Subscribe

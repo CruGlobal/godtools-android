@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tract.databinding.TractContentFormBinding
-import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.Form
 

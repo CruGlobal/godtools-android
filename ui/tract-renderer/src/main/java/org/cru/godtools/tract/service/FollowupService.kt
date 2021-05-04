@@ -5,9 +5,9 @@ import androidx.annotation.WorkerThread
 import dagger.Lazy
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.model.Followup
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.EventId
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

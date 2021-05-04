@@ -37,6 +37,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -59,7 +60,6 @@ import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
-import org.cru.godtools.xml.model.Event
 import org.cru.godtools.xml.model.backgroundColor
 import org.cru.godtools.xml.model.navBarColor
 import org.cru.godtools.xml.model.navBarControlColor
