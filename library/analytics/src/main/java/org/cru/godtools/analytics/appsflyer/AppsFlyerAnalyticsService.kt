@@ -45,14 +45,14 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsScreenEvent(event: AnalyticsScreenEvent) {
         if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.trackEvent(app, event.screen, emptyMap())
+            appsFlyer.logEvent(app, event.screen, emptyMap())
     }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsActionEvent(event: AnalyticsActionEvent) {
         if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.trackEvent(app, event.action, emptyMap())
+            appsFlyer.logEvent(app, event.action, emptyMap())
     }
     // endregion Analytics Events
 
@@ -98,7 +98,7 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
         appsFlyer.apply {
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
             init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
-            startTracking(app)
+            start(app)
         }
         app.registerActivityLifecycleCallbacks(this)
         eventBus.register(this)
