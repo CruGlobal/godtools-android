@@ -33,12 +33,18 @@ private const val IS_FIRST_LAUNCH = "is_first_launch"
 private const val STATUS_NON_ORGANIC = "Non-organic"
 
 @Singleton
-class AppsFlyerAnalyticsService @Inject internal constructor(
+class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     private val app: Application,
     eventBus: EventBus,
-    private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
+    private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>,
+    private val appsFlyer: AppsFlyerLib
 ) : Application.ActivityLifecycleCallbacks {
-    private val appsFlyer: AppsFlyerLib = AppsFlyerLib.getInstance()
+    @Inject
+    internal constructor(
+        app: Application,
+        eventBus: EventBus,
+        deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
+    ) : this(app, eventBus, deepLinkResolvers, AppsFlyerLib.getInstance())
 
     // region Analytics Events
     @WorkerThread

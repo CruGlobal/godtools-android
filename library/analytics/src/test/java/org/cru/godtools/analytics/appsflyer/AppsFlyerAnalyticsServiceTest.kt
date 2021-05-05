@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appsflyer.AppsFlyerLibCore
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
@@ -31,13 +30,12 @@ class AppsFlyerAnalyticsServiceTest {
 
     @Before
     fun setupMocks() {
-        AppsFlyerLibCore.instance = mock()
         application = mock()
         activity = mock()
         eventBus = mock()
         deepLinkResolver = mock()
 
-        analyticsService = AppsFlyerAnalyticsService(application, eventBus, setOf(deepLinkResolver))
+        analyticsService = AppsFlyerAnalyticsService(application, eventBus, setOf(deepLinkResolver), mock())
     }
 
     // region conversionListener.onAppOpenAttribution()
