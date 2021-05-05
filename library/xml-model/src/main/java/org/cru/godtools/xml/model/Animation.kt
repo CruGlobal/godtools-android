@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESOURCE = "resource"
@@ -24,9 +23,9 @@ class Animation : Content {
     val loop: Boolean
     val autoPlay: Boolean
 
-    val events: Set<Event.Id>
-    val playListeners: Set<Event.Id>
-    val stopListeners: Set<Event.Id>
+    val events: Set<EventId>
+    val playListeners: Set<EventId>
+    val stopListeners: Set<EventId>
 
     @WorkerThread
     internal constructor(parent: Base, parser: XmlPullParser) : super(parent, parser) {

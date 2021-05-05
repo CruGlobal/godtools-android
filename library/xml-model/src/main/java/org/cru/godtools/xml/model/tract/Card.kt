@@ -2,10 +2,10 @@ package org.cru.godtools.xml.model.tract
 
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Parent
@@ -47,8 +47,8 @@ class Card : BaseModel, Styles, Parent {
     val isLastVisibleCard get() = this == page.visibleCards.lastOrNull()
 
     val isHidden: Boolean
-    val listeners: Set<Event.Id>
-    val dismissListeners: Set<Event.Id>
+    val listeners: Set<EventId>
+    val dismissListeners: Set<EventId>
     val analyticsEvents: Collection<AnalyticsEvent>
 
     private val _backgroundImage: String?

@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.lesson.DEFAULT_LESSON_CONTROL_COLOR
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
@@ -46,7 +45,7 @@ class ManifestParsingRobolectricTest {
         assertEquals("title", manifest.title)
         assertEquals(Manifest.Type.LESSON, manifest.type)
         assertEquals(Color.RED, manifest.lessonControlColor)
-        assertEquals(Event.Id.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
+        assertEquals(EventId.parse(TOOL_CODE, "dismiss_event"), manifest.dismissListeners)
         assertThat(manifest.tractPages, `is`(empty()))
         assertEquals(1, manifest.lessonPages.size)
         assertEquals("page0.xml", manifest.lessonPages[0].fileName)

@@ -1,15 +1,15 @@
-package org.cru.godtools.base.model
+package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event.Id.Companion.FOLLOWUP_EVENT
-import org.cru.godtools.base.model.Event.Id.Companion.parse
+import org.cru.godtools.xml.model.EventId.Companion.FOLLOWUP_EVENT
+import org.cru.godtools.xml.model.EventId.Companion.parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-private val ID1 = Event.Id("FOLLOWup", "SEnd")
-private val ID2 = Event.Id("followUP", "SEnd")
+private val ID1 = EventId("FOLLOWup", "SEnd")
+private val ID2 = EventId("followUP", "SEnd")
 
 class EventIdTest {
     @Test
@@ -26,7 +26,7 @@ class EventIdTest {
     fun verifyParse() {
         assertThat(
             parse("kgp", "FollowUp:SeNd followup:SEND event1 blargh kgp:event1"),
-            containsInAnyOrder(FOLLOWUP_EVENT, Event.Id("kgp", "event1"), Event.Id("kgp", "blargh"))
+            containsInAnyOrder(FOLLOWUP_EVENT, EventId("kgp", "event1"), EventId("kgp", "blargh"))
         )
     }
 

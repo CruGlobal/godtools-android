@@ -14,7 +14,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.util.xmlpull.CloseableXmlPullParser
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.lesson.DEFAULT_LESSON_CONTROL_COLOR
 import org.cru.godtools.xml.model.lesson.LessonPage
 import org.cru.godtools.xml.model.lesson.XML_CONTROL_COLOR
@@ -87,7 +86,7 @@ class Manifest : BaseModel, Styles {
     val locale: Locale
     val type: Type
 
-    val dismissListeners: Set<Event.Id>
+    val dismissListeners: Set<EventId>
 
     @ColorInt
     override val primaryColor: Int

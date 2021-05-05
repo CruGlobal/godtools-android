@@ -1,7 +1,6 @@
 package org.cru.godtools.xml.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -23,7 +22,7 @@ class LinkTest {
 
     @Test
     fun testParseLink() {
-        val events = Event.Id.parse(TOOL_CODE, "ns:event1 event2")
+        val events = EventId.parse(TOOL_CODE, "ns:event1 event2")
         val link = Link(manifest, getXmlParserForResource("link.xml"))
         assertThat(link.events, containsInAnyOrder(*events.toTypedArray()))
         assertEquals("Test", link.text!!.text)

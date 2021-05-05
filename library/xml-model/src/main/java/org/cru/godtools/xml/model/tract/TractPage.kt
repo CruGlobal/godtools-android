@@ -6,9 +6,9 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.DEFAULT_TEXT_SCALE
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
@@ -48,7 +48,7 @@ class TractPage : BaseModel, Styles {
 
     @VisibleForTesting
     internal val fileName: String?
-    val listeners: Set<Event.Id>
+    val listeners: Set<EventId>
 
     @ColorInt
     val backgroundColor: Int

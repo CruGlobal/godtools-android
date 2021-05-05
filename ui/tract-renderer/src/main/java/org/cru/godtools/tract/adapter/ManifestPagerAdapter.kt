@@ -15,7 +15,7 @@ import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController

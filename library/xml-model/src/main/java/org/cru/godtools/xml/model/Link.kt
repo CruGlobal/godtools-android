@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(parent, parser) {
@@ -9,7 +8,7 @@ class Link internal constructor(parent: Base, parser: XmlPullParser) : Content(p
     }
 
     val analyticsEvents: Collection<AnalyticsEvent>
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     val text: Text?
 
     init {

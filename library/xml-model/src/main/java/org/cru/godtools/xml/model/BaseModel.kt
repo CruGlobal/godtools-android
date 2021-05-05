@@ -1,6 +1,5 @@
 package org.cru.godtools.xml.model
 
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 abstract class BaseModel internal constructor(private val parent: Base? = null) : Base {
@@ -13,5 +12,5 @@ abstract class BaseModel internal constructor(private val parent: Base? = null) 
 
     private val defaultEventNamespace get() = manifest.code
     internal fun parseEvents(parser: XmlPullParser, attribute: String) =
-        Event.Id.parse(defaultEventNamespace, parser.getAttributeValue(null, attribute))
+        EventId.parse(defaultEventNamespace, parser.getAttributeValue(null, attribute))
 }

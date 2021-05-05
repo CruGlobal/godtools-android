@@ -3,7 +3,6 @@ package org.cru.godtools.xml.model
 import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
-import org.cru.godtools.base.model.Event
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_COLOR = "color"
@@ -83,7 +82,7 @@ class Button : Content, Styles {
     }
 
     val type: Type
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     val url: Uri?
 
     private val _style: Style?

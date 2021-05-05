@@ -3,8 +3,8 @@ package org.cru.godtools.xml.model.tract
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.xml.model.BaseModel
+import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.Text
 import org.cru.godtools.xml.model.XMLNS_TRACT
 import org.cru.godtools.xml.model.XMLNS_TRAINING
@@ -26,7 +26,7 @@ class CallToAction : BaseModel {
     private val page: TractPage
 
     val label: Text?
-    val events: Set<Event.Id>
+    val events: Set<EventId>
     @ColorInt
     private val _controlColor: Int?
     @get:ColorInt
@@ -59,7 +59,7 @@ class CallToAction : BaseModel {
     constructor(
         parent: TractPage,
         label: ((CallToAction) -> Text?)? = null,
-        events: Set<Event.Id> = emptySet(),
+        events: Set<EventId> = emptySet(),
         @ColorInt controlColor: Int? = null,
         tip: String? = null
     ) : super(parent) {
