@@ -46,7 +46,7 @@ buildscript {
                 youtubeplayer      : '10.0.5'
         ]
         deps.androidX = [
-                activity          : '1.2.2',
+                activity          : '1.2.3',
                 annotation        : '1.2.0',
                 appCompat         : '1.2.0',
                 archCore          : '2.1.0',
