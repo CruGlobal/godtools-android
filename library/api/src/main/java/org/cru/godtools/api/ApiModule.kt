@@ -1,7 +1,6 @@
 package org.cru.godtools.api
 
 import android.app.Application
-import android.os.Build
 import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
 import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
@@ -16,8 +15,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.TlsVersion
-import okhttp3.internal.Util
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
@@ -30,7 +27,6 @@ import org.ccci.gto.android.common.jsonapi.scarlet.JsonApiMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
-import org.ccci.gto.android.common.util.DynamicSSLSocketFactory
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.api.model.PublisherInfo
 import org.cru.godtools.api.model.ToolViews
@@ -43,7 +39,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
-import timber.log.Timber
 
 @Module(includes = [OkHttp3Module::class])
 @InstallIn(SingletonComponent::class)
@@ -55,20 +50,6 @@ object ApiModule {
     ) = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
-        .apply {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    // customize the SSLSocketFactory for OkHttpClient
-                    val factory = DynamicSSLSocketFactory.create()
-                        // enable TLS 1.1 and TLS 1.2 for older versions of android that support it but don't enable it
-                        .addEnabledProtocols(TlsVersion.TLS_1_1.javaName(), TlsVersion.TLS_1_2.javaName())
-                        .build()
-                    sslSocketFactory(factory, Util.platformTrustManager())
-                } catch (e: Exception) {
-                    Timber.tag("ApiModule").e(e, "Error creating the DynamicSSLSocketFactory for OkHttp")
-                }
-            }
-        }
         .apply { networkInterceptors.forEach { addNetworkInterceptor(it) } }
         .build()
 
