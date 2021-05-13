@@ -120,8 +120,7 @@ ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 ext {
     applicationId = 'org.keynote.godtools.android'
     compileSdk    = 30
-    minSdk        = 19
-    minSdkFeature = 21
+    minSdk        = 21
     targetSdk     = 30
 }
 
