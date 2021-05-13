@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -181,7 +182,7 @@ class AemArticleManagerTest {
         val resourceDao = aemDb.resourceDao()
         val data = "testDownloadResource()"
         val uri = mock<Uri>()
-        val mediaType = MediaType.get("image/jpg")
+        val mediaType = "image/jpg".toMediaType()
         val resource = mock<Resource> { on { needsDownload() } doReturn true }
         whenever(resourceDao.find(uri)).thenReturn(resource)
         wheneverDownloadingResource(uri)
