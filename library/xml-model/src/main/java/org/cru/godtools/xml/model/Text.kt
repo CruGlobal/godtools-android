@@ -163,5 +163,5 @@ internal fun XmlPullParser.parseTextChild(
 }
 
 private fun XmlPullParser.getAttributeValueAsTextStylesOrNull(name: String) =
-    getAttributeValue(null, name)?.let { REGEX_SEQUENCE_SEPARATOR.split(it) }
+    getAttributeValue(null, name)?.split(REGEX_SEQUENCE_SEPARATOR)
         ?.mapNotNullTo(mutableSetOf()) { Text.Style.parseOrNull(it) }

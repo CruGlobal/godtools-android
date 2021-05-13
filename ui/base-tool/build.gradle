@@ -2,6 +2,12 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [eventBusIndex: 'org.cru.godtools.base.tool.BaseToolEventBusIndex']
+            }
+        }
+
         vectorDrawables.useSupportLibrary = true
     }
     buildFeatures {
@@ -55,6 +61,7 @@ dependencies {
     kapt "com.google.auto.value:auto-value:${deps.autoValue}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation project(':ui:tract-renderer')
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"
