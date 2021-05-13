@@ -34,7 +34,7 @@ buildscript {
                 okta               : '1.0.18',
                 picasso            : '2.8',
                 picassoTransforms  : '2.4.0',
-                retrofit2          : '2.6.4',
+                retrofit2          : '2.9.0',
                 robolectric        : '4.5.1',
                 scarlet            : '0.1.12',
                 snowplow           : '1.7.1',
