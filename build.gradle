@@ -33,7 +33,7 @@ buildscript {
                 okhttp3            : '3.12.13',
                 okta               : '1.0.18',
                 picasso            : '2.8',
-                picassoTransforms  : '2.3.1',
+                picassoTransforms  : '2.4.0',
                 retrofit2          : '2.6.4',
                 robolectric        : '4.5.1',
                 scarlet            : '0.1.12',
