@@ -37,7 +37,7 @@ buildscript {
                 retrofit2          : '2.6.4',
                 robolectric        : '4.5.1',
                 scarlet            : '0.1.12',
-                snowplow           : '1.7.1',
+                snowplow           : '2.0.1',
                 splitties          : '3.0.0-beta01',
                 taptargetview      : '1.13.2',
                 timber             : '4.7.1',
