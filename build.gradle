@@ -16,7 +16,7 @@ buildscript {
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.2.1',
                 grpc               : '1.37.0',
-                gtoSupport         : '3.8.2-SNAPSHOT',
+                gtoSupport         : '3.9.0-SNAPSHOT',
                 guava              : '30.1.1-android',
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
