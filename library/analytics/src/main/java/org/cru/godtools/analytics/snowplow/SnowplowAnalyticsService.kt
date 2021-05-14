@@ -3,14 +3,12 @@ package org.cru.godtools.analytics.snowplow
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.snowplowanalytics.snowplow.Snowplow
+import com.snowplowanalytics.snowplow.configuration.NetworkConfiguration
+import com.snowplowanalytics.snowplow.configuration.SubjectConfiguration
+import com.snowplowanalytics.snowplow.configuration.TrackerConfiguration
 import com.snowplowanalytics.snowplow.event.AbstractEvent
 import com.snowplowanalytics.snowplow.event.Event
-import com.snowplowanalytics.snowplow.internal.emitter.Emitter.EmitterBuilder
-import com.snowplowanalytics.snowplow.internal.tracker.Logger
-import com.snowplowanalytics.snowplow.internal.tracker.Subject.SubjectBuilder
-import com.snowplowanalytics.snowplow.internal.tracker.Tracker
-import com.snowplowanalytics.snowplow.internal.tracker.Tracker.TrackerBuilder
-import com.snowplowanalytics.snowplow.network.Protocol
 import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
 import com.snowplowanalytics.snowplow.tracker.LogLevel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -55,26 +53,24 @@ class SnowplowAnalyticsService @Inject internal constructor(
     oktaUserProfileProvider: OktaUserProfileProvider
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val snowplowTracker: Tracker
+    private val snowplowTracker = Snowplow.createTracker(
+        context,
+        SNOWPLOW_NAMESPACE,
+        NetworkConfiguration(BuildConfig.SNOWPLOW_ENDPOINT).apply {
+            okHttpClient = okhttp
+        },
+        TrackerConfiguration(BuildConfig.SNOWPLOW_APP_ID).apply {
+            base64encoding = false
+            platformContext = true
+            lifecycleAutotracking = true
+            exceptionAutotracking = false
 
-    init {
-        // close any existing SP tracker and build our new one
-        Tracker.close()
-        val emitter = EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
-            .security(Protocol.HTTPS)
-            .client(okhttp)
-            .build()
-        snowplowTracker = TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, BuildConfig.SNOWPLOW_APP_ID, context)
-            .base64(false)
-            .mobileContext(true)
-            .applicationCrash(false)
-            .loggerDelegate(TimberLogger)
-            .lifecycleEvents(true)
-            .subject(SubjectBuilder().build())
-            .build()
-        Logger.setDelegate(TimberLogger)
-        Logger.updateLogLevel(if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR)
-    }
+            loggerDelegate = TimberLogger
+            logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR
+            diagnosticAutotracking = true
+        },
+        SubjectConfiguration()
+    )
 
     // region Tracking Events
     init {
