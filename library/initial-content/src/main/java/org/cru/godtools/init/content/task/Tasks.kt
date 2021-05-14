@@ -14,7 +14,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
@@ -84,7 +83,7 @@ internal class Tasks @Inject constructor(
                 // always add english and bundled languages
                 launch { downloadManager.pinLanguage(Locale.ENGLISH) }
                 BuildConfig.BUNDLED_LANGUAGES.forEach {
-                    launch { downloadManager.pinLanguage(LocaleCompat.forLanguageTag(it)) }
+                    launch { downloadManager.pinLanguage(Locale.forLanguageTag(it)) }
                 }
             }
         }

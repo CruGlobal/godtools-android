@@ -19,7 +19,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -51,9 +50,9 @@ class TractActivityDataModel @Inject constructor(
 
     // region Active Tool
     val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
-        .map { it?.let { LocaleCompat.forLanguageTag(it) } }
+        .map { it?.let { Locale.forLanguageTag(it) } }
         .distinctUntilChanged()
-    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, LocaleCompat.toLanguageTag(locale))
+    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
 
     val activeManifest =
         distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
