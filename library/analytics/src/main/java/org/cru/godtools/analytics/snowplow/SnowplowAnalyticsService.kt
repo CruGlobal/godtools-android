@@ -1,17 +1,18 @@
 package org.cru.godtools.analytics.snowplow
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.WorkerThread
-import com.snowplowanalytics.snowplow.tracker.Emitter.EmitterBuilder
-import com.snowplowanalytics.snowplow.tracker.Subject.SubjectBuilder
-import com.snowplowanalytics.snowplow.tracker.Tracker
-import com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder
-import com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity
-import com.snowplowanalytics.snowplow.tracker.events.AbstractEvent
-import com.snowplowanalytics.snowplow.tracker.events.Event
-import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson
-import com.snowplowanalytics.snowplow.tracker.utils.LogLevel
-import com.snowplowanalytics.snowplow.tracker.utils.Logger
+import com.snowplowanalytics.snowplow.event.AbstractEvent
+import com.snowplowanalytics.snowplow.event.Event
+import com.snowplowanalytics.snowplow.internal.emitter.Emitter.EmitterBuilder
+import com.snowplowanalytics.snowplow.internal.tracker.Logger
+import com.snowplowanalytics.snowplow.internal.tracker.Subject.SubjectBuilder
+import com.snowplowanalytics.snowplow.internal.tracker.Tracker
+import com.snowplowanalytics.snowplow.internal.tracker.Tracker.TrackerBuilder
+import com.snowplowanalytics.snowplow.network.Protocol
+import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
+import com.snowplowanalytics.snowplow.tracker.LogLevel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,6 +47,7 @@ private const val CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id"
 private const val CONTEXT_ATTR_SCORING_URI = "uri"
 
 @Singleton
+@SuppressLint("RestrictedApi")
 class SnowplowAnalyticsService @Inject internal constructor(
     @ApplicationContext context: Context,
     eventBus: EventBus,
@@ -59,7 +61,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
         // close any existing SP tracker and build our new one
         Tracker.close()
         val emitter = EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
-            .security(RequestSecurity.HTTPS)
+            .security(Protocol.HTTPS)
             .client(okhttp)
             .build()
         snowplowTracker = TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, BuildConfig.SNOWPLOW_APP_ID, context)
@@ -70,7 +72,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
             .lifecycleEvents(true)
             .subject(SubjectBuilder().build())
             .build()
-        Logger.setErrorLogger(TimberLogger)
+        Logger.setDelegate(TimberLogger)
         Logger.updateLogLevel(if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR)
     }
 
