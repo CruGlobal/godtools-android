@@ -4,6 +4,7 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import org.ccci.gto.android.common.util.xmlpull.skipTag
+import org.cru.godtools.tool.model.EventId
 import org.xmlpull.v1.XmlPullParser
 
 private const val XML_RESOURCE = "resource"

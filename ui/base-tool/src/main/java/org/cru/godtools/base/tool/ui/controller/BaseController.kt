@@ -22,9 +22,9 @@ import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.model.TrainingTip
+import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.layoutDirection
 import org.cru.godtools.xml.model.tips.Tip
 import org.greenrobot.eventbus.EventBus

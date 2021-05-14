@@ -2,8 +2,7 @@ package org.cru.godtools.xml.model.tract
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.xml.model.EventId
-import org.cru.godtools.xml.model.TOOL_CODE
+import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.xml.model.mockManifest
 import org.cru.godtools.xml.util.getXmlParserForResource
 import org.hamcrest.MatcherAssert.assertThat
@@ -16,7 +15,7 @@ import org.junit.runner.RunWith
 class CallToActionTest {
     @Test
     fun testParseCallToAction() {
-        val events = EventId.parse(TOOL_CODE, "event1 ns:event2")
+        val events = EventId.parse("event1 ns:event2")
         val page = TractPage(mockManifest(), 0, null, getXmlParserForResource("call_to_action.xml"))
         val callToAction = page.callToAction
 

@@ -2,8 +2,8 @@ package org.cru.godtools.xml.model.lesson
 
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.xml.model.DEFAULT_TEXT_SCALE
-import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Manifest
@@ -41,7 +41,7 @@ class LessonPageTest {
         assertEquals(Color.RED, page.backgroundColor)
         assertEquals(ImageGravity.TOP or ImageGravity.END, page.backgroundImageGravity)
         assertEquals(ImageScaleType.FIT, page.backgroundImageScaleType)
-        assertEquals(EventId.parse(TOOL_CODE, "lesson_page_event1"), page.listeners)
+        assertEquals(EventId.parse("lesson_page_event1").toSet(), page.listeners)
     }
 
     @Test

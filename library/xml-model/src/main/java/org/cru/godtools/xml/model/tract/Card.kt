@@ -2,10 +2,10 @@ package org.cru.godtools.xml.model.tract
 
 import androidx.annotation.ColorInt
 import androidx.annotation.RestrictTo
+import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.xml.model.AnalyticsEvent
 import org.cru.godtools.xml.model.BaseModel
 import org.cru.godtools.xml.model.Content
-import org.cru.godtools.xml.model.EventId
 import org.cru.godtools.xml.model.ImageGravity
 import org.cru.godtools.xml.model.ImageScaleType
 import org.cru.godtools.xml.model.Parent
