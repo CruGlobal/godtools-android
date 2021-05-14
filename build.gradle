@@ -156,9 +156,9 @@ allprojects {
             // force the correct version of transitive coroutine libraries
             force "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${deps.kotlinCoroutines}"
 
-            // XXX: Force okhttp3 to older version to support older versions of Android.
-            // XXX: This can go away once we bump minimum android version to API-21+
-            force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
+            // XXX: Force a version of picasso that uses AndroidX.
+            //      This can be removed once FIAM doesn't depend on Picasso 2.71828
+            force "com.squareup.picasso:picasso:${deps.picasso}"
 
             // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
             //      Remove this override once FIAM depends on v1.30.0+ of grpc
