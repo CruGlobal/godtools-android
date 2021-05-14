@@ -25,7 +25,6 @@ import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.graphics.toHsvColor
@@ -225,7 +224,7 @@ class TractActivity :
     }
 
     @VisibleForTesting
-    internal val Uri.deepLinkSelectedLanguage get() = LocaleCompat.forLanguageTag(pathSegments[0])
+    internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
     @VisibleForTesting
     internal val Uri.deepLinkTool get() = pathSegments[1]
     @VisibleForTesting
@@ -251,7 +250,7 @@ class TractActivity :
     private fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
-        .map { LocaleCompat.forLanguageTag(it) }
+        .map { Locale.forLanguageTag(it) }
     // endregion Intent Processing
 
     private fun validStartState() = dataModel.tool.value != null &&
@@ -445,7 +444,7 @@ class TractActivity :
     override val shareLinkUri get() = buildShareLink()?.build()?.toString()
     private fun buildShareLink() = activeManifest?.let {
         URI_SHARE_BASE.buildUpon()
-            .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
+            .appendEncodedPath(it.locale.toLanguageTag().toLowerCase(Locale.ENGLISH))
             .appendPath(it.code)
             .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
             .appendQueryParameter("icid", "gtshare")
@@ -482,10 +481,10 @@ class TractActivity :
                 val shareUrl = (buildShareLink() ?: return)
                     .apply {
                         dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
-                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.joinToString(",") { it.toLanguageTag() }
                             ?.let { appendQueryParameter(PARAM_PRIMARY_LANGUAGE, it) }
                         dataModel.parallelLocales.value?.takeUnless { it.isEmpty() }
-                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.joinToString(",") { it.toLanguageTag() }
                             ?.let { appendQueryParameter(PARAM_PARALLEL_LANGUAGE, it) }
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)

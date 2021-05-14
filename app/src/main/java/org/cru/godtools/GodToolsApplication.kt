@@ -10,7 +10,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import java.util.Locale
 import javax.inject.Inject
-import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.util.LocaleUtils
@@ -57,7 +56,7 @@ open class GodToolsApplication : Application() {
         FirebaseCrashlytics.getInstance().apply {
             setCustomKey("InstantApp", InstantApps.isInstantApp(this@GodToolsApplication))
             setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
-            setCustomKey("SystemLanguage", toLanguageTag(Locale.getDefault()))
+            setCustomKey("SystemLanguage", Locale.getDefault().toLanguageTag())
         }
         Timber.plant(CrashlyticsTree())
     }

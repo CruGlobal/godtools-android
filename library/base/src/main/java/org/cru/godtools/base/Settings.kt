@@ -16,8 +16,6 @@ import javax.inject.Singleton
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
-import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
-import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
 
 private const val PREFS_SETTINGS = "GodTools"
@@ -65,12 +63,12 @@ class Settings @Inject internal constructor(
             ?: defaultLanguage.also { primaryLanguage = it }
         set(value) {
             prefs.edit {
-                putString(PREF_PRIMARY_LANGUAGE, toLanguageTag(value))
+                putString(PREF_PRIMARY_LANGUAGE, value.toLanguageTag())
                 if (value == parallelLanguage) remove(PREF_PARALLEL_LANGUAGE)
             }
         }
     val primaryLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, toLanguageTag(defaultLanguage)).distinctUntilChanged()
+        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
             .map { it?.parseLanguageTag() ?: defaultLanguage.also { primaryLanguage = it } }
     }
 
@@ -78,7 +76,7 @@ class Settings @Inject internal constructor(
         get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.parseLanguageTag()
         set(locale) {
             if (primaryLanguage == locale) return
-            prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.let { toLanguageTag(it) }) }
+            prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
         }
     val parallelLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
@@ -153,13 +151,13 @@ class Settings @Inject internal constructor(
     fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {
         oktaId == null && guid == null -> true
         oktaId?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", false) } == true -> true
-        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", false) } == true -> true
+        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.uppercase(Locale.ROOT)}", false) } == true -> true
         else -> false
     }
 
     fun recordAddedToCampaign(oktaId: String? = null, guid: String? = null) = prefs.edit {
         if (oktaId != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", true)
-        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", true)
+        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.uppercase(Locale.ROOT)}", true)
     }
     // endregion Campaign Tracking
 
@@ -209,4 +207,4 @@ class Settings @Inject internal constructor(
 }
 
 @Suppress("NOTHING_TO_INLINE")
-private inline fun String.parseLanguageTag() = forLanguageTag(this)
+private inline fun String.parseLanguageTag() = Locale.forLanguageTag(this)
