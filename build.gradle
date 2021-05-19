@@ -15,7 +15,7 @@ buildscript {
                 findbugs           : '3.0.2',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.2.1',
-                grpc               : '1.37.1',
+                grpc               : '1.38.0',
                 gtoSupport         : '3.9.0-SNAPSHOT',
                 guava              : '30.1.1-android',
                 hamcrest           : '2.2',
