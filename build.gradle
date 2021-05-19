@@ -55,7 +55,7 @@ buildscript {
                 collection        : '1.1.0',
                 concurrent        : '1.1.0',
                 constraintLayout  : '2.0.4',
-                core              : '1.3.2',
+                core              : '1.5.0',
                 databinding       : deps.gradleAndroidPlugin,
                 fragment          : '1.3.3',
                 hilt              : '1.0.0',
