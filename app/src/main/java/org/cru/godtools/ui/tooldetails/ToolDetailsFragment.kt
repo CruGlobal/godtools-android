@@ -87,7 +87,7 @@ class ToolDetailsFragment() :
     }
 
     override fun onLinkClicked(url: String) {
-        eventBus.post(ExitLinkActionEvent(Uri.parse(url)))
+        eventBus.post(ExitLinkActionEvent(toolCode, Uri.parse(url)))
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
