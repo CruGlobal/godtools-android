@@ -1,7 +1,5 @@
 package org.cru.godtools
 
-import android.content.Context
-import androidx.multidex.MultiDex
 import leakcanary.LeakCanary
 import org.ccci.gto.android.common.leakcanary.crashlytics.CrashlyticsOnHeapAnalyzedListener
 import org.ccci.gto.android.common.leakcanary.timber.TimberSharkLog
@@ -13,11 +11,6 @@ class DebugGodToolsApplication : GodToolsApplication() {
         configLeakCanary()
         initTimber()
         super.onCreate()
-    }
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 
     private fun configLeakCanary() {

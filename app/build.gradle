@@ -210,7 +210,6 @@ dependencies {
     implementation "com.sergivonavi:materialbanner:1.2.0"
     api "org.greenrobot:eventbus:${deps.eventbus}"
 
-    debugImplementation "androidx.multidex:multidex:${deps.androidX.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"

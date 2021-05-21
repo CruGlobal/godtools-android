@@ -61,7 +61,6 @@ buildscript {
                 hilt              : '1.0.0',
                 lifecycle         : '2.3.0',
                 loader            : '1.1.0',
-                multidex          : '2.0.1',
                 recyclerView      : '1.2.1',
                 room              : '2.3.0',
                 swipeRefreshLayout: '1.1.0',
@@ -149,7 +148,6 @@ allprojects {
             force "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
             force "androidx.fragment:fragment:${deps.androidX.fragment}"
             force "androidx.loader:loader:${deps.androidX.loader}"
-            force "androidx.multidex:multidex:${deps.androidX.multidex}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
             force "junit:junit:${deps.junit}"
 
