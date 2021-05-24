@@ -31,13 +31,15 @@ internal sealed class ButtonController<T : ViewDataBinding>(
     }
 
     fun click() {
+        val model = model
         triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
         when (model?.type) {
-            Button.Type.URL -> model?.url?.let { url ->
-                eventBus.post(ExitLinkActionEvent(url))
+            Button.Type.URL -> model.url?.let { url ->
+                eventBus.post(ExitLinkActionEvent(model.manifest.code, url))
                 root.context.openUrl(url)
             }
-            Button.Type.EVENT -> sendEvents(model?.events)
+            Button.Type.EVENT -> sendEvents(model.events)
+            Button.Type.UNKNOWN -> Unit
         }
     }
 }
