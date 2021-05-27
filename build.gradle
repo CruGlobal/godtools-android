@@ -5,7 +5,7 @@ buildscript {
         deps = [
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
-                appsFlyer          : '6.3.0',
+                appsFlyer          : '6.3.1',
                 autoValue          : '1.8.1',
                 circleindicator    : '2.1.6',
                 dagger             : '2.36',
