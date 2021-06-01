@@ -28,6 +28,6 @@ internal inline fun Parent.parseContent(
         if (parser.eventType == XmlPullParser.END_TAG) continue
 
         // try parsing this child element as a content node
-        Content.fromXml(this@parseContent, parser, true)?.takeUnless { it.isIgnored }?.let { add(it) }
+        Content.fromXml(this@parseContent, parser)?.takeUnless { it.isIgnored }?.let { add(it) }
     }
 }
