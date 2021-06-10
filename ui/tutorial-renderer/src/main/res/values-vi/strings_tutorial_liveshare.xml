@@ -2,14 +2,12 @@
 <resources>
     <!-- Live Share Tutorial -->
     <string name="tutorial_live_share_description_headline">Chia sẻ màn hình của bạn</string>
-    <string name="tutorial_live_share_description_text">Tùy chọn này sẽ gửi một liên kết đến công cụ này cho một người bạn. Khi liên kết được mở, nó sẽ bắt đầu một phiên chia sẻ màn hình.</string>
-    <string name="tutorial_live_share_mirrored_headline">Trải nghiệm nhân đôi</string>
-    <string name="tutorial_live_share_mirrored_text">Khi bạn cuộn công cụ trên điện thoại, màn hình của bạn bè sẽ phản hồi theo cách tương tự. Điều này sẽ giúp bạn xem một công cụ cùng nhau trên 2 thiết bị cùng một lúc.</string>
+    <string name="tutorial_live_share_description_text">Tùy chọn này sẽ gửi một đường link về công cụ này cho một người bạn. Khi đường link được mở, nó sẽ bắt đầu phần chia sẻ màn hình.</string>
+    <string name="tutorial_live_share_mirrored_headline">Trải nghiệm song song</string>
+    <string name="tutorial_live_share_mirrored_text">Khi bạn lướt công cụ trên điện thoại của mình, màn hình của bạn bè cũng sẽ được lướt theo. Điều này sẽ giúp bạn và người nghe có thể xem cùng công cụ cùng lúc trên 2 thiết bị khác nhau.</string>
     <string name="tutorial_live_share_start_headline">Bắt đầu</string>
-    <string name="tutorial_live_share_start_text">Gửi liên kết tới một hoặc nhiều người để bắt đầu phiên chia sẻ màn hình ngay bây giờ.
-
-Trải nghiệm này hiện yêu cầu tất cả người tham gia phải tải xuống ứng dụng GodTools trên thiết bị của họ.</string>
+    <string name="tutorial_live_share_start_text">Gửi link tới một hoặc nhiều người để bắt đầu chia sẻ màn hình ngay bây giờ.</string>
     <string name="tutorial_live_share_action_continue">Tiếp tục</string>
     <string name="tutorial_live_share_action_skip">"Bỏ qua "</string>
-    <string name="tutorial_live_share_action_start">Chia sẻ một liên kết</string>
+    <string name="tutorial_live_share_action_start">Chia sẻ đường link</string>
 </resources>
