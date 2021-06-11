@@ -6,15 +6,20 @@
     <string name="tract_card_next">Tiếp theo</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Chia sẻ màn hình của bạn</string>
+    <string name="menu_live_share_active">Đang chia sẻ màn hình</string>
     <string name="share_tool_message_tract_live_share">Xin chào, hãy theo dõi cùng tôi trong GodTools thông qua chia sẻ màn hình. Đây là liên kết: %1$s\n\nNếu bạn không nhận được thông báo này sau đó, liên kết có thể vẫn không hoạt động. Chúng ta có thể thử lại vào lúc khác.</string>
     <string name="tract_live_share_starting">Bắt đầu chia sẻ màn hình…</string>
-    <string name="tract_live_share_unable_to_connect">Không thể kết nối với Chia sẻ màn hình</string>
-    <string name="tract_live_share_exit_dialog_message">Thoát khỏi phiên chia sẻ từ xa bây giờ?</string>
+    <string name="tract_live_share_unable_to_connect">Không thể kết nối để chia sẻ màn hình</string>
+    <string name="tract_live_share_exit_dialog_message">Thoát khỏi chế độ chia sẻ từ xa?</string>
     <string name="tract_live_share_exit_dialog_confirm">Thoát</string>
     <string name="tract_live_share_exit_dialog_cancel">Hủy</string>
     <!-- Training Tips -->
     <string name="tract_tips_tip_action_next">Tiếp theo</string>
     <string name="tract_tips_tip_action_close">Đóng</string>
     <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Hỏi</string>
+    <string name="tract_tips_type_consider">Xem xét</string>
     <string name="tract_tips_type_prepare">Chuẩn bị</string>
+    <string name="tract_tips_type_quote">Trích dẫn</string>
+    <string name="tract_tips_type_tip">Lời gợi ý</string>
 </resources>
