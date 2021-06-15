@@ -29,7 +29,7 @@ import org.robolectric.annotation.Config
 @Config(application = HiltTestApplication::class)
 class TractContentCardBindingTest {
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    val hiltRule = HiltAndroidRule(this)
 
     private lateinit var binding: TractContentCardBinding
 
