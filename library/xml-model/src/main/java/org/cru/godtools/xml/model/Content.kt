@@ -34,11 +34,7 @@ abstract class Content : BaseModel {
     open val tips get() = emptyList<Tip>()
 
     companion object {
-        internal fun fromXml(
-            parent: Base,
-            parser: XmlPullParser,
-            consumeUnrecognizedTags: Boolean = false
-        ): Content? {
+        internal fun fromXml(parent: Base, parser: XmlPullParser): Content? {
             parser.require(XmlPullParser.START_TAG, null, null)
 
             return when (parser.namespace) {
@@ -61,19 +57,19 @@ abstract class Content : BaseModel {
                     Link.XML_LINK -> Link(parent, parser)
                     Spacer.XML_SPACER -> Spacer(parent, parser)
                     else -> {
-                        if (consumeUnrecognizedTags) parser.skipTag()
+                        parser.skipTag()
                         null
                     }
                 }
                 XMLNS_TRAINING -> when (parser.name) {
                     InlineTip.XML_TIP -> InlineTip(parent, parser)
                     else -> {
-                        if (consumeUnrecognizedTags) parser.skipTag()
+                        parser.skipTag()
                         null
                     }
                 }
                 else -> {
-                    if (consumeUnrecognizedTags) parser.skipTag()
+                    parser.skipTag()
                     null
                 }
             }

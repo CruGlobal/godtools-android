@@ -1,7 +1,6 @@
 package org.cru.godtools.tutorial
 
 import java.util.Locale
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
 
@@ -33,7 +32,7 @@ enum class PageSet(
             Locale("in"),
             Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
-            LocaleCompat.forLanguageTag("zh-Hans")
+            Locale.forLanguageTag("zh-Hans")
         )
     ),
     TRAINING(
@@ -53,7 +52,7 @@ enum class PageSet(
             Locale("in"),
             Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
-            LocaleCompat.forLanguageTag("zh-Hans")
+            Locale.forLanguageTag("zh-Hans")
         )
     ),
     LIVE_SHARE(

@@ -121,9 +121,10 @@ abstract class BaseController<T : Base> protected constructor(
 
     protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
+        val locale = manifest?.locale
         return when {
-            manifest == null || tipId == null -> ImmutableLiveData(false)
-            else -> findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
+            manifest == null || locale == null || tipId == null -> ImmutableLiveData(false)
+            else -> findLiveData<TrainingTip>(manifest.code, locale, tipId).map { it?.isCompleted == true }
                 .distinctUntilChanged()
         }
     }

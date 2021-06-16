@@ -16,10 +16,6 @@ android {
     }
 }
 
-hilt {
-    enableTransformForLocalTests = true
-}
-
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')

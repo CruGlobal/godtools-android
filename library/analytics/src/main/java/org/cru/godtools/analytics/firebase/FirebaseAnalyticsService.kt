@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
@@ -79,7 +78,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         val bundle = Bundle().apply {
             putString(FirebaseAnalytics.Param.SCREEN_NAME, event.screen)
             putString(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
-            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
+            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, it.toLanguageTag()) }
             event.appSection?.let { putString(PARAM_APP_SECTION, it) }
             event.appSubSection?.let { putString(PARAM_APP_SUB_SECTION, it) }
         }
@@ -89,7 +88,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     @MainThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
         val params = Bundle().apply {
-            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(it)) }
+            event.locale?.let { putString(PARAM_CONTENT_LANGUAGE, it.toLanguageTag()) }
             event.appSection?.let { putString(PARAM_APP_SECTION, it) }
             event.appSubSection?.let { putString(PARAM_APP_SUB_SECTION, it) }
             putAll(event.firebaseParams)
@@ -108,7 +107,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
             .launchIn(coroutineScope)
 
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
-        firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, LocaleCompat.toLanguageTag(Locale.getDefault()))
+        firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, Locale.getDefault().toLanguageTag())
         firebase.setUserProperty(
             USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )

@@ -39,25 +39,25 @@ class ContentTest {
 
     @Test
     fun verifyFromXmlParagraph() {
-        val content = Content.fromXml(Manifest(), getXmlParserForResource("paragraph.xml"), true)
+        val content = Content.fromXml(Manifest(), getXmlParserForResource("paragraph.xml"))
         assertTrue(content is Paragraph)
     }
 
     @Test
     fun verifyFromXmlParagraphFallback() {
-        val content = Content.fromXml(Manifest(), getXmlParserForResource("fallback_paragraph.xml"), true)
+        val content = Content.fromXml(Manifest(), getXmlParserForResource("fallback_paragraph.xml"))
         assertTrue(content is Fallback)
     }
 
     @Test
     fun verifyFromXmlFallback() {
-        val content = Content.fromXml(Manifest(), getXmlParserForResource("fallback.xml"), true)
+        val content = Content.fromXml(Manifest(), getXmlParserForResource("fallback.xml"))
         assertTrue(content is Fallback)
     }
 
     @Test
     fun testFromXmlSpacer() {
-        val content = Content.fromXml(Manifest(), getXmlParserForResource("spacer.xml"), true)
+        val content = Content.fromXml(Manifest(), getXmlParserForResource("spacer.xml"))
         assertTrue(content is Spacer)
     }
 }
