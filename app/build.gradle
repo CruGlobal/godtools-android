@@ -1,3 +1,4 @@
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -227,8 +228,6 @@ dependencies {
 
     kaptTest "com.google.dagger:hilt-compiler:${deps.dagger}"
 }
-
-apply plugin: 'com.google.gms.google-services'
 
 // make crashlytics upload task dependent on the assemble task for all build variants
 afterEvaluate {
