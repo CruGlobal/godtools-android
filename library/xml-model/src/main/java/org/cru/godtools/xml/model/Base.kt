@@ -2,13 +2,13 @@ package org.cru.godtools.xml.model
 
 import android.text.TextUtils
 import android.view.View
+import org.cru.godtools.tool.model.stylesParent
 
-interface Base {
-    val stylesParent: Styles?
+@Deprecated("Use kotlin mpp library instead")
+typealias Base = org.cru.godtools.tool.model.Base
 
-    val manifest: Manifest
-}
+@Deprecated("Use kotlin mpp library instead", ReplaceWith("stylesParent", "org.cru.godtools.tool.model.stylesParent"))
+inline val Base?.stylesParent get() = stylesParent
 
-val Base?.stylesParent get() = this?.stylesParent
 val Base?.layoutDirection
     get() = this?.manifest?.locale?.let { TextUtils.getLayoutDirectionFromLocale(it) } ?: View.LAYOUT_DIRECTION_INHERIT

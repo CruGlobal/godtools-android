@@ -31,6 +31,3 @@ internal enum class DeviceType {
         }
     }
 }
-
-internal fun XmlPullParser.getAttributeValueAsDeviceTypesOrNull(name: String) =
-    DeviceType.parseOrNull(getAttributeValue(null, name))

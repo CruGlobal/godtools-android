@@ -1,46 +1,32 @@
 package org.cru.godtools.xml.model
 
 import androidx.annotation.ColorInt
-import androidx.annotation.DimenRes
-import org.cru.godtools.xml.R
+import org.cru.godtools.tool.model.buttonStyle
+import org.cru.godtools.tool.model.primaryColor
+import org.cru.godtools.tool.model.primaryTextColor
+import org.cru.godtools.tool.model.textAlign
+import org.cru.godtools.tool.model.textColor
 
-@DimenRes
-private val DEFAULT_TEXT_SIZE = R.dimen.text_size_base
 internal const val DEFAULT_TEXT_SCALE = 1.0
-private val DEFAULT_TEXT_ALIGN = Text.Align.DEFAULT
 
-interface Styles : Base {
-    @get:ColorInt
-    val primaryColor: Int get() = stylesParent.primaryColor
+@Deprecated("Use kotlin mpp library instead")
+typealias Styles = org.cru.godtools.tool.model.Styles
 
-    @get:ColorInt
-    val primaryTextColor: Int get() = stylesParent.primaryTextColor
-
-    @get:ColorInt
-    val textColor: Int get() = stylesParent.textColor
-
-    val textScale: Double get() = stylesParent.textScale
-    @get:DimenRes
-    val textSize: Int get() = stylesParent.textSize
-
-    val textAlign: Text.Align get() = stylesParent.textAlign
-
-    // region Button styles
-    val buttonStyle: Button.Style get() = stylesParent.buttonStyle
-    @get:ColorInt
-    val buttonColor: Int? get() = stylesParent?.buttonColor
-    // endregion Button styles
-}
-
+@Deprecated("Use kotlin mpp library instead", ReplaceWith("primaryColor", "org.cru.godtools.tool.model.primaryColor"))
 @get:ColorInt
-val Styles?.primaryColor get() = this?.primaryColor ?: Manifest.DEFAULT_PRIMARY_COLOR
+inline val Styles?.primaryColor get() = primaryColor
+@Deprecated(
+    "Use kotlin mpp library instead",
+    ReplaceWith("primaryTextColor", "org.cru.godtools.tool.model.primaryTextColor")
+)
 @get:ColorInt
-val Styles?.primaryTextColor get() = this?.primaryTextColor ?: Manifest.DEFAULT_PRIMARY_TEXT_COLOR
+inline val Styles?.primaryTextColor get() = primaryTextColor
+@Deprecated("Use kotlin mpp library instead", ReplaceWith("textColor", "org.cru.godtools.tool.model.textColor"))
 @get:ColorInt
-val Styles?.textColor get() = this?.textColor ?: Manifest.DEFAULT_TEXT_COLOR
-@get:DimenRes
-val Styles?.textSize get() = this?.textSize ?: DEFAULT_TEXT_SIZE
+inline val Styles?.textColor get() = textColor
 val Styles?.textScale get() = this?.textScale ?: DEFAULT_TEXT_SCALE
-val Styles?.textAlign get() = this?.textAlign ?: DEFAULT_TEXT_ALIGN
+@Deprecated("Use kotlin mpp library instead", ReplaceWith("textAlign", "org.cru.godtools.tool.model.textAlign"))
+inline val Styles?.textAlign get() = textAlign
 
-val Styles?.buttonStyle get() = this?.buttonStyle ?: Manifest.DEFAULT_BUTTON_STYLE
+@Deprecated("Use kotlin mpp library instead", ReplaceWith("buttonStyle", "org.cru.godtools.tool.model.buttonStyle"))
+inline val Styles?.buttonStyle get() = buttonStyle
