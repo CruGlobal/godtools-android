@@ -9,6 +9,7 @@ import java.io.IOException
 import java.util.Locale
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.base.ToolFileManager
+import org.cru.godtools.tool.service.Result
 import org.cru.godtools.xml.model.TOOL_CODE
 import org.cru.godtools.xml.util.getInputStreamForResource
 import org.junit.Assert.assertNotNull
