@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.databinding
 
-import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.TypedValue
@@ -24,8 +23,26 @@ import splitties.bitflags.minusFlag
 import splitties.bitflags.withFlag
 
 @BindingAdapter("android:text", "android:textSize", "defaultTextColor", requireAll = false)
-fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextColor: Int?) =
-    text.bindTo(this, textSize, defaultTextColor)
+fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextColor: Int?) {
+    this.text = text?.text
+    setTypeface(text?.manifest?.getTypeface(context), text?.typefaceStyle ?: Typeface.NORMAL)
+    paintFlags = paintFlags.let {
+        if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
+        else it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
+    }
+    val size = text.textScale * (textSize ?: context.resources.getDimension(text.textSize))
+    setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
+
+    val defColor = defaultTextColor ?: text.defaultTextColor
+    if (text != null) {
+        setTextColor(text.getTextColor(defColor))
+    } else {
+        setTextColor(defColor)
+    }
+
+    // set the alignment for the text
+    gravity = (gravity and Gravity.VERTICAL_GRAVITY_MASK) or text.textAlign.gravity
+}
 
 @BindingAdapter("android:drawableStart", "drawableStartSize")
 fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: Int) {
@@ -61,28 +78,6 @@ fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) 
     }
 }
 
-private fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
-    view.text = this?.text
-    view.setTypeface(this?.getTypeface(view.context), this?.typefaceStyle ?: Typeface.NORMAL)
-    view.paintFlags = view.paintFlags.let {
-        if (Text.Style.UNDERLINE in this?.textStyles.orEmpty()) it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
-        else it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
-    }
-    val size = textScale * (textSize ?: view.context.resources.getDimension(this.textSize))
-    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
-
-    val defColor = defaultTextColor ?: this.defaultTextColor
-    if (this != null) {
-        view.setTextColor(getTextColor(defColor))
-    } else {
-        view.setTextColor(defColor)
-    }
-
-    // set the alignment for the text
-    view.gravity = (view.gravity and Gravity.VERTICAL_GRAVITY_MASK) or textAlign.gravity
-}
-
-private fun Text.getTypeface(context: Context) = manifest.getTypeface(context)
 private val Text.typefaceStyle
     get() = Typeface.NORMAL
         .withFlag(if (Text.Style.BOLD in textStyles) Typeface.BOLD else 0)
