@@ -34,11 +34,7 @@ fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextCo
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
     val defColor = defaultTextColor ?: text.defaultTextColor
-    if (text != null) {
-        setTextColor(text.getTextColor(defColor))
-    } else {
-        setTextColor(defColor)
-    }
+    setTextColor(text?.getTextColor(defColor) ?: defColor)
 
     // set the alignment for the text
     gravity = (gravity and Gravity.VERTICAL_GRAVITY_MASK) or text.textAlign.gravity
