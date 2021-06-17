@@ -9,12 +9,12 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.model.tract.CallToAction
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.tips.Tip
-import org.cru.godtools.xml.model.tract.CallToAction
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

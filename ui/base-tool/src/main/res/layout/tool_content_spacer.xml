@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="org.cru.godtools.xml.model.Spacer.Mode" />
+        <import type="org.cru.godtools.tool.model.Spacer.Mode" />
         <import type="org.ccci.gto.android.common.util.DimensionUtils" />
 
-        <variable name="model" type="org.cru.godtools.xml.model.Spacer" />
+        <variable name="model" type="org.cru.godtools.tool.model.Spacer" />
     </data>
 
     <Space

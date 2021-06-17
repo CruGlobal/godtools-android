@@ -2,9 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.xml.model.ButtonKt" />
+        <import type="org.cru.godtools.tool.model.ButtonKt" />
 
-        <variable name="model" type="org.cru.godtools.xml.model.Button" />
+        <variable name="model" type="org.cru.godtools.tool.model.Button" />
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.ButtonController" />
     </data>
 

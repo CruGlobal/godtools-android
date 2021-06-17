@@ -6,12 +6,12 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.xml.model.BaseKt" />
-        <import type="org.cru.godtools.xml.model.tract.TractPageKt" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.tool.model.tract.TractPageKt" />
+        <import type="org.cru.godtools.tool.model.StylesKt" />
         <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
-        <variable name="page" type="org.cru.godtools.xml.model.tract.TractPage" />
+        <variable name="page" type="org.cru.godtools.tool.model.tract.TractPage" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
         <variable name="isVisible" type="Boolean" />
         <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />

@@ -9,7 +9,7 @@
 
         <variable name="enableTips" type="Boolean" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.tips.InlineTipController" />
-        <variable name="model" type="org.cru.godtools.xml.model.tips.InlineTip" />
+        <variable name="model" type="org.cru.godtools.tool.model.tips.InlineTip" />
         <variable name="isCompleted" type="androidx.lifecycle.LiveData&lt;Boolean&gt;" />
     </data>
 

@@ -14,7 +14,7 @@
         <variable name="primaryTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="parallelTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />
-        <variable name="manifest" type="LiveData&lt;org.cru.godtools.xml.model.Manifest>" />
+        <variable name="manifest" type="LiveData&lt;org.cru.godtools.tool.model.Manifest>" />
     </data>
 
     <org.ccci.gto.android.common.widget.HackyNestedScrollView

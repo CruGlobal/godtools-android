@@ -10,10 +10,11 @@ import android.graphics.Typeface.NORMAL
 import android.view.Gravity
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.Text
+import org.cru.godtools.tool.model.defaultTextColor
+import org.cru.godtools.tool.model.gravity
 import org.cru.godtools.xml.R
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Text
-import org.cru.godtools.xml.model.defaultTextColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

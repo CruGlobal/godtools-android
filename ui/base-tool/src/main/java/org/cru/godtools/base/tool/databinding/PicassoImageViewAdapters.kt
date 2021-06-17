@@ -9,9 +9,9 @@ import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
 import org.cru.godtools.base.toolFileManager
-import org.cru.godtools.xml.model.ImageGravity
-import org.cru.godtools.xml.model.ImageScaleType
-import org.cru.godtools.xml.model.Resource
+import org.cru.godtools.tool.model.ImageGravity
+import org.cru.godtools.tool.model.ImageScaleType
+import org.cru.godtools.tool.model.Resource
 import org.cru.godtools.xml.model.layoutDirection
 
 private const val PICASSO_FILE = "picassoFile"
@@ -23,8 +23,8 @@ internal fun SimplePicassoImageView.setPicassoFile(resource: Resource?) = setPic
 internal fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
     scaleType: ImageScaleType?,
-    gravity: Int?
-) = bindScaledResource(resource, scaleType, gravity?.let { ImageGravity(it) } ?: ImageGravity.CENTER)
+    gravity: Int
+) = bindScaledResource(resource, scaleType, ImageGravity(gravity))
 
 private fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,

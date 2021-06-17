@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.xml.model.BaseKt" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.tool.model.BaseKt" />
+        <import type="org.cru.godtools.tool.model.StylesKt" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.LinkController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Link" />
+        <variable name="model" type="org.cru.godtools.tool.model.Link" />
     </data>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"

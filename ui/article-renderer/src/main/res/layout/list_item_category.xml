@@ -6,11 +6,11 @@
     <data>
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.article.ui.categories.CategorySelectedListener" />
-        <import type="org.cru.godtools.xml.model.Manifest" />
-        <import type="org.cru.godtools.xml.model.ManifestKt" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.tool.model.ManifestKt" />
 
         <variable name="callbacks" type="ObservableField&lt;CategorySelectedListener&gt;" />
-        <variable name="category" type="org.cru.godtools.xml.model.Category" />
+        <variable name="category" type="org.cru.godtools.tool.model.Category" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

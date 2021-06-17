@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
-        <import type="org.cru.godtools.xml.model.BaseKt" />
-        <import type="org.cru.godtools.xml.model.Input.Type" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
-        <import type="org.cru.godtools.xml.model.TextKt" />
+        <import type="org.cru.godtools.tool.model.BaseKt" />
+        <import type="org.cru.godtools.tool.model.Input.Type" />
+        <import type="org.cru.godtools.tool.model.StylesKt" />
+        <import type="org.cru.godtools.tool.model.TextKt" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.InputController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Input" />
-        <variable name="error" type="org.cru.godtools.xml.model.Input.Error" />
+        <variable name="model" type="org.cru.godtools.tool.model.Input" />
+        <variable name="error" type="org.cru.godtools.tool.model.Input.Error" />
     </data>
 
     <com.google.android.material.textfield.TextInputLayout

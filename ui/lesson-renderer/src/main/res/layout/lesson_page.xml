@@ -4,11 +4,11 @@
     <data>
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
-        <import type="org.cru.godtools.xml.model.lesson.LessonPageKt" />
+        <import type="org.cru.godtools.tool.model.lesson.LessonPageKt" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
-        <variable name="model" type="org.cru.godtools.xml.model.lesson.LessonPage" />
+        <variable name="model" type="org.cru.godtools.tool.model.lesson.LessonPage" />
         <variable name="isFirstPage" type="boolean" />
         <variable name="isLastPage" type="boolean" />
     </data>

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="org.cru.godtools.xml.model.tract.HeaderKt" />
+        <import type="org.cru.godtools.tool.model.tract.HeaderKt" />
 
-        <variable name="header" type="org.cru.godtools.xml.model.tract.Header" />
+        <variable name="header" type="org.cru.godtools.tool.model.tract.Header" />
     </data>
 
     <RelativeLayout
