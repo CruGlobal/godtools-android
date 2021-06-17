@@ -61,7 +61,7 @@ fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) 
     }
 }
 
-internal fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
+private fun Text?.bindTo(view: TextView, textSize: Float? = null, @ColorInt defaultTextColor: Int? = null) {
     view.text = this?.text
     view.setTypeface(this?.getTypeface(view.context), this?.typefaceStyle ?: Typeface.NORMAL)
     view.paintFlags = view.paintFlags.let {

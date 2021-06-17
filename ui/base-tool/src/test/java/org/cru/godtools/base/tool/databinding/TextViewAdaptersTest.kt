@@ -36,7 +36,7 @@ class TextViewAdaptersTest {
     }
 
     @Test
-    fun verifyBindText() {
+    fun verifyBindTextNode() {
         val text = Text(
             Manifest(),
             text = "text",
@@ -45,7 +45,7 @@ class TextViewAdaptersTest {
             textAlign = Text.Align.CENTER,
             textStyles = setOf(Text.Style.BOLD, Text.Style.ITALIC, Text.Style.UNDERLINE)
         )
-        text.bindTo(view)
+        view.bindTextNode(text, null, null)
         assertEquals("text", view.text)
         assertEquals(Color.RED, view.textColors.defaultColor)
         assertEquals(Text.Align.CENTER.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
@@ -55,10 +55,10 @@ class TextViewAdaptersTest {
     }
 
     @Test
-    fun verifyBindTextDefaults() {
+    fun verifyBindTextNodeDefaults() {
         val baseTextSize = activity.resources.getDimension(R.dimen.text_size_header)
         val text = Text(Manifest(), text = "text", textScale = 1.5, textColor = null, textAlign = Text.Align.END)
-        text.bindTo(view, baseTextSize, Color.GREEN)
+        view.bindTextNode(text, baseTextSize, Color.GREEN)
         assertEquals("text", view.text)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
         assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
