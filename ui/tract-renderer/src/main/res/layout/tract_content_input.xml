@@ -7,6 +7,7 @@
         <import type="org.cru.godtools.tool.model.Input.Type" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
         <import type="org.cru.godtools.tool.model.TextKt" />
+        <import type="org.cru.godtools.base.tool.ui.util.InputUtilsKt" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.InputController" />
         <variable name="model" type="org.cru.godtools.tool.model.Input" />
@@ -23,7 +24,7 @@
         android:hint="@{(model.label ?? model.placeholder).text}"
         android:textColorHint="@{TextKt.getTextColor(model.label ?? model.placeholder)}"
         app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}"
-        app:error="@{error.msgId != null ? ContextKt.getString(context, model.manifest.locale, error.msgId, model.name, input.text) : error.msg}"
+        app:error="@{InputUtilsKt.getMessage(error, context, model.manifest.locale, model.name, input.text)}"
         app:errorEnabled="@{error != null}"
         app:hintTextColor="@{TextKt.getTextColor(model.placeholder ?? model.label)}"
         app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
