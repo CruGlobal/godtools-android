@@ -1,8 +1,9 @@
 package org.cru.godtools.base.tool.analytics.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.xml.model.AnalyticsEvent
+import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.tool.model.AnalyticsEvent.System.ADOBE
+import org.cru.godtools.tool.model.AnalyticsEvent.System.FIREBASE
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasEntry
 import org.junit.Assert.assertEquals
@@ -16,11 +17,11 @@ class ContentAnalyticsActionEventTest {
     @Test
     fun testFirebaseEventNameAdobeMigration() {
         val adobeEvent =
-            ContentAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(AnalyticsSystem.ADOBE)))
+            ContentAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(ADOBE)))
         assertEquals("a_b_c_d_e", adobeEvent.firebaseEventName)
 
         val firebaseEvent =
-            ContentAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(AnalyticsSystem.FIREBASE)))
+            ContentAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(FIREBASE)))
         assertEquals("A b_c.d-e", firebaseEvent.firebaseEventName)
     }
 
@@ -28,7 +29,7 @@ class ContentAnalyticsActionEventTest {
     fun testFirebaseParamsAdobeMigration() {
         val adobeEvent =
             ContentAnalyticsActionEvent(
-                AnalyticsEvent(systems = setOf(AnalyticsSystem.ADOBE), attributes = mapOf("cru.Key" to "value"))
+                AnalyticsEvent(systems = setOf(ADOBE), attributes = mapOf("cru.Key" to "value"))
             )
         assertThat(adobeEvent.adobeAttributes, hasEntry("cru.Key", "value"))
         with(adobeEvent.firebaseParams) {
@@ -39,7 +40,7 @@ class ContentAnalyticsActionEventTest {
 
         val firebaseEvent =
             ContentAnalyticsActionEvent(
-                AnalyticsEvent(systems = setOf(AnalyticsSystem.FIREBASE), attributes = mapOf("cru.Key" to "value"))
+                AnalyticsEvent(systems = setOf(FIREBASE), attributes = mapOf("cru.Key" to "value"))
             )
         with(firebaseEvent.firebaseParams) {
             assertFalse(containsKey("cru_key"))
