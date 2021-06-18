@@ -7,8 +7,8 @@ import androidx.annotation.UiThread
 import kotlin.reflect.KClass
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.xml.model.Content
-import org.cru.godtools.xml.model.Parent
+import org.cru.godtools.tool.model.Content
+import org.cru.godtools.tool.model.Parent
 import org.greenrobot.eventbus.EventBus
 
 abstract class ParentController<T> protected constructor(

@@ -8,7 +8,7 @@ import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.databinding.ToolContentVideoBinding
-import org.cru.godtools.xml.model.Video
+import org.cru.godtools.tool.model.Video
 
 internal class VideoController private constructor(
     private val binding: ToolContentVideoBinding,

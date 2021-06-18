@@ -9,7 +9,7 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionBinding
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionSectionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.xml.model.Accordion
+import org.cru.godtools.tool.model.Accordion
 
 class AccordionController private constructor(
     private val binding: ToolContentAccordionBinding,

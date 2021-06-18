@@ -13,11 +13,11 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import javax.inject.Inject
 import org.cru.godtools.base.Settings
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

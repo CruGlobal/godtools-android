@@ -19,12 +19,12 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.Modal
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
-import org.cru.godtools.xml.model.tips.Tip
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.Modal
-import org.cru.godtools.xml.model.tract.TractPage
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 

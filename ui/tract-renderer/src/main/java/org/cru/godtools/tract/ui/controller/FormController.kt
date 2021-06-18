@@ -10,8 +10,8 @@ import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.Form
 import org.cru.godtools.tract.databinding.TractContentFormBinding
-import org.cru.godtools.xml.model.Form
 
 class FormController private constructor(
     private val binding: TractContentFormBinding,
@@ -34,7 +34,7 @@ class FormController private constructor(
 
     override val contentContainer get() = binding.content
 
-    override fun validate(ids: Set<EventId>): Boolean {
+    override fun validate(ids: List<EventId>): Boolean {
         // XXX: right now we only validate if we have a followup:send event
         if (EventId.FOLLOWUP in ids) return onValidate()
 

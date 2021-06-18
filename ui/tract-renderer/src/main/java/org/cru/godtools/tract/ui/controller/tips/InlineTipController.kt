@@ -6,8 +6,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.tool.model.tips.InlineTip
 import org.cru.godtools.tract.databinding.TractContentInlineTipBinding
-import org.cru.godtools.xml.model.tips.InlineTip
 import org.keynote.godtools.android.db.GodToolsDao
 
 internal class InlineTipController private constructor(

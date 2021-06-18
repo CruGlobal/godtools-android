@@ -6,8 +6,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentLinkBinding
-import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.Link
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
+import org.cru.godtools.tool.model.Link
 
 internal class LinkController private constructor(
     private val binding: ToolContentLinkBinding,
