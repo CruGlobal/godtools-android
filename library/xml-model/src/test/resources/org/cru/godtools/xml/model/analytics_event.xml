@@ -1,4 +1,0 @@
-<analytics:event xmlns:analytics="https://mobile-content-api.cru.org/xmlns/analytics" action="test" delay="50"
-    system="adobe">
-    <analytics:attribute key="attr" value="value" />
-</analytics:event>

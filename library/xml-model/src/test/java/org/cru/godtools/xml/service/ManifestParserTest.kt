@@ -6,12 +6,11 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.stub
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.InputStream
 import java.util.Locale
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.tool.service.Result
-import org.cru.godtools.xml.model.TOOL_CODE
-import org.cru.godtools.xml.util.getInputStreamForResource
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -19,6 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 private const val MANIFEST = "manifest.xml"
+private const val TOOL_CODE = "test"
 
 @RunWith(AndroidJUnit4::class)
 class ManifestParserTest {
@@ -74,3 +74,5 @@ class ManifestParserTest {
         assertTrue(result is Result.Error.Corrupted)
     }
 }
+
+private fun Any.getInputStreamForResource(name: String): InputStream = this::class.java.getResourceAsStream(name)!!
