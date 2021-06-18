@@ -15,9 +15,9 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.service.Result
 import org.cru.godtools.xml.service.ManifestParser
-import org.cru.godtools.xml.service.Result
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
