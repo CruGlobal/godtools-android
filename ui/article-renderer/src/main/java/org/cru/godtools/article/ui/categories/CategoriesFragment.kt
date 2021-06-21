@@ -13,7 +13,7 @@ import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
-import org.cru.godtools.xml.model.Category
+import org.cru.godtools.tool.model.Category
 import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint

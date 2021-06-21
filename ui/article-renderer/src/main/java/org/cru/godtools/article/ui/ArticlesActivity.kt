@@ -21,7 +21,7 @@ import org.cru.godtools.article.ui.categories.CategorySelectedListener
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
-import org.cru.godtools.xml.model.Category
+import org.cru.godtools.tool.model.Category
 
 fun Context.createArticlesIntent(toolCode: String, language: Locale): Intent {
     return Intent(this, ArticlesActivity::class.java)
