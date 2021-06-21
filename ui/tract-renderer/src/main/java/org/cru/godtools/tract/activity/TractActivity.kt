@@ -382,7 +382,9 @@ class TractActivity :
     }
 
     override fun showModal(modal: Modal) = startModalActivity(modal)
-    override fun showTip(tip: Tip) = TipBottomSheetDialogFragment(tip).show(supportFragmentManager, null)
+    override fun showTip(tip: Tip) {
+        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
+    }
     // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI
