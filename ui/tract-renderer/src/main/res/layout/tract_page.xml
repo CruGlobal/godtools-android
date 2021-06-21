@@ -5,7 +5,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
-        <import type="org.cru.godtools.xml.model.BaseKt" />
+        <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
         <import type="org.cru.godtools.tool.model.tract.TractPageKt" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
         <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cropToPadding="false"
-            android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
+            android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}"
             android:scaleType="matrix"
             app:gravity="@{TractPageKt.getBackgroundImageGravity(page)}"
             app:picassoFile="@{page.backgroundImage}"
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true"
-                android:layoutDirection="@{BaseKt.getLayoutDirection(page)}"
+                android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}"
                 app:layout_childType="hero">
 
                 <LinearLayout

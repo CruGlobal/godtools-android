@@ -7,12 +7,12 @@ import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
 import org.cru.godtools.base.toolFileManager
 import org.cru.godtools.tool.model.ImageGravity
 import org.cru.godtools.tool.model.ImageScaleType
 import org.cru.godtools.tool.model.Resource
-import org.cru.godtools.xml.model.layoutDirection
 
 private const val PICASSO_FILE = "picassoFile"
 

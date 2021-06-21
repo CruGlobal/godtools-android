@@ -21,12 +21,12 @@ import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.xml.model.layoutDirection
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
