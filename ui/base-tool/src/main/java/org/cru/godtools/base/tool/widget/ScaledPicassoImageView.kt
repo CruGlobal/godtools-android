@@ -16,7 +16,7 @@ import org.ccci.gto.android.common.picasso.transformation.ScaleTransformation
 import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.picasso.transformation.ScaledCropTransformation
-import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.tool.model.ImageScaleType
 
 interface ScaledPicassoImageView : PicassoImageView {
     class ScaleHelper(

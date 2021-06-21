@@ -12,7 +12,7 @@ import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.verify
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
-import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.tool.model.ImageScaleType
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

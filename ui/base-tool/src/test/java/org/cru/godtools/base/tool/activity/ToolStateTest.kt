@@ -4,7 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.EnumSet
 import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.model.Translation
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
