@@ -7,14 +7,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.mock
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import javax.inject.Inject
 import org.cru.godtools.base.Settings
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
@@ -71,7 +70,7 @@ class PageControllerTest {
 
     @Test
     fun verifyOnToggleCard() {
-        controller.model = TractPage(Manifest(), cards = { listOf(Card(it)) })
+        controller.model = TractPage(cards = { listOf(mock()) })
 
         val cardController = controller.cardControllers.first()
         assertNull(binding.pageContentLayout.activeCard)
@@ -84,7 +83,7 @@ class PageControllerTest {
     @Test
     fun verifyUpdateChildrenLifecycles() {
         controller.lifecycleOwner!!.maxState = Lifecycle.State.RESUMED
-        controller.model = TractPage(Manifest(), cards = { listOf(Card(it), Card(it)) })
+        controller.model = TractPage(cards = { listOf(mock(), mock()) })
 
         // initially hero is visible
         assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
