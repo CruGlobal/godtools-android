@@ -17,6 +17,5 @@
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
-        app:backgroundColor="@{ButtonKt.getButtonColor(model)}"
-        app:defaultTextColor="@{ButtonKt.getTextColor(model)}" />
+        app:backgroundColor="@{ButtonKt.getButtonColor(model)}" />
 </layout>
