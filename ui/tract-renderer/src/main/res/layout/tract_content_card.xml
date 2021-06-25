@@ -51,7 +51,6 @@
                     android:layout_marginBottom="12dp"
                     android:text="@{model.label}"
                     android:textSize="@{@dimen/tract_card_label_text_size, default=@dimen/tract_card_label_text_size}"
-                    app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
                     app:layout_constraintEnd_toStartOf="@id/tipsIndicator"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
