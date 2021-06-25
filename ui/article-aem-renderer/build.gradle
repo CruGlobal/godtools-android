@@ -24,7 +24,6 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
-    implementation project(':library:xml-model')
 
     implementation project(':ui:base-tool')
 
@@ -43,6 +42,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
 
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger:${deps.dagger}"

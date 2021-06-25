@@ -22,7 +22,6 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:sync')
-    implementation project(':library:xml-model')
 
     api project(':ui:base-tool')
     api project(':ui:tutorial-renderer')
@@ -50,6 +49,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
+
+    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
