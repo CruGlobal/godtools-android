@@ -10,11 +10,13 @@ import android.graphics.Typeface.NORMAL
 import android.view.Gravity
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.random.Random
+import org.cru.godtools.base.tool.R
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.defaultTextColor
 import org.cru.godtools.tool.model.gravity
-import org.cru.godtools.xml.R
+import org.cru.godtools.tool.model.textColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -52,14 +54,14 @@ class TextViewAdaptersTest {
         assertEquals("text", view.text)
         assertEquals(Color.RED, view.textColors.defaultColor)
         assertEquals(Text.Align.CENTER.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
-        assertEquals(2 * activity.resources.getDimension(R.dimen.text_size_base), view.textSize, 0.001f)
+        assertEquals(2 * activity.resources.getDimension(R.dimen.tool_content_text_size_base), view.textSize, 0.001f)
         assertEquals(BOLD_ITALIC, view.typeface.style)
         assertTrue(view.paintFlags.hasFlag(UNDERLINE_TEXT_FLAG))
     }
 
     @Test
     fun verifyBindTextNodeDefaults() {
-        val baseTextSize = activity.resources.getDimension(R.dimen.text_size_header)
+        val baseTextSize = Random.nextFloat() * 30
         val text = Text(Manifest(), text = "text", textScale = 1.5, textColor = null, textAlign = Text.Align.END)
         view.bindTextNode(text, baseTextSize, Color.GREEN)
         assertEquals("text", view.text)

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tract_header_title_text_size">18sp</dimen>
+    <dimen name="tract_header_number_text_size">54sp</dimen>
+</resources>

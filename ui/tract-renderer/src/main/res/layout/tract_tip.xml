@@ -71,7 +71,7 @@
             android:layout_marginEnd="@dimen/tract_tip_margin_horiz"
             android:text="@{ContextKt.getString(context, tip.manifest.locale, TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
             android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
-            android:textSize="@dimen/text_size_tip_label"
+            android:textSize="@dimen/tract_tip_text_size_label"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/icon"
             app:layout_constraintEnd_toEndOf="parent"

@@ -31,7 +31,7 @@ fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextCo
         if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
         else it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
     }
-    val size = text.textScale * (textSize ?: context.resources.getDimension(R.dimen.text_size_base))
+    val size = text.textScale * (textSize ?: context.resources.getDimension(R.dimen.tool_content_text_size_base))
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
     val defColor = defaultTextColor ?: text.defaultTextColor
