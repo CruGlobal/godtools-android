@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
     <data>
-        <import type="org.cru.godtools.tool.model.BaseKt" />
-        <import type="org.cru.godtools.tool.model.StylesKt" />
-
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.LinkController" />
         <variable name="model" type="org.cru.godtools.tool.model.Link" />
     </data>
@@ -18,6 +15,5 @@
         android:minHeight="32dp"
         android:saveEnabled="false"
         android:onClick="@{() -> controller.click(model)}"
-        android:text="@{model.text}"
-        app:defaultTextColor="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}" />
+        android:text="@{model.text}" />
 </layout>
