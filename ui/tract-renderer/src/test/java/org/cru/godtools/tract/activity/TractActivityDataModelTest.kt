@@ -20,7 +20,7 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.aMapWithSize
 import org.hamcrest.Matchers.allOf

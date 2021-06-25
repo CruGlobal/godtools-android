@@ -7,4 +7,6 @@
     <string name="tool_offline">Det værktøj, du anmodede om, kræver en internetforbindelse for at åbne</string>
     <string name="feature_discovery_title_share_tool">Del et link</string>
     <string name="feature_discovery_desc_share_tool">Send dette værktøj til en ven ved at klikke på dette ikon</string>
+    <string name="tract_content_input_error_required">%1$s påkræves</string>
+    <string name="tract_content_input_error_invalid_email">Angiv en gyldig e-mailadresse</string>
 </resources>

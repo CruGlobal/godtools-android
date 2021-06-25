@@ -7,7 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentParagraphBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.xml.model.Paragraph
+import org.cru.godtools.tool.model.Paragraph
 
 class ParagraphController private constructor(
     private val binding: ToolContentParagraphBinding,

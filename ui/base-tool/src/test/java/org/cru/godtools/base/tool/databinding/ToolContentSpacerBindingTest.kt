@@ -8,8 +8,8 @@ import android.widget.LinearLayout
 import android.widget.Space
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Spacer
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.Spacer
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

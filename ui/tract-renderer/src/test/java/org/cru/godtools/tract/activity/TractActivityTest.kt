@@ -25,9 +25,9 @@ import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
+import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.Manifest
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

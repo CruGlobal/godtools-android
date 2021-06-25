@@ -8,4 +8,6 @@
     <string name="tool_offline">Công cụ bạn yêu cầu cần kết nối Internet để mở</string>
     <string name="feature_discovery_title_share_tool">Chia sẻ một liên kết</string>
     <string name="feature_discovery_desc_share_tool">Gửi công cụ này đến một người bạn bằng cách nhấp vào biểu tượng này</string>
+    <string name="tract_content_input_error_required">%1$s là bắt buộc</string>
+    <string name="tract_content_input_error_invalid_email">Vui lòng nhập địa chỉ email hợp lệ</string>
 </resources>

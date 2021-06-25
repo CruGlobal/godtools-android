@@ -13,8 +13,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.xml.model.Image
-import org.cru.godtools.xml.model.Text
+import org.cru.godtools.tool.model.Image
+import org.cru.godtools.tool.model.Text
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.sameInstance

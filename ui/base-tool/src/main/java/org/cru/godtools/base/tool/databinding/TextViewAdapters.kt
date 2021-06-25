@@ -11,14 +11,15 @@ import com.squareup.picasso.Picasso
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableEndTarget
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
 import org.ccci.gto.android.common.util.dpToPixelSize
-import org.cru.godtools.base.tool.model.view.getTypeface
+import org.cru.godtools.base.tool.R
+import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.toolFileManager
-import org.cru.godtools.xml.model.Resource
-import org.cru.godtools.xml.model.Text
-import org.cru.godtools.xml.model.defaultTextColor
-import org.cru.godtools.xml.model.textAlign
-import org.cru.godtools.xml.model.textScale
-import org.cru.godtools.xml.model.textSize
+import org.cru.godtools.tool.model.Resource
+import org.cru.godtools.tool.model.Text
+import org.cru.godtools.tool.model.defaultTextColor
+import org.cru.godtools.tool.model.gravity
+import org.cru.godtools.tool.model.textAlign
+import org.cru.godtools.tool.model.textScale
 import splitties.bitflags.minusFlag
 import splitties.bitflags.withFlag
 
@@ -30,7 +31,7 @@ fun TextView.bindTextNode(text: Text?, textSize: Float?, @ColorInt defaultTextCo
         if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
         else it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
     }
-    val size = text.textScale * (textSize ?: context.resources.getDimension(text.textSize))
+    val size = text.textScale * (textSize ?: context.resources.getDimension(R.dimen.tool_content_text_size_base))
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
     val defColor = defaultTextColor ?: text.defaultTextColor

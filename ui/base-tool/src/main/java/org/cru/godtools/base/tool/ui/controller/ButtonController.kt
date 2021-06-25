@@ -11,9 +11,9 @@ import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.base.tool.databinding.ToolContentButtonOutlinedBinding
 import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.Button
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
+import org.cru.godtools.tool.model.Base
+import org.cru.godtools.tool.model.Button
 import org.greenrobot.eventbus.EventBus
 
 internal sealed class ButtonController<T : ViewDataBinding>(

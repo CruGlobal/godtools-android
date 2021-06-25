@@ -7,4 +7,6 @@
     <string name="tool_offline">Az általad kért eszköz megnyitásához internetkapcsolat szükséges</string>
     <string name="feature_discovery_title_share_tool">Hivatkozás megosztása</string>
     <string name="feature_discovery_desc_share_tool">Küldd el ezt az eszközt egy ismerősnek az ikonra kattintva</string>
+    <string name="tract_content_input_error_required">%1$s kötelező</string>
+    <string name="tract_content_input_error_invalid_email">Adj meg egy érvényes e-mail címet</string>
 </resources>

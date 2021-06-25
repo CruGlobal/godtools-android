@@ -6,4 +6,6 @@
 "</string>
     <string name="tool_not_found">የፈለጉት መተግበርያ አልተገኘም</string>
     <string name="tool_loading">የጠየቁት መተግበርያ በሂደት ላይ ነዉ...</string>
+    <string name="tract_content_input_error_required">%1$s እንዲሞላ ይጠበቃል</string>
+    <string name="tract_content_input_error_invalid_email">እባክዎትን ትክክለኛ ኢሜይል ያስገቡ</string>
 </resources>

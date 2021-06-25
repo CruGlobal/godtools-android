@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="tract_content_input_error_required">%1$s ကိုတောင်းဆိုထားသည်။</string>
-    <string name="tract_content_input_error_invalid_email">အီးမေးလ် လိပ်စာကို ဖြည့် ပေးပါ</string>
-</resources>

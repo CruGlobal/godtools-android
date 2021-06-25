@@ -37,7 +37,7 @@ import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.model.view.getTypeface
+import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.download.manager.DownloadProgress
@@ -45,8 +45,8 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.navBarColor
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.navBarColor
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
@@ -247,7 +247,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processContentEvent(event: Event) {
-        checkForManifestEvent(event)
+        val manifest = activeManifest ?: return
+        if (manifest.code != event.tool || manifest.locale != event.locale) return
+
+        manifest.checkForEvent(event)
         if (isFinishing) return
         onContentEvent(event)
     }
@@ -255,9 +258,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     protected open fun onContentEvent(event: Event) = Unit
 
-    private fun checkForManifestEvent(event: Event) {
-        val manifest = activeManifest ?: return
-        if (event.id in manifest.dismissListeners) {
+    private fun Manifest.checkForEvent(event: Event) {
+        if (event.id in dismissListeners) {
             finish()
             return
         }

@@ -1,4 +1,0 @@
-<content:button xmlns:content="https://mobile-content-api.cru.org/xmlns/content" color="rgba(255,0,0,1)"
-    events="ns:event1 event2" type="url">
-    <content:text>event button</content:text>
-</content:button>

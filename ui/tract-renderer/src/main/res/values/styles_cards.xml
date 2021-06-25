@@ -12,5 +12,7 @@
     <dimen name="card_margin_content_top">16dp</dimen>
     <dimen name="card_margin_content_bottom">4dp</dimen>
 
+    <dimen name="tract_card_label_text_size">18sp</dimen>
+
     <dimen name="card_bounce_height">40dp</dimen>
 </resources>

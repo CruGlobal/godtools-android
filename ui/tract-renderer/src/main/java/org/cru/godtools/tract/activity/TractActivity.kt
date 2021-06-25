@@ -37,6 +37,13 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.tool.model.backgroundColor
+import org.cru.godtools.tool.model.navBarColor
+import org.cru.godtools.tool.model.navBarControlColor
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.Modal
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -59,13 +66,6 @@ import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
-import org.cru.godtools.xml.model.backgroundColor
-import org.cru.godtools.xml.model.navBarColor
-import org.cru.godtools.xml.model.navBarControlColor
-import org.cru.godtools.xml.model.tips.Tip
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.Modal
-import org.cru.godtools.xml.model.tract.TractPage
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
 
@@ -382,7 +382,9 @@ class TractActivity :
     }
 
     override fun showModal(modal: Modal) = startModalActivity(modal)
-    override fun showTip(tip: Tip) = TipBottomSheetDialogFragment(tip).show(supportFragmentManager, null)
+    override fun showTip(tip: Tip) {
+        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
+    }
     // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI
@@ -442,10 +444,13 @@ class TractActivity :
     }
 
     override val shareLinkUri get() = buildShareLink()?.build()?.toString()
-    private fun buildShareLink() = activeManifest?.let {
-        URI_SHARE_BASE.buildUpon()
-            .appendEncodedPath(it.locale.toLanguageTag().toLowerCase(Locale.ENGLISH))
-            .appendPath(it.code)
+    private fun buildShareLink(): Uri.Builder? {
+        val manifest = activeManifest ?: return null
+        val tool = manifest.code ?: return null
+        val locale = manifest.locale ?: return null
+        return URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(locale.toLanguageTag().toLowerCase(Locale.ENGLISH))
+            .appendPath(tool)
             .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }

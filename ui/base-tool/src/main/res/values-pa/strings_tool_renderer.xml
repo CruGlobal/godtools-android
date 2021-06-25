@@ -7,4 +7,6 @@
     <string name="tool_offline">ਤੁਹਾਡੇ ਦੁਆਰਾ ਬੇਨਤੀ ਕੀਤੇ ਟੂਲ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਇੱਕ ਇੰਟਰਨੈਟ ਕਨੈਕਸ਼ਨ ਦੀ ਲੋੜ ਹੈ</string>
     <string name="feature_discovery_title_share_tool">ਇੱਕ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="feature_discovery_desc_share_tool">ਇਸ ਆਈਕਾਨ ਨੂੰ ਕਲਿੱਕ ਕਰਕੇ ਇਸ ਟੂਲ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ</string>
+    <string name="tract_content_input_error_required">“%1$s ਦੀ ਲੋੜ ਹੈ</string>
+    <string name="tract_content_input_error_invalid_email">ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਦੇ ਸਹੀ ਪਤੇ ਨੂੰ ਲਿਖੋ</string>
 </resources>

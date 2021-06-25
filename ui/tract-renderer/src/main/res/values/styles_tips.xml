@@ -4,6 +4,7 @@
     <color name="tract_tips_orange">#E55536</color>
 
     <dimen name="tract_tip_margin_horiz">32dp</dimen>
+    <dimen name="tract_tip_text_size_label">16sp</dimen>
 
     <dimen name="tract_tips_tip_elevation">4dp</dimen>
     <dimen name="tract_tips_tip_corner_radius">6dp</dimen>

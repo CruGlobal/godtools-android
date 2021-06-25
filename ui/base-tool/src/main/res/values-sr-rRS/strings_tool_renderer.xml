@@ -7,4 +7,6 @@
     <string name="tool_offline">Алатка коју сте тражили захтева отварање везе са интернетом</string>
     <string name="feature_discovery_title_share_tool">Подели везу</string>
     <string name="feature_discovery_desc_share_tool">Пошаљи ову алатку пријатељу тако што ћеш кликнути на ову икону</string>
+    <string name="tract_content_input_error_required">%1$s је обавезно</string>
+    <string name="tract_content_input_error_invalid_email">Унесите важећу адресу е-поште</string>
 </resources>

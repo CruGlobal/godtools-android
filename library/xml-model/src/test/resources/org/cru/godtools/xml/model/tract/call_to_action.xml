@@ -1,7 +1,0 @@
-<page xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    xmlns:training="https://mobile-content-api.cru.org/xmlns/training"
-    xmlns="https://mobile-content-api.cru.org/xmlns/tract">
-    <call-to-action control-color="rgba(255,0,0,1)" events="event1 ns:event2" training:tip="tip1">
-        <content:text>Call To Action</content:text>
-    </call-to-action>
-</page>

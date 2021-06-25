@@ -21,13 +21,13 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tract.EXTRA_MODAL
 import org.cru.godtools.tract.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController
 import org.cru.godtools.tract.ui.controller.bindController
-import org.cru.godtools.xml.model.tract.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -80,6 +80,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onContentEvent(event: Event) {
+        if (event.tool != dataModel.toolCode.value && event.locale != dataModel.locale.value) return
         checkForDismissEvent(event)
     }
 

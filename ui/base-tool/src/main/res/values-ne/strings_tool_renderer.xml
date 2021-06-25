@@ -4,4 +4,6 @@
     <string name="share_tool_title">"“%1$s” चिन्हको  उपयोग गर्दै साझा गर्नुहोस "</string>
     <string name="tool_not_found">"अनुरोधित टूल भेट्नु भएन "</string>
     <string name="tool_loading">अनुरोधित टूल लोड हुँदैछ...</string>
+    <string name="tract_content_input_error_required">%1$s को आवश्यकता छ</string>
+    <string name="tract_content_input_error_invalid_email">"कृपया वैध ई-मेल लेख्नुहोस् "</string>
 </resources>

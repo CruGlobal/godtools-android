@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.cru.godtools.article.databinding.ListItemCategoryBinding
-import org.cru.godtools.xml.model.Category
+import org.cru.godtools.tool.model.Category
 
 internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
     SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner), Observer<List<Category>?> {

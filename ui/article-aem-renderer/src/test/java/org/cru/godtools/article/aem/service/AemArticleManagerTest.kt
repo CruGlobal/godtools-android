@@ -37,7 +37,7 @@ import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.greaterThanOrEqualTo
@@ -109,7 +109,7 @@ class AemArticleManagerTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val uri = mock<Uri>()
-        val manifest = Manifest(aemImports = listOf(uri))
+        val manifest = mock<Manifest> { on { aemImports } doReturn listOf(uri) }
         val repository = aemDb.translationRepository()
         stub {
             onBlocking { manifestManager.getManifest(translation) } doReturn manifest

@@ -1,9 +1,0 @@
-<content:input xmlns:content="https://mobile-content-api.cru.org/xmlns/content"
-    name="name" type="text" required="true">
-    <content:label>
-        <content:text i18n-id="cb98c9b5-a77f-466c-bee4-57f6289a3b4b">Name</content:text>
-    </content:label>
-    <content:placeholder>
-        <content:text>First Name and Last Name</content:text>
-    </content:placeholder>
-</content:input>

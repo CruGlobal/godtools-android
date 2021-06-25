@@ -18,10 +18,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
+import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
-import org.cru.godtools.xml.model.AnalyticsEvent
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.tract.Hero
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before
@@ -63,7 +61,7 @@ class HeroControllerTest {
         val event1 = AnalyticsEvent()
         val event2 = AnalyticsEvent(delay = 1)
         val event3 = AnalyticsEvent(delay = 2)
-        controller.model = Hero(Manifest(), analyticsEvents = setOf(event1, event2, event3))
+        controller.model = mock { on { analyticsEvents } doReturn listOf(event1, event2, event3) }
         verifyNoInteractions(eventBus)
 
         // event1 with no delay

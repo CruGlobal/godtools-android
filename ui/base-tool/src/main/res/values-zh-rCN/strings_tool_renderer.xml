@@ -7,4 +7,6 @@
     <string name="tool_offline">你请求的工具需要有互联网连接才能打开</string>
     <string name="feature_discovery_title_share_tool">分享链接</string>
     <string name="feature_discovery_desc_share_tool">点击此图标，将这款工具发送给朋友</string>
+    <string name="tract_content_input_error_required">需要 %1$s</string>
+    <string name="tract_content_input_error_invalid_email">请输入有效的电子邮件地址</string>
 </resources>

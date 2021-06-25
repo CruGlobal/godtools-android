@@ -4,11 +4,19 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.xml.model.AnalyticsEvent
+import org.cru.godtools.tool.model.AnalyticsEvent
 
 class ContentAnalyticsActionEvent(@VisibleForTesting val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty()) {
-    override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(system)
+    override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(
+        when (system) {
+            AnalyticsSystem.ADOBE -> AnalyticsEvent.System.ADOBE
+            AnalyticsSystem.APPSFLYER -> AnalyticsEvent.System.APPSFLYER
+            AnalyticsSystem.FACEBOOK -> AnalyticsEvent.System.FACEBOOK
+            AnalyticsSystem.FIREBASE -> AnalyticsEvent.System.FIREBASE
+            AnalyticsSystem.SNOWPLOW -> AnalyticsEvent.System.SNOWPLOW
+        }
+    )
 
     override val appSection get() = event.manifest.code
 
@@ -22,10 +30,10 @@ class ContentAnalyticsActionEvent(@VisibleForTesting val event: AnalyticsEvent) 
     override val firebaseParams
         get() = Bundle().apply {
             when {
-                event.isForSystem(AnalyticsSystem.FIREBASE) -> event.attributes.forEach { putString(it.key, it.value) }
-                event.isForSystem(AnalyticsSystem.ADOBE) -> {
+                event.isForSystem(AnalyticsEvent.System.FIREBASE) ->
+                    event.attributes.forEach { putString(it.key, it.value) }
+                event.isForSystem(AnalyticsEvent.System.ADOBE) ->
                     event.attributes.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value) }
-                }
             }
         }
 }

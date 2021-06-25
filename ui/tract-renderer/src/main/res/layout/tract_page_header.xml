@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="org.cru.godtools.xml.model.tract.HeaderKt" />
+        <import type="org.cru.godtools.tool.model.tract.HeaderKt" />
 
-        <variable name="header" type="org.cru.godtools.xml.model.tract.Header" />
+        <variable name="header" type="org.cru.godtools.tool.model.tract.Header" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:saveEnabled="false"
         android:background="@{HeaderKt.getBackgroundColor(header)}"
+        android:saveEnabled="false"
         app:visibleIf="@{header != null}"
         tools:background="@android:color/Purple_800">
 
@@ -23,12 +23,11 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:saveEnabled="false"
-            android:textIsSelectable="false"
             android:text="@{header.number}"
-            android:textSize="@{@dimen/text_size_header_number}"
+            android:textIsSelectable="false"
+            android:textSize="@{@dimen/tract_header_number_text_size, default=@dimen/tract_header_number_text_size}"
             app:visibleIf="@{header.number != null}"
-            tools:text="1"
-            tools:textSize="@dimen/text_size_header_number" />
+            tools:text="1" />
 
         <TextView
             android:id="@+id/header_title"
@@ -38,11 +37,10 @@
             android:layout_margin="16dp"
             android:layout_toEndOf="@id/header_number"
             android:saveEnabled="false"
-            android:textIsSelectable="true"
             android:text="@{header.title}"
-            android:textSize="@{@dimen/text_size_header}"
+            android:textIsSelectable="true"
+            android:textSize="@{@dimen/tract_header_title_text_size, default=@dimen/tract_header_title_text_size}"
             app:visibleIf="@{header.title != null}"
-            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
-            tools:textSize="@dimen/text_size_header" />
+            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY." />
     </RelativeLayout>
 </layout>

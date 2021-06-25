@@ -7,4 +7,6 @@
     <string name="tool_offline">Alat yang Anda minta membutuhkan koneksi internet untuk dibuka</string>
     <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
     <string name="feature_discovery_desc_share_tool">Kirim sarana ini ke teman dengan mengklik ikon ini</string>
+    <string name="tract_content_input_error_required">%1$s wajib diisi</string>
+    <string name="tract_content_input_error_invalid_email">Silahkan masukkan alamat email yang valid</string>
 </resources>

@@ -9,8 +9,8 @@
         <import type="java.util.Locale" />
         <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState" />
         <import type="org.cru.godtools.download.manager.DownloadProgress" />
-        <import type="org.cru.godtools.xml.model.Manifest" />
-        <import type="org.cru.godtools.xml.model.ManifestKt" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.tool.model.ManifestKt" />
 
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />

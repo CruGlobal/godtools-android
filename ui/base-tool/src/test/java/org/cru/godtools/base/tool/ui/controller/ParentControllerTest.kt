@@ -14,12 +14,12 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.model.Base
+import org.cru.godtools.tool.model.Image
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.Paragraph
+import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.Image
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Paragraph
-import org.cru.godtools.xml.model.Text
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.instanceOf

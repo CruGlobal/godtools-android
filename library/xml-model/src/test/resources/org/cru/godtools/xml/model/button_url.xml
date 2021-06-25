@@ -1,7 +1,0 @@
-<content:button xmlns:analytics="https://mobile-content-api.cru.org/xmlns/analytics"
-    xmlns:content="https://mobile-content-api.cru.org/xmlns/content" type="url" style="outlined" url="https://www.google.com/">
-    <content:text>url button</content:text>
-    <analytics:events>
-        <analytics:event action="adobe action" system="adobe" />
-    </analytics:events>
-</content:button>

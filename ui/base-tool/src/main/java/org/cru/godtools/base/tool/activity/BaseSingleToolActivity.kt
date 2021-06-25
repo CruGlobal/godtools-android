@@ -14,7 +14,7 @@ import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,

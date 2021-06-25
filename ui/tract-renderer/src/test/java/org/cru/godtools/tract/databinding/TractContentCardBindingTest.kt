@@ -3,18 +3,18 @@ package org.cru.godtools.tract.databinding
 import android.view.LayoutInflater
 import android.view.View
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.model.tract.CallToAction
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.tips.Tip
-import org.cru.godtools.xml.model.tract.CallToAction
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -34,7 +34,7 @@ class TractContentCardBindingTest {
     private lateinit var binding: TractContentCardBinding
 
     private lateinit var page: TractPage
-    private val card get() = page.cards[0]
+    private lateinit var card: Card
     private val callToAction get() = page.callToAction
     private lateinit var tip: Tip
 
@@ -45,7 +45,9 @@ class TractContentCardBindingTest {
         binding = TractContentCardBinding.inflate(LayoutInflater.from(activity), null, false)
 
         tip = Tip(id = "tip")
-        page = TractPage(Manifest(), cards = { listOf(spy(Card(it))) }, callToAction = { spy(CallToAction(it)) })
+        card = mock { on { isLastVisibleCard } doReturn true }
+        page = TractPage(cards = { listOf(card) }, callToAction = { mock() })
+        whenever(card.page) doReturn page
     }
 
     // region Tips Indicator
@@ -91,7 +93,7 @@ class TractContentCardBindingTest {
 
     @Test
     fun verifyTipsIndicatorHiddenWhenCallToActionHasATipButThisIsntTheLastCard() {
-        whenever(card.isLastVisibleCard).thenReturn(false)
+        whenever(card.isLastVisibleCard) doReturn false
         callToAction.setTip(tip)
         binding.enableTips = true
         binding.model = card

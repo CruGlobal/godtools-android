@@ -22,17 +22,17 @@ import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
-import org.cru.godtools.xml.model.Accordion
-import org.cru.godtools.xml.model.Animation
-import org.cru.godtools.xml.model.Button
-import org.cru.godtools.xml.model.Fallback
-import org.cru.godtools.xml.model.Image
-import org.cru.godtools.xml.model.Link
-import org.cru.godtools.xml.model.Paragraph
-import org.cru.godtools.xml.model.Spacer
-import org.cru.godtools.xml.model.Tabs
-import org.cru.godtools.xml.model.Text
-import org.cru.godtools.xml.model.Video
+import org.cru.godtools.tool.model.Accordion
+import org.cru.godtools.tool.model.Animation
+import org.cru.godtools.tool.model.Button
+import org.cru.godtools.tool.model.Fallback
+import org.cru.godtools.tool.model.Image
+import org.cru.godtools.tool.model.Link
+import org.cru.godtools.tool.model.Paragraph
+import org.cru.godtools.tool.model.Spacer
+import org.cru.godtools.tool.model.Tabs
+import org.cru.godtools.tool.model.Text
+import org.cru.godtools.tool.model.Video
 
 private const val VARIATION_BUTTON_CONTAINED = 1
 private const val VARIATION_BUTTON_OUTLINED = 2

@@ -7,4 +7,6 @@
     <string name="tool_offline">Sorğuladığınız alət internet bağlantınızın açıq olmasını tələb edir</string>
     <string name="feature_discovery_title_share_tool">Linki paylaş</string>
     <string name="feature_discovery_desc_share_tool">Bu ikonanı klikləyərək bu aləti dostuna göndər</string>
+    <string name="tract_content_input_error_required">%1$s tələb olunur</string>
+    <string name="tract_content_input_error_invalid_email">Zəhmət olmasa etibarlı e-poçt ünvanı daxil edin</string>
 </resources>

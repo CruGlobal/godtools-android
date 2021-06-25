@@ -8,10 +8,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.controller.tips.TipPageController
 import org.cru.godtools.tract.ui.controller.tips.bindController
-import org.cru.godtools.xml.model.tips.Tip
 
 class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,

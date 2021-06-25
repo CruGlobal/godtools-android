@@ -8,17 +8,16 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.widget.ImageViewCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.Text
+import org.cru.godtools.tool.model.tract.CallToAction
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.R
-import org.cru.godtools.xml.model.EventId
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.Text
-import org.cru.godtools.xml.model.tract.CallToAction
-import org.cru.godtools.xml.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -30,6 +29,7 @@ class TractPageCallToActionBindingTest {
     private lateinit var binding: TractPageCallToActionBinding
 
     private lateinit var page: TractPage
+    private lateinit var callToAction: CallToAction
 
     @Before
     fun setup() {
@@ -42,7 +42,8 @@ class TractPageCallToActionBindingTest {
         binding.controller = mock()
         binding.executePendingBindings()
 
-        page = spy(TractPage(Manifest(), 0))
+        page = mock()
+        callToAction = mock()
     }
 
     // region Arrow Tests
@@ -56,9 +57,10 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowVisibilityLastPageWithEvents() {
-        whenever(page.isLastPage).thenReturn(true)
+        whenever(page.isLastPage) doReturn true
+        whenever(callToAction.events) doReturn listOf(EventId.FOLLOWUP)
         binding.page = page
-        binding.callToAction = CallToAction(page, events = setOf(EventId.FOLLOWUP_EVENT))
+        binding.callToAction = callToAction
         binding.executePendingBindings()
         assertEquals(View.VISIBLE, binding.callToActionArrow.visibility)
     }
@@ -82,7 +84,7 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowOnClickNoEvents() {
-        binding.callToAction = CallToAction(page)
+        binding.callToAction = callToAction
         binding.executePendingBindings()
 
         binding.callToActionArrow.performClick()
@@ -92,7 +94,8 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowOnClickEvents() {
-        binding.callToAction = CallToAction(page, events = setOf(EventId.FOLLOWUP_EVENT))
+        whenever(callToAction.events) doReturn listOf(EventId.FOLLOWUP)
+        binding.callToAction = callToAction
         binding.executePendingBindings()
 
         binding.callToActionArrow.performClick()
@@ -102,7 +105,8 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowColor() {
-        binding.callToAction = CallToAction(page, controlColor = Color.GREEN)
+        whenever(callToAction.controlColor) doReturn Color.GREEN
+        binding.callToAction = callToAction
         binding.executePendingBindings()
 
         assertEquals(Color.GREEN, ImageViewCompat.getImageTintList(binding.callToActionArrow)!!.defaultColor)
@@ -111,7 +115,12 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyLabel() {
-        binding.callToAction = CallToAction(page, label = { Text(it, text = "Label Test") })
+        val label = mock<Text> {
+            on { text } doReturn "Label Test"
+            on { textAlign } doReturn Text.Align.START
+        }
+        whenever(callToAction.label) doReturn label
+        binding.callToAction = callToAction
         binding.executePendingBindings()
 
         assertEquals("Label Test", binding.callToActionLabel.text.toString())

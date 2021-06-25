@@ -21,12 +21,12 @@ import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.model.TrainingTip
-import org.cru.godtools.xml.model.AnalyticsEvent
-import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.EventId
-import org.cru.godtools.xml.model.layoutDirection
-import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.tool.model.Base
+import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -77,13 +77,15 @@ abstract class BaseController<T : Base> protected constructor(
         root.layoutDirection = model.layoutDirection
     }
 
-    fun sendEvents(ids: Set<EventId>?) {
+    fun sendEvents(ids: List<EventId>?) {
         if (ids.isNullOrEmpty()) return
         if (!validate(ids)) return
 
         // try letting a parent build the event object
-        val builder = Event.Builder()
-        model?.manifest?.locale?.let { builder.locale(it) }
+        val builder = Event.Builder().apply {
+            tool = model?.manifest?.code
+            locale = model?.manifest?.locale
+        }
 
         // populate the event with our local state if it wasn't populated by a parent
         if (!buildEvent(builder)) onBuildEvent(builder, false)
@@ -107,7 +109,7 @@ abstract class BaseController<T : Base> protected constructor(
      */
     protected open fun buildEvent(builder: Event.Builder): Boolean = parentController?.buildEvent(builder) == true
 
-    protected open fun validate(ids: Set<EventId>): Boolean {
+    protected open fun validate(ids: List<EventId>): Boolean {
         // navigate up hierarchy before performing validation
         return parentController?.validate(ids) != false
     }
@@ -121,10 +123,11 @@ abstract class BaseController<T : Base> protected constructor(
 
     protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
+        val tool = manifest?.code
         val locale = manifest?.locale
         return when {
-            manifest == null || locale == null || tipId == null -> ImmutableLiveData(false)
-            else -> findLiveData<TrainingTip>(manifest.code, locale, tipId).map { it?.isCompleted == true }
+            tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
+            else -> findLiveData<TrainingTip>(tool, locale, tipId).map { it?.isCompleted == true }
                 .distinctUntilChanged()
         }
     }

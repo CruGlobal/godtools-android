@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.ImageController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Image" />
+        <variable name="model" type="org.cru.godtools.tool.model.Image" />
     </data>
 
     <org.cru.godtools.base.ui.view.DaggerPicassoImageView

@@ -4,4 +4,6 @@
     <string name="share_tool_title">...ഉപയോഗിച്ച് “%1$s” പങ്കിടുക</string>
     <string name="tool_not_found">നിങ്ങൾ അപേക്ഷിച്ച ടൂൾ ലഭ്യമല്ല</string>
     <string name="tool_loading">നിങ്ങൾ അപേക്ഷിച്ച ടൂൾ ലോഡ് ആയിക്കൊണ്ടിരിക്കുന്നു…</string>
+    <string name="tract_content_input_error_required">%1$s ആവശ്യമാണ്</string>
+    <string name="tract_content_input_error_invalid_email">ശരിയായ ഇമെയിൽ വിലാസം എഴുതി ചേർക്കുക</string>
 </resources>
