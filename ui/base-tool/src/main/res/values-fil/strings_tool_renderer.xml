@@ -7,4 +7,6 @@
     <string name="tool_offline">Ang ni-request mong tool ay kailangan ng koneksyon sa internet para magbukas</string>
     <string name="feature_discovery_title_share_tool">Magbahagi ng link</string>
     <string name="feature_discovery_desc_share_tool">Ipadala ang tool na ito sa isang kaibigan sa pamamagitan ng pag-click sa icon na ito</string>
+    <string name="tract_content_input_error_required">Kinakailangan ang %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Mangyaring maglagay ng tamang email address</string>
 </resources>

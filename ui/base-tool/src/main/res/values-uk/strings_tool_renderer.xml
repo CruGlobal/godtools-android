@@ -7,4 +7,6 @@
     <string name="tool_offline">Необхідний вам інструмент вимагає підключення до Інтернету</string>
     <string name="feature_discovery_title_share_tool">Поширте посилання</string>
     <string name="feature_discovery_desc_share_tool">Нажміть цю іконку, щоб відправити програму другові чи подружці</string>
+    <string name="tract_content_input_error_required">%1$s є обов\'язковим пунктом</string>
+    <string name="tract_content_input_error_invalid_email">Вкажіть дійсну адресу ел. пошти</string>
 </resources>

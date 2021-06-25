@@ -8,4 +8,6 @@
     <string name="tool_offline">ابزاری که درخواست کردید برای باز شدن به اتصال اینترنت نیاز دارد.</string>
     <string name="feature_discovery_title_share_tool">اشتراک‌گذاری یک پیوند</string>
     <string name="feature_discovery_desc_share_tool">با کلیک روی این آیکون، این ابزار را برای یک دوست ارسال کنید</string>
+    <string name="tract_content_input_error_required">به %1$s نیاز است</string>
+    <string name="tract_content_input_error_invalid_email">لطفاً یک آدرس ایمیل معتبر وارد کنید</string>
 </resources>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="tract_content_input_error_required">%1$s 이(가) 필요합니다</string>
-    <string name="tract_content_input_error_invalid_email">유효한 이메일 주소를 입력하세요</string>
-</resources>

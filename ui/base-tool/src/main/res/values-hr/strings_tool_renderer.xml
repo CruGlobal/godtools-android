@@ -7,4 +7,6 @@
     <string name="tool_offline">Kako biste otvorili alat koji ste tražili potrebna je internetska veza</string>
     <string name="feature_discovery_title_share_tool">Podijeli vezu</string>
     <string name="feature_discovery_desc_share_tool">Pošalji ovaj alat prijatelju klikom na ikonu</string>
+    <string name="tract_content_input_error_required">%1$s  je obvezno</string>
+    <string name="tract_content_input_error_invalid_email">Unesite valjanu adresu e-pošte</string>
 </resources>

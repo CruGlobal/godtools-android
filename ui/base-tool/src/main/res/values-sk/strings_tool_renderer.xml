@@ -7,4 +7,6 @@
     <string name="tool_offline">Nástroj, ktorý ste si vyžiadali, si na otvorenie vyžaduje internetové pripojenie</string>
     <string name="feature_discovery_title_share_tool">Zdieľajte odkaz</string>
     <string name="feature_discovery_desc_share_tool">Kliknite na túto ikonu a pošlite tento nástroj priateľovi</string>
+    <string name="tract_content_input_error_required">Vyžaduje sa %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Zadajte platnú e-mailovú adresu</string>
 </resources>

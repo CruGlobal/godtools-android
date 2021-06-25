@@ -7,4 +7,6 @@
     <string name="tool_offline">הכלי שביקשת דורש חיבור לאינטרנט כדי להיפתח</string>
     <string name="feature_discovery_title_share_tool">שתף קישור</string>
     <string name="feature_discovery_desc_share_tool">שלח כלי זה לחבר על ידי לחיצה על סמל זה</string>
+    <string name="tract_content_input_error_required">%1$s הינו חובה</string>
+    <string name="tract_content_input_error_invalid_email">יש להכניס כתובת דוא\"ל תקינה</string>
 </resources>

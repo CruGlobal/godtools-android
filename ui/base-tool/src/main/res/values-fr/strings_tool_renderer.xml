@@ -8,4 +8,6 @@
     <string name="tool_offline">Une connexion Internet est nécessaire pour ouvrir l\'outil que vous avez demandé</string>
     <string name="feature_discovery_title_share_tool">Partagez un lien</string>
     <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
+    <string name="tract_content_input_error_required">%1$s doit être renseigné</string>
+    <string name="tract_content_input_error_invalid_email">Veuillez saisir une adresse e-mail valable</string>
 </resources>

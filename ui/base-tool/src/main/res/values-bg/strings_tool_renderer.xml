@@ -8,4 +8,6 @@
     <string name="tool_offline">За да се отвори инструмента, който поискахте, е нужна връзка с интернет</string>
     <string name="feature_discovery_title_share_tool">Споделете връзка</string>
     <string name="feature_discovery_desc_share_tool">Изпратете този инструмент на приятел, като кликнете тази икона</string>
+    <string name="tract_content_input_error_required">%1$s се изисква</string>
+    <string name="tract_content_input_error_invalid_email">Моля, въведете валиден имейл адрес</string>
 </resources>

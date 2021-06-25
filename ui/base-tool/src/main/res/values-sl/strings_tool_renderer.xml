@@ -7,4 +7,6 @@
     <string name="tool_offline">Orodje, ki ste ga zahtevali, za odpiranje zahteva internetno povezavo</string>
     <string name="feature_discovery_title_share_tool">Deli povezavo</string>
     <string name="feature_discovery_desc_share_tool">Pošlji to orodje prijatelju s klikom na to ikono</string>
+    <string name="tract_content_input_error_required">%1$s  je obvesno polje.</string>
+    <string name="tract_content_input_error_invalid_email">Prosimo vpiši veljaven elektronski naslov</string>
 </resources>
