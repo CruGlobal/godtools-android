@@ -14,7 +14,6 @@ import kotlin.random.Random
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.Text
-import org.cru.godtools.tool.model.defaultTextColor
 import org.cru.godtools.tool.model.gravity
 import org.cru.godtools.tool.model.textColor
 import org.junit.Assert.assertEquals
@@ -50,7 +49,7 @@ class TextViewAdaptersTest {
             textAlign = Text.Align.CENTER,
             textStyles = setOf(Text.Style.BOLD, Text.Style.ITALIC, Text.Style.UNDERLINE)
         )
-        view.bindTextNode(text, null, null)
+        view.bindTextNode(text, null)
         assertEquals("text", view.text)
         assertEquals(Color.RED, view.textColors.defaultColor)
         assertEquals(Text.Align.CENTER.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
@@ -63,9 +62,9 @@ class TextViewAdaptersTest {
     fun verifyBindTextNodeDefaults() {
         val baseTextSize = Random.nextFloat() * 30
         val text = Text(Manifest(), text = "text", textScale = 1.5, textColor = null, textAlign = Text.Align.END)
-        view.bindTextNode(text, baseTextSize, Color.GREEN)
+        view.bindTextNode(text, baseTextSize)
         assertEquals("text", view.text)
-        assertEquals(Color.GREEN, view.textColors.defaultColor)
+        assertEquals(text.textColor, view.textColors.defaultColor)
         assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(1.5f * baseTextSize, view.textSize, 0.001f)
         assertEquals(NORMAL, view.typeface?.style ?: NORMAL)
@@ -75,35 +74,32 @@ class TextViewAdaptersTest {
     @Test
     fun verifyBindTextNodeTextColor() {
         with(Text(Manifest())) {
-            view.bindTextNode(this, null, null)
-            assertEquals(defaultTextColor, view.textColors.defaultColor)
+            view.bindTextNode(this, null)
+            assertEquals(textColor, view.textColors.defaultColor)
         }
 
-        view.bindTextNode(Text(Manifest(), textColor = Color.GREEN), null, Color.RED)
+        view.bindTextNode(Text(Manifest(), textColor = Color.GREEN), null)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
 
-        view.bindTextNode(null, null, Color.BLUE)
-        assertEquals(Color.BLUE, view.textColors.defaultColor)
-
-        view.bindTextNode(null, null, null)
-        assertEquals((null as Text?).defaultTextColor, view.textColors.defaultColor)
+        view.bindTextNode(null, null)
+        assertEquals((null as Text?).textColor, view.textColors.defaultColor)
     }
 
     @Test
     fun verifyBindTextNodeTextStyles() {
-        view.bindTextNode(Text(Manifest()), null, null)
+        view.bindTextNode(Text(Manifest()), null)
         assertEquals(NORMAL, view.typeface?.style ?: NORMAL)
 
-        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.UNDERLINE)), null, null)
+        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.UNDERLINE)), null)
         assertEquals(NORMAL, view.typeface?.style ?: NORMAL)
 
-        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.BOLD)), null, null)
+        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.BOLD)), null)
         assertEquals(BOLD, view.typeface.style)
 
-        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.ITALIC)), null, null)
+        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.ITALIC)), null)
         assertEquals(ITALIC, view.typeface.style)
 
-        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.BOLD, Text.Style.ITALIC)), null, null)
+        view.bindTextNode(Text(Manifest(), textStyles = setOf(Text.Style.BOLD, Text.Style.ITALIC)), null)
         assertEquals(BOLD_ITALIC, view.typeface.style)
     }
 }

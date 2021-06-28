@@ -18,7 +18,6 @@
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
-        app:defaultTextColor="@{ButtonKt.getButtonColor(model)}"
         app:rippleColor="@{ButtonKt.getButtonColor(model)}"
         app:strokeColor="@{ButtonKt.getButtonColor(model)}" />
 </layout>
