@@ -193,6 +193,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
+    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
+
     implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"

@@ -22,7 +22,6 @@ dependencies {
     api project(':library:download-manager')
     implementation project(':library:model')
     api project(':library:sync')
-    api project(':library:xml-model')
 
     api project(':ui:base')
 
@@ -45,6 +44,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
