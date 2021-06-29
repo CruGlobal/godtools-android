@@ -9,7 +9,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Named
-import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.tool.service.ManifestParser
@@ -29,7 +28,7 @@ object BaseToolRendererModule {
     @Provides
     @Reusable
     fun manifestParser(fileManager: ToolFileManager) = ManifestParser(object : AndroidXmlPullParserFactory() {
-        override fun openFile(fileName: String) = runBlocking { fileManager.getInputStream(fileName).buffered() }
+        override suspend fun openFile(fileName: String) = fileManager.getInputStream(fileName).buffered()
     })
 
     @IntoSet

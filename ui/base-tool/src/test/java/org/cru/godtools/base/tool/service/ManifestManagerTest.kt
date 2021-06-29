@@ -3,13 +3,14 @@ package org.cru.godtools.base.tool.service
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.stub
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.cru.godtools.model.Translation
@@ -49,7 +50,9 @@ class ManifestManagerTest {
     @Test
     fun testGetManifest() {
         val manifest = mock<Manifest>()
-        whenever(parser.parseManifest(MANIFEST_NAME)) doReturn Result.Data(manifest)
+        parser.stub {
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Data(manifest)
+        }
 
         val result = runBlocking { manager.getManifest(translation) }
         assertSame(manifest, result)
@@ -57,17 +60,22 @@ class ManifestManagerTest {
 
     @Test
     fun testGetManifestCacheValidManifests() {
-        whenever(parser.parseManifest(MANIFEST_NAME)) doReturn Result.Data(mock()) doThrow IllegalStateException::class
+        parser.stub {
+            onBlocking { parseManifest(MANIFEST_NAME) } doAnswer { Result.Data(mock()) }
+        }
 
         val result1 = runBlocking { manager.getManifest(translation) }
         val result2 = runBlocking { manager.getManifest(translation) }
         assertSame(result1, result2)
-        verify(parser).parseManifest(any())
+        verifyBlocking(parser) { parseManifest(any()) }
+        verifyNoMoreInteractions(parser)
     }
 
     @Test
     fun testGetManifestCorrupted() {
-        whenever(parser.parseManifest(MANIFEST_NAME)) doReturn Result.Error.Corrupted
+        parser.stub {
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Error.Corrupted
+        }
 
         val result = runBlocking { manager.getManifest(translation) }
         assertNull(result)
@@ -77,7 +85,9 @@ class ManifestManagerTest {
 
     @Test
     fun testGetManifestNotFound() {
-        whenever(parser.parseManifest(MANIFEST_NAME)) doReturn Result.Error.NotFound
+        parser.stub {
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Error.NotFound
+        }
 
         val result = runBlocking { manager.getManifest(translation) }
         assertNull(result)
