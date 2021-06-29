@@ -68,10 +68,7 @@ class ManifestManager @Inject constructor(
 
     @AnyThread
     private suspend fun parseManifest(name: String) = loadingMutex.withLock(name) {
-        cache[name] ?: withContext(Dispatchers.IO) {
-            parser.parseManifest(name)
-                .also { if (it is Result.Data) cache.put(name, it) }
-        }
+        cache[name] ?: parser.parseManifest(name).also { if (it is Result.Data) cache.put(name, it) }
     }
 
     @WorkerThread
