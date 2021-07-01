@@ -11,7 +11,7 @@ buildscript {
                 dagger             : '2.37',
                 eventbus           : '3.2.0',
                 facebook           : '11.0.0',
-                facebookFlipper    : '0.95.0',
+                facebookFlipper    : '0.96.0',
                 findbugs           : '3.0.2',
                 godtoolsToolParser : '0.1.0',
                 googleTagManager   : '17.0.0',
