@@ -16,6 +16,7 @@ import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FallbackController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
+import org.cru.godtools.base.tool.ui.controller.MultiselectController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
@@ -28,6 +29,7 @@ import org.cru.godtools.tool.model.Button
 import org.cru.godtools.tool.model.Fallback
 import org.cru.godtools.tool.model.Image
 import org.cru.godtools.tool.model.Link
+import org.cru.godtools.tool.model.Multiselect
 import org.cru.godtools.tool.model.Paragraph
 import org.cru.godtools.tool.model.Spacer
 import org.cru.godtools.tool.model.Tabs
@@ -77,6 +79,11 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Link::class)
     internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Multiselect::class)
+    internal abstract fun multiselectControllerFactory(f: MultiselectController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
