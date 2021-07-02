@@ -140,8 +140,8 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun <T : Base, C : BaseController<T>> ViewGroup.bindModels(
         models: List<T>,
         existing: MutableList<C>,
-        acquireController: (model: T) -> C?,
-        releaseController: ((controller: C) -> Unit)? = null
+        releaseController: ((controller: C) -> Unit)? = null,
+        acquireController: (model: T) -> C?
     ): List<C> {
         var next: C? = null
         try {

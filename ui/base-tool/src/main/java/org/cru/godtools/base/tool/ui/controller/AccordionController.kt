@@ -47,9 +47,8 @@ class AccordionController private constructor(
 
         sectionControllers = binding.sections.bindModels(
             model?.sections.orEmpty(),
-            sectionControllers.toMutableList(),
-            acquireController = { sectionFactory.create(binding.sections, this) }
-        )
+            sectionControllers.toMutableList()
+        ) { sectionFactory.create(binding.sections, this) }
     }
     // endregion Sections
 
