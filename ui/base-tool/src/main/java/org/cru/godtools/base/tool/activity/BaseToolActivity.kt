@@ -70,7 +70,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     override fun onBindingChanged() {
         binding.setVariable(BR.manifest, activeManifestLiveData)
         binding.setVariable(BR.loadingProgress, activeDownloadProgressLiveData)
-        binding.setVariable(BR.toolState, activeToolStateLiveData)
+        binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
     }
 
     override fun onSetupActionBar() {
@@ -195,7 +195,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Share tool logic
 
     // region Tool state
-    enum class ToolState {
+    enum class LoadingState {
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE, OFFLINE;
 
         companion object {
@@ -219,7 +219,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
     protected abstract val activeManifestLiveData: LiveData<Manifest?>
-    protected abstract val activeToolStateLiveData: LiveData<ToolState>
+    protected abstract val activeToolLoadingStateLiveData: LiveData<LoadingState>
     // endregion Tool state
 
     // region Tool sync/download logic

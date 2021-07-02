@@ -31,10 +31,10 @@ class ToolGenericFragmentActivityBindingTest {
 
     @Test
     fun verifyMainContentVisibility() {
-        val visible = setOf(BaseToolActivity.ToolState.LOADED)
-        val notVisible = EnumSet.allOf(BaseToolActivity.ToolState::class.java) - visible
+        val visible = setOf(BaseToolActivity.LoadingState.LOADED)
+        val notVisible = EnumSet.allOf(BaseToolActivity.LoadingState::class.java) - visible
         visible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             Assert.assertEquals(
                 "mainContent should be visible when tool state is $it",
@@ -43,7 +43,7 @@ class ToolGenericFragmentActivityBindingTest {
         }
 
         notVisible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             Assert.assertEquals(
                 "mainContent should be hidden when tool state is $it",

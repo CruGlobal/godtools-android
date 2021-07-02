@@ -72,9 +72,9 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     }
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
-    override val activeToolStateLiveData by lazy {
+    override val activeToolLoadingStateLiveData by lazy {
         activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
-            ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
+            LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
 

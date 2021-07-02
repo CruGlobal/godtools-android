@@ -16,7 +16,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
+import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -247,26 +247,29 @@ class TractActivityDataModelTest {
     }
     // endregion Property: translations
 
-    // region Property: state
+    // region Property: loadingState
     @Test
-    fun verifyStateUpdateTranslation() {
+    fun verifyLoadingStateUpdateTranslation() {
         val translation = MutableLiveData<Translation?>(null)
         dataModel.tool.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
         wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
 
-        dataModel.state.observeForever(observer)
-        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.NOT_FOUND)))
+        dataModel.loadingState.observeForever(observer)
+        assertThat(
+            dataModel.loadingState.value,
+            allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND))
+        )
         translation.value = Translation()
-        assertThat(dataModel.state.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.LOADING)))
-        argumentCaptor<Map<Locale, ToolState>> {
+        assertThat(dataModel.loadingState.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
+        argumentCaptor<Map<Locale, LoadingState>> {
             verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.NOT_FOUND)))
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, ToolState.LOADING)))
+            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND)))
+            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
         }
     }
-    // endregion Property: state
+    // endregion Property: loadingState
 
     // region Property: visibleLocales
     @Test

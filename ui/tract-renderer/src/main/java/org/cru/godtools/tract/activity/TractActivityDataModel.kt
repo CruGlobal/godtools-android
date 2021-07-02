@@ -23,7 +23,7 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
-import org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState
+import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
@@ -57,10 +57,10 @@ class TractActivityDataModel @Inject constructor(
     val activeManifest =
         distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
+    val activeLoadingState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
         val translation = translationCache.get(tool, l)
         manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
-            ToolState.determineToolState(m, t, manifestType = Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
+            LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
@@ -97,10 +97,10 @@ class TractActivityDataModel @Inject constructor(
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
-    val state = locales
+    val loadingState = locales
         .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
             l.associateWith {
-                ToolState.determineToolState(
+                LoadingState.determineToolState(
                     m[it], t[it],
                     manifestType = Manifest.Type.TRACT,
                     isConnected = connected,
@@ -109,32 +109,37 @@ class TractActivityDataModel @Inject constructor(
             }
         }
     @OptIn(ExperimentalStdlibApi::class)
-    val availableLocales =
-        activeLocale.combineWith(primaryLocales, parallelLocales, state) { activeLocale, primary, parallel, state ->
+    val availableLocales = activeLocale
+        .combineWith(primaryLocales, parallelLocales, loadingState) { activeLocale, primary, parallel, loadingState ->
             buildList {
                 primary
-                    .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
+                    .filterNot {
+                        loadingState[it] == LoadingState.INVALID_TYPE || loadingState[it] == LoadingState.NOT_FOUND
+                    }
                     .let {
-                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
-                            ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                        it.firstOrNull { it == activeLocale && loadingState[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loadingState[it] == LoadingState.LOADED }
                             ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
                 parallel
                     .filterNot { contains(it) }
-                    .filterNot { state[it] == ToolState.INVALID_TYPE || state[it] == ToolState.NOT_FOUND }
+                    .filterNot {
+                        loadingState[it] == LoadingState.INVALID_TYPE || loadingState[it] == LoadingState.NOT_FOUND
+                    }
                     .let {
-                        it.firstOrNull { it == activeLocale && state[it] != ToolState.OFFLINE }
-                            ?: it.firstOrNull { state[it] == ToolState.LOADED }
+                        it.firstOrNull { it == activeLocale && loadingState[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loadingState[it] == LoadingState.LOADED }
                             ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
             }
         }
-    val visibleLocales =
-        availableLocales.combineWith(state) { locales, state -> locales.filter { state[it] == ToolState.LOADED } }
+    val visibleLocales = availableLocales.combineWith(loadingState) { locales, loadingState ->
+        locales.filter { loadingState[it] == LoadingState.LOADED }
+    }
     // endregion Language Switcher
 
     var liveShareTutorialShown: Boolean

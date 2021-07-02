@@ -28,10 +28,10 @@ class ActivityToolMissingBindingTest {
 
     @Test
     fun verifyNoContentVisibility() {
-        val visible = setOf(BaseToolActivity.ToolState.NOT_FOUND, BaseToolActivity.ToolState.INVALID_TYPE)
-        val notVisible = EnumSet.allOf(BaseToolActivity.ToolState::class.java) - visible
+        val visible = setOf(BaseToolActivity.LoadingState.NOT_FOUND, BaseToolActivity.LoadingState.INVALID_TYPE)
+        val notVisible = EnumSet.allOf(BaseToolActivity.LoadingState::class.java) - visible
         visible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
                 "noContent should be visible when tool state is $it",
@@ -40,7 +40,7 @@ class ActivityToolMissingBindingTest {
         }
 
         notVisible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals("noContent should be hidden when tool state is $it", View.GONE, binding.noContent.visibility)
         }

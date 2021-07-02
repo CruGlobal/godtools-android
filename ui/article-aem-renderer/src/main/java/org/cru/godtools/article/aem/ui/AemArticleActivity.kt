@@ -160,12 +160,12 @@ class AemArticleActivity :
     override val shareLinkUri get() = articleDataModel.article.value?.let { it.shareUri ?: it.canonicalUri }?.toString()
     // endregion Share Link logic
 
-    override val activeToolStateLiveData by lazy {
+    override val activeToolLoadingStateLiveData by lazy {
         articleDataModel.article.combineWith(syncFinished) { article, syncFinished ->
             when {
-                article?.content != null -> ToolState.LOADED
-                !syncFinished -> ToolState.LOADING
-                else -> ToolState.NOT_FOUND
+                article?.content != null -> LoadingState.LOADED
+                !syncFinished -> LoadingState.LOADING
+                else -> LoadingState.NOT_FOUND
             }
         }.distinctUntilChanged()
     }
