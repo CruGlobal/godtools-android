@@ -11,7 +11,6 @@ import org.cru.godtools.base.tool.databinding.ToolContentMultiselectBinding
 import org.cru.godtools.base.tool.databinding.ToolContentMultiselectOptionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.Multiselect
-import org.cru.godtools.tool.state.State
 
 class MultiselectController private constructor(
     private val binding: ToolContentMultiselectBinding,
@@ -71,16 +70,21 @@ class MultiselectController private constructor(
             fun create(parent: ViewGroup, multiselectController: MultiselectController): OptionController
         }
 
+        init {
+            binding.lifecycleOwner = lifecycleOwner
+            binding.controller = this
+        }
+
         override val childContainer get() = binding.content
 
         override fun onBind() {
             super.onBind()
             binding.model = model
-            binding.isSelected = model?.isSelectedFlow(State())?.asLiveData() ?: ImmutableLiveData(false)
+            binding.isSelected = model?.isSelectedFlow(toolState)?.asLiveData() ?: ImmutableLiveData(false)
         }
 
         override val textEnableTextIsSelectable get() = false
 
-        fun toggleOption() = model?.toggleSelected(State())
+        fun toggleOption() = model?.toggleSelected(toolState)
     }
 }
