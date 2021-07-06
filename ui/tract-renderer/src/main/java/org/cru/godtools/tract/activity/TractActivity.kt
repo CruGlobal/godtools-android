@@ -404,7 +404,7 @@ class TractActivity :
 
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
-    override val activeToolStateLiveData get() = dataModel.activeState
+    override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
 
     private fun setupActiveTranslationManagement() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
@@ -415,22 +415,24 @@ class TractActivity :
         dataModel.availableLocales.observe(this) {
             updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
         }
-        dataModel.activeState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(activeState = it) }
-        dataModel.state.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(state = it) }
+        dataModel.activeLoadingState.observe(this) {
+            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
+        }
+        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
     }
 
     private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeState: ToolState? = dataModel.activeState.value,
+        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
         availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        state: Map<Locale, ToolState> = dataModel.state.value.orEmpty()
+        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
     ) {
-        when (activeState) {
+        when (activeLoadingState) {
             // update the active language if the current active language is not found, invalid, or offline
-            ToolState.NOT_FOUND,
-            ToolState.INVALID_TYPE,
-            ToolState.OFFLINE -> availableLocales.firstOrNull {
-                state[it] != ToolState.NOT_FOUND && state[it] != ToolState.INVALID_TYPE &&
-                    state[it] != ToolState.OFFLINE
+            LoadingState.NOT_FOUND,
+            LoadingState.INVALID_TYPE,
+            LoadingState.OFFLINE -> availableLocales.firstOrNull {
+                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                    loadingState[it] != LoadingState.OFFLINE
             }?.let { dataModel.setActiveLocale(it) }
         }
     }

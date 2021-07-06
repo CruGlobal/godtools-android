@@ -80,7 +80,7 @@ class LessonActivity :
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
-    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this).also { it.callbacks = this } }
+    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this, this) }
 
     private fun LessonActivityBinding.setupPages() {
         pages.adapter = lessonPageAdapter

@@ -52,9 +52,8 @@ abstract class ParentController<T> protected constructor(
         children = contentContainer.bindModels(
             models = contentToRender.orEmpty(),
             existing = children.orEmpty().toMutableList(),
-            acquireController = { childCache.acquire(it) },
             releaseController = { it.releaseTo(childCache) }
-        )
+        ) { childCache.acquire(it) }
     }
     // endregion Child Content
 }

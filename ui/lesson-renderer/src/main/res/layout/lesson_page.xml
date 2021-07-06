@@ -2,11 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="androidx.databinding.ObservableField" />
-        <import type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
         <import type="org.cru.godtools.tool.model.lesson.LessonPageKt" />
 
-        <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
+        <variable name="callbacks" type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
         <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
         <variable name="model" type="org.cru.godtools.tool.model.lesson.LessonPage" />
         <variable name="isFirstPage" type="boolean" />

@@ -71,12 +71,6 @@ abstract class BaseController<T : Base> protected constructor(
     open fun supportsModel(model: Base) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = model?.let { cache.release(it, this) }
 
-    protected open fun updateLayoutDirection() {
-        // HACK: In theory we should be able to set this on the root page only.
-        // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
-        root.layoutDirection = model.layoutDirection
-    }
-
     fun sendEvents(ids: List<EventId>?) {
         if (ids.isNullOrEmpty()) return
         if (!validate(ids)) return
@@ -114,25 +108,6 @@ abstract class BaseController<T : Base> protected constructor(
         return parentController?.validate(ids) != false
     }
 
-    // region Tips
-    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
-
-    open fun showTip(tip: Tip?) {
-        parentController?.showTip(tip)
-    }
-
-    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
-        val manifest = model?.manifest
-        val tool = manifest?.code
-        val locale = manifest?.locale
-        return when {
-            tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
-            else -> findLiveData<TrainingTip>(tool, locale, tipId).map { it?.isCompleted == true }
-                .distinctUntilChanged()
-        }
-    }
-    // endregion Tips
-
     // region UI
     /**
      * This method provides a mechanism for binding arbitrary model controllers to a ViewGroup
@@ -140,8 +115,8 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun <T : Base, C : BaseController<T>> ViewGroup.bindModels(
         models: List<T>,
         existing: MutableList<C>,
-        acquireController: (model: T) -> C?,
-        releaseController: ((controller: C) -> Unit)? = null
+        releaseController: ((controller: C) -> Unit)? = null,
+        acquireController: (model: T) -> C?
     ): List<C> {
         var next: C? = null
         try {
@@ -161,5 +136,30 @@ abstract class BaseController<T : Base> protected constructor(
             }
         }
     }
+
+    protected open fun updateLayoutDirection() {
+        // HACK: In theory we should be able to set this on the root page only.
+        //       But updating the direction doesn't seem to trigger a re-layout of descendant views.
+        root.layoutDirection = model.layoutDirection
+    }
+
+    // region Tips
+    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+
+    open fun showTip(tip: Tip?) {
+        parentController?.showTip(tip)
+    }
+
+    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
+        val manifest = model?.manifest
+        val tool = manifest?.code
+        val locale = manifest?.locale
+        return when {
+            tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
+            else -> findLiveData<TrainingTip>(tool, locale, tipId).map { it?.isCompleted == true }
+                .distinctUntilChanged()
+        }
+    }
+    // endregion Tips
     // endregion UI
 }
