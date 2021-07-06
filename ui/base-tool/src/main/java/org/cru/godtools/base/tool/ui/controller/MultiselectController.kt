@@ -79,6 +79,8 @@ class MultiselectController private constructor(
             binding.isSelected = model?.isSelectedFlow(State())?.asLiveData() ?: ImmutableLiveData(false)
         }
 
+        override val textEnableTextIsSelectable get() = false
+
         fun toggleOption() = model?.toggleSelected(State())
     }
 }

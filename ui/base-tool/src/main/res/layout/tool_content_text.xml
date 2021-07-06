@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.TextController" />
         <variable name="model" type="org.cru.godtools.tool.model.Text" />
     </data>
 
@@ -16,7 +17,7 @@
         android:gravity="center_vertical"
         android:saveEnabled="false"
         android:text="@{model}"
-        android:textIsSelectable="true"
+        android:textIsSelectable="@{controller.textEnableTextIsSelectable}"
         app:drawableStartSize="@{model.startImageSize}"
         app:drawableEndSize="@{model.endImageSize}" />
 </layout>
