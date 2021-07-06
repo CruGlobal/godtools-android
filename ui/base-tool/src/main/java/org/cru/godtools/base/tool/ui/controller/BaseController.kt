@@ -27,6 +27,7 @@ import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -46,6 +47,7 @@ abstract class BaseController<T : Base> protected constructor(
         get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
 
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
+    protected open val toolState: State get() = checkNotNull(parentController?.toolState)
 
     var model: T? = null
         set(value) {

@@ -9,16 +9,18 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.tool.model.lesson.LessonPage
+import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
 
 class LessonPageController @AssistedInject constructor(
     @Assisted private val binding: LessonPageBinding,
+    @Assisted override val toolState: State,
     cacheFactory: UiControllerCache.Factory,
     eventBus: EventBus
 ) : ParentController<LessonPage>(LessonPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
-        fun create(binding: LessonPageBinding): LessonPageController
+        fun create(binding: LessonPageBinding, toolState: State): LessonPageController
     }
 
     init {
@@ -37,4 +39,5 @@ class LessonPageController @AssistedInject constructor(
     override val childContainer get() = binding.content
 }
 
-fun LessonPageBinding.bindController(factory: LessonPageController.Factory) = controller ?: factory.create(this)
+fun LessonPageBinding.bindController(factory: LessonPageController.Factory, toolState: State) =
+    controller ?: factory.create(this, toolState)
