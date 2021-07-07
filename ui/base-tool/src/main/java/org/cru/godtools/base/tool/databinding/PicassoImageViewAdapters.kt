@@ -23,13 +23,7 @@ internal fun SimplePicassoImageView.setPicassoFile(resource: Resource?) = setPic
 internal fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
     scaleType: ImageScaleType?,
-    gravity: Int
-) = bindScaledResource(resource, scaleType, ImageGravity(gravity))
-
-private fun SimpleScaledPicassoImageView.bindScaledResource(
-    resource: Resource?,
-    scaleType: ImageScaleType? = this.scaleType,
-    gravity: ImageGravity? = null
+    gravity: ImageGravity?
 ) {
     toggleBatchUpdates(true)
     setPicassoResource(resource)
