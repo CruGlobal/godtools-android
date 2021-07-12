@@ -40,7 +40,7 @@ buildscript {
                 scarlet            : '0.1.12',
                 snowplow           : '2.1.1',
                 splitties          : '3.0.0-beta01',
-                taptargetview      : '1.13.2',
+                taptargetview      : '1.13.3',
                 timber             : '4.7.1',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
