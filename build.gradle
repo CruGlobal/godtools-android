@@ -75,7 +75,7 @@ buildscript {
                 crashlytics   : '18.1.0',
                 inAppMessaging: '20.0.0',
                 messaging     : '22.0.0',
-                perf          : '20.0.1',
+                perf          : '20.0.2',
         ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
