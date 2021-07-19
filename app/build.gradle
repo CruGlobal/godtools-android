@@ -208,7 +208,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-    implementation "com.okta.android:oidc-androidx:${deps.okta}"
+    implementation "com.okta.android:okta-oidc-android:${deps.okta}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
     api "org.greenrobot:eventbus:${deps.eventbus}"
