@@ -141,7 +141,7 @@ class GodToolsShortcutManagerTest {
         verifyZeroInteractions(dao)
 
         // trigger update
-        assertTrue(shortcutManager.updatePendingShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         verifyZeroInteractions(dao)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
@@ -149,10 +149,10 @@ class GodToolsShortcutManagerTest {
         clearInvocations(dao)
 
         // trigger multiple updates simultaneously, it should conflate to a single update
-        assertTrue(shortcutManager.updatePendingShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(1)
         verifyZeroInteractions(dao)
-        assertTrue(shortcutManager.updatePendingShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
@@ -176,10 +176,10 @@ class GodToolsShortcutManagerTest {
         clearInvocations(dao)
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
-        assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
-        assertTrue(shortcutManager.updateShortcutsActor.offer(Unit))
+        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
+        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verifyZeroInteractions(dao)
         coroutineScope.advanceUntilIdle()
@@ -192,7 +192,7 @@ class GodToolsShortcutManagerTest {
         coroutineScope.advanceUntilIdle()
         assertTrue(
             "Ensure actor can still accept requests, even though they are no-ops",
-            shortcutManager.updateShortcutsActor.offer(Unit)
+            shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess
         )
         coroutineScope.advanceUntilIdle()
         verifyZeroInteractions(dao)

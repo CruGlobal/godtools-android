@@ -111,24 +111,24 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onToolUpdate(event: ToolUpdateEvent) {
         // Could change which tools are visible or the label for tools
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
     @Subscribe
     fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
         // Handles potential icon image changes.
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
     @Subscribe
     fun onTranslationUpdate(event: TranslationUpdateEvent) {
         // Could change which tools are available or the label for tools
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
@@ -143,8 +143,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         when (key) {
             // primary/parallel language preferences changed. key=null when preferences are cleared
             Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
-                updateShortcutsActor.offer(Unit)
-                updatePendingShortcutsActor.offer(Unit)
+                updateShortcutsActor.trySend(Unit)
+                updatePendingShortcutsActor.trySend(Unit)
             }
         }
     }
@@ -221,7 +221,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     init {
         // launch an initial update
-        updateShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
