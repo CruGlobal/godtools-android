@@ -331,6 +331,10 @@ subprojects {
 junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
+    excludes += [
+            '**/*_Impl.*', // Room generated classes
+            '**/*_Impl$*' // Room generated classes
+    ]
 }
 task jacocoTestReport {
     subprojects.each { dependsOn(it.tasks.withType(JacocoReport)) }
