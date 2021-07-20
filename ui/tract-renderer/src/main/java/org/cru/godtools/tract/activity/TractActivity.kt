@@ -451,7 +451,7 @@ class TractActivity :
         val tool = manifest.code ?: return null
         val locale = manifest.locale ?: return null
         return URI_SHARE_BASE.buildUpon()
-            .appendEncodedPath(locale.toLanguageTag().toLowerCase(Locale.ENGLISH))
+            .appendEncodedPath(locale.toLanguageTag().lowercase(Locale.ENGLISH))
             .appendPath(tool)
             .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
             .appendQueryParameter("icid", "gtshare")
