@@ -332,6 +332,7 @@ junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
     excludes += [
+            '**/*EventBusIndex.*', // EventBus generated Indexes
             '**/hilt_aggregated_deps/**/*', // Hilt generated classes
             '**/Hilt_*', // Hilt generated classes
             '**/*_HiltModules.*', // Hilt generated classes
