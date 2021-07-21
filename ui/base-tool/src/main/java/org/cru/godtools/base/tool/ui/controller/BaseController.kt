@@ -87,7 +87,7 @@ abstract class BaseController<T : Base> protected constructor(
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
         // trigger an event for every id provided
-        ids.forEach { eventBus.post(builder.id(it).build()) }
+        ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
     }
 
     protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
