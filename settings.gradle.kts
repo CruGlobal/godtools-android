@@ -12,7 +12,7 @@ pluginManagement {
             //       modify excluded classes.
             //       see: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin/pull/173
             if (requested.id.id == "com.vanniktech.android.junit.jacoco") {
-                useModule("com.github.vanniktech:gradle-android-junit-jacoco-plugin:master-SNAPSHOT")
+                useModule("com.github.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0")
             }
         }
     }
