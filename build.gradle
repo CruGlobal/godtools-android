@@ -332,6 +332,10 @@ junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
     excludes += [
+            '**/hilt_aggregated_deps/**/*', // Hilt generated classes
+            '**/Hilt_*', // Hilt generated classes
+            '**/*_HiltModules.*', // Hilt generated classes
+            '**/*_HiltModules$*', // Hilt generated classes
             '**/*_Impl.*', // Room generated classes
             '**/*_Impl$*' // Room generated classes
     ]
