@@ -37,6 +37,7 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.navBarControlColor
@@ -258,6 +259,7 @@ class TractActivity :
 
     // region Data Model
     private val dataModel: TractActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
     private fun setupDataModel() {
         dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
     }
@@ -330,7 +332,7 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this).also { adapter ->
+        pagerAdapterFactory.create(this, toolState.toolState).also { adapter ->
             adapter.callbacks = this
             adapter.showTips = showTips
             dataModel.activeManifest.observe(this) { manifest ->
