@@ -20,6 +20,7 @@ import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tract.EXTRA_MODAL
@@ -46,6 +47,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
 @AndroidEntryPoint
 class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
     @Inject
     internal lateinit var modalControllerFactory: ModalController.Factory
 
@@ -68,7 +70,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     }
 
     override fun onBindingChanged() {
-        binding.modalLayout.bindController(modalControllerFactory)
+        binding.modalLayout.bindController(modalControllerFactory, toolState.toolState)
             .also { dataModel.modal.observe(this, it) }
     }
 
