@@ -103,6 +103,7 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     init {
         appsFlyer.apply {
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
+            setOneLinkCustomDomain("get.godtoolsapp.com")
             init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
             start(app)
         }
