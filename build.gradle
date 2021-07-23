@@ -13,7 +13,7 @@ buildscript {
                 facebook           : '11.1.1',
                 facebookFlipper    : '0.98.0',
                 findbugs           : '3.0.2',
-                godtoolsToolParser : '0.1.0',
+                godtoolsToolParser : '0.1.1',
                 googleTagManager   : '17.0.0',
                 gradleAndroidPlugin: '4.2.2',
                 grpc               : '1.39.0',
