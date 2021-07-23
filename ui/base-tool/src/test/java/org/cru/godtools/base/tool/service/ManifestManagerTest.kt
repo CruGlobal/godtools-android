@@ -74,7 +74,7 @@ class ManifestManagerTest {
     @Test
     fun testGetManifestCorrupted() {
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Error.Corrupted
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<Result.Error.Corrupted>()
         }
 
         val result = runBlocking { manager.getManifest(translation) }
@@ -86,7 +86,7 @@ class ManifestManagerTest {
     @Test
     fun testGetManifestNotFound() {
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Error.NotFound
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<Result.Error.NotFound>()
         }
 
         val result = runBlocking { manager.getManifest(translation) }
