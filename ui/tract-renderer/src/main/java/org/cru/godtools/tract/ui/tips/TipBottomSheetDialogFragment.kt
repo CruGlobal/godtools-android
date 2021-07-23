@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -25,6 +26,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tool.model.tips.Tip
@@ -60,6 +62,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
     internal lateinit var eventBus: EventBus
 
     private val dataModel: TipBottomSheetDialogFragmentDataModel by viewModels()
+    private val toolState: ToolStateHolder by activityViewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +103,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
     lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
 
     private fun TractTipBinding.setupPages() {
-        pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner).also {
+        pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner, toolState.toolState).also {
             it.callbacks = this@TipBottomSheetDialogFragment
             dataModel.tip.observe(viewLifecycleOwner, it)
         }
