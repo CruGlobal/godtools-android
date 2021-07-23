@@ -4,6 +4,7 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.tool.model.MultiselectKt" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController" />
         <variable name="model" type="org.cru.godtools.tool.model.Multiselect.Option" />
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:onClick="@{() -> controller.toggleOption()}"
+        app:cardBackgroundColor="@{isSelected ? MultiselectKt.getSelectedColor(model) : MultiselectKt.getBackgroundColor(model)}"
         app:cardCornerRadius="@dimen/tool_content_accordion_section_card_corner_radius"
         app:cardElevation="@dimen/tool_content_accordion_section_card_elevation"
         app:cardMaxElevation="@dimen/tool_content_accordion_section_card_elevation">
