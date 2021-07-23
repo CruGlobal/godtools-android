@@ -18,6 +18,8 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
+import org.cru.godtools.tool.FEATURE_ANIMATION
+import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.Result
@@ -33,6 +35,10 @@ class ManifestManager @Inject constructor(
 ) {
     private val cache = WeakLruCache<String, Result.Data>(6)
     private val loadingMutex = MutexMap()
+
+    init {
+        ParserConfig.supportedFeatures = setOf(FEATURE_ANIMATION)
+    }
 
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
