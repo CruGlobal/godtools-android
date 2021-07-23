@@ -32,7 +32,7 @@ class FormController private constructor(
     @AssistedFactory
     interface Factory : BaseController.Factory<FormController>
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     override fun validate(ids: List<EventId>): Boolean {
         // XXX: right now we only validate if we have a followup:send event

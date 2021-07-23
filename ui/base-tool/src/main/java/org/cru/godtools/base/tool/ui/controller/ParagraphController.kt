@@ -28,5 +28,5 @@ class ParagraphController private constructor(
     @AssistedFactory
     interface Factory : BaseController.Factory<ParagraphController>
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 }

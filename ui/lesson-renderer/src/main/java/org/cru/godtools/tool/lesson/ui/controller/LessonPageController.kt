@@ -34,7 +34,7 @@ class LessonPageController @AssistedInject constructor(
         binding.model = model
     }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 }
 
 fun LessonPageBinding.bindController(factory: LessonPageController.Factory) = controller ?: factory.create(this)

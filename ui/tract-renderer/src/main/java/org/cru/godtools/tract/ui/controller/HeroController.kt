@@ -25,7 +25,7 @@ class HeroController @AssistedInject internal constructor(
 
     override val lifecycleOwner = pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it) }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {

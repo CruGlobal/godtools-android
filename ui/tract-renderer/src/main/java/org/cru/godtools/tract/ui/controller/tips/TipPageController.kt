@@ -32,7 +32,7 @@ class TipPageController @AssistedInject internal constructor(
             binding.callbacks = value
         }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     override fun onBind() {
         super.onBind()

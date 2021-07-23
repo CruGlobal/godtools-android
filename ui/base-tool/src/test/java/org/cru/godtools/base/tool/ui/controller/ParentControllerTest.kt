@@ -54,16 +54,16 @@ class ParentControllerTest {
     @Test
     fun verifyBindContent() {
         controller.model = Paragraph(manifest) { listOf(Text(it), Image(it)) }
-        assertEquals(2, controller.contentContainer.childCount)
+        assertEquals(2, controller.childContainer.childCount)
         assertThat(
-            controller.contentContainer.children.toList(),
+            controller.childContainer.children.toList(),
             contains(instanceOf(TextView::class.java), instanceOf(ImageView::class.java))
         )
 
         controller.model = Paragraph(manifest) { listOf(Image(it), Text(it), Image(it)) }
-        assertEquals(3, controller.contentContainer.childCount)
+        assertEquals(3, controller.childContainer.childCount)
         assertThat(
-            controller.contentContainer.children.toList(),
+            controller.childContainer.children.toList(),
             contains(
                 instanceOf(ImageView::class.java),
                 instanceOf(TextView::class.java),
@@ -72,38 +72,38 @@ class ParentControllerTest {
         )
 
         controller.model = null
-        assertEquals(0, controller.contentContainer.childCount)
+        assertEquals(0, controller.childContainer.childCount)
     }
 
     @Test
     fun verifyBindContentWithUnmanagedViews() {
-        controller.contentContainer.addView(Space(context))
+        controller.childContainer.addView(Space(context))
 
         controller.model = Paragraph(manifest) { listOf(Text(it), Image(it)) }
-        assertEquals(3, controller.contentContainer.childCount)
+        assertEquals(3, controller.childContainer.childCount)
         assertThat(
-            controller.contentContainer.children.toList(),
+            controller.childContainer.children.toList(),
             contains(instanceOf(Space::class.java), instanceOf(TextView::class.java), instanceOf(ImageView::class.java))
         )
 
         controller.model = Paragraph(manifest) { listOf(Image(it)) }
-        assertEquals(2, controller.contentContainer.childCount)
+        assertEquals(2, controller.childContainer.childCount)
         assertThat(
-            controller.contentContainer.children.toList(),
+            controller.childContainer.children.toList(),
             contains(instanceOf(Space::class.java), instanceOf(ImageView::class.java))
         )
 
         controller.model = null
-        assertEquals(1, controller.contentContainer.childCount)
-        assertThat(controller.contentContainer.children.toList(), contains(instanceOf(Space::class.java)))
+        assertEquals(1, controller.childContainer.childCount)
+        assertThat(controller.childContainer.children.toList(), contains(instanceOf(Space::class.java)))
     }
 
     class ConcreteParentController(
-        public override val contentContainer: LinearLayout,
+        public override val childContainer: LinearLayout,
         cache: UiControllerCache
     ) : ParentController<Paragraph>(
         Paragraph::class,
-        contentContainer,
+        childContainer,
         null,
         UiControllerCache.Factory { _, _ -> cache }
     )

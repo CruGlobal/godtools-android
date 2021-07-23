@@ -22,38 +22,42 @@ abstract class ParentController<T> protected constructor(
     @CallSuper
     override fun onBind() {
         super.onBind()
-        bindContent()
+        bindChildren()
     }
 
     @CallSuper
     override fun onContentEvent(event: Event) {
         super.onContentEvent(event)
-        children?.forEach { it.onContentEvent(event) }
+        propagateContentEventToChildren(event)
     }
 
-    // XXX: we don't want to short-circuit execution, so we don't use allMatch
-    override fun onValidate() = children?.filterNot { it.onValidate() }.isNullOrEmpty()
+    override fun onValidate() = validateChildren()
 
     @CallSuper
     override fun onBuildEvent(builder: Event.Builder, recursive: Boolean) {
-        if (recursive) children?.forEach { it.onBuildEvent(builder, true) }
+        if (recursive) childControllers.forEach { it.onBuildEvent(builder, true) }
     }
     // endregion Lifecycle
 
-    // region Child Content
-    protected abstract val contentContainer: ViewGroup
-    private val childCache by lazy { cacheFactory.create(contentContainer, this) }
-    private var children: List<BaseController<Content>>? = null
+    // region Children
+    protected abstract val childContainer: ViewGroup
+    private val childCache by lazy { cacheFactory.create(childContainer, this) }
+    private var childControllers = emptyList<BaseController<Content>>()
 
-    protected open val contentToRender get() = model?.content
+    protected open val childrenToRender get() = model?.content.orEmpty()
 
     @UiThread
-    private fun bindContent() {
-        children = contentContainer.bindModels(
-            models = contentToRender.orEmpty(),
-            existing = children.orEmpty().toMutableList(),
+    private fun bindChildren() {
+        childControllers = childContainer.bindModels(
+            models = childrenToRender,
+            existing = childControllers.toMutableList(),
             releaseController = { it.releaseTo(childCache) }
         ) { childCache.acquire(it) }
     }
-    // endregion Child Content
+
+    private fun propagateContentEventToChildren(event: Event) = childControllers.forEach { it.onContentEvent(event) }
+
+    // XXX: we don't want to short-circuit execution, so we don't use allMatch
+    private fun validateChildren() = childControllers.filterNot { it.onValidate() }.isEmpty()
+    // endregion Children
 }

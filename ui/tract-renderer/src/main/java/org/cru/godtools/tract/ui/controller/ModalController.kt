@@ -23,7 +23,7 @@ class ModalController @AssistedInject internal constructor(
         binding.controller = this
     }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     override fun onBind() {
         super.onBind()
