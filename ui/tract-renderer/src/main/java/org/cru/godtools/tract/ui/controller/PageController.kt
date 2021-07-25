@@ -23,6 +23,7 @@ import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.greenrobot.eventbus.EventBus
@@ -31,6 +32,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
+    @Assisted override val toolState: State,
     private val dao: GodToolsDao,
     eventBus: EventBus,
     private val settings: Settings,
@@ -42,7 +44,7 @@ class PageController @AssistedInject internal constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?): PageController
+        fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?, toolState: State): PageController
     }
 
     interface Callbacks {
@@ -276,5 +278,8 @@ class PageController @AssistedInject internal constructor(
     override fun updateLayoutDirection() = Unit
 }
 
-internal fun TractPageBinding.bindController(factory: PageController.Factory, lifecycleOwner: LifecycleOwner? = null) =
-    controller ?: factory.create(this, lifecycleOwner)
+internal fun TractPageBinding.bindController(
+    factory: PageController.Factory,
+    lifecycleOwner: LifecycleOwner? = null,
+    toolState: State
+) = controller ?: factory.create(this, lifecycleOwner, toolState)

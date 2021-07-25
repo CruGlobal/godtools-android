@@ -15,6 +15,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import javax.inject.Inject
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.greenrobot.eventbus.EventBus
@@ -60,6 +61,7 @@ class PageControllerTest {
         controller = PageController(
             binding,
             baseLifecycleOwner,
+            State(),
             dao,
             eventBus,
             settings,

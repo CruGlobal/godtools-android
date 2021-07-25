@@ -9,17 +9,19 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.databinding.TractTipPageBinding
 import org.cru.godtools.tract.ui.controller.tips.TipPageController
 import org.cru.godtools.tract.ui.controller.tips.bindController
 
 class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
+    @Assisted private val toolState: State,
     private val controllerFactory: TipPageController.Factory
 ) : SimpleDataBindingAdapter<TractTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
     @AssistedFactory
     interface Factory {
-        fun create(lifecycleOwner: LifecycleOwner): TipPageAdapter
+        fun create(lifecycleOwner: LifecycleOwner, toolState: State): TipPageAdapter
     }
 
     var callbacks: TipCallbacks? = null
@@ -40,7 +42,7 @@ class TipPageAdapter @AssistedInject internal constructor(
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
         TractTipPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-            bindController(controllerFactory)
+            bindController(controllerFactory, toolState)
             callbacks = this@TipPageAdapter
         }
 

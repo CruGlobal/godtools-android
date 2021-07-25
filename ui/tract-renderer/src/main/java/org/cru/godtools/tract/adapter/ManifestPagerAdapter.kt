@@ -21,6 +21,7 @@ import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController
@@ -30,12 +31,13 @@ import org.greenrobot.eventbus.ThreadMode
 
 class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
+    @Assisted private val toolState: State,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
 ) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
     @AssistedFactory
     interface Factory {
-        fun create(lifecycleOwner: LifecycleOwner): ManifestPagerAdapter
+        fun create(lifecycleOwner: LifecycleOwner, toolState: State): ManifestPagerAdapter
     }
 
     interface Callbacks {
@@ -77,7 +79,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun onViewDataBindingCreated(binding: TractPageBinding) {
-        binding.bindController(pageControllerFactory, lifecycleOwner).also {
+        binding.bindController(pageControllerFactory, lifecycleOwner, toolState).also {
             it.callbacks = this
             it.isTipsEnabled = showTips
         }

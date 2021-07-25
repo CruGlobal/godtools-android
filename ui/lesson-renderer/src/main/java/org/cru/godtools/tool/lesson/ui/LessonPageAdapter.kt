@@ -16,15 +16,17 @@ import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.tool.lesson.ui.controller.LessonPageController
 import org.cru.godtools.tool.lesson.ui.controller.bindController
 import org.cru.godtools.tool.model.lesson.LessonPage
+import org.cru.godtools.tool.state.State
 
 class LessonPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     @Assisted private val callbacks: Callbacks?,
+    @Assisted private val toolState: State,
     private val controllerFactory: LessonPageController.Factory
 ) : SimpleDataBindingAdapter<LessonPageBinding>(lifecycleOwner) {
     @AssistedFactory
     interface Factory {
-        fun create(lifecycleOwner: LifecycleOwner, callbacks: Callbacks?): LessonPageAdapter
+        fun create(lifecycleOwner: LifecycleOwner, callbacks: Callbacks?, toolState: State): LessonPageAdapter
     }
 
     interface Callbacks {
@@ -61,7 +63,7 @@ class LessonPageAdapter @AssistedInject internal constructor(
 
     override fun onViewDataBindingCreated(binding: LessonPageBinding, viewType: Int) {
         binding.callbacks = callbacks
-        binding.bindController(controllerFactory)
+        binding.bindController(controllerFactory, toolState)
     }
 
     override fun onBindViewDataBinding(binding: LessonPageBinding, position: Int) {

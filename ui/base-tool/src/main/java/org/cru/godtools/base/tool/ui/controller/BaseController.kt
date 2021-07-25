@@ -27,6 +27,7 @@ import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -46,6 +47,7 @@ abstract class BaseController<T : Base> protected constructor(
         get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
 
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
+    protected open val toolState: State get() = checkNotNull(parentController?.toolState)
 
     var model: T? = null
         set(value) {
@@ -85,7 +87,7 @@ abstract class BaseController<T : Base> protected constructor(
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
         // trigger an event for every id provided
-        ids.forEach { eventBus.post(builder.id(it).build()) }
+        ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
     }
 
     protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
@@ -142,6 +144,15 @@ abstract class BaseController<T : Base> protected constructor(
         //       But updating the direction doesn't seem to trigger a re-layout of descendant views.
         root.layoutDirection = model.layoutDirection
     }
+
+    // region Text Overrides
+    // HACK: `textIsSelectable` suppresses click events propagating up to parent elements.
+    //       Providing this override point will allow controllers to suppress the `textIsSelectable` attribute when it
+    //       interferes with other click listeners
+    //       This makes it impossible for the user to toggle Multiselect Options by clicking on a child text view.
+    //       Related: https://stackoverflow.com/q/19584750
+    open val textEnableTextIsSelectable: Boolean get() = parentController?.textEnableTextIsSelectable ?: true
+    // endregion Text Overrides
 
     // region Tips
     open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false

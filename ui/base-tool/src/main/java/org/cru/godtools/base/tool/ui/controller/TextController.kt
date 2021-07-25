@@ -18,6 +18,10 @@ internal class TextController private constructor(
     @AssistedFactory
     interface Factory : BaseController.Factory<TextController>
 
+    init {
+        binding.controller = this
+    }
+
     public override fun onBind() {
         super.onBind()
         binding.model = model

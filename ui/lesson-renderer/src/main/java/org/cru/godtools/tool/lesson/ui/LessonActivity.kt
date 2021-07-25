@@ -17,6 +17,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
@@ -34,6 +35,7 @@ class LessonActivity :
     ),
     LessonPageAdapter.Callbacks {
     override val dataModel: LessonActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle
     override fun onBindingChanged() {
@@ -80,7 +82,7 @@ class LessonActivity :
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
-    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this, this) }
+    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this, this, toolState.toolState) }
 
     private fun LessonActivityBinding.setupPages() {
         pages.adapter = lessonPageAdapter
