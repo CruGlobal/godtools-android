@@ -15,7 +15,7 @@ buildscript {
                 findbugs           : '3.0.2',
                 godtoolsToolParser : '0.1.1',
                 googleTagManager   : '17.0.0',
-                gradleAndroidPlugin: '4.2.2',
+                gradleAndroidPlugin: '7.0.0',
                 grpc               : '1.39.0',
                 gtoSupport         : '3.9.0-SNAPSHOT',
                 guava              : '30.1.1-android',
