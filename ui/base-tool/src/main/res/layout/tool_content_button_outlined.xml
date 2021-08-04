@@ -18,6 +18,10 @@
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
+        app:icon="@{model.icon}"
+        app:iconGravity="@{ButtonKt.getIconGravity(model)}"
+        app:iconSize="@{ButtonKt.getIconSize(model)}"
+        app:iconTint="@null"
         app:rippleColor="@{ButtonKt.getButtonColor(model)}"
         app:strokeColor="@{ButtonKt.getButtonColor(model)}" />
 </layout>

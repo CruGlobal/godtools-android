@@ -17,5 +17,9 @@
         android:onClick="@{() -> controller.click()}"
         android:saveEnabled="false"
         android:text="@{model.text}"
-        app:backgroundColor="@{ButtonKt.getButtonColor(model)}" />
+        app:backgroundColor="@{ButtonKt.getButtonColor(model)}"
+        app:icon="@{model.icon}"
+        app:iconGravity="@{ButtonKt.getIconGravity(model)}"
+        app:iconSize="@{ButtonKt.getIconSize(model)}"
+        app:iconTint="@null" />
 </layout>
