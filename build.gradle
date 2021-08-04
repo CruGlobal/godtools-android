@@ -175,10 +175,6 @@ allprojects {
 
                 // use regular moshi library instead of moshi-kotlin, any Kotlin moshi models should use moshi-kotlin-codegen instead
                 substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
-
-                // HACK: Okta changed the artifact name of their OIDC library when moving it to Maven Central,
-                //       this is a temporary substitution until gto-support is updated.
-                substitute module('com.okta.android:oidc-androidx') with module("com.okta.android:okta-oidc-android:${deps.okta}")
             }
         }
     }
