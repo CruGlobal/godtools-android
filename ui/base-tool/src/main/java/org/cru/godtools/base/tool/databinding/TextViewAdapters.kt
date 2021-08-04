@@ -6,11 +6,11 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.squareup.picasso.Picasso
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableEndTarget
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
 import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.R
+import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.toolFileManager
 import org.cru.godtools.tool.model.Resource
@@ -45,13 +45,12 @@ fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: I
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
     val imageSize = dpToPixelSize(drawableStartSize, resources)
     if (file != null) {
-        // TODO: figure out how to provide Picasso Singleton from Dagger
-        Picasso.get().load(file)
+        context.picasso.load(file)
             .resize(imageSize, imageSize)
             .centerInside()
             .into(target)
     } else {
-        Picasso.get().cancelRequest(target)
+        context.picasso.cancelRequest(target)
         target.updateDrawable(null)
     }
 }
@@ -62,13 +61,12 @@ fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) 
     val file = resource?.localName?.let { context.toolFileManager.getFileBlocking(it) }
     val imageSize = dpToPixelSize(drawableEndSize, resources)
     if (file != null) {
-        // TODO: figure out how to provide Picasso Singleton from Dagger
-        Picasso.get().load(file)
+        context.picasso.load(file)
             .resize(imageSize, imageSize)
             .centerInside()
             .into(target)
     } else {
-        Picasso.get().cancelRequest(target)
+        context.picasso.cancelRequest(target)
         target.updateDrawable(null)
     }
 }
