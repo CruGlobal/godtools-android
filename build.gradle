@@ -169,8 +169,6 @@ allprojects {
             force "io.grpc:grpc-stub:${deps.grpc}"
 
             dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
-
                 // use the new condensed version of hamcrest
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
                 substitute module('org.hamcrest:hamcrest-library') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
@@ -243,11 +241,11 @@ subprojects {
                 }
 
                 compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_1_8
-                    targetCompatibility JavaVersion.VERSION_1_8
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
                 }
                 kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_1_8.toString()
+                    jvmTarget = JavaVersion.VERSION_11.toString()
                     freeCompilerArgs += '-Xjvm-default=all'
                 }
                 lintOptions {
