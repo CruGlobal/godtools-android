@@ -159,9 +159,6 @@ allprojects {
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
             force "junit:junit:${deps.junit}"
 
-            // force the correct version of transitive coroutine libraries
-            force "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${deps.kotlinCoroutines}"
-
             // XXX: Force a version of picasso that uses AndroidX.
             //      This can be removed once FIAM doesn't depend on Picasso 2.71828
             force "com.squareup.picasso:picasso:${deps.picasso}"
