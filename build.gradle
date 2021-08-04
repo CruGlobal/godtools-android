@@ -151,9 +151,6 @@ allprojects {
 
     configurations.all { configuration ->
         configuration.resolutionStrategy {
-            force "androidx.annotation:annotation:${deps.androidX.annotation}"
-            force "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
-            force "androidx.fragment:fragment:${deps.androidX.fragment}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
             force "junit:junit:${deps.junit}"
 
