@@ -275,7 +275,7 @@ subprojects {
                 compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
                 compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
 
                 implementation "com.jakewharton.timber:timber:${deps.timber}"
 
