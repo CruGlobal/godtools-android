@@ -2,8 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="androidx.lifecycle.LiveData" />
+
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.ImageController" />
         <variable name="model" type="org.cru.godtools.tool.model.Image" />
+        <variable name="isGone" type="LiveData&lt;Boolean&gt;" />
+        <variable name="isInvisible" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <org.cru.godtools.base.ui.view.DaggerPicassoImageView
@@ -14,5 +18,7 @@
         android:adjustViewBounds="true"
         android:onClick="@{() -> controller.sendEvents(model.events)}"
         android:scaleType="centerCrop"
+        app:goneIf="@{isGone ?? false}"
+        app:invisibleIf="@{isInvisible ?? false}"
         app:picassoFile="@{model.resource}" />
 </layout>
