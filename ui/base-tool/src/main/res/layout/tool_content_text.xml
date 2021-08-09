@@ -2,8 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="androidx.lifecycle.LiveData" />
+
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.TextController" />
         <variable name="model" type="org.cru.godtools.tool.model.Text" />
+        <variable name="isGone" type="LiveData&lt;Boolean&gt;" />
+        <variable name="isInvisible" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <TextView
@@ -18,6 +22,8 @@
         android:saveEnabled="false"
         android:text="@{model}"
         android:textIsSelectable="@{controller.textEnableTextIsSelectable}"
+        app:drawableEndSize="@{model.endImageSize}"
         app:drawableStartSize="@{model.startImageSize}"
-        app:drawableEndSize="@{model.endImageSize}" />
+        app:goneIf="@{isGone ?? false}"
+        app:invisibleIf="@{isInvisible ?? false}" />
 </layout>
