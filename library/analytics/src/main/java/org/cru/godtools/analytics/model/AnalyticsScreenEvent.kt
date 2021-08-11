@@ -34,6 +34,11 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
         const val APP_SECTION_TOOLS = "tools"
     }
 
+    override fun isForSystem(system: AnalyticsSystem) = when (screen) {
+        SCREEN_LESSONS -> system == AnalyticsSystem.APPSFLYER || super.isForSystem(system)
+        else -> super.isForSystem(system)
+    }
+
     override val appSection
         get() = when (screen) {
             SCREEN_ALL_TOOLS -> APP_SECTION_TOOLS
