@@ -41,7 +41,7 @@ buildscript {
                 snowplow           : '2.2.0',
                 splitties          : '3.0.0-rc03',
                 taptargetview      : '1.13.3',
-                timber             : '4.7.1',
+                timber             : '5.0.0',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
