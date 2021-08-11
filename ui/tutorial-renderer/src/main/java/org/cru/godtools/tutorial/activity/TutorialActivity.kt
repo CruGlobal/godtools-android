@@ -34,7 +34,6 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = 
         .putExtra(ARG_PAGE_SET, pageSet)
         .putExtra(ARG_FRMT_ARGS, formatArgs)
 
-@JvmOverloads
 fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
     startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
 

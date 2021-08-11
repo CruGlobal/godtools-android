@@ -27,7 +27,7 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -277,12 +277,13 @@ class GodToolsDownloadManagerTest {
         stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
         fileManager.stub { onBlocking { getFile(attachment) } doReturn file }
 
-        staleAttachmentsChannel.sendBlocking(emptyList())
-        staleAttachmentsChannel.sendBlocking(emptyList())
+        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
+        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
         verify(dao, never()).find<Attachment>(attachment.id)
 
-        staleAttachmentsChannel.sendBlocking(listOf(attachment))
-        staleAttachmentsChannel.sendBlocking(emptyList()) // this will block until the previous list has been processed
+        assertTrue(staleAttachmentsChannel.trySendBlocking(listOf(attachment)).isSuccess)
+        // this will block until the previous list has been processed
+        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
         assertArrayEquals(testData, file.readBytes())
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
@@ -298,13 +299,13 @@ class GodToolsDownloadManagerTest {
         stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
         fileManager.stub { onBlocking { getFile(attachment) } doReturn file }
 
-        toolBannerAttachmentsChannel.sendBlocking(emptyList())
-        toolBannerAttachmentsChannel.sendBlocking(emptyList())
+        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
+        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
         verify(dao, never()).find<Attachment>(attachment.id)
 
-        toolBannerAttachmentsChannel.sendBlocking(listOf(attachment))
+        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(listOf(attachment)).isSuccess)
         // this will block until the previous list has been processed
-        toolBannerAttachmentsChannel.sendBlocking(emptyList())
+        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
         assertArrayEquals(testData, file.readBytes())
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
