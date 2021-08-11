@@ -25,7 +25,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -403,11 +402,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @VisibleForTesting
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
     internal val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveOrNull() }
+        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
         while (!channel.isClosedForReceive) {
             detectMissingFiles()
             cleanFilesystem()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveOrNull() }
+            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
         }
     }
 
