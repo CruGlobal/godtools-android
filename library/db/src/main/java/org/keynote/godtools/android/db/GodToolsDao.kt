@@ -142,7 +142,6 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
 
-    @JvmOverloads
     @WorkerThread
     fun getLatestTranslation(
         code: String?,
