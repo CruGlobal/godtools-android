@@ -12,7 +12,7 @@ open class AnalyticsActionEvent(
     val action: String,
     val label: String? = null,
     locale: Locale? = null,
-    systems: Collection<AnalyticsSystem>? = null
+    systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) : AnalyticsBaseEvent(locale, systems) {
     companion object {
         fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_").lowercase(Locale.ROOT)
