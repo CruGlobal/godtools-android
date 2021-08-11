@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -22,12 +23,15 @@ internal sealed class ButtonController<T : ViewDataBinding>(
     eventBus: EventBus
 ) : BaseController<Button>(Button::class, binding.root, parentController, eventBus) {
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.setVariable(BR.controller, this)
     }
 
     public override fun onBind() {
         super.onBind()
         binding.setVariable(BR.model, model)
+        binding.setVariable(BR.isGone, model?.isGoneFlow(toolState)?.asLiveData())
+        binding.setVariable(BR.isInvisible, model?.isInvisibleFlow(toolState)?.asLiveData())
     }
 
     fun click() {

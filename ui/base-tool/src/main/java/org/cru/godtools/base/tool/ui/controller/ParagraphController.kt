@@ -2,6 +2,7 @@ package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -27,6 +28,16 @@ class ParagraphController private constructor(
 
     @AssistedFactory
     interface Factory : BaseController.Factory<ParagraphController>
+
+    init {
+        binding.lifecycleOwner = lifecycleOwner
+    }
+
+    override fun onBind() {
+        super.onBind()
+        binding.isGone = model?.isGoneFlow(toolState)?.asLiveData()
+        binding.isInvisible = model?.isInvisibleFlow(toolState)?.asLiveData()
+    }
 
     override val childContainer get() = binding.content
 }

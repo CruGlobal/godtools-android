@@ -127,11 +127,12 @@ ext {
 allprojects {
     repositories {
         maven {
-            url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/'
+            url 'https://cruglobal.jfrog.io/artifactory/maven-mobile/'
             content {
                 includeGroup 'org.ccci.gto.android'
                 includeGroup 'org.ccci.gto.android.testing'
                 includeGroup 'org.cru.godtools.kotlin'
+                includeGroup 'org.cru.mobile.fork.antlr-kotlin'
             }
         }
         maven {
