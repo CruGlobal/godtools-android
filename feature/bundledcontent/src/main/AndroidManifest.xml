@@ -7,8 +7,7 @@
         dist:title="@string/feature_bundled_content">
         <dist:delivery>
             <dist:install-time>
-                <!-- TODO: enable this when we upgrade to Android Studio 4.2 -->
-<!--                <dist:removable value="true" />-->
+                <dist:removable value="true" />
             </dist:install-time>
         </dist:delivery>
         <dist:fusing dist:include="true" />
