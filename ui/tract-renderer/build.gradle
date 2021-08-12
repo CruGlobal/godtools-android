@@ -50,7 +50,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
 
-    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
+    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'

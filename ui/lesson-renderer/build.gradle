@@ -19,7 +19,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
 
-    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
+    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
