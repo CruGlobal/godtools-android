@@ -141,7 +141,7 @@ class MainActivity :
         bottomNav.menu.findItem(R.id.action_lessons)?.let { lessons ->
             dataModel.lessons.observe(this@MainActivity) { lessons.isVisible = !it.isNullOrEmpty() }
         }
-        bottomNav.setOnNavigationItemSelectedListener {
+        bottomNav.setOnItemSelectedListener {
             Page.findPage(it.itemId)?.let { showPage(it) }
             true
         }
