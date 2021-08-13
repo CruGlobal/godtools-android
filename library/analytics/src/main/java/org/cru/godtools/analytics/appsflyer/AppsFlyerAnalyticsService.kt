@@ -18,6 +18,7 @@ import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.HOST_GET_GODTOOLSAPP_COM
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -103,7 +104,7 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     init {
         appsFlyer.apply {
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
-            setOneLinkCustomDomain("get.godtoolsapp.com")
+            setOneLinkCustomDomain(HOST_GET_GODTOOLSAPP_COM)
             init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
             start(app)
         }
