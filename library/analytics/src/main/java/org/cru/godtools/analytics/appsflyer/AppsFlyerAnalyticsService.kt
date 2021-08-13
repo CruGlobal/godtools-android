@@ -36,7 +36,7 @@ private const val STATUS_NON_ORGANIC = "Non-organic"
 class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     private val app: Application,
     eventBus: EventBus,
-    private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>,
+    private val deepLinkResolvers: Set<AppsFlyerDeepLinkResolver>,
     private val appsFlyer: AppsFlyerLib
 ) : Application.ActivityLifecycleCallbacks {
     @Inject
