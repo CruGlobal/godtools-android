@@ -204,7 +204,7 @@ class TractActivity :
     private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
-        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink(this) == true) {
+        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
             dataModel.tool.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary

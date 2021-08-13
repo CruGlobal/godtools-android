@@ -27,6 +27,7 @@ import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
@@ -106,7 +107,7 @@ class AemArticleActivity :
     private fun Intent?.isValidDeepLink() =
         this != null && action == Intent.ACTION_VIEW && data?.isValidDeepLink() == true
     private fun Uri.isValidDeepLink() =
-        (scheme == "http" || scheme == "https") && host == "godtoolsapp.com" && path == "/article/aem"
+        (scheme == "http" || scheme == "https") && host == HOST_GODTOOLSAPP_COM && path == "/article/aem"
     // endregion Intent parsing
 
     private val articleDataModel: AemArticleViewModel by viewModels()

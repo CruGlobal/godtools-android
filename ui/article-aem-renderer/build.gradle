@@ -43,7 +43,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "org.cru.godtools.kotlin:godtools-tool-parser:${deps.godtoolsToolParser}"
+    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
