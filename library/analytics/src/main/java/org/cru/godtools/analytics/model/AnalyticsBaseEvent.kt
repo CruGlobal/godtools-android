@@ -9,12 +9,16 @@ private const val SNOWPLOW_CONTENT_SCORING_URI_SCHEME = "godtools"
 @Immutable
 abstract class AnalyticsBaseEvent internal constructor(
     val locale: Locale? = null,
-    private val systems: Collection<AnalyticsSystem>? = null
+    private val systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) {
+    protected companion object {
+        val DEFAULT_SYSTEMS = setOf(*AnalyticsSystem.values()) - AnalyticsSystem.APPSFLYER
+    }
+
     /**
      * Return whether or not this Analytics event should be tracked in the specified service
      */
-    open fun isForSystem(system: AnalyticsSystem) = systems == null || systems.contains(system)
+    open fun isForSystem(system: AnalyticsSystem) = systems.contains(system)
 
     open val appSection: String? get() = null
     open val appSubSection: String? get() = null
