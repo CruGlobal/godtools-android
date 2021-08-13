@@ -1,5 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
@@ -28,11 +29,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        intent?.extras?.let { extras ->
-            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
-            dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
-        }
+        processIntent(intent)
 
         // finish now if this activity is in an invalid state
         if (!validStartState()) {
@@ -43,6 +40,13 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         startLoaders()
     }
     // endregion Lifecycle
+
+    protected open fun processIntent(intent: Intent?) {
+        intent?.extras?.let { extras ->
+            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
+            dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
+        }
+    }
 
     private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
 
