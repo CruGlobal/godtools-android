@@ -3,6 +3,7 @@ package org.cru.godtools.tutorial.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
@@ -165,6 +167,10 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
 
     override fun onTutorialAction(view: View) {
         when (view.id) {
+            R.id.action_onboarding_watch_video -> {
+                // TODO: this should launch in-app if possible
+                openUrl(Uri.parse("https://www.youtube.com/watch?v=ELRAmQxLqHE"))
+            }
             R.id.action_onboarding_training -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
                 startTutorialActivity(PageSet.TRAINING)

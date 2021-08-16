@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
@@ -66,6 +67,27 @@
             app:layout_constraintEnd_toEndOf="@id/welcome"
             app:layout_constraintStart_toStartOf="@id/welcome"
             app:layout_constraintTop_toTopOf="@id/welcome" />
+
+        <TextView
+            android:id="@+id/action_onboarding_watch_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:onClick="@{callbacks::onTutorialAction}"
+            android:text="@string/tutorial_onboarding_welcome_action_video"
+            android:textColor="@color/gt_blue"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:drawableEndCompat="@drawable/ic_tutorial_onboarding_watch_video"
+            app:drawableTint="@color/gt_blue"
+            app:layout_constraintBottom_toTopOf="@id/action_next"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/welcome2"
+            tools:alpha="1"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action_next"
