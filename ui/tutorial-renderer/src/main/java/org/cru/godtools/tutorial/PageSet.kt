@@ -21,8 +21,8 @@ enum class PageSet(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_OTHERS,
             Page.ONBOARDING_TOOLS,
-            Page.ONBOARDING_READY,
-            Page.ONBOARDING_FINAL
+            Page.ONBOARDING_OLD_READY,
+            Page.ONBOARDING_OLD_FINAL
         ),
         supportedLocales = setOf(
             Locale.ENGLISH,
