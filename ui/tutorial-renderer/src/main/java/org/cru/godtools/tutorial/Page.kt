@@ -13,6 +13,7 @@ internal enum class Page(
         showMenu = false
     ),
     ONBOARDING_CONVERSATIONS(R.layout.tutorial_onboarding_conversations),
+    ONBOARDING_PREPARE(R.layout.tutorial_onboarding_prepare),
     ONBOARDING_SHARE(R.layout.tutorial_onboarding_share),
     ONBOARDING_OLD_READY(R.layout.tutorial_onboarding_old_ready),
     ONBOARDING_OLD_FINAL(R.layout.tutorial_onboarding_old_final, showMenu = false),

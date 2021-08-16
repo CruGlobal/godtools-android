@@ -7,6 +7,8 @@
     <string name="tutorial_onboarding_welcome_action_video">Watch Video</string>
     <string name="tutorial_onboarding_others_headline">Talk about God with anyone</string>
     <string name="tutorial_onboarding_others_subhead">GodTools help you have meaningful conversations about God.</string>
+    <string name="tutorial_onboarding_prepare_headline">Prepare for the moments that matter</string>
+    <string name="tutorial_onboarding_prepare_subhead">Learn how to make conversations about faith a natural part of your life.</string>
     <string name="tutorial_onboarding_tools_headline">Choose Your Tools</string>
     <string name="tutorial_onboarding_tools_subhead">GodTools helps you before, during, and after a spiritual conversation</string>
     <string name="tutorial_onboarding_final_action_start">Get Started</string>

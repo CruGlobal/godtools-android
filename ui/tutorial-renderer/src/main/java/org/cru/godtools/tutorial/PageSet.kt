@@ -20,6 +20,7 @@ enum class PageSet(
         pages = listOf(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_CONVERSATIONS,
+            Page.ONBOARDING_PREPARE,
             Page.ONBOARDING_SHARE,
             Page.ONBOARDING_OLD_READY,
             Page.ONBOARDING_OLD_FINAL
