@@ -5,8 +5,8 @@
     <string name="tutorial_onboarding_welcome">Welcome</string>
     <string name="tutorial_onboarding_welcome_2">Ready for every conversation</string>
     <string name="tutorial_onboarding_welcome_action_video">Watch Video</string>
-    <string name="tutorial_onboarding_others_headline">Share With Others</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools is built to guide your faith conversations</string>
+    <string name="tutorial_onboarding_others_headline">Talk about God with anyone</string>
+    <string name="tutorial_onboarding_others_subhead">GodTools help you have meaningful conversations about God.</string>
     <string name="tutorial_onboarding_tools_headline">Choose Your Tools</string>
     <string name="tutorial_onboarding_tools_subhead">GodTools helps you before, during, and after a spiritual conversation</string>
     <string name="tutorial_onboarding_final_action_start">Get Started</string>

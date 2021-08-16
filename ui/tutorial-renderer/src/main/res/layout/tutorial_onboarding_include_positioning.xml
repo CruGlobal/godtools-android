@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        android:id="@+id/headlinePosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/subheadPosition"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headlineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="headline,headlinePosition" />
+
+    <TextView
+        android:id="@+id/subheadPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/tutorial_page_onboarding_subhead_margin_top"
+        android:lines="3"
+        android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/animationPosition"
+        app:layout_constraintTop_toBottomOf="@id/headlinePosition" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/subheadBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="headlineBottom,subhead,subheadPosition" />
+
+    <Space
+        android:id="@+id/animationPosition"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/actions"
+        app:layout_constraintTop_toBottomOf="@id/subheadPosition" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/actions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="action_next" />
+</merge>

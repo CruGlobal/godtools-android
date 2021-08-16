@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tutorial_page_onboarding_anim_height_old">140dp</dimen>
+    <dimen name="tutorial_page_onboarding_anim_height">300dp</dimen>
+    <dimen name="tutorial_page_onboarding_subhead_margin_top">12dp</dimen>
+
     <style name="Widget.GodTools.Tutorial.Onboarding.Final.Point" parent="Base">
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Subhead</item>
