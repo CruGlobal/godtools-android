@@ -19,8 +19,8 @@ enum class PageSet(
         analyticsBaseScreenName = "onboarding",
         pages = listOf(
             Page.ONBOARDING_WELCOME,
-            Page.ONBOARDING_OTHERS,
-            Page.ONBOARDING_TOOLS,
+            Page.ONBOARDING_CONVERSATIONS,
+            Page.ONBOARDING_SHARE,
             Page.ONBOARDING_OLD_READY,
             Page.ONBOARDING_OLD_FINAL
         ),
