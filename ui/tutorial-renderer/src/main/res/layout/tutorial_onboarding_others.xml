@@ -15,7 +15,7 @@
 
         <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_onboarding_include_positioning" />
+        <include layout="@layout/tutorial_onboarding_old_include_positioning" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/inset_top"
