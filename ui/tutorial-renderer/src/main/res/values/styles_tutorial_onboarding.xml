@@ -7,6 +7,17 @@
     <!-- marginTop + height -->
     <dimen name="tutorial_page_onboarding_anim_position_height">248dp</dimen>
 
+    <style name="Widget.GodTools.Tutorial.Onboarding.Link" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Onboarding.Link</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="drawableTint">@color/gt_blue</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tutorial.Onboarding.Link" parent="TextAppearance.GodTools">
+        <item name="android:textColor">@color/gt_blue</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Widget.GodTools.Tutorial.Onboarding.Final.Point" parent="Base">
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Subhead</item>
