@@ -13,6 +13,6 @@
     <string name="tutorial_onboarding_tools_subhead">GodTools is your guide to communicating the gospel in clear and relevant ways.</string>
     <string name="tutorial_onboarding_final_action_start">Get Started</string>
     <string name="tutorial_onboarding_action_begin">Begin</string>
-    <string name="tutorial_onboarding_action_continue">Continue</string>
+    <string name="tutorial_onboarding_action_continue">Next</string>
     <string name="tutorial_onboarding_action_skip">Skip</string>
 </resources>
