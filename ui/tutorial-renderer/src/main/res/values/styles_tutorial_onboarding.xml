@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tutorial_page_onboarding_anim_height_old">140dp</dimen>
     <dimen name="tutorial_page_onboarding_subhead_margin_top">12dp</dimen>
     <dimen name="tutorial_page_onboarding_anim_margin_top">-52dp</dimen>
     <dimen name="tutorial_page_onboarding_anim_height">300dp</dimen>
@@ -16,14 +15,6 @@
     <style name="TextAppearance.GodTools.Tutorial.Onboarding.Link" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gt_blue</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="Widget.GodTools.Tutorial.Onboarding.Final.Point" parent="Base">
-        <item name="android:gravity">start|center_vertical</item>
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Subhead</item>
-        <item name="drawableStartCompat">@drawable/ic_tutorial_onboarding_final_point</item>
-        <item name="drawableLeftCompat">@drawable/ic_tutorial_onboarding_final_point</item>
-        <item name="android:drawablePadding">16dp</item>
     </style>
 
     <!-- region Links Box -->

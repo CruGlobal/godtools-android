@@ -23,7 +23,6 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
@@ -170,11 +169,6 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
             R.id.action_onboarding_watch_video -> {
                 // TODO: this should launch in-app if possible
                 openUrl(Uri.parse("https://www.youtube.com/watch?v=ELRAmQxLqHE"))
-            }
-            R.id.action_onboarding_training -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
-                startTutorialActivity(PageSet.TRAINING)
-                finish()
             }
             R.id.action_onboarding_finish -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))

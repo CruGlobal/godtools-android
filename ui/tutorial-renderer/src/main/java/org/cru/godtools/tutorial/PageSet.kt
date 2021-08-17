@@ -22,9 +22,7 @@ enum class PageSet(
             Page.ONBOARDING_CONVERSATIONS,
             Page.ONBOARDING_PREPARE,
             Page.ONBOARDING_SHARE,
-            Page.ONBOARDING_LINKS,
-            Page.ONBOARDING_OLD_READY,
-            Page.ONBOARDING_OLD_FINAL
+            Page.ONBOARDING_LINKS
         ),
         supportedLocales = setOf(
             Locale.ENGLISH,

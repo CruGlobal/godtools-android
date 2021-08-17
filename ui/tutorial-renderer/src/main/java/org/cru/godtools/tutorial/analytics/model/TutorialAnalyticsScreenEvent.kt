@@ -10,7 +10,8 @@ class TutorialAnalyticsScreenEvent(private val tutorial: PageSet, private val pa
     AnalyticsScreenEvent("${tutorial.analyticsBaseScreenName}-${page + 1}", locale) {
     override fun isForSystem(system: AnalyticsSystem) = when (tutorial.pages[page]) {
         Page.ONBOARDING_WELCOME,
-        Page.ONBOARDING_OLD_FINAL -> system == AnalyticsSystem.APPSFLYER || super.isForSystem(system)
+        Page.ONBOARDING_SHARE,
+        Page.ONBOARDING_LINKS -> system == AnalyticsSystem.APPSFLYER || super.isForSystem(system)
         else -> super.isForSystem(system)
     }
 
