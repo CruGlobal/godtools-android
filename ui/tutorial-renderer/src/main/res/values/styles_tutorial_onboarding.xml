@@ -25,4 +25,20 @@
         <item name="drawableLeftCompat">@drawable/ic_tutorial_onboarding_final_point</item>
         <item name="android:drawablePadding">16dp</item>
     </style>
+
+    <!-- region Links Box -->
+    <dimen name="tutorial_onboarding_link_box_margin_horizontal">24dp</dimen>
+    <dimen name="tutorial_onboarding_link_box_padding">12dp</dimen>
+    <dimen name="tutorial_onboarding_link_box_padding_negative">-12dp</dimen>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Links.LinkBox" parent="Base">
+        <item name="android:background">@color/gray_F2</item>
+        <item name="android:layout_marginBottom">@dimen/tutorial_onboarding_link_box_padding_negative</item>
+    </style>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Links.LinkBox.Link" parent="Widget.GodTools.Tutorial.Onboarding.Link">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="drawableEndCompat">@drawable/ic_tutorial_onboarding_link_arrow</item>
+    </style>
+    <!-- endregion Links Box -->
 </resources>

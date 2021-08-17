@@ -52,5 +52,5 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="action_next" />
+        app:constraint_referenced_ids="action_next,action_onboarding_finish" />
 </merge>

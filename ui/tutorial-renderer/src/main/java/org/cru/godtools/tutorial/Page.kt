@@ -15,6 +15,7 @@ internal enum class Page(
     ONBOARDING_CONVERSATIONS(R.layout.tutorial_onboarding_conversations),
     ONBOARDING_PREPARE(R.layout.tutorial_onboarding_prepare),
     ONBOARDING_SHARE(R.layout.tutorial_onboarding_share),
+    ONBOARDING_LINKS(R.layout.tutorial_onboarding_links),
     ONBOARDING_OLD_READY(R.layout.tutorial_onboarding_old_ready),
     ONBOARDING_OLD_FINAL(R.layout.tutorial_onboarding_old_final, showMenu = false),
     TRAINING_WATCH(R.layout.tutorial_training_watch),
