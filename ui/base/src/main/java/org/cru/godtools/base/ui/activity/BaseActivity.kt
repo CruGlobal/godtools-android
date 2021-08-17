@@ -209,7 +209,6 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
     // endregion Up Navigation
 
     companion object {
-        @JvmStatic
         fun buildExtras(context: Context) = Bundle().apply {
             if (context is Activity) putParcelable(EXTRA_LAUNCHING_COMPONENT, context.componentName)
         }
