@@ -6,7 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
-        <variable name="selectedPage" type="LiveData&lt;org.cru.godtools.ui.dashboard.Page&gt;" />
+        <variable name="selectedPage" type="LiveData&lt;org.cru.godtools.base.ui.dashboard.Page&gt;" />
     </data>
 
     <org.ccci.gto.android.common.androidx.drawerlayout.widget.HackyDrawerLayout
