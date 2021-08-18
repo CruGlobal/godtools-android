@@ -29,11 +29,11 @@ import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
-import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
+import org.cru.godtools.base.ui.buildToolExtras
 
 fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
-    val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
+    val extras = buildToolExtras(toolCode, language).apply {
         putParcelable(EXTRA_ARTICLE, articleUri)
     }
     Intent(this, AemArticleActivity::class.java)

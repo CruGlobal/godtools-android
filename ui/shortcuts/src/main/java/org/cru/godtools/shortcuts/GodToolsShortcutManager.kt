@@ -45,11 +45,11 @@ import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.article.ui.createArticlesIntent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
+import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool

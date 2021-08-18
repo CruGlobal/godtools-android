@@ -15,7 +15,6 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
-    implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-tool')
 

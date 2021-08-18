@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.activity
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
@@ -92,11 +91,4 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         return extras
     }
     // endregion Up Navigation
-
-    companion object {
-        fun buildExtras(context: Context, toolCode: String?, language: Locale?) = buildExtras(context).apply {
-            putString(EXTRA_TOOL, toolCode)
-            putLocale(EXTRA_LANGUAGE, language)
-        }
-    }
 }
