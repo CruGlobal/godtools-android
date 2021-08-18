@@ -19,18 +19,15 @@ import org.cru.godtools.article.ui.articles.ArticlesFragment
 import org.cru.godtools.article.ui.categories.CategoriesFragment
 import org.cru.godtools.article.ui.categories.CategorySelectedListener
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
-import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
+import org.cru.godtools.base.ui.buildToolExtras
 import org.cru.godtools.tool.model.Category
 
-fun Context.createArticlesIntent(toolCode: String, language: Locale): Intent {
-    return Intent(this, ArticlesActivity::class.java)
-        .putExtras(BaseSingleToolActivity.buildExtras(this, toolCode, language))
-}
+fun Context.createArticlesIntent(toolCode: String, language: Locale) = Intent(this, ArticlesActivity::class.java)
+    .putExtras(buildToolExtras(toolCode, language))
 
-fun Activity.startArticlesActivity(toolCode: String, language: Locale) {
+fun Activity.startArticlesActivity(toolCode: String, language: Locale) =
     startActivity(createArticlesIntent(toolCode, language))
-}
 
 @AndroidEntryPoint
 class ArticlesActivity :
