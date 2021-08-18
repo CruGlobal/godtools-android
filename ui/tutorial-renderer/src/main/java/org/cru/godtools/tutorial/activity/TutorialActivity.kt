@@ -45,6 +45,7 @@ fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null)
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
+    private val pages get() = pageSet.pages.filter { it.supportsLocale(Locale.getDefault()) }
 
     // region Lifecycle
     override fun onContentChanged() {
@@ -111,7 +112,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     // region ViewPager
     private fun setupViewPager() {
         binding.pages.apply {
-            adapter = TutorialPagerAdapter(this@TutorialActivity, pageSet.pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
+            adapter = TutorialPagerAdapter(this@TutorialActivity, pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
             setupAnalytics()
             setupMenuVisibility()
             setupIndicator()
@@ -129,7 +130,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     private fun ViewPager2.updateIndicatorVisibility(indicator: CircleIndicator3, page: Int = currentItem) {
-        indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
+        indicator.visibility = if (pages[page].showIndicator) View.VISIBLE else View.GONE
     }
     // endregion ViewPager
 
@@ -156,7 +157,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     private fun ViewPager2.updateMenuVisibility(page: Int = currentItem) {
-        val visible = pageSet.pages[page].showMenu
+        val visible = pages[page].showMenu
         menu?.forEach { it.isVisible = visible }
     }
     // endregion Menu
