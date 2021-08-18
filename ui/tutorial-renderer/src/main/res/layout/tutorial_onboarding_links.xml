@@ -84,11 +84,12 @@
 
         <!-- region Lessons Link Box -->
         <View
-            android:id="@+id/lessons_box"
+            android:id="@+id/action_onboarding_launch_lessons"
             style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
+            android:onClick="@{callbacks::onTutorialAction}"
             app:layout_constraintBottom_toBottomOf="@id/lessons_action"
             app:layout_constraintEnd_toEndOf="@id/linkEnd"
             app:layout_constraintStart_toStartOf="@id/linkStart"
@@ -103,9 +104,9 @@
             android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
             android:text="@string/tutorial_onboarding_links_lessons_subhead"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
-            app:layout_constraintEnd_toEndOf="@id/lessons_box"
-            app:layout_constraintStart_toStartOf="@id/lessons_box"
-            app:layout_constraintTop_toTopOf="@id/lessons_box" />
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintTop_toTopOf="@id/action_onboarding_launch_lessons" />
 
         <TextView
             android:id="@+id/lessons_action"
@@ -115,9 +116,9 @@
             android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
             android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
             android:text="@string/tutorial_onboarding_links_lessons_action"
-            app:layout_constraintEnd_toEndOf="@id/lessons_box"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_lessons"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@id/lessons_box"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_lessons"
             app:layout_constraintTop_toBottomOf="@id/lessons_subhead" />
         <!-- endregion Lessons Link Box -->
 
@@ -131,7 +132,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tools_action"
             app:layout_constraintEnd_toEndOf="@id/linkEnd"
             app:layout_constraintStart_toStartOf="@id/linkStart"
-            app:layout_constraintTop_toBottomOf="@id/lessons_box" />
+            app:layout_constraintTop_toBottomOf="@id/action_onboarding_launch_lessons" />
 
         <TextView
             android:id="@+id/tools_subhead"
