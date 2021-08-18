@@ -124,11 +124,12 @@
 
         <!-- region Tools Link Box -->
         <View
-            android:id="@+id/tools_box"
+            android:id="@+id/action_onboarding_launch_tools"
             style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
+            android:onClick="@{callbacks::onTutorialAction}"
             app:layout_constraintBottom_toBottomOf="@id/tools_action"
             app:layout_constraintEnd_toEndOf="@id/linkEnd"
             app:layout_constraintStart_toStartOf="@id/linkStart"
@@ -143,9 +144,9 @@
             android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
             android:text="@string/tutorial_onboarding_links_tools_subhead"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
-            app:layout_constraintEnd_toEndOf="@id/tools_box"
-            app:layout_constraintStart_toStartOf="@id/tools_box"
-            app:layout_constraintTop_toTopOf="@id/tools_box" />
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintTop_toTopOf="@id/action_onboarding_launch_tools" />
 
         <TextView
             android:id="@+id/tools_action"
@@ -155,9 +156,9 @@
             android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
             android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
             android:text="@string/tutorial_onboarding_links_tools_action"
-            app:layout_constraintEnd_toEndOf="@id/tools_box"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_tools"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@id/tools_box"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_tools"
             app:layout_constraintTop_toBottomOf="@id/tools_subhead" />
         <!-- endregion Tools Link Box -->
 
