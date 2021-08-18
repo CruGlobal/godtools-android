@@ -26,7 +26,7 @@ buildscript {
                 kotlin             : '1.5.21',
                 kotlinCoroutines   : '1.5.1',
                 leakcanary         : '2.7',
-                lottie             : '4.0.0',
+                lottie             : '4.1.0',
                 materialDesign     : '1.4.0',
                 mockito            : '3.11.2',
                 mockitoKotlin      : '2.2.0',
