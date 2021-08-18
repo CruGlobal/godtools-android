@@ -13,8 +13,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
@@ -169,6 +171,11 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
             R.id.action_onboarding_watch_video -> {
                 // TODO: this should launch in-app if possible
                 openUrl(Uri.parse("https://www.youtube.com/watch?v=ELRAmQxLqHE"))
+            }
+            R.id.action_onboarding_launch_articles -> {
+                // TODO: we need to launch in whichever language makes sense for the current system/primary locale
+                startArticlesActivity("es", Locale.ENGLISH)
+                finish()
             }
             R.id.action_onboarding_finish -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
