@@ -45,7 +45,7 @@ fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null)
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
-    private val pages get() = pageSet.pages.filter { it.supportsLocale(Locale.getDefault()) }
+    private val pages get() = pageSet.pagesFor(Locale.getDefault())
 
     // region Lifecycle
     override fun onContentChanged() {

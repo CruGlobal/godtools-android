@@ -3,7 +3,12 @@ package org.cru.godtools.tutorial
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.greaterThanOrEqualTo
+import org.hamcrest.Matchers.hasItem
+import org.hamcrest.Matchers.hasItems
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeThat
@@ -61,5 +66,23 @@ class PageSetTest {
         assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-TW")))
         assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh")))
         assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-Hant")))
+    }
+
+    @Test
+    fun testOnboardingPages() {
+        assertThat(
+            PageSet.ONBOARDING.pagesFor(Locale.ENGLISH),
+            allOf(
+                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS),
+                not(hasItem(Page.ONBOARDING_SHARE_FINAL))
+            )
+        )
+        assertThat(
+            PageSet.ONBOARDING.pagesFor(Locale.GERMAN),
+            allOf(
+                not(hasItems(Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS)),
+                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE_FINAL)
+            )
+        )
     }
 }

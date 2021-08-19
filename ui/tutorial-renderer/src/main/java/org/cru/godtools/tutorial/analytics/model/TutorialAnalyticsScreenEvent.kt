@@ -14,7 +14,7 @@ class TutorialAnalyticsScreenEvent internal constructor(
 ) : AnalyticsScreenEvent("${tutorial.analyticsBaseScreenName}-${pagePos + 1}", locale) {
     override fun isForSystem(system: AnalyticsSystem) = when (page) {
         Page.ONBOARDING_WELCOME,
-        Page.ONBOARDING_SHARE,
+        Page.ONBOARDING_SHARE_FINAL,
         Page.ONBOARDING_LINKS -> system == AnalyticsSystem.APPSFLYER || super.isForSystem(system)
         else -> super.isForSystem(system)
     }
