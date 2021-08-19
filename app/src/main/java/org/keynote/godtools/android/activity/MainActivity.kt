@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.activity
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -29,6 +31,7 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
 import org.cru.godtools.ui.dashboard.Page
+import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
@@ -47,6 +50,7 @@ class MainActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        processIntent(intent, savedInstanceState == null)
         triggerOnboardingIfNecessary()
     }
 
@@ -62,6 +66,11 @@ class MainActivity :
         binding.setupBottomNavigation()
     }
 
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
+        processIntent(newIntent, true)
+    }
+
     override fun onResume() {
         super.onResume()
         launchTrackingViewModel.trackLaunch()
@@ -73,6 +82,16 @@ class MainActivity :
         syncService.syncToolShares().sync()
     }
     // endregion Lifecycle
+
+    // region Intent processing
+    private fun processIntent(intent: Intent?, newIntent: Boolean) {
+        when {
+            intent?.action == ACTION_VIEW && intent.data?.isDashboardLessonsDeepLink() == true -> {
+                if (newIntent) showPage(Page.LESSONS)
+            }
+        }
+    }
+    // endregion Intent processing
 
     private fun triggerOnboardingIfNecessary() {
         // TODO: remove this once we support onboarding in all languages

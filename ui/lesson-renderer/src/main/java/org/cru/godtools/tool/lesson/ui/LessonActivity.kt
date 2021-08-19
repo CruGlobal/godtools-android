@@ -1,5 +1,7 @@
 package org.cru.godtools.tool.lesson.ui
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import androidx.activity.viewModels
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,9 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
+import org.cru.godtools.tool.lesson.util.isLessonDeepLink
+import org.cru.godtools.tool.lesson.util.lessonDeepLinkCode
+import org.cru.godtools.tool.lesson.util.lessonDeepLinkLocale
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.lesson.LessonPage
 import org.keynote.godtools.android.db.GodToolsDao
@@ -53,6 +58,19 @@ class LessonActivity :
         checkForPageEvent(event)
     }
     // endregion Lifecycle
+
+    // region Intent Processing
+    override fun processIntent(intent: Intent?) {
+        val data = intent?.data
+        when {
+            intent?.action == ACTION_VIEW && data?.isLessonDeepLink() == true -> {
+                dataModel.toolCode.value = data.lessonDeepLinkCode
+                dataModel.locale.value = data.lessonDeepLinkLocale
+            }
+            else -> super.processIntent(intent)
+        }
+    }
+    // endregion Intent Processing
 
     // region UI
     // region Toolbar
