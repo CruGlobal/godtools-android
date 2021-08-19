@@ -141,8 +141,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         })
     }
 
-    private fun trackScreenAnalytics(page: Int = binding.pages.currentItem) {
-        eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
+    private fun trackScreenAnalytics(pagePos: Int = binding.pages.currentItem) {
+        eventBus.post(TutorialAnalyticsScreenEvent(pageSet, pages.getOrNull(pagePos), pagePos, deviceLocale))
     }
     // endregion Analytics
 
