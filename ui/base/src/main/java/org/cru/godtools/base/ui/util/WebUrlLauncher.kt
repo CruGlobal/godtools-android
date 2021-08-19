@@ -1,5 +1,3 @@
-@file:JvmName("WebUrlLauncher")
-
 package org.cru.godtools.base.ui.util
 
 import android.content.ActivityNotFoundException
