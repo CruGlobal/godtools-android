@@ -3,11 +3,13 @@
     <style name="Base"/>
 
     <!-- GodTools theme -->
-    <style name="Theme.GodTools" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.GodTools" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/gt_blue</item>
         <item name="colorPrimaryDark">@color/gt_blue_dark</item>
         <item name="colorAccent">@color/gt_blue</item>
         <item name="android:windowBackground">@color/white</item>
+
+        <item name="windowActionModeOverlay">true</item>
 
         <item name="actionBarTheme">@style/ThemeOverlay.GodTools.Toolbar.AppBar</item>
         <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Solid</item>
@@ -17,9 +19,7 @@
         <item name="toolbarStyle">@style/Widget.GodTools.Toolbar.AppBar</item>
     </style>
 
-    <style name="Theme.GodTools.AppBar">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
+    <style name="Theme.GodTools.NoAppBar">
+        <item name="windowActionModeOverlay">false</item>
     </style>
 </resources>
