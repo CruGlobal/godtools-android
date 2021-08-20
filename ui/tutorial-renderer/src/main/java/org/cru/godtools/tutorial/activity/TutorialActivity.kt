@@ -173,7 +173,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         when (view.id) {
             R.id.action_onboarding_watch_video -> {
                 // TODO: this should launch in-app if possible
-                openUrl(Uri.parse("https://www.youtube.com/watch?v=ELRAmQxLqHE"))
+                openUrl(Uri.parse("https://www.youtube.com/watch?v=RvhZ_wuxAgE"))
             }
             R.id.action_onboarding_launch_articles -> {
                 // TODO: we need to launch in whichever language makes sense for the current system/primary locale
