@@ -7,5 +7,5 @@
 
     <dimen name="tract_content_margin_horizontal">16dp</dimen>
 
-    <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tool.AppBar" />
+    <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tool" />
 </resources>

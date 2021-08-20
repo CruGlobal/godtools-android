@@ -53,7 +53,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GodTools.AppBar">
+        android:theme="@style/Theme.GodTools">
         <activity
             android:name="org.keynote.godtools.android.activity.MainActivity"
             android:launchMode="singleTask"

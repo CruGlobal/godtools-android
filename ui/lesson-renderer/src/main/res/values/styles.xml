@@ -2,7 +2,7 @@
 <resources>
     <dimen name="lesson_content_horiz_margin">16dp</dimen>
 
-    <style name="Theme.GodTools.Tool.Activity.Lesson" parent="Theme.GodTools.Tool.AppBar">
+    <style name="Theme.GodTools.Tool.Activity.Lesson" parent="Theme.GodTools.Tool">
         <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Lesson.Content.Button</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Lesson.Content.Button.OutlinedButton</item>
 

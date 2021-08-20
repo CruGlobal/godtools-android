@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -119,12 +118,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private fun setupStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.apply {
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                activeManifestLiveData.observe(this@BaseToolActivity) {
-                    statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
-                }
+        window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            activeManifestLiveData.observe(this@BaseToolActivity) {
+                statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
             }
         }
     }

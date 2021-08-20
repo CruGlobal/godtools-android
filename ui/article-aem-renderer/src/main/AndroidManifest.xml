@@ -6,7 +6,7 @@
             android:name=".ui.AemArticleActivity"
             android:parentActivityName="org.cru.godtools.article.ui.ArticlesActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.GodTools.Tool.AppBar">
+            android:theme="@style/Theme.GodTools.Tool">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
