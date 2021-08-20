@@ -9,42 +9,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bkg_tutorial_onboarding"
         android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
         android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
         <include layout="@layout/tutorial_include_margins" />
-
         <include layout="@layout/tutorial_onboarding_include_positioning" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/inset_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/tutorial_page_inset_top" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bkg_tutorial_onboarding_wave_1" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/image"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
-            app:layout_constraintBottom_toTopOf="@id/headlinePosition"
-            app:layout_constraintEnd_toStartOf="@id/marginEnd"
-            app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/inset_top"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:lottie_autoPlay="true"
-            app:lottie_rawRes="@raw/anim_tutorial_onboarding_cups"
-            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/headline"
@@ -52,8 +22,8 @@
             android:layout_height="wrap_content"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="@string/tutorial_onboarding_others_headline"
-            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
+            android:text="@string/tutorial_onboarding_prepare_headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
             app:layout_constraintTop_toTopOf="@id/headlinePosition" />
@@ -62,14 +32,26 @@
             android:id="@+id/subhead"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/tutorial_page_onboarding_subhead_margin_top"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
-            android:text="@string/tutorial_onboarding_others_subhead"
+            android:text="@string/tutorial_onboarding_prepare_subhead"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/tutorial_page_onboarding_anim_margin_top"
+            android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subheadBottom"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_tutorial_onboarding_dog" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action_next"

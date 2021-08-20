@@ -20,9 +20,11 @@ import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSy
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
+import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
@@ -30,7 +32,6 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
-import org.cru.godtools.ui.dashboard.Page
 import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
@@ -85,7 +86,9 @@ class MainActivity :
 
     // region Intent processing
     private fun processIntent(intent: Intent?, newIntent: Boolean) {
+        val page = (intent?.getSerializableExtra(EXTRA_PAGE) as? Page)
         when {
+            page != null -> showPage(page)
             intent?.action == ACTION_VIEW && intent.data?.isDashboardLessonsDeepLink() == true -> {
                 if (newIntent) showPage(Page.LESSONS)
             }
@@ -157,7 +160,7 @@ class MainActivity :
     // endregion ToolsFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
-        bottomNav.menu.findItem(R.id.action_lessons)?.let { lessons ->
+        bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
             dataModel.lessons.observe(this@MainActivity) { lessons.isVisible = !it.isNullOrEmpty() }
         }
         bottomNav.setOnItemSelectedListener {
