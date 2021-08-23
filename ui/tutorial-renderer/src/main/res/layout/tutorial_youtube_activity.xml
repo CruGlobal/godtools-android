@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="activity" type="org.cru.godtools.tutorial.activity.YoutubePlayerActivity" />
+        <variable name="lifecycleOwner2" type="androidx.lifecycle.LifecycleOwner" />
+        <variable name="videoId" type="String" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{() -> activity.finish()}">
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtubePlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:lifecycleOwner="@{lifecycleOwner2}"
+            app:autoPlay="@{true}"
+            app:recue="@{true}"
+            app:useWebUi="true"
+            app:onPlaybackEnded="@{() -> activity.finish()}"
+            app:videoId="@{videoId}" />
+    </FrameLayout>
+</layout>

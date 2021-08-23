@@ -29,6 +29,7 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation "com.louiscad.splitties:splitties-intents:${deps.splitties}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "me.relex:circleindicator:${deps.circleindicator}"
