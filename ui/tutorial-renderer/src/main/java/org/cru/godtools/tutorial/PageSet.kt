@@ -24,16 +24,6 @@ enum class PageSet(
             Page.ONBOARDING_SHARE_FINAL,
             Page.ONBOARDING_SHARE,
             Page.ONBOARDING_LINKS
-        ),
-        supportedLocales = setOf(
-            Locale.ENGLISH,
-            Locale("es"),
-            Locale.FRENCH,
-            Locale("hi"),
-            Locale("in"),
-            Locale("ru"),
-            Locale.SIMPLIFIED_CHINESE,
-            Locale.forLanguageTag("zh-Hans")
         )
     ),
     TRAINING(
