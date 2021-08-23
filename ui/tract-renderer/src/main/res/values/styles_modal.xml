@@ -2,12 +2,5 @@
 <resources>
     <dimen name="tract_content_modal_title_text_size">48sp</dimen>
 
-    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.NoAppBar">
-        <item name="android:fitsSystemWindows">false</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.70</item>
-    </style>
+    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.Modal" />
 </resources>

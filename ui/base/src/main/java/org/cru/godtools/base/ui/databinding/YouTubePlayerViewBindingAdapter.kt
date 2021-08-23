@@ -73,3 +73,27 @@ private val YouTubePlayerView.tracker
             addYouTubePlayerListener(it)
         }
 // region updateVideo()
+
+// region YouTubePlayerListener
+private const val ON_PLAYBACK_ENDED = "onPlaybackEnded"
+
+@BindingAdapter(ON_PLAYBACK_ENDED)
+internal fun YouTubePlayerView.setYouTubePlayerListener(playbackEnded: OnPlaybackEnded?) {
+    val newValue = when {
+        playbackEnded == null -> null
+        else -> object : AbstractYouTubePlayerListener() {
+            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                if (state == PlayerConstants.PlayerState.ENDED) playbackEnded.onPlaybackEnded(youTubePlayer)
+            }
+        }
+    }
+
+    ListenerUtil.trackListener(this, newValue, R.id.youtubeplayer_listener)
+        ?.let { removeYouTubePlayerListener(it) }
+    newValue?.let { addYouTubePlayerListener(it) }
+}
+
+internal interface OnPlaybackEnded {
+    fun onPlaybackEnded(player: YouTubePlayer)
+}
+// endregion YouTubePlayerListener

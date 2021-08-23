@@ -22,4 +22,14 @@
     <style name="Theme.GodTools.NoAppBar">
         <item name="windowActionModeOverlay">false</item>
     </style>
+
+    <style name="Theme.GodTools.Modal" parent="Theme.GodTools.NoAppBar">
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+    </style>
 </resources>

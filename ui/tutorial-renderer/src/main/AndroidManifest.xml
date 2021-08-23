@@ -7,5 +7,9 @@
             android:screenOrientation="@integer/default_screen_orientation"
             android:exported="false"
             android:theme="@style/Theme.GodTools.Activity.Tutorial" />
+        <activity
+            android:name=".activity.YoutubePlayerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GodTools.Modal" />
     </application>
 </manifest>
