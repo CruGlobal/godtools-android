@@ -5,13 +5,12 @@
     <string name="tutorial_onboarding_welcome">Welcome</string>
     <string name="tutorial_onboarding_welcome_2">Ready for every conversation</string>
     <string name="tutorial_onboarding_welcome_action_video">Watch Video</string>
-    <string name="tutorial_onboarding_others_headline">Talk about God with anyone</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools help you have meaningful conversations about God.</string>
+    <string name="tutorial_onboarding_conversations_headline">Talk about God with anyone</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools help you have meaningful conversations about God.</string>
     <string name="tutorial_onboarding_prepare_headline">Prepare for the moments that matter</string>
     <string name="tutorial_onboarding_prepare_subhead">Learn how to make conversations about faith a natural part of your life.</string>
-    <string name="tutorial_onboarding_tools_headline">Help someone discover Jesus</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools is your guide to communicating the gospel in clear and relevant ways.</string>
-    <string name="tutorial_onboarding_final_action_start">Get Started</string>
+    <string name="tutorial_onboarding_share_headline">Help someone discover Jesus</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools is your guide to communicating the gospel in clear and relevant ways.</string>
     <string name="tutorial_onboarding_links_headline">Quick start links</string>
     <string name="tutorial_onboarding_links_articles_subhead">I want to explore Christianity</string>
     <string name="tutorial_onboarding_links_articles_action">Read our articles</string>
@@ -20,6 +19,7 @@
     <string name="tutorial_onboarding_links_tools_subhead">I want to share the gospel with someone</string>
     <string name="tutorial_onboarding_links_tools_action">Choose one of our tools</string>
     <string name="tutorial_onboarding_action_begin">Begin</string>
-    <string name="tutorial_onboarding_action_continue">Next</string>
+    <string name="tutorial_onboarding_action_next">Next</string>
     <string name="tutorial_onboarding_action_skip">Skip</string>
+    <string name="tutorial_onboarding_action_start">Get Started</string>
 </resources>

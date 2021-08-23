@@ -3,20 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Добре дошли</string>
     <string name="tutorial_onboarding_welcome_2">Помагайки ви да споделяте вярата си</string>
-    <string name="tutorial_onboarding_others_headline">Споделете с други</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools е създаден, за да ви помогне във вашите духовни разговори</string>
-    <string name="tutorial_onboarding_tools_headline">Изберете вашите инструменти</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools ви помага преди, по време на, и след духовен разговор</string>
-    <string name="tutorial_onboarding_ready_headline">Винаги готов</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools е тук, за да ви помогне и е готов, когато и вие сте</string>
-    <string name="tutorial_onboarding_final_prepare">Подгответе се за всеки разговор</string>
-    <string name="tutorial_onboarding_final_gospel">Преминете през Евангелието с някого</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Вижте два езика един до друг</string>
-    <string name="tutorial_onboarding_final_languages">Изберете от над 90 езика</string>
-    <string name="tutorial_onboarding_final_help_others">Помогнете на някого да израсне като християнин</string>
-    <string name="tutorial_onboarding_final_action_show_more">Покажете повече</string>
-    <string name="tutorial_onboarding_final_action_start">Започнете</string>
+    <string name="tutorial_onboarding_conversations_headline">Споделете с други</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools е създаден, за да ви помогне във вашите духовни разговори</string>
+    <string name="tutorial_onboarding_share_headline">Изберете вашите инструменти</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools ви помага преди, по време на, и след духовен разговор</string>
+    <string name="tutorial_onboarding_action_start">Започнете</string>
     <string name="tutorial_onboarding_action_begin">Начало</string>
-    <string name="tutorial_onboarding_action_continue">Продължете</string>
+    <string name="tutorial_onboarding_action_next">Продължете</string>
     <string name="tutorial_onboarding_action_skip">Пропуснете</string>
 </resources>

@@ -3,19 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">స్వాగతం</string>
     <string name="tutorial_onboarding_welcome_2">మీ విశ్వాసాన్ని పంచుకోవడానికి మీకు సహాయం చేస్తుంది</string>
-    <string name="tutorial_onboarding_others_headline">ఇతరులతో పంచుకోండి</string>
-    <string name="tutorial_onboarding_others_subhead">మీ విశ్వాస సంభాషణలకు మార్గనిర్దేశం చేయడానికి GodTools నిర్మించబడ్డాయి</string>
-    <string name="tutorial_onboarding_tools_headline">మీ సాధనాలను ఎంచుకోండి</string>
-    <string name="tutorial_onboarding_tools_subhead">ఆధ్యాత్మిక సంభాషణకు ముందు, సమయంలో మరియు తర్వాత GodTools మీకు సహాయం చేస్తుంది</string>
-    <string name="tutorial_onboarding_ready_headline">ఎల్లప్పుడూ సిద్ధం</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools సహాయం కోసం ఇక్కడ ఉంది మరియు మీరు ఉన్నప్పుడు సిద్ధంగా ఉంది</string>
-    <string name="tutorial_onboarding_final_prepare">ఏదైనా సంభాషణ కోసం సిద్ధం చేయండి</string>
-    <string name="tutorial_onboarding_final_gospel">సువార్త ద్వారా ఎవరైనా నడవండి</string>
-    <string name="tutorial_onboarding_final_parallel_languages">రెండు భాషలను పక్కపక్కనే చూడండి</string>
-    <string name="tutorial_onboarding_final_languages">90 కి పైగా భాషల నుండి ఎంచుకోండి</string>
-    <string name="tutorial_onboarding_final_help_others">క్రైస్తవుడిగా ప్రారంభించడానికి ఎవరైనా సహాయం చేయండి</string>
-    <string name="tutorial_onboarding_final_action_start">ప్రారంభించడానికి</string>
+    <string name="tutorial_onboarding_conversations_headline">ఇతరులతో పంచుకోండి</string>
+    <string name="tutorial_onboarding_conversations_subhead">మీ విశ్వాస సంభాషణలకు మార్గనిర్దేశం చేయడానికి GodTools నిర్మించబడ్డాయి</string>
+    <string name="tutorial_onboarding_share_headline">మీ సాధనాలను ఎంచుకోండి</string>
+    <string name="tutorial_onboarding_share_subhead">ఆధ్యాత్మిక సంభాషణకు ముందు, సమయంలో మరియు తర్వాత GodTools మీకు సహాయం చేస్తుంది</string>
+    <string name="tutorial_onboarding_action_start">ప్రారంభించడానికి</string>
     <string name="tutorial_onboarding_action_begin">ప్రారంభించండి</string>
-    <string name="tutorial_onboarding_action_continue">కొనసాగించండి</string>
+    <string name="tutorial_onboarding_action_next">కొనసాగించండి</string>
     <string name="tutorial_onboarding_action_skip">దాటవేయి</string>
 </resources>
