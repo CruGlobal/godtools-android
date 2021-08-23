@@ -167,7 +167,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{callbacks::onTutorialAction}"
-            android:text="@string/tutorial_onboarding_final_action_start"
+            android:text="@string/tutorial_onboarding_action_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart" />
