@@ -47,7 +47,6 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation"
             android:layout_width="0dp"
-            android:layout_marginTop="@dimen/tutorial_page_onboarding_anim_margin_top"
             android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
