@@ -3,20 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Boas-vindas</string>
     <string name="tutorial_onboarding_welcome_2">Ajudando você a compartilhar a sua fé</string>
-    <string name="tutorial_onboarding_others_headline">Compartilhe com outras pessoas</string>
-    <string name="tutorial_onboarding_others_subhead">O GodTools foi criado para guiar as suas conversas sobre a fé</string>
-    <string name="tutorial_onboarding_tools_headline">Escolha as suas ferramentas</string>
-    <string name="tutorial_onboarding_tools_subhead">O GodTools ajuda antes, durante e depois de uma conversa espiritual</string>
-    <string name="tutorial_onboarding_ready_headline">Sempre pronto</string>
-    <string name="tutorial_onboarding_ready_subhead">O GodTools está aqui para ajudar e está pronto quando também estiver</string>
-    <string name="tutorial_onboarding_final_prepare">Prepare-se para qualquer conversa</string>
-    <string name="tutorial_onboarding_final_gospel">Explique o evangelho a outra pessoa</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Veja dois idiomas lado a lado</string>
-    <string name="tutorial_onboarding_final_languages">Escolha entre mais de 90 idiomas</string>
-    <string name="tutorial_onboarding_final_help_others">Ajude alguém a começar como cristão</string>
-    <string name="tutorial_onboarding_final_action_show_more">Mostrar mais</string>
-    <string name="tutorial_onboarding_final_action_start">Começar</string>
+    <string name="tutorial_onboarding_conversations_headline">Compartilhe com outras pessoas</string>
+    <string name="tutorial_onboarding_conversations_subhead">O GodTools foi criado para guiar as suas conversas sobre a fé</string>
+    <string name="tutorial_onboarding_share_headline">Escolha as suas ferramentas</string>
+    <string name="tutorial_onboarding_share_subhead">O GodTools ajuda antes, durante e depois de uma conversa espiritual</string>
+    <string name="tutorial_onboarding_action_start">Começar</string>
     <string name="tutorial_onboarding_action_begin">Começar</string>
-    <string name="tutorial_onboarding_action_continue">Continuar</string>
+    <string name="tutorial_onboarding_action_next">Continuar</string>
     <string name="tutorial_onboarding_action_skip">Ignorar</string>
 </resources>

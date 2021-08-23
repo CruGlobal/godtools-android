@@ -3,20 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">स्वागतम</string>
     <string name="tutorial_onboarding_welcome_2">आपके विश्वास को साझा करने में सहायक</string>
-    <string name="tutorial_onboarding_others_headline">अन्यों से साझा करें</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools को आपकी विश्वास वार्तालापों में मदद देने के लिए बनाया गया है</string>
-    <string name="tutorial_onboarding_tools_headline">अपने टूल्स को चुनें</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools आपको आध्यात्मिक वार्तालाप से पहले, इसके बीच में और बाद मदद करता है</string>
-    <string name="tutorial_onboarding_ready_headline">हमेशा तैयार</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools आपकी मदद के लिए है और आपके साथ ही तैयार है</string>
-    <string name="tutorial_onboarding_final_prepare">किसी भी वार्तालाप की तैयारी करें</string>
-    <string name="tutorial_onboarding_final_gospel">किसी को सुसमाचार के बारे में विस्तार से बताएंँ</string>
-    <string name="tutorial_onboarding_final_parallel_languages">दो भाषाएंँ एक साथ देखें</string>
-    <string name="tutorial_onboarding_final_languages">90 से अधिक भाषाओं में से चुनें</string>
-    <string name="tutorial_onboarding_final_help_others">किसी को मसीही के रूप में आरम्भ करने में मदद करें।</string>
-    <string name="tutorial_onboarding_final_action_show_more">मुझे और अधिक दिखाएंँ</string>
-    <string name="tutorial_onboarding_final_action_start">शुरू हो जाएंँ</string>
+    <string name="tutorial_onboarding_conversations_headline">अन्यों से साझा करें</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools को आपकी विश्वास वार्तालापों में मदद देने के लिए बनाया गया है</string>
+    <string name="tutorial_onboarding_share_headline">अपने टूल्स को चुनें</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools आपको आध्यात्मिक वार्तालाप से पहले, इसके बीच में और बाद मदद करता है</string>
+    <string name="tutorial_onboarding_action_start">शुरू हो जाएंँ</string>
     <string name="tutorial_onboarding_action_begin">शुरू करें</string>
-    <string name="tutorial_onboarding_action_continue">जारी रखें</string>
+    <string name="tutorial_onboarding_action_next">जारी रखें</string>
     <string name="tutorial_onboarding_action_skip">छोड़ें</string>
 </resources>

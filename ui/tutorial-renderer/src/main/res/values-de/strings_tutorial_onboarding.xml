@@ -3,20 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Herzlich willkommen!</string>
     <string name="tutorial_onboarding_welcome_2">Teile leichter deinen Glauben</string>
-    <string name="tutorial_onboarding_others_headline">Mit anderen Gläubigen reden</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools wurde entwickelt, um Glaubensgespräche zu führen.</string>
-    <string name="tutorial_onboarding_tools_headline">Tools wählen</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools hilft dir vor, während und nach einem spirituellen Gespräch.</string>
-    <string name="tutorial_onboarding_ready_headline">Immer Bereit</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools ist hier, um zu helfen, und ist bereit, wenn du es bist.</string>
-    <string name="tutorial_onboarding_final_prepare">Bereite dich auf ein beliebiges Gespräch vor.</string>
-    <string name="tutorial_onboarding_final_gospel">Erkläre einem Interessierten das Evangelium.</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Sieh dir zwei Sprachen nebeneinander an.</string>
-    <string name="tutorial_onboarding_final_languages">Wähle aus über 90 Sprachen aus.</string>
-    <string name="tutorial_onboarding_final_help_others">Hilf einem Menschen, Christ zu werden.</string>
-    <string name="tutorial_onboarding_final_action_show_more">Mehr anzeigen</string>
-    <string name="tutorial_onboarding_final_action_start">Erste Schritte</string>
+    <string name="tutorial_onboarding_conversations_headline">Mit anderen Gläubigen reden</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools wurde entwickelt, um Glaubensgespräche zu führen.</string>
+    <string name="tutorial_onboarding_share_headline">Tools wählen</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools hilft dir vor, während und nach einem spirituellen Gespräch.</string>
+    <string name="tutorial_onboarding_action_start">Erste Schritte</string>
     <string name="tutorial_onboarding_action_begin">Loslegen</string>
-    <string name="tutorial_onboarding_action_continue">Weiter</string>
+    <string name="tutorial_onboarding_action_next">Weiter</string>
     <string name="tutorial_onboarding_action_skip">überspringen</string>
 </resources>
