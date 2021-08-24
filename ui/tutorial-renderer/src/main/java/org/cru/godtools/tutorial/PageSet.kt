@@ -43,6 +43,7 @@ enum class PageSet(
             Page.TRAINING_WATCH,
             Page.FEATURES_TOOLS,
             Page.FEATURES_TIPS,
+            Page.FEATURES_LIVE_SHARE,
             Page.TRAINING_PREPARE,
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL
