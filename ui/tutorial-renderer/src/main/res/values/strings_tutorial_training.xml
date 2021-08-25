@@ -10,12 +10,4 @@
 Press the About button to learn more about the tool.</string>
     <string name="tutorial_training_try_headline">Try</string>
     <string name="tutorial_training_try_subhead">Everyone starts as a beginner. Try using a tool in a conversation and see what you learn.</string>
-    <string name="tutorial_training_final_headline">This tutorial is available to see again in the menu</string>
-    <string name="tutorial_training_action_start">Start Using GodTools</string>
-
-    <!-- Training Tutorial Banner -->
-    <eat-comment />
-    <string name="tutorial_training_banner_text">Show me a Tutorial</string>
-    <string name="tutorial_training_banner_action_open">Open Tutorial</string>
-    <string name="tutorial_training_banner_action_dismiss">Dismiss</string>
 </resources>

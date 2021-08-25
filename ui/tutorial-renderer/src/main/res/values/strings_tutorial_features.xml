@@ -8,6 +8,14 @@
     <string name="tutorial_features_live_share_subhead">You can now share your screen remotely so the other person can follow as you use a tool to discuss the gospel.</string>
     <string name="tutorial_features_lessons_headline">Lessons</string>
     <string name="tutorial_features_lessons_subhead">In each GodTools lesson you learn something to help you have real conversations about God.</string>
+    <string name="tutorial_training_final_headline">Find this tutorial in the menu whenever you need it.</string>
 
     <string name="tutorial_training_action_continue">Continue</string>
+    <string name="tutorial_training_action_start">Close tutorial</string>
+
+    <!-- Training Tutorial Banner -->
+    <eat-comment />
+    <string name="tutorial_training_banner_text">Show me a Tutorial</string>
+    <string name="tutorial_training_banner_action_open">Open Tutorial</string>
+    <string name="tutorial_training_banner_action_dismiss">Dismiss</string>
 </resources>
