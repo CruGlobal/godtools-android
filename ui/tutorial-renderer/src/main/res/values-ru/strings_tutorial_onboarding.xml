@@ -7,8 +7,8 @@
     <string name="tutorial_onboarding_conversations_subhead">GodTools создан для того, чтобы помочь вам говорить с другими о своей вере</string>
     <string name="tutorial_onboarding_share_headline">Выберите свои инструменты</string>
     <string name="tutorial_onboarding_share_subhead">GodTools поможет вам во время разговора с человеком о Боге, до и после</string>
-    <string name="tutorial_onboarding_action_start">Начать</string>
     <string name="tutorial_onboarding_action_begin">Начать</string>
     <string name="tutorial_onboarding_action_next">Продолжить</string>
     <string name="tutorial_onboarding_action_skip">Пропустить</string>
+    <string name="tutorial_onboarding_action_start">Начать</string>
 </resources>

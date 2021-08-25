@@ -21,7 +21,7 @@
             android:id="@+id/headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/tutorial_training_final_headline"
+            android:text="@string/tutorial_features_final_headline"
             android:breakStrategy="balanced"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline"
@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{callbacks::onTutorialAction}"
-            android:text="@string/tutorial_training_action_start"
+            android:text="@string/tutorial_features_action_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/marginEnd"
             app:layout_constraintStart_toEndOf="@id/marginStart" />

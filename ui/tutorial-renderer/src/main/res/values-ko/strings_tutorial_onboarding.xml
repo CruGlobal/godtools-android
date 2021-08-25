@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">환영합니다</string>
+    <string name="tutorial_onboarding_welcome_2">모든 대화 준비</string>
+    <string name="tutorial_onboarding_welcome_action_video">동영상 보기</string>
+    <string name="tutorial_onboarding_conversations_headline">다른 사람과 신에 대해 이야기하기</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools는 신에 대한 의미 있는 대화를 할 수 있도록 도와줍니다.</string>
+    <string name="tutorial_onboarding_prepare_headline">중요한 순간을 준비하세요</string>
+    <string name="tutorial_onboarding_prepare_subhead">신앙에 대한 대화를 자연스럽게 삶의 일부로 만드는 방법을 배우세요.</string>
+    <string name="tutorial_onboarding_share_headline">다른 사람에게 예수님을 발견하도록 도와주세요</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools는 명확하고 적절한 방식으로 복음을 전하기 위한 지침입니다.</string>
+    <string name="tutorial_onboarding_links_headline">빠른 시작 링크</string>
+    <string name="tutorial_onboarding_links_articles_subhead">기독교를 알아보고 싶습니다</string>
+    <string name="tutorial_onboarding_links_articles_action">글 읽어보기</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">복음 대화에 대해 배우고 싶습니다</string>
+    <string name="tutorial_onboarding_links_lessons_action">수업 듣기</string>
+    <string name="tutorial_onboarding_links_tools_subhead">누군가와 복음을 나누고 싶습니다</string>
+    <string name="tutorial_onboarding_links_tools_action">도구를 선택하세요</string>
+    <string name="tutorial_onboarding_action_begin">시작</string>
+    <string name="tutorial_onboarding_action_next">다음</string>
+    <string name="tutorial_onboarding_action_skip">건너뛰기</string>
+    <string name="tutorial_onboarding_action_start">시작하기</string>
+</resources>

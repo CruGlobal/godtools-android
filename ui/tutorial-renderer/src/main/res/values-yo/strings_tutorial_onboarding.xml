@@ -7,8 +7,8 @@
     <string name="tutorial_onboarding_conversations_subhead">A se agbekale GodTools kọ lati o sona ninu iforowero igbagbọ rẹ</string>
     <string name="tutorial_onboarding_share_headline">Yan ohun elo re</string>
     <string name="tutorial_onboarding_share_subhead">GodTools ṣe iranlọwọ fun ọ ṣaaju, lakoko, ati lẹhin iforowero ti emi re</string>
-    <string name="tutorial_onboarding_action_start">Bibẹrẹ</string>
     <string name="tutorial_onboarding_action_begin">Bere</string>
     <string name="tutorial_onboarding_action_next">Tesiwaju</string>
     <string name="tutorial_onboarding_action_skip">Fo da</string>
+    <string name="tutorial_onboarding_action_start">Bibẹrẹ</string>
 </resources>

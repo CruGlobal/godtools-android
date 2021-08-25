@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">Ce tutoriel peut être consulté à nouveau depuis le menu</string>
+    <string name="tutorial_features_action_continue">Continuer</string>
+    <string name="tutorial_features_action_close">Commencez à utiliser GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Me montrez un tutoriel</string>
+    <string name="tutorial_features_banner_action_open">Ouvrir le tutoriel</string>
+    <string name="tutorial_features_banner_action_dismiss">Ignorer</string>
+</resources>

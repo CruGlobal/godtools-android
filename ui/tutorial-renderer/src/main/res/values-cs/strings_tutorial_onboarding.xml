@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Vítejte</string>
+    <string name="tutorial_onboarding_welcome_2">Připravena na každý rozhovor</string>
+    <string name="tutorial_onboarding_welcome_action_video">Podívejte se na video</string>
+    <string name="tutorial_onboarding_conversations_headline">Promluvte si o Bohu s kýmkoli</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools vám pomohou vést smysluplné rozhovory o Bohu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Připravte se na důležité okamžiky</string>
+    <string name="tutorial_onboarding_prepare_subhead">Naučte se, jak z rozhovorů o víře udělat přirozenou součást svého života.</string>
+    <string name="tutorial_onboarding_share_headline">Pomozte někomu objevit Ježíše</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools jsou vaším průvodcem, jak srozumitelně a relevantně předávat evangelium.</string>
+    <string name="tutorial_onboarding_links_headline">Odkazy pro rychlý start</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Chci prozkoumat křesťanství</string>
+    <string name="tutorial_onboarding_links_articles_action">Přečtěte si naše články</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Chci se dozvědět, jak vést rozhovory o evangeliu</string>
+    <string name="tutorial_onboarding_links_lessons_action">Vyzkoušejte naše lekce</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Chci se s někým podělit o evangelium</string>
+    <string name="tutorial_onboarding_links_tools_action">Vyberte si jeden z našich nástrojů</string>
+    <string name="tutorial_onboarding_action_begin">Začněte</string>
+    <string name="tutorial_onboarding_action_next">Další</string>
+    <string name="tutorial_onboarding_action_skip">Přeskočit</string>
+    <string name="tutorial_onboarding_action_start">Začít</string>
+</resources>

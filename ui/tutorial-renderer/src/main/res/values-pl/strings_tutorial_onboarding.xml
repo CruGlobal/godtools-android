@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Witaj</string>
+    <string name="tutorial_onboarding_welcome_2">Gotowa na każdą rozmowę</string>
+    <string name="tutorial_onboarding_welcome_action_video">Obejrzyj film</string>
+    <string name="tutorial_onboarding_conversations_headline">Porozmawiaj o Bogu z dowolną osobą</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools pomoże Ci w przeprowadzeniu pełnej treści rozmowy o Bogu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Przygotuj się na chwile, które mają znaczenie</string>
+    <string name="tutorial_onboarding_prepare_subhead">Dowiedz się, w jaki sposób rozmowy o wierze uczynić częścią życia.</string>
+    <string name="tutorial_onboarding_share_headline">Pomóż innym odnaleźć Jezusa</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools jest twoim przewodnikiem przy przekazywaniu ewangelii w zrozumiały i adekwatny do sytuacji sposób.</string>
+    <string name="tutorial_onboarding_links_headline">Linki do szybkiego rozpoczęcia</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Chcę dowiedzieć się więcej o Chrześcijaństwie</string>
+    <string name="tutorial_onboarding_links_articles_action">Przeczytaj nasze artykuły</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Chcę dowiedzieć się więcej o przeprowadzaniu rozmów o ewangelii</string>
+    <string name="tutorial_onboarding_links_lessons_action">Spróbuj naszych lekcji</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Chcę podzielić się z kimś ewangelią</string>
+    <string name="tutorial_onboarding_links_tools_action">Wybierz jedno z naszych narzędzi</string>
+    <string name="tutorial_onboarding_action_begin">Zacznij</string>
+    <string name="tutorial_onboarding_action_next">Następny</string>
+    <string name="tutorial_onboarding_action_skip">Pomiń</string>
+    <string name="tutorial_onboarding_action_start">Rozpocznij</string>
+</resources>

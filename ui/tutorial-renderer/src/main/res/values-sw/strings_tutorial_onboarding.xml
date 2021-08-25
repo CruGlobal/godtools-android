@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Karibu</string>
+    <string name="tutorial_onboarding_welcome_2">Tayari kwa mazungumzo yote</string>
+    <string name="tutorial_onboarding_welcome_action_video">Tazama Video</string>
+    <string name="tutorial_onboarding_conversations_headline">Ongea kuhusu Mungu na yeyote yule</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools inakusaidia kuwa na mazungumzo yenye maana kuhusu Mungu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Jitayarishe kwa nyakati ambazo ni muhimu</string>
+    <string name="tutorial_onboarding_prepare_subhead">Fahamu jinsi ya kufanya mazungumzo kuhusu imani yawe sehemu asili ya maisha yako.</string>
+    <string name="tutorial_onboarding_share_headline">Msaidie mtu kugundua Yesu</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools ni mwongozo wako wa kuwasilisha injili kwa njia wazi na muhimu.</string>
+    <string name="tutorial_onboarding_links_headline">Viungo muhimo vya kuanza</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Ninataka kuchunguza Ukristo</string>
+    <string name="tutorial_onboarding_links_articles_action">Soma makala yetu</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Ninataka kuanza kuwa na mazungumzo ya injili</string>
+    <string name="tutorial_onboarding_links_lessons_action">Jaribu Masomo yetu</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Ninataka kushirikisha mwingine na injili</string>
+    <string name="tutorial_onboarding_links_tools_action">Chagua moja ya zana zetu</string>
+    <string name="tutorial_onboarding_action_begin">Anza</string>
+    <string name="tutorial_onboarding_action_next">Ijayo</string>
+    <string name="tutorial_onboarding_action_skip">Ruka</string>
+    <string name="tutorial_onboarding_action_start">Anza</string>
+</resources>

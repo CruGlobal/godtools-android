@@ -11,11 +11,4 @@
 Натиснете на „Подробности“, за да научите повече за инструмента.</string>
     <string name="tutorial_training_try_headline">Опитайте</string>
     <string name="tutorial_training_try_subhead">Всеки започва като начинаещ. Опитайте да използвате някой от инструментите, когато имате разговор и вижте какво ще научите.</string>
-    <string name="tutorial_training_final_headline">Можете да намерите този урок отново в менюто</string>
-    <string name="tutorial_training_action_continue">Продължете</string>
-    <string name="tutorial_training_action_start">Започнете да използвате GodTools</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">Покажете ми ръководството</string>
-    <string name="tutorial_training_banner_action_open">Отворете ръководството</string>
-    <string name="tutorial_training_banner_action_dismiss">Скрии</string>
 </resources>

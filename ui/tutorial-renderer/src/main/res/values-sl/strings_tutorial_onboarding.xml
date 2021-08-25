@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Dobrodošli</string>
+    <string name="tutorial_onboarding_welcome_2">Pripravljeni za vsak pogovor</string>
+    <string name="tutorial_onboarding_welcome_action_video">Oglejte si videoposnetek</string>
+    <string name="tutorial_onboarding_conversations_headline">Govorite o Bogu s komer koli</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools vam pomaga do smiselnih pogovorov o Bogu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Pripravite se na pomembne trenutke</string>
+    <string name="tutorial_onboarding_prepare_subhead">Naučite se, kako postanejo pogovori o veri naravni del vašega življenja.</string>
+    <string name="tutorial_onboarding_share_headline">Pomagajte nekomu odkriti Jezusa</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools je vaš vodič za jasno in ustrezno oznanjanje evangelija.</string>
+    <string name="tutorial_onboarding_links_headline">Povezave za hitri začetek</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Želim raziskati krščanstvo</string>
+    <string name="tutorial_onboarding_links_articles_action">Preberite naše članke</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Želim se naučiti pogovorov o evangeliju</string>
+    <string name="tutorial_onboarding_links_lessons_action">Preizkusite naše lekcije</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Želim deliti evangelij z nekom</string>
+    <string name="tutorial_onboarding_links_tools_action">Izberite eno od naših orodij</string>
+    <string name="tutorial_onboarding_action_begin">Začni</string>
+    <string name="tutorial_onboarding_action_next">Naprej</string>
+    <string name="tutorial_onboarding_action_skip">Preskoči</string>
+    <string name="tutorial_onboarding_action_start">Začetek</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Welkom</string>
+    <string name="tutorial_onboarding_welcome_2">Klaar voor elk gesprek</string>
+    <string name="tutorial_onboarding_welcome_action_video">Video bekijken</string>
+    <string name="tutorial_onboarding_conversations_headline">Met iedereen over God praten</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools helpt je zinvolle gesprekken over God te hebben.</string>
+    <string name="tutorial_onboarding_prepare_headline">Bereid je voor op de momenten die ertoe doen.</string>
+    <string name="tutorial_onboarding_prepare_subhead">Leer hoe je gesprekken over het geloof op natuurlijke wijze in je leven kunt integreren.</string>
+    <string name="tutorial_onboarding_share_headline">Help iemand anders Jezus te leren kennen</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools helpen je het evangelie op een duidelijke en relevante manier te verspreiden.</string>
+    <string name="tutorial_onboarding_links_headline">Links voor snelle start</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Ik wil het Christendom leren kennen</string>
+    <string name="tutorial_onboarding_links_articles_action">Lees onze artikelen</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Ik wil evangeliegesprekken leren voeren</string>
+    <string name="tutorial_onboarding_links_lessons_action">Probeer onze lessen</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Ik wil het evangelie met iemand delen</string>
+    <string name="tutorial_onboarding_links_tools_action">Kies een van onze programma\'s</string>
+    <string name="tutorial_onboarding_action_begin">Beginnen</string>
+    <string name="tutorial_onboarding_action_next">Volgende</string>
+    <string name="tutorial_onboarding_action_skip">Overslaan</string>
+    <string name="tutorial_onboarding_action_start">Aan de slag</string>
+</resources>

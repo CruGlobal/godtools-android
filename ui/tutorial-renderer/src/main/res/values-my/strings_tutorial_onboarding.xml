@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">ကြိုဆိုပါတယ်</string>
+    <string name="tutorial_onboarding_welcome_2">ပြောဆိုမှုအတွက်အဆင်သင့်ပါ</string>
+    <string name="tutorial_onboarding_welcome_action_video">ဗီဒီယိုကြည့်ပါ</string>
+    <string name="tutorial_onboarding_conversations_headline">မည်သူနှင့်မဆိုဘုရားသခင်အကြောင်းပြောပါ</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools သည်ဘုရားသခင်နှင့်ပတ်သက်သော အဓိပ္ပါယ်ရှိသည့်ပြောဆိုမှုများရရှိရန် ကူညီသည်။</string>
+    <string name="tutorial_onboarding_prepare_headline">အရေးကြီးသည့်အချိန်တွေအတွက် ပြင်ဆင်ပါ</string>
+    <string name="tutorial_onboarding_prepare_subhead">ယုံကြည်ခြင်းသည် သင့်ဘ၀၏အစိတ်အပိုင်းတစ်ခုအဖြစ် မည်သို့ပြောဆိုရမည်ကို သင်ယူပါ</string>
+    <string name="tutorial_onboarding_share_headline">ယေရှု့ကိုရှာဖွေနေသူကိုကူညီပါ</string>
+    <string name="tutorial_onboarding_share_subhead">GoTools သည် ဧဝံဂေလိသတင်းစကားကို ဆက်သွယ်ပြောဆိုရန် သင့်ကိုရှင်းလင်းပြတ်သားအောင်ပြုလုပ်ပြီးသင့်တော်သောနည်းလမ်းဖြစ်ရန် လမ်းညွှန်ပေးသည်</string>
+    <string name="tutorial_onboarding_links_headline">အမြန်စတင်ရန်လင့်ခ်များ</string>
+    <string name="tutorial_onboarding_links_articles_subhead">ကျွန်ုပ်ခရစ်ယာန်ဘာညာကိုလေ့လာလိုပါသည်</string>
+    <string name="tutorial_onboarding_links_articles_action">ကျွန်ုပ်တို့၏ဆောင်းပါးများကိုဖတ်ရန်</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">ဧဝံဂေလိစကားဝိုင်းများအကြောင်းကျွန်ုပ်လေ့လာလိုပါသည်</string>
+    <string name="tutorial_onboarding_links_lessons_action">ကျွန်ုပ်တို့၏သင်ခန်းစာများကိုကြိုးစားကြည့်မယ်</string>
+    <string name="tutorial_onboarding_links_tools_subhead">ဒီဧဝံဂေတိကိုတစ်စုံတစ်ယောက်နှင့်ကျွန်ုပ်မျှဝေလိုသည်</string>
+    <string name="tutorial_onboarding_links_tools_action">ကျွန်ုပ်တို့၏ကိရိယာများကိုရွေးချယ်ပါ</string>
+    <string name="tutorial_onboarding_action_begin">စတင်ပါ</string>
+    <string name="tutorial_onboarding_action_next">နောက်သို့</string>
+    <string name="tutorial_onboarding_action_skip">ကျော်သွားမည်</string>
+    <string name="tutorial_onboarding_action_start">စတင်လိုက်ပါ</string>
+</resources>

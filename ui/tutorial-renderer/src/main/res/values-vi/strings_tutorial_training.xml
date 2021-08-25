@@ -9,11 +9,4 @@
 Nhấn nút \"Giới thiệu\" để biết thêm về công cụ.</string>
     <string name="tutorial_training_try_headline">Thử</string>
     <string name="tutorial_training_try_subhead">Mỗi người khi bắt đầu đều là người mới học. Hãy thử sử dụng một công cụ trong một cuộc trò chuyện và xem bạn học được những gì.</string>
-    <string name="tutorial_training_final_headline">Bạn có thể xem lại hướng dẫn này trong menu</string>
-    <string name="tutorial_training_action_continue">Tiếp tục</string>
-    <string name="tutorial_training_action_start">Bắt đầu sử dụng GodTools</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">Cho tôi xem hướng dẫn</string>
-    <string name="tutorial_training_banner_action_open">Mở hướng dẫn</string>
-    <string name="tutorial_training_banner_action_dismiss">Bỏ qua</string>
 </resources>

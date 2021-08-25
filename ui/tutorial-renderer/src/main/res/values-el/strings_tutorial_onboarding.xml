@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Καλώς ήλθατε</string>
+    <string name="tutorial_onboarding_welcome_2">Έτοιμη για κάθε συζήτηση</string>
+    <string name="tutorial_onboarding_welcome_action_video">Παρακολουθήστε Βίντεο</string>
+    <string name="tutorial_onboarding_conversations_headline">Μιλήστε για τον Θεό με οποιονδήποτε</string>
+    <string name="tutorial_onboarding_conversations_subhead">Τα Θεϊκά Εργαλεία σάς βοηθούν να κάνετε ουσιαστικές συζητήσεις για τον Θεό.</string>
+    <string name="tutorial_onboarding_prepare_headline">Προετοιμαστείτε για τις σημαντικές στιγμές</string>
+    <string name="tutorial_onboarding_prepare_subhead">Μάθετε πώς να κάνετε τις συζητήσεις για την πίστη φυσικό μέρος της ζωής σας.</string>
+    <string name="tutorial_onboarding_share_headline">Βοηθήστε κάποιον να ανακαλύψει τον Ιησού</string>
+    <string name="tutorial_onboarding_share_subhead">Τα Θεϊκά Εργαλεία είναι ο οδηγός σας για την επικοινωνία του Ευαγγελίου με σαφείς και σχετικούς τρόπους.</string>
+    <string name="tutorial_onboarding_links_headline">Σύνδεσμοι γρήγορης εκκίνησης</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Θέλω να εξερευνήσω τον Χριστιανισμό</string>
+    <string name="tutorial_onboarding_links_articles_action">Διαβάστε τα άρθρα μας</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Θέλω να μάθω πώς να κάνω συζητήσεις για το Ευαγγέλιο</string>
+    <string name="tutorial_onboarding_links_lessons_action">Δοκιμάστε τα μαθήματά μας</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Θέλω να μοιραστώ το Ευαγγέλιο με κάποιον</string>
+    <string name="tutorial_onboarding_links_tools_action">Διαλέξτε ένα από τα εργαλεία μας</string>
+    <string name="tutorial_onboarding_action_begin">Αρχίστε</string>
+    <string name="tutorial_onboarding_action_next">Επόμενο</string>
+    <string name="tutorial_onboarding_action_skip">Παράλειψη</string>
+    <string name="tutorial_onboarding_action_start">Αρχίστε</string>
+</resources>

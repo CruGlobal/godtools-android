@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">歡迎</string>
+    <string name="tutorial_onboarding_welcome_2">準備好進行每次對話</string>
+    <string name="tutorial_onboarding_welcome_action_video">觀看影片</string>
+    <string name="tutorial_onboarding_conversations_headline">與任何人談論上帝</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools 能幫助你們以上帝為主題，進行有意義的對話。</string>
+    <string name="tutorial_onboarding_prepare_headline">為重要時刻做好準備</string>
+    <string name="tutorial_onboarding_prepare_subhead">學習如何將關於信仰的對話自然而然地融入生活中。</string>
+    <string name="tutorial_onboarding_share_headline">幫助某人認識耶穌</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools 是能讓你以清楚且相關的方式交流福音的指南。</string>
+    <string name="tutorial_onboarding_links_headline">快速入門連結</string>
+    <string name="tutorial_onboarding_links_articles_subhead">我想要了解基督教</string>
+    <string name="tutorial_onboarding_links_articles_action">閱讀我們的文章</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">我想要瞭解福音對話</string>
+    <string name="tutorial_onboarding_links_lessons_action">試試我們的課程</string>
+    <string name="tutorial_onboarding_links_tools_subhead">我想要與某人分享福音</string>
+    <string name="tutorial_onboarding_links_tools_action">選擇一個我們的工具</string>
+    <string name="tutorial_onboarding_action_begin">開始</string>
+    <string name="tutorial_onboarding_action_next">下一頁</string>
+    <string name="tutorial_onboarding_action_skip">跳過</string>
+    <string name="tutorial_onboarding_action_start">開始使用</string>
+</resources>

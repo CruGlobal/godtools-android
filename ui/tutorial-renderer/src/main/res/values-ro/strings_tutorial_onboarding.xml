@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Bine ai venit</string>
+    <string name="tutorial_onboarding_welcome_2">Pregătită pentru fiecare conversație</string>
+    <string name="tutorial_onboarding_welcome_action_video">Urmărește videoclipul</string>
+    <string name="tutorial_onboarding_conversations_headline">Discută despre Dumnezeu cu oricine</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools te ajută să ai conversații constructive despre Dumnezeu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Pregătește-te pentru momentele care contează</string>
+    <string name="tutorial_onboarding_prepare_subhead">Află cum să faci conversațiile despre credință o parte normală din viața ta.</string>
+    <string name="tutorial_onboarding_share_headline">Ajută pe cineva să-l descopere pe Iisus</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools este ghidul tău pentru propovăduirea Bibliei într-un mod clar și relevant.</string>
+    <string name="tutorial_onboarding_links_headline">Linkuri de pornire rapidă</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Vreau să explorez creștinismul</string>
+    <string name="tutorial_onboarding_links_articles_action">Citește articolele noastre</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Vreau să aflu despre conversațiile pe marginea Bibliei</string>
+    <string name="tutorial_onboarding_links_lessons_action">Încearcă lecțiile noastre</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Vreau să împărtășesc Biblia cu cineva</string>
+    <string name="tutorial_onboarding_links_tools_action">Alege unul dintre instrumentele noastre</string>
+    <string name="tutorial_onboarding_action_begin">Începe</string>
+    <string name="tutorial_onboarding_action_next">Următorul</string>
+    <string name="tutorial_onboarding_action_skip">Omite</string>
+    <string name="tutorial_onboarding_action_start">Să începem</string>
+</resources>

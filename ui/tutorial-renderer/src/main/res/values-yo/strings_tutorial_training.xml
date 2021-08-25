@@ -11,11 +11,4 @@
 Tẹ bọtini Nipa lati ni imọ siwaju sii nipa ohun elo naa.</string>
     <string name="tutorial_training_try_headline">Gbiyanju</string>
     <string name="tutorial_training_try_subhead">Gbogbo eniyan bẹrẹ gege  bi alakobere. Gbiyanju lilo ohun elo kan ninu ibaraẹni sọrọ, yi o ya o lenu ohun ti o kọ.</string>
-    <string name="tutorial_training_final_headline">O tun le ri idanileko yii lẹẹkansi ni mẹnu</string>
-    <string name="tutorial_training_action_continue">Tesiwaju</string>
-    <string name="tutorial_training_action_start">Bere si lo GodTools</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">Fi itoni han mi</string>
-    <string name="tutorial_training_banner_action_open">Si itoni</string>
-    <string name="tutorial_training_banner_action_dismiss">Mu kuro</string>
 </resources>

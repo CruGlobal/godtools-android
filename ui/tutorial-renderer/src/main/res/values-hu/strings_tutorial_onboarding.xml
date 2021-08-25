@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Üdvözlünk</string>
+    <string name="tutorial_onboarding_welcome_2">Minden beszélgetésre készen áll</string>
+    <string name="tutorial_onboarding_welcome_action_video">Videó megtekintése</string>
+    <string name="tutorial_onboarding_conversations_headline">Beszélgess bárkivel Istenről</string>
+    <string name="tutorial_onboarding_conversations_subhead">A GodTools segít értelmes beszélgetéseket folytatni Istenről.</string>
+    <string name="tutorial_onboarding_prepare_headline">Készülj fel a fontos pillanatokra</string>
+    <string name="tutorial_onboarding_prepare_subhead">Ismerd meg, hogyan teheted a hitről szóló beszélgetéseket életed természetes részévé.</string>
+    <string name="tutorial_onboarding_share_headline">Segíts valakinek felfedezni Jézust</string>
+    <string name="tutorial_onboarding_share_subhead">A GodTools az útmutatód ahhoz, hogy érthető és releváns módon kommunikáld az evangéliumot.</string>
+    <string name="tutorial_onboarding_links_headline">Gyorsindítási hivatkozások</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Szeretném felfedezni a kereszténységet</string>
+    <string name="tutorial_onboarding_links_articles_action">Olvasd el a cikkeinket</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Szeretném megtudni, hogyan folytassak beszélgetéseket az evangéliumról.</string>
+    <string name="tutorial_onboarding_links_lessons_action">Próbáld ki a Leckéinket</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Szeretném megosztani valakivel az evangéliumot</string>
+    <string name="tutorial_onboarding_links_tools_action">Próbáld ki valamelyik eszközünket</string>
+    <string name="tutorial_onboarding_action_begin">Kezdés</string>
+    <string name="tutorial_onboarding_action_next">Következő</string>
+    <string name="tutorial_onboarding_action_skip">Kihagyás</string>
+    <string name="tutorial_onboarding_action_start">Első lépések</string>
+</resources>

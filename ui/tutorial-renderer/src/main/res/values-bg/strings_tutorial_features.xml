@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">Можете да намерите този урок отново в менюто</string>
+    <string name="tutorial_features_action_continue">Продължете</string>
+    <string name="tutorial_features_action_close">Започнете да използвате GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Покажете ми ръководството</string>
+    <string name="tutorial_features_banner_action_open">Отворете ръководството</string>
+    <string name="tutorial_features_banner_action_dismiss">Скрии</string>
+</resources>

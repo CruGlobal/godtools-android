@@ -2,13 +2,23 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Selamat Datang</string>
-    <string name="tutorial_onboarding_welcome_2">Membantu Saudara Membagikan Iman Saudara</string>
-    <string name="tutorial_onboarding_conversations_headline">Bagikan Dengan Orang Lain</string>
-    <string name="tutorial_onboarding_conversations_subhead">GodTools dibangun untuk memandu percakapan iman Saudara</string>
-    <string name="tutorial_onboarding_share_headline">Pilih Sarana Saudara</string>
-    <string name="tutorial_onboarding_share_subhead">GodTools membantu Saudara sebelum, selama, dan setelah percakapan rohani</string>
-    <string name="tutorial_onboarding_action_start">Memulai</string>
+    <string name="tutorial_onboarding_welcome_2">Siap untuk setiap percakapan</string>
+    <string name="tutorial_onboarding_welcome_action_video">Tonton Video</string>
+    <string name="tutorial_onboarding_conversations_headline">Bicara dengan Tuhan tentang siapa pun</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools membantu Anda melakukan percakapan yang bermakna tentang Tuhan.</string>
+    <string name="tutorial_onboarding_prepare_headline">Persiapkan momen-momen yang penting</string>
+    <string name="tutorial_onboarding_prepare_subhead">Pelajari cara menjadikan percakapan tentang iman sebagai bagian alami dari hidup Anda.</string>
+    <string name="tutorial_onboarding_share_headline">Bantu seseorang menemukan Yesus</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools adalah panduan Anda untuk mengomunikasikan Injil dengan cara yang jelas dan relevan.</string>
+    <string name="tutorial_onboarding_links_headline">Tautan mulai cepat</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Saya ingin menjelajahi agama Kristen</string>
+    <string name="tutorial_onboarding_links_articles_action">Baca artikel kami</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Saya ingin belajar tentang melakukan percakapan Injil</string>
+    <string name="tutorial_onboarding_links_lessons_action">Coba Pelajaran kami</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Saya ingin membagikan Injil dengan seseorang</string>
+    <string name="tutorial_onboarding_links_tools_action">Pilih salah satu alat kami</string>
     <string name="tutorial_onboarding_action_begin">Mulai</string>
-    <string name="tutorial_onboarding_action_next">Lanjutkan</string>
+    <string name="tutorial_onboarding_action_next">Berikutnya</string>
     <string name="tutorial_onboarding_action_skip">Lewati</string>
+    <string name="tutorial_onboarding_action_start">Memulai</string>
 </resources>

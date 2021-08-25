@@ -7,8 +7,8 @@
     <string name="tutorial_onboarding_conversations_subhead">GodTools તમારા વિશ્વાસ વાર્તાલાપને માર્ગદર્શન આપવા માટે બનાવવામાં આવ્યું છે</string>
     <string name="tutorial_onboarding_share_headline">તમારા ટુલ્સ પસંદ કરો</string>
     <string name="tutorial_onboarding_share_subhead">GodTools આધ્યાત્મિક વાતચીત પહેલાં, દરમ્યાન અને પછી તમને મદદ કરે છે</string>
-    <string name="tutorial_onboarding_action_start">શરૂ કરો</string>
     <string name="tutorial_onboarding_action_begin">શરૂઆત</string>
     <string name="tutorial_onboarding_action_next">ચાલુ રાખો</string>
     <string name="tutorial_onboarding_action_skip">અવગણો</string>
+    <string name="tutorial_onboarding_action_start">શરૂ કરો</string>
 </resources>

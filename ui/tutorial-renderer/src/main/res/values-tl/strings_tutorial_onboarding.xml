@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Mabuhay!</string>
+    <string name="tutorial_onboarding_welcome_2">Handa para sa araw-araw na pag-uusap</string>
+    <string name="tutorial_onboarding_welcome_action_video">Panoorin ang Video</string>
+    <string name="tutorial_onboarding_conversations_headline">Pag-usapan ang tungkol sa Diyos kasama ng iba</string>
+    <string name="tutorial_onboarding_conversations_subhead">Tutulungan ka ng GodTools na magkaroon ng mga makabuluhang pag-uusap tungkol sa Diyos.</string>
+    <string name="tutorial_onboarding_prepare_headline">Paghandaan ang mahahalagang sandali</string>
+    <string name="tutorial_onboarding_prepare_subhead">Alamin kung paano gagawing natural na bahagi ng iyong buhay ang mga pag-uusap tungkol sa pananalampalataya.</string>
+    <string name="tutorial_onboarding_share_headline">Tulungan ang isang tao na makilala si Hesus</string>
+    <string name="tutorial_onboarding_share_subhead">Ang GodTools ay ang iyong gabay sa pagsasabi ng ebanghelyo sa malinaw at makabuluhang mga paraan.</string>
+    <string name="tutorial_onboarding_links_headline">Mga link para sa mabilis na simula</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Gusto kong ma-explore ang Kristiyanismo</string>
+    <string name="tutorial_onboarding_links_articles_action">Basahin ang aming mga artikulo</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Gusto kong matutong magkaroon ng mga pag-uusap tungkol sa ebanghelyo</string>
+    <string name="tutorial_onboarding_links_lessons_action">Subukan ang aming mga Lesson</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Gusto kong magbahagi ng ebanghelyo sa isang tao</string>
+    <string name="tutorial_onboarding_links_tools_action">Piliin ang isa sa aming mga tool</string>
+    <string name="tutorial_onboarding_action_begin">Magsimula</string>
+    <string name="tutorial_onboarding_action_next">Susunod</string>
+    <string name="tutorial_onboarding_action_skip">Laktawan</string>
+    <string name="tutorial_onboarding_action_start">Magsimula</string>
+</resources>
