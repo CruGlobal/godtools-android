@@ -31,6 +31,10 @@ enum class PageSet(
         analyticsBaseScreenName = "tutorial",
         pages = listOf(
             Page.TRAINING_WATCH,
+            Page.FEATURES_TOOLS,
+            Page.FEATURES_TIPS,
+            Page.FEATURES_LIVE_SHARE,
+            Page.FEATURES_LESSONS,
             Page.TRAINING_PREPARE,
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL

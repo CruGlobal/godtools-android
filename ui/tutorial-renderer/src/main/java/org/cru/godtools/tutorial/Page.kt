@@ -5,6 +5,7 @@ import java.util.Locale
 import org.ccci.gto.android.common.util.LocaleUtils
 
 private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH)
+private val FEATURES_LOCALES = setOf(Locale.ENGLISH)
 
 internal enum class Page(
     @LayoutRes val layout: Int,
@@ -31,9 +32,13 @@ internal enum class Page(
         supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
-    TRAINING_WATCH(R.layout.tutorial_training_watch),
-    TRAINING_PREPARE(R.layout.tutorial_training_prepare),
-    TRAINING_TRY(R.layout.tutorial_training_try),
+    TRAINING_WATCH(R.layout.tutorial_training_watch, disabledLocales = FEATURES_LOCALES),
+    FEATURES_TOOLS(R.layout.tutorial_features_tools, supportedLocales = FEATURES_LOCALES),
+    FEATURES_TIPS(R.layout.tutorial_features_tips, supportedLocales = FEATURES_LOCALES),
+    FEATURES_LIVE_SHARE(R.layout.tutorial_features_live_share, supportedLocales = FEATURES_LOCALES),
+    FEATURES_LESSONS(R.layout.tutorial_features_lessons, supportedLocales = FEATURES_LOCALES),
+    TRAINING_PREPARE(R.layout.tutorial_training_prepare, disabledLocales = FEATURES_LOCALES),
+    TRAINING_TRY(R.layout.tutorial_training_try, disabledLocales = FEATURES_LOCALES),
     TRAINING_FINAL(R.layout.tutorial_training_final),
     LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
     LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
