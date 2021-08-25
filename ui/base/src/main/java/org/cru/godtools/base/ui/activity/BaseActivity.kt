@@ -18,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
@@ -43,7 +44,7 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataBinding()
-        savedInstanceState?.restoreFeatureDiscoveryState()
+        setupFeatureDiscovery(savedInstanceState)
     }
 
     protected open fun onBindingChanged() = Unit
@@ -63,11 +64,6 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
 
     @CallSuper
     protected open fun onSetupActionBar() = Unit
-
-    override fun onPostResume() {
-        super.onPostResume()
-        triggerFeatureDiscovery()
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -105,6 +101,11 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
 
     // region Feature Discovery
     protected var featureDiscoveryActive: String? = null
+
+    private fun setupFeatureDiscovery(savedInstanceState: Bundle?) {
+        savedInstanceState?.restoreFeatureDiscoveryState()
+        lifecycle.onResume { triggerFeatureDiscovery() }
+    }
 
     private fun triggerFeatureDiscovery() {
         when (val feature = featureDiscoveryActive) {
