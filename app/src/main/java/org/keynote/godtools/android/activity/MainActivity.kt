@@ -174,14 +174,11 @@ class MainActivity :
         else -> super.canShowFeatureDiscovery(feature)
     }
 
-    override fun showNextFeatureDiscovery() {
-        if (!settings.isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
-            canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
-        ) {
+    override fun showNextFeatureDiscovery() = when {
+        !settings.isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+            canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS) ->
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000)
-            return
-        }
-        super.showNextFeatureDiscovery()
+        else -> super.showNextFeatureDiscovery()
     }
 
     override fun onShowFeatureDiscovery(feature: String, force: Boolean) = when (feature) {
