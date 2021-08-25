@@ -107,10 +107,6 @@ class Settings @Inject internal constructor(
                     setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
                     changed = true
                 }
-                FEATURE_LANGUAGE_SETTINGS -> if (parallelLanguage != null) {
-                    setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
-                    changed = true
-                }
                 FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
                     setFeatureDiscovered(FEATURE_LOGIN)
                     changed = true
