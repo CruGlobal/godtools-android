@@ -159,7 +159,7 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
     // region Delayed Dispatch
     @VisibleForTesting
     internal val featureDiscoveryHandler by lazy {
-        Handler(mainLooper, Handler.Callback { m -> showFeatureDiscovery(m) })
+        Handler(mainLooper) { m -> showFeatureDiscovery(m) }
             .apply { lifecycle.onDestroy { removeCallbacksAndMessages(null) } }
     }
 
