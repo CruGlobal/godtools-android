@@ -2,13 +2,18 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Chào mừng</string>
-    <string name="tutorial_onboarding_welcome_2">Giúp bạn chia sẻ niềm tin</string>
-    <string name="tutorial_onboarding_conversations_headline">Chia sẻ với người khác</string>
-    <string name="tutorial_onboarding_conversations_subhead">GodTools được xây dựng để dẫn dắt các cuộc trò chuyện về đức tin của bạn.</string>
-    <string name="tutorial_onboarding_share_headline">Chọn công cụ của bạn</string>
-    <string name="tutorial_onboarding_share_subhead">GodTools trợ giúp cho bạn trước, trong và sau một cuộc trò chuyện về tâm linh</string>
-    <string name="tutorial_onboarding_action_start">Bắt đầu</string>
+    <string name="tutorial_onboarding_welcome_2">Sẵn sàng cho mọi cuộc trò chuyện</string>
+    <string name="tutorial_onboarding_welcome_action_video">Xem video</string>
+    <string name="tutorial_onboarding_conversations_headline">Nói về Chúa với người khác</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools giúp bạn có những cuộc trò chuyện đầy ý nghĩa về Chúa.</string>
+    <string name="tutorial_onboarding_prepare_headline">Sẵn sàng cho những thời điểm quan trọng</string>
+    <string name="tutorial_onboarding_prepare_subhead">Học cách trò chuyện chia sẻ đức tin như là điều tự nhiên trong đời sống bạn.</string>
+    <string name="tutorial_onboarding_share_headline">Giúp người khác khám phá về Chúa Giê-xu</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools là sự chỉ dẫn để bạn chia sẻ Phúc Âm cách rõ ràng và thích hợp.</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Tôi muốn biết nhiều hơn về Chúa</string>
+    <string name="tutorial_onboarding_links_articles_action">Đọc bài viết</string>
     <string name="tutorial_onboarding_action_begin">Bắt đầu</string>
     <string name="tutorial_onboarding_action_next">Tiếp tục</string>
     <string name="tutorial_onboarding_action_skip">Bỏ qua</string>
+    <string name="tutorial_onboarding_action_start">Bắt đầu</string>
 </resources>

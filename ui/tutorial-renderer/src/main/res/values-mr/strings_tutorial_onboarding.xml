@@ -2,14 +2,24 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">स्वागत आहे</string>
-    <string name="tutorial_onboarding_welcome_2">आपला विश्वास इतरांस सांगण्यात आपल्याला मदत करणे</string>
-    <string name="tutorial_onboarding_conversations_headline">इतरांस सांगा</string>
-    <string name="tutorial_onboarding_conversations_subhead">GodTools आपल्या विश्वासात संभाषणांचे मार्गदर्शन करण्यासाठी तयार केले गेले आहेत</string>
-    <string name="tutorial_onboarding_share_headline">आपले टूल्स निवडा</string>
-    <string name="tutorial_onboarding_share_subhead">GodTools आपल्याला आत्मिक संभाषणापूर्वी, दरम्यान आणि नंतर मदत करतात</string>
-    <string name="tutorial_onboarding_action_start">सुरूवात करा</string>
+    <string name="tutorial_onboarding_welcome_2">सर्व संभाषणांसाठी तयर</string>
+    <string name="tutorial_onboarding_welcome_action_video">व्हीडिओ पहा</string>
+    <string name="tutorial_onboarding_conversations_headline">देवाविषयी कुणाशीही बोला</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools आपल्याला देवाविषयी अर्थपूर्ण संभाषण करू शकण्यात मदत करते.</string>
+    <string name="tutorial_onboarding_prepare_headline">महत्त्वाच्या क्षणांसाठी तयारी करा</string>
+    <string name="tutorial_onboarding_prepare_subhead">विश्वासाविषयी संभाषणाला आपल्या आयुष्याचा एक नैसर्गिक भाग कसे बनवावे ते शिका.</string>
+    <string name="tutorial_onboarding_share_headline">कुणाला तरी येशूजवळ येण्यास मदत करा</string>
+    <string name="tutorial_onboarding_share_subhead">गॉस्पेल विषयी सुस्पष्ट व सुबोध रीत्या संवाद स्थापनेमध्ये GodTools आपले दिशादर्शक आहे.</string>
+    <string name="tutorial_onboarding_links_headline">झटपट सुरुवात लिंक्स</string>
+    <string name="tutorial_onboarding_links_articles_subhead">मला ख्रिश्चनिटी विषयी जाणून घ्यायचे आहे</string>
+    <string name="tutorial_onboarding_links_articles_action">आमचे लेख वाचा</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">मला गॉस्पेल-विषयक संभाषणे करण्याबद्दल जाणून घ्यायचे आहे</string>
+    <string name="tutorial_onboarding_links_lessons_action">आमचे धडे घेऊन पहा</string>
+    <string name="tutorial_onboarding_links_tools_subhead">मला गॉस्पेल कुणाशी तरी शेअर करायचे आहे</string>
+    <string name="tutorial_onboarding_links_tools_action">आमच्या टूल्सपैकी एक निवडा</string>
     <string name="tutorial_onboarding_action_begin">सुरू करा</string>
-    <string name="tutorial_onboarding_action_next">सुरू</string>
+    <string name="tutorial_onboarding_action_next">पुढे</string>
     <string name="tutorial_onboarding_action_skip">"
 वगळा"</string>
+    <string name="tutorial_onboarding_action_start">सुरूवात करा</string>
 </resources>

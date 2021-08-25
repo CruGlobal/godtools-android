@@ -2,13 +2,23 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">欢迎</string>
-    <string name="tutorial_onboarding_welcome_2">帮助你分享自己的信仰</string>
-    <string name="tutorial_onboarding_conversations_headline">与他人分享</string>
-    <string name="tutorial_onboarding_conversations_subhead">GodTools旨在引导你完成信仰对话</string>
-    <string name="tutorial_onboarding_share_headline">选择你的工具</string>
-    <string name="tutorial_onboarding_share_subhead">GodTools在属灵对话之前、之中和之后为你提供帮助</string>
-    <string name="tutorial_onboarding_action_start">开始体验</string>
+    <string name="tutorial_onboarding_welcome_2">准备好了每一场对话</string>
+    <string name="tutorial_onboarding_welcome_action_video">观看视频</string>
+    <string name="tutorial_onboarding_conversations_headline">与任何人谈论神</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools帮助你进行关于神的富有意义的对话。</string>
+    <string name="tutorial_onboarding_prepare_headline">为重要的时刻做准备</string>
+    <string name="tutorial_onboarding_prepare_subhead">了解如何在你的生活中自然而然地融入有关信仰的对话。</string>
+    <string name="tutorial_onboarding_share_headline">帮助别人发现耶稣</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools指导你以清晰而又有意义的方式传播福音。</string>
+    <string name="tutorial_onboarding_links_headline">快速入门链接</string>
+    <string name="tutorial_onboarding_links_articles_subhead">我想探索基督教</string>
+    <string name="tutorial_onboarding_links_articles_action">阅读我们的文章</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">我想了解如何进行福音对话</string>
+    <string name="tutorial_onboarding_links_lessons_action">试听我们的课程</string>
+    <string name="tutorial_onboarding_links_tools_subhead">我想与他人分享福音</string>
+    <string name="tutorial_onboarding_links_tools_action">选择我们的一个工具</string>
     <string name="tutorial_onboarding_action_begin">开始</string>
-    <string name="tutorial_onboarding_action_next">继续</string>
+    <string name="tutorial_onboarding_action_next">下一步</string>
     <string name="tutorial_onboarding_action_skip">跳过</string>
+    <string name="tutorial_onboarding_action_start">开始体验</string>
 </resources>

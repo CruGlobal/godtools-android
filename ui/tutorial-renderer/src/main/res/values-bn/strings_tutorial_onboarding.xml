@@ -7,8 +7,8 @@
     <string name="tutorial_onboarding_conversations_subhead">"আপনার বিশ্বাসের কথোপকথনকে গাইড করতে GodTools তৈরী করা হয়েছে  I  "</string>
     <string name="tutorial_onboarding_share_headline">"আপনার টুলস পছন্দ করুন I "</string>
     <string name="tutorial_onboarding_share_subhead">"একটি আধ্যাত্মিক কথোপকথনের পূর্বে. মধ্যে, এবং পরে GodTools আপনাকে সাহায্য করে "</string>
-    <string name="tutorial_onboarding_action_start">"শুরু করুন "</string>
     <string name="tutorial_onboarding_action_begin">"আরম্ভ করুন "</string>
     <string name="tutorial_onboarding_action_next">"চালিয়ে যান "</string>
     <string name="tutorial_onboarding_action_skip">"ছেড়ে দিন "</string>
+    <string name="tutorial_onboarding_action_start">"শুরু করুন "</string>
 </resources>

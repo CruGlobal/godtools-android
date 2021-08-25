@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">Bạn có thể xem lại hướng dẫn này trong menu</string>
+    <string name="tutorial_features_action_continue">Tiếp tục</string>
+    <string name="tutorial_features_action_close">Bắt đầu sử dụng GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Cho tôi xem hướng dẫn</string>
+    <string name="tutorial_features_banner_action_open">Mở hướng dẫn</string>
+    <string name="tutorial_features_banner_action_dismiss">Bỏ qua</string>
+</resources>

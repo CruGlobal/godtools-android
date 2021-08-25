@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Laipni lūdzam</string>
+    <string name="tutorial_onboarding_welcome_2">Gatavs jebkurai sarunai</string>
+    <string name="tutorial_onboarding_welcome_action_video">Skatīties video</string>
+    <string name="tutorial_onboarding_conversations_headline">Runājiet par Dievu ar citiem</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools palīdz jums piedalīties jēgpilnās sarunās par Dievu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Sagatavojaties svarīgiem brīžiem</string>
+    <string name="tutorial_onboarding_prepare_subhead">Uzziniet, kā sarunāties par ticību jūsu ikdienas dzīvē.</string>
+    <string name="tutorial_onboarding_share_headline">Palīdziet citiem atklāt Jēzu</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools palīdzēs jums runāt par gospeli skaidrā un saistošā veidā.</string>
+    <string name="tutorial_onboarding_links_headline">Ātrās sākšanas saites</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Es vēlos iepazīt kristietību</string>
+    <string name="tutorial_onboarding_links_articles_action">Lasiet mūsu rakstus</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Es vēlos uzzināt par sarunām par gospeli</string>
+    <string name="tutorial_onboarding_links_lessons_action">Izmēģiniet mūsu Mācību stundas</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Vēlos runāt par gospeli ar kādu citu</string>
+    <string name="tutorial_onboarding_links_tools_action">Izvēlieties vienu no mūsu rīkiem</string>
+    <string name="tutorial_onboarding_action_begin">Sākt</string>
+    <string name="tutorial_onboarding_action_next">Tālāk</string>
+    <string name="tutorial_onboarding_action_skip">Izlaist</string>
+    <string name="tutorial_onboarding_action_start">Sākt</string>
+</resources>

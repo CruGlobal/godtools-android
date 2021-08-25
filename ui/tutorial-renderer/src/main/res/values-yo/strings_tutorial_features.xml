@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">O tun le ri idanileko yii lẹẹkansi ni mẹnu</string>
+    <string name="tutorial_features_action_continue">Tesiwaju</string>
+    <string name="tutorial_features_action_close">Bere si lo GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Fi itoni han mi</string>
+    <string name="tutorial_features_banner_action_open">Si itoni</string>
+    <string name="tutorial_features_banner_action_dismiss">Mu kuro</string>
+</resources>

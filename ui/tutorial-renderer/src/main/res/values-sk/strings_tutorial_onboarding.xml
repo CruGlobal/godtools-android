@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Vitajte</string>
+    <string name="tutorial_onboarding_welcome_2">Pripravené na každú konverzáciu</string>
+    <string name="tutorial_onboarding_welcome_action_video">Pozerať video</string>
+    <string name="tutorial_onboarding_conversations_headline">Rozprávajte sa o bohu s kýmkoľvek</string>
+    <string name="tutorial_onboarding_conversations_subhead">Aplikácia GodTools vám pomôže viesť zmysluplné konverzácie o bohu.</string>
+    <string name="tutorial_onboarding_prepare_headline">Pripravte sa na chvíle, ktoré sú dôležité</string>
+    <string name="tutorial_onboarding_prepare_subhead">Zistite, ako konverzovať o viere, prirodzenej súčasti vášho života.</string>
+    <string name="tutorial_onboarding_share_headline">Pomôžte niekomu objaviť Ježiša</string>
+    <string name="tutorial_onboarding_share_subhead">Aplikácia GodTools je vaším sprievodcom ku komunikácii o slove božom jasnými a relevantnými spôsobmi.</string>
+    <string name="tutorial_onboarding_links_headline">Odkazy na rýchly začiatok</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Chcem preskúmať kresťanstvo</string>
+    <string name="tutorial_onboarding_links_articles_action">Prečítajte si naše články</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Chcem sa dozvedieť o konverzáciách o slove božom</string>
+    <string name="tutorial_onboarding_links_lessons_action">Vyskúšajte naše lekcie</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Chcem sa s niekým podeliť o slovo božie</string>
+    <string name="tutorial_onboarding_links_tools_action">Vyberte si jeden z našich nástrojov</string>
+    <string name="tutorial_onboarding_action_begin">Začať</string>
+    <string name="tutorial_onboarding_action_next">Ďalej</string>
+    <string name="tutorial_onboarding_action_skip">Preskočiť</string>
+    <string name="tutorial_onboarding_action_start">Začať</string>
+</resources>

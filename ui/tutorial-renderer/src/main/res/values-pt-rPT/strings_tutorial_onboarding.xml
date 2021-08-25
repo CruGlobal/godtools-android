@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Damos-lhe as boas-vindas</string>
+    <string name="tutorial_onboarding_welcome_2">Pronto para qualquer conversa</string>
+    <string name="tutorial_onboarding_welcome_action_video">Ver vídeo</string>
+    <string name="tutorial_onboarding_conversations_headline">Fala sobre Deus com qualquer pessoa</string>
+    <string name="tutorial_onboarding_conversations_subhead">A aplicação GodTools ajuda-te a ter conversas profundas sobre Deus.</string>
+    <string name="tutorial_onboarding_prepare_headline">Prepara-te para os momentos importantes</string>
+    <string name="tutorial_onboarding_prepare_subhead">Aprende a tornar as conversas sobre a fé numa parte natural da tua vida.</string>
+    <string name="tutorial_onboarding_share_headline">Ajuda outra pessoa a descobrir Jesus</string>
+    <string name="tutorial_onboarding_share_subhead">A aplicação GodTools é o teu guia para transmitir o evangelho de uma forma clara e relevante.</string>
+    <string name="tutorial_onboarding_links_headline">Ligações para o início rápido</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Quero explorar o Cristianismo</string>
+    <string name="tutorial_onboarding_links_articles_action">Lê os nossos artigos</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Quero aprender a ter conversas sobre o evangelho</string>
+    <string name="tutorial_onboarding_links_lessons_action">Experimenta as nossas sessões</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Quero partilhar o evangelho com uma pessoa</string>
+    <string name="tutorial_onboarding_links_tools_action">Escolhe uma das nossas ferramentas</string>
+    <string name="tutorial_onboarding_action_begin">Começar</string>
+    <string name="tutorial_onboarding_action_next">Seguinte</string>
+    <string name="tutorial_onboarding_action_skip">Ignorar</string>
+    <string name="tutorial_onboarding_action_start">Começar</string>
+</resources>

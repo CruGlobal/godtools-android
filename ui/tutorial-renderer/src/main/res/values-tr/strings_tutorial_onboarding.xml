@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Hoş Geldin</string>
+    <string name="tutorial_onboarding_welcome_2">Her sohbete hazır</string>
+    <string name="tutorial_onboarding_welcome_action_video">Videoyu İzle</string>
+    <string name="tutorial_onboarding_conversations_headline">Herkesle Tanrı hakkında konuş</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools Tanrı hakkında anlamlı sohbetlere katılmana yardımcı olur.</string>
+    <string name="tutorial_onboarding_prepare_headline">Önemli anlara hazırlan</string>
+    <string name="tutorial_onboarding_prepare_subhead">İnanç hakkında sohbetleri nasıl hayatının doğal bir parçası hâline getireceğini öğren.</string>
+    <string name="tutorial_onboarding_share_headline">Birilerinin İsa\'yı bulmasına yardımcı ol</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools hakikati açık ve amacına uygun biçimde anlatma konusunda rehberindir.</string>
+    <string name="tutorial_onboarding_links_headline">Hızlı başlangıç bağlantıları</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Hristiyanlığı keşfetmek istiyorum</string>
+    <string name="tutorial_onboarding_links_articles_action">Makalelerimizi oku</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">İncil sohbetleri gerçekleştirme konusunda bilgi edinmek istiyorum</string>
+    <string name="tutorial_onboarding_links_lessons_action">Derslerimizi dene</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Hakikati birisiyle paylaşmak istiyorum</string>
+    <string name="tutorial_onboarding_links_tools_action">Araçlarımızdan birini seç</string>
+    <string name="tutorial_onboarding_action_begin">Başla</string>
+    <string name="tutorial_onboarding_action_next">Sonraki</string>
+    <string name="tutorial_onboarding_action_skip">Atla</string>
+    <string name="tutorial_onboarding_action_start">Başla</string>
+</resources>

@@ -11,11 +11,4 @@
 La herramienta \"Enséñame a compartir\" es un buen punto de partida. "</string>
     <string name="tutorial_training_try_headline">Pruébate</string>
     <string name="tutorial_training_try_subhead">Todo el mundo empieza como principiante. Prueba a usar una herramienta en una conversación y observa lo que aprendes.</string>
-    <string name="tutorial_training_final_headline">Este tutorial está disponible para volver a verlo en el menú.</string>
-    <string name="tutorial_training_action_continue">Continuar</string>
-    <string name="tutorial_training_action_start">Empieza a usar GodTools</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">Muéstrame un tutorial</string>
-    <string name="tutorial_training_banner_action_open">Abrir tutorial</string>
-    <string name="tutorial_training_banner_action_dismiss">Descartar</string>
 </resources>

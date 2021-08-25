@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">Tutorial ini tersedia untuk dilihat lagi di menu</string>
+    <string name="tutorial_features_action_continue">Lanjutkan</string>
+    <string name="tutorial_features_action_close">Mulai menggunakan GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Tunjukkan tutorial</string>
+    <string name="tutorial_features_banner_action_open">Membuka tutorial</string>
+    <string name="tutorial_features_banner_action_dismiss">Memberhentikan</string>
+</resources>

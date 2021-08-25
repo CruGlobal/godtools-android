@@ -2,13 +2,23 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">స్వాగతం</string>
-    <string name="tutorial_onboarding_welcome_2">మీ విశ్వాసాన్ని పంచుకోవడానికి మీకు సహాయం చేస్తుంది</string>
-    <string name="tutorial_onboarding_conversations_headline">ఇతరులతో పంచుకోండి</string>
-    <string name="tutorial_onboarding_conversations_subhead">మీ విశ్వాస సంభాషణలకు మార్గనిర్దేశం చేయడానికి GodTools నిర్మించబడ్డాయి</string>
-    <string name="tutorial_onboarding_share_headline">మీ సాధనాలను ఎంచుకోండి</string>
-    <string name="tutorial_onboarding_share_subhead">ఆధ్యాత్మిక సంభాషణకు ముందు, సమయంలో మరియు తర్వాత GodTools మీకు సహాయం చేస్తుంది</string>
-    <string name="tutorial_onboarding_action_start">ప్రారంభించడానికి</string>
+    <string name="tutorial_onboarding_welcome_2">ప్రతి సంభాషణ కోసం సిద్ధం</string>
+    <string name="tutorial_onboarding_welcome_action_video">వీడియో వీక్షించండి</string>
+    <string name="tutorial_onboarding_conversations_headline">ఎవరితోనైనా దేవుని గురించి మాట్లాడండి</string>
+    <string name="tutorial_onboarding_conversations_subhead">దేవుని గురించి అర్థవంతమైన సంభాషణలు చేయడానికి GodTools మీకు సహాయపడతాయి.</string>
+    <string name="tutorial_onboarding_prepare_headline">ముఖ్యమైన క్షణాల కోసం సిద్ధం చేయండి</string>
+    <string name="tutorial_onboarding_prepare_subhead">విశ్వాసం గురించి సంభాషణలను మీ జీవితంలో సహజ భాగంగా ఎలా చేయాలో తెలుసుకోండి.</string>
+    <string name="tutorial_onboarding_share_headline">యేసును కనుగొనడంలో ఎవరికైనా సహాయపడండి</string>
+    <string name="tutorial_onboarding_share_subhead">స్పష్టమైన మరియు సంబంధిత మార్గాల్లో సువార్తను తెలియజేయడానికి GodTools మీ మార్గదర్శి.</string>
+    <string name="tutorial_onboarding_links_headline">త్వరిత ప్రారంభ లింక్స్</string>
+    <string name="tutorial_onboarding_links_articles_subhead">నేను క్రైస్తవ మతాన్ని అన్వేషించాలనుకుంటున్నాను</string>
+    <string name="tutorial_onboarding_links_articles_action">మా కథనాలను చదవండి</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">సువార్త సంభాషణల గురించి నేను నేర్చుకోవాలనుకుంటున్నాను</string>
+    <string name="tutorial_onboarding_links_lessons_action">మా పాఠాలు ప్రయత్నించండి</string>
+    <string name="tutorial_onboarding_links_tools_subhead">నేను సువార్తను ఎవరితోనైనా పంచుకోవాలనుకుంటున్నాను</string>
+    <string name="tutorial_onboarding_links_tools_action">మా సాధనాల్లో ఒకదాన్ని ఎంచుకోండి</string>
     <string name="tutorial_onboarding_action_begin">ప్రారంభించండి</string>
-    <string name="tutorial_onboarding_action_next">కొనసాగించండి</string>
+    <string name="tutorial_onboarding_action_next">తరువాత</string>
     <string name="tutorial_onboarding_action_skip">దాటవేయి</string>
+    <string name="tutorial_onboarding_action_start">ప్రారంభించడానికి</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">दुबारा देखने के लिए यह ट्यूटोरियल मेन्यु में उपलब्ध है</string>
+    <string name="tutorial_features_action_continue">जारी रखें</string>
+    <string name="tutorial_features_action_close">GodTools का उपयोग शुरू करें</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">मुझे एक ट्यूटोरियल दिखाएं</string>
+    <string name="tutorial_features_banner_action_open">ट्यूटोरियल खोलें</string>
+    <string name="tutorial_features_banner_action_dismiss">रद्द करें</string>
+</resources>

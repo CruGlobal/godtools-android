@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">可以在菜单中再次查看本教程</string>
+    <string name="tutorial_features_action_continue">继续</string>
+    <string name="tutorial_features_action_close">开始使用GodTools</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">给我看教程</string>
+    <string name="tutorial_features_banner_action_open">打开教程</string>
+    <string name="tutorial_features_banner_action_dismiss">取消</string>
+</resources>

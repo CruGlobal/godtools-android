@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">ยินดีต้อนรับ</string>
+    <string name="tutorial_onboarding_welcome_2">พร้อมสำหรับทุกการสนทนา</string>
+    <string name="tutorial_onboarding_welcome_action_video">ดูวิดีโอ</string>
+    <string name="tutorial_onboarding_conversations_headline">พูดคุยเรื่องพระเจ้ากับใครก็ได้</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools ช่วยให้คุณมีบทสนทนาที่มีความหมายเกี่ยวกับพระเจ้า</string>
+    <string name="tutorial_onboarding_prepare_headline">เตรียมพร้อมสำหรับช่วงเวลาที่สำคัญ</string>
+    <string name="tutorial_onboarding_prepare_subhead">เรียนรู้วิธีสนทนาเกี่ยวกับความศรัทธา ซึ่งเป็นส่วนหนึ่งของชีวิตคุณ</string>
+    <string name="tutorial_onboarding_share_headline">ช่วยใครซักคนให้รู้จักกับพระเยซู</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools ชี้แนะแนวทางในการสื่อสารพระกิตติคุณอย่างชัดเจนและตรงประเด็น</string>
+    <string name="tutorial_onboarding_links_headline">ลิงก์เริ่มต้นด่วน</string>
+    <string name="tutorial_onboarding_links_articles_subhead">ฉันต้องการศึกษาศาสนาคริสต์</string>
+    <string name="tutorial_onboarding_links_articles_action">อ่านบทความของเรา</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">ฉันต้องการเรียนรู้เกี่ยวกับการสนทนาเรื่องพระกิตติคุณ</string>
+    <string name="tutorial_onboarding_links_lessons_action">ลองศึกษาบทเรียนของเรา</string>
+    <string name="tutorial_onboarding_links_tools_subhead">ฉันต้องการแชร์เรื่องพระกิตติคุณกับใครสักคน</string>
+    <string name="tutorial_onboarding_links_tools_action">เลือกหนึ่งในเครื่องมือของเรา</string>
+    <string name="tutorial_onboarding_action_begin">เริ่มต้น</string>
+    <string name="tutorial_onboarding_action_next">ต่อไป</string>
+    <string name="tutorial_onboarding_action_skip">ข้าม</string>
+    <string name="tutorial_onboarding_action_start">เริ่มต้นใช้งาน</string>
+</resources>
