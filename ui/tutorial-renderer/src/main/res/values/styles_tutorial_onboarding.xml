@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tutorial_page_onboarding_subhead_margin_top">12dp</dimen>
-    <dimen name="tutorial_page_onboarding_anim_margin_top">-52dp</dimen>
-    <dimen name="tutorial_page_onboarding_anim_height">300dp</dimen>
-    <!-- marginTop + height -->
-    <dimen name="tutorial_page_onboarding_anim_position_height">248dp</dimen>
+    <dimen name="tutorial_page_onboarding_anim_height">268dp</dimen>
 
     <style name="Widget.GodTools.Tutorial.Onboarding.Link" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Onboarding.Link</item>

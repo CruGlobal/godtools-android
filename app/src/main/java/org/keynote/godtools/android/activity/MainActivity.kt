@@ -25,7 +25,6 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
@@ -97,10 +96,6 @@ class MainActivity :
     // endregion Intent processing
 
     private fun triggerOnboardingIfNecessary() {
-        // TODO: remove this once we support onboarding in all languages
-        // mark OnBoarding as discovered if this isn't a supported language
-        if (!PageSet.ONBOARDING.supportsLocale(deviceLocale)) settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
-
         if (settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) return
         startTutorialActivity(PageSet.ONBOARDING)
     }
