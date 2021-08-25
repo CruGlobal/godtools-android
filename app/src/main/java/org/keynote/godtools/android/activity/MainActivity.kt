@@ -182,30 +182,33 @@ class MainActivity :
     }
 
     override fun onShowFeatureDiscovery(feature: String, force: Boolean) = when (feature) {
-        FEATURE_LANGUAGE_SETTINGS -> {
-            if (toolbar.findViewById<View>(R.id.action_switch_language) != null) {
-                // purge any pending feature discovery triggers since we are showing feature discovery now
-                purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
-
-                // show language settings feature discovery
-                val target = TapTarget.forToolbarMenuItem(
-                    toolbar,
-                    R.id.action_switch_language,
-                    getString(R.string.feature_discovery_title_language_settings),
-                    getString(R.string.feature_discovery_desc_language_settings)
-                )
-                featureDiscovery = TapTargetView.showFor(this, target, LanguageSettingsFeatureDiscoveryListener())
-                featureDiscoveryActive = feature
-            } else {
-                // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
-                //       the menu item just hasn't been drawn yet.
-
-                // the toolbar action isn't available yet.
-                // re-attempt this feature discovery on the next frame iteration.
-                dispatchDelayedFeatureDiscovery(feature, force, 17)
-            }
-        }
+        FEATURE_LANGUAGE_SETTINGS -> showLanguageSettingsFeatureDiscovery(force)
         else -> super.onShowFeatureDiscovery(feature, force)
+    }
+
+    // region Language Settings
+    private fun showLanguageSettingsFeatureDiscovery(force: Boolean) {
+        if (toolbar.findViewById<View>(R.id.action_switch_language) != null) {
+            // purge any pending feature discovery triggers since we are showing feature discovery now
+            purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
+
+            // show language settings feature discovery
+            val target = TapTarget.forToolbarMenuItem(
+                toolbar,
+                R.id.action_switch_language,
+                getString(R.string.feature_discovery_title_language_settings),
+                getString(R.string.feature_discovery_desc_language_settings)
+            )
+            featureDiscovery = TapTargetView.showFor(this, target, LanguageSettingsFeatureDiscoveryListener())
+            featureDiscoveryActive = FEATURE_LANGUAGE_SETTINGS
+        } else {
+            // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
+            //       the menu item just hasn't been drawn yet.
+
+            // the toolbar action isn't available yet.
+            // re-attempt this feature discovery on the next frame iteration.
+            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, force, 17)
+        }
     }
 
     private inner class LanguageSettingsFeatureDiscoveryListener : TapTargetView.Listener() {
@@ -228,5 +231,6 @@ class MainActivity :
             if (view === featureDiscovery) featureDiscovery = null
         }
     }
+    // endregion Language Settings
     // endregion Feature Discovery
 }
