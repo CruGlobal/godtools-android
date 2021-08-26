@@ -15,10 +15,8 @@ class LaunchTrackingViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
     private var launchTracked: Boolean
-        get() = state.get<Boolean>("launchTracked") ?: false
-        set(value) {
-            state.set("launchTracked", value)
-        }
+        get() = state["launchTracked"] ?: false
+        set(value) = state.set("launchTracked", value)
 
     fun trackLaunch() {
         // short-circuit if we have already tracked this launch
