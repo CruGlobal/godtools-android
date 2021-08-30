@@ -22,6 +22,7 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
+import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
@@ -32,6 +33,7 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
 import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
+import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
@@ -39,6 +41,8 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
+
+private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
 class MainActivity :
@@ -167,14 +171,19 @@ class MainActivity :
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null
-    override fun isFeatureDiscoveryVisible() = super.isFeatureDiscoveryVisible() || featureDiscovery != null
+    override fun isFeatureDiscoveryVisible() =
+        super.isFeatureDiscoveryVisible() || isParallelLanguageDialogVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
+        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.FAVORITE_TOOLS
         FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }
 
     override fun showNextFeatureDiscovery() = when {
+        !settings.isFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE) &&
+            canShowFeatureDiscovery(FEATURE_PARALLEL_LANGUAGE) ->
+            showFeatureDiscovery(FEATURE_PARALLEL_LANGUAGE, false)
         !settings.isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
             canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS) ->
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000)
@@ -182,9 +191,20 @@ class MainActivity :
     }
 
     override fun onShowFeatureDiscovery(feature: String, force: Boolean) = when (feature) {
+        FEATURE_PARALLEL_LANGUAGE -> showParallelLanguageDialog()
         FEATURE_LANGUAGE_SETTINGS -> showLanguageSettingsFeatureDiscovery(force)
         else -> super.onShowFeatureDiscovery(feature, force)
     }
+
+    // region Parallel Language
+    private fun showParallelLanguageDialog() {
+        ParallelLanguageDialogFragment().show(supportFragmentManager, TAG_PARALLEL_LANGUAGE_DIALOG)
+        settings.setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
+    }
+
+    private fun isParallelLanguageDialogVisible() =
+        supportFragmentManager.findFragmentByTag(TAG_PARALLEL_LANGUAGE_DIALOG) != null
+    // endregion Parallel Language
 
     // region Language Settings
     private fun showLanguageSettingsFeatureDiscovery(force: Boolean) {
