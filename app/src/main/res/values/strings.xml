@@ -41,4 +41,9 @@
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
     <string name="label_language_search">Filter Languages</string>
+
+    <!-- Parallel Language Dialog -->
+    <eat-comment />
+    <string name="languages_parallel_dialog_headline">Would you like to choose a parallel language?</string>
+    <string name="languages_parallel_dialog_select">Select a language</string>
 </resources>
