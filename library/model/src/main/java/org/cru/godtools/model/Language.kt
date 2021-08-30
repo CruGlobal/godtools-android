@@ -1,6 +1,7 @@
 package org.cru.godtools.model
 
 import android.content.Context
+import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -39,3 +40,10 @@ class Language : Base() {
     // XXX: output the language id and code for debugging purposes
     override fun toString() = "Language{id=$id, code=$_code}"
 }
+
+fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
+    associateBy { it.getDisplayName(context, displayLocale) }
+        .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
+
+fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null) =
+    toDisplayNameSortedMap(context, displayLocale).values.toList()

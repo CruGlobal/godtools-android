@@ -9,7 +9,6 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.text.Collator
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -17,6 +16,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.toDisplayNameSortedMap
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -55,10 +55,7 @@ class LanguagesFragmentViewModel @Inject constructor(
         .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
         .getAsLiveData(dao)
     private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
-        .combineWith(rawLanguages) { displayLocale, languages ->
-            languages.associateBy { lang -> lang.getDisplayName(context, displayLocale) }
-                .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
-        }
+        .combineWith(rawLanguages) { locale, languages -> languages.toDisplayNameSortedMap(context, locale) }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->
         when {
             query.isNullOrEmpty() -> languages.values.toList()
