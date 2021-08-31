@@ -187,6 +187,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-napier:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
