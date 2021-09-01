@@ -21,6 +21,7 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -34,6 +35,7 @@ private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
 private const val USER_PROP_DEBUG = "debug"
+private const val USER_PROP_LAUNCHES = "godtools_launches"
 private const val USER_PROP_LOGGED_IN_STATUS = "cru_loggedinstatus"
 private const val USER_PROP_SSO_GUID = "cru_ssoguid"
 private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
@@ -48,6 +50,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     app: Application,
     eventBus: EventBus,
     oktaUserProfileProvider: OktaUserProfileProvider,
+    settings: Settings,
     private val firebase: FirebaseAnalytics,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
@@ -56,8 +59,9 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     internal constructor(
         app: Application,
         eventBus: EventBus,
-        oktaUserProfileProvider: OktaUserProfileProvider
-    ) : this(app, eventBus, oktaUserProfileProvider, FirebaseAnalytics.getInstance(app))
+        oktaUserProfileProvider: OktaUserProfileProvider,
+        settings: Settings
+    ) : this(app, eventBus, oktaUserProfileProvider, settings, FirebaseAnalytics.getInstance(app))
 
     // region Tracking Events
     init {
@@ -104,6 +108,10 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
                 firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
                 firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
             }
+            .launchIn(coroutineScope)
+
+        settings.launchesFlow
+            .onEach { firebase.setUserProperty(USER_PROP_LAUNCHES, it.toString()) }
             .launchIn(coroutineScope)
 
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)

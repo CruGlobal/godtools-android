@@ -13,9 +13,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.getIntFlow
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
 
 private const val PREFS_SETTINGS = "GodTools"
@@ -175,6 +177,8 @@ class Settings @Inject internal constructor(
     var launches
         get() = prefs.getInt(PREF_LAUNCHES, 0)
         private set(value) = prefs.edit { putInt(PREF_LAUNCHES, value) }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val launchesFlow get() = prefs.getIntFlow(PREF_LAUNCHES, 0)
 
     private fun trackFirstLaunchVersion() {
         if (prefs.contains(PREF_VERSION_FIRST_LAUNCH)) return

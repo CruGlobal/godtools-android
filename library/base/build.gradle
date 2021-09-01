@@ -13,6 +13,7 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 

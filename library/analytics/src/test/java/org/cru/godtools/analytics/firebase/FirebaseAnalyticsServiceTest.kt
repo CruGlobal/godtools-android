@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.clearInvocations
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -13,9 +14,11 @@ import com.okta.oidc.net.response.UserInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import org.junit.After
@@ -31,6 +34,7 @@ class FirebaseAnalyticsServiceTest {
     private lateinit var firebase: FirebaseAnalytics
     private lateinit var eventBus: EventBus
     private lateinit var oktaUserProfileProvider: OktaUserProfileProvider
+    private lateinit var settings: Settings
     private val userInfoChannel = Channel<UserInfo?>()
     private lateinit var coroutineScope: TestCoroutineScope
 
@@ -45,9 +49,10 @@ class FirebaseAnalyticsServiceTest {
         oktaUserProfileProvider = mock {
             on { userInfoFlow(refreshIfStale = any()) } doReturn userInfoChannel.consumeAsFlow()
         }
+        settings = mock { on { launchesFlow } doAnswer { flowOf(0) } }
 
         analyticsService =
-            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, firebase, coroutineScope)
+            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, settings, firebase, coroutineScope)
     }
 
     @After
