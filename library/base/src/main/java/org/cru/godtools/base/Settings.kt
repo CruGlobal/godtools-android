@@ -26,6 +26,7 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 private const val VERSION_5_1_4 = 4033503
 private const val VERSION_5_2_0 = 4035089
+private const val VERSION_5_5_0 = 4037627
 
 @Singleton
 class Settings @Inject internal constructor(
@@ -42,6 +43,7 @@ class Settings @Inject internal constructor(
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
+        const val FEATURE_PARALLEL_LANGUAGE = "parallelLanguage"
         const val FEATURE_LOGIN = "login"
         const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TOOL_SHARE = "toolShare"
@@ -77,6 +79,7 @@ class Settings @Inject internal constructor(
         set(locale) {
             if (primaryLanguage == locale) return
             prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
+            if (locale != null) setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
         }
     val parallelLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
@@ -107,8 +110,8 @@ class Settings @Inject internal constructor(
                     setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
                     changed = true
                 }
-                FEATURE_LANGUAGE_SETTINGS -> if (parallelLanguage != null) {
-                    setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
+                FEATURE_PARALLEL_LANGUAGE -> if (firstLaunchVersion <= VERSION_5_5_0 || parallelLanguage != null) {
+                    setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
                     changed = true
                 }
                 FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
