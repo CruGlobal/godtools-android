@@ -1,6 +1,7 @@
 package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
@@ -46,6 +47,8 @@ class MultiselectController private constructor(
             model?.options.orEmpty(),
             optionControllers.toMutableList()
         ) { optionFactory.create(binding.options, this) }
+
+        binding.flow.referencedIds = optionControllers.map { it.root.id }.toIntArray()
     }
     // endregion Options
 
@@ -71,6 +74,7 @@ class MultiselectController private constructor(
         }
 
         init {
+            binding.root.id = View.generateViewId()
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
         }
