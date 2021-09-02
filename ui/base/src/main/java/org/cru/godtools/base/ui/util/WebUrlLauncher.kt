@@ -26,6 +26,7 @@ fun Context.openUrl(url: Uri) = try {
 } catch (e: ActivityNotFoundException) {
     Timber.tag("WebUrlLauncher")
         .d(e, "Unable to open url: %s", url)
-    Toast.makeText(this, getString(R.string.toast_unable_to_launch_activity, url), Toast.LENGTH_LONG).show()
+    Toast.makeText(applicationContext, getString(R.string.toast_unable_to_launch_activity, url), Toast.LENGTH_LONG)
+        .show()
     false
 }
