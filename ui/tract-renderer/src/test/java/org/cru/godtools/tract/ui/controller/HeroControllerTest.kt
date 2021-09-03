@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -61,7 +62,7 @@ class HeroControllerTest {
         val event1 = AnalyticsEvent()
         val event2 = AnalyticsEvent(delay = 1)
         val event3 = AnalyticsEvent(delay = 2)
-        controller.model = mock { on { analyticsEvents } doReturn listOf(event1, event2, event3) }
+        controller.model = mock { on { getAnalyticsEvents(any()) } doReturn listOf(event1, event2, event3) }
         verifyNoInteractions(eventBus)
 
         // event1 with no delay

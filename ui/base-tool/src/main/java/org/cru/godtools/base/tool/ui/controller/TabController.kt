@@ -21,6 +21,6 @@ class TabController @AssistedInject internal constructor(
     override val childContainer get() = binding.content
 
     fun trackSelectedAnalyticsEvents() {
-        triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
+        triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.CLICKED))
     }
 }

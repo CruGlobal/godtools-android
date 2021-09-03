@@ -90,8 +90,8 @@ abstract class BaseController<T : Base> protected constructor(
         ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
     }
 
-    protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
-        events?.filter { it.isTriggerType(*types) }?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
+    protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
+        events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
         if (event.delay > 0) delay(event.delay * 1000L)

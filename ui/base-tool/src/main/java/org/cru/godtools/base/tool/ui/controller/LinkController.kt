@@ -29,7 +29,7 @@ internal class LinkController private constructor(
     }
 
     fun click(link: Link?) {
-        triggerAnalyticsEvents(link?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
+        triggerAnalyticsEvents(link?.getAnalyticsEvents(Trigger.CLICKED))
         sendEvents(link?.events)
     }
 }

@@ -36,7 +36,7 @@ internal sealed class ButtonController<T : ViewDataBinding>(
 
     fun click() {
         val model = model
-        triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
+        triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.CLICKED))
         when (model?.type) {
             Button.Type.URL -> model.url?.let { url ->
                 eventBus.post(ExitLinkActionEvent(model.manifest.code, url))
