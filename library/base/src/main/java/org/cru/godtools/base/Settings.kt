@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
+import org.ccci.gto.android.common.util.toLocale
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
@@ -61,7 +62,7 @@ class Settings @Inject internal constructor(
 
     // region Language Settings
     var primaryLanguage: Locale
-        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.parseLanguageTag()
+        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale()
             ?: defaultLanguage.also { primaryLanguage = it }
         set(value) {
             prefs.edit {
@@ -71,11 +72,11 @@ class Settings @Inject internal constructor(
         }
     val primaryLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
-            .map { it?.parseLanguageTag() ?: defaultLanguage.also { primaryLanguage = it } }
+            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
     }
 
     var parallelLanguage
-        get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.parseLanguageTag()
+        get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()
         set(locale) {
             if (primaryLanguage == locale) return
             prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
@@ -83,7 +84,7 @@ class Settings @Inject internal constructor(
         }
     val parallelLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
-            .map { it?.parseLanguageTag() }
+            .map { it?.toLocale() }
     }
 
     fun isLanguageProtected(locale: Locale) = when (locale) {
@@ -208,6 +209,3 @@ class Settings @Inject internal constructor(
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
     }
 }
-
-@Suppress("NOTHING_TO_INLINE")
-private inline fun String.parseLanguageTag() = Locale.forLanguageTag(this)
