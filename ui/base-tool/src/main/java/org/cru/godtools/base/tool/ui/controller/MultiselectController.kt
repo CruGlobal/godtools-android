@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.tool.databinding.ToolContentMultiselectBinding
 import org.cru.godtools.base.tool.databinding.ToolContentMultiselectOptionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tool.model.Multiselect
 
 class MultiselectController private constructor(
@@ -89,6 +90,9 @@ class MultiselectController private constructor(
 
         override val textEnableTextIsSelectable get() = false
 
-        fun toggleOption() = model?.toggleSelected(toolState)
+        fun toggleOption() {
+            triggerAnalyticsEvents(model?.getAnalyticsEvents(AnalyticsEvent.Trigger.CLICKED))
+            model?.toggleSelected(toolState)
+        }
     }
 }
