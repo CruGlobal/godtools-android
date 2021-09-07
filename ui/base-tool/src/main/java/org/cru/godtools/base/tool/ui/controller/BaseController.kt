@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.findLiveData
-import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.base.tool.ui.util.layoutDirection
@@ -95,7 +95,7 @@ abstract class BaseController<T : Base> protected constructor(
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
         if (event.delay > 0) delay(event.delay * 1000L)
-        eventBus.post(ContentAnalyticsActionEvent(event))
+        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
     }.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
