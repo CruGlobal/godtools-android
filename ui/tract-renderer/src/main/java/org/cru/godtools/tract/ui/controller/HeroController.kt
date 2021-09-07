@@ -30,10 +30,7 @@ class HeroController @AssistedInject internal constructor(
 
     init {
         lifecycleOwner?.lifecycle?.apply {
-            onResume {
-                pendingAnalyticsEvents =
-                    triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-            }
+            onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }
             onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
         }
     }
