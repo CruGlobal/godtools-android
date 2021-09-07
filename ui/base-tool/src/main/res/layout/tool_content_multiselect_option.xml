@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:padding="8dp"
-        app:layout_constraintWidth_percent="@{(float) 1 / (model != null ? model.multiselect.columns : 1), default=1}">
+        app:layout_constraintWidth_percent="@{(float) 1 / (model != null ? model.multiselect.columns : 1)}">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
