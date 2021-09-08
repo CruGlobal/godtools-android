@@ -56,6 +56,7 @@ class ToolDetailsFragment() :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        downloadLatestTranslation()
         setupDataModel()
     }
 
@@ -180,6 +181,10 @@ class ToolDetailsFragment() :
 
     // region Training Tips
     private val selectedTool by viewModels<SelectedToolSavedState>()
+
+    private fun downloadLatestTranslation() {
+        downloadManager.downloadLatestPublishedTranslationAsync(toolCode, settings.primaryLanguage)
+    }
 
     private fun launchTrainingTips(
         code: String? = selectedTool.tool,
