@@ -69,7 +69,7 @@ class LocaleUtilsGetDisplayNameTest {
     private fun wheneverGetLanguageNameStringRes(locale: Locale): OngoingStubbing<String?> {
         whenever(
             context.resources.getIdentifier(
-                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().toLowerCase(Locale.ENGLISH)}", "string", null
+                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}", "string", null
             )
         ).thenReturn(1)
         return whenever(context.resources.getString(1))
