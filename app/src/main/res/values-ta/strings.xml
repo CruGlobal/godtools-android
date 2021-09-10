@@ -33,4 +33,5 @@
     <string name="text_language_warning">ஒவ்வொரு கருவியும் ஒவ்வொரு மொழியிலும் கிடைக்காது.</string>
     <string name="label_language_none">எதுவுமில்லை</string>
     <string name="label_language_search">மொழிகளை வடிகட்டவும்</string>
+    <!-- Parallel Language Dialog -->
 </resources>

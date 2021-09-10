@@ -31,4 +31,5 @@
     <string name="text_language_warning">Vsa orodja niso na voljo v vseh jezikih</string>
     <string name="label_language_none">Noben</string>
     <string name="label_language_search">Filtriraj jezike</string>
+    <!-- Parallel Language Dialog -->
 </resources>

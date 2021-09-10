@@ -31,4 +31,5 @@
     <string name="text_language_warning">Her araç her dilde kullanıma hazır değildir.</string>
     <string name="label_language_none">Hiçbiri</string>
     <string name="label_language_search">Dilleri Filtrele</string>
+    <!-- Parallel Language Dialog -->
 </resources>

@@ -31,4 +31,5 @@
     <string name="text_language_warning">Nie każde narzędzie jest dostępne w każdym języku</string>
     <string name="label_language_none">Żaden</string>
     <string name="label_language_search">Filtruj języki</string>
+    <!-- Parallel Language Dialog -->
 </resources>

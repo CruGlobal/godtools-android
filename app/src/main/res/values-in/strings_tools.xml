@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_lessons">Pelajaran</string>
     <string name="nav_favorite_tools">Favorit</string>
     <string name="nav_all_tools">Semua Alat</string>
     <string name="action_tools_about">Tentang</string>
@@ -10,6 +11,8 @@
     <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
     <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Berhentikan</string>
+    <string name="tools_list_lesson_info_length">%1$d Minimal Baca</string>
+    <string name="tools_list_lesson_info_language_available">Tersedia di %1$s</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Tambahkan ke Layar Beranda</string>
     <string name="action_tools_open_tool">Buka Sarana</string>

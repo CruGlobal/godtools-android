@@ -31,4 +31,5 @@
     <string name="text_language_warning">Δεν είναι διαθέσιμο κάθε εργαλείο σε κάθε γλώσσα.</string>
     <string name="label_language_none">Κανένα</string>
     <string name="label_language_search">Φιλτράρισμα Γλωσσών</string>
+    <!-- Parallel Language Dialog -->
 </resources>

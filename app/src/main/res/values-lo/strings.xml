@@ -31,4 +31,5 @@
     <string name="text_language_warning">ບໍ່ມີເຄື່ອງມືໃດໆໃຫ້ບໍລິການໃນທຸກໆພາສາ.</string>
     <string name="label_language_none">ບໍ່ເລີຍ</string>
     <string name="label_language_search">ການກັ່ນຕອງພາສາ</string>
+    <!-- Parallel Language Dialog -->
 </resources>

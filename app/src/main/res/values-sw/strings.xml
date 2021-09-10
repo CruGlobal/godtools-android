@@ -31,4 +31,5 @@
     <string name="text_language_warning">Si kila chombo kinapatikana kwa kila lugha.</string>
     <string name="label_language_none">Hakuna</string>
     <string name="label_language_search">Chuja Lugha</string>
+    <!-- Parallel Language Dialog -->
 </resources>

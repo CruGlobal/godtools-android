@@ -31,4 +31,5 @@
     <string name="text_language_warning">לא כל כלי זמין בכל שפה</string>
     <string name="label_language_none">אף אחד</string>
     <string name="label_language_search">סנן שפות</string>
+    <!-- Parallel Language Dialog -->
 </resources>

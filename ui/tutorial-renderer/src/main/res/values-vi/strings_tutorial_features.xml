@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tutorial_features_final_headline">Bạn có thể xem lại hướng dẫn này trong menu</string>
+    <string name="tutorial_features_tools_headline">Công cụ</string>
+    <string name="tutorial_features_tools_subhead">Mỗi công cụ sẽ thích hợp với từng mức độ của cuộc trò chuyện - trước, trong và sau.</string>
+    <string name="tutorial_features_tips_headline">Gợi ý</string>
+    <string name="tutorial_features_tips_subhead">Các gợi ý của God Tools sẽ hướng dẫn để bạn có thể giúp người khác hiểu về Phúc Âm và biết Chúa Giê-xu.</string>
+    <string name="tutorial_features_live_share_headline">Chia sẻ màn hình</string>
+    <string name="tutorial_features_live_share_subhead">Bây giờ bạn có thể chia sẻ màn hình từ xa và người kia có thể cùng theo dõi trong lúc bạn sử dụng một công cụ để chia sẻ Phúc Âm.</string>
+    <string name="tutorial_features_lessons_headline">Bài học</string>
+    <string name="tutorial_features_lessons_subhead">Trong mỗi bài học, bạn sẽ học cách giúp bạn có thể trò chuyện nói về Chúa.</string>
+    <string name="tutorial_features_final_headline">Bạn có thể tìm thấy phần hướng dẫn trong mục lục bất cứ lúc nào.</string>
     <string name="tutorial_features_action_continue">Tiếp tục</string>
-    <string name="tutorial_features_action_close">Bắt đầu sử dụng GodTools</string>
+    <string name="tutorial_features_action_close">Đóng phần hướng dẫn</string>
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">Cho tôi xem hướng dẫn</string>
     <string name="tutorial_features_banner_action_open">Mở hướng dẫn</string>

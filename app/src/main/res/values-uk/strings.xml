@@ -31,4 +31,5 @@
     <string name="text_language_warning">Деякі інструменти недоступні на усіх мовах</string>
     <string name="label_language_none">Нічого</string>
     <string name="label_language_search">Фільтрувати мови</string>
+    <!-- Parallel Language Dialog -->
 </resources>

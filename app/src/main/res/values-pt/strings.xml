@@ -33,4 +33,5 @@
     <string name="text_language_warning">Nem todas as ferramentas estão disponíveis em todos os idiomas.</string>
     <string name="label_language_none">Nenhum</string>
     <string name="label_language_search">Filtrar idiomas</string>
+    <!-- Parallel Language Dialog -->
 </resources>

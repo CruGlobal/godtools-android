@@ -30,4 +30,5 @@
     <string name="text_language_warning">Ekki eru öll tól tiltæk í hverju tungumáli.</string>
     <string name="label_language_none">Ekkert</string>
     <string name="label_language_search">Sía tungumál</string>
+    <!-- Parallel Language Dialog -->
 </resources>

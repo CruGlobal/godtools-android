@@ -31,4 +31,5 @@
     <string name="text_language_warning">Ang bawat tool ay hindi available sa bawat wika.</string>
     <string name="label_language_none">Wala</string>
     <string name="label_language_search">I-filter ang mga Wika</string>
+    <!-- Parallel Language Dialog -->
 </resources>

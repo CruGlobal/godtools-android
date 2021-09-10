@@ -31,4 +31,5 @@
     <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
     <string name="label_language_none">Niciunul</string>
     <string name="label_language_search">Filtrează limbile</string>
+    <!-- Parallel Language Dialog -->
 </resources>

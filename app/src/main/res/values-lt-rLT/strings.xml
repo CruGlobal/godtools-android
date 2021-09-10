@@ -30,4 +30,5 @@
     <string name="text_language_warning">Ne kiekvienas įrankis pateikiamas kiekviena kalba</string>
     <string name="label_language_none">Joks</string>
     <string name="label_language_search">Filtruoti kalbas</string>
+    <!-- Parallel Language Dialog -->
 </resources>

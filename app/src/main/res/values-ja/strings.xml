@@ -31,4 +31,5 @@
     <string name="text_language_warning">全言語ですべてのツールが利用できるわけではありません。</string>
     <string name="label_language_none">なし</string>
     <string name="label_language_search">言語を絞り込む</string>
+    <!-- Parallel Language Dialog -->
 </resources>

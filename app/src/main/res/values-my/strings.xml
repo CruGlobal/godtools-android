@@ -30,4 +30,5 @@
     <string name="text_language_warning">အချို့ဘာသာစကားများအတွက် အသုံးမပြုနိုင် သေးပါ</string>
     <string name="label_language_none">မရှိပါ</string>
     <string name="label_language_search">ဘာသာစကား များကိုရွေးချယ်ခြင်း</string>
+    <!-- Parallel Language Dialog -->
 </resources>

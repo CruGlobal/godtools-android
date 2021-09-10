@@ -30,4 +30,5 @@
     <string name="text_language_warning">Kaikki työkalut eivät ole saatavissa joka kielellä.</string>
     <string name="label_language_none">Ei mitään</string>
     <string name="label_language_search">Suodata kieliä</string>
+    <!-- Parallel Language Dialog -->
 </resources>

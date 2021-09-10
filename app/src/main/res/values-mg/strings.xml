@@ -24,4 +24,5 @@
     <string name="text_language_parallel_description">"Zarao amin'ny hafa amin'ny tenindrazany ny GodTools. "</string>
     <string name="text_language_warning">Tsy ny fitaovana rehetra no voadika amin\'ny fiteny samihafa.</string>
     <string name="label_language_none">Tsy fantatra</string>
+    <!-- Parallel Language Dialog -->
 </resources>

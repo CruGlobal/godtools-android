@@ -9,6 +9,6 @@
     <string name="tutorial_training_prepare_subhead">"Familiarízate con algunas de nuestras herramientas.
 
 La herramienta \"Enséñame a compartir\" es un buen punto de partida. "</string>
-    <string name="tutorial_training_try_headline">Pruébate</string>
-    <string name="tutorial_training_try_subhead">Todo el mundo empieza como principiante. Prueba a usar una herramienta en una conversación y observa lo que aprendes.</string>
+    <string name="tutorial_training_try_headline">Pruébalo</string>
+    <string name="tutorial_training_try_subhead">Todo el mundo empieza como principiante. Prueba usando una de las herramientas en una conversación y observa lo que aprendes.</string>
 </resources>

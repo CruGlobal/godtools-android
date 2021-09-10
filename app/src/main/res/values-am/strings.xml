@@ -29,4 +29,5 @@
     <string name="text_language_parallel_description">GodTools\'ን ለሰዎች በራሳቸዉ ቋንቋ አጋራ</string>
     <string name="text_language_warning">ሁሉም አገልግሎቶች በሁሉም ቋንቋ አይገኙም</string>
     <string name="label_language_none">ምንም</string>
+    <!-- Parallel Language Dialog -->
 </resources>

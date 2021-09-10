@@ -31,4 +31,5 @@
     <string name="text_language_warning">Ikke alle værktøjer findes på alle sprog.</string>
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer sprog</string>
+    <!-- Parallel Language Dialog -->
 </resources>

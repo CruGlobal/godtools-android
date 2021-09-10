@@ -33,4 +33,5 @@
     <string name="text_language_warning">تمام ابزار به تمام زبان‌ها در دسترس نیستند.</string>
     <string name="label_language_none">هیچکدام</string>
     <string name="label_language_search">فیلتر کردن زبان‌ها</string>
+    <!-- Parallel Language Dialog -->
 </resources>

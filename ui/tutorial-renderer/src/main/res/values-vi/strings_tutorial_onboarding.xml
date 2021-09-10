@@ -12,8 +12,12 @@
     <string name="tutorial_onboarding_share_subhead">GodTools là sự chỉ dẫn để bạn chia sẻ Phúc Âm cách rõ ràng và thích hợp.</string>
     <string name="tutorial_onboarding_links_articles_subhead">Tôi muốn biết nhiều hơn về Chúa</string>
     <string name="tutorial_onboarding_links_articles_action">Đọc bài viết</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Tôi muốn học biết về việc chia sẻ Phúc Âm</string>
+    <string name="tutorial_onboarding_links_lessons_action">Xem bài học</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Tôi muốn chia sẻ Phúc Âm với người khác</string>
+    <string name="tutorial_onboarding_links_tools_action">Chọn một trong số bốn công cụ</string>
     <string name="tutorial_onboarding_action_begin">Bắt đầu</string>
-    <string name="tutorial_onboarding_action_next">Tiếp tục</string>
+    <string name="tutorial_onboarding_action_next">Tiếp theo</string>
     <string name="tutorial_onboarding_action_skip">Bỏ qua</string>
     <string name="tutorial_onboarding_action_start">Bắt đầu</string>
 </resources>
