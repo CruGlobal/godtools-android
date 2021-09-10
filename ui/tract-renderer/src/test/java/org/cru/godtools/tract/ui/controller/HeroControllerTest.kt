@@ -18,7 +18,7 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
-import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.tool.model.AnalyticsEvent
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
 import org.greenrobot.eventbus.EventBus
@@ -69,14 +69,14 @@ class HeroControllerTest {
         mainDispatcher.pauseDispatcher()
         baseLifecycleOwner.currentState = Lifecycle.State.RESUMED
         mainDispatcher.runCurrent()
-        verify(eventBus).post(argThat<ContentAnalyticsActionEvent> { event == event1 })
+        verify(eventBus).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event1 })
         verifyNoMoreInteractions(eventBus)
 
         // event2 with 1 second delay
         mainDispatcher.advanceTimeBy(999)
         verifyNoMoreInteractions(eventBus)
         mainDispatcher.advanceTimeBy(1)
-        verify(eventBus).post(argThat<ContentAnalyticsActionEvent> { event == event2 })
+        verify(eventBus).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event2 })
         verifyNoMoreInteractions(eventBus)
 
         // event3 with 2 second delay, lifecycle is paused before event can fire
@@ -84,7 +84,7 @@ class HeroControllerTest {
         verifyNoMoreInteractions(eventBus)
         baseLifecycleOwner.currentState = Lifecycle.State.STARTED
         mainDispatcher.advanceUntilIdle()
-        verify(eventBus, never()).post(argThat<ContentAnalyticsActionEvent> { event == event3 })
+        verify(eventBus, never()).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event3 })
         verifyNoMoreInteractions(eventBus)
     }
 }
