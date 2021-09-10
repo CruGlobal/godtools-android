@@ -105,8 +105,7 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowColor() {
-        whenever(callToAction.controlColor) doReturn Color.GREEN
-        binding.callToAction = callToAction
+        binding.callToAction = CallToAction(controlColor = Color.GREEN)
         binding.executePendingBindings()
 
         assertEquals(Color.GREEN, ImageViewCompat.getImageTintList(binding.callToActionArrow)!!.defaultColor)
@@ -115,12 +114,9 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyLabel() {
-        val label = mock<Text> {
-            on { text } doReturn "Label Test"
-            on { textAlign } doReturn Text.Align.START
-        }
-        whenever(callToAction.label) doReturn label
-        binding.callToAction = callToAction
+        binding.callToAction = CallToAction(
+            label = { Text(it, text = "Label Test", textAlign = Text.Align.START) }
+        )
         binding.executePendingBindings()
 
         assertEquals("Label Test", binding.callToActionLabel.text.toString())
