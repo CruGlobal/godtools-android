@@ -31,4 +31,5 @@
     <string name="text_language_warning">"प्रत्येक भाषामा प्रत्येक टूल उपलब्ध ।
  "</string>
     <string name="label_language_none">केहि  छैन</string>
+    <!-- Parallel Language Dialog -->
 </resources>

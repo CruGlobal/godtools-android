@@ -31,4 +31,5 @@
     <string name="text_language_warning">Kõik tööriistad ei ole kõigis keeltes saadaval.</string>
     <string name="label_language_none">Mitte ühtki</string>
     <string name="label_language_search">Filtri keeled</string>
+    <!-- Parallel Language Dialog -->
 </resources>

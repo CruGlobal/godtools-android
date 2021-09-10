@@ -31,4 +31,5 @@
     <string name="text_language_warning">มีเครื่องมือไม่ครบทุกภาษา</string>
     <string name="label_language_none">ไม่มี</string>
     <string name="label_language_search">กรองภาษา</string>
+    <!-- Parallel Language Dialog -->
 </resources>

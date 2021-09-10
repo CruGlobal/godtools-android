@@ -31,4 +31,5 @@
     <string name="text_language_warning">Niet elke tool is beschikbaar in elke taal</string>
     <string name="label_language_none">Geen</string>
     <string name="label_language_search">Talen filteren</string>
+    <!-- Parallel Language Dialog -->
 </resources>

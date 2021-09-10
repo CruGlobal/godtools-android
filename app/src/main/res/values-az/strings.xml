@@ -30,4 +30,5 @@
     <string name="text_language_warning">Hər alət bütün dillərdə mövcud deyil.</string>
     <string name="label_language_none">Heç biri</string>
     <string name="label_language_search">Dilləri filtrlə</string>
+    <!-- Parallel Language Dialog -->
 </resources>

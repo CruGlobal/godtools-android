@@ -30,4 +30,5 @@
     <string name="text_language_warning">Nie elke hulpmiddel is in elke taal beskikbaar nie.</string>
     <string name="label_language_none">Geen</string>
     <string name="label_language_search">Filter tale</string>
+    <!-- Parallel Language Dialog -->
 </resources>

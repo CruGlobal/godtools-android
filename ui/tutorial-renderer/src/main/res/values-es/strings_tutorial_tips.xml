@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Aprende a compartir esta herramienta</string>
+    <string name="tutorial_tips_learn_text">Practica utilizando tantos consejos como necesites para sentirte seguro al compartir esta herramienta con los demás.</string>
+</resources>

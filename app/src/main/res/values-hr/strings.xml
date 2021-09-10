@@ -31,4 +31,5 @@
     <string name="text_language_warning">Nije svaki alat dostupan na svakom od jezika.</string>
     <string name="label_language_none">Ništa</string>
     <string name="label_language_search">Filtriraj jezike</string>
+    <!-- Parallel Language Dialog -->
 </resources>

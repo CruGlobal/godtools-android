@@ -4,6 +4,7 @@
     <string name="share_prompt">Selecciona cómo te gustaría compartir</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">General</string>
+    <string name="menu_heading_account">Cuenta</string>
     <string name="menu_heading_share">Compartir</string>
     <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Acerca de</string>
@@ -20,16 +21,17 @@
     <string name="menu_privacy_policy">Política de privacidad</string>
     <string name="menu_copyright">Derechos de autor</string>
     <!-- Share a story -->
-    <string name="share_story_subject">¡Escucha cómo se mueve Dios!</string>
+    <string name="share_story_subject">Historia de GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Más de 90 idiomas</string>
     <string name="menu_language_settings">Ajustes de idioma</string>
     <string name="title_language_settings">Ajustes de idioma</string>
-    <string name="title_language_primary">Idioma primario</string>
+    <string name="title_language_primary">Idioma principal</string>
     <string name="title_language_parallel">Idioma paralelo</string>
     <string name="action_language_parallel_select">Selecciona un idioma paralelo</string>
     <string name="text_language_parallel_description">Comparte GodTools con alguien en su idioma nativo.</string>
     <string name="text_language_warning">No todas las herramientas están disponibles en todos los idiomas.</string>
     <string name="label_language_none">Ninguno</string>
     <string name="label_language_search">Filtrar idiomas</string>
+    <!-- Parallel Language Dialog -->
 </resources>

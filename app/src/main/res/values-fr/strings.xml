@@ -33,4 +33,5 @@
     <string name="text_language_warning">Tous les outils ne sont pas disponibles dans toutes les langues.</string>
     <string name="label_language_none">Aucun(e)</string>
     <string name="label_language_search">Filtrer les langues</string>
+    <!-- Parallel Language Dialog -->
 </resources>

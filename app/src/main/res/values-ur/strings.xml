@@ -30,4 +30,5 @@
     <string name="text_language_warning">ہر زبان میں ہر ٹُول دستیاب نہیں ہے۔</string>
     <string name="label_language_none">کوئی بھی نہیں</string>
     <string name="label_language_search">زبانیں فلٹر کریں</string>
+    <!-- Parallel Language Dialog -->
 </resources>

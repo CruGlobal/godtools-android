@@ -31,4 +31,5 @@
     <string name="text_language_warning">Gli strumenti disponibili variano a seconda della lingua.</string>
     <string name="label_language_none">Nessuno</string>
     <string name="label_language_search">Filtra le lingue</string>
+    <!-- Parallel Language Dialog -->
 </resources>

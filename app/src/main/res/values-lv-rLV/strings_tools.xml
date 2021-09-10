@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tools List UI -->
+    <string name="nav_lessons">Nodarbības</string>
     <string name="nav_favorite_tools">Izlase</string>
     <string name="nav_all_tools">Visi rīki</string>
-    <string name="action_tools_about">Par</string>
+    <string name="action_tools_about">Par rīku</string>
     <string name="action_tools_open">Atvērt</string>
-    <string name="tools_list_remove_favorite_dialog_title">Dzēst “%1$s” no Izlases?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Noņemt</string>
+    <string name="tools_list_remove_favorite_dialog_title">Izņemt “%1$s” no Izlases?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Izņemt</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Atcelt</string>
-    <string name="tools_list_favorites_banner_text">Padariet savu rīku pieejamu bezsaistē, nospiežot sirds ikonu, lai pievienotu to izlasei.</string>
+    <string name="tools_list_favorites_banner_text">Padari rīku pieejamu bezsaistē, nospiežot sirds ikonu, lai pievienotu to Izlasei.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Atcelt</string>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Pievienot sākuma ekrānam</string>
     <string name="action_tools_open_tool">Atvērt rīku</string>
     <string name="action_tools_add_favorite">Pievienot Izlasei</string>
-    <string name="action_tools_remove_favorite">Dzēst no Izlases</string>
+    <string name="action_tools_remove_favorite">Izņemt no Izlases</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d skatījums</item>
         <item quantity="other">%1$,d skatījumi</item>

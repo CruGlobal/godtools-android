@@ -33,4 +33,5 @@
     <string name="text_language_warning">Không phải mọi công cụ đều có sẵn trong mọi ngôn ngữ.</string>
     <string name="label_language_none">Không gì cả</string>
     <string name="label_language_search">Bộ lọc ngôn ngữ</string>
+    <!-- Parallel Language Dialog -->
 </resources>

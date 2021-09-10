@@ -21,4 +21,5 @@
     <string name="action_language_parallel_select">Избери паралелен јазик</string>
     <string name="text_language_parallel_description">Сподели ја God Tools со некого на нивниот мајчин јазик</string>
     <string name="text_language_warning">Не се сите алатки достапни на сите јазици</string>
+    <!-- Parallel Language Dialog -->
 </resources>

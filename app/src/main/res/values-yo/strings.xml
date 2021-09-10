@@ -32,4 +32,5 @@
     <string name="text_language_warning">Kii ṣe gbogbo ohun elo ni o wa ni gbogbo ede.</string>
     <string name="label_language_none">kò si</string>
     <string name="label_language_search">Yiyan ede</string>
+    <!-- Parallel Language Dialog -->
 </resources>

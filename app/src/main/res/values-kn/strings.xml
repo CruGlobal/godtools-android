@@ -33,4 +33,5 @@
     <string name="text_language_warning">ಪ್ರತಿಯೊಂದು ಭಾಷೆಯಲ್ಲೂ ಪ್ರತಿಯೊಂದು ಸಾಧನವು ಲಭ್ಯವಿಲ್ಲ.</string>
     <string name="label_language_none">ಯಾವುದೂ ಇಲ್ಲ</string>
     <string name="label_language_search">ಭಾಷೆಗಳನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಿ</string>
+    <!-- Parallel Language Dialog -->
 </resources>
