@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -66,11 +65,9 @@ import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
+import org.cru.godtools.tutorial.TutorialActivityResultContract
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
-
-private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
 
 @AndroidEntryPoint
 class TractActivity :
@@ -164,19 +161,6 @@ class TractActivity :
     }
 
     override fun onDismissTip() = trackTractPage()
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
-        REQUEST_LIVE_SHARE_TUTORIAL -> when (resultCode) {
-            Activity.RESULT_OK -> {
-                dataModel.liveShareTutorialShown = true
-                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
-                shareLiveShareLink()
-            }
-            Activity.RESULT_CANCELED -> publisherController.started = false
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-        else -> super.onActivityResult(requestCode, resultCode, data)
-    }
 
     @CallSuper
     override fun onUpdateActiveManifest() {
@@ -463,6 +447,16 @@ class TractActivity :
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
+    private val liveShareTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
+        when (it) {
+            RESULT_CANCELED -> publisherController.started = false
+            else -> {
+                dataModel.liveShareTutorialShown = true
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                shareLiveShareLink()
+            }
+        }
+    }
 
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
@@ -482,7 +476,7 @@ class TractActivity :
         when {
             !dataModel.liveShareTutorialShown &&
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
-                startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
+                liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             publisherController.publisherInfo.value == null ->
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
             else -> {
