@@ -18,6 +18,7 @@ pluginManagement {
     }
 }
 rootProject.name = "godtools"
+enableFeaturePreview("VERSION_CATALOGS")
 
 include("library:analytics")
 include("library:api")
