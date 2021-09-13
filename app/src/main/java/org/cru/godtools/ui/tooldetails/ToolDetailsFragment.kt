@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
 import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -29,12 +28,10 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
+import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.fragmentargs.arg
-
-private const val REQUEST_TUTORIAL_TIPS = 102
 
 @AndroidEntryPoint
 class ToolDetailsFragment() :
@@ -77,14 +74,6 @@ class ToolDetailsFragment() :
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_tool_details, menu)
         menu.setupPinShortcutAction()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
-        REQUEST_TUTORIAL_TIPS -> when (resultCode) {
-            RESULT_OK -> launchTrainingTips(skipTutorial = true)
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-        else -> super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onLinkClicked(url: String) {
@@ -181,6 +170,9 @@ class ToolDetailsFragment() :
 
     // region Training Tips
     private val selectedTool by viewModels<SelectedToolSavedState>()
+    private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
+        if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
+    }
 
     private fun downloadLatestTranslation() {
         downloadManager.downloadLatestPublishedTranslationAsync(toolCode, settings.primaryLanguage)
@@ -191,7 +183,7 @@ class ToolDetailsFragment() :
         type: Tool.Type? = selectedTool.type,
         locale: Locale? = selectedTool.language,
         skipTutorial: Boolean = false
-    ) = when {
+    ): Unit = when {
         code == null || type == null || locale == null -> Unit
         skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
             settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
@@ -201,7 +193,7 @@ class ToolDetailsFragment() :
             selectedTool.tool = code
             selectedTool.type = type
             selectedTool.language = locale
-            startActivityForResult(requireContext().buildTutorialActivityIntent(PageSet.TIPS), REQUEST_TUTORIAL_TIPS)
+            tipsTutorialLauncher.launch(PageSet.TIPS)
         }
     }
     // endregion Training Tips
