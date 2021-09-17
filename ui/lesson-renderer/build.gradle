@@ -25,6 +25,7 @@ dependencies {
 
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
