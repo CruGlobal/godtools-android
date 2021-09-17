@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Review</string>
+    <string name="lesson_feedback_question_helpful">Was this lesson helpful for you?</string>
+    <string name="lesson_feedback_question_helpful_yes">Yes</string>
+    <string name="lesson_feedback_question_helpful_no">No</string>
+    <string name="lesson_feedback_question_readiness">On a scale of 1-10 ready do you feel to share your faith?</string>
+    <string name="lesson_feedback_action_submit">Send feedback</string>
+    <string name="lesson_feedback_action_cancel">Skip</string>
+</resources>
