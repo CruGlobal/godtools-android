@@ -209,12 +209,4 @@ class Settings @Inject internal constructor(
         trackFirstLaunchVersion()
     }
     // endregion Launch tracking
-
-    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.unregisterOnSharedPreferenceChangeListener(listener)
-    }
 }
