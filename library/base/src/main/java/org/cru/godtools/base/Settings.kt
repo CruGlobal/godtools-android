@@ -13,9 +13,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
 import org.ccci.gto.android.common.util.toLocale
 
@@ -75,6 +78,9 @@ class Settings @Inject internal constructor(
         prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
             .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
     }
+    val primaryLanguageFlow
+        get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
+            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
 
     var parallelLanguage
         get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()
@@ -87,6 +93,9 @@ class Settings @Inject internal constructor(
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
             .map { it?.toLocale() }
     }
+    val parallelLanguageFlow
+        get() = prefs.getStringFlow(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
+            .map { it?.toLocale() }
 
     fun isLanguageProtected(locale: Locale) = when (locale) {
         defaultLanguage -> true
@@ -201,12 +210,4 @@ class Settings @Inject internal constructor(
         trackFirstLaunchVersion()
     }
     // endregion Launch tracking
-
-    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.unregisterOnSharedPreferenceChangeListener(listener)
-    }
 }
