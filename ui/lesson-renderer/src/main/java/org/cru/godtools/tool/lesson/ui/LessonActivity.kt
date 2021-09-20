@@ -169,7 +169,6 @@ class LessonActivity :
     // region Feedback
     private fun setupFeedbackDialog() {
         supportFragmentManager.setFragmentResultListener(LessonFeedbackDialogFragment.RESULT_DISMISSED, this) { _, _ ->
-            settings.setFeatureDiscovered(FEATURE_LESSON_FEEDBACK + tool)
             finish()
         }
         onBackPressedDispatcher.addCallback(

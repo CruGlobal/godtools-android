@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.DataBindingDialogFragment
+import org.cru.godtools.base.Settings
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonFeedbackAnalyticsEvent
 import org.cru.godtools.tool.lesson.analytics.model.LessonFeedbackAnalyticsEvent.Companion.PARAM_HELPFUL
@@ -43,6 +44,8 @@ class LessonFeedbackDialogFragment() :
 
     @Inject
     internal lateinit var eventBus: EventBus
+    @Inject
+    internal lateinit var settings: Settings
     private val viewModel by viewModels<LessonFeedbackViewModel>()
 
     // region Lifecycle
@@ -58,6 +61,7 @@ class LessonFeedbackDialogFragment() :
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        settings.setFeatureDiscovered(Settings.FEATURE_LESSON_FEEDBACK + lesson)
         setFragmentResult(RESULT_DISMISSED, Bundle.EMPTY)
     }
     // endregion Lifecycle
