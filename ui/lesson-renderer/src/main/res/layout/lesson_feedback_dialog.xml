@@ -17,6 +17,7 @@
             style="?attr/materialAlertDialogBodyTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/lesson_feedback_question_helpful" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
@@ -48,6 +49,7 @@
             style="?attr/materialAlertDialogBodyTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/lesson_feedback_question_readiness" />
 
         <com.google.android.material.slider.Slider
