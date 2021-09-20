@@ -2,6 +2,7 @@
 <resources>
     <string name="menu_share_tool">Compartir</string>
     <string name="share_tool_title">Comparte “%1$s” mediante</string>
+    <string name="share_tool_message_article">Quería compartir este artículo contigo y me gustaría conocer tu opinión al respecto. \n%1$s</string>
     <string name="tool_not_found">No se puede encontrar la herramienta que has solicitado</string>
     <string name="tool_loading">Se está cargando la herramienta que has solicitado…</string>
     <string name="tool_offline">La herramienta solicitada requiere conexión a internet para abrirse.</string>

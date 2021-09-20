@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Profil Saya</string>
+    <string name="menu_profile">Aktifitas Global</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Aktivitas</string>
+</resources>
