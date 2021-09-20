@@ -247,7 +247,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         val manifest = activeManifest ?: return
         if (manifest.code != event.tool || manifest.locale != event.locale) return
 
-        manifest.checkForEvent(event)
+        checkForManifestEvent(manifest, event)
         if (isFinishing) return
         onContentEvent(event)
     }
@@ -255,8 +255,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     protected open fun onContentEvent(event: Event) = Unit
 
-    private fun Manifest.checkForEvent(event: Event) {
-        if (event.id in dismissListeners) {
+    protected open fun checkForManifestEvent(manifest: Manifest, event: Event) {
+        if (event.id in manifest.dismissListeners) {
             finish()
             return
         }
