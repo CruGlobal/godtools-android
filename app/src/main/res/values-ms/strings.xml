@@ -4,11 +4,13 @@
     <string name="share_prompt">Pilih cara anda mahu berkongsi</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Umum</string>
+    <string name="menu_heading_account">Akaun</string>
     <string name="menu_heading_share">Kongsi</string>
     <string name="menu_heading_legal">Sah</string>
     <string name="menu_about">Perihal</string>
     <string name="menu_help">Soalan Lazim</string>
     <string name="menu_contact_us">Hubungi Kami</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Log Masuk</string>
     <string name="menu_signup">Cipta Akaun</string>
     <string name="menu_logout">Log Keluar</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Dasar Privasi</string>
     <string name="menu_copyright">Hak Cipta</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Dengar cara God berfungsi!</string>
+    <string name="share_story_subject">Kisah GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ Bahasa</string>
     <string name="menu_language_settings">Tetapan Bahasa</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">Tiada</string>
     <string name="label_language_search">Tapis Bahasa</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Adakah anda ingin menetapkan bahasa kedua?</string>
+    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
+    <string name="languages_parallel_dialog_action_start">Mulakan</string>
+    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih</string>
 </resources>

@@ -34,4 +34,8 @@
     <string name="label_language_none">Không gì cả</string>
     <string name="label_language_search">Bộ lọc ngôn ngữ</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Bạn có muốn thiết lập ngôn ngữ thứ hai không?</string>
+    <string name="languages_parallel_dialog_select">Chọn một ngôn ngữ</string>
+    <string name="languages_parallel_dialog_action_start">Bắt đầu</string>
+    <string name="languages_parallel_dialog_action_cancel">Không, cám ơn</string>
 </resources>

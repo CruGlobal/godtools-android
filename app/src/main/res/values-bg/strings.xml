@@ -34,4 +34,8 @@
     <string name="label_language_none">Няма</string>
     <string name="label_language_search">Филтриране на езици</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Искате ли да зададете втори език?</string>
+    <string name="languages_parallel_dialog_select">Изберете език</string>
+    <string name="languages_parallel_dialog_action_start">Започнете</string>
+    <string name="languages_parallel_dialog_action_cancel">Не, благодаря</string>
 </resources>

@@ -43,8 +43,7 @@
     <string name="label_language_search">Filter Languages</string>
 
     <!-- Parallel Language Dialog -->
-    <eat-comment />
-    <string name="languages_parallel_dialog_headline">Would you like to set a second language?</string>
+    <string name="languages_parallel_dialog_headline">Would you like to set a secondary language?</string>
     <string name="languages_parallel_dialog_select">Select a language</string>
     <string name="languages_parallel_dialog_action_start">Get started</string>
     <string name="languages_parallel_dialog_action_cancel">No Thanks</string>

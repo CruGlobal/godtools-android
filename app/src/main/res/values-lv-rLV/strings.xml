@@ -4,11 +4,13 @@
     <string name="share_prompt">Izvēlies, kādā veidā vēlies dalīties</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Vispārīgi</string>
+    <string name="menu_heading_account">Konts</string>
     <string name="menu_heading_share">Dalies</string>
     <string name="menu_heading_legal">Juridiskie paziņojumi</string>
     <string name="menu_about">Par lietotni</string>
     <string name="menu_help">Biežāk uzdotie jautājumi</string>
     <string name="menu_contact_us">Sazinies ar mums</string>
+    <string name="menu_tutorial">Pamācība</string>
     <string name="menu_login">Pierakstīties</string>
     <string name="menu_signup">Izveidot kontu</string>
     <string name="menu_logout">Izrakstīties</string>
@@ -31,4 +33,8 @@
     <string name="label_language_none">Nav</string>
     <string name="label_language_search">Atlasīt valodas</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vai vēlaties iestatīt otro valodu?</string>
+    <string name="languages_parallel_dialog_select">Atlasīt valodu</string>
+    <string name="languages_parallel_dialog_action_start">Sākt</string>
+    <string name="languages_parallel_dialog_action_cancel">Nē, paldies</string>
 </resources>

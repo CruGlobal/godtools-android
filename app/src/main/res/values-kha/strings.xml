@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">নির্বাচন করুন কেমনভাবে আপনি শেয়ার করতে চান</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">সাধারণ</string>
+    <string name="menu_heading_account">অ্যাকাউন্ট</string>
+    <string name="menu_heading_share">শেয়ার করুন</string>
+    <string name="menu_heading_legal">আইনি</string>
+    <string name="menu_about">যার বিষয়ে</string>
+    <string name="menu_help">প্রায়শ করা প্রশ্নাবলী</string>
+    <string name="menu_contact_us">আমাদের যোগাযোগ করুন</string>
+    <string name="menu_tutorial">টিউটোরিয়াল</string>
+    <string name="menu_login">লগইন</string>
+    <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="menu_logout">লগআউট</string>
+    <string name="menu_share_godtools">GodTools অ্যাপ শেয়ার করুন</string>
+    <string name="menu_share_story">আমাদের সাথে একটি গল্প শেয়ার করুন</string>
+    <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
+    <string name="menu_privacy_policy">একান্ততার নীতি</string>
+    <string name="menu_copyright">ষ্বত্বাধিকার</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">GodTools গল্প</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">৯০+ ভাষা</string>
+    <string name="menu_language_settings">ভাষার সেটিংগুলি</string>
+    <string name="title_language_settings">ভাষার সেটিংগুলি</string>
+    <string name="title_language_primary">প্রাথমিক ভাষা</string>
+    <string name="title_language_parallel">সমান্তরাল ভাষা</string>
+    <string name="action_language_parallel_select">একটি সমান্তরাল ভাষা বেছে নিন</string>
+    <string name="text_language_parallel_description">কারোর সাথে তার নিজস্ব ভাষায় GodTools শেয়ার করুন</string>
+    <string name="text_language_warning">সব সাধনী সব ভাষায় উপলভ্য নয়</string>
+    <string name="label_language_none">নেই</string>
+    <string name="label_language_search">ভাষা ফিল্টার করুন</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">আপনি কি একটি মাধ্যমিক ভাষা সেট করতে চাইবেন?</string>
+    <string name="languages_parallel_dialog_select">একটি ভাষা বেছে নিন</string>
+    <string name="languages_parallel_dialog_action_start">শুরু করুন</string>
+    <string name="languages_parallel_dialog_action_cancel">না ধন্যবাদ</string>
+</resources>

@@ -4,11 +4,13 @@
     <string name="share_prompt">انتخاب کریں کہ کیسے شیئر کرنا پسند کریں گے</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">جنرل</string>
+    <string name="menu_heading_account">اکاؤنٹ</string>
     <string name="menu_heading_share">شیئر کریں</string>
     <string name="menu_heading_legal">لِیگل</string>
     <string name="menu_about">ہمارے متعلق</string>
     <string name="menu_help">اکثر پوچھے جانے والے سوالات</string>
     <string name="menu_contact_us">ہم سے رابطہ کریں</string>
+    <string name="menu_tutorial">ٹیوٹوریل</string>
     <string name="menu_login">میں لاگ ان کریں</string>
     <string name="menu_signup">اپنا کھاتا شروع کریں</string>
     <string name="menu_logout">کمپیوٹر سے باہر نکلیں</string>
@@ -18,7 +20,7 @@
     <string name="menu_privacy_policy">رازداری کی پالیسی</string>
     <string name="menu_copyright">کاپی رائٹ</string>
     <!-- Share a story -->
-    <string name="share_story_subject">سنیں کہ خدا آپ کے لیے کیا کر رہا ہے!</string>
+    <string name="share_story_subject">GodTools کہانی</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ زبانیں</string>
     <string name="menu_language_settings">زبان سیٹِنگز</string>
@@ -31,4 +33,8 @@
     <string name="label_language_none">کوئی بھی نہیں</string>
     <string name="label_language_search">زبانیں فلٹر کریں</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">کیا آپ کوئی ثانوی زبان سیٹ کرنا چاہیں گے؟</string>
+    <string name="languages_parallel_dialog_select">کوئی زبان منتخب کریں</string>
+    <string name="languages_parallel_dialog_action_start">شروعات</string>
+    <string name="languages_parallel_dialog_action_cancel">نہیں، شکریہ</string>
 </resources>

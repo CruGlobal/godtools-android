@@ -4,11 +4,13 @@
     <string name="share_prompt">Оберіть, як переслати</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Основне</string>
+    <string name="menu_heading_account">Обліковий запис</string>
     <string name="menu_heading_share">Переслати</string>
     <string name="menu_heading_legal">Правові відомості</string>
     <string name="menu_about">Про програму</string>
     <string name="menu_help">Часті запитання</string>
     <string name="menu_contact_us">Зв\'язок з нами</string>
+    <string name="menu_tutorial">Тренування</string>
     <string name="menu_login">Увійти</string>
     <string name="menu_signup">Створити обліковий запис</string>
     <string name="menu_logout">Вийти</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Політика конфіденційності</string>
     <string name="menu_copyright">Авторське право</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Почуйте, як Бог пробуджує сердце!</string>
+    <string name="share_story_subject">Історія GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Понад 90 мов</string>
     <string name="menu_language_settings">Налаштування мови</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">Нічого</string>
     <string name="label_language_search">Фільтрувати мови</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Хочете встановити додаткову мову?</string>
+    <string name="languages_parallel_dialog_select">Оберіть мову</string>
+    <string name="languages_parallel_dialog_action_start">Розпочати</string>
+    <string name="languages_parallel_dialog_action_cancel">Ні, дякую</string>
 </resources>

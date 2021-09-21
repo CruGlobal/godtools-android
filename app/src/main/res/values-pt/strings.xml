@@ -21,7 +21,7 @@
     <string name="menu_privacy_policy">Política de Privacidade</string>
     <string name="menu_copyright">Direitos de Autor</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Ouça como Deus está a comover!</string>
+    <string name="share_story_subject">História do GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Mais de 90 idiomas</string>
     <string name="menu_language_settings">Definições de idioma</string>
@@ -34,4 +34,8 @@
     <string name="label_language_none">Nenhum</string>
     <string name="label_language_search">Filtrar idiomas</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Gostaria de definir um idioma secundário?</string>
+    <string name="languages_parallel_dialog_select">Selecione um idioma</string>
+    <string name="languages_parallel_dialog_action_start">Começar</string>
+    <string name="languages_parallel_dialog_action_cancel">Não, obrigado</string>
 </resources>

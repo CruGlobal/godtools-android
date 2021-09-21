@@ -21,7 +21,7 @@
     <string name="menu_privacy_policy">Datenschutzbestimmungen</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Hören Sie, wie Gott bewegt!</string>
+    <string name="share_story_subject">GodTools Story</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Über 90 Sprachen</string>
     <string name="menu_language_settings">Spracheinstellungen</string>
@@ -34,4 +34,8 @@
     <string name="label_language_none">Keine</string>
     <string name="label_language_search">Sprachen filtern</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Möchtest du eine Zweitsprache festlegen?</string>
+    <string name="languages_parallel_dialog_select">Sprache auswählen</string>
+    <string name="languages_parallel_dialog_action_start">Erste Schritte</string>
+    <string name="languages_parallel_dialog_action_cancel">Nein danke</string>
 </resources>

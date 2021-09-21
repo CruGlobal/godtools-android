@@ -4,11 +4,13 @@
     <string name="share_prompt">ဝေငှလို သောအရာကို ရွေးချယ်ပါ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">အထွေထွေ</string>
+    <string name="menu_heading_account">အကောင့်</string>
     <string name="menu_heading_share">ဝေငှပါ</string>
     <string name="menu_heading_legal">တရားဝင်</string>
     <string name="menu_about">အ ကြောင်း</string>
     <string name="menu_help">အမေးများသော မေးခွန်းများ</string>
     <string name="menu_contact_us">ဆက်သွယ်ရန်</string>
+    <string name="menu_tutorial">ဗီဒီယိုသင်ခန်းစာ</string>
     <string name="menu_login">"  အ ကောင့် ဝင်ရန်"</string>
     <string name="menu_signup">" အကောင့်အသစ်ဖွင့်ပါ"</string>
     <string name="menu_logout">" အ ကောင့်မှထွက်သည်"</string>
@@ -18,7 +20,7 @@
     <string name="menu_privacy_policy">ကိုယ်ရေးကိုယ်တာ ဆိုင်ရာမူဝါဒ</string>
     <string name="menu_copyright">မူပိုင်ခွင့်</string>
     <!-- Share a story -->
-    <string name="share_story_subject">ဘုရားမည်သို့လုပ်ဆောင်နေခြင်းကို ကြားချင်ပါသည်။</string>
+    <string name="share_story_subject">GodTools ဇာတ်လမ်း</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၉၀  ကျော်</string>
     <string name="menu_language_settings">"ဘာသာစကား၏ ဆက်တင်များ "</string>
@@ -31,4 +33,8 @@
     <string name="label_language_none">မရှိပါ</string>
     <string name="label_language_search">ဘာသာစကား များကိုရွေးချယ်ခြင်း</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">အရန် ဘာသာစကား သတ်မှတ်ချင်ပါသလား။</string>
+    <string name="languages_parallel_dialog_select">ဘာသာစကား ရွေးချယ်ပါ</string>
+    <string name="languages_parallel_dialog_action_start">စတင်လိုက်ပါ</string>
+    <string name="languages_parallel_dialog_action_cancel">လက်မခံသေးပါ</string>
 </resources>

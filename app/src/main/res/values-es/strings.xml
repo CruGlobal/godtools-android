@@ -34,4 +34,8 @@
     <string name="label_language_none">Ninguno</string>
     <string name="label_language_search">Filtrar idiomas</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">¿Quiere establecer un idioma secundario?</string>
+    <string name="languages_parallel_dialog_select">Seleccione un idioma</string>
+    <string name="languages_parallel_dialog_action_start">Comenzar</string>
+    <string name="languages_parallel_dialog_action_cancel">No, gracias</string>
 </resources>
