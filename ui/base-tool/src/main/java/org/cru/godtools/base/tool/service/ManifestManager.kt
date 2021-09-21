@@ -23,7 +23,7 @@ import org.cru.godtools.tool.FEATURE_MULTISELECT
 import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.Result
+import org.cru.godtools.tool.service.ParserResult
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -34,7 +34,7 @@ class ManifestManager @Inject constructor(
     private val eventBus: EventBus,
     private val parser: ManifestParser
 ) {
-    private val cache = WeakLruCache<String, Result.Data>(6)
+    private val cache = WeakLruCache<String, ParserResult.Data>(6)
     private val loadingMutex = MutexMap()
 
     init {
@@ -64,18 +64,18 @@ class ManifestManager @Inject constructor(
     suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null
         return when (val result = parseManifest(manifestFileName)) {
-            is Result.Error.Corrupted, is Result.Error.NotFound -> {
+            is ParserResult.Error.Corrupted, is ParserResult.Error.NotFound -> {
                 withContext(Dispatchers.Default) { brokenManifest(manifestFileName) }
                 null
             }
-            is Result.Data -> result.manifest
+            is ParserResult.Data -> result.manifest
             else -> null
         }
     }
 
     @AnyThread
     private suspend fun parseManifest(name: String) = loadingMutex.withLock(name) {
-        cache[name] ?: parser.parseManifest(name).also { if (it is Result.Data) cache.put(name, it) }
+        cache[name] ?: parser.parseManifest(name).also { if (it is ParserResult.Data) cache.put(name, it) }
     }
 
     @WorkerThread

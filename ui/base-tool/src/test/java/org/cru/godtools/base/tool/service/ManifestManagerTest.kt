@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.Result
+import org.cru.godtools.tool.service.ParserResult
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Before
@@ -51,7 +51,7 @@ class ManifestManagerTest {
     fun testGetManifest() {
         val manifest = mock<Manifest>()
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doReturn Result.Data(manifest)
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn ParserResult.Data(manifest)
         }
 
         val result = runBlocking { manager.getManifest(translation) }
@@ -61,7 +61,7 @@ class ManifestManagerTest {
     @Test
     fun testGetManifestCacheValidManifests() {
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doAnswer { Result.Data(mock()) }
+            onBlocking { parseManifest(MANIFEST_NAME) } doAnswer { ParserResult.Data(mock()) }
         }
 
         val result1 = runBlocking { manager.getManifest(translation) }
@@ -74,7 +74,7 @@ class ManifestManagerTest {
     @Test
     fun testGetManifestCorrupted() {
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<Result.Error.Corrupted>()
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<ParserResult.Error.Corrupted>()
         }
 
         val result = runBlocking { manager.getManifest(translation) }
@@ -86,7 +86,7 @@ class ManifestManagerTest {
     @Test
     fun testGetManifestNotFound() {
         parser.stub {
-            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<Result.Error.NotFound>()
+            onBlocking { parseManifest(MANIFEST_NAME) } doReturn mock<ParserResult.Error.NotFound>()
         }
 
         val result = runBlocking { manager.getManifest(translation) }
