@@ -2,8 +2,6 @@ package org.cru.godtools.ui.languages.paralleldialog
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
-import org.ccci.gto.android.common.androidx.fragment.app.BaseDialogFragment
+import org.ccci.gto.android.common.androidx.fragment.app.DataBindingDialogFragment
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -31,7 +29,8 @@ import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
-class ParallelLanguageDialogFragment : BaseDialogFragment() {
+class ParallelLanguageDialogFragment :
+    DataBindingDialogFragment<LanguagesParallelDialogBinding>(R.layout.languages_parallel_dialog) {
     private val dataModel: ParallelLanguageDialogDataModel by viewModels()
 
     @Inject
@@ -48,33 +47,25 @@ class ParallelLanguageDialogFragment : BaseDialogFragment() {
         }
         .setNegativeButton(R.string.languages_parallel_dialog_action_cancel, null)
         .create()
-        .also { it.inflateBinding() }
+
+    override fun onBindingCreated(binding: LanguagesParallelDialogBinding) {
+        binding.deviceLocale = dataModel.deviceLocale
+        binding.selectedLanguage = dataModel.selectedLanguage
+
+        with(binding.parallelLanguage) {
+            setAdapter(LanguagesAdapter(context).also { dataModel.sortedLanguages.observe(dialogLifecycleOwner, it) })
+        }
+
+        // TODO: can this be done in data binding?
+        binding.parallelLanguage.setOnItemClickListener { _, _, _, id ->
+            dataModel.selectedLocale.value = IdUtils.convertId(id) as? Locale
+        }
+    }
 
     override fun onResume() {
         super.onResume()
         dataModel.deviceLocale.value = requireContext().deviceLocale
     }
-
-    // region Binding
-    private lateinit var binding: LanguagesParallelDialogBinding
-    private fun AlertDialog.inflateBinding() {
-        binding = LanguagesParallelDialogBinding.inflate(LayoutInflater.from(context)).apply {
-            lifecycleOwner = dialogLifecycleOwner
-            deviceLocale = dataModel.deviceLocale
-            selectedLanguage = dataModel.selectedLanguage
-
-            parallelLanguage.setAdapter(
-                LanguagesAdapter(context)
-                    .also { dataModel.sortedLanguages.observe(dialogLifecycleOwner, it) }
-            )
-
-            // TODO: can this be done in data binding?
-            parallelLanguage.setOnItemClickListener { _, _, _, id ->
-                dataModel.selectedLocale.value = IdUtils.convertId(id) as? Locale
-            }
-        }.also { setView(it.root) }
-    }
-    // endregion Binding
 }
 
 @HiltViewModel

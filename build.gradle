@@ -13,7 +13,7 @@ buildscript {
                 facebook           : '11.3.0',
                 facebookFlipper    : '0.110.0',
                 findbugs           : '3.0.2',
-                godtoolsToolParser : '0.3.0-SNAPSHOT',
+                godtoolsToolParser : '0.3.0',
                 googleTagManager   : '17.0.1',
                 gradleAndroidPlugin: '7.0.2',
                 grpc               : '1.40.1',
@@ -168,9 +168,6 @@ allprojects {
                 // use the new condensed version of hamcrest
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
                 substitute module('org.hamcrest:hamcrest-library') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
-
-                // use regular moshi library instead of moshi-kotlin, any Kotlin moshi models should use moshi-kotlin-codegen instead
-                substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
             }
         }
     }
