@@ -99,6 +99,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @WorkerThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
         CustomStructured.builder()
+            .category(event.snowplowCategory)
             .action(event.action)
             .apply { event.label?.let { label(it) } }
             .populate(event)
