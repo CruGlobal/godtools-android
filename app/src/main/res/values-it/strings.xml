@@ -4,11 +4,13 @@
     <string name="share_prompt">Seleziona il metodo di condivisione desiderato</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Generale</string>
+    <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Condividi</string>
     <string name="menu_heading_legal">Legale</string>
     <string name="menu_about">Informazioni</string>
     <string name="menu_help">Domande frequenti</string>
     <string name="menu_contact_us">Contattaci</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Accesso</string>
     <string name="menu_signup">Crea account</string>
     <string name="menu_logout">Esci</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Informativa sulla privacy</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Senti la presenza di Dio!</string>
+    <string name="share_story_subject">Storia di GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Oltre 90 lingue</string>
     <string name="menu_language_settings">Impostazioni della lingua</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">Nessuno</string>
     <string name="label_language_search">Filtra le lingue</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vuoi impostare una lingua secondaria?</string>
+    <string name="languages_parallel_dialog_select">Seleziona una lingua</string>
+    <string name="languages_parallel_dialog_action_start">Per iniziare</string>
+    <string name="languages_parallel_dialog_action_cancel">No, grazie</string>
 </resources>

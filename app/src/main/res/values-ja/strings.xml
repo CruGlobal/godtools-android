@@ -4,11 +4,13 @@
     <string name="share_prompt">どのようにシェアするかを選択</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">一般</string>
+    <string name="menu_heading_account">アカウント</string>
     <string name="menu_heading_share">シェア</string>
     <string name="menu_heading_legal">法定事項</string>
     <string name="menu_about">情報</string>
     <string name="menu_help">よくある質問</string>
     <string name="menu_contact_us">お問い合わせ</string>
+    <string name="menu_tutorial">チュートリアル</string>
     <string name="menu_login">ログイン</string>
     <string name="menu_signup">アカウント作成</string>
     <string name="menu_logout">ログアウト</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">なし</string>
     <string name="label_language_search">言語を絞り込む</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">第二言語を設定しますか？</string>
+    <string name="languages_parallel_dialog_select">言語を選択</string>
+    <string name="languages_parallel_dialog_action_start">開始する</string>
+    <string name="languages_parallel_dialog_action_cancel">いいえ、結構です</string>
 </resources>

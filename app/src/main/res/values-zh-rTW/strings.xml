@@ -4,11 +4,13 @@
     <string name="share_prompt">選擇您想要的分享方式</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">一般</string>
+    <string name="menu_heading_account">帳號</string>
     <string name="menu_heading_share">分享</string>
     <string name="menu_heading_legal">法律條款</string>
     <string name="menu_about">關於</string>
     <string name="menu_help">常見問題</string>
     <string name="menu_contact_us">聯絡我們</string>
+    <string name="menu_tutorial">教學</string>
     <string name="menu_login">登入</string>
     <string name="menu_signup">建立帳號</string>
     <string name="menu_logout">登出</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">隱私政策</string>
     <string name="menu_copyright">著作權</string>
     <!-- Share a story -->
-    <string name="share_story_subject">聆聽上帝的故事！</string>
+    <string name="share_story_subject">GodTools 故事</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">超過 90 種語言</string>
     <string name="menu_language_settings">語言選項</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">無</string>
     <string name="label_language_search">篩選語言</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">您想要設定次要語言嗎？</string>
+    <string name="languages_parallel_dialog_select">選擇語言</string>
+    <string name="languages_parallel_dialog_action_start">開始使用</string>
+    <string name="languages_parallel_dialog_action_cancel">不用了，謝謝</string>
 </resources>

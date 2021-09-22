@@ -4,11 +4,13 @@
     <string name="share_prompt">Nasıl paylaşmak istediğinizi seçin</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Genel</string>
+    <string name="menu_heading_account">Hesap</string>
     <string name="menu_heading_share">Paylaş</string>
     <string name="menu_heading_legal">Yasal</string>
     <string name="menu_about">Hakkında</string>
     <string name="menu_help">Sık Sorulan Sorular</string>
     <string name="menu_contact_us">Bize Ulaşın</string>
+    <string name="menu_tutorial">Öğretici</string>
     <string name="menu_login">Oturum Aç</string>
     <string name="menu_signup">Hesap Oluştur</string>
     <string name="menu_logout">Oturumu Kapat</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Gizlilik Politikası</string>
     <string name="menu_copyright">Telif Hakkı</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Tanrı\'nın nasıl hareket ettiğini duyun!</string>
+    <string name="share_story_subject">GodTools Hikayesi</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90\'i Aşkın Dil</string>
     <string name="menu_language_settings">Dil Ayarları</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">Hiçbiri</string>
     <string name="label_language_search">Dilleri Filtrele</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">İkinci bir dil ayarlamak ister misiniz?</string>
+    <string name="languages_parallel_dialog_select">Bir dil seçin</string>
+    <string name="languages_parallel_dialog_action_start">Başlayın</string>
+    <string name="languages_parallel_dialog_action_cancel">Hayır Teşekkürler</string>
 </resources>

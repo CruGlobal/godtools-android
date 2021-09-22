@@ -4,11 +4,13 @@
     <string name="share_prompt">"तपाई कसरी साझा गर्न चाहनुहुन्छ यो चुन्नुहोस     "</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">सामान्य</string>
+    <string name="menu_heading_account">एकाउन्ट</string>
     <string name="menu_heading_share">"साझा गर्नुहोस "</string>
     <string name="menu_heading_legal">वैद्य</string>
     <string name="menu_about">"को बारेमा "</string>
-    <string name="menu_help">सहायता</string>
+    <string name="menu_help">प्राय सोधिने प्रश्नहरू</string>
     <string name="menu_contact_us">"सम्पर्क गर्नुहोस "</string>
+    <string name="menu_tutorial">ट्यूटोरियल</string>
     <string name="menu_login">"भित्र  आउनुहोस "</string>
     <string name="menu_signup">"एकाउन्ट खोल्नुहोस "</string>
     <string name="menu_logout">"बाहिर निक्ल्नुहोस "</string>
@@ -19,7 +21,7 @@
 "</string>
     <string name="menu_copyright">कॉपीराइट</string>
     <!-- Share a story -->
-    <string name="share_story_subject">परमेश्वरले कसरी कार्य गर्दै हुनुहुन्छ सुन्नुहोस !</string>
+    <string name="share_story_subject">गडटुल स्टोरी</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ भाषाहरु</string>
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>
@@ -31,5 +33,10 @@
     <string name="text_language_warning">"प्रत्येक भाषामा प्रत्येक टूल उपलब्ध ।
  "</string>
     <string name="label_language_none">केहि  छैन</string>
+    <string name="label_language_search">फिल्टर भाषा</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">के तपाईले माध्यमिक भाषा सेट गर्न चाहन्नुहुन्छ?</string>
+    <string name="languages_parallel_dialog_select">भाषा छनौट गर्नुहोस्</string>
+    <string name="languages_parallel_dialog_action_start">सरू गर्नुहोस्</string>
+    <string name="languages_parallel_dialog_action_cancel">होइन धन्यवाद</string>
 </resources>

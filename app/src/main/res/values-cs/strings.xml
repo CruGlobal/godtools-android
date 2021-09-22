@@ -4,11 +4,13 @@
     <string name="share_prompt">Vyberte si, jak chcete sdílet</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Obecné</string>
+    <string name="menu_heading_account">Účet</string>
     <string name="menu_heading_share">Sdílet</string>
     <string name="menu_heading_legal">Pravidla užívání a ochrany soukromí</string>
     <string name="menu_about">O nás</string>
     <string name="menu_help">Často kladené otázky</string>
     <string name="menu_contact_us">Kontaktujte nás</string>
+    <string name="menu_tutorial">Návod</string>
     <string name="menu_login">Přihlášení</string>
     <string name="menu_signup">Vytvořit účet</string>
     <string name="menu_logout">Odhlášení</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Ochrana soukromí</string>
     <string name="menu_copyright">Autorská práva</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Poslechněte si, jak Bůh hýbe světem!</string>
+    <string name="share_story_subject">Příběh GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ jazyků</string>
     <string name="menu_language_settings">Jazyková nastavení</string>
@@ -32,4 +34,8 @@
     <string name="label_language_none">Žádný</string>
     <string name="label_language_search">Filtrovat jazyky</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Chcete si nastavit druhý jazyk?</string>
+    <string name="languages_parallel_dialog_select">Vybrat jazyk</string>
+    <string name="languages_parallel_dialog_action_start">Začít</string>
+    <string name="languages_parallel_dialog_action_cancel">Ne, děkuji</string>
 </resources>
