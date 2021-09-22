@@ -7,7 +7,7 @@
         dist:title="@string/feature_bundled_content">
         <dist:delivery>
             <dist:install-time>
-                <dist:removable value="true" />
+                <dist:removable dist:value="true" />
             </dist:install-time>
         </dist:delivery>
         <dist:fusing dist:include="true" />
