@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
+
+        <include layout="@layout/tutorial_include_margins" />
+        <include layout="@layout/tutorial_onboarding_include_positioning" />
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
+            android:text="@string/tutorial_onboarding_conversations_headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
+
+        <TextView
+            android:id="@+id/subhead"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tutorial_page_onboarding_subhead_margin_top"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
+            android:text="@string/tutorial_onboarding_conversations_subhead"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toBottomOf="@id/headlineBottom" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/tutorial_page_onboarding_anim_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subheadBottom"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_tutorial_onboarding_guys" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> callbacks.nextPage()}"
+            android:text="@string/tutorial_onboarding_action_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

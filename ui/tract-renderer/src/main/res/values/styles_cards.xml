@@ -3,14 +3,14 @@
     <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="card_elevation">6dp</dimen>
 
-    <!-- {target} - ({elevation} + (1 - cos(4)) * {corner}) -->
-    <dimen name="card_margin_horiz">7dp</dimen><!--16dp - 9dp-->
-    <!-- {target} - (({elevation} * 1.5) + (1 - cos(4)) * {corner}) -->
-    <dimen name="card_margin_top">4dp</dimen><!--16dp - 12dp-->
-    <dimen name="card_margin_bottom">4dp</dimen><!--16dp - 12dp-->
+    <dimen name="card_margin_horiz">16dp</dimen>
+    <dimen name="card_margin_top">16dp</dimen>
+    <dimen name="card_margin_bottom">16dp</dimen>
 
     <dimen name="card_margin_content_top">16dp</dimen>
     <dimen name="card_margin_content_bottom">4dp</dimen>
+
+    <dimen name="tract_card_label_text_size">18sp</dimen>
 
     <dimen name="card_bounce_height">40dp</dimen>
 </resources>

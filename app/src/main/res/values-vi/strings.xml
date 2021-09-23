@@ -3,34 +3,39 @@
     <!-- Main Activity-->
     <string name="share_prompt">Chọn cách bạn muốn chia sẻ</string>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Nói chung</string>
+    <string name="menu_heading_general">Tổng quát</string>
     <string name="menu_heading_account">Tài khoản</string>
     <string name="menu_heading_share">Chia sẻ</string>
     <string name="menu_heading_legal">Hợp pháp</string>
-    <string name="menu_about">Giới thiệu về</string>
-    <string name="menu_help">Câu hỏi Thường Gặp</string>
-    <string name="menu_contact_us">Liên hệ chúng tôi</string>
+    <string name="menu_about">Giới thiệu</string>
+    <string name="menu_help">Câu hỏi thường gặp</string>
+    <string name="menu_contact_us">Liên hệ</string>
     <string name="menu_tutorial">Hướng dẫn</string>
     <string name="menu_login">Đăng nhập</string>
-    <string name="menu_signup">Tạo Tài khoản</string>
+    <string name="menu_signup">Tạo tài khoản</string>
     <string name="menu_logout">Đăng xuất</string>
-    <string name="menu_share_godtools">Chia sẻ Ứng dụng GodTools</string>
-    <string name="menu_share_story">Chia sẻ một Câu chuyện với Chúng tôi</string>
+    <string name="menu_share_godtools">Chia sẻ ứng dụng GodTools</string>
+    <string name="menu_share_story">Chia sẻ câu chuyện với chúng tôi</string>
     <string name="menu_rate">Đánh giá GodTools</string>
-    <string name="menu_terms_of_use">Điều khoản Sử dụng</string>
-    <string name="menu_privacy_policy">Chính sách Quyền riêng tư</string>
+    <string name="menu_terms_of_use">Điều khoản sử dụng</string>
+    <string name="menu_privacy_policy">Chính sách quyền riêng tư</string>
     <string name="menu_copyright">Bản quyền</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Nghe xem Chúa di chuyển như thế nào!</string>
+    <string name="share_story_subject">Câu chuyện từ GodTools</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Hơn 90 Ngôn ngữ</string>
-    <string name="menu_language_settings">Các thiết lập Ngôn ngữ</string>
-    <string name="title_language_settings">Các thiết lập Ngôn ngữ</string>
-    <string name="title_language_primary">Ngôn ngữ Chính</string>
-    <string name="title_language_parallel">Ngôn ngữ Tương đương</string>
-    <string name="action_language_parallel_select">Chọn một Ngôn ngữ Tương đương</string>
-    <string name="text_language_parallel_description">Chia sẻ GodTools với một ai đó bằng ngôn ngữ bản địa của họ</string>
-    <string name="text_language_warning">Không phải mọi công cụ đều có sẵn trong mọi ngôn ngữ</string>
+    <string name="feature_discovery_title_language_settings">90+ Ngôn ngữ</string>
+    <string name="menu_language_settings">Các thiết lập ngôn ngữ</string>
+    <string name="title_language_settings">Các thiết lập ngôn ngữ</string>
+    <string name="title_language_primary">Ngôn ngữ chính</string>
+    <string name="title_language_parallel">Ngôn ngữ song song</string>
+    <string name="action_language_parallel_select">Chọn một ngôn ngữ song song</string>
+    <string name="text_language_parallel_description">Chia sẻ GodTools với người khác bằng ngôn ngữ của họ.</string>
+    <string name="text_language_warning">Không phải mọi công cụ đều có sẵn trong mọi ngôn ngữ.</string>
     <string name="label_language_none">Không gì cả</string>
-    <string name="label_language_search">Lọc các Ngôn ngữ</string>
+    <string name="label_language_search">Bộ lọc ngôn ngữ</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Bạn có muốn thiết lập ngôn ngữ thứ hai không?</string>
+    <string name="languages_parallel_dialog_select">Chọn một ngôn ngữ</string>
+    <string name="languages_parallel_dialog_action_start">Bắt đầu</string>
+    <string name="languages_parallel_dialog_action_cancel">Không, cám ơn</string>
 </resources>

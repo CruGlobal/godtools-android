@@ -4,11 +4,13 @@
     <string name="share_prompt">Válaszd ki, hogyan kívánod megosztani</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Általános</string>
+    <string name="menu_heading_account">Fiók</string>
     <string name="menu_heading_share">Megosztás</string>
     <string name="menu_heading_legal">Jogi információk</string>
     <string name="menu_about">Rólunk</string>
     <string name="menu_help">Gyakran ismételt kérdések</string>
     <string name="menu_contact_us">Kapcsolatfelvétel</string>
+    <string name="menu_tutorial">Oktatóanyag</string>
     <string name="menu_login">Bejelentkezés</string>
     <string name="menu_signup">Fiók létrehozása</string>
     <string name="menu_logout">Kijelentkezés</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Adatvédelmi irányelvek</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Halld Isten cselekedeteit!</string>
+    <string name="share_story_subject">GodTools-történet</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ nyelv</string>
     <string name="menu_language_settings">Nyelvbeállítások</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Nem minden eszköz áll rendelkezésre minden nyelven.</string>
     <string name="label_language_none">Nincs</string>
     <string name="label_language_search">Nyelvek szűrése</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Másodlagos nyelvet szeretnél beállítani?</string>
+    <string name="languages_parallel_dialog_select">Válassz ki egy nyelvet</string>
+    <string name="languages_parallel_dialog_action_start">Első lépések</string>
+    <string name="languages_parallel_dialog_action_cancel">Köszönöm, nem</string>
 </resources>

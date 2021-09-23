@@ -7,4 +7,6 @@
     <string name="tool_offline">リクエストされたツールを開くためにはインターネット接続が必要です</string>
     <string name="feature_discovery_title_share_tool">リンクをシェア</string>
     <string name="feature_discovery_desc_share_tool">このアイコンをクリックして、このツールを友達に送りましょう</string>
+    <string name="tract_content_input_error_required">%1$sが必要です</string>
+    <string name="tract_content_input_error_invalid_email">有効なメールアドレスを入力してください</string>
 </resources>

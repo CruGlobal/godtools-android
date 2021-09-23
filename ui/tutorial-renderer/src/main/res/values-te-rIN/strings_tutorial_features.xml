@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_final_headline">ఈ ట్యుటోరియల్ మెనులో మళ్ళీ చూడటానికి అందుబాటులో ఉంది</string>
+    <string name="tutorial_features_action_continue">కొనసాగిచండి</string>
+    <string name="tutorial_features_action_close">GodTools ఉపయోగించడం ప్రారంభించండి</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">నాకు ట్యుటోరియలను చూపించండి</string>
+    <string name="tutorial_features_banner_action_open">ఓపెన్ ట్యుటోరియల్</string>
+    <string name="tutorial_features_banner_action_dismiss">రద్దుచేసే</string>
+</resources>

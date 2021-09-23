@@ -4,6 +4,7 @@
     <color name="tract_tips_orange">#E55536</color>
 
     <dimen name="tract_tip_margin_horiz">32dp</dimen>
+    <dimen name="tract_tip_text_size_label">16sp</dimen>
 
     <dimen name="tract_tips_tip_elevation">4dp</dimen>
     <dimen name="tract_tips_tip_corner_radius">6dp</dimen>
@@ -13,17 +14,12 @@
     <!-- region Badge -->
     <dimen name="tract_tips_badge_size">40dp</dimen>
     <dimen name="tract_tips_badge_padding">8dp</dimen>
-    <color name="tract_tips_badge_outline">@color/gray_E6</color>
 
     <style name="Widget.GodTools.Tip.Badge" parent="Base">
         <item name="android:layout_width">@dimen/tract_tips_badge_size</item>
         <item name="android:layout_height">@dimen/tract_tips_badge_size</item>
         <item name="android:elevation" tools:targetApi="lollipop">@dimen/tract_tips_tip_elevation</item>
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Badge</item>
-
-        <!-- KitKat compatibility -->
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/tract_tips_badge_outline</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
@@ -42,10 +38,6 @@
     <style name="Widget.GodTools.Tip.Arrow" parent="Base">
         <item name="android:elevation" tools:targetApi="lollipop">@dimen/tract_tips_tip_elevation</item>
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Arrow</item>
-
-        <!-- KitKat compatibility -->
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/tract_tips_badge_outline</item>
     </style>
 
     <style name="Widget.GodTools.Tip.Arrow.Vertical">

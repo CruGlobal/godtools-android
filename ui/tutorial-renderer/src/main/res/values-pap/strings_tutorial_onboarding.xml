@@ -3,20 +3,12 @@
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Bonbiní</string>
     <string name="tutorial_onboarding_welcome_2">Yudando Bo Kompartí Bo Fe</string>
-    <string name="tutorial_onboarding_others_headline">Kompartí Ku Otronan</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools t\'ei pa guia bo kombersashonnan tokante fe</string>
-    <string name="tutorial_onboarding_tools_headline">Skohe Bo Hèrmèntnan</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools ta yuda bo promé, durante, i despues di un kombersashon spiritual.</string>
-    <string name="tutorial_onboarding_ready_headline">Semper Kla</string>
-    <string name="tutorial_onboarding_ready_subhead">Ora bo ta kla, GodTools t\'aki pa yuda bo</string>
-    <string name="tutorial_onboarding_final_prepare">Prepará pa kualke kombersashon</string>
-    <string name="tutorial_onboarding_final_gospel">Pasa ku un hende dor di e Evangelio</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Wak dos idioma banda di otro</string>
-    <string name="tutorial_onboarding_final_languages">Skohe entre mas ku 90 idioma</string>
-    <string name="tutorial_onboarding_final_help_others">Yuda un hende kuminsá su bida komo Kristian</string>
-    <string name="tutorial_onboarding_final_action_show_more">Mustra Mi Mas</string>
-    <string name="tutorial_onboarding_final_action_start">Ban Kuminsá</string>
+    <string name="tutorial_onboarding_conversations_headline">Kompartí Ku Otronan</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools t\'ei pa guia bo kombersashonnan tokante fe</string>
+    <string name="tutorial_onboarding_share_headline">Skohe Bo Hèrmèntnan</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools ta yuda bo promé, durante, i despues di un kombersashon spiritual.</string>
     <string name="tutorial_onboarding_action_begin">Kuminsá</string>
-    <string name="tutorial_onboarding_action_continue">Sigui</string>
+    <string name="tutorial_onboarding_action_next">Sigui</string>
     <string name="tutorial_onboarding_action_skip">Salta</string>
+    <string name="tutorial_onboarding_action_start">Ban Kuminsá</string>
 </resources>

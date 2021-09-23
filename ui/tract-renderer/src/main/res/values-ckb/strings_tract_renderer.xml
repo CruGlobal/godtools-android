@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tract_card_previous">گەڕانەوە</string>
+    <string name="tract_card_next">دواتر</string>
+    <!-- Live Sharing -->
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">دواتر</string>
+    <!-- Tip Types -->
+</resources>

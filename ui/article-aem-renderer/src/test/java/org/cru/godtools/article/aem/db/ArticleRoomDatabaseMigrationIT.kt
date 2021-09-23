@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [19])
+@Config(sdk = [21, 28])
 class ArticleRoomDatabaseMigrationIT {
     @get:Rule
     val helper = MigrationTestHelper(

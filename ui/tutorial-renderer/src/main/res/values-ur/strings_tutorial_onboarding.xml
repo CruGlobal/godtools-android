@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">خوش آمدید</string>
+    <string name="tutorial_onboarding_welcome_2">ہر گفتگو کے لیے تیار</string>
+    <string name="tutorial_onboarding_welcome_action_video">ویڈیو دیکھیں</string>
+    <string name="tutorial_onboarding_conversations_headline">کسی کے بھی ساتھ خدا کے بارے میں بات کریں</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools خدا کے بارے میں بامعنی گفتگو کرنے میں آپ کی مدد کرتا ہے۔</string>
+    <string name="tutorial_onboarding_prepare_headline">اہم لمحات کے لیے تیاری کریں</string>
+    <string name="tutorial_onboarding_prepare_subhead">ایمان کے بارے میں گفتگو کو اپنی زندگی کا فطری حصہ بنانا سیکھیں۔</string>
+    <string name="tutorial_onboarding_share_headline">یسوع کو دریافت کرنے میں کسی کی مدد کریں</string>
+    <string name="tutorial_onboarding_share_subhead">واضح اور متعلقہ طریقوں سے انجیل کی تبلیغ کے لیے GodTools آپ کا رہنما ہے۔</string>
+    <string name="tutorial_onboarding_links_headline">فوری آغاز کے لنکس</string>
+    <string name="tutorial_onboarding_links_articles_subhead">میں عیسائیت کو دریافت کرنا چاہتا ہوں</string>
+    <string name="tutorial_onboarding_links_articles_action">ہمارے مضامین پڑھیں</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">میں انجیل کے متعلق گفتگو کرنے کے بارے میں جاننا چاہتا ہوں</string>
+    <string name="tutorial_onboarding_links_lessons_action">ہمارے سبق آزمائیں</string>
+    <string name="tutorial_onboarding_links_tools_subhead">میں کسی کے ساتھ انجیل ساجھا کرنا چاہتا ہوں</string>
+    <string name="tutorial_onboarding_links_tools_action">ہمارے ٹولز میں سے کسی ایک کا انتخاب کریں</string>
+    <string name="tutorial_onboarding_action_begin">شروع کریں</string>
+    <string name="tutorial_onboarding_action_next">اگلا</string>
+    <string name="tutorial_onboarding_action_skip">آگے بڑھیں</string>
+    <string name="tutorial_onboarding_action_start">آغاز</string>
+</resources>

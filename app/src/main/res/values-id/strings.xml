@@ -4,6 +4,7 @@
     <string name="share_prompt">Pilih bagaimana Saudara mau berbagi</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Umum</string>
+    <string name="menu_heading_account">Akun</string>
     <string name="menu_heading_share">Berbagi</string>
     <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Tentang</string>
@@ -32,4 +33,9 @@
     <string name="text_language_warning">Tidak semua sarana tersedia dalam setiap bahasa.</string>
     <string name="label_language_none">Tidak ada</string>
     <string name="label_language_search">Filter Bahasa</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Apakah Anda ingin menyetel bahasa sekunder?</string>
+    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
+    <string name="languages_parallel_dialog_action_start">Mari mulai</string>
+    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih.</string>
 </resources>

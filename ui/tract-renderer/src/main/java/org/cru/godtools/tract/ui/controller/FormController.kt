@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.Form
 import org.cru.godtools.tract.databinding.TractContentFormBinding
-import org.cru.godtools.xml.model.Form
 
 class FormController private constructor(
     private val binding: TractContentFormBinding,
@@ -31,11 +32,11 @@ class FormController private constructor(
     @AssistedFactory
     interface Factory : BaseController.Factory<FormController>
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
-    override fun validate(ids: Set<Event.Id>): Boolean {
+    override fun validate(ids: List<EventId>): Boolean {
         // XXX: right now we only validate if we have a followup:send event
-        if (Event.Id.FOLLOWUP_EVENT in ids) return onValidate()
+        if (EventId.FOLLOWUP in ids) return onValidate()
 
         // default to default validation logic
         return super.validate(ids)

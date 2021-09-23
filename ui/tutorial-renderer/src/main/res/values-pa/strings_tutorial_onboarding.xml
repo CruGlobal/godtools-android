@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">ਸਵਾਗਤ ਹੈ</string>
+    <string name="tutorial_onboarding_welcome_2">ਹਰ ਗੱਲਬਾਤ ਲਈ ਤਿਆਰ</string>
+    <string name="tutorial_onboarding_welcome_action_video">ਵੀਡੀਓ ਵੇਖੋ</string>
+    <string name="tutorial_onboarding_conversations_headline">ਕਿਸੇ ਨਾਲ ਵੀ ਰੱਬ ਬਾਰੇ ਗੱਲ ਕਰੋ</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools ਰੱਬ ਬਾਰੇ ਸਾਰਥਕ ਗੱਲਬਾਤ ਕਰਨ ਵਿੱਚ ਤੁਹਾਡੀ ਸਹਾਇਤਾ ਕਰਦੀ ਹੈ।</string>
+    <string name="tutorial_onboarding_prepare_headline">ਮਹੱਤਵਪੂਰਣ ਪਲਾਂ ਲਈ ਤਿਆਰੀ ਕਰੋ</string>
+    <string name="tutorial_onboarding_prepare_subhead">ਵਿਸ਼ਵਾਸ ਬਾਰੇ ਗੱਲਬਾਤ ਨੂੰ ਆਪਣੀ ਜ਼ਿੰਦਗੀ ਦਾ ਇੱਕ ਕੁਦਰਤੀ ਹਿੱਸਾ ਬਣਾਉਣਾ ਸਿੱਖੋ।</string>
+    <string name="tutorial_onboarding_share_headline">ਕਿਸੇ ਨੂੰ ਯਿਸੂ ਦੀ ਖੋਜ ਕਰਨ ਵਿੱਚ ਸਹਾਇਤਾ ਕਰੋ</string>
+    <string name="tutorial_onboarding_share_subhead">ਸਪਸ਼ਟ ਅਤੇ ਢੁਕਵੇਂ ਤਰੀਕਿਆਂ ਨਾਲ ਗੌਸਪਲ ਦਾ ਸੰਚਾਰ ਕਰਨ ਲਈ GodTools ਤੁਹਾਡੀ ਮਾਰਗਦਰਸ਼ਕ ਹੈ।</string>
+    <string name="tutorial_onboarding_links_headline">ਤੁਰੰਤ ਸ਼ੁਰੂਆਤ ਲਈ ਲਿੰਕ</string>
+    <string name="tutorial_onboarding_links_articles_subhead">ਮੈਂ ਈਸਾਈ ਧਰਮ ਦੀ ਪੜਚੋਲ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹਾਂ</string>
+    <string name="tutorial_onboarding_links_articles_action">ਸਾਡੇ ਲੇਖ ਪੜ੍ਹੋ</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">ਮੈਂ ਗੌਸਪਲ ਸੰਚਾਰ ਕਰਨ ਬਾਰੇ ਸਿੱਖਣਾ ਚਾਹੁੰਦਾ ਹਾਂ</string>
+    <string name="tutorial_onboarding_links_lessons_action">ਸਾਡੇ ਪਾਠਾਂ ਨੂੰ ਅਜ਼ਮਾਓ</string>
+    <string name="tutorial_onboarding_links_tools_subhead">ਮੈਂ ਕਿਸੇ ਨਾਲ ਗੌਸਪਲ ਸਾਂਝੇ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹਾਂ</string>
+    <string name="tutorial_onboarding_links_tools_action">ਸਾਡੇ ਟੂਲਸ ਵਿੱਚੋਂ ਇੱਕ ਦੀ ਚੋਣ ਕਰੋ</string>
+    <string name="tutorial_onboarding_action_begin">ਅਰੰਭ ਕਰੋ</string>
+    <string name="tutorial_onboarding_action_next">ਅਗਲਾ</string>
+    <string name="tutorial_onboarding_action_skip">ਛੱਡੋ</string>
+    <string name="tutorial_onboarding_action_start">ਅਰੰਭ ਕਰੋ</string>
+</resources>

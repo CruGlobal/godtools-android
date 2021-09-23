@@ -1,0 +1,5 @@
+[versions]
+play-billing = "4.0.0"
+
+[libraries]
+play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }

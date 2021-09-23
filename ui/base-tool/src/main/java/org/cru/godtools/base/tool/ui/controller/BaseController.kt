@@ -18,14 +18,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.findLiveData
-import org.cru.godtools.base.model.Event
-import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.model.TrainingTip
-import org.cru.godtools.xml.model.AnalyticsEvent
-import org.cru.godtools.xml.model.Base
-import org.cru.godtools.xml.model.layoutDirection
-import org.cru.godtools.xml.model.tips.Tip
+import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.tool.model.Base
+import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -45,6 +47,7 @@ abstract class BaseController<T : Base> protected constructor(
         get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
 
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
+    protected open val toolState: State get() = checkNotNull(parentController?.toolState)
 
     var model: T? = null
         set(value) {
@@ -70,33 +73,29 @@ abstract class BaseController<T : Base> protected constructor(
     open fun supportsModel(model: Base) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = model?.let { cache.release(it, this) }
 
-    protected open fun updateLayoutDirection() {
-        // HACK: In theory we should be able to set this on the root page only.
-        // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
-        root.layoutDirection = model.layoutDirection
-    }
-
-    fun sendEvents(ids: Set<Event.Id>?) {
+    fun sendEvents(ids: List<EventId>?) {
         if (ids.isNullOrEmpty()) return
         if (!validate(ids)) return
 
         // try letting a parent build the event object
-        val builder = Event.Builder()
-        model?.manifest?.locale?.let { builder.locale(it) }
+        val builder = Event.Builder().apply {
+            tool = model?.manifest?.code
+            locale = model?.manifest?.locale
+        }
 
         // populate the event with our local state if it wasn't populated by a parent
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
         // trigger an event for every id provided
-        ids.forEach { eventBus.post(builder.id(it).build()) }
+        ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
     }
 
-    protected fun triggerAnalyticsEvents(events: Collection<AnalyticsEvent>?, vararg types: AnalyticsEvent.Trigger) =
-        events?.filter { it.isTriggerType(*types) }?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
+    protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
+        events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
         if (event.delay > 0) delay(event.delay * 1000L)
-        eventBus.post(ContentAnalyticsActionEvent(event))
+        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
     }.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
@@ -106,27 +105,10 @@ abstract class BaseController<T : Base> protected constructor(
      */
     protected open fun buildEvent(builder: Event.Builder): Boolean = parentController?.buildEvent(builder) == true
 
-    protected open fun validate(ids: Set<Event.Id>): Boolean {
+    protected open fun validate(ids: List<EventId>): Boolean {
         // navigate up hierarchy before performing validation
         return parentController?.validate(ids) != false
     }
-
-    // region Tips
-    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
-
-    open fun showTip(tip: Tip?) {
-        parentController?.showTip(tip)
-    }
-
-    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
-        val manifest = model?.manifest
-        return when {
-            manifest == null || tipId == null -> ImmutableLiveData(false)
-            else -> findLiveData<TrainingTip>(manifest.code, manifest.locale, tipId).map { it?.isCompleted == true }
-                .distinctUntilChanged()
-        }
-    }
-    // endregion Tips
 
     // region UI
     /**
@@ -135,8 +117,8 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun <T : Base, C : BaseController<T>> ViewGroup.bindModels(
         models: List<T>,
         existing: MutableList<C>,
-        acquireController: (model: T) -> C?,
-        releaseController: ((controller: C) -> Unit)? = null
+        releaseController: ((controller: C) -> Unit)? = null,
+        acquireController: (model: T) -> C?
     ): List<C> {
         var next: C? = null
         try {
@@ -156,5 +138,39 @@ abstract class BaseController<T : Base> protected constructor(
             }
         }
     }
+
+    protected open fun updateLayoutDirection() {
+        // HACK: In theory we should be able to set this on the root page only.
+        //       But updating the direction doesn't seem to trigger a re-layout of descendant views.
+        root.layoutDirection = model.layoutDirection
+    }
+
+    // region Text Overrides
+    // HACK: `textIsSelectable` suppresses click events propagating up to parent elements.
+    //       Providing this override point will allow controllers to suppress the `textIsSelectable` attribute when it
+    //       interferes with other click listeners
+    //       This makes it impossible for the user to toggle Multiselect Options by clicking on a child text view.
+    //       Related: https://stackoverflow.com/q/19584750
+    open val textEnableTextIsSelectable: Boolean get() = parentController?.textEnableTextIsSelectable ?: true
+    // endregion Text Overrides
+
+    // region Tips
+    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+
+    open fun showTip(tip: Tip?) {
+        parentController?.showTip(tip)
+    }
+
+    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
+        val manifest = model?.manifest
+        val tool = manifest?.code
+        val locale = manifest?.locale
+        return when {
+            tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
+            else -> findLiveData<TrainingTip>(tool, locale, tipId).map { it?.isCompleted == true }
+                .distinctUntilChanged()
+        }
+    }
+    // endregion Tips
     // endregion UI
 }

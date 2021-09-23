@@ -8,4 +8,6 @@
     <string name="tool_offline">ನೀವು ವಿನಂತಿಸಿದ ಸಾಧನಗಳು ತೆರೆಯಲು ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕದ ಅಗತ್ಯವಿದೆ</string>
     <string name="feature_discovery_title_share_tool">ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
     <string name="feature_discovery_desc_share_tool">ಈ ಐಕಾನ್ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ಈ ಸಾಧನ ಸ್ನೇಹಿತರಿಗೆ ಕಳುಹಿಸಿ</string>
+    <string name="tract_content_input_error_required">%1$s ಅಗತ್ಯವಿದೆ</string>
+    <string name="tract_content_input_error_invalid_email">ದಯವಿಟ್ಟು ಸರಿಯಾದ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ</string>
 </resources>

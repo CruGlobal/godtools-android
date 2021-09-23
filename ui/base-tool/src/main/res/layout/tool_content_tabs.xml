@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.xml.model.BaseKt" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.tool.model.BaseKt" />
+        <import type="org.cru.godtools.tool.model.StylesKt" />
 
-        <variable name="model" type="org.cru.godtools.xml.model.Tabs" />
+        <variable name="model" type="org.cru.godtools.tool.model.Tabs" />
     </data>
 
     <LinearLayout

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.ModalController" />
-        <variable name="modal" type="org.cru.godtools.xml.model.tract.Modal" />
+        <variable name="modal" type="org.cru.godtools.tool.model.tract.Modal" />
     </data>
 
     <LinearLayout
@@ -22,9 +22,8 @@
             android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
             android:layout_marginRight="@dimen/tract_content_margin_horizontal"
             android:text="@{modal.title}"
-            android:textSize="@{@dimen/text_size_modal_title}"
-            tools:text="Thank you"
-            tools:textSize="@dimen/text_size_modal_title" />
+            android:textSize="@{@dimen/tract_content_modal_title_text_size, default=@dimen/tract_content_modal_title_text_size}"
+            tools:text="Thank you" />
 
         <LinearLayout
             android:id="@+id/content"

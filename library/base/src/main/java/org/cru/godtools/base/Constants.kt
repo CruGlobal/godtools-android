@@ -6,5 +6,10 @@ import android.net.Uri
 const val EXTRA_TOOL = "tool"
 const val EXTRA_LANGUAGE = "language"
 const val EXTRA_LANGUAGES = "languages"
+const val EXTRA_PAGE = "page"
 
-val URI_SHARE_BASE: Uri = Uri.parse("https://knowgod.com/")
+const val HOST_GODTOOLSAPP_COM = "godtoolsapp.com"
+const val HOST_GET_GODTOOLSAPP_COM = "get.godtoolsapp.com"
+const val HOST_KNOWGOD_COM = "knowgod.com"
+
+val URI_SHARE_BASE: Uri = Uri.parse("https://$HOST_KNOWGOD_COM/")

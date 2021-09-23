@@ -12,8 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import me.relex.circleindicator.CircleIndicator3
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
+import org.cru.godtools.base.ui.startArticlesActivity
+import org.cru.godtools.base.ui.startDashboardActivity
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
@@ -21,7 +25,6 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_TRAINING
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
@@ -34,13 +37,13 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = 
         .putExtra(ARG_PAGE_SET, pageSet)
         .putExtra(ARG_FRMT_ARGS, formatArgs)
 
-@JvmOverloads
 fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
     startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
     private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
+    private val pages get() = pageSet.pagesFor(Locale.getDefault())
 
     // region Lifecycle
     override fun onContentChanged() {
@@ -107,7 +110,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     // region ViewPager
     private fun setupViewPager() {
         binding.pages.apply {
-            adapter = TutorialPagerAdapter(this@TutorialActivity, pageSet.pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
+            adapter = TutorialPagerAdapter(this@TutorialActivity, pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
             setupAnalytics()
             setupMenuVisibility()
             setupIndicator()
@@ -125,7 +128,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     private fun ViewPager2.updateIndicatorVisibility(indicator: CircleIndicator3, page: Int = currentItem) {
-        indicator.visibility = if (pageSet.pages[page].showIndicator) View.VISIBLE else View.GONE
+        indicator.visibility = if (pages[page].showIndicator) View.VISIBLE else View.GONE
     }
     // endregion ViewPager
 
@@ -136,8 +139,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         })
     }
 
-    private fun trackScreenAnalytics(page: Int = binding.pages.currentItem) {
-        eventBus.post(TutorialAnalyticsScreenEvent(pageSet, page, deviceLocale))
+    private fun trackScreenAnalytics(pagePos: Int = binding.pages.currentItem) {
+        eventBus.post(TutorialAnalyticsScreenEvent(pageSet, pages.getOrNull(pagePos), pagePos, deviceLocale))
     }
     // endregion Analytics
 
@@ -152,7 +155,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     }
 
     private fun ViewPager2.updateMenuVisibility(page: Int = currentItem) {
-        val visible = pageSet.pages[page].showMenu
+        val visible = pages[page].showMenu
         menu?.forEach { it.isVisible = visible }
     }
     // endregion Menu
@@ -166,9 +169,18 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
 
     override fun onTutorialAction(view: View) {
         when (view.id) {
-            R.id.action_onboarding_training -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_TRAINING))
-                startTutorialActivity(PageSet.TRAINING)
+            R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
+            R.id.action_onboarding_launch_articles -> {
+                // TODO: we need to launch in whichever language makes sense for the current system/primary locale
+                startArticlesActivity("es", Locale.ENGLISH)
+                finish()
+            }
+            R.id.action_onboarding_launch_lessons -> {
+                startDashboardActivity(DashboardPage.LESSONS)
+                finish()
+            }
+            R.id.action_onboarding_launch_tools -> {
+                startDashboardActivity(DashboardPage.FAVORITE_TOOLS)
                 finish()
             }
             R.id.action_onboarding_finish -> {

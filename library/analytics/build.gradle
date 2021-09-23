@@ -50,9 +50,8 @@ dependencies {
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
-
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.play.billing
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"

@@ -10,15 +10,6 @@ updates:
   assignees:
   - frett
   ignore:
-  - dependency-name: com.squareup.okhttp3:okhttp
-    versions:
-    - ">= 3.13.a"
-  - dependency-name: com.squareup.retrofit2:converter-scalars
-    versions:
-    - ">= 2.7.a"
-  - dependency-name: com.squareup.retrofit2:retrofit
-    versions:
-    - ">= 2.7.a"
   - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-*
     versions:
-    - "1.4.3-native-mt"
+    - "1.5.0-native-mt"

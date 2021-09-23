@@ -33,4 +33,5 @@
     <string name="text_language_warning">ପ୍ରତ୍ୟେକ ଭାଷାରେ ପ୍ରତ୍ୟେକ ଉପକରଣ ଉପଲବ୍ଧ ନୁହେଁ |</string>
     <string name="label_language_none">"କିଛି ନୁହେଁ "</string>
     <string name="label_language_search">ଭାଷାଗୁଡ଼ିକୁ ଫିଲ୍ଟର୍ କରନ୍ତୁ</string>
+    <!-- Parallel Language Dialog -->
 </resources>

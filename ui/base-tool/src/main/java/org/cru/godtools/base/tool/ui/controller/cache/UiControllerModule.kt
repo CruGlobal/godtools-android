@@ -16,23 +16,25 @@ import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FallbackController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
+import org.cru.godtools.base.tool.ui.controller.MultiselectController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
-import org.cru.godtools.xml.model.Accordion
-import org.cru.godtools.xml.model.Animation
-import org.cru.godtools.xml.model.Button
-import org.cru.godtools.xml.model.Fallback
-import org.cru.godtools.xml.model.Image
-import org.cru.godtools.xml.model.Link
-import org.cru.godtools.xml.model.Paragraph
-import org.cru.godtools.xml.model.Spacer
-import org.cru.godtools.xml.model.Tabs
-import org.cru.godtools.xml.model.Text
-import org.cru.godtools.xml.model.Video
+import org.cru.godtools.tool.model.Accordion
+import org.cru.godtools.tool.model.Animation
+import org.cru.godtools.tool.model.Button
+import org.cru.godtools.tool.model.Fallback
+import org.cru.godtools.tool.model.Image
+import org.cru.godtools.tool.model.Link
+import org.cru.godtools.tool.model.Multiselect
+import org.cru.godtools.tool.model.Paragraph
+import org.cru.godtools.tool.model.Spacer
+import org.cru.godtools.tool.model.Tabs
+import org.cru.godtools.tool.model.Text
+import org.cru.godtools.tool.model.Video
 
 private const val VARIATION_BUTTON_CONTAINED = 1
 private const val VARIATION_BUTTON_OUTLINED = 2
@@ -77,6 +79,11 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Link::class)
     internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Multiselect::class)
+    internal abstract fun multiselectControllerFactory(f: MultiselectController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap

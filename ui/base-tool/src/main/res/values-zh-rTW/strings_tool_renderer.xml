@@ -7,4 +7,6 @@
     <string name="tool_offline">你要求的工具需要網路連線才能開啟</string>
     <string name="feature_discovery_title_share_tool">分享連結</string>
     <string name="feature_discovery_desc_share_tool">點選此圖示即可將此工具傳送給好友</string>
+    <string name="tract_content_input_error_required">必須輸入%1$s</string>
+    <string name="tract_content_input_error_invalid_email">請輸入正確的電子郵件地址</string>
 </resources>

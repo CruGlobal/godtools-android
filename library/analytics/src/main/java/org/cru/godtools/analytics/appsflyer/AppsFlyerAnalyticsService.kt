@@ -18,6 +18,7 @@ import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.HOST_GET_GODTOOLSAPP_COM
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -33,26 +34,32 @@ private const val IS_FIRST_LAUNCH = "is_first_launch"
 private const val STATUS_NON_ORGANIC = "Non-organic"
 
 @Singleton
-class AppsFlyerAnalyticsService @Inject internal constructor(
+class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     private val app: Application,
     eventBus: EventBus,
-    private val deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
+    private val deepLinkResolvers: Set<AppsFlyerDeepLinkResolver>,
+    private val appsFlyer: AppsFlyerLib
 ) : Application.ActivityLifecycleCallbacks {
-    private val appsFlyer: AppsFlyerLib = AppsFlyerLib.getInstance()
+    @Inject
+    internal constructor(
+        app: Application,
+        eventBus: EventBus,
+        deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
+    ) : this(app, eventBus, deepLinkResolvers, AppsFlyerLib.getInstance())
 
     // region Analytics Events
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsScreenEvent(event: AnalyticsScreenEvent) {
         if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.trackEvent(app, event.screen, emptyMap())
+            appsFlyer.logEvent(app, event.screen, emptyMap())
     }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsActionEvent(event: AnalyticsActionEvent) {
         if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.trackEvent(app, event.action, emptyMap())
+            appsFlyer.logEvent(app, event.action, emptyMap())
     }
     // endregion Analytics Events
 
@@ -97,8 +104,9 @@ class AppsFlyerAnalyticsService @Inject internal constructor(
     init {
         appsFlyer.apply {
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
+            setOneLinkCustomDomain(HOST_GET_GODTOOLSAPP_COM)
             init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
-            startTracking(app)
+            start(app)
         }
         app.registerActivityLifecycleCallbacks(this)
         eventBus.register(this)

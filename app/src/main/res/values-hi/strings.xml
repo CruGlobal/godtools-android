@@ -33,4 +33,9 @@
     <string name="text_language_warning">सभी टूल सभी भाषा में उपलब्ध नहीं हैं।</string>
     <string name="label_language_none">कोई नहीं</string>
     <string name="label_language_search">भाषाएं फ़िल्टर करें</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">क्या आप कोई द्वितीय भाषा सेट करना चाहेंगे?</string>
+    <string name="languages_parallel_dialog_select">एक भाषा चुनें</string>
+    <string name="languages_parallel_dialog_action_start">शुरू करें</string>
+    <string name="languages_parallel_dialog_action_cancel">नहीं, धन्यवाद</string>
 </resources>

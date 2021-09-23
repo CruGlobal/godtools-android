@@ -26,14 +26,20 @@ private fun TutorialOnboardingWelcomeBinding.welcomeTextAnimator() = AnimatorSet
             }
         })
     }
-    val fadeIn = ObjectAnimator.ofFloat(welcome2, "alpha", 0f, 1f).apply {
+    val fadeIn = AnimatorSet().apply {
+        playTogether(
+            ObjectAnimator.ofFloat(actionOnboardingWatchVideo, "alpha", 0f, 1f),
+            ObjectAnimator.ofFloat(welcome2, "alpha", 0f, 1f)
+        )
         duration = WELCOME_FADE_IN_DURATION
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {
+                actionOnboardingWatchVideo.visibility = View.VISIBLE
                 welcome2.visibility = View.VISIBLE
             }
 
             override fun onAnimationEnd(animation: Animator?) {
+                actionOnboardingWatchVideo.alpha = 1f
                 welcome2.alpha = 1f
             }
         })

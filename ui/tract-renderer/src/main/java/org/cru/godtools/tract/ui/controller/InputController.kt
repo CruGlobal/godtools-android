@@ -7,10 +7,10 @@ import androidx.core.content.getSystemService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.tool.model.Input
 import org.cru.godtools.tract.databinding.TractContentInputBinding
-import org.cru.godtools.xml.model.Input
 
 class InputController private constructor(
     private val binding: TractContentInputBinding,

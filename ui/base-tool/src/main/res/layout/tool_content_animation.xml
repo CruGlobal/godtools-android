@@ -4,7 +4,7 @@
 
     <data>
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.AnimationController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Animation" />
+        <variable name="model" type="org.cru.godtools.tool.model.Animation" />
     </data>
 
     <com.airbnb.lottie.LottieAnimationView

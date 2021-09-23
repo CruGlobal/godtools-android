@@ -9,11 +9,4 @@
 किसी भी टूल की अधिक जानकारी हेतु उस पर दिया हुआ जानकारी बटन दबाएं।</string>
     <string name="tutorial_training_try_headline">कोशिश करें</string>
     <string name="tutorial_training_try_subhead">सबकी शुरुआत नौसिखिए की तरह ही होती है। किसी वार्तालाप में एक टूल का उपयोग करके देखें कि आप क्या सीखें हैं।</string>
-    <string name="tutorial_training_final_headline">दुबारा देखने के लिए यह ट्यूटोरियल मेन्यु में उपलब्ध है</string>
-    <string name="tutorial_training_action_continue">जारी रखें</string>
-    <string name="tutorial_training_action_start">GodTools का उपयोग शुरू करें</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">मुझे एक ट्यूटोरियल दिखाएं</string>
-    <string name="tutorial_training_banner_action_open">ट्यूटोरियल खोलें</string>
-    <string name="tutorial_training_banner_action_dismiss">रद्द करें</string>
 </resources>

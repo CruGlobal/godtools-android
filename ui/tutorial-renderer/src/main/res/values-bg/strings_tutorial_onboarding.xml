@@ -2,21 +2,23 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_welcome">Добре дошли</string>
-    <string name="tutorial_onboarding_welcome_2">Помагайки ви да споделяте вярата си</string>
-    <string name="tutorial_onboarding_others_headline">Споделете с други</string>
-    <string name="tutorial_onboarding_others_subhead">GodTools е създаден, за да ви помогне във вашите духовни разговори</string>
-    <string name="tutorial_onboarding_tools_headline">Изберете вашите инструменти</string>
-    <string name="tutorial_onboarding_tools_subhead">GodTools ви помага преди, по време на, и след духовен разговор</string>
-    <string name="tutorial_onboarding_ready_headline">Винаги готов</string>
-    <string name="tutorial_onboarding_ready_subhead">GodTools е тук, за да ви помогне и е готов, когато и вие сте</string>
-    <string name="tutorial_onboarding_final_prepare">Подгответе се за всеки разговор</string>
-    <string name="tutorial_onboarding_final_gospel">Преминете през Евангелието с някого</string>
-    <string name="tutorial_onboarding_final_parallel_languages">Вижте два езика един до друг</string>
-    <string name="tutorial_onboarding_final_languages">Изберете от над 90 езика</string>
-    <string name="tutorial_onboarding_final_help_others">Помогнете на някого да израсне като християнин</string>
-    <string name="tutorial_onboarding_final_action_show_more">Покажете повече</string>
-    <string name="tutorial_onboarding_final_action_start">Започнете</string>
+    <string name="tutorial_onboarding_welcome_2">Готово за всеки разговор</string>
+    <string name="tutorial_onboarding_welcome_action_video">Виж видео</string>
+    <string name="tutorial_onboarding_conversations_headline">Говори за Бог с всеки</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools ти помага да провеждаш смислени разговори за Бог.</string>
+    <string name="tutorial_onboarding_prepare_headline">Подготви се за моментите, които имат значение</string>
+    <string name="tutorial_onboarding_prepare_subhead">Научи се как да направиш така, че разговорите за вярата да са естествена час от живота ти.</string>
+    <string name="tutorial_onboarding_share_headline">Помогни на някого да открие Исус.</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools ти помага да говориш за Евангелието по ясен и уместен начин.</string>
+    <string name="tutorial_onboarding_links_headline">Връзки за бързо начало</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Искам да науча още за християнството</string>
+    <string name="tutorial_onboarding_links_articles_action">Четете статиите ни</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Искам да науча още за разговорите относно Евангелието</string>
+    <string name="tutorial_onboarding_links_lessons_action">Опитай уроците ни</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Искам да споделя Евангелието с някого</string>
+    <string name="tutorial_onboarding_links_tools_action">Избери един от инструментите ни</string>
     <string name="tutorial_onboarding_action_begin">Начало</string>
-    <string name="tutorial_onboarding_action_continue">Продължете</string>
+    <string name="tutorial_onboarding_action_next">Продължи</string>
     <string name="tutorial_onboarding_action_skip">Пропуснете</string>
+    <string name="tutorial_onboarding_action_start">Започнете</string>
 </resources>

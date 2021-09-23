@@ -33,4 +33,9 @@
     <string name="text_language_warning">Не все инструменты доступны на всех языках.</string>
     <string name="label_language_none">Нет</string>
     <string name="label_language_search">Фильтр языков</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Хотите установить второй язык?</string>
+    <string name="languages_parallel_dialog_select">Выберите язык</string>
+    <string name="languages_parallel_dialog_action_start">Начать</string>
+    <string name="languages_parallel_dialog_action_cancel">Нет, спасибо</string>
 </resources>

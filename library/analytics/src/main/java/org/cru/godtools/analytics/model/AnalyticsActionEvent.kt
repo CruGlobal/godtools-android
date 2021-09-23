@@ -12,10 +12,10 @@ open class AnalyticsActionEvent(
     val action: String,
     val label: String? = null,
     locale: Locale? = null,
-    systems: Collection<AnalyticsSystem>? = null
+    systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) : AnalyticsBaseEvent(locale, systems) {
     companion object {
-        fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_").toLowerCase(Locale.ROOT)
+        fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_").lowercase(Locale.ROOT)
     }
 
     constructor(action: String, label: String? = null, locale: Locale? = null, system: AnalyticsSystem) :
@@ -28,6 +28,7 @@ open class AnalyticsActionEvent(
         adobeAttributes?.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value?.toString()) }
     }
 
+    open val snowplowCategory = "action"
     override val snowplowPageTitle = listOfNotNull(action, label).joinToString(" : ")
     override val snowplowContentScoringUri: Uri.Builder get() = super.snowplowContentScoringUri
         .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)

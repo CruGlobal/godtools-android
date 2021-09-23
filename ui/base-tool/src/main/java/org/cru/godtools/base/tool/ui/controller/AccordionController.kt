@@ -9,7 +9,7 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionBinding
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionSectionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.xml.model.Accordion
+import org.cru.godtools.tool.model.Accordion
 
 class AccordionController private constructor(
     private val binding: ToolContentAccordionBinding,
@@ -47,9 +47,8 @@ class AccordionController private constructor(
 
         sectionControllers = binding.sections.bindModels(
             model?.sections.orEmpty(),
-            sectionControllers.toMutableList(),
-            acquireController = { sectionFactory.create(binding.sections, this) }
-        )
+            sectionControllers.toMutableList()
+        ) { sectionFactory.create(binding.sections, this) }
     }
     // endregion Sections
 
@@ -90,6 +89,6 @@ class AccordionController private constructor(
                 model?.id?.takeUnless { it == accordionController.activeSection.value }
         }
 
-        override val contentContainer get() = binding.content
+        override val childContainer get() = binding.content
     }
 }

@@ -7,4 +7,6 @@
     <string name="tool_offline">Die hulpmiddels wat jy aangevra het, benodig \'n internetverbinding om oop te maak</string>
     <string name="feature_discovery_title_share_tool">Deel \'n skakel</string>
     <string name="feature_discovery_desc_share_tool">Stuur hierdie gereedskap na \'n vriend deur op hierdie ikoon te klik.</string>
+    <string name="tract_content_input_error_required">%1$s word benodig</string>
+    <string name="tract_content_input_error_invalid_email">Voer asseblief \'n geldige e-posadres in</string>
 </resources>

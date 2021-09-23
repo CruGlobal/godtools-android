@@ -4,13 +4,13 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.ToolState" />
+        <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState" />
         <import type="org.cru.godtools.download.manager.DownloadProgress" />
-        <import type="org.cru.godtools.xml.model.Manifest" />
-        <import type="org.cru.godtools.xml.model.ManifestKt" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.tool.model.ManifestKt" />
 
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
-        <variable name="toolState" type="LiveData&lt;ToolState&gt;" />
+        <variable name="loadingState" type="LiveData&lt;LoadingState&gt;" />
         <variable name="loadingProgress" type="LiveData&lt;DownloadProgress&gt;" />
     </data>
 
@@ -43,21 +43,21 @@
             <include
                 layout="@layout/activity_tool_loading"
                 app:progress="@{loadingProgress}"
-                app:toolState="@{toolState}" />
+                app:loadingState="@{loadingState}" />
 
             <include
                 layout="@layout/activity_tool_missing"
-                app:toolState="@{toolState}" />
+                app:loadingState="@{loadingState}" />
 
             <include
                 layout="@layout/activity_tool_offline"
-                app:toolState="@{toolState}" />
+                app:loadingState="@{loadingState}" />
 
             <FrameLayout
                 android:id="@+id/mainContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:visibleIf="@{toolState == ToolState.LOADED}">
+                app:visibleIf="@{loadingState == LoadingState.LOADED}">
 
                 <FrameLayout
                     android:id="@+id/frame"

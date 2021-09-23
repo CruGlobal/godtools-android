@@ -4,11 +4,13 @@
     <string name="share_prompt">Chagua jinsi ungependa kushiriki</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Ujumla</string>
+    <string name="menu_heading_account">Akaunti</string>
     <string name="menu_heading_share">Shirikisha</string>
     <string name="menu_heading_legal">Kisheria</string>
     <string name="menu_about">Kuhusu</string>
     <string name="menu_help">Maswali Yanayoulizwa Mara kwa Mara</string>
     <string name="menu_contact_us">Wasiliana Nasi</string>
+    <string name="menu_tutorial">Mafunzo</string>
     <string name="menu_login">Ingia</string>
     <string name="menu_signup">Unda Akaunti</string>
     <string name="menu_logout">Toka</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Sera ya Faragha</string>
     <string name="menu_copyright">Hati miliki</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Sikiliza namna Mungu anavyotembea!</string>
+    <string name="share_story_subject">Hadithi ya GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Lugha Tisini na Zaidi</string>
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Si kila chombo kinapatikana kwa kila lugha.</string>
     <string name="label_language_none">Hakuna</string>
     <string name="label_language_search">Chuja Lugha</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Je, ungependa kuweka lugha ya sekondari?</string>
+    <string name="languages_parallel_dialog_select">Chagua lugha</string>
+    <string name="languages_parallel_dialog_action_start">Anza</string>
+    <string name="languages_parallel_dialog_action_cancel">Hapana Asante</string>
 </resources>

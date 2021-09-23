@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tutorial_page_onboarding_anim_height">140dp</dimen>
-    <style name="Widget.GodTools.Tutorial.Onboarding.Final.Point" parent="Base">
-        <item name="android:gravity">start|center_vertical</item>
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Subhead</item>
-        <item name="drawableStartCompat">@drawable/ic_tutorial_onboarding_final_point</item>
-        <item name="drawableLeftCompat">@drawable/ic_tutorial_onboarding_final_point</item>
-        <item name="android:drawablePadding">16dp</item>
+    <dimen name="tutorial_page_onboarding_subhead_margin_top">12dp</dimen>
+    <dimen name="tutorial_page_onboarding_anim_height">268dp</dimen>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Link" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tutorial.Onboarding.Link</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="drawableTint">@color/gt_blue</item>
     </style>
+
+    <style name="TextAppearance.GodTools.Tutorial.Onboarding.Link" parent="TextAppearance.GodTools">
+        <item name="android:textColor">@color/gt_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- region Links Box -->
+    <dimen name="tutorial_onboarding_link_box_margin_horizontal">24dp</dimen>
+    <dimen name="tutorial_onboarding_link_box_padding">12dp</dimen>
+    <dimen name="tutorial_onboarding_link_box_padding_negative">-12dp</dimen>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Links.LinkBox" parent="Base">
+        <item name="android:background">@color/gray_F2</item>
+        <item name="android:layout_marginBottom">@dimen/tutorial_onboarding_link_box_padding_negative</item>
+    </style>
+
+    <style name="Widget.GodTools.Tutorial.Onboarding.Links.LinkBox.Link" parent="Widget.GodTools.Tutorial.Onboarding.Link">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="drawableEndCompat">@drawable/ic_tutorial_onboarding_link_arrow</item>
+    </style>
+    <!-- endregion Links Box -->
 </resources>

@@ -4,11 +4,13 @@
     <string name="share_prompt">Selectează cum vrei să distribui</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">General</string>
+    <string name="menu_heading_account">Cont</string>
     <string name="menu_heading_share">Distribuie</string>
     <string name="menu_heading_legal">Juridic</string>
     <string name="menu_about">Despre</string>
     <string name="menu_help">Întrebări frecvente</string>
     <string name="menu_contact_us">Contactează-ne</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Conectare</string>
     <string name="menu_signup">Creează cont</string>
     <string name="menu_logout">Deconectare</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Politica de confidențialitate</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Află cum lucrează Dumnezeu!</string>
+    <string name="share_story_subject">Poveste cu GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 90 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
     <string name="label_language_none">Niciunul</string>
     <string name="label_language_search">Filtrează limbile</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vrei să setezi o limbă secundară?</string>
+    <string name="languages_parallel_dialog_select">Selectează o limbă</string>
+    <string name="languages_parallel_dialog_action_start">Să începem</string>
+    <string name="languages_parallel_dialog_action_cancel">Nu, mulțumesc</string>
 </resources>

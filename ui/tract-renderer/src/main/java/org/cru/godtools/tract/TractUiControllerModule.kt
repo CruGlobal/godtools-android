@@ -7,12 +7,12 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType
+import org.cru.godtools.tool.model.Form
+import org.cru.godtools.tool.model.Input
+import org.cru.godtools.tool.model.tips.InlineTip
 import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.InputController
 import org.cru.godtools.tract.ui.controller.tips.InlineTipController
-import org.cru.godtools.xml.model.Form
-import org.cru.godtools.xml.model.Input
-import org.cru.godtools.xml.model.tips.InlineTip
 
 @Module
 @InstallIn(SingletonComponent::class)

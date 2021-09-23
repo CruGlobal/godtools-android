@@ -11,4 +11,7 @@
 
     <string name="feature_discovery_title_share_tool">Share a link</string>
     <string name="feature_discovery_desc_share_tool">Send this tool to a friend by clicking this icon</string>
+
+    <string name="tract_content_input_error_required">%1$s is required</string>
+    <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
 </resources>

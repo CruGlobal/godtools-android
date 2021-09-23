@@ -4,11 +4,13 @@
     <string name="share_prompt">Selecteer hoe je wilt delen</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Algemeen</string>
+    <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Delen</string>
     <string name="menu_heading_legal">Legaal</string>
     <string name="menu_about">Over</string>
     <string name="menu_help">Veelgestelde vragen</string>
     <string name="menu_contact_us">Contacteer Ons</string>
+    <string name="menu_tutorial">Uitleg</string>
     <string name="menu_login">Inloggen</string>
     <string name="menu_signup">Account aanmaken</string>
     <string name="menu_logout">Uitloggen</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Privacybeleid</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Hoor hoe God beweegt!</string>
+    <string name="share_story_subject">GodTools-verhaal</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ talen</string>
     <string name="menu_language_settings">Taal Instellingen</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Niet elke tool is beschikbaar in elke taal</string>
     <string name="label_language_none">Geen</string>
     <string name="label_language_search">Talen filteren</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Wil je een tweede taal instellen?</string>
+    <string name="languages_parallel_dialog_select">Selecteer een taal</string>
+    <string name="languages_parallel_dialog_action_start">Aan de slag</string>
+    <string name="languages_parallel_dialog_action_cancel">Nee, bedankt</string>
 </resources>

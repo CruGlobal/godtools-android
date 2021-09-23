@@ -7,4 +7,6 @@
     <string name="tool_offline">Kad galėtumėte atidaryti prašomą puslapį, reikalingas interneto ryšys</string>
     <string name="feature_discovery_title_share_tool">Bendrinti nuorodą</string>
     <string name="feature_discovery_desc_share_tool">Siųsti šį įrankį draugui paspaudus šią piktogramą</string>
+    <string name="tract_content_input_error_required">Reikalingas %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Įrašykite teisingą el. pašto adresą</string>
 </resources>

@@ -1,8 +1,15 @@
 package org.cru.godtools.tool.lesson.ui
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.switchMap
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,16 +20,23 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.lesson.LessonPage
+import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
+import org.cru.godtools.tool.lesson.util.isLessonDeepLink
+import org.cru.godtools.tool.lesson.util.lessonDeepLinkCode
+import org.cru.godtools.tool.lesson.util.lessonDeepLinkLocale
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.lesson.LessonPage
 import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
@@ -34,8 +48,14 @@ class LessonActivity :
     ),
     LessonPageAdapter.Callbacks {
     override val dataModel: LessonActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupFeedbackDialog()
+    }
+
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.setupPages()
@@ -47,10 +67,28 @@ class LessonActivity :
         trackPageInAnalytics()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> showFeedbackDialogIfNecessary() || super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
+    }
+
     override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
     }
     // endregion Lifecycle
+
+    // region Intent Processing
+    override fun processIntent(intent: Intent?) {
+        val data = intent?.data
+        when {
+            intent?.action == ACTION_VIEW && data?.isLessonDeepLink() == true -> {
+                dataModel.toolCode.value = data.lessonDeepLinkCode
+                dataModel.locale.value = data.lessonDeepLinkLocale
+            }
+            else -> super.processIntent(intent)
+        }
+    }
+    // endregion Intent Processing
 
     // region UI
     // region Toolbar
@@ -80,7 +118,7 @@ class LessonActivity :
     // region Pages
     @Inject
     lateinit var lessonPageAdapterFactory: LessonPageAdapter.Factory
-    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this).also { it.callbacks = this } }
+    private val lessonPageAdapter by lazy { lessonPageAdapterFactory.create(this, this, toolState.toolState) }
 
     private fun LessonActivityBinding.setupPages() {
         pages.adapter = lessonPageAdapter
@@ -104,6 +142,7 @@ class LessonActivity :
             override fun onPageSelected(position: Int) {
                 updateProgressIndicator(position = position)
                 trackPageInAnalytics(dataModel.pages.value?.getOrNull(position))
+                dataModel.pageReached.value = maxOf(position, dataModel.pageReached.value ?: 0)
             }
         })
     }
@@ -126,7 +165,32 @@ class LessonActivity :
         binding.pages.currentItem += 1
     }
     // endregion Pages
+
+    // region Feedback
+    private fun setupFeedbackDialog() {
+        supportFragmentManager.setFragmentResultListener(LessonFeedbackDialogFragment.RESULT_DISMISSED, this) { _, _ ->
+            finish()
+        }
+        onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(false) {
+                override fun handleOnBackPressed() {
+                    showFeedbackDialogIfNecessary()
+                }
+            }.also { cb -> dataModel.showFeedback.observe(this) { cb.isEnabled = it } }
+        )
+    }
+
+    private fun showFeedbackDialogIfNecessary() = if (dataModel.showFeedback.value == true) {
+        LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value ?: 0).show(supportFragmentManager, null)
+        true
+    } else false
+    // endregion Feedback
     // endregion UI
+
+    override fun checkForManifestEvent(manifest: Manifest, event: Event) {
+        if (event.id in manifest.dismissListeners && showFeedbackDialogIfNecessary()) return
+        super.checkForManifestEvent(manifest, event)
+    }
 
     private fun trackPageInAnalytics(page: LessonPage? = dataModel.pages.value?.getOrNull(binding.pages.currentItem)) {
         page?.let { eventBus.post(LessonPageAnalyticsScreenEvent(page)) }
@@ -137,11 +201,19 @@ class LessonActivity :
 class LessonActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     dao: GodToolsDao,
-    downloadManager: GodToolsDownloadManager
+    downloadManager: GodToolsDownloadManager,
+    settings: Settings,
+    savedState: SavedStateHandle
 ) : BaseSingleToolActivityDataModel(manifestManager, dao, downloadManager) {
     val visiblePages = SetLiveData<String>(synchronous = true)
 
     val pages = manifest.combineWith(visiblePages) { manifest, visible ->
         manifest?.lessonPages.orEmpty().filter { !it.isHidden || it.id in visible }
     }.distinctUntilChanged()
+
+    val pageReached = savedState.getLiveData("pageReached", 0)
+    val showFeedback = toolCode
+        .switchMap { settings.isFeatureDiscoveredLiveData(FEATURE_LESSON_FEEDBACK + it) }
+        .combineWith(pageReached) { discovered, page -> !discovered && page > 3 }
+        .distinctUntilChanged()
 }

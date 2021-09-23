@@ -21,6 +21,7 @@ dependencies {
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
     implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
 
+    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
@@ -28,6 +29,7 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation "com.louiscad.splitties:splitties-intents:${deps.splitties}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "me.relex:circleindicator:${deps.circleindicator}"

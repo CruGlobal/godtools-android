@@ -8,4 +8,6 @@
     <string name="tool_offline">நீங்கள் கோரிய கருவிக்கு திறக்க இணைய இணைப்பு தேவை</string>
     <string name="feature_discovery_title_share_tool">இணைப்பைப் பகிரவும்</string>
     <string name="feature_discovery_desc_share_tool">இந்த ஐகானைக் கிளிக் செய்வதன் மூலம் இந்த கருவியை நண்பருக்கு அனுப்பவும்</string>
+    <string name="tract_content_input_error_required">%1$s தேவை</string>
+    <string name="tract_content_input_error_invalid_email">செல்லுபடியாகும் மின்னஞ்சல் முகவரியை உள்ளிடவும்</string>
 </resources>

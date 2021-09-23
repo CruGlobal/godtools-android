@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="org.cru.godtools.xml.model.StylesKt" />
-
-        <variable name="model" type="org.cru.godtools.xml.model.tract.Hero" />
+        <variable name="model" type="org.cru.godtools.tool.model.tract.Hero" />
     </data>
 
     <LinearLayout
@@ -26,11 +24,9 @@
             android:saveEnabled="false"
             android:text="@{model.heading}"
             android:textIsSelectable="true"
-            android:textSize="@{@dimen/text_size_hero_heading}"
-            app:defaultTextColor="@{StylesKt.getPrimaryColor(model)}"
+            android:textSize="@{@dimen/tract_hero_heading_text_size, default=@dimen/tract_hero_heading_text_size}"
             app:visibleIf="@{model.heading != null}"
-            tools:text="Knowing God Personally"
-            tools:textSize="@dimen/text_size_hero_heading" />
+            tools:text="Knowing God Personally" />
 
         <LinearLayout
             android:id="@+id/content"

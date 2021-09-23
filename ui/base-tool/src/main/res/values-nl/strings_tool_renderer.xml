@@ -7,4 +7,6 @@
     <string name="tool_offline">Voor het aangevraagde hulpmiddel is een internetverbinding vereist</string>
     <string name="feature_discovery_title_share_tool">Een koppeling delen</string>
     <string name="feature_discovery_desc_share_tool">Klik op dit pictogram en stuur dit naar een vriend(in)</string>
+    <string name="tract_content_input_error_required">%1$s is verplicht</string>
+    <string name="tract_content_input_error_invalid_email">Gelieve een geldig e-mailadres op te geven</string>
 </resources>

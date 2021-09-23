@@ -4,11 +4,13 @@
     <string name="share_prompt">تحديد طريقة المشاركة</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">عام</string>
+    <string name="menu_heading_account">حساب</string>
     <string name="menu_heading_share">شارك</string>
     <string name="menu_heading_legal">قانوني</string>
     <string name="menu_about">حول</string>
     <string name="menu_help">الأسئلة المتكررة</string>
     <string name="menu_contact_us">اتصل بنا</string>
+    <string name="menu_tutorial">شرح</string>
     <string name="menu_login">تسجيل الدخول</string>
     <string name="menu_signup">إنشاء حساب</string>
     <string name="menu_logout">تسجيل الخروج</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">سياسة الخصوصية</string>
     <string name="menu_copyright">حق النشر والتأليف</string>
     <!-- Share a story -->
-    <string name="share_story_subject">استمع لكيفية تحرك الرب!</string>
+    <string name="share_story_subject">قصة GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+90 لغة</string>
     <string name="menu_language_settings">إعدادات اللغة</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">ليس كل أداة متوفرة في كل لغة.</string>
     <string name="label_language_none">لا شيء</string>
     <string name="label_language_search">فلترة اللغات</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">هل ترغب في تعيين لغة ثانوية؟</string>
+    <string name="languages_parallel_dialog_select">تحديد اللغة</string>
+    <string name="languages_parallel_dialog_action_start">ابدأ</string>
+    <string name="languages_parallel_dialog_action_cancel">لا شكراً</string>
 </resources>

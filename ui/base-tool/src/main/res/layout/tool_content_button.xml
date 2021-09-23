@@ -2,10 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.xml.model.ButtonKt" />
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.tool.model.ButtonKt" />
 
-        <variable name="model" type="org.cru.godtools.xml.model.Button" />
+        <variable name="model" type="org.cru.godtools.tool.model.Button" />
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.ButtonController" />
+        <variable name="isGone" type="LiveData&lt;Boolean&gt;" />
+        <variable name="isInvisible" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <com.google.android.material.button.MaterialButton
@@ -18,5 +21,10 @@
         android:saveEnabled="false"
         android:text="@{model.text}"
         app:backgroundColor="@{ButtonKt.getButtonColor(model)}"
-        app:defaultTextColor="@{ButtonKt.getTextColor(model)}" />
+        app:goneIf="@{isGone ?? false}"
+        app:icon="@{model.icon}"
+        app:iconGravity="@{ButtonKt.getIconGravity(model)}"
+        app:iconSize="@{ButtonKt.getIconSize(model)}"
+        app:iconTint="@null"
+        app:invisibleIf="@{isInvisible ?? false}" />
 </layout>

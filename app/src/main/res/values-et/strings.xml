@@ -4,11 +4,13 @@
     <string name="share_prompt">Vali jagamise viis</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Üldised</string>
+    <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Jagamine</string>
     <string name="menu_heading_legal">Juriidiline teave</string>
     <string name="menu_about">Teave</string>
     <string name="menu_help">Korduvalt küsitud küsimused</string>
     <string name="menu_contact_us">Kontakt</string>
+    <string name="menu_tutorial">Juhend</string>
     <string name="menu_login">Logi sisse</string>
     <string name="menu_signup">Loo konto</string>
     <string name="menu_logout">Logi välja</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Andmekaitsepõhimõtted</string>
     <string name="menu_copyright">Autoriõigus</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Kuula, kuidas Jumal tegutseb!</string>
+    <string name="share_story_subject">Jumala tööriistade lugu</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Kõik tööriistad ei ole kõigis keeltes saadaval.</string>
     <string name="label_language_none">Mitte ühtki</string>
     <string name="label_language_search">Filtri keeled</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Kas soovid seadistada teise keele?</string>
+    <string name="languages_parallel_dialog_select">Vali keel</string>
+    <string name="languages_parallel_dialog_action_start">Alustamine</string>
+    <string name="languages_parallel_dialog_action_cancel">Ei, aitäh</string>
 </resources>

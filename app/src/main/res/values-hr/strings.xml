@@ -4,11 +4,13 @@
     <string name="share_prompt">Odaberite kako biste željeli podijeliti</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Općenito</string>
+    <string name="menu_heading_account">Račun</string>
     <string name="menu_heading_share">Podijeli</string>
     <string name="menu_heading_legal">Pravno</string>
     <string name="menu_about">O nama</string>
     <string name="menu_help">Često postavljana pitanja</string>
     <string name="menu_contact_us">Kontaktirajte nas</string>
+    <string name="menu_tutorial">Priručnik</string>
     <string name="menu_login">Prijava</string>
     <string name="menu_signup">Stvori račun</string>
     <string name="menu_logout">Odjava</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Pravila privatnosti</string>
     <string name="menu_copyright">Autorska prava</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Poslušajte kako nas Bog nadahnjuje!</string>
+    <string name="share_story_subject">GodTools priča</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Više od 90 jezika</string>
     <string name="menu_language_settings">Postavke jezika</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Nije svaki alat dostupan na svakom od jezika.</string>
     <string name="label_language_none">Ništa</string>
     <string name="label_language_search">Filtriraj jezike</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Želite li postaviti drugi jezik?</string>
+    <string name="languages_parallel_dialog_select">Odaberite jezik</string>
+    <string name="languages_parallel_dialog_action_start">Započnite</string>
+    <string name="languages_parallel_dialog_action_cancel">Ne, hvala</string>
 </resources>

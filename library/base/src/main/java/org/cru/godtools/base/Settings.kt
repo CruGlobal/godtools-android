@@ -13,12 +13,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
-import org.ccci.gto.android.common.compat.util.LocaleCompat.forLanguageTag
-import org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag
+import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
+import org.ccci.gto.android.common.util.toLocale
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
@@ -28,6 +30,7 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 private const val VERSION_5_1_4 = 4033503
 private const val VERSION_5_2_0 = 4035089
+private const val VERSION_5_5_0 = 4037627
 
 @Singleton
 class Settings @Inject internal constructor(
@@ -44,10 +47,12 @@ class Settings @Inject internal constructor(
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
+        const val FEATURE_PARALLEL_LANGUAGE = "parallelLanguage"
         const val FEATURE_LOGIN = "login"
         const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TOOL_FAVORITE = "toolFavorite"
+        const val FEATURE_LESSON_FEEDBACK = "lessonFeedback."
         const val FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped"
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding"
@@ -61,29 +66,36 @@ class Settings @Inject internal constructor(
 
     // region Language Settings
     var primaryLanguage: Locale
-        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.parseLanguageTag()
+        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale()
             ?: defaultLanguage.also { primaryLanguage = it }
         set(value) {
             prefs.edit {
-                putString(PREF_PRIMARY_LANGUAGE, toLanguageTag(value))
+                putString(PREF_PRIMARY_LANGUAGE, value.toLanguageTag())
                 if (value == parallelLanguage) remove(PREF_PARALLEL_LANGUAGE)
             }
         }
     val primaryLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, toLanguageTag(defaultLanguage)).distinctUntilChanged()
-            .map { it?.parseLanguageTag() ?: defaultLanguage.also { primaryLanguage = it } }
+        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
+            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
     }
+    val primaryLanguageFlow
+        get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
+            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
 
     var parallelLanguage
-        get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.parseLanguageTag()
+        get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()
         set(locale) {
             if (primaryLanguage == locale) return
-            prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.let { toLanguageTag(it) }) }
+            prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
+            if (locale != null) setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
         }
     val parallelLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
-            .map { it?.parseLanguageTag() }
+            .map { it?.toLocale() }
     }
+    val parallelLanguageFlow
+        get() = prefs.getStringFlow(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
+            .map { it?.toLocale() }
 
     fun isLanguageProtected(locale: Locale) = when (locale) {
         defaultLanguage -> true
@@ -109,8 +121,8 @@ class Settings @Inject internal constructor(
                     setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
                     changed = true
                 }
-                FEATURE_LANGUAGE_SETTINGS -> if (parallelLanguage != null) {
-                    setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
+                FEATURE_PARALLEL_LANGUAGE -> if (firstLaunchVersion <= VERSION_5_5_0 || parallelLanguage != null) {
+                    setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
                     changed = true
                 }
                 FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
@@ -153,13 +165,13 @@ class Settings @Inject internal constructor(
     fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {
         oktaId == null && guid == null -> true
         oktaId?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", false) } == true -> true
-        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", false) } == true -> true
+        guid?.let { prefs.getBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.uppercase(Locale.ROOT)}", false) } == true -> true
         else -> false
     }
 
     fun recordAddedToCampaign(oktaId: String? = null, guid: String? = null) = prefs.edit {
         if (oktaId != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN$oktaId", true)
-        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.toUpperCase(Locale.ROOT)}", true)
+        if (guid != null) putBoolean("$PREF_ADDED_TO_CAMPAIGN${guid.uppercase(Locale.ROOT)}", true)
     }
     // endregion Campaign Tracking
 
@@ -198,15 +210,4 @@ class Settings @Inject internal constructor(
         trackFirstLaunchVersion()
     }
     // endregion Launch tracking
-
-    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) {
-        prefs.unregisterOnSharedPreferenceChangeListener(listener)
-    }
 }
-
-@Suppress("NOTHING_TO_INLINE")
-private inline fun String.parseLanguageTag() = forLanguageTag(this)

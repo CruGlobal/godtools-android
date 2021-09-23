@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 @Config(application = HiltTestApplication::class)
 class TractActivityBindingTest {
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    val hiltRule = HiltAndroidRule(this)
 
     private lateinit var binding: TractActivityBinding
 
@@ -38,10 +38,10 @@ class TractActivityBindingTest {
 
     @Test
     fun verifyMainContentVisibility() {
-        val visible = setOf(BaseToolActivity.ToolState.LOADED)
-        val notVisible = EnumSet.allOf(BaseToolActivity.ToolState::class.java) - visible
+        val visible = setOf(BaseToolActivity.LoadingState.LOADED)
+        val notVisible = EnumSet.allOf(BaseToolActivity.LoadingState::class.java) - visible
         visible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
                 "mainContent should be visible when tool state is $it",
@@ -50,7 +50,7 @@ class TractActivityBindingTest {
         }
 
         notVisible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
                 "mainContent should be hidden when tool state is $it",

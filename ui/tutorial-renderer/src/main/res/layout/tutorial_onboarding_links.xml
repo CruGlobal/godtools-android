@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/tutorial_page_inset_top"
+        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
+
+        <include layout="@layout/tutorial_include_margins" />
+        <include layout="@layout/tutorial_onboarding_include_positioning" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/linkStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/tutorial_onboarding_link_box_margin_horizontal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/linkEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/tutorial_onboarding_link_box_margin_horizontal" />
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:breakStrategy="balanced"
+            android:gravity="center_horizontal"
+            android:text="@string/tutorial_onboarding_links_headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart"
+            app:layout_constraintTop_toTopOf="@id/headlinePosition" />
+
+        <!-- region Articles Link Box -->
+        <View
+            android:id="@+id/action_onboarding_launch_articles"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:onClick="@{callbacks::onTutorialAction}"
+            app:layout_constraintBottom_toBottomOf="@id/articles_action"
+            app:layout_constraintEnd_toEndOf="@id/linkEnd"
+            app:layout_constraintStart_toStartOf="@id/linkStart"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
+
+        <TextView
+            android:id="@+id/articles_subhead"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginTop="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_articles_subhead"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_articles"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_articles"
+            app:layout_constraintTop_toTopOf="@id/action_onboarding_launch_articles" />
+
+        <TextView
+            android:id="@+id/articles_action"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_articles_action"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_articles"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_articles"
+            app:layout_constraintTop_toBottomOf="@id/articles_subhead" />
+        <!-- endregion Articles Link Box -->
+
+        <!-- region Lessons Link Box -->
+        <View
+            android:id="@+id/action_onboarding_launch_lessons"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:onClick="@{callbacks::onTutorialAction}"
+            app:layout_constraintBottom_toBottomOf="@id/lessons_action"
+            app:layout_constraintEnd_toEndOf="@id/linkEnd"
+            app:layout_constraintStart_toStartOf="@id/linkStart"
+            app:layout_constraintTop_toBottomOf="@id/action_onboarding_launch_articles" />
+
+        <TextView
+            android:id="@+id/lessons_subhead"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginTop="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_lessons_subhead"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintTop_toTopOf="@id/action_onboarding_launch_lessons" />
+
+        <TextView
+            android:id="@+id/lessons_action"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_lessons_action"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_lessons"
+            app:layout_constraintTop_toBottomOf="@id/lessons_subhead" />
+        <!-- endregion Lessons Link Box -->
+
+        <!-- region Tools Link Box -->
+        <View
+            android:id="@+id/action_onboarding_launch_tools"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:onClick="@{callbacks::onTutorialAction}"
+            app:layout_constraintBottom_toBottomOf="@id/tools_action"
+            app:layout_constraintEnd_toEndOf="@id/linkEnd"
+            app:layout_constraintStart_toStartOf="@id/linkStart"
+            app:layout_constraintTop_toBottomOf="@id/action_onboarding_launch_lessons" />
+
+        <TextView
+            android:id="@+id/tools_subhead"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginTop="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_tools_subhead"
+            android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Subhead"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintTop_toTopOf="@id/action_onboarding_launch_tools" />
+
+        <TextView
+            android:id="@+id/tools_action"
+            style="@style/Widget.GodTools.Tutorial.Onboarding.Links.LinkBox.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/tutorial_onboarding_link_box_padding"
+            android:layout_marginRight="@dimen/tutorial_onboarding_link_box_padding"
+            android:text="@string/tutorial_onboarding_links_tools_action"
+            app:layout_constraintEnd_toEndOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/action_onboarding_launch_tools"
+            app:layout_constraintTop_toBottomOf="@id/tools_subhead" />
+        <!-- endregion Tools Link Box -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_onboarding_finish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{callbacks::onTutorialAction}"
+            android:text="@string/tutorial_onboarding_action_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/marginEnd"
+            app:layout_constraintStart_toEndOf="@id/marginStart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

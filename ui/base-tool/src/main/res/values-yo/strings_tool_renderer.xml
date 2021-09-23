@@ -8,4 +8,6 @@
     <string name="tool_offline">Ohun elo ti o beere nilo asopọ intanẹẹti lati ṣii</string>
     <string name="feature_discovery_title_share_tool">Se ajopin adiresi ero ayelujara</string>
     <string name="feature_discovery_desc_share_tool">Fi ohun elo yii ranse si ọrẹ re kan nipa titẹ aami yi</string>
+    <string name="tract_content_input_error_required">A nilo %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Jowo fun wa ni adiresi email re gangan</string>
 </resources>

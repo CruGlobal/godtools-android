@@ -5,7 +5,7 @@ import com.squareup.picasso.Transformation
 import jp.wasabeef.picasso.transformations.CropTransformation
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
-import org.cru.godtools.xml.model.ImageScaleType
+import org.cru.godtools.tool.model.ImageScaleType
 
 data class ScaledCropTransformation(
     private val aspectRatio: Float,

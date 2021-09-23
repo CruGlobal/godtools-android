@@ -27,12 +27,13 @@ import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
-import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
+import org.cru.godtools.base.ui.buildToolExtras
 
 fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
-    val extras = BaseSingleToolActivity.buildExtras(this, toolCode, language).apply {
+    val extras = buildToolExtras(toolCode, language).apply {
         putParcelable(EXTRA_ARTICLE, articleUri)
     }
     Intent(this, AemArticleActivity::class.java)
@@ -106,7 +107,7 @@ class AemArticleActivity :
     private fun Intent?.isValidDeepLink() =
         this != null && action == Intent.ACTION_VIEW && data?.isValidDeepLink() == true
     private fun Uri.isValidDeepLink() =
-        (scheme == "http" || scheme == "https") && host == "godtoolsapp.com" && path == "/article/aem"
+        (scheme == "http" || scheme == "https") && host == HOST_GODTOOLSAPP_COM && path == "/article/aem"
     // endregion Intent parsing
 
     private val articleDataModel: AemArticleViewModel by viewModels()
@@ -160,12 +161,12 @@ class AemArticleActivity :
     override val shareLinkUri get() = articleDataModel.article.value?.let { it.shareUri ?: it.canonicalUri }?.toString()
     // endregion Share Link logic
 
-    override val activeToolStateLiveData by lazy {
+    override val activeToolLoadingStateLiveData by lazy {
         articleDataModel.article.combineWith(syncFinished) { article, syncFinished ->
             when {
-                article?.content != null -> ToolState.LOADED
-                !syncFinished -> ToolState.LOADING
-                else -> ToolState.NOT_FOUND
+                article?.content != null -> LoadingState.LOADED
+                !syncFinished -> LoadingState.LOADING
+                else -> LoadingState.NOT_FOUND
             }
         }.distinctUntilChanged()
     }

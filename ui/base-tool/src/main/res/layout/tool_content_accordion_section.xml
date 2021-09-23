@@ -7,7 +7,7 @@
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.AccordionController.SectionController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Accordion.Section" />
+        <variable name="model" type="org.cru.godtools.tool.model.Accordion.Section" />
         <variable name="activeSection" type="LiveData&lt;String&gt;" />
     </data>
 

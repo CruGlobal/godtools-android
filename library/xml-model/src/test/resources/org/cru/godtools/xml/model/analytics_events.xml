@@ -1,8 +1,0 @@
-<analytics:events xmlns:analytics="https://mobile-content-api.cru.org/xmlns/analytics">
-    <analytics:event action="event1" delay="1" system="adobe">
-        <analytics:attribute key="attr1" value="value" />
-    </analytics:event>
-    <analytics:event action="event2" delay="2" system="adobe appsflyer">
-        <analytics:attribute key="attr2" value="value" />
-    </analytics:event>
-</analytics:events>

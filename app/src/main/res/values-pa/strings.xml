@@ -31,4 +31,5 @@
     <string name="text_language_warning">ਹਰੋਕ ਡੂਲ ਹਰੇਕ ਭਾਸ਼ਾ ਵਿੱਚ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ ।</string>
     <string name="label_language_none">ਕੋਈ ਵੀ ਨਹੀਂ</string>
     <string name="label_language_search">ਭਾਸ਼ਾਵਾਂ ਫਿਲਟਰ ਕਰੋ</string>
+    <!-- Parallel Language Dialog -->
 </resources>

@@ -7,4 +7,6 @@
     <string name="tool_offline">جس ٹول کی آپ نے درخواست کی ہے، اسے کھولنے کے لیے انٹرنیٹ کنکشن درکار ہے</string>
     <string name="feature_discovery_title_share_tool">ایک لنک شیئر کریں</string>
     <string name="feature_discovery_desc_share_tool">اس آئکن پر کلک کر کے یہ ٹول کسی دوست کو بھیجیں</string>
+    <string name="tract_content_input_error_required">%1$s  مطلوب ہے</string>
+    <string name="tract_content_input_error_invalid_email">"برائے مہربانی مناسب ای میل کا پتہ درج کریں "</string>
 </resources>

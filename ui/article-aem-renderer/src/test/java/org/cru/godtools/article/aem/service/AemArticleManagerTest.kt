@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -36,7 +37,7 @@ import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileManager
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.greaterThanOrEqualTo
@@ -108,11 +109,11 @@ class AemArticleManagerTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val uri = mock<Uri>()
-        val manifest = Manifest(aemImports = listOf(uri))
+        val manifest = mock<Manifest> { on { aemImports } doReturn listOf(uri) }
         val repository = aemDb.translationRepository()
-        runBlocking {
-            whenever(manifestManager.getManifest(translation)) doReturn manifest
-            whenever(articleManager.syncAemImportsFromManifest(any(), any())) doReturn null
+        stub {
+            onBlocking { manifestManager.getManifest(translation) } doReturn manifest
+            onBlocking { articleManager.syncAemImportsFromManifest(any(), any()) } doReturn null
         }
 
         startArticleTranslationsJob()
@@ -181,7 +182,7 @@ class AemArticleManagerTest {
         val resourceDao = aemDb.resourceDao()
         val data = "testDownloadResource()"
         val uri = mock<Uri>()
-        val mediaType = MediaType.get("image/jpg")
+        val mediaType = "image/jpg".toMediaType()
         val resource = mock<Resource> { on { needsDownload() } doReturn true }
         whenever(resourceDao.find(uri)).thenReturn(resource)
         wheneverDownloadingResource(uri)

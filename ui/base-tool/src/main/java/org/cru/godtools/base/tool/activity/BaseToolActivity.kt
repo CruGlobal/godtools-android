@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -28,16 +27,16 @@ import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.BR
-import org.cru.godtools.base.tool.BaseToolRendererModule.IS_CONNECTED_LIVE_DATA
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
-import org.cru.godtools.base.tool.model.view.getTypeface
+import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.download.manager.DownloadProgress
@@ -45,8 +44,8 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.model.navBarColor
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.navBarColor
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
@@ -70,7 +69,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     override fun onBindingChanged() {
         binding.setVariable(BR.manifest, activeManifestLiveData)
         binding.setVariable(BR.loadingProgress, activeDownloadProgressLiveData)
-        binding.setVariable(BR.toolState, activeToolStateLiveData)
+        binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
     }
 
     override fun onSetupActionBar() {
@@ -119,12 +118,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private fun setupStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.apply {
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                activeManifestLiveData.observe(this@BaseToolActivity) {
-                    statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
-                }
+        window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            activeManifestLiveData.observe(this@BaseToolActivity) {
+                statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
             }
         }
     }
@@ -195,7 +192,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Share tool logic
 
     // region Tool state
-    enum class ToolState {
+    enum class LoadingState {
         LOADING, LOADED, NOT_FOUND, INVALID_TYPE, OFFLINE;
 
         companion object {
@@ -219,7 +216,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
     protected abstract val activeManifestLiveData: LiveData<Manifest?>
-    protected abstract val activeToolStateLiveData: LiveData<ToolState>
+    protected abstract val activeToolLoadingStateLiveData: LiveData<LoadingState>
     // endregion Tool state
 
     // region Tool sync/download logic
@@ -247,7 +244,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processContentEvent(event: Event) {
-        checkForManifestEvent(event)
+        val manifest = activeManifest ?: return
+        if (manifest.code != event.tool || manifest.locale != event.locale) return
+
+        checkForManifestEvent(manifest, event)
         if (isFinishing) return
         onContentEvent(event)
     }
@@ -255,8 +255,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @MainThread
     protected open fun onContentEvent(event: Event) = Unit
 
-    private fun checkForManifestEvent(event: Event) {
-        val manifest = activeManifest ?: return
+    protected open fun checkForManifestEvent(manifest: Manifest, event: Event) {
         if (event.id in manifest.dismissListeners) {
             finish()
             return

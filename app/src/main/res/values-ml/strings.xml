@@ -29,4 +29,5 @@
     <string name="text_language_parallel_description">മറ്റുള്ളവരുമായി അവരുടെ മാതൃഭാഷയിൽ ഗോഡ് ടൂൾസ് പങ്കിടുക</string>
     <string name="text_language_warning">"ഇപ്പോൾ എല്ലാ ടൂളുകളും എല്ലാ ഭാഷകളിലും ലഭ്യമാണ്. "</string>
     <string name="label_language_none">ഒന്നും ഇല്ല</string>
+    <!-- Parallel Language Dialog -->
 </resources>

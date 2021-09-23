@@ -6,11 +6,4 @@
     <string name="tutorial_training_prepare_subhead">Mache dich mit einigen Tools vertraut. Das Tool „Hilf mir, über den Glauben zu reden“ ist ein guter Anfang.  Für weitere Infos drücke den Info-Button bei einem Tool.</string>
     <string name="tutorial_training_try_headline">Ausprobieren</string>
     <string name="tutorial_training_try_subhead">Jeder fängt mal klein an. Verwende ein Tool in einem Gespräch und lerne Neues hinzu.</string>
-    <string name="tutorial_training_final_headline">Dieses Tutorial kann über das Menü neu gestartet werden.</string>
-    <string name="tutorial_training_action_continue">Weiter</string>
-    <string name="tutorial_training_action_start">GodTools verwenden</string>
-    <!-- Training Tutorial Banner -->
-    <string name="tutorial_training_banner_text">Tutorial anzeigen</string>
-    <string name="tutorial_training_banner_action_open">Tutorial öffnen</string>
-    <string name="tutorial_training_banner_action_dismiss">Schließen</string>
 </resources>

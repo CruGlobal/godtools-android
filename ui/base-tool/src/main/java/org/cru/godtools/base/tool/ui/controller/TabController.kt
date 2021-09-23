@@ -5,8 +5,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentTabBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.Tab
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
+import org.cru.godtools.tool.model.Tabs.Tab
 
 class TabController @AssistedInject internal constructor(
     @Assisted private val binding: ToolContentTabBinding,
@@ -18,9 +18,9 @@ class TabController @AssistedInject internal constructor(
         fun create(binding: ToolContentTabBinding, tabsController: TabsController): TabController
     }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     fun trackSelectedAnalyticsEvents() {
-        triggerAnalyticsEvents(model?.analyticsEvents, Trigger.SELECTED, Trigger.DEFAULT)
+        triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.CLICKED))
     }
 }

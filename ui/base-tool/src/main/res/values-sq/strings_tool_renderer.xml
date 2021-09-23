@@ -4,4 +4,6 @@
     <string name="share_tool_title">Ndaj \"%1$s duke përdorur</string>
     <string name="tool_not_found">Mjeti që po kërkoni nuk gjendet</string>
     <string name="tool_loading">Mjeti që po kërkoni është  duke u ngarkuar</string>
+    <string name="tract_content_input_error_required">%1$s  është  i nevojshëm</string>
+    <string name="tract_content_input_error_invalid_email">Ju lutemi fusni një adresë   imeli të  vlefshme</string>
 </resources>

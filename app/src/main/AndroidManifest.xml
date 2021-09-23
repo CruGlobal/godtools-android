@@ -53,7 +53,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GodTools.AppBar">
+        android:theme="@style/Theme.GodTools">
         <activity
             android:name="org.keynote.godtools.android.activity.MainActivity"
             android:launchMode="singleTask"
@@ -72,6 +72,17 @@
                 <data android:scheme="https" />
                 <data android:host="knowgod.com" />
                 <data android:path="/" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="godtoolsapp.com" />
+                <data android:path="/lessons" />
             </intent-filter>
         </activity>
 
@@ -110,12 +121,17 @@
             android:label="@string/profile_title"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
 
-        <!-- Disable the built-in WorkManagerInitializer -->
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="remove" />
+            tools:node="merge">
+            <!-- Disable the built-in WorkManagerInitializer -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -27,4 +27,5 @@
     <string name="text_language_parallel_description">Поделитеьсь GodTools с кем-нибудь на его/ее родном языке.</string>
     <string name="text_language_warning">Не все инструменты доступны на всех языках.</string>
     <string name="label_language_none">Нет</string>
+    <!-- Parallel Language Dialog -->
 </resources>

@@ -8,4 +8,6 @@
     <string name="tool_offline">E hèrmènt ku bo a pidi tin mester di konekshon di internèt pa e habri</string>
     <string name="feature_discovery_title_share_tool">Kompartí un lenk</string>
     <string name="feature_discovery_desc_share_tool">Manda e hèrmènt aki pa un amigu dor di primi riba e boton aki</string>
+    <string name="tract_content_input_error_required">%1$s ta rekerí</string>
+    <string name="tract_content_input_error_invalid_email">Por fabor hinka un email bálido</string>
 </resources>

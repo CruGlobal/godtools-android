@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Velkommen</string>
+    <string name="tutorial_onboarding_welcome_2">Klar til enhver samtale</string>
+    <string name="tutorial_onboarding_welcome_action_video">Se video</string>
+    <string name="tutorial_onboarding_conversations_headline">Tal om Gud med alle</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools hjælper dig med at have meningsfulde samtaler om Gud.</string>
+    <string name="tutorial_onboarding_prepare_headline">Forbered dig til de øjeblikke, der betyder noget</string>
+    <string name="tutorial_onboarding_prepare_subhead">Lær, hvordan du gør samtaler om tro til en naturlig del af dit liv</string>
+    <string name="tutorial_onboarding_share_headline">Hjælp andre med at finde Jesus</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools er din vejledning til at kommunikere evangeliet på en tydelig og relevant måde.</string>
+    <string name="tutorial_onboarding_links_headline">Link til hurtig start</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Jeg vil gerne udforske kristendommen</string>
+    <string name="tutorial_onboarding_links_articles_action">Læs vores artikler</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Jeg vil gerne lære om evangeliesamtaler</string>
+    <string name="tutorial_onboarding_links_lessons_action">Prøv vores lektioner</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Jeg vil gerne dele evangeliet med nogen</string>
+    <string name="tutorial_onboarding_links_tools_action">Vælg et af vores værktøjer</string>
+    <string name="tutorial_onboarding_action_begin">Begynd</string>
+    <string name="tutorial_onboarding_action_next">Næste</string>
+    <string name="tutorial_onboarding_action_skip">Spring over</string>
+    <string name="tutorial_onboarding_action_start">Kom godt i gang</string>
+</resources>

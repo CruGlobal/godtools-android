@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.VideoController" />
-        <variable name="model" type="org.cru.godtools.xml.model.Video" />
+        <variable name="model" type="org.cru.godtools.tool.model.Video" />
         <variable name="isVisible" type="boolean" />
     </data>
 

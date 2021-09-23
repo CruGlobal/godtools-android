@@ -6,6 +6,6 @@
             android:name=".ui.ArticlesActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool.AppBar" />
+            android:theme="@style/Theme.GodTools.Tool" />
     </application>
 </manifest>

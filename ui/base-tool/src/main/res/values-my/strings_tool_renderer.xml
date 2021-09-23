@@ -7,4 +7,6 @@
     <string name="tool_offline">သင်တောင်းဆိုသောကိရိယာကိုအသုံးပြုဖို့အတွက် အင်တာနက်ဖွင့်ရန်လိုအပ်ပါသည်</string>
     <string name="feature_discovery_title_share_tool">လင့်ခ်တစ်ခုကို မျှဝေပါ</string>
     <string name="feature_discovery_desc_share_tool">ဤအိုင်ကွန်ကို နှိပ်ခြင်းဖြင့် ဤကိရိယာကို မိတ်ဆွေတစ်ဦးထံ ပေးပို့ပါ</string>
+    <string name="tract_content_input_error_required">%1$s ကိုတောင်းဆိုထားသည်။</string>
+    <string name="tract_content_input_error_invalid_email">အီးမေးလ် လိပ်စာကို ဖြည့် ပေးပါ</string>
 </resources>

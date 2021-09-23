@@ -2,6 +2,12 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [eventBusIndex: 'org.cru.godtools.base.tool.BaseToolEventBusIndex']
+            }
+        }
+
         vectorDrawables.useSupportLibrary = true
     }
     buildFeatures {
@@ -16,7 +22,6 @@ dependencies {
     api project(':library:download-manager')
     implementation project(':library:model')
     api project(':library:sync')
-    api project(':library:xml-model')
 
     api project(':ui:base')
 
@@ -33,11 +38,15 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-animation:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-lottie:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
+    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
@@ -50,9 +59,12 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
+    debugImplementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+
     kapt "com.google.auto.value:auto-value:${deps.autoValue}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation project(':ui:tract-renderer')
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"

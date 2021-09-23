@@ -4,7 +4,13 @@
     <item name="appbar_tabs" type="id" />
 
     <!-- Data Binding Listeners -->
+    <item name="youtubeplayer_listener" type="id" />
     <item name="youtubeplayer_recue_listener" type="id" />
     <item name="youtubeplayer_tracker" type="id" />
     <item name="lifecycleOwner" type="id" />
+
+    <!-- Dashboard Pages -->
+    <item name="dashboard_page_lessons" type="id" />
+    <item name="dashboard_page_favorites" type="id" />
+    <item name="dashboard_page_all_tools" type="id" />
 </resources>

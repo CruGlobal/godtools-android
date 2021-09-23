@@ -19,9 +19,9 @@ enum class BannerType(
         icon = R.drawable.ic_favorite_24dp
     ),
     TUTORIAL_TRAINING(
-        message = R.string.tutorial_training_banner_text,
-        primaryButton = R.string.tutorial_training_banner_action_open,
-        secondaryButton = R.string.tutorial_training_banner_action_dismiss
+        message = R.string.tutorial_features_banner_text,
+        primaryButton = R.string.tutorial_features_banner_action_open,
+        secondaryButton = R.string.tutorial_features_banner_action_dismiss
     );
 }
 

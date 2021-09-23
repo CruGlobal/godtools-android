@@ -5,77 +5,76 @@ buildscript {
         deps = [
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
-                appsFlyer          : '5.4.3',
-                autoValue          : '1.8.1',
+                appsFlyer          : '6.4.0',
+                autoValue          : '1.8.2',
                 circleindicator    : '2.1.6',
-                dagger             : '2.35',
+                dagger             : '2.38.1',
                 eventbus           : '3.2.0',
-                facebook           : '9.1.1',
-                facebookFlipper    : '0.87.0',
+                facebook           : '11.3.0',
+                facebookFlipper    : '0.111.0',
                 findbugs           : '3.0.2',
-                googleTagManager   : '17.0.0',
-                gradleAndroidPlugin: '4.1.3',
-                grpc               : '1.37.0',
-                gtoSupport         : '3.8.1',
+                godtoolsToolParser : '0.3.0',
+                googleTagManager   : '17.0.1',
+                gradleAndroidPlugin: '7.0.2',
+                grpc               : '1.41.0',
+                gtoSupport         : '3.9.1',
                 guava              : '30.1.1-android',
                 hamcrest           : '2.2',
-                jacoco             : '0.8.6',
-                jsoup              : '1.13.1',
+                jacoco             : '0.8.7',
+                jsoup              : '1.14.2',
                 junit              : '4.13.2',
-                kotlin             : '1.4.32',
-                kotlinCoroutines   : '1.4.3',
+                kotlin             : '1.5.31',
+                kotlinCoroutines   : '1.5.2',
                 leakcanary         : '2.7',
-                lottie             : '3.7.0',
-                materialDesign     : '1.3.0',
-                mockito            : '3.8.0',
-                mockitoKotlin      : '2.1.0',
+                lottie             : '4.1.0',
+                materialDesign     : '1.4.0',
+                mockito            : '3.12.4',
+                mockitoKotlin      : '2.2.0',
                 moshi              : '1.12.0',
-                okhttp3            : '3.12.13',
-                okta               : '1.0.16',
+                okhttp3            : '4.9.1',
+                okta               : '1.0.20',
                 picasso            : '2.8',
-                picassoTransforms  : '2.3.1',
-                retrofit2          : '2.6.4',
-                robolectric        : '4.5.1',
-                scarlet            : '0.1.11',
-                snowplow           : '1.7.1',
-                splitties          : '3.0.0-beta01',
-                taptargetview      : '1.13.0',
-                timber             : '4.7.1',
+                picassoTransforms  : '2.4.0',
+                retrofit2          : '2.9.0',
+                robolectric        : '4.6.1',
+                scarlet            : '0.1.12',
+                snowplow           : '2.2.1',
+                splitties          : '3.0.0',
+                taptargetview      : '1.13.3',
+                timber             : '5.0.1',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
         ]
         deps.androidX = [
-                activity          : '1.2.2',
+                activity          : '1.3.1',
                 annotation        : '1.2.0',
-                appCompat         : '1.2.0',
+                appCompat         : '1.3.1',
                 archCore          : '2.1.0',
                 browser           : '1.3.0',
                 cardView          : '1.0.0',
                 collection        : '1.1.0',
                 concurrent        : '1.1.0',
-                constraintLayout  : '2.0.4',
-                core              : '1.3.2',
+                constraintLayout  : '2.1.0',
+                core              : '1.6.0',
                 databinding       : deps.gradleAndroidPlugin,
-                fragment          : '1.3.3',
-                hilt              : '1.0.0-beta01',
-                lifecycle         : '2.3.0',
-                loader            : '1.1.0',
-                multidex          : '2.0.1',
-                recyclerView      : '1.2.0',
+                fragment          : '1.3.6',
+                hilt              : '1.0.0',
+                lifecycle         : '2.3.1',
+                recyclerView      : '1.2.1',
                 room              : '2.3.0',
                 swipeRefreshLayout: '1.1.0',
                 test              : '1.2.0',
-                testJUnit         : '1.1.2',
+                testJUnit         : '1.1.3',
                 viewPager2        : '1.0.0',
-                work              : '2.5.0',
+                work              : '2.6.0',
         ]
         deps.firebase = [
-                core          : '18.0.3',
-                crashlytics   : '17.4.1',
-                inAppMessaging: '19.1.5',
-                messaging     : '21.1.0',
-                perf          : '19.1.1',
+                core          : '19.0.1',
+                crashlytics   : '18.2.1',
+                inAppMessaging: '20.1.0',
+                messaging     : '22.0.0',
+                perf          : '20.0.2',
         ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
@@ -93,82 +92,82 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${deps.gradleAndroidPlugin}"
         classpath "com.google.dagger:hilt-android-gradle-plugin:${deps.dagger}"
-        classpath 'com.google.firebase:perf-plugin:1.3.5'
-        classpath 'com.google.firebase:firebase-appdistribution-gradle:2.1.1'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
-        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.firebase:perf-plugin:1.4.0'
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:2.2.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        classpath 'com.google.gms:google-services:4.3.10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
     }
 }
 
 plugins {
-    id "com.getkeepsafe.dexcount" version "2.0.0" apply false
     id "com.vanniktech.android.junit.jacoco" version "0.16.0"
-    id "de.undercouch.download" version "4.1.1" apply false
+    id "de.undercouch.download" version "4.1.2" apply false
     id "org.ajoberstar.grgit" version "4.1.0"
-    id "org.jlleitschuh.gradle.ktlint" version "10.0.0"
+    id "org.jlleitschuh.gradle.ktlint" version "10.2.0"
 }
 
-version '5.5.0'
+version '5.5.1-SNAPSHOT'
 ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
 
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
     compileSdk    = 30
-    minSdk        = 19
-    minSdkFeature = 21
+    minSdk        = 21
     targetSdk     = 30
 }
 
 // configure dependency resolution
 allprojects {
     repositories {
+        maven {
+            url 'https://cruglobal.jfrog.io/artifactory/maven-mobile/'
+            content {
+                includeGroup 'org.ccci.gto.android'
+                includeGroup 'org.ccci.gto.android.testing'
+                includeGroup 'org.cru.godtools.kotlin'
+                includeGroup 'org.cru.mobile.fork.antlr-kotlin'
+            }
+        }
+        maven {
+            url 'https://jitpack.io'
+            content { includeGroupByRegex 'com\\.github\\..*' }
+        }
         google()
-        jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
+        mavenCentral()
+        jcenter {
+            content {
+                includeModule 'com.duolingo.open', 'rtl-viewpager'
+                includeModule 'com.pierfrancescosoffritti.androidyoutubeplayer', 'core'
+                includeModule 'com.sergivonavi', 'materialbanner'
+            }
+        }
     }
 
     configurations.all { configuration ->
         configuration.resolutionStrategy {
-            force "androidx.annotation:annotation:${deps.androidX.annotation}"
-            force "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
-            force "androidx.fragment:fragment:${deps.androidX.fragment}"
-            force "androidx.loader:loader:${deps.androidX.loader}"
-            force "androidx.multidex:multidex:${deps.androidX.multidex}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
             force "junit:junit:${deps.junit}"
-
-            // force the correct version of transitive coroutine libraries
-            force "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${deps.kotlinCoroutines}"
-
-            // XXX: Force okhttp3 to older version to support older versions of Android.
-            // XXX: This can go away once we bump minimum android version to API-21+
-            force "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
 
             // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
             //      Remove this override once FIAM depends on v1.30.0+ of grpc
             //      https://github.com/grpc/grpc-java/pull/6912
             //      https://jira.cru.org/projects/GT/issues/GT-1122
+            //      https://github.com/firebase/firebase-android-sdk/issues/2642
             force "io.grpc:grpc-okhttp:${deps.grpc}"
             force "io.grpc:grpc-protobuf-lite:${deps.grpc}"
             force "io.grpc:grpc-stub:${deps.grpc}"
 
             dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}")
-
                 // use the new condensed version of hamcrest
                 substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
                 substitute module('org.hamcrest:hamcrest-library') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
-
-                // use regular moshi library instead of moshi-kotlin, any Kotlin moshi models should use moshi-kotlin-codegen instead
-                substitute module('com.squareup.moshi:moshi-kotlin') with module("com.squareup.moshi:moshi:${deps.moshi}")
             }
         }
     }
@@ -187,10 +186,9 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
 
-    android {
-        defaultConfig {
-            manifestPlaceholders = [appAuthRedirectScheme: "org.cru.godtools.library.test"]
-        }
+    dependencies {
+        androidTestImplementation "org.ccci.gto.android.testing:gto-support-okta:${deps.gtoSupport}"
+        testImplementation "org.ccci.gto.android.testing:gto-support-okta:${deps.gtoSupport}"
     }
 }
 
@@ -232,11 +230,11 @@ subprojects {
                 }
 
                 compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_1_8
-                    targetCompatibility JavaVersion.VERSION_1_8
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
                 }
                 kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_1_8.toString()
+                    jvmTarget = JavaVersion.VERSION_11.toString()
                     freeCompilerArgs += '-Xjvm-default=all'
                 }
                 lintOptions {
@@ -249,10 +247,6 @@ subprojects {
                         all {
                             // increase unit tests max heap size
                             jvmArgs "-Xmx2g"
-
-                            // enable only SDKs we actually support in robolectric
-                            // TODO: SDK >= 29 requires Java 9 which we don't currently support
-                            systemProperty 'robolectric.enabledSdks', (rootProject.minSdk..28).join(" ")
                         }
                     }
                 }
@@ -267,7 +261,7 @@ subprojects {
                 compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
                 compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
 
                 implementation "com.jakewharton.timber:timber:${deps.timber}"
 
@@ -320,6 +314,32 @@ subprojects {
 junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
+    excludes += [
+            // DataBinding generated classes
+            '**/DataBinderMapperImpl.java',
+            '**/*BindingImpl.*',
+            '**/databinding/*Binding.*',
+
+            // EventBus generated Indexes
+            '**/*EventBusIndex.*',
+
+            // Hilt generated classes
+            '**/hilt_aggregated_deps/**/*',
+            '**/Hilt_*',
+            '**/*_HiltModules.*',
+            '**/*_HiltModules$*',
+
+            // Room generated classes
+            '**/*_Impl.*',
+            '**/*_Impl$*'
+    ]
+}
+allprojects {
+    afterEvaluate {
+        tasks.withType(Test) {
+            jacoco.excludes = ['jdk.internal.*']
+        }
+    }
 }
 task jacocoTestReport {
     subprojects.each { dependsOn(it.tasks.withType(JacocoReport)) }

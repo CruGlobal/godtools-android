@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Sveiki</string>
+    <string name="tutorial_onboarding_welcome_2">Pasirengę kiekvienam pokalbiui</string>
+    <string name="tutorial_onboarding_welcome_action_video">Žiūrėti vaizdo įrašą</string>
+    <string name="tutorial_onboarding_conversations_headline">Pakalbėkite apie Dievą su bet kuo</string>
+    <string name="tutorial_onboarding_conversations_subhead">„GodTools“ padeda jums prasmingai pasikalbėti apie Dievą.</string>
+    <string name="tutorial_onboarding_prepare_headline">Pasiruoškite reikšmingoms akimirkoms</string>
+    <string name="tutorial_onboarding_prepare_subhead">Sužinokite, kaip pokalbius apie tikėjimą paversti natūralia jūsų gyvenimo dalimi.</string>
+    <string name="tutorial_onboarding_share_headline">Padėkite kam nors atrasti Jėzų</string>
+    <string name="tutorial_onboarding_share_subhead">„GodTools“ – tai jūsų vadovas, kaip skelbti evangeliją aiškiais ir aktualiais būdais.</string>
+    <string name="tutorial_onboarding_links_headline">Greitos pradžios nuorodos</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Noriu susipažinti su Krikščionybe</string>
+    <string name="tutorial_onboarding_links_articles_action">Skaitykite mūsų straipsnius</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Noriu sužinoti, kaip rengti pokalbius apie evangeliją</string>
+    <string name="tutorial_onboarding_links_lessons_action">Išbandykite mūsų pamokas</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Noriu su kuo nors pasidalyti evangelija</string>
+    <string name="tutorial_onboarding_links_tools_action">Pasirinkite vieną iš mūsų įrankių</string>
+    <string name="tutorial_onboarding_action_begin">Pradėti</string>
+    <string name="tutorial_onboarding_action_next">Kitas</string>
+    <string name="tutorial_onboarding_action_skip">Praleisti</string>
+    <string name="tutorial_onboarding_action_start">Pradėkite</string>
+</resources>

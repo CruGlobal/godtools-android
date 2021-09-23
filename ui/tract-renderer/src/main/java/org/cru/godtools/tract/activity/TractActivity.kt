@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -25,7 +24,6 @@ import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.graphics.toHsvColor
@@ -35,9 +33,17 @@ import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
-import org.cru.godtools.base.model.Event
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.tool.model.backgroundColor
+import org.cru.godtools.tool.model.navBarColor
+import org.cru.godtools.tool.model.navBarControlColor
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.model.tract.Card
+import org.cru.godtools.tool.model.tract.Modal
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -59,18 +65,9 @@ import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.buildTutorialActivityIntent
-import org.cru.godtools.xml.model.backgroundColor
-import org.cru.godtools.xml.model.navBarColor
-import org.cru.godtools.xml.model.navBarControlColor
-import org.cru.godtools.xml.model.tips.Tip
-import org.cru.godtools.xml.model.tract.Card
-import org.cru.godtools.xml.model.tract.Modal
-import org.cru.godtools.xml.model.tract.TractPage
+import org.cru.godtools.tutorial.TutorialActivityResultContract
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
-
-private const val REQUEST_LIVE_SHARE_TUTORIAL = 100
 
 @AndroidEntryPoint
 class TractActivity :
@@ -165,19 +162,6 @@ class TractActivity :
 
     override fun onDismissTip() = trackTractPage()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
-        REQUEST_LIVE_SHARE_TUTORIAL -> when (resultCode) {
-            Activity.RESULT_OK -> {
-                dataModel.liveShareTutorialShown = true
-                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
-                shareLiveShareLink()
-            }
-            Activity.RESULT_CANCELED -> publisherController.started = false
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-        else -> super.onActivityResult(requestCode, resultCode, data)
-    }
-
     @CallSuper
     override fun onUpdateActiveManifest() {
         super.onUpdateActiveManifest()
@@ -204,7 +188,7 @@ class TractActivity :
     private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
-        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink(this) == true) {
+        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
             dataModel.tool.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
@@ -225,7 +209,7 @@ class TractActivity :
     }
 
     @VisibleForTesting
-    internal val Uri.deepLinkSelectedLanguage get() = LocaleCompat.forLanguageTag(pathSegments[0])
+    internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
     @VisibleForTesting
     internal val Uri.deepLinkTool get() = pathSegments[1]
     @VisibleForTesting
@@ -251,7 +235,7 @@ class TractActivity :
     private fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
-        .map { LocaleCompat.forLanguageTag(it) }
+        .map { Locale.forLanguageTag(it) }
     // endregion Intent Processing
 
     private fun validStartState() = dataModel.tool.value != null &&
@@ -259,6 +243,7 @@ class TractActivity :
 
     // region Data Model
     private val dataModel: TractActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
     private fun setupDataModel() {
         dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
     }
@@ -331,7 +316,7 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this).also { adapter ->
+        pagerAdapterFactory.create(this, toolState.toolState).also { adapter ->
             adapter.callbacks = this
             adapter.showTips = showTips
             dataModel.activeManifest.observe(this) { manifest ->
@@ -383,7 +368,9 @@ class TractActivity :
     }
 
     override fun showModal(modal: Modal) = startModalActivity(modal)
-    override fun showTip(tip: Tip) = TipBottomSheetDialogFragment(tip).show(supportFragmentManager, null)
+    override fun showTip(tip: Tip) {
+        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
+    }
     // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI
@@ -403,7 +390,7 @@ class TractActivity :
 
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
-    override val activeToolStateLiveData get() = dataModel.activeState
+    override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
 
     private fun setupActiveTranslationManagement() {
         isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
@@ -414,22 +401,24 @@ class TractActivity :
         dataModel.availableLocales.observe(this) {
             updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
         }
-        dataModel.activeState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(activeState = it) }
-        dataModel.state.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(state = it) }
+        dataModel.activeLoadingState.observe(this) {
+            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
+        }
+        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
     }
 
     private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeState: ToolState? = dataModel.activeState.value,
+        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
         availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        state: Map<Locale, ToolState> = dataModel.state.value.orEmpty()
+        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
     ) {
-        when (activeState) {
+        when (activeLoadingState) {
             // update the active language if the current active language is not found, invalid, or offline
-            ToolState.NOT_FOUND,
-            ToolState.INVALID_TYPE,
-            ToolState.OFFLINE -> availableLocales.firstOrNull {
-                state[it] != ToolState.NOT_FOUND && state[it] != ToolState.INVALID_TYPE &&
-                    state[it] != ToolState.OFFLINE
+            LoadingState.NOT_FOUND,
+            LoadingState.INVALID_TYPE,
+            LoadingState.OFFLINE -> availableLocales.firstOrNull {
+                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                    loadingState[it] != LoadingState.OFFLINE
             }?.let { dataModel.setActiveLocale(it) }
         }
     }
@@ -443,10 +432,13 @@ class TractActivity :
     }
 
     override val shareLinkUri get() = buildShareLink()?.build()?.toString()
-    private fun buildShareLink() = activeManifest?.let {
-        URI_SHARE_BASE.buildUpon()
-            .appendEncodedPath(LocaleCompat.toLanguageTag(it.locale).toLowerCase(Locale.ENGLISH))
-            .appendPath(it.code)
+    private fun buildShareLink(): Uri.Builder? {
+        val manifest = activeManifest ?: return null
+        val tool = manifest.code ?: return null
+        val locale = manifest.locale ?: return null
+        return URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(locale.toLanguageTag().lowercase(Locale.ENGLISH))
+            .appendPath(tool)
             .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
@@ -455,6 +447,16 @@ class TractActivity :
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
+    private val liveShareTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
+        when (it) {
+            RESULT_CANCELED -> publisherController.started = false
+            else -> {
+                dataModel.liveShareTutorialShown = true
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                shareLiveShareLink()
+            }
+        }
+    }
 
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
@@ -474,7 +476,7 @@ class TractActivity :
         when {
             !dataModel.liveShareTutorialShown &&
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
-                startActivityForResult(buildTutorialActivityIntent(PageSet.LIVE_SHARE), REQUEST_LIVE_SHARE_TUTORIAL)
+                liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             publisherController.publisherInfo.value == null ->
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
             else -> {
@@ -482,10 +484,10 @@ class TractActivity :
                 val shareUrl = (buildShareLink() ?: return)
                     .apply {
                         dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
-                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.joinToString(",") { it.toLanguageTag() }
                             ?.let { appendQueryParameter(PARAM_PRIMARY_LANGUAGE, it) }
                         dataModel.parallelLocales.value?.takeUnless { it.isEmpty() }
-                            ?.joinToString(",") { LocaleCompat.toLanguageTag(it) }
+                            ?.joinToString(",") { it.toLanguageTag() }
                             ?.let { appendQueryParameter(PARAM_PARALLEL_LANGUAGE, it) }
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)

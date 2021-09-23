@@ -7,4 +7,6 @@
     <string name="tool_offline">Pyytämäsi työkalun avaaminen vaatii verkkoyhteyden</string>
     <string name="feature_discovery_title_share_tool">Jaa linkki</string>
     <string name="feature_discovery_desc_share_tool">Lähetä tämä työkalu ystävälle tätä kuvaketta napsauttamalla</string>
+    <string name="tract_content_input_error_required">%1$s on välttämätön</string>
+    <string name="tract_content_input_error_invalid_email">Anna voimassa oleva sähköpostiosoite</string>
 </resources>

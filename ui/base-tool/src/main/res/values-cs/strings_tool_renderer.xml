@@ -7,4 +7,6 @@
     <string name="tool_offline">Pro otevření požadovaného nástroje musíte být připojeni k internetu</string>
     <string name="feature_discovery_title_share_tool">Sdílet odkaz</string>
     <string name="feature_discovery_desc_share_tool">Klepnutím na tuto ikonku odešlete tento nástroj příteli</string>
+    <string name="tract_content_input_error_required">%1$s je povinné</string>
+    <string name="tract_content_input_error_invalid_email">Prosím vložte platnou e-mailovou adresu</string>
 </resources>

@@ -6,11 +6,10 @@
     <data>
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.article.ui.categories.CategorySelectedListener" />
-        <import type="org.cru.godtools.xml.model.Manifest" />
-        <import type="org.cru.godtools.xml.model.ManifestKt" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
 
         <variable name="callbacks" type="ObservableField&lt;CategorySelectedListener&gt;" />
-        <variable name="category" type="org.cru.godtools.xml.model.Category" />
+        <variable name="category" type="org.cru.godtools.tool.model.Category" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,10 +35,8 @@
             android:ellipsize="end"
             android:lines="2"
             android:text="@{category.label}"
-            android:textSize="@{@dimen/text_size_category}"
-            app:defaultTextColor="@{ManifestKt.getCategoryLabelColor(category.getManifest())}"
+            android:textSize="@{@dimen/categories_list_label_text_size, default=@dimen/categories_list_label_text_size}"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="About God"
-            tools:textSize="@dimen/text_size_category" />
+            tools:text="About God" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

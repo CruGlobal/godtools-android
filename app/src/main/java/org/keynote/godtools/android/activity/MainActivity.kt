@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.activity
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -18,17 +20,20 @@ import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSy
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
+import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
+import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
-import org.cru.godtools.ui.dashboard.Page
+import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
+import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsFragment
@@ -36,6 +41,8 @@ import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
 import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
+
+private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
 class MainActivity :
@@ -47,6 +54,7 @@ class MainActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        processIntent(intent, savedInstanceState == null)
         triggerOnboardingIfNecessary()
     }
 
@@ -62,6 +70,11 @@ class MainActivity :
         binding.setupBottomNavigation()
     }
 
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
+        processIntent(newIntent, true)
+    }
+
     override fun onResume() {
         super.onResume()
         launchTrackingViewModel.trackLaunch()
@@ -74,11 +87,19 @@ class MainActivity :
     }
     // endregion Lifecycle
 
-    private fun triggerOnboardingIfNecessary() {
-        // TODO: remove this once we support onboarding in all languages
-        // mark OnBoarding as discovered if this isn't a supported language
-        if (!PageSet.ONBOARDING.supportsLocale(deviceLocale)) settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
+    // region Intent processing
+    private fun processIntent(intent: Intent?, newIntent: Boolean) {
+        val page = (intent?.getSerializableExtra(EXTRA_PAGE) as? Page)
+        when {
+            page != null -> showPage(page)
+            intent?.action == ACTION_VIEW && intent.data?.isDashboardLessonsDeepLink() == true -> {
+                if (newIntent) showPage(Page.LESSONS)
+            }
+        }
+    }
+    // endregion Intent processing
 
+    private fun triggerOnboardingIfNecessary() {
         if (settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) return
         startTutorialActivity(PageSet.ONBOARDING)
     }
@@ -138,10 +159,10 @@ class MainActivity :
     // endregion ToolsFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
-        bottomNav.menu.findItem(R.id.action_lessons)?.let { lessons ->
+        bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
             dataModel.lessons.observe(this@MainActivity) { lessons.isVisible = !it.isNullOrEmpty() }
         }
-        bottomNav.setOnNavigationItemSelectedListener {
+        bottomNav.setOnItemSelectedListener {
             Page.findPage(it.itemId)?.let { showPage(it) }
             true
         }
@@ -150,48 +171,64 @@ class MainActivity :
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null
-    override fun isFeatureDiscoveryVisible() = super.isFeatureDiscoveryVisible() || featureDiscovery != null
+    override fun isFeatureDiscoveryVisible() =
+        super.isFeatureDiscoveryVisible() || isParallelLanguageDialogVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
+        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.FAVORITE_TOOLS
         FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }
 
-    override fun showNextFeatureDiscovery() {
-        if (!settings.isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
-            canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
-        ) {
+    override fun showNextFeatureDiscovery() = when {
+        !settings.isFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE) &&
+            canShowFeatureDiscovery(FEATURE_PARALLEL_LANGUAGE) ->
+            showFeatureDiscovery(FEATURE_PARALLEL_LANGUAGE, false)
+        !settings.isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+            canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS) ->
             dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000)
-            return
-        }
-        super.showNextFeatureDiscovery()
+        else -> super.showNextFeatureDiscovery()
     }
 
     override fun onShowFeatureDiscovery(feature: String, force: Boolean) = when (feature) {
-        FEATURE_LANGUAGE_SETTINGS -> {
-            if (toolbar.findViewById<View>(R.id.action_switch_language) != null) {
-                // purge any pending feature discovery triggers since we are showing feature discovery now
-                purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
-
-                // show language settings feature discovery
-                val target = TapTarget.forToolbarMenuItem(
-                    toolbar,
-                    R.id.action_switch_language,
-                    getString(R.string.feature_discovery_title_language_settings),
-                    getString(R.string.feature_discovery_desc_language_settings)
-                )
-                featureDiscovery = TapTargetView.showFor(this, target, LanguageSettingsFeatureDiscoveryListener())
-                featureDiscoveryActive = feature
-            } else {
-                // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
-                //       the menu item just hasn't been drawn yet.
-
-                // the toolbar action isn't available yet.
-                // re-attempt this feature discovery on the next frame iteration.
-                dispatchDelayedFeatureDiscovery(feature, force, 17)
-            }
-        }
+        FEATURE_PARALLEL_LANGUAGE -> showParallelLanguageDialog()
+        FEATURE_LANGUAGE_SETTINGS -> showLanguageSettingsFeatureDiscovery(force)
         else -> super.onShowFeatureDiscovery(feature, force)
+    }
+
+    // region Parallel Language
+    private fun showParallelLanguageDialog() {
+        ParallelLanguageDialogFragment().show(supportFragmentManager, TAG_PARALLEL_LANGUAGE_DIALOG)
+        settings.setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
+    }
+
+    private fun isParallelLanguageDialogVisible() =
+        supportFragmentManager.findFragmentByTag(TAG_PARALLEL_LANGUAGE_DIALOG) != null
+    // endregion Parallel Language
+
+    // region Language Settings
+    private fun showLanguageSettingsFeatureDiscovery(force: Boolean) {
+        if (toolbar.findViewById<View>(R.id.action_switch_language) != null) {
+            // purge any pending feature discovery triggers since we are showing feature discovery now
+            purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)
+
+            // show language settings feature discovery
+            val target = TapTarget.forToolbarMenuItem(
+                toolbar,
+                R.id.action_switch_language,
+                getString(R.string.feature_discovery_title_language_settings),
+                getString(R.string.feature_discovery_desc_language_settings)
+            )
+            featureDiscovery = TapTargetView.showFor(this, target, LanguageSettingsFeatureDiscoveryListener())
+            featureDiscoveryActive = FEATURE_LANGUAGE_SETTINGS
+        } else {
+            // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
+            //       the menu item just hasn't been drawn yet.
+
+            // the toolbar action isn't available yet.
+            // re-attempt this feature discovery on the next frame iteration.
+            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, force, 17)
+        }
     }
 
     private inner class LanguageSettingsFeatureDiscoveryListener : TapTargetView.Listener() {
@@ -214,5 +251,6 @@ class MainActivity :
             if (view === featureDiscovery) featureDiscovery = null
         }
     }
+    // endregion Language Settings
     // endregion Feature Discovery
 }

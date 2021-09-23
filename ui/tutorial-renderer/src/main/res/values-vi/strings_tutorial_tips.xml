@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Học cách chia sẻ về công cụ này với người khác</string>
+    <string name="tutorial_tips_learn_text">Thực hành sử dụng các lời gợi ý sẽ giúp bạn tự tin khi chia sẻ với người khác.</string>
+    <string name="tutorial_tips_light_headline">Những gợi ý để chỉ dẫn</string>
+    <string name="tutorial_tips_light_text1">Trên màn hình, bạn sẽ thấy một số biểu tượng. Bấm vào biểu tượng để xem lời gợi ý giúp bạn trình bày về nội dung bạn đang xem trên màn hình.</string>
+    <string name="tutorial_tips_light_text2">Với những phần không có lời gợi ý, bạn hãy đọc qua hết nội dung phần đó và thảo luận với người nghe nếu cần.</string>
+    <string name="tutorial_tips_start_headline">Bật sáng lời gợi ý</string>
+    <string name="tutorial_tips_start_text">Khi lời gợi ý bật sáng lên, nó báo hiệu rằng bạn đã hoàn thành phần hướng dẫn đó. Bạn không nhất thiết phải sử dụng tất cả các lời gợi ý trong tất cả các phần khi chia sẻ.</string>
+    <string name="tutorial_tips_action_continue">Tiếp tục</string>
+    <string name="tutorial_tips_action_skip">Bỏ qua</string>
+    <string name="tutorial_tips_action_start">Bắt đầu</string>
+</resources>

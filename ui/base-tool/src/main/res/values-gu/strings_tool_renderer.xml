@@ -8,4 +8,6 @@
     <string name="tool_offline">તમે વિનંતી કરેલ ટૂલને ખોલવા માટે ઇન્ટરનેટ કનેક્શનની જરૂર છે</string>
     <string name="feature_discovery_title_share_tool">એક લિંક વહેંચો</string>
     <string name="feature_discovery_desc_share_tool">આ આઇકોનને ક્લિક કરીને આ ટુલ ને મિત્રને મોકલો</string>
+    <string name="tract_content_input_error_required">%1$s ફરજીયાત છે</string>
+    <string name="tract_content_input_error_invalid_email">કૃપા કરી તમારું સાચુ ઈ-મેલ એડ્રેસ આપો</string>
 </resources>

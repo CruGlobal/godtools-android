@@ -7,4 +7,6 @@
     <string name="tool_offline">الأداة التي طلبتها تستلزم فتح الاتصال بالإنترنت</string>
     <string name="feature_discovery_title_share_tool">شارك رابطاً</string>
     <string name="feature_discovery_desc_share_tool">أرسل هذه الأداة إلى صديق بالضغط على هذه الأيقونة</string>
+    <string name="tract_content_input_error_required">%1$s مطلوب</string>
+    <string name="tract_content_input_error_invalid_email">يرجى إدخال عنوان إلكتروني صالح</string>
 </resources>

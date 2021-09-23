@@ -1,14 +1,13 @@
 package org.cru.godtools.tutorial
 
 import java.util.Locale
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
 
 enum class PageSet(
     internal val feature: String? = null,
-    internal val pages: List<Page>,
-    internal val supportedLocales: Set<Locale> = emptySet(),
+    private val pages: List<Page>,
+    private val supportedLocales: Set<Locale> = emptySet(),
     internal val menu: Int? = null,
     internal val showUpNavigation: Boolean = true,
     internal val analyticsBaseScreenName: String
@@ -20,20 +19,11 @@ enum class PageSet(
         analyticsBaseScreenName = "onboarding",
         pages = listOf(
             Page.ONBOARDING_WELCOME,
-            Page.ONBOARDING_OTHERS,
-            Page.ONBOARDING_TOOLS,
-            Page.ONBOARDING_READY,
-            Page.ONBOARDING_FINAL
-        ),
-        supportedLocales = setOf(
-            Locale.ENGLISH,
-            Locale("es"),
-            Locale.FRENCH,
-            Locale("hi"),
-            Locale("in"),
-            Locale("ru"),
-            Locale.SIMPLIFIED_CHINESE,
-            LocaleCompat.forLanguageTag("zh-Hans")
+            Page.ONBOARDING_CONVERSATIONS,
+            Page.ONBOARDING_PREPARE,
+            Page.ONBOARDING_SHARE_FINAL,
+            Page.ONBOARDING_SHARE,
+            Page.ONBOARDING_LINKS
         )
     ),
     TRAINING(
@@ -41,6 +31,10 @@ enum class PageSet(
         analyticsBaseScreenName = "tutorial",
         pages = listOf(
             Page.TRAINING_WATCH,
+            Page.FEATURES_TOOLS,
+            Page.FEATURES_TIPS,
+            Page.FEATURES_LIVE_SHARE,
+            Page.FEATURES_LESSONS,
             Page.TRAINING_PREPARE,
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL
@@ -53,7 +47,7 @@ enum class PageSet(
             Locale("in"),
             Locale("ru"),
             Locale.SIMPLIFIED_CHINESE,
-            LocaleCompat.forLanguageTag("zh-Hans")
+            Locale.forLanguageTag("zh-Hans")
         )
     ),
     LIVE_SHARE(
@@ -77,6 +71,8 @@ enum class PageSet(
     );
 
     fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }
+
+    internal fun pagesFor(locale: Locale) = pages.filter { it.supportsLocale(locale) }
 
     companion object {
         val DEFAULT = ONBOARDING

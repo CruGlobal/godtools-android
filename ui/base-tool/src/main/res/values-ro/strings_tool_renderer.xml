@@ -7,4 +7,6 @@
     <string name="tool_offline">Instrumentul solicitat necesită conexiune la internet pentru a fi deschis</string>
     <string name="feature_discovery_title_share_tool">Partajează un link</string>
     <string name="feature_discovery_desc_share_tool">Trimite acest instrument unui prieten făcând clic pe această pictogramă</string>
+    <string name="tract_content_input_error_required">%1$s este necesar</string>
+    <string name="tract_content_input_error_invalid_email">Introdu o adresă de e-mail valabilă</string>
 </resources>

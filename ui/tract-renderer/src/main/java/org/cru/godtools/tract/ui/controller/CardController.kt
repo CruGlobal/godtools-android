@@ -11,12 +11,12 @@ import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
+import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tract.databinding.TractContentCardBinding
-import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.tract.Card
 
 class CardController private constructor(
     private val binding: TractContentCardBinding,
@@ -57,10 +57,7 @@ class CardController private constructor(
         binding.enableTips = pageController.isTipsEnabled
 
         lifecycleOwner?.lifecycle?.apply {
-            onResume {
-                pendingAnalyticsEvents =
-                    triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-            }
+            onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }
             onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
         }
     }
@@ -79,7 +76,7 @@ class CardController private constructor(
     }
     // endregion Lifecycle
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
 
     private fun processDismissEvent(event: Event) {
         if (model?.dismissListeners?.contains(event.id) == true) dismissCard()

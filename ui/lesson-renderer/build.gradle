@@ -10,17 +10,22 @@ dependencies {
     api project(":ui:base-tool")
 
     implementation "androidx.activity:activity-ktx:${deps.androidX.activity}"
+    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
 
+    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
+
     implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"

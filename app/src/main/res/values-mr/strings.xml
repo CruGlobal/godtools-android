@@ -36,4 +36,9 @@
     <string name="text_language_warning">प्रत्येक टूल प्रत्येक भाषेत उपलब्ध नसते</string>
     <string name="label_language_none">एकही नाही</string>
     <string name="label_language_search">भाषा फिल्टर करा</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">आपण अतिरिक्त भाषा सेट करू इच्छिता?</string>
+    <string name="languages_parallel_dialog_select">एक भाषा निवडा</string>
+    <string name="languages_parallel_dialog_action_start">सुरु करा</string>
+    <string name="languages_parallel_dialog_action_cancel">नाही धन्यवाद</string>
 </resources>

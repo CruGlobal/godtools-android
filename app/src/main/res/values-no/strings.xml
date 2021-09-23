@@ -4,11 +4,13 @@
     <string name="share_prompt">Velg hvordan du vil dele</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Generelt</string>
+    <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Del</string>
     <string name="menu_heading_legal">Juridisk</string>
     <string name="menu_about">Om</string>
     <string name="menu_help">Vanlige spørsmål</string>
     <string name="menu_contact_us">Kontakt oss</string>
+    <string name="menu_tutorial">Veiledning</string>
     <string name="menu_login">Logg inn</string>
     <string name="menu_signup">Opprett konto</string>
     <string name="menu_logout">Logg ut</string>
@@ -19,7 +21,7 @@
     <string name="menu_privacy_policy">Personvern</string>
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Hør hvordan Gud rører!</string>
+    <string name="share_story_subject">GodTools-historie</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 90 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
@@ -31,4 +33,9 @@
     <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer språk</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vil du velg et språk til?</string>
+    <string name="languages_parallel_dialog_select">Velg språk</string>
+    <string name="languages_parallel_dialog_action_start">Kom i gang</string>
+    <string name="languages_parallel_dialog_action_cancel">Nei takk</string>
 </resources>

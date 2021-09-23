@@ -6,8 +6,8 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.article.ui.articles.ArticlesAdapter.Callbacks" />
-        <import type="org.cru.godtools.xml.model.Manifest" />
-        <import type="org.cru.godtools.xml.model.StylesKt" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.tool.model.StylesKt" />
 
         <variable name="callbacks" type="ObservableField&lt;Callbacks&gt;" />
         <variable name="manifest" type="LiveData&lt;Manifest&gt;" />

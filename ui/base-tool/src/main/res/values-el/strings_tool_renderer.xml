@@ -7,4 +7,6 @@
     <string name="tool_offline">Το εργαλείο που ζητήσατε απαιτεί σύνδεση στο διαδίκτυο για να ανοίξει.</string>
     <string name="feature_discovery_title_share_tool">Μοιραστείτε έναν σύνδεσμο</string>
     <string name="feature_discovery_desc_share_tool">Στείλτε αυτό το εργαλείο σε έναν φίλο πατώντας πάνω στο εικονίδιο</string>
+    <string name="tract_content_input_error_required">%1$s απαιτείται</string>
+    <string name="tract_content_input_error_invalid_email">Παρακαλώ εισάγετε έγκυρη διεύθυνση email</string>
 </resources>

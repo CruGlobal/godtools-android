@@ -28,10 +28,10 @@ class ActivityToolLoadingBindingTest {
 
     @Test
     fun verifyContentLoadingVisibility() {
-        val visible = setOf(BaseToolActivity.ToolState.LOADING)
-        val notVisible = EnumSet.allOf(BaseToolActivity.ToolState::class.java) - visible
+        val visible = setOf(BaseToolActivity.LoadingState.LOADING)
+        val notVisible = EnumSet.allOf(BaseToolActivity.LoadingState::class.java) - visible
         visible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
                 "contentLoading should be visible when tool state is $it",
@@ -40,7 +40,7 @@ class ActivityToolLoadingBindingTest {
         }
 
         notVisible.forEach {
-            binding.toolState = MutableLiveData(it)
+            binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
                 "contentLoading should be hidden when tool state is $it",

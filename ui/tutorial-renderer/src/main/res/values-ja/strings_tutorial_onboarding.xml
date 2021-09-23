@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">ようこそ</string>
+    <string name="tutorial_onboarding_welcome_2">どのような会話にも対応できます</string>
+    <string name="tutorial_onboarding_welcome_action_video">動画を視聴</string>
+    <string name="tutorial_onboarding_conversations_headline">誰とでも神について話しましょう</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodToolsは神について意義ある会話をするのに役立ちます。</string>
+    <string name="tutorial_onboarding_prepare_headline">大切な瞬間のために準備しておきましょう</string>
+    <string name="tutorial_onboarding_prepare_subhead">信仰についての会話をあなたの自然な生活の一部にする方法を学びましょう。</string>
+    <string name="tutorial_onboarding_share_headline">イエスとの出会い助けましょう</string>
+    <string name="tutorial_onboarding_share_subhead">GodToolsはキリストの教えを分かりやすく身近な方法で伝えるためのガイドです。</string>
+    <string name="tutorial_onboarding_links_headline">クイックスタートリンク</string>
+    <string name="tutorial_onboarding_links_articles_subhead">キリスト教について知りたい</string>
+    <string name="tutorial_onboarding_links_articles_action">記事をお読みください</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">キリストの教えについて会話をする方法を知りたい</string>
+    <string name="tutorial_onboarding_links_lessons_action">レッスンをお試しください</string>
+    <string name="tutorial_onboarding_links_tools_subhead">キリストの教えを誰かと共有したい</string>
+    <string name="tutorial_onboarding_links_tools_action">ツールを一つお選びください</string>
+    <string name="tutorial_onboarding_action_begin">始める</string>
+    <string name="tutorial_onboarding_action_next">次へ</string>
+    <string name="tutorial_onboarding_action_skip">スキップ</string>
+    <string name="tutorial_onboarding_action_start">開始</string>
+</resources>

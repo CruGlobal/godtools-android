@@ -17,17 +17,18 @@ import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tract.EXTRA_MODAL
 import org.cru.godtools.tract.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController
 import org.cru.godtools.tract.ui.controller.bindController
-import org.cru.godtools.xml.model.tract.Modal
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -46,6 +47,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
 @AndroidEntryPoint
 class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
+    private val toolState: ToolStateHolder by viewModels()
     @Inject
     internal lateinit var modalControllerFactory: ModalController.Factory
 
@@ -68,7 +70,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     }
 
     override fun onBindingChanged() {
-        binding.modalLayout.bindController(modalControllerFactory)
+        binding.modalLayout.bindController(modalControllerFactory, toolState.toolState)
             .also { dataModel.modal.observe(this, it) }
     }
 
@@ -80,6 +82,7 @@ class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_mod
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onContentEvent(event: Event) {
+        if (event.tool != dataModel.toolCode.value && event.locale != dataModel.locale.value) return
         checkForDismissEvent(event)
     }
 

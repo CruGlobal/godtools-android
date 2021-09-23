@@ -7,4 +7,6 @@
     <string name="tool_offline">Soovitud tööriista avamiseks on vajalik võrguühendus</string>
     <string name="feature_discovery_title_share_tool">Jaga linki</string>
     <string name="feature_discovery_desc_share_tool">Saada tööriist sõbrale, klõpsates sellele ikoonile</string>
+    <string name="tract_content_input_error_required">%1$s on kohustuslik</string>
+    <string name="tract_content_input_error_invalid_email">Sisesta kehtiv meiliaadress</string>
 </resources>

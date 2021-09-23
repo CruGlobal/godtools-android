@@ -31,4 +31,5 @@
     <string name="text_language_warning">모든 언어로 모든 도구를 이용할 수 있지는 않습니다.</string>
     <string name="label_language_none">없음</string>
     <string name="label_language_search">언어 필터</string>
+    <!-- Parallel Language Dialog -->
 </resources>

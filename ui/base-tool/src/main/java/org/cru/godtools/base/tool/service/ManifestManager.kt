@@ -13,11 +13,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
+import org.ccci.gto.android.common.kotlin.coroutines.withLock
+import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.cru.godtools.xml.model.Manifest
-import org.cru.godtools.xml.service.ManifestParser
-import org.cru.godtools.xml.service.Result
+import org.cru.godtools.tool.FEATURE_ANIMATION
+import org.cru.godtools.tool.FEATURE_MULTISELECT
+import org.cru.godtools.tool.ParserConfig
+import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.service.ManifestParser
+import org.cru.godtools.tool.service.ParserResult
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -26,8 +32,15 @@ import org.keynote.godtools.android.db.GodToolsDao
 class ManifestManager @Inject constructor(
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
-    private val manifestParser: ManifestParser
+    private val parser: ManifestParser
 ) {
+    private val cache = WeakLruCache<String, ParserResult.Data>(6)
+    private val loadingMutex = MutexMap()
+
+    init {
+        ParserConfig.supportedFeatures = setOf(FEATURE_ANIMATION, FEATURE_MULTISELECT)
+    }
+
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         GlobalScope.launch(Dispatchers.Default) {
@@ -50,15 +63,19 @@ class ManifestManager @Inject constructor(
 
     suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null
-        val toolCode = translation.toolCode ?: return null
-        return when (val result = manifestParser.parse(manifestFileName, toolCode, translation.languageCode)) {
-            is Result.Error.Corrupted, is Result.Error.NotFound -> {
+        return when (val result = parseManifest(manifestFileName)) {
+            is ParserResult.Error.Corrupted, is ParserResult.Error.NotFound -> {
                 withContext(Dispatchers.Default) { brokenManifest(manifestFileName) }
                 null
             }
-            is Result.Data -> result.manifest
+            is ParserResult.Data -> result.manifest
             else -> null
         }
+    }
+
+    @AnyThread
+    private suspend fun parseManifest(name: String) = loadingMutex.withLock(name) {
+        cache[name] ?: parser.parseManifest(name).also { if (it is ParserResult.Data) cache.put(name, it) }
     }
 
     @WorkerThread

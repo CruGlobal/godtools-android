@@ -32,4 +32,5 @@
     <string name="text_language_warning">প্রত্যেক টুল প্রতিটি ভাষায় উপলব্ধ নয়</string>
     <string name="label_language_none">কোনটাই না</string>
     <string name="label_language_search">"ফিল্টার ভাষা সমূহ "</string>
+    <!-- Parallel Language Dialog -->
 </resources>

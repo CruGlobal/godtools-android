@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Tools</string>
+    <string name="tutorial_features_tools_subhead">Each tool is made for a different stage of conversation– before, during or after.</string>
+    <string name="tutorial_features_tips_headline">Tool tips</string>
+    <string name="tutorial_features_tips_subhead">GodTools tips guide you as you help someone understand the gospel and encounter Jesus.</string>
+    <string name="tutorial_features_live_share_headline">Screen sharing</string>
+    <string name="tutorial_features_live_share_subhead">You can now share your screen remotely so the other person can follow as you use a tool to discuss the gospel.</string>
+    <string name="tutorial_features_lessons_headline">Lessons</string>
+    <string name="tutorial_features_lessons_subhead">In each GodTools lesson you learn something to help you have real conversations about God.</string>
+    <string name="tutorial_features_final_headline">Find this tutorial in the menu whenever you need it.</string>
+
+    <string name="tutorial_features_action_continue">Continue</string>
+    <string name="tutorial_features_action_close">Close tutorial</string>
+
+    <!-- Training Tutorial Banner -->
+    <eat-comment />
+    <string name="tutorial_features_banner_text">Show me a Tutorial</string>
+    <string name="tutorial_features_banner_action_open">Open Tutorial</string>
+    <string name="tutorial_features_banner_action_dismiss">Dismiss</string>
+</resources>

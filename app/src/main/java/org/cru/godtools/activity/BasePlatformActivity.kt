@@ -29,7 +29,6 @@ import javax.inject.Named
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.view.MenuUtils
@@ -332,7 +331,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     private fun launchShare() {
         eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
         val shareLink = URI_SHARE_BASE.buildUpon()
-            .appendPath(LocaleCompat.toLanguageTag(settings.primaryLanguage).toLowerCase(Locale.US))
+            .appendPath(settings.primaryLanguage.toLanguageTag().lowercase(Locale.US))
             .appendPath("")
             .build().toString()
 

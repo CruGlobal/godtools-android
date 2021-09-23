@@ -27,4 +27,5 @@
     <string name="text_language_parallel_description">Ndaj God Tools me dikë në gjuhën e tyre.</string>
     <string name="text_language_warning">Jo çdo mjet është i disponueshëm në çdo gjuhë</string>
     <string name="label_language_none">Asnjë</string>
+    <!-- Parallel Language Dialog -->
 </resources>

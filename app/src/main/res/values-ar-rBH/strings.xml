@@ -30,4 +30,5 @@
     <string name="text_language_warning">ليس كل أداة متوفرة في كل لغة.</string>
     <string name="label_language_none">لا شيء</string>
     <string name="label_language_search">فلترة اللغات</string>
+    <!-- Parallel Language Dialog -->
 </resources>

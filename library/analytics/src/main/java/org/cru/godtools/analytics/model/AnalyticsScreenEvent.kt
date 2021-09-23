@@ -11,8 +11,7 @@ private const val APP_SECTION_MENU = "menu"
 private const val APP_SUB_SECTION_LANGUAGE_SETTINGS = "language settings"
 
 @Immutable
-open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, locale: Locale? = null) :
-    AnalyticsBaseEvent(locale) {
+open class AnalyticsScreenEvent(val screen: String, locale: Locale? = null) : AnalyticsBaseEvent(locale) {
     companion object {
         /* Screen event names */
         const val SCREEN_HOME = "Favorites"
@@ -32,6 +31,11 @@ open class AnalyticsScreenEvent @JvmOverloads constructor(val screen: String, lo
 
         /* App Sections */
         const val APP_SECTION_TOOLS = "tools"
+    }
+
+    override fun isForSystem(system: AnalyticsSystem) = when (screen) {
+        SCREEN_LESSONS -> system == AnalyticsSystem.APPSFLYER || super.isForSystem(system)
+        else -> super.isForSystem(system)
     }
 
     override val appSection

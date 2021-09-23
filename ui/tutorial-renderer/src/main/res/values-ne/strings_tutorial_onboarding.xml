@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">स्वागतम</string>
+    <string name="tutorial_onboarding_welcome_2">हरेक कुराकानी को लागी तयार छ</string>
+    <string name="tutorial_onboarding_welcome_action_video">भिडियो हेर्नुहोस्</string>
+    <string name="tutorial_onboarding_conversations_headline">जो कोहि संग भगवान को बारे मा कुरा गर्नुहोस्</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools तपाइँ भगवान को बारे मा सार्थक कुराकानी गर्न मद्दत गर्दछ।</string>
+    <string name="tutorial_onboarding_prepare_headline">महत्त्वपूर्ण क्षणहरु को लागी तयार हुनुहोस्</string>
+    <string name="tutorial_onboarding_prepare_subhead">जान्नुहोस् कसरी विश्वास को बारे मा कुराकानी गर्न को लागी तपाइँको जीवन को एक प्राकृतिक भाग हो</string>
+    <string name="tutorial_onboarding_share_headline">कसैलाई येशूलाई खोज्न मद्दत गर्नुहोस्</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools स्पष्ट अनि  सान्दर्भिक तरिकामा सुसमाचार संचार गर्न को लागी तपाइँको मार्गदर्शक हो।</string>
+    <string name="tutorial_onboarding_links_headline">छिटो सुरु लिंक</string>
+    <string name="tutorial_onboarding_links_articles_subhead">म ईसाई धर्म को अन्वेषण गर्न चाहन्छु</string>
+    <string name="tutorial_onboarding_links_articles_action">हाम्रो लेख पढ्नुहोस्</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">म सुसमाचार कुराकानीहरु को बारे मा जान्न चाहन्छु</string>
+    <string name="tutorial_onboarding_links_lessons_action">"हाम्रो पाठ कोसिस गर्नुहोस्
+"</string>
+    <string name="tutorial_onboarding_links_tools_subhead">हाम्रो पाठ कोसिस गर्नुहोस्</string>
+    <string name="tutorial_onboarding_links_tools_action">हाम्रो उपकरण मध्ये एक छान्नुहोस्</string>
+    <string name="tutorial_onboarding_action_begin">सुरु</string>
+    <string name="tutorial_onboarding_action_next">अर्को</string>
+    <string name="tutorial_onboarding_action_skip">छोड्नुहोस्</string>
+    <string name="tutorial_onboarding_action_start">सुरु भयो</string>
+</resources>

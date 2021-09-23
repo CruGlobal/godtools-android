@@ -9,9 +9,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
+import org.cru.godtools.tool.model.tract.Hero
 import org.cru.godtools.tract.databinding.TractPageHeroBinding
-import org.cru.godtools.xml.model.AnalyticsEvent.Trigger
-import org.cru.godtools.xml.model.tract.Hero
 
 class HeroController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageHeroBinding,
@@ -25,15 +25,12 @@ class HeroController @AssistedInject internal constructor(
 
     override val lifecycleOwner = pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it) }
 
-    override val contentContainer get() = binding.content
+    override val childContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {
         lifecycleOwner?.lifecycle?.apply {
-            onResume {
-                pendingAnalyticsEvents =
-                    triggerAnalyticsEvents(model?.analyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT)
-            }
+            onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }
             onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
         }
     }

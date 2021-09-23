@@ -5,9 +5,10 @@ import androidx.annotation.WorkerThread
 import dagger.Lazy
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.cru.godtools.base.model.Event
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.model.Followup
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tool.model.EventId
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -33,7 +34,7 @@ class FollowupService @Inject internal constructor(
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     fun onContentEvent(event: Event) {
-        if (event.id == Event.Id.FOLLOWUP_EVENT) {
+        if (event.id == EventId.FOLLOWUP) {
             val followup = Followup().apply {
                 name = event.fields[FIELD_NAME]
                 email = event.fields[FIELD_EMAIL]

@@ -2,7 +2,6 @@ package org.cru.godtools.shortcuts
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
@@ -23,6 +22,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
@@ -35,6 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -45,11 +46,11 @@ import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.cru.godtools.article.ui.createArticlesIntent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
+import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
@@ -78,7 +79,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val settings: Settings,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
-) : SharedPreferences.OnSharedPreferenceChangeListener {
+) {
     @Inject
     constructor(
         @ApplicationContext context: Context,
@@ -103,7 +104,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     init {
         // register event listeners
         eventBus.register(this)
-        settings.registerOnSharedPreferenceChangeListener(this)
     }
 
     // region Events
@@ -111,24 +111,24 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onToolUpdate(event: ToolUpdateEvent) {
         // Could change which tools are visible or the label for tools
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
     @Subscribe
     fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
         // Handles potential icon image changes.
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
     @Subscribe
     fun onTranslationUpdate(event: TranslationUpdateEvent) {
         // Could change which tools are available or the label for tools
-        updateShortcutsActor.offer(Unit)
-        updatePendingShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
+        updatePendingShortcutsActor.trySend(Unit)
     }
 
     @AnyThread
@@ -136,16 +136,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     fun onToolUsed(event: ToolUsedEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
-        }
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when (key) {
-            // primary/parallel language preferences changed. key=null when preferences are cleared
-            Settings.PREF_PRIMARY_LANGUAGE, Settings.PREF_PARALLEL_LANGUAGE, null -> {
-                updateShortcutsActor.offer(Unit)
-                updatePendingShortcutsActor.offer(Unit)
-            }
         }
     }
     // endregion Events
@@ -178,9 +168,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
-    @OptIn(ObsoleteCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
     internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        channel.consumeAsFlow().conflate().collectLatest {
+        merge(
+            settings.primaryLanguageFlow,
+            settings.parallelLanguageFlow,
+            channel.consumeAsFlow()
+        ).conflate().collectLatest {
             delay(DELAY_UPDATE_PENDING_SHORTCUTS)
             updatePendingShortcuts()
         }
@@ -209,9 +203,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val updateShortcutsMutex = Mutex()
 
     @VisibleForTesting
-    @OptIn(ObsoleteCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
     internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        channel.consumeAsFlow().conflate().collectLatest {
+        merge(
+            settings.primaryLanguageFlow,
+            settings.parallelLanguageFlow,
+            channel.consumeAsFlow()
+        ).conflate().collectLatest {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 delay(DELAY_UPDATE_SHORTCUTS)
                 updateShortcuts()
@@ -221,7 +219,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     init {
         // launch an initial update
-        updateShortcutsActor.offer(Unit)
+        updateShortcutsActor.trySend(Unit)
     }
 
     @AnyThread

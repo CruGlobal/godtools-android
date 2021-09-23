@@ -1,6 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
@@ -14,7 +14,7 @@ import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
-import org.cru.godtools.xml.model.Manifest
+import org.cru.godtools.tool.model.Manifest
 
 abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,
@@ -29,11 +29,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        intent?.extras?.let { extras ->
-            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
-            dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
-        }
+        processIntent(intent)
 
         // finish now if this activity is in an invalid state
         if (!validStartState()) {
@@ -44,6 +40,13 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         startLoaders()
     }
     // endregion Lifecycle
+
+    protected open fun processIntent(intent: Intent?) {
+        intent?.extras?.let { extras ->
+            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
+            dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
+        }
+    }
 
     private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
 
@@ -72,9 +75,9 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     }
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
-    override val activeToolStateLiveData by lazy {
+    override val activeToolLoadingStateLiveData by lazy {
         activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
-            ToolState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
+            LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
 
@@ -92,11 +95,4 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         return extras
     }
     // endregion Up Navigation
-
-    companion object {
-        fun buildExtras(context: Context, toolCode: String?, language: Locale?) = buildExtras(context).apply {
-            putString(EXTRA_TOOL, toolCode)
-            putLocale(EXTRA_LANGUAGE, language)
-        }
-    }
 }

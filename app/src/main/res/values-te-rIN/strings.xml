@@ -33,4 +33,9 @@
     <string name="text_language_warning">ప్రతి సాధనము ప్రతి భాషలో అందుబాటులో లేదు.</string>
     <string name="label_language_none">ఏదీ కాదు</string>
     <string name="label_language_search">భాషలను ఫిల్టర్ చేయి</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">మీరు సెకండరీ భాషను సెట్ చేయాలనుకుంటున్నారా?</string>
+    <string name="languages_parallel_dialog_select">ఒక భాషను ఎంచుకోండి</string>
+    <string name="languages_parallel_dialog_action_start">ప్రారంభించడానికి</string>
+    <string name="languages_parallel_dialog_action_cancel">వద్దు ధన్యవాదములు</string>
 </resources>
