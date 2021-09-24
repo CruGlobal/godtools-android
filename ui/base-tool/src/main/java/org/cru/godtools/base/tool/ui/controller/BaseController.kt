@@ -78,6 +78,19 @@ abstract class BaseController<T : Base> protected constructor(
     open fun supportsModel(model: Base) = modelClass.isInstance(model)
     internal fun releaseTo(cache: UiControllerCache) = model?.let { cache.release(it, this) }
 
+    // region AnalyticsEvents
+    protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
+        events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
+
+    private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
+        if (event.delay > 0) delay(event.delay * 1000L)
+        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
+    }.takeUnless { it.isCompleted }
+
+    protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
+    // endregion AnalyticsEvents
+
+    // region Content Events
     fun sendEvents(ids: List<EventId>?) {
         if (ids.isNullOrEmpty()) return
         if (!validate(ids)) return
@@ -95,16 +108,6 @@ abstract class BaseController<T : Base> protected constructor(
         ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
     }
 
-    protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
-        events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
-
-    private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
-        if (event.delay > 0) delay(event.delay * 1000L)
-        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
-    }.takeUnless { it.isCompleted }
-
-    protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
-
     /**
      * @return true if the event has been built by a parent controller.
      */
@@ -114,6 +117,7 @@ abstract class BaseController<T : Base> protected constructor(
         // navigate up hierarchy before performing validation
         return parentController?.validate(ids) != false
     }
+    // endregion Content Events
 
     // region UI
     /**
