@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
-        android:onClick="@{() -> controller.click()}"
+        android:onClick="@{() -> controller.click(model)}"
         android:saveEnabled="false"
         android:text="@{model.text}"
         app:backgroundColor="@{ButtonKt.getButtonColor(model)}"
