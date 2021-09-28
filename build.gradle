@@ -18,7 +18,7 @@ buildscript {
                 gradleAndroidPlugin: '7.0.2',
                 grpc               : '1.41.0',
                 gtoSupport         : '3.9.1',
-                guava              : '31.0-android',
+                guava              : '31.0.1-android',
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
                 jsoup              : '1.14.2',
