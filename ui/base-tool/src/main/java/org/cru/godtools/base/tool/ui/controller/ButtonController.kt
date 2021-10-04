@@ -7,12 +7,9 @@ import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.base.tool.databinding.ToolContentButtonOutlinedBinding
-import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.Button
 import org.greenrobot.eventbus.EventBus
@@ -32,19 +29,6 @@ internal sealed class ButtonController<T : ViewDataBinding>(
         binding.setVariable(BR.model, model)
         binding.setVariable(BR.isGone, model?.isGoneFlow(toolState)?.asLiveData())
         binding.setVariable(BR.isInvisible, model?.isInvisibleFlow(toolState)?.asLiveData())
-    }
-
-    fun click() {
-        val model = model
-        triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.CLICKED))
-        when (model?.type) {
-            Button.Type.URL -> model.url?.let { url ->
-                eventBus.post(ExitLinkActionEvent(model.manifest.code, url))
-                root.context.openUrl(url)
-            }
-            Button.Type.EVENT -> sendEvents(model.events)
-            Button.Type.UNKNOWN -> Unit
-        }
     }
 }
 

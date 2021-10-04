@@ -18,14 +18,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.findLiveData
+import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.base.tool.ui.util.layoutDirection
+import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.Base
+import org.cru.godtools.tool.model.Clickable
 import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.HasAnalyticsEvents
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
@@ -144,6 +149,18 @@ abstract class BaseController<T : Base> protected constructor(
         //       But updating the direction doesn't seem to trigger a re-layout of descendant views.
         root.layoutDirection = model.layoutDirection
     }
+
+    // region Clickable
+    fun click(model: Clickable?) {
+        if (model == null) return
+        if (model is HasAnalyticsEvents) triggerAnalyticsEvents(model.getAnalyticsEvents(Trigger.CLICKED))
+        sendEvents(model.events)
+        model.url?.let { url ->
+            eventBus.post(ExitLinkActionEvent(model.manifest.code, url))
+            root.context.openUrl(url)
+        }
+    }
+    // endregion Clickable
 
     // region Text Overrides
     // HACK: `textIsSelectable` suppresses click events propagating up to parent elements.

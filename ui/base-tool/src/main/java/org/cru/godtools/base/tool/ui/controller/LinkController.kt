@@ -6,7 +6,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentLinkBinding
-import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.Link
 
 internal class LinkController private constructor(
@@ -26,10 +25,5 @@ internal class LinkController private constructor(
     public override fun onBind() {
         super.onBind()
         binding.model = model
-    }
-
-    fun click(link: Link?) {
-        triggerAnalyticsEvents(link?.getAnalyticsEvents(Trigger.CLICKED))
-        sendEvents(link?.events)
     }
 }
