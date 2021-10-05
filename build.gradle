@@ -71,7 +71,7 @@ buildscript {
         ]
         deps.firebase = [
                 core          : '19.0.2',
-                crashlytics   : '18.2.1',
+                crashlytics   : '18.2.3',
                 inAppMessaging: '20.1.0',
                 messaging     : '22.0.0',
                 perf          : '20.0.3',
