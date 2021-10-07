@@ -1,5 +1,8 @@
 [versions]
+firebase-crashlytics = "18.2.3"
 play-billing = "4.0.0"
 
 [libraries]
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
+firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }
