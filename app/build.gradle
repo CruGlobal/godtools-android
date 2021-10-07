@@ -197,7 +197,7 @@ dependencies {
 
     implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
-    implementation "com.google.firebase:firebase-crashlytics:${deps.firebase.crashlytics}"
+    implementation libs.firebase.crashlytics
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
@@ -219,6 +219,7 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
     debugImplementation 'com.facebook.soloader:soloader:0.10.1'
