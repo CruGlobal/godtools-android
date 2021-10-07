@@ -201,7 +201,7 @@ dependencies {
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
     implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
 
-    implementation 'com.google.android.play:core:1.10.2'
+    implementation libs.play.core
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
