@@ -9,7 +9,6 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import java.io.ByteArrayInputStream
 import java.util.Locale
@@ -63,7 +62,7 @@ class TasksTest {
         whenever(dao.getLastSyncTime(anyVararg())).thenReturn(5)
         tasks.initFavoriteTools()
         verify(dao, never()).get(any<Query<*>>())
-        verifyZeroInteractions(downloadManager)
+        verifyNoMoreInteractions(downloadManager)
     }
 
     @Test
