@@ -135,9 +135,6 @@ class SnowplowAnalyticsService @Inject internal constructor(
     // endregion Contexts
 
     init {
-        // register the service with eventbus as the last thing during object initialization to avoid a partially
-        // initialized object processing an EventBus event.
-        // see: https://jira.cru.org/browse/GT-1303
         eventBus.register(this)
     }
 }
