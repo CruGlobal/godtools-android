@@ -11,7 +11,6 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -107,7 +106,7 @@ class YouTubePlayerViewBindingAdapterTest {
         ListenerUtil.trackListener(view, tracker, R.id.youtubeplayer_tracker)
         whenever(tracker.videoId).thenReturn("current")
         view.updateVideo("current")
-        verifyZeroInteractions(player)
+        verifyNoMoreInteractions(player)
     }
     // endregion updateVideo()
 }
