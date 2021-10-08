@@ -73,10 +73,6 @@ class SnowplowAnalyticsService @Inject internal constructor(
     )
 
     // region Tracking Events
-    init {
-        eventBus.register(this)
-    }
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
@@ -137,4 +133,11 @@ class SnowplowAnalyticsService @Inject internal constructor(
         CONTEXT_SCHEMA_SCORING, mapOf(CONTEXT_ATTR_SCORING_URI to snowplowContentScoringUri.toString())
     )
     // endregion Contexts
+
+    init {
+        // register the service with eventbus as the last thing during object initialization to avoid a partially
+        // initialized object processing an EventBus event.
+        // see: https://jira.cru.org/browse/GT-1303
+        eventBus.register(this)
+    }
 }
