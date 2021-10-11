@@ -52,11 +52,11 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
     implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
-    implementation "org.jsoup:jsoup:${deps.jsoup}"
+    implementation libs.jsoup
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "androidx.room:room-testing:${deps.androidX.room}"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
 
     kapt "androidx.room:room-compiler:${deps.androidX.room}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

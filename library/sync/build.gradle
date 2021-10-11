@@ -3,7 +3,7 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    implementation libs.kotlin.coroutines
 
     implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
     implementation "androidx.core:core-ktx:${deps.androidX.core}"
@@ -17,7 +17,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

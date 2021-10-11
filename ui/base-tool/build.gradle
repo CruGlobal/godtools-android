@@ -25,7 +25,7 @@ dependencies {
 
     api project(':ui:base')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    implementation libs.kotlin.coroutines
 
     implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"

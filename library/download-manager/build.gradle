@@ -10,7 +10,7 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${deps.kotlinCoroutines}"
+    implementation libs.kotlin.coroutines
 
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
@@ -23,7 +23,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt "com.google.dagger:hilt-compiler:${deps.dagger}"

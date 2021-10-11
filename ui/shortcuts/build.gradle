@@ -22,7 +22,7 @@ dependencies {
     implementation "androidx.hilt:hilt-work:${deps.androidX.hilt}"
     api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
-    implementation "com.google.firebase:firebase-perf-ktx:${deps.firebase.perf}"
+    implementation libs.firebase.perf.ktx
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
@@ -34,7 +34,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
     testImplementation "org.ccci.gto.android.testing:gto-support-timber:${deps.gtoSupport}"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

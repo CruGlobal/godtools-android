@@ -21,10 +21,8 @@ buildscript {
                 guava              : '31.0.1-android',
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
-                jsoup              : '1.14.3',
                 junit              : '4.13.2',
                 kotlin             : '1.5.31',
-                kotlinCoroutines   : '1.5.2',
                 leakcanary         : '2.7',
                 lottie             : '4.2.0',
                 materialDesign     : '1.4.0',
@@ -38,10 +36,8 @@ buildscript {
                 retrofit2          : '2.9.0',
                 robolectric        : '4.6.1',
                 scarlet            : '0.1.12',
-                snowplow           : '2.2.1',
                 splitties          : '3.0.0',
                 taptargetview      : '1.13.3',
-                timber             : '5.0.1',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
@@ -73,7 +69,6 @@ buildscript {
                 core          : '19.0.2',
                 inAppMessaging: '20.1.0',
                 messaging     : '22.0.0',
-                perf          : '20.0.3',
         ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
@@ -262,7 +257,7 @@ subprojects {
 
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
 
-                implementation "com.jakewharton.timber:timber:${deps.timber}"
+                implementation libs.timber
 
                 testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
                 testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"

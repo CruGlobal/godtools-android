@@ -28,11 +28,11 @@ android {
 dependencies {
     api project(':library:base')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${deps.kotlinCoroutines}"
+    implementation libs.kotlin.coroutines
 
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
     implementation "com.google.firebase:firebase-messaging:${deps.firebase.messaging}"
-    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
+    implementation libs.firebase.perf
     implementation "com.google.android.gms:play-services-tagmanager:${deps.googleTagManager}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
@@ -47,10 +47,10 @@ dependencies {
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
-    implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
+    implementation libs.snowplow
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
     testImplementation libs.play.billing
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

@@ -175,6 +175,8 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
     implementation "androidx.work:work-runtime:${deps.androidX.work}"
 
+    implementation libs.kotlin.coroutines.android
+
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-drawerlayout:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
@@ -199,9 +201,9 @@ dependencies {
 
     implementation libs.firebase.crashlytics
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
-    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
+    implementation libs.firebase.perf
 
-    implementation 'com.google.android.play:core:1.10.2'
+    implementation libs.play.core
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
