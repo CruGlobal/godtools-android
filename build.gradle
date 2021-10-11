@@ -41,7 +41,6 @@ buildscript {
                 snowplow           : '2.2.1',
                 splitties          : '3.0.0',
                 taptargetview      : '1.13.3',
-                timber             : '5.0.1',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : '1.0.1',
                 youtubeplayer      : '10.0.5'
@@ -262,7 +261,7 @@ subprojects {
 
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
 
-                implementation "com.jakewharton.timber:timber:${deps.timber}"
+                implementation libs.timber
 
                 testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
                 testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"

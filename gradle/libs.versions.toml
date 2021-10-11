@@ -7,3 +7,4 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", ve
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
+timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
