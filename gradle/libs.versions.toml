@@ -1,10 +1,14 @@
 [versions]
 firebase-crashlytics = "18.2.3"
+kotlinCoroutines = "1.5.2"
 play-billing = "4.0.0"
 
 [libraries]
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }

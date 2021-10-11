@@ -28,7 +28,7 @@ android {
 dependencies {
     api project(':library:base')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${deps.kotlinCoroutines}"
+    implementation libs.kotlin.coroutines
 
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
     implementation "com.google.firebase:firebase-messaging:${deps.firebase.messaging}"
@@ -50,7 +50,7 @@ dependencies {
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
     testImplementation libs.play.billing
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"

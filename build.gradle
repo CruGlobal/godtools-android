@@ -24,7 +24,6 @@ buildscript {
                 jsoup              : '1.14.3',
                 junit              : '4.13.2',
                 kotlin             : '1.5.31',
-                kotlinCoroutines   : '1.5.2',
                 leakcanary         : '2.7',
                 lottie             : '4.2.0',
                 materialDesign     : '1.4.0',

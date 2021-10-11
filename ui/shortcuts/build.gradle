@@ -34,7 +34,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
 
     testImplementation "org.ccci.gto.android.testing:gto-support-timber:${deps.gtoSupport}"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${deps.kotlinCoroutines}"
+    testImplementation libs.kotlin.coroutines.test
 
     kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
