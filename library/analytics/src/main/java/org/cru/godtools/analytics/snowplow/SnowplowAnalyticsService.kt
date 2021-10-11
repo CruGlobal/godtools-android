@@ -73,10 +73,6 @@ class SnowplowAnalyticsService @Inject internal constructor(
     )
 
     // region Tracking Events
-    init {
-        eventBus.register(this)
-    }
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
@@ -137,4 +133,8 @@ class SnowplowAnalyticsService @Inject internal constructor(
         CONTEXT_SCHEMA_SCORING, mapOf(CONTEXT_ATTR_SCORING_URI to snowplowContentScoringUri.toString())
     )
     // endregion Contexts
+
+    init {
+        eventBus.register(this)
+    }
 }
