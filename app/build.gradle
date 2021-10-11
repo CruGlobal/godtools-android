@@ -201,7 +201,7 @@ dependencies {
 
     implementation libs.firebase.crashlytics
     implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
-    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
+    implementation libs.firebase.perf
 
     implementation libs.play.core
 

@@ -32,7 +32,7 @@ dependencies {
 
     implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
     implementation "com.google.firebase:firebase-messaging:${deps.firebase.messaging}"
-    implementation "com.google.firebase:firebase-perf:${deps.firebase.perf}"
+    implementation libs.firebase.perf
     implementation "com.google.android.gms:play-services-tagmanager:${deps.googleTagManager}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"

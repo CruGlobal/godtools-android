@@ -1,11 +1,14 @@
 [versions]
 firebase-crashlytics = "18.2.3"
+firebase-perf = "20.0.3"
 kotlinCoroutines = "1.5.2"
 play-billing = "4.0.0"
 
 [libraries]
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
+firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
+firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }

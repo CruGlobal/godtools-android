@@ -22,7 +22,7 @@ dependencies {
     implementation "androidx.hilt:hilt-work:${deps.androidX.hilt}"
     api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
 
-    implementation "com.google.firebase:firebase-perf-ktx:${deps.firebase.perf}"
+    implementation libs.firebase.perf.ktx
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
