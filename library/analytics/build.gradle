@@ -47,7 +47,7 @@ dependencies {
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
-    implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
+    implementation libs.snowplow
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation libs.kotlin.coroutines.test
