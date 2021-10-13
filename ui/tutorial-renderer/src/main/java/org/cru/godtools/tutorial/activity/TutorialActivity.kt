@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import me.relex.circleindicator.CircleIndicator3
+import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 import org.cru.godtools.base.ui.startArticlesActivity
@@ -31,6 +32,9 @@ import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 
 private const val ARG_PAGE_SET = "pageSet"
 private const val ARG_FRMT_ARGS = "formatArgs"
+
+// TODO: this should be dynamic based upon the available languages in the database
+private val ARTICLES_SUPPORTED_LANGUAGES = setOf(Locale.ENGLISH, Locale("es"))
 
 fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
     Intent(this, TutorialActivity::class.java)
@@ -171,8 +175,9 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         when (view.id) {
             R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             R.id.action_onboarding_launch_articles -> {
-                // TODO: we need to launch in whichever language makes sense for the current system/primary locale
-                startArticlesActivity("es", Locale.ENGLISH)
+                val locale = LocaleUtils.getFallbacks(deviceLocale, Locale.ENGLISH)
+                    .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
+                startArticlesActivity("es", locale)
                 finish()
             }
             R.id.action_onboarding_launch_lessons -> {

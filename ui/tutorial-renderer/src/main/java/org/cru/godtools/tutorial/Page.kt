@@ -4,7 +4,7 @@ import androidx.annotation.LayoutRes
 import java.util.Locale
 import org.ccci.gto.android.common.util.LocaleUtils
 
-private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH)
+private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH, Locale("es"))
 private val FEATURES_LOCALES = setOf(Locale.ENGLISH)
 
 internal enum class Page(
