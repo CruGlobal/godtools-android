@@ -1,22 +1,3 @@
-pluginManagement {
-    repositories {
-        maven {
-            setUrl("https://jitpack.io")
-            content { includeGroupByRegex("com\\.github\\..*") }
-        }
-        gradlePluginPortal()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            // HACK: use the master-SNAPSHOT version until 0.17.0 is released. This provides a better mechanism to
-            //       modify excluded classes.
-            //       see: https://github.com/vanniktech/gradle-android-junit-jacoco-plugin/pull/173
-            if (requested.id.id == "com.vanniktech.android.junit.jacoco") {
-                useModule("com.github.vanniktech:gradle-android-junit-jacoco-plugin:master-SNAPSHOT")
-            }
-        }
-    }
-}
 rootProject.name = "godtools"
 enableFeaturePreview("VERSION_CATALOGS")
 
