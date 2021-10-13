@@ -1,7 +1,5 @@
 package org.cru.godtools.article.aem.db
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
 import java.util.Locale
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
@@ -9,6 +7,8 @@ import org.cru.godtools.model.Translation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 
 class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : TranslationRepository(db) {}

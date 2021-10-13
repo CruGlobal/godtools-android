@@ -1,16 +1,6 @@
 package org.cru.godtools.init.content.task
 
 import android.content.Context
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyVararg
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import java.io.ByteArrayInputStream
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +17,16 @@ import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyVararg
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TasksTest {
@@ -63,7 +63,7 @@ class TasksTest {
         whenever(dao.getLastSyncTime(anyVararg())).thenReturn(5)
         tasks.initFavoriteTools()
         verify(dao, never()).get(any<Query<*>>())
-        verifyZeroInteractions(downloadManager)
+        verifyNoInteractions(downloadManager)
     }
 
     @Test
