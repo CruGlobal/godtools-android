@@ -308,25 +308,6 @@ subprojects {
 junitJacoco {
     jacocoVersion = deps.jacoco
     includeNoLocationClasses = true
-    excludes += [
-            // DataBinding generated classes
-            '**/DataBinderMapperImpl.java',
-            '**/*BindingImpl.*',
-            '**/databinding/*Binding.*',
-
-            // EventBus generated Indexes
-            '**/*EventBusIndex.*',
-
-            // Hilt generated classes
-            '**/hilt_aggregated_deps/**/*',
-            '**/Hilt_*',
-            '**/*_HiltModules.*',
-            '**/*_HiltModules$*',
-
-            // Room generated classes
-            '**/*_Impl.*',
-            '**/*_Impl$*'
-    ]
 }
 allprojects {
     afterEvaluate {
