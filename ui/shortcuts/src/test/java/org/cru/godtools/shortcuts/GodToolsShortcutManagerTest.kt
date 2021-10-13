@@ -8,17 +8,6 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.clearInvocations
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.stub
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.squareup.picasso.Picasso
 import java.util.EnumSet
 import java.util.Locale
@@ -48,6 +37,18 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
+import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 
@@ -146,11 +147,11 @@ class GodToolsShortcutManagerTest {
         // update doesn't trigger before requested
         coroutineScope.advanceUntilIdle()
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
 
         // trigger update
         assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
@@ -159,7 +160,7 @@ class GodToolsShortcutManagerTest {
         // trigger multiple updates simultaneously, it should conflate to a single update
         assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(1)
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         verify(dao).find<Tool>("kgp")
@@ -179,7 +180,7 @@ class GodToolsShortcutManagerTest {
 
         // trigger a primary language update
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         coroutineScope.advanceUntilIdle()
         verify(dao).get(Tool::class.java)
     }
@@ -193,7 +194,7 @@ class GodToolsShortcutManagerTest {
 
         // trigger a primary language update
         assertTrue(parallelLanguageFlow.tryEmit(null))
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         coroutineScope.advanceUntilIdle()
         verify(dao).get(Tool::class.java)
     }
@@ -215,7 +216,7 @@ class GodToolsShortcutManagerTest {
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         coroutineScope.advanceUntilIdle()
         verify(dao).get(Tool::class.java)
     }
@@ -229,7 +230,7 @@ class GodToolsShortcutManagerTest {
             shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess
         )
         coroutineScope.advanceUntilIdle()
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
     }
 
     @Test
@@ -249,7 +250,7 @@ class GodToolsShortcutManagerTest {
     private fun assertUpdateExistingShortcutsInitialUpdate() {
         // ensure update shortcuts is initially delayed
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
         coroutineScope.advanceTimeBy(1)
         verify(dao).get(Tool::class.java)
         clearInvocations(dao)
@@ -267,7 +268,7 @@ class GodToolsShortcutManagerTest {
         clearInvocations(dao)
 
         coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }
-        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(dao)
     }
     // endregion Instant App
 }

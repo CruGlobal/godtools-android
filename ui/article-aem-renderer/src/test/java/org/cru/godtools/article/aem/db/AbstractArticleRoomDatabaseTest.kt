@@ -1,7 +1,7 @@
 package org.cru.godtools.article.aem.db
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 abstract class AbstractArticleRoomDatabaseTest {
     protected val aemImportDao = mock<AemImportDao> {}

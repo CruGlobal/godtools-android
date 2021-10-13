@@ -1,9 +1,6 @@
 package org.cru.godtools.tract.analytics.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.tract.TractPage
 import org.junit.Assert.assertEquals
@@ -11,6 +8,9 @@ import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class TractPageAnalyticsScreenEventTest {

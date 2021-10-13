@@ -2,8 +2,6 @@ package org.cru.godtools.base
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import com.okta.oidc.clients.sessions.SessionClient
 import org.cru.godtools.base.Settings.Companion.FEATURE_LOGIN
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
@@ -14,6 +12,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 private const val FEATURE_TEST = "testFeature"
 
