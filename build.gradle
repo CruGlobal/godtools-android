@@ -145,7 +145,6 @@ allprojects {
     configurations.all { configuration ->
         configuration.resolutionStrategy {
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
-            force "junit:junit:${deps.junit}"
 
             // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
             //      Remove this override once FIAM depends on v1.30.0+ of grpc
