@@ -3,7 +3,6 @@ firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
 gtoSupport = "3.9.1"
 kotlinCoroutines = "1.5.2"
-play-billing = "4.0.0"
 
 [libraries]
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
@@ -21,7 +20,7 @@ kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", 
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "4.0.0" }
-play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }
+play-billing = { module = "com.android.billingclient:billing", version = "4.0.0" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
 play-installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2" }
 snowplow = { module = "com.snowplowanalytics:snowplow-android-tracker", version = "2.2.1" }
