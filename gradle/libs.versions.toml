@@ -23,5 +23,6 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "4.0.0" }
 play-billing = { module = "com.android.billingclient:billing", version.ref = "play-billing" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
+play-installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2" }
 snowplow = { module = "com.snowplowanalytics:snowplow-android-tracker", version = "2.2.1" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
