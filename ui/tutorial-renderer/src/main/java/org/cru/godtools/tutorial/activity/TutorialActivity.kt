@@ -26,6 +26,9 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.TutorialCallbacks
 import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_LESSONS
+import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
@@ -175,16 +178,19 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         when (view.id) {
             R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             R.id.action_onboarding_launch_articles -> {
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES))
                 val locale = LocaleUtils.getFallbacks(deviceLocale, Locale.ENGLISH)
                     .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                 startArticlesActivity("es", locale)
                 finish()
             }
             R.id.action_onboarding_launch_lessons -> {
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_LESSONS))
                 startDashboardActivity(DashboardPage.LESSONS)
                 finish()
             }
             R.id.action_onboarding_launch_tools -> {
+                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS))
                 startDashboardActivity(DashboardPage.FAVORITE_TOOLS)
                 finish()
             }
