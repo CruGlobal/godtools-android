@@ -10,7 +10,11 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", ve
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
+gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
+gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
+gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
+gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 json = { module = "org.json:json", version = "20210307" }
 jsoup = { module = "org.jsoup:jsoup", version = "1.14.3" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
