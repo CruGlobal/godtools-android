@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tools_card_corner_radius">0dp</dimen>
+    <dimen name="tools_card_corner_radius">6dp</dimen>
     <dimen name="tools_card_elevation">2dp</dimen>
-    <dimen name="tools_card_margin_horiz">14dp</dimen>
-    <dimen name="tools_card_margin_vert">6dp</dimen>
+    <dimen name="tools_card_margin_horiz">16dp</dimen>
+    <dimen name="tools_card_margin_vert">12dp</dimen>
 
     <color name="tools_download_progress_bg">#7F000000</color>
 
