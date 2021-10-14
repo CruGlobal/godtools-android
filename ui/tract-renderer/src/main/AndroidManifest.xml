@@ -5,6 +5,7 @@
     <application>
         <activity
             android:name=".activity.TractActivity"
+            android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tract.Activity.Tract">
             <intent-filter android:autoVerify="true">
