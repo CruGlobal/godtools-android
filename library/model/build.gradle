@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation project(':library:base')
 
-    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
+    implementation libs.gtoSupport.jsonapi
 
     testImplementation libs.json
 }
