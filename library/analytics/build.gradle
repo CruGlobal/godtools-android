@@ -40,8 +40,8 @@ dependencies {
     implementation libs.gtoSupport.okta
     implementation libs.gtoSupport.snowplow
 
+    implementation libs.appsflyer
     implementation libs.play.installreferrer
-    implementation "com.appsflyer:af-android-sdk:${deps.appsFlyer}"
     implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger:${deps.dagger}"

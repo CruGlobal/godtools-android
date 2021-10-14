@@ -5,6 +5,7 @@ gtoSupport = "3.9.1"
 kotlinCoroutines = "1.5.2"
 
 [libraries]
+appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.0" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
