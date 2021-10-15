@@ -67,6 +67,7 @@ dependencies {
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation project(':ui:tract-renderer')
+    testImplementation libs.androidx.arch.core.testing
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }
