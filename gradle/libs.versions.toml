@@ -1,4 +1,5 @@
 [versions]
+androidx-arch = "2.1.0"
 dagger = "2.39.1"
 firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
@@ -6,6 +7,7 @@ gtoSupport = "3.9.1"
 kotlinCoroutines = "1.5.2"
 
 [libraries]
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch" }
 appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.0" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }

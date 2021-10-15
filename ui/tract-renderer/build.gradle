@@ -64,7 +64,7 @@ dependencies {
     kapt libs.hilt.compiler
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
-    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation libs.androidx.arch.core.testing
     testImplementation "androidx.lifecycle:lifecycle-runtime-testing:${deps.androidX.lifecycle}"
     testImplementation libs.hilt.testing
     testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
