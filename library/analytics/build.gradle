@@ -35,13 +35,13 @@ dependencies {
     implementation libs.firebase.perf
     implementation "com.google.android.gms:play-services-tagmanager:${deps.googleTagManager}"
 
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-snowplow:${deps.gtoSupport}"
+    implementation libs.gtoSupport.compat
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.okta
+    implementation libs.gtoSupport.snowplow
 
-    implementation "com.android.installreferrer:installreferrer:2.2"
-    implementation "com.appsflyer:af-android-sdk:${deps.appsFlyer}"
+    implementation libs.appsflyer
+    implementation libs.play.installreferrer
     implementation "com.facebook.android:facebook-core:${deps.facebook}"
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.dagger:dagger:${deps.dagger}"
