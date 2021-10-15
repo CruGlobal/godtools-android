@@ -5,7 +5,6 @@ import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -23,6 +22,7 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
+import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -43,10 +43,9 @@ class TractActivityDataModel @Inject constructor(
     private val manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
     private val savedState: SavedStateHandle
-) : ViewModel() {
-    val tool = MutableLiveData<String?>()
+) : BaseMultiLanguageToolActivityDataModel() {
     val isInitialSyncFinished = MutableLiveData(false)
-    private val distinctTool = tool.distinctUntilChanged()
+    private val distinctToolCode = toolCode.distinctUntilChanged()
 
     // region Active Tool
     val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
@@ -55,16 +54,16 @@ class TractActivityDataModel @Inject constructor(
     fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
 
     val activeManifest =
-        distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
+        distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeLoadingState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
+    val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val translation = translationCache.get(tool, l)
         manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
             LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
-    val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
+    val downloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
         when {
             t == null || l == null -> emptyLiveData()
             else -> downloadManager.getDownloadProgressLiveData(t, l)
@@ -86,14 +85,14 @@ class TractActivityDataModel @Inject constructor(
     @VisibleForTesting
     internal val manifests =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
-            distinctTool.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
+            distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
         }.map { it.toMap() }
     @VisibleForTesting
     internal val translations =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
-            distinctTool.switchMap { translationCache.get(it, locale).withInitialValue(null) }
+            distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }

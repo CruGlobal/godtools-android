@@ -92,7 +92,7 @@ class TractActivity :
         }
 
         // track this view
-        if (savedInstanceState == null) dataModel.tool.value?.let { trackToolOpen(it) }
+        if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it) }
 
         setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
@@ -176,7 +176,7 @@ class TractActivity :
         val data = intent?.data
         val extras = intent?.extras
         if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
-            dataModel.tool.value = data.deepLinkTool
+            dataModel.toolCode.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
@@ -185,13 +185,13 @@ class TractActivity :
                 data.deepLinkPage?.let { initialPage = it }
             }
         } else if (extras != null) {
-            dataModel.tool.value = extras.getString(EXTRA_TOOL, dataModel.tool.value)
+            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
             val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
             dataModel.primaryLocales.value = if (languages.isNotEmpty()) languages.subList(0, 1) else emptyList()
             dataModel.parallelLocales.value =
                 if (languages.size > 1) languages.subList(1, languages.size) else emptyList()
         } else {
-            dataModel.tool.value = null
+            dataModel.toolCode.value = null
         }
     }
 
@@ -225,7 +225,7 @@ class TractActivity :
         .map { Locale.forLanguageTag(it) }
 
     override val isValidStartState
-        get() = dataModel.tool.value != null &&
+        get() = dataModel.toolCode.value != null &&
             (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
     // endregion Intent Processing
 
@@ -287,7 +287,7 @@ class TractActivity :
     override fun onTabSelected(tab: TabLayout.Tab) {
         if (languageToggleController.isUpdatingTabs) return
         val locale = tab.tag as? Locale ?: return
-        eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
+        eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.toolCode.value, locale))
         dataModel.setActiveLocale(locale)
     }
 
@@ -361,7 +361,7 @@ class TractActivity :
     // endregion UI
 
     override fun cacheTools() {
-        dataModel.tool.value?.let { tool ->
+        dataModel.toolCode.value?.let { tool ->
             dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
         }
     }
@@ -437,7 +437,7 @@ class TractActivity :
             RESULT_CANCELED -> publisherController.started = false
             else -> {
                 dataModel.liveShareTutorialShown = true
-                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
                 shareLiveShareLink()
             }
         }
@@ -460,7 +460,7 @@ class TractActivity :
     internal fun shareLiveShareLink() {
         when {
             !dataModel.liveShareTutorialShown &&
-                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
+                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 ->
                 liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             publisherController.publisherInfo.value == null ->
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
@@ -501,7 +501,7 @@ class TractActivity :
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
-            dataModel.tool.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
+            dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
             dataModel.setActiveLocale(it)
         }
         event.page?.let { goToPage(it) }

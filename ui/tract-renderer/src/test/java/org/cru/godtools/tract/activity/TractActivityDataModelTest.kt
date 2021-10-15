@@ -68,7 +68,7 @@ class TractActivityDataModelTest {
     fun verifyActiveManifestChangeActiveLocale() {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.setActiveLocale(Locale.ENGLISH)
 
         dataModel.activeManifest.observeForever(observer)
@@ -88,7 +88,7 @@ class TractActivityDataModelTest {
     fun verifyManifests() {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
@@ -111,7 +111,7 @@ class TractActivityDataModelTest {
     fun verifyManifestsNoLocales() {
         dataModel.manifests.observeForever(observer)
         assertThat(dataModel.manifests.value, anEmptyMap())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         assertThat(dataModel.manifests.value, anEmptyMap())
         verify(observer).onChanged(eq(emptyMap<Locale, Manifest?>()))
     }
@@ -121,7 +121,7 @@ class TractActivityDataModelTest {
         val french = MutableLiveData(Manifest())
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
@@ -147,7 +147,7 @@ class TractActivityDataModelTest {
         val french = MutableLiveData<Manifest?>()
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
         dataModel.manifests.observeForever(observer)
         french.value = Manifest()
@@ -183,7 +183,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         wheneverGetTranslation(TOOL, Locale.CHINESE).thenReturn(MutableLiveData(translation))
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
 
         dataModel.translations.observeForever(observer)
@@ -208,7 +208,7 @@ class TractActivityDataModelTest {
     fun verifyTranslationsNoLocales() {
         dataModel.translations.observeForever(observer)
         assertThat(dataModel.translations.value, anEmptyMap())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         assertThat(dataModel.translations.value, anEmptyMap())
         verify(observer).onChanged(eq(emptyMap<Locale, Translation?>()))
     }
@@ -218,7 +218,7 @@ class TractActivityDataModelTest {
         val french = MutableLiveData<Translation?>(null)
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(french)
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.translations.observeForever(observer)
@@ -251,7 +251,7 @@ class TractActivityDataModelTest {
     @Test
     fun verifyLoadingStateUpdateTranslation() {
         val translation = MutableLiveData<Translation?>(null)
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
         wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
@@ -279,7 +279,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.setActiveLocale(Locale.FRENCH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
@@ -298,7 +298,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Manifest()))
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.setActiveLocale(Locale.FRENCH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
@@ -321,7 +321,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.setActiveLocale(Locale.ENGLISH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
@@ -344,7 +344,7 @@ class TractActivityDataModelTest {
         wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
-        dataModel.tool.value = TOOL
+        dataModel.toolCode.value = TOOL
         dataModel.setActiveLocale(Locale.GERMAN)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
