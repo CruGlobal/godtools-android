@@ -14,7 +14,6 @@ import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.aMapWithSize
 import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.anEmptyMap
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasEntry
@@ -79,99 +78,6 @@ class TractActivityDataModelTest {
         }
     }
     // endregion Property: activeManifest
-
-    // region Property: manifests
-    @Test
-    fun verifyManifests() {
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        dataModel.toolCode.value = TOOL
-        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
-
-        dataModel.manifests.observeForever(observer)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer).onChanged(capture())
-            assertThat(
-                lastValue,
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
-                )
-            )
-        }
-    }
-
-    @Test
-    fun verifyManifestsNoLocales() {
-        dataModel.manifests.observeForever(observer)
-        assertThat(dataModel.manifests.value, anEmptyMap())
-        dataModel.toolCode.value = TOOL
-        assertThat(dataModel.manifests.value, anEmptyMap())
-        verify(observer).onChanged(eq(emptyMap<Locale, Manifest?>()))
-    }
-
-    @Test
-    fun verifyManifestsUpdateLocales() {
-        val french = MutableLiveData(Manifest())
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
-        dataModel.toolCode.value = TOOL
-        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
-
-        dataModel.manifests.observeForever(observer)
-        dataModel.primaryLocales.value = listOf(Locale.FRENCH)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(
-                firstValue,
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-                )
-            )
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)))
-        }
-    }
-
-    @Test
-    fun verifyManifestsUpdateManifest() {
-        val french = MutableLiveData<Manifest?>()
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
-        dataModel.toolCode.value = TOOL
-        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
-        dataModel.manifests.observeForever(observer)
-        french.value = Manifest()
-
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(
-                firstValue,
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
-                )
-            )
-            assertThat(
-                lastValue,
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-                )
-            )
-        }
-    }
-    // endregion Property: manifests
 
     // region Property: loadingState
     @Test
