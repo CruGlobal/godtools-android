@@ -10,5 +10,6 @@ internal fun Uri.isLessonDeepLink() = ("http".equals(scheme, true) || "https".eq
     host.equals(HOST_GODTOOLSAPP_COM, true) &&
     pathSegments.getOrNull(0) == "lessons" && pathSegments.size >= 3
 
-internal val Uri.lessonDeepLinkCode get() = pathSegments[1]
-internal val Uri.lessonDeepLinkLocale get() = Locale.forLanguageTag(pathSegments[2])
+internal val Uri.lessonDeepLinkCode get() = pathSegments[1]?.takeIf { it.isNotEmpty() }
+internal val Uri.lessonDeepLinkLocale
+    get() = pathSegments[2]?.takeIf { it.isNotEmpty() }?.let { Locale.forLanguageTag(it) }

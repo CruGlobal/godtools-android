@@ -29,4 +29,9 @@ dependencies {
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt libs.hilt.compiler
+
+    testImplementation project(':library:model')
+    testImplementation libs.hilt.testing
+
+    kaptTest libs.hilt.compiler
 }

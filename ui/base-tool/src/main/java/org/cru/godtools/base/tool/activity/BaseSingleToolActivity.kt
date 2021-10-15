@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.distinctUntilChanged
 import java.util.Locale
@@ -50,7 +52,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 
     private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
 
-    protected val tool: String
+    @VisibleForTesting(otherwise = PROTECTED)
+    val tool: String
         get() = when {
             !requireTool -> throw UnsupportedOperationException(
                 "You cannot get the tool code on a fragment that doesn't require a tool"
@@ -58,7 +61,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             else -> checkNotNull(dataModel.toolCode.value) { "requireTool is true, but a tool wasn't specified" }
         }
 
-    protected val locale: Locale
+    @VisibleForTesting(otherwise = PROTECTED)
+    val locale: Locale
         get() = when {
             !requireTool -> throw UnsupportedOperationException(
                 "You cannot get the locale on a fragment that doesn't require a tool"
