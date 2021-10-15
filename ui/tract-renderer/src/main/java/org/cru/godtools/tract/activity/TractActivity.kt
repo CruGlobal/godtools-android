@@ -84,13 +84,7 @@ class TractActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        processIntent(intent, savedInstanceState)
-
-        // finish now if this activity is in an invalid start state
-        if (!validStartState()) {
-            finish()
-            return
-        }
+        if (isFinishing) return
 
         // restore any saved state
         savedInstanceState?.run {
@@ -178,7 +172,7 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         val data = intent?.data
         val extras = intent?.extras
         if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
@@ -229,10 +223,11 @@ class TractActivity :
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { Locale.forLanguageTag(it) }
-    // endregion Intent Processing
 
-    private fun validStartState() = dataModel.tool.value != null &&
-        (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
+    override val isValidStartState
+        get() = dataModel.tool.value != null &&
+            (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
+    // endregion Intent Processing
 
     // region Data Model
     private val dataModel: TractActivityDataModel by viewModels()

@@ -53,6 +53,7 @@ class LessonActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (isFinishing) return
         setupFeedbackDialog()
     }
 
@@ -78,14 +79,16 @@ class LessonActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    override fun processIntent(intent: Intent?) {
+    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+        super.processIntent(intent, savedInstanceState)
         val data = intent?.data
-        when {
-            intent?.action == ACTION_VIEW && data?.isLessonDeepLink() == true -> {
-                dataModel.toolCode.value = data.lessonDeepLinkCode
-                dataModel.locale.value = data.lessonDeepLinkLocale
+        when (intent?.action) {
+            ACTION_VIEW -> when {
+                data?.isLessonDeepLink() == true -> {
+                    dataModel.toolCode.value = data.lessonDeepLinkCode
+                    dataModel.locale.value = data.lessonDeepLinkLocale
+                }
             }
-            else -> super.processIntent(intent)
         }
     }
     // endregion Intent Processing

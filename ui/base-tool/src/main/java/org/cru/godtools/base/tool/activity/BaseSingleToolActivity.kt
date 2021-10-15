@@ -28,24 +28,17 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     protected open val dataModel: BaseSingleToolActivityDataModel by viewModels()
     protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
 
-    // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        processIntent(intent)
-
-        // finish now if this activity is in an invalid state
-        if (!validStartState()) finish()
-    }
-    // endregion Lifecycle
-
-    protected open fun processIntent(intent: Intent?) {
+    // region Intent processing
+    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         intent?.extras?.let { extras ->
             dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
             dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
         }
     }
 
+    override val isValidStartState get() = super.isValidStartState && (!requireTool || hasTool())
     private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
+    // endregion Intent processing
 
     @VisibleForTesting(otherwise = PROTECTED)
     val tool: String
@@ -79,8 +72,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }
-
-    private fun validStartState() = !requireTool || hasTool()
 
     // region Up Navigation
     override fun buildParentIntentExtras(): Bundle {
