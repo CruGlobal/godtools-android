@@ -55,22 +55,22 @@ dependencies {
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
     implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.hilt
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.hilt.compiler
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
     testImplementation "androidx.lifecycle:lifecycle-runtime-testing:${deps.androidX.lifecycle}"
-    testImplementation "com.google.dagger:hilt-android-testing:${deps.dagger}"
+    testImplementation libs.hilt.testing
     testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
     testImplementation "org.ccci.gto.android.testing:gto-support-picasso:${deps.gtoSupport}"
     testImplementation libs.kotlin.coroutines.test
 
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
-    kaptTest "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kaptTest libs.hilt.compiler
 }

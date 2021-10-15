@@ -24,9 +24,9 @@ dependencies {
     implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
     implementation "com.google.android.material:material:${deps.materialDesign}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.hilt
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.hilt.compiler
 }
