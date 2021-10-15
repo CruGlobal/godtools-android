@@ -15,10 +15,10 @@ import org.junit.Assume.assumeThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import org.robolectric.annotation.Config.TARGET_SDK
+import org.robolectric.annotation.Config.NEWEST_SDK
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [21, TARGET_SDK])
+@Config(sdk = [21, NEWEST_SDK])
 class PageSetTest {
     @Test
     fun testTrainingSupportedLanguages() {
