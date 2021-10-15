@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.activity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -21,6 +22,8 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.nullableArgumentCaptor
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -42,7 +45,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
     fun setupDataModel() {
         dao = mock()
         manifestManager = mock()
-        dataModel = BaseMultiLanguageToolActivityDataModel(dao, manifestManager)
+        dataModel = BaseMultiLanguageToolActivityDataModel(dao, manifestManager, SavedStateHandle())
     }
 
     @Before
@@ -222,4 +225,24 @@ class BaseMultiLanguageToolActivityDataModelTest {
     }
     // endregion Property: manifests
     // endregion Resolved Data
+
+    // region Property: activeManifest
+    @Test
+    fun `Property activeManifest - Change Active Locale`() {
+        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        dataModel.toolCode.value = TOOL
+        dataModel.setActiveLocale(Locale.ENGLISH)
+
+        dataModel.activeManifest.observeForever(observer)
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager, never()).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        dataModel.setActiveLocale(Locale.FRENCH)
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
+        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        nullableArgumentCaptor<Manifest> {
+            verify(observer, times(2)).onChanged(capture())
+        }
+    }
+    // endregion Property: activeManifest
 }

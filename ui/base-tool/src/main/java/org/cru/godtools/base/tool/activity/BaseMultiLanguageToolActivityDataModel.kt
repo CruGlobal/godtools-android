@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
@@ -15,6 +16,7 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.db.Expression
@@ -28,10 +30,13 @@ import org.cru.godtools.tool.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 
+private const val STATE_ACTIVE_LOCALE = "activeLocale"
+
 @HiltViewModel
 open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     manifestManager: ManifestManager,
+    protected val savedState: SavedStateHandle,
 ) : ViewModel() {
     val toolCode = MutableLiveData<String?>()
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
@@ -63,6 +68,18 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
         }.map { it.toMap() }
+    // endregion Resolved Data
+
+    // region Active Tool
+    val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
+        .map { it?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
+
+    val activeManifest =
+        distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
+            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
+    // endregion Active Tool
 
     protected val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
@@ -76,7 +93,6 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
             return manifestManager.getLatestPublishedManifestLiveData(tool, locale).distinctUntilChanged()
         }
     }
-    // endregion Resolved Data
 }
 
 private fun <T> LruCache<TranslationKey, T>.get(tool: String?, locale: Locale?) = get(TranslationKey(tool, locale))!!

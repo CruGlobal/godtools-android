@@ -23,10 +23,7 @@ import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.nullableArgumentCaptor
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -58,26 +55,6 @@ class TractActivityDataModelTest {
     fun setupObserver() {
         observer = mock()
     }
-
-    // region Property: activeManifest
-    @Test
-    fun verifyActiveManifestChangeActiveLocale() {
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        dataModel.toolCode.value = TOOL
-        dataModel.setActiveLocale(Locale.ENGLISH)
-
-        dataModel.activeManifest.observeForever(observer)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager, never()).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        dataModel.setActiveLocale(Locale.FRENCH)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        nullableArgumentCaptor<Manifest> {
-            verify(observer, times(2)).onChanged(capture())
-        }
-    }
-    // endregion Property: activeManifest
 
     // region Property: loadingState
     @Test
