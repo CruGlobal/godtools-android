@@ -102,9 +102,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    @CallSuper
-    protected open fun onUpdateActiveManifest() = Unit
     // endregion Lifecycle
 
     /**
