@@ -34,7 +34,7 @@ import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
-import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.tool.model.backgroundColor
@@ -71,7 +71,7 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 
 @AndroidEntryPoint
 class TractActivity :
-    BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
+    BaseMultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
     TabLayout.OnTabSelectedListener,
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
@@ -230,7 +230,7 @@ class TractActivity :
     // endregion Intent Processing
 
     // region Data Model
-    private val dataModel: TractActivityDataModel by viewModels()
+    override val dataModel: TractActivityDataModel by viewModels()
     private val toolState: ToolStateHolder by viewModels()
     // endregion Data Model
 
