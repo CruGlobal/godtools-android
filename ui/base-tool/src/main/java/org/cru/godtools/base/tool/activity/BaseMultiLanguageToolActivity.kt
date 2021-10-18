@@ -8,11 +8,13 @@ import androidx.databinding.ViewDataBinding
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 
 abstract class BaseMultiLanguageToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int
 ) : BaseToolActivity<B>(contentLayoutId) {
     protected open val dataModel: BaseMultiLanguageToolActivityDataModel by viewModels()
+    protected val toolState: ToolStateHolder by viewModels()
 
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {

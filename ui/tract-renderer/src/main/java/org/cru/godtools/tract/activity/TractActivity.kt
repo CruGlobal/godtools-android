@@ -34,7 +34,6 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.navBarControlColor
@@ -73,6 +72,9 @@ class TractActivity :
     TabLayout.OnTabSelectedListener,
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
+    @VisibleForTesting(otherwise = PROTECTED)
+    public override val dataModel: TractActivityDataModel by viewModels()
+
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -214,12 +216,6 @@ class TractActivity :
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { Locale.forLanguageTag(it) }
     // endregion Intent Processing
-
-    // region Data Model
-    @VisibleForTesting(otherwise = PROTECTED)
-    public override val dataModel: TractActivityDataModel by viewModels()
-    private val toolState: ToolStateHolder by viewModels()
-    // endregion Data Model
 
     // region UI
     override val toolbar get() = binding.appbar
