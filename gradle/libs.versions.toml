@@ -8,7 +8,7 @@ kotlinCoroutines = "1.5.2"
 
 [libraries]
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch" }
-appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.0" }
+appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.1" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
