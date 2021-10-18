@@ -28,10 +28,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.ccci.gto.android.common.util.graphics.toHsvColor
-import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
-import org.cru.godtools.base.EXTRA_LANGUAGES
-import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
@@ -174,8 +171,8 @@ class TractActivity :
 
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+        super.processIntent(intent, savedInstanceState)
         val data = intent?.data
-        val extras = intent?.extras
         if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
             dataModel.toolCode.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
@@ -185,14 +182,6 @@ class TractActivity :
                 dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
                 data.deepLinkPage?.let { initialPage = it }
             }
-        } else if (extras != null) {
-            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
-            val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
-            dataModel.primaryLocales.value = if (languages.isNotEmpty()) languages.subList(0, 1) else emptyList()
-            dataModel.parallelLocales.value =
-                if (languages.size > 1) languages.subList(1, languages.size) else emptyList()
-        } else {
-            dataModel.toolCode.value = null
         }
     }
 
@@ -224,10 +213,6 @@ class TractActivity :
         .flatMap { it.split(",") }
         .map { it.trim() }.filterNot { it.isEmpty() }
         .map { Locale.forLanguageTag(it) }
-
-    override val isValidStartState
-        get() = dataModel.toolCode.value != null &&
-            (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
     // endregion Intent Processing
 
     // region Data Model
