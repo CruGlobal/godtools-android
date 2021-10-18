@@ -6,8 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
@@ -24,16 +22,7 @@ class TractActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle
-) : BaseMultiLanguageToolActivityDataModel(dao, manifestManager, isConnected, savedState) {
-    // region Active Tool
-    val downloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
-        when {
-            t == null || l == null -> emptyLiveData()
-            else -> downloadManager.getDownloadProgressLiveData(t, l)
-        }
-    }
-    // endregion Active Tool
-
+) : BaseMultiLanguageToolActivityDataModel(dao, downloadManager, manifestManager, isConnected, savedState) {
     // region Language Switcher
     @OptIn(ExperimentalStdlibApi::class)
     val availableLocales = activeLocale

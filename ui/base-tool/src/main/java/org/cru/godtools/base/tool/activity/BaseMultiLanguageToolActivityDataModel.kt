@@ -26,6 +26,7 @@ import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
@@ -38,6 +39,7 @@ private const val STATE_ACTIVE_LOCALE = "activeLocale"
 @HiltViewModel
 open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
+    downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     protected val savedState: SavedStateHandle,
@@ -48,7 +50,7 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Resolved Data
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
-    protected val distinctToolCode = toolCode.distinctUntilChanged()
+    private val distinctToolCode = toolCode.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
 
     val languages = distinctLocales.switchMap {
@@ -107,6 +109,13 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
         distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
     // endregion Active Tool
+
+    val downloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
+        when {
+            t == null || l == null -> emptyLiveData()
+            else -> downloadManager.getDownloadProgressLiveData(t, l)
+        }
+    }
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =

@@ -8,6 +8,7 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
@@ -37,6 +38,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
 
     // region Objects & Mocks
     private lateinit var dao: GodToolsDao
+    private lateinit var downloadManager: GodToolsDownloadManager
     private lateinit var manifestManager: ManifestManager
     private lateinit var dataModel: BaseMultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
@@ -46,8 +48,15 @@ class BaseMultiLanguageToolActivityDataModelTest {
     @Before
     fun setupDataModel() {
         dao = mock()
+        downloadManager = mock()
         manifestManager = mock()
-        dataModel = BaseMultiLanguageToolActivityDataModel(dao, manifestManager, isConnnected, SavedStateHandle())
+        dataModel = BaseMultiLanguageToolActivityDataModel(
+            dao,
+            downloadManager,
+            manifestManager,
+            isConnnected,
+            SavedStateHandle()
+        )
     }
 
     @Before
