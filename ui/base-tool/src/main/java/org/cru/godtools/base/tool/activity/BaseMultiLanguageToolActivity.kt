@@ -30,4 +30,8 @@ abstract class BaseMultiLanguageToolActivity<B : ViewDataBinding>(
         get() = dataModel.toolCode.value != null &&
             (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
     // endregion Intent Processing
+
+    // region Tool sync
+    override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished
+    // endregion Tool sync
 }

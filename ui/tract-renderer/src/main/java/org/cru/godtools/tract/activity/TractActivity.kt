@@ -361,7 +361,6 @@ class TractActivity :
     override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
 
     private fun setupActiveTranslationManagement() {
-        isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
         dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
             if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
         }

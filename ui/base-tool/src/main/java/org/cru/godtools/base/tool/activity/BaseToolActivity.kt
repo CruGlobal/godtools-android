@@ -236,7 +236,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
-    protected val isInitialSyncFinished = MutableLiveData<Boolean>()
+    protected open val isInitialSyncFinished = MutableLiveData<Boolean>()
 
     private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {
         cacheTools()
