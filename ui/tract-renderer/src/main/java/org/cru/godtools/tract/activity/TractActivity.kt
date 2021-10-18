@@ -11,6 +11,7 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
@@ -230,7 +231,8 @@ class TractActivity :
     // endregion Intent Processing
 
     // region Data Model
-    override val dataModel: TractActivityDataModel by viewModels()
+    @VisibleForTesting(otherwise = PROTECTED)
+    public override val dataModel: TractActivityDataModel by viewModels()
     private val toolState: ToolStateHolder by viewModels()
     // endregion Data Model
 
