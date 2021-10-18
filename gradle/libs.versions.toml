@@ -1,10 +1,13 @@
 [versions]
+androidx-arch = "2.1.0"
+dagger = "2.39.1"
 firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
 gtoSupport = "3.9.1"
 kotlinCoroutines = "1.5.2"
 
 [libraries]
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch" }
 appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.0" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
@@ -15,6 +18,9 @@ gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", versio
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
 gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
+hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 json = { module = "org.json:json", version = "20210307" }
 jsoup = { module = "org.jsoup:jsoup", version = "1.14.3" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
