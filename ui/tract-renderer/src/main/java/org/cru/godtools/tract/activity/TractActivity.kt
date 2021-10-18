@@ -343,12 +343,6 @@ class TractActivity :
     // endregion Tool Pager
     // endregion UI
 
-    override fun cacheTools() {
-        dataModel.toolCode.value?.let { tool ->
-            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-        }
-    }
-
     private fun trackTractPage(
         page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
         card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard

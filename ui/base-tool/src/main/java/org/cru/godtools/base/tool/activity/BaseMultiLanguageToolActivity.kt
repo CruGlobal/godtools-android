@@ -33,5 +33,11 @@ abstract class BaseMultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Tool sync
     override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished
+
+    override fun cacheTools() {
+        dataModel.toolCode.value?.let { tool ->
+            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
+        }
+    }
     // endregion Tool sync
 }
