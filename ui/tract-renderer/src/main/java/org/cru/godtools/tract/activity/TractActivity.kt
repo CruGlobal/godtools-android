@@ -162,12 +162,6 @@ class TractActivity :
 
     override fun onDismissTip() = trackTractPage()
 
-    @CallSuper
-    override fun onUpdateActiveManifest() {
-        super.onUpdateActiveManifest()
-        showNextFeatureDiscovery()
-    }
-
     override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
         propagateEventToPage(event)
