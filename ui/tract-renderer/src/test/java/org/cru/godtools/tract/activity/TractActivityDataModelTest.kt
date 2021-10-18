@@ -5,27 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import java.util.Locale
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.aMapWithSize
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.hasEntry
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 private const val TOOL = "kgp"
@@ -55,30 +46,6 @@ class TractActivityDataModelTest {
     fun setupObserver() {
         observer = mock()
     }
-
-    // region Property: loadingState
-    @Test
-    fun verifyLoadingStateUpdateTranslation() {
-        val translation = MutableLiveData<Translation?>(null)
-        dataModel.toolCode.value = TOOL
-        dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
-        wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
-        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
-
-        dataModel.loadingState.observeForever(observer)
-        assertThat(
-            dataModel.loadingState.value,
-            allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND))
-        )
-        translation.value = Translation()
-        assertThat(dataModel.loadingState.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
-        argumentCaptor<Map<Locale, LoadingState>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND)))
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
-        }
-    }
-    // endregion Property: loadingState
 
     // region Property: visibleLocales
     @Test

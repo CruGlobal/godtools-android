@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
@@ -38,6 +39,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
     private lateinit var dao: GodToolsDao
     private lateinit var manifestManager: ManifestManager
     private lateinit var dataModel: BaseMultiLanguageToolActivityDataModel
+    private val isConnnected = MutableLiveData(true)
 
     private lateinit var observer: Observer<Any?>
 
@@ -45,7 +47,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
     fun setupDataModel() {
         dao = mock()
         manifestManager = mock()
-        dataModel = BaseMultiLanguageToolActivityDataModel(dao, manifestManager, SavedStateHandle())
+        dataModel = BaseMultiLanguageToolActivityDataModel(dao, manifestManager, isConnnected, SavedStateHandle())
     }
 
     @Before
@@ -225,6 +227,31 @@ class BaseMultiLanguageToolActivityDataModelTest {
     }
     // endregion Property: manifests
     // endregion Resolved Data
+
+    // region Property: loadingState
+    @Test
+    fun `Property loadingState - Update Translation`() {
+        val translation = MutableLiveData<Translation?>(null)
+        dataModel.toolCode.value = TOOL
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
+        wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
+        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
+        dataModel.isInitialSyncFinished.value = true
+
+        dataModel.loadingState.observeForever(observer)
+        assertThat(
+            dataModel.loadingState.value,
+            allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND))
+        )
+        translation.value = Translation()
+        assertThat(dataModel.loadingState.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
+        argumentCaptor<Map<Locale, LoadingState>> {
+            verify(observer, times(2)).onChanged(capture())
+            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND)))
+            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
+        }
+    }
+    // endregion Property: loadingState
 
     // region Property: activeManifest
     @Test

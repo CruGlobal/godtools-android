@@ -13,6 +13,7 @@ import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -22,6 +23,8 @@ import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
+import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
@@ -36,6 +39,7 @@ private const val STATE_ACTIVE_LOCALE = "activeLocale"
 open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     manifestManager: ManifestManager,
+    @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     protected val savedState: SavedStateHandle,
 ) : ViewModel() {
     val toolCode = MutableLiveData<String?>()
@@ -70,23 +74,46 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
         }.map { it.toMap() }
     // endregion Resolved Data
 
+    // region Loading State
+    val isInitialSyncFinished = MutableLiveData(false)
+
+    val loadingState = locales
+        .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
+            l.associateWith {
+                LoadingState.determineToolState(
+                    m[it], t[it],
+                    manifestType = Manifest.Type.TRACT,
+                    isConnected = connected,
+                    isSyncFinished = syncFinished
+                )
+            }
+        }
+    // endregion Loading State
+
     // region Active Tool
     val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
         .map { it?.let { Locale.forLanguageTag(it) } }
         .distinctUntilChanged()
     fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
 
+    val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
+        val translation = translationCache.get(tool, l)
+        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
+            LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
+        }
+    }.distinctUntilChanged()
+
     val activeManifest =
         distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
     // endregion Active Tool
 
-    protected val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
+    private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
             dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
     }
 
-    protected val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
+    private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
         override fun create(key: TranslationKey): LiveData<Manifest?> {
             val tool = key.tool ?: return emptyLiveData()
             val locale = key.locale ?: return emptyLiveData()
