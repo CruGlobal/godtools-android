@@ -84,7 +84,6 @@ class TractActivity :
         // track this view
         if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it) }
 
-        setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary(savedInstanceState)
     }
@@ -297,41 +296,6 @@ class TractActivity :
     ) {
         page?.let { eventBus.post(TractPageAnalyticsScreenEvent(page, card)) }
     }
-
-    // region Active Translation management
-    override val activeManifestLiveData get() = dataModel.activeManifest
-    override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
-
-    private fun setupActiveTranslationManagement() {
-        dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
-            if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
-        }
-
-        dataModel.availableLocales.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
-        }
-        dataModel.activeLoadingState.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
-        }
-        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
-    }
-
-    private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
-        availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
-    ) {
-        when (activeLoadingState) {
-            // update the active language if the current active language is not found, invalid, or offline
-            LoadingState.NOT_FOUND,
-            LoadingState.INVALID_TYPE,
-            LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                    loadingState[it] != LoadingState.OFFLINE
-            }?.let { dataModel.setActiveLocale(it) }
-        }
-    }
-    // endregion Active Translation management
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
