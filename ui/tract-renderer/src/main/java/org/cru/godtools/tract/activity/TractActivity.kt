@@ -11,7 +11,6 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
@@ -72,8 +71,7 @@ class TractActivity :
     TabLayout.OnTabSelectedListener,
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
-    @VisibleForTesting(otherwise = PROTECTED)
-    public override val dataModel: TractActivityDataModel by viewModels()
+    private val savedState: TractActivitySavedState by viewModels()
 
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
@@ -412,7 +410,7 @@ class TractActivity :
         when (it) {
             RESULT_CANCELED -> publisherController.started = false
             else -> {
-                dataModel.liveShareTutorialShown = true
+                savedState.liveShareTutorialShown = true
                 settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
                 shareLiveShareLink()
             }
@@ -435,7 +433,7 @@ class TractActivity :
 
     internal fun shareLiveShareLink() {
         when {
-            !dataModel.liveShareTutorialShown &&
+            !savedState.liveShareTutorialShown &&
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 ->
                 liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             publisherController.publisherInfo.value == null ->
