@@ -8,7 +8,7 @@ buildscript {
                 autoValue          : '1.8.2',
                 circleindicator    : '2.1.6',
                 dagger             : libs.versions.dagger.get(),
-                eventbus           : '3.2.0',
+                eventbus           : libs.versions.eventbus.get(),
                 facebook           : '12.0.1',
                 facebookFlipper    : '0.115.0',
                 findbugs           : '3.0.2',
