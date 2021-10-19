@@ -7,8 +7,8 @@ android {
 dependencies {
     implementation libs.kotlin.coroutines
 
-    implementation "androidx.core:core:${deps.androidX.core}"
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
+    implementation libs.androidx.core
+    implementation libs.androidx.core.ktx
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
