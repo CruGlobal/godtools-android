@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,7 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
-import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -24,20 +22,14 @@ import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
-import org.cru.godtools.base.tool.activity.LanguageToggleController
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
-import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.model.backgroundColor
-import org.cru.godtools.tool.model.navBarColor
-import org.cru.godtools.tool.model.navBarControlColor
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.Modal
@@ -69,7 +61,6 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 @AndroidEntryPoint
 class TractActivity :
     MultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
-    TabLayout.OnTabSelectedListener,
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
     private val savedState: TractActivitySavedState by viewModels()
@@ -106,7 +97,6 @@ class TractActivity :
     override fun onContentChanged() {
         super.onContentChanged()
         setupBackground()
-        setupLanguageToggle()
         setupPager()
     }
 
@@ -218,6 +208,7 @@ class TractActivity :
 
     // region UI
     override val toolbar get() = binding.appbar
+    override val languageToggle get() = binding.languageToggle
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
 
@@ -235,48 +226,6 @@ class TractActivity :
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
     }
-
-    // region Language Toggle
-    private lateinit var languageToggleController: LanguageToggleController
-
-    private fun setupLanguageToggle() {
-        ViewCompat.setClipToOutline(binding.languageToggle, true)
-        dataModel.activeManifest.observe(this) { manifest ->
-            // determine colors for the language toggle
-            val controlColor = manifest.navBarControlColor
-            var selectedColor = manifest.navBarColor
-            if (Color.alpha(selectedColor) < 255) {
-                // XXX: the expected behavior is to support transparent text. But we currently don't support
-                //      transparent text, so pick white or black based on the control color
-                selectedColor = if (controlColor.toHsvColor().value > 0.6) Color.BLACK else Color.WHITE
-            }
-
-            // update colors for tab text
-            binding.languageToggle.setTabTextColors(controlColor, selectedColor)
-        }
-
-        languageToggleController = LanguageToggleController(binding.languageToggle).also { controller ->
-            dataModel.activeLocale.observe(this) { controller.activeLocale = it }
-            dataModel.activeManifest.observe(this) { controller.activeManifest = it }
-            dataModel.visibleLocales.observe(this) { controller.locales = it }
-            dataModel.languages.observe(this) { controller.languages = it }
-        }
-
-        binding.languageToggle.addOnTabSelectedListener(this)
-    }
-
-    // region TabLayout.OnTabSelectedListener
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        if (languageToggleController.isUpdatingTabs) return
-        val locale = tab.tag as? Locale ?: return
-        eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.toolCode.value, locale))
-        dataModel.setActiveLocale(locale)
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-    // endregion TabLayout.OnTabSelectedListener
-    // endregion Language Toggle
 
     // region Tool Pager
     @Inject
