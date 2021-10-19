@@ -15,6 +15,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.aMapWithSize
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anEmptyMap
+import org.hamcrest.Matchers.contains
+import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasEntry
 import org.junit.Before
 import org.junit.Rule
@@ -281,4 +283,95 @@ class BaseMultiLanguageToolActivityDataModelTest {
         }
     }
     // endregion Property: activeManifest
+
+    // region Property: visibleLocales
+    @Test
+    fun `Property visibleLocales - First Primary Downloaded`() {
+        // setup test
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
+        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
+        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        dataModel.toolCode.value = TOOL
+        dataModel.setActiveLocale(Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
+        dataModel.visibleLocales.observeForever(observer)
+
+        // run logic and verify results
+        assertThat(
+            "first language should be visible because it is downloaded",
+            dataModel.visibleLocales.value, contains(Locale.FRENCH)
+        )
+    }
+
+    @Test
+    fun `Property visibleLocales - First Primary Loading, Active Second Primary Downloaded`() {
+        // setup test
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
+        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Manifest()))
+        dataModel.toolCode.value = TOOL
+        dataModel.setActiveLocale(Locale.FRENCH)
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
+        dataModel.visibleLocales.observeForever(observer)
+
+        // run logic and verify results
+        assertThat(
+            "french is available because it is currently active and potentially available",
+            dataModel.availableLocales.value, contains(Locale.FRENCH)
+        )
+        assertThat(
+            "neither language should be visible because the preferred primary is still loading",
+            dataModel.visibleLocales.value, empty()
+        )
+    }
+
+    @Test
+    fun `Property visibleLocales - First Primary Missing, Second Primary Loading, Neither Active`() {
+        // setup test
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
+        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
+        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        dataModel.toolCode.value = TOOL
+        dataModel.setActiveLocale(Locale.ENGLISH)
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
+        dataModel.isInitialSyncFinished.value = true
+        dataModel.visibleLocales.observeForever(observer)
+
+        // run logic and verify results
+        assertThat(
+            "german should be available because it is potentially available",
+            dataModel.availableLocales.value, contains(Locale.GERMAN)
+        )
+        assertThat(
+            "neither language should be visible because the primary is still loading",
+            dataModel.visibleLocales.value, empty()
+        )
+    }
+
+    @Test
+    fun `Property visibleLocales - First Primary Loaded, Second Primary Loading And Active`() {
+        // setup test
+        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
+        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
+        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
+        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        dataModel.toolCode.value = TOOL
+        dataModel.setActiveLocale(Locale.GERMAN)
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
+        dataModel.visibleLocales.observeForever(observer)
+
+        // run logic and verify results
+        assertThat(
+            "german should be available because it is potentially available",
+            dataModel.availableLocales.value, contains(Locale.GERMAN)
+        )
+        assertThat(
+            "neither language should be visible because the primary is still loading",
+            dataModel.visibleLocales.value, empty()
+        )
+    }
+    // endregion Property: visibleLocales
 }

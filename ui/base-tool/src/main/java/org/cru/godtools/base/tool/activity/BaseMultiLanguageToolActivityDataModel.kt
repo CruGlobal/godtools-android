@@ -117,6 +117,37 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
         }
     }
 
+    // region Available Locales
+    @OptIn(ExperimentalStdlibApi::class)
+    val availableLocales = activeLocale
+        .combineWith(primaryLocales, parallelLocales, loadingState) { activeLocale, primary, parallel, loaded ->
+            buildList {
+                primary
+                    .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
+                    .let {
+                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull()
+                    }
+                    ?.let { add(it) }
+                parallel
+                    .filterNot { contains(it) }
+                    .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
+                    .let {
+                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
+                            ?: it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull()
+                    }
+                    ?.let { add(it) }
+            }
+        }
+    val visibleLocales = availableLocales.combineWith(loadingState) { locales, loadingState ->
+        locales.filter { loadingState[it] == LoadingState.LOADED }
+    }
+    // endregion Available Locales
+
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
             dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
