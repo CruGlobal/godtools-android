@@ -18,11 +18,14 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", ve
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
+gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
 gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
+gtoSupport-kotlin-coroutines = { module = "org.ccci.gto.android:gto-support-kotlin-coroutines", version.ref = "gtoSupport" }
 gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
+gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
