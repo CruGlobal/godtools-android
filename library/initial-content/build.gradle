@@ -18,19 +18,19 @@ dependencies {
 
     implementation libs.kotlin.coroutines
 
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation libs.gtoSupport.compat
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.jsonapi
+    implementation libs.gtoSupport.util
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.dagger
+    implementation libs.hilt
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation libs.kotlin.coroutines.test
 
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.hilt.compiler
 }
 
 apply from: 'download_initial_content.gradle'
