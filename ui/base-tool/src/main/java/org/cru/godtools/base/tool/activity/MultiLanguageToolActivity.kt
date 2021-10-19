@@ -57,6 +57,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // endregion Intent Processing
 
     // region UI
+    override val activeDownloadProgressLiveData get() = dataModel.activeToolDownloadProgress
+
     // region Language Toggle
     protected open val languageToggle: TabLayout? = null
     private lateinit var languageToggleController: LanguageToggleController

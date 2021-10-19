@@ -107,14 +107,14 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
     val activeManifest =
         distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
             .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    // endregion Active Tool
 
-    val downloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
+    internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
         when {
             t == null || l == null -> emptyLiveData()
             else -> downloadManager.getDownloadProgressLiveData(t, l)
         }
     }
+    // endregion Active Tool
 
     // region Available Locales
     @OptIn(ExperimentalStdlibApi::class)

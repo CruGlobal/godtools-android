@@ -209,8 +209,6 @@ class TractActivity :
     override val toolbar get() = binding.appbar
     override val languageToggle get() = binding.languageToggle
 
-    override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
-
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
