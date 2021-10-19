@@ -31,6 +31,7 @@ import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
+import org.cru.godtools.base.tool.activity.LanguageToggleController
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
