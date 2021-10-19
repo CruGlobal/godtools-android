@@ -62,6 +62,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         super.onCreate(savedInstanceState)
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
+        setupFeatureDiscovery()
         eventBus.register(this, this)
     }
 
@@ -101,9 +102,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    @CallSuper
-    protected open fun onUpdateActiveManifest() = Unit
     // endregion Lifecycle
 
     /**
@@ -265,6 +263,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     // region Feature Discovery
     private var featureDiscovery: TapTargetView? = null
+
+    private fun setupFeatureDiscovery() {
+        shareMenuItemVisible.observe(this) { showNextFeatureDiscovery() }
+    }
 
     override fun showNextFeatureDiscovery() {
         if (!settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) && canShowFeatureDiscovery(FEATURE_TOOL_SHARE)) {

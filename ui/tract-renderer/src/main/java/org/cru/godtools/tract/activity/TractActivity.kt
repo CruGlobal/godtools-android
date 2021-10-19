@@ -100,7 +100,6 @@ class TractActivity :
         // track this view
         if (savedInstanceState == null) dataModel.tool.value?.let { trackToolOpen(it) }
 
-        setupDataModel()
         setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary(savedInstanceState)
@@ -161,12 +160,6 @@ class TractActivity :
     }
 
     override fun onDismissTip() = trackTractPage()
-
-    @CallSuper
-    override fun onUpdateActiveManifest() {
-        super.onUpdateActiveManifest()
-        showNextFeatureDiscovery()
-    }
 
     override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
@@ -244,9 +237,6 @@ class TractActivity :
     // region Data Model
     private val dataModel: TractActivityDataModel by viewModels()
     private val toolState: ToolStateHolder by viewModels()
-    private fun setupDataModel() {
-        dataModel.activeManifest.observe(this) { onUpdateActiveManifest() }
-    }
     // endregion Data Model
 
     // region UI

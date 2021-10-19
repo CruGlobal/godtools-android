@@ -34,12 +34,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         processIntent(intent)
 
         // finish now if this activity is in an invalid state
-        if (!validStartState()) {
-            finish()
-            return
-        }
-
-        startLoaders()
+        if (!validStartState()) finish()
     }
     // endregion Lifecycle
 
@@ -86,10 +81,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     }
 
     private fun validStartState() = !requireTool || hasTool()
-
-    private fun startLoaders() {
-        dataModel.manifest.observe(this) { onUpdateActiveManifest() }
-    }
 
     // region Up Navigation
     override fun buildParentIntentExtras(): Bundle {
