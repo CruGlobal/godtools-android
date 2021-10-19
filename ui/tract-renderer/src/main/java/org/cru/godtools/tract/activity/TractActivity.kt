@@ -31,7 +31,7 @@ import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
-import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivity
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.navBarColor
@@ -67,7 +67,7 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 
 @AndroidEntryPoint
 class TractActivity :
-    BaseMultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
+    MultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
     TabLayout.OnTabSelectedListener,
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {

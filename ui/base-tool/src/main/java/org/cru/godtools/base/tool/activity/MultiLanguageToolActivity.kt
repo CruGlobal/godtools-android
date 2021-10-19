@@ -10,7 +10,7 @@ import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 
-abstract class BaseMultiLanguageToolActivity<B : ViewDataBinding>(
+abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int
 ) : BaseToolActivity<B>(contentLayoutId) {
     protected open val dataModel: BaseMultiLanguageToolActivityDataModel by viewModels()
