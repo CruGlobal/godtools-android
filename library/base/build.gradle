@@ -17,9 +17,9 @@ dependencies {
     implementation libs.gtoSupport.okta
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation libs.dagger
     implementation libs.hilt
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
     kapt libs.hilt.compiler
 }
