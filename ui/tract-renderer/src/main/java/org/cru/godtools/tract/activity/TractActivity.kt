@@ -32,6 +32,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
+import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.navBarColor
@@ -48,7 +49,6 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ShareScreenEngagedActionEvent
 import org.cru.godtools.tract.analytics.model.ShareScreenOpenedActionEvent
-import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.State
