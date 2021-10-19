@@ -22,6 +22,7 @@ firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "f
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
+gtoSupport-core = { module = "org.ccci.gto.android:gto-support-core", version.ref = "gtoSupport" }
 gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
 gtoSupport-kotlin-coroutines = { module = "org.ccci.gto.android:gto-support-kotlin-coroutines", version.ref = "gtoSupport" }

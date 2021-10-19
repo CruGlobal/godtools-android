@@ -19,7 +19,7 @@ dependencies {
     implementation libs.kotlin.coroutines
 
     implementation libs.gtoSupport.compat
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation libs.gtoSupport.core
     implementation libs.gtoSupport.dagger
     implementation libs.gtoSupport.jsonapi
     implementation libs.gtoSupport.util
