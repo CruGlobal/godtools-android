@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -59,16 +58,16 @@ open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
             .getAsLiveData(dao)
     }.map { it.associateBy { it.code } }
 
-    @VisibleForTesting(otherwise = PROTECTED)
-    val translations =
+    @VisibleForTesting
+    internal val translations =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
             distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
 
-    @VisibleForTesting(otherwise = PROTECTED)
-    val manifests =
+    @VisibleForTesting
+    internal val manifests =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
             distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
