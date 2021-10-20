@@ -13,7 +13,6 @@ import android.os.Message;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.tract.util.ViewUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,8 +35,6 @@ import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
-import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
@@ -584,37 +580,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
 
         updateChildrenOffsetsAndAlpha();
-    }
-
-    private void layoutFullyVisibleChild(final View child, final int parentLeft, final int parentTop,
-                                         final int parentRight, final int parentBottom) {
-        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
-        final int width = child.getMeasuredWidth();
-        final int height = child.getMeasuredHeight();
-
-        int childLeft = parentLeft + lp.leftMargin;
-        int childTop;
-
-        int gravity = lp.gravity;
-        if (gravity == UNSPECIFIED_GRAVITY) {
-            gravity = Gravity.TOP;
-        }
-
-        switch (gravity & Gravity.VERTICAL_GRAVITY_MASK) {
-            case Gravity.BOTTOM:
-                childTop = parentBottom - height - lp.bottomMargin;
-                break;
-            default:
-                childTop = parentTop + lp.topMargin;
-        }
-
-        final View above = lp.above != INVALID_ID_RES ? findViewById(lp.above) : null;
-        if (above != null) {
-            childTop = ViewUtils.getTopOffset(this, above) - height;
-        }
-
-        child.layout(childLeft, childTop, childLeft + width, childTop + height);
     }
 
     @SuppressWarnings("checkstyle:RightCurly")
