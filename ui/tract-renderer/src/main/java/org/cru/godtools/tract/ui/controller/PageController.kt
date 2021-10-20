@@ -25,7 +25,7 @@ import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.databinding.TractPageBinding
-import org.cru.godtools.tract.widget.PageContentLayout
+import org.cru.godtools.tract.widget.JavaPageContentLayout
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -40,7 +40,7 @@ class PageController @AssistedInject internal constructor(
     private val cardControllerFactory: CardController.Factory
 ) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
     CardController.Callbacks,
-    PageContentLayout.OnActiveCardListener {
+    JavaPageContentLayout.OnActiveCardListener {
 
     @AssistedFactory
     interface Factory {

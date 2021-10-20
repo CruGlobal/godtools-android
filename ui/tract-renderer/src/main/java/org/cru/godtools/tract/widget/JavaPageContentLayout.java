@@ -48,14 +48,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
+import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
+import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
+import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CARD;
+import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_HERO;
+import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 @AndroidEntryPoint
-public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
+public class JavaPageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
@@ -131,16 +131,16 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     };
 
     // region Initialization
-    public PageContentLayout(@NonNull final Context context) {
+    public JavaPageContentLayout(@NonNull final Context context) {
         this(context, null);
     }
 
-    public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs) {
+    public JavaPageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
-                             final int defStyleAttr) {
+    public JavaPageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
+                                 final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
@@ -148,8 +148,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
-                             final int defStyleAttr, final int defStyleRes) {
+    public JavaPageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
+                                 final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
@@ -926,9 +926,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
      */
     private static class PageLayoutHandler extends Handler {
-        private final WeakReference<PageContentLayout> mPageContentLayout;
+        private final WeakReference<JavaPageContentLayout> mPageContentLayout;
 
-        PageLayoutHandler(@NonNull final PageContentLayout layout) {
+        PageLayoutHandler(@NonNull final JavaPageContentLayout layout) {
             super(Looper.getMainLooper());
             mPageContentLayout = new WeakReference<>(layout);
         }
@@ -948,7 +948,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_BOUNCE_ANIMATION:
-                    final PageContentLayout layout = mPageContentLayout.get();
+                    final JavaPageContentLayout layout = mPageContentLayout.get();
                     if (layout != null && layout.mBounceFirstCard) {
                         layout.bounceFirstCard();
                         enqueueBounce(BOUNCE_ANIMATION_DELAY);
