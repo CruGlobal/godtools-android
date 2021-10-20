@@ -55,7 +55,7 @@ import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.C
 import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 @AndroidEntryPoint
-public class JavaPageContentLayout extends FrameLayout implements NestedScrollingParent,
+public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
