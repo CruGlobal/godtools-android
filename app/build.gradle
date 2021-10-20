@@ -171,7 +171,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
     implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
     implementation "androidx.hilt:hilt-work:${deps.androidX.hilt}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
+    implementation libs.androidx.lifecycle.livedata.ktx
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
     implementation "androidx.work:work-runtime:${deps.androidX.work}"
 
@@ -180,22 +180,22 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-drawerlayout:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.lifecycle
     implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-work:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    implementation libs.gtoSupport.compat
+    implementation libs.gtoSupport.dagger
     implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-napier:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-okta:${deps.gtoSupport}"
+    implementation libs.gtoSupport.okta
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.util
 
     implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
 
@@ -216,7 +216,7 @@ dependencies {
     implementation "com.okta.android:okta-oidc-android:${deps.okta}"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.sergivonavi:materialbanner:1.2.0"
-    api "org.greenrobot:eventbus:${deps.eventbus}"
+    api libs.eventbus
 
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
@@ -227,14 +227,14 @@ dependencies {
     debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
-    testImplementation "com.google.dagger:hilt-android-testing:${deps.dagger}"
+    testImplementation libs.hilt.testing
     testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
 
-    kaptTest "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kaptTest libs.hilt.compiler
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants
