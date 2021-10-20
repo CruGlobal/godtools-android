@@ -9,6 +9,8 @@ firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
 gtoSupport = "3.9.1"
 kotlinCoroutines = "1.5.2"
+okhttp3 = "4.9.2"
+weakdelegate = "1.0.1"
 
 [libraries]
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch" }
@@ -19,11 +21,15 @@ appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.1" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-processor", version.ref = "eventbus" }
+facebook = { module = "com.facebook.android:facebook-core", version = "12.0.1" }
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = { module = "com.facebook.soloader:soloader", version = "0.10.1" }
+firebase-core = { module = "com.google.firebase:firebase-core", version = "19.0.2" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "22.0.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
@@ -48,8 +54,11 @@ kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", 
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "4.0.0" }
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 play-billing = { module = "com.android.billingclient:billing", version = "4.0.0" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
 play-installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2" }
+play-tagmanager = { module = "com.google.android.gms:play-services-tagmanager", version = "17.0.1" }
 snowplow = { module = "com.snowplowanalytics:snowplow-android-tracker", version = "2.2.1" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
+weakdelegate = { module = "com.github.Karumi:WeakDelegate", version.ref = "weakdelegate" }

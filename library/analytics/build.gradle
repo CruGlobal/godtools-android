@@ -30,10 +30,9 @@ dependencies {
 
     implementation libs.kotlin.coroutines
 
-    implementation "com.google.firebase:firebase-core:${deps.firebase.core}"
-    implementation "com.google.firebase:firebase-messaging:${deps.firebase.messaging}"
+    implementation libs.firebase.core
+    implementation libs.firebase.messaging
     implementation libs.firebase.perf
-    implementation "com.google.android.gms:play-services-tagmanager:${deps.googleTagManager}"
 
     implementation libs.gtoSupport.compat
     implementation libs.gtoSupport.dagger
@@ -41,19 +40,20 @@ dependencies {
     implementation libs.gtoSupport.snowplow
 
     implementation libs.appsflyer
+    implementation libs.dagger
+    implementation libs.eventbus
+    implementation libs.facebook
+    implementation libs.hilt
+    implementation libs.okhttp3
     implementation libs.play.installreferrer
-    implementation "com.facebook.android:facebook-core:${deps.facebook}"
-    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
+    implementation libs.play.tagmanager
     implementation libs.snowplow
-    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+    implementation libs.weakdelegate
 
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.play.billing
 
     kapt libs.dagger.compiler
     kapt libs.hilt.compiler
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt libs.eventbus.annotationProcessor
 }

@@ -9,10 +9,8 @@ buildscript {
                 circleindicator    : '2.1.6',
                 dagger             : libs.versions.dagger.get(),
                 eventbus           : libs.versions.eventbus.get(),
-                facebook           : '12.0.1',
                 findbugs           : '3.0.2',
                 godtoolsToolParser : '0.3.2',
-                googleTagManager   : '17.0.1',
                 gradleAndroidPlugin: '7.0.3',
                 grpc               : '1.41.0',
                 gtoSupport         : libs.versions.gtoSupport.get(),
@@ -26,7 +24,7 @@ buildscript {
                 materialDesign     : '1.4.0',
                 mockito            : '4.0.0',
                 moshi              : '1.12.0',
-                okhttp3            : '4.9.2',
+                okhttp3            : libs.versions.okhttp3.get(),
                 okta               : '1.1.0',
                 picasso            : '2.8',
                 picassoTransforms  : '2.4.0',
@@ -36,7 +34,7 @@ buildscript {
                 splitties          : '3.0.0',
                 taptargetview      : '1.13.3',
                 tinderStateMachine : '0.2.0',
-                weakdelegate       : '1.0.1',
+                weakdelegate       : libs.versions.weakdelegate.get(),
                 youtubeplayer      : '10.0.5'
         ]
         deps.androidX = [
@@ -63,9 +61,7 @@ buildscript {
                 work              : '2.7.0',
         ]
         deps.firebase = [
-                core          : '19.0.2',
                 inAppMessaging: '20.1.0',
-                messaging     : '22.0.0',
         ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
