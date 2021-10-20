@@ -53,7 +53,7 @@ dependencies {
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.play.billing
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
