@@ -33,8 +33,8 @@ class Language : Base() {
     @JsonApiIgnore
     var isAdded = false
 
-    @JvmOverloads
-    fun getDisplayName(context: Context?, inLocale: Locale? = null) =
+    fun getDisplayName(context: Context?) = getDisplayName(context, null)
+    fun getDisplayName(context: Context?, inLocale: Locale?) =
         _code?.getDisplayName(context, name, inLocale).orEmpty()
 
     // XXX: output the language id and code for debugging purposes
