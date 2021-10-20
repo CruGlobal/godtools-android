@@ -5,10 +5,10 @@ dependencies {
     implementation libs.androidx.lifecycle.livedata.ktx
 
     implementation libs.gtoSupport.androidx.lifecycle
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-db:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-db-coroutines:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-db-livedata:${deps.gtoSupport}"
+    implementation libs.gtoSupport.core
+    api libs.gtoSupport.db
+    api libs.gtoSupport.db.coroutines
+    api libs.gtoSupport.db.livedata
     implementation libs.gtoSupport.util
 
     implementation libs.dagger
