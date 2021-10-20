@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -37,7 +36,6 @@ import androidx.annotation.UiThread;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
-import androidx.customview.view.AbsSavedState;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
@@ -159,8 +157,8 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
 
-        changeActiveCard(ss.activeCardPosition, false);
-        setBounceFirstCard(ss.bounceFirstCard);
+        changeActiveCard(ss.getActiveCardPosition(), false);
+        setBounceFirstCard(ss.isBounceFirstCard());
     }
 
     @Override
@@ -206,10 +204,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        final SavedState state = new SavedState(super.onSaveInstanceState());
-        state.activeCardPosition = mActiveCardPosition;
-        state.bounceFirstCard = isBounceFirstCard();
-        return state;
+        return new SavedState(mActiveCardPosition, isBounceFirstCard(), super.onSaveInstanceState());
     }
 
     @Override
@@ -731,45 +726,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
     }
     // endregion View layout logic
-
-    protected static class SavedState extends AbsSavedState {
-        int activeCardPosition;
-        boolean bounceFirstCard;
-
-        public SavedState(Parcel in, ClassLoader loader) {
-            super(in, loader);
-            activeCardPosition = in.readInt();
-            bounceFirstCard = in.readInt() == 1;
-        }
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            super.writeToParcel(dest, flags);
-            dest.writeInt(activeCardPosition);
-            dest.writeInt(bounceFirstCard ? 1 : 0);
-        }
-
-        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(final Parcel source) {
-                return new SavedState(source, null);
-            }
-
-            @Override
-            public SavedState[] newArray(final int size) {
-                return new SavedState[size];
-            }
-
-            @Override
-            public SavedState createFromParcel(final Parcel source, final ClassLoader loader) {
-                return new SavedState(source, loader);
-            }
-        };
-    }
 
     /**
      * This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE

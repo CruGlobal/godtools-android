@@ -1,4 +1,5 @@
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-parcelize'
 
 android {
     defaultConfig {

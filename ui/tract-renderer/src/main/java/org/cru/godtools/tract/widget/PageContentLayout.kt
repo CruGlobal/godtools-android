@@ -2,6 +2,7 @@ package org.cru.godtools.tract.widget
 
 import android.animation.Animator
 import android.content.Context
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
+import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
 import org.cru.godtools.tract.R
@@ -151,4 +153,11 @@ open class PageContentLayout @JvmOverloads constructor(
     }
     // endregion LayoutParams
     // endregion View layout logic
+
+    @Parcelize
+    protected class SavedState(
+        val activeCardPosition: Int,
+        val isBounceFirstCard: Boolean,
+        val superState: Parcelable
+    ) : Parcelable
 }
