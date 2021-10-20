@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,7 +21,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.tract.R;
@@ -35,7 +33,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -48,11 +45,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
-import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
-import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
-import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_CARD;
-import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_HERO;
-import static org.cru.godtools.tract.widget.JavaPageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
+import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent,
@@ -534,34 +531,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     // region View layout logic
     @Override
-    protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
-        return p instanceof LayoutParams;
-    }
-
-    @Override
-    public LayoutParams generateLayoutParams(final AttributeSet attrs) {
-        return new LayoutParams(getContext(), attrs);
-    }
-
-    @Override
-    protected LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
-
-    @Override
-    protected LayoutParams generateLayoutParams(final ViewGroup.LayoutParams p) {
-        if (p instanceof LayoutParams) {
-            return new LayoutParams((LayoutParams) p);
-        } else if (p instanceof MarginLayoutParams) {
-            return new LayoutParams((MarginLayoutParams) p);
-        } else if (p != null) {
-            return new LayoutParams(p);
-        }
-
-        return generateDefaultLayoutParams();
-    }
-
-    @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         final int count = getChildCount();
 
@@ -853,73 +822,8 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         };
     }
 
-    public static class LayoutParams extends FrameLayout.LayoutParams {
-        public static final int CHILD_TYPE_UNKNOWN = 0;
-        public static final int CHILD_TYPE_HERO = 1;
-        public static final int CHILD_TYPE_CARD = 2;
-        public static final int CHILD_TYPE_CALL_TO_ACTION = 3;
-        public static final int CHILD_TYPE_CALL_TO_ACTION_TIP = 4;
-
-        public int childType = CHILD_TYPE_UNKNOWN;
-
-        @IdRes
-        public int cardPaddingViewTop = INVALID_ID_RES;
-        @IdRes
-        public int cardPeekViewTop = INVALID_ID_RES;
-        @IdRes
-        public int cardStackViewTop = INVALID_ID_RES;
-
-        @IdRes
-        public int above = INVALID_ID_RES;
-
-        // card peek heights
-        int cardPaddingOffset = 0;
-        int cardStackOffset = 0;
-        int cardPeekOffset = 0;
-        int siblingStackOffset = 0;
-
-        public LayoutParams(final Context c, final AttributeSet attrs) {
-            super(c, attrs);
-            final TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.PageContentLayout_Layout);
-
-            childType = a.getInt(R.styleable.PageContentLayout_Layout_layout_childType, childType);
-
-            // get the views that are used to calculate the various peek heights
-            cardPaddingViewTop =
-                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_padding_toTopOf, INVALID_ID_RES);
-            cardPeekViewTop =
-                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_peek_toTopOf, INVALID_ID_RES);
-            cardStackViewTop =
-                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_stack_toTopOf, INVALID_ID_RES);
-
-            above = a.getResourceId(R.styleable.PageContentLayout_Layout_android_layout_above, INVALID_ID_RES);
-
-            a.recycle();
-        }
-
-        public LayoutParams(final int width, final int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(@NonNull final ViewGroup.LayoutParams p) {
-            super(p);
-        }
-
-        public LayoutParams(@NonNull final MarginLayoutParams source) {
-            super(source);
-            if (source instanceof FrameLayout.LayoutParams) {
-                this.gravity = ((FrameLayout.LayoutParams) source).gravity;
-            }
-        }
-
-        public LayoutParams(@NonNull final LayoutParams p) {
-            this((MarginLayoutParams) p);
-            this.childType = p.childType;
-        }
-    }
-
     /**
-     *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
+     * This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
      */
     private static class PageLayoutHandler extends Handler {
         private final WeakReference<JavaPageContentLayout> mPageContentLayout;
