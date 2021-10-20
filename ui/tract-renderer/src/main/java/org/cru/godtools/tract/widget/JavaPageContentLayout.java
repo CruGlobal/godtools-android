@@ -68,10 +68,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     private static final int MSG_BOUNCE_ANIMATION = 1;
 
-    public interface OnActiveCardListener {
-        void onActiveCardChanged(@Nullable View activeCard);
-    }
-
     private boolean mBounceFirstCard = false;
     private float mBounceHeight;
     private final BounceInterpolator mBounceInterpolator =

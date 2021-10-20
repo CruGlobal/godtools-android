@@ -2,6 +2,7 @@ package org.cru.godtools.tract.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
@@ -11,4 +12,8 @@ open class PageContentLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr, defStyleRes)
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
+    interface OnActiveCardListener {
+        fun onActiveCardChanged(activeCard: View?)
+    }
+}
