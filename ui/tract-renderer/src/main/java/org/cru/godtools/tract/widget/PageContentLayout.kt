@@ -12,6 +12,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
+import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.animation.BounceInterpolator
 
@@ -42,6 +43,40 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Animation
 
     // region View layout logic
+    protected fun calculateCardOffsets(child: View): Boolean {
+        // only update card offsets if the child has been laid out
+        if (child.isLaidOut) {
+            val lp = child.layoutParams as LayoutParams
+
+            // calculate the current offsets
+            var cardPaddingOffset = 0
+            var cardPeekOffset = 0
+            var cardStackOffset = 0
+
+            when (lp.childType) {
+                LayoutParams.CHILD_TYPE_CARD -> {
+                    if (child is ViewGroup) {
+                        cardPaddingOffset = child.calculateTopOffsetOrNull(lp.cardPaddingViewTop) ?: 0
+                        cardPeekOffset = child.calculateTopOffsetOrNull(lp.cardPeekViewTop) ?: 0
+                        cardStackOffset = child.calculateTopOffsetOrNull(lp.cardStackViewTop) ?: 0
+                    }
+                }
+            }
+
+            // only update values if any changed
+            if (lp.cardPaddingOffset != cardPaddingOffset ||
+                lp.cardPeekOffset != cardPeekOffset ||
+                lp.cardStackOffset != cardStackOffset
+            ) {
+                lp.cardPaddingOffset = cardPaddingOffset
+                lp.cardPeekOffset = cardPeekOffset
+                lp.cardStackOffset = cardStackOffset
+                return true
+            }
+        }
+        return false
+    }
+
     // region LayoutParams
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
     override fun generateLayoutParams(attrs: AttributeSet?) = LayoutParams(context, attrs)

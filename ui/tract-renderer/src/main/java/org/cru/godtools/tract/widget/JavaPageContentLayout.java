@@ -37,7 +37,6 @@ import androidx.annotation.UiThread;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
-import androidx.core.view.ViewCompat;
 import androidx.customview.view.AbsSavedState;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -601,45 +600,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         final int measuredHeight = getMeasuredHeight();
         final int maxGutterSize = measuredHeight / 10;
         mGutterSize = Math.min(maxGutterSize, mDefaultGutterSize);
-    }
-
-    private boolean calculateCardOffsets(@NonNull final View child) {
-        // only update card offsets if the child has been laid out and is a ViewGroup
-        if (ViewCompat.isLaidOut(child) && child instanceof ViewGroup) {
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
-            // calculate the current offsets
-            final int cardPaddingOffset;
-            final int cardPeekOffset;
-            final int cardStackOffset;
-            if (lp.childType == CHILD_TYPE_CARD) {
-                final View paddingView =
-                        lp.cardPaddingViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPaddingViewTop) : null;
-                final View peekView =
-                        lp.cardPeekViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPeekViewTop) : null;
-                final View stackView =
-                        lp.cardStackViewTop != INVALID_ID_RES ? child.findViewById(lp.cardStackViewTop) : null;
-
-                cardPaddingOffset = paddingView != null ? ViewUtils.getTopOffset((ViewGroup) child, paddingView) : 0;
-                cardPeekOffset = peekView != null ? ViewUtils.getTopOffset((ViewGroup) child, peekView) : 0;
-                cardStackOffset = stackView != null ? ViewUtils.getTopOffset((ViewGroup) child, stackView) : 0;
-            } else {
-                cardPaddingOffset = 0;
-                cardPeekOffset = 0;
-                cardStackOffset = 0;
-            }
-
-            // only update values if any changed
-            if (lp.cardPaddingOffset != cardPaddingOffset || lp.cardPeekOffset != cardPeekOffset ||
-                    lp.cardStackOffset != cardStackOffset) {
-                lp.cardPaddingOffset = cardPaddingOffset;
-                lp.cardPeekOffset = cardPeekOffset;
-                lp.cardStackOffset = cardStackOffset;
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
