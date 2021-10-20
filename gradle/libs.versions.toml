@@ -32,6 +32,7 @@ gtoSupport-core = { module = "org.ccci.gto.android:gto-support-core", version.re
 gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
 gtoSupport-kotlin-coroutines = { module = "org.ccci.gto.android:gto-support-kotlin-coroutines", version.ref = "gtoSupport" }
+gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-material-components", version.ref = "gtoSupport" }
 gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
