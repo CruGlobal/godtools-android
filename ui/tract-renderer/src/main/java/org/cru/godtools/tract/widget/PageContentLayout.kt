@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.widget
 
+import android.animation.Animator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -12,6 +13,10 @@ import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.cru.godtools.tract.R
+import org.cru.godtools.tract.animation.BounceInterpolator
+
+private const val BOUNCE_ANIMATION_BOUNCES = 4
+private const val BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5
 
 open class PageContentLayout @JvmOverloads constructor(
     context: Context,
@@ -22,6 +27,19 @@ open class PageContentLayout @JvmOverloads constructor(
     interface OnActiveCardListener {
         fun onActiveCardChanged(activeCard: View?)
     }
+
+    // region Animation
+    @JvmField
+    protected var activeAnimation: Animator? = null
+
+    // region Card Bounce Animation
+    open var isBounceFirstCard = false
+    @JvmField
+    protected val bounceHeight = resources.getDimension(R.dimen.card_bounce_height)
+    @JvmField
+    protected val bounceInterpolator = BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY)
+    // endregion Card Bounce Animation
+    // endregion Animation
 
     // region View layout logic
     // region LayoutParams

@@ -23,8 +23,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.animation.BounceInterpolator;
 import org.cru.godtools.tract.util.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -57,18 +55,11 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
 
-    private static final int BOUNCE_ANIMATION_BOUNCES = 4;
-    private static final double BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5;
     private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 2000;
     private static final long BOUNCE_ANIMATION_DELAY = 7000;
     private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400;
 
     private static final int MSG_BOUNCE_ANIMATION = 1;
-
-    private boolean mBounceFirstCard = false;
-    private float mBounceHeight;
-    private final BounceInterpolator mBounceInterpolator =
-            new BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY);
 
     private int mDefaultGutterSize;
     private int mGutterSize = 0;
@@ -100,13 +91,11 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     private int mActiveCardPosition = 0;
     private int mTotalCards = 0;
 
-    @Nullable
-    Animator mAnimation;
     private final Animator.AnimatorListener mAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(final Animator animation) {
-            if (mAnimation == animation) {
-                mAnimation = null;
+            if (activeAnimation == animation) {
+                activeAnimation = null;
                 updateChildrenOffsetsAndAlpha();
                 dispatchActiveCardChanged();
             }
@@ -116,8 +105,8 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     private final Animator.AnimatorListener mBounceAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(final Animator animation) {
-            if (mAnimation == animation) {
-                mAnimation = null;
+            if (activeAnimation == animation) {
+                activeAnimation = null;
                 updateChildrenOffsetsAndAlpha();
             }
         }
@@ -150,7 +139,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     }
 
     private void init() {
-        mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
         mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * getResources().getDisplayMetrics().density);
     }
     // endregion Initialization
@@ -221,7 +209,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     protected Parcelable onSaveInstanceState() {
         final SavedState state = new SavedState(super.onSaveInstanceState());
         state.activeCardPosition = mActiveCardPosition;
-        state.bounceFirstCard = mBounceFirstCard;
+        state.bounceFirstCard = isBounceFirstCard();
         return state;
     }
 
@@ -321,7 +309,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     void dispatchActiveCardChanged() {
         // only dispatch change active card callback if we aren't animating
-        if (mActiveCardListener != null && mAnimation == null) {
+        if (mActiveCardListener != null && activeAnimation == null) {
             mActiveCardListener.onActiveCardChanged(mActiveCard);
         }
     }
@@ -349,16 +337,16 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             updateActiveCardPosition(false);
 
             if (animate) {
-                final Animator oldAnimation = mAnimation;
-                mAnimation = buildAnimation();
+                final Animator oldAnimation = activeAnimation;
+                activeAnimation = buildAnimation();
                 if (oldAnimation != null) {
                     oldAnimation.cancel();
                 }
-                mAnimation.start();
+                activeAnimation.start();
             } else {
                 // stop any running animation
-                final Animator oldAnimation = mAnimation;
-                mAnimation = null;
+                final Animator oldAnimation = activeAnimation;
+                activeAnimation = null;
                 if (oldAnimation != null) {
                     oldAnimation.cancel();
                 }
@@ -477,9 +465,10 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     // region Card Bounce Animation
     @UiThread
+    @Override
     public void setBounceFirstCard(final boolean animate) {
-        mBounceFirstCard = animate;
-        if (mBounceFirstCard) {
+        super.setBounceFirstCard(animate);
+        if (animate) {
             mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
         } else {
             mHandler.cancelBounce();
@@ -487,7 +476,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     }
 
     /**
-     * This method will either create a new bounce Animation or start the one that is already created.
+     * This method will start a bounce Animation if the layout is in a supported state for the animation.
      */
     @UiThread
     void bounceFirstCard() {
@@ -497,7 +486,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
 
         // short-circuit if another animation is running
-        if (mAnimation != null) {
+        if (activeAnimation != null) {
             return;
         }
 
@@ -506,8 +495,8 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             final View child = getChildAt(i);
             switch (getChildType(child)) {
                 case CHILD_TYPE_CARD:
-                    mAnimation = buildBounceAnimation(child);
-                    mAnimation.start();
+                    activeAnimation = buildBounceAnimation(child);
+                    activeAnimation.start();
                     return; // Stop after first Card View
             }
         }
@@ -521,9 +510,9 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     @NonNull
     @UiThread
     private Animator buildBounceAnimation(@NonNull final View view) {
-        final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - mBounceHeight);
-        animation.setInterpolator(mBounceInterpolator);
-        animation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
+        final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - bounceHeight);
+        animation.setInterpolator(bounceInterpolator);
+        animation.setDuration(bounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
         animation.addListener(mBounceAnimationListener);
         return animation;
     }
@@ -768,7 +757,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     @UiThread
     void updateChildrenOffsetsAndAlpha() {
         // update the child position if we aren't animating
-        if (mAnimation == null) {
+        if (activeAnimation == null) {
             int count = getChildCount();
             for (int i = 0; i < count; i++) {
                 final View child = getChildAt(i);
@@ -849,7 +838,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             switch (msg.what) {
                 case MSG_BOUNCE_ANIMATION:
                     final JavaPageContentLayout layout = mPageContentLayout.get();
-                    if (layout != null && layout.mBounceFirstCard) {
+                    if (layout != null && layout.isBounceFirstCard()) {
                         layout.bounceFirstCard();
                         enqueueBounce(BOUNCE_ANIMATION_DELAY);
                     }
