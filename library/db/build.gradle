@@ -2,17 +2,17 @@ dependencies {
     api project(':library:base')
     implementation project(':library:model')
 
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
+    implementation libs.androidx.lifecycle.livedata.ktx
 
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.lifecycle
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-coroutines:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-livedata:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.util
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.dagger
+    implementation libs.hilt
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
 }
