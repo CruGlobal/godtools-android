@@ -16,7 +16,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
@@ -39,7 +38,6 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
@@ -315,14 +313,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     public int getActiveCardPosition() {
         return activeCardPosition;
-    }
-
-    private int getChildType(final View view) {
-        final ViewGroup.LayoutParams lp = view.getLayoutParams();
-        if (lp instanceof LayoutParams) {
-            return ((LayoutParams) lp).childType;
-        }
-        return CHILD_TYPE_UNKNOWN;
     }
 
     @NonNull
@@ -607,16 +597,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
 
         return parentTop;
-    }
-
-    private float getChildTargetAlpha(@Nullable final View child) {
-        if (child != null) {
-            final int childType = getChildType(child);
-            if (childType == CHILD_TYPE_CALL_TO_ACTION || childType == CHILD_TYPE_CALL_TO_ACTION_TIP) {
-                return activeCardPosition + 1 >= totalCards ? 1 : 0;
-            }
-        }
-        return 1;
     }
 
     @UiThread

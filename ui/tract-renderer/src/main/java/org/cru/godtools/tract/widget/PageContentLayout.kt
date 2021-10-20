@@ -21,6 +21,9 @@ import org.ccci.gto.android.common.util.view.calculateTopOffset
 import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.animation.BounceInterpolator
+import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION
+import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION_TIP
+import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_UNKNOWN
 
 private const val BOUNCE_ANIMATION_BOUNCES = 4
 private const val BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5
@@ -153,6 +156,16 @@ open class PageContentLayout @JvmOverloads constructor(
         }
         return false
     }
+
+    protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
+    protected val View.childTargetAlpha
+        get() = when (childType) {
+            CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
+                activeCardPosition + 1 >= totalCards -> 1f
+                else -> 0f
+            }
+            else -> 1f
+        }
 
     // region LayoutParams
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
