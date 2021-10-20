@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
@@ -47,8 +46,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_UNKNOWN;
 
 @AndroidEntryPoint
-public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent,
-        ViewTreeObserver.OnGlobalLayoutListener {
+public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
     private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
 
@@ -142,12 +140,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     // region Lifecycle
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        getViewTreeObserver().addOnGlobalLayoutListener(this);
-    }
-
-    @Override
     protected void onRestoreInstanceState(final Parcelable state) {
         if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
@@ -159,23 +151,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
         changeActiveCard(ss.getActiveCardPosition(), false);
         setBounceFirstCard(ss.isBounceFirstCard());
-    }
-
-    @Override
-    public void onGlobalLayout() {
-        // XXX: This is to fix a chicken and egg bug. When measuring views we want to have access to card offsets.
-        // XXX: To get card offsets we need to access the actual layout of nodes. to get the actual layout of nodes we
-        // XXX: need to measure the views first.
-        // XXX: So, to work around this problem we only calculate offsets after a view has been laid out at least once,
-        // XXX: and double check our offsets after any layout pass.
-        boolean changed = false;
-        for (int i = 0; i < getChildCount(); i++) {
-            changed = calculateCardOffsets(getChildAt(i)) || changed;
-        }
-        if (changed) {
-            invalidate();
-            requestLayout();
-        }
     }
 
     @Override
@@ -205,12 +180,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     @Override
     protected Parcelable onSaveInstanceState() {
         return new SavedState(mActiveCardPosition, isBounceFirstCard(), super.onSaveInstanceState());
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
     // endregion Lifecycle
 

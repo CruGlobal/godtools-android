@@ -7,11 +7,13 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
+import androidx.core.view.children
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
@@ -26,10 +28,35 @@ open class PageContentLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), ViewTreeObserver.OnGlobalLayoutListener {
     interface OnActiveCardListener {
         fun onActiveCardChanged(activeCard: View?)
     }
+
+    // region Lifecycle
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        viewTreeObserver.addOnGlobalLayoutListener(this)
+    }
+
+    override fun onGlobalLayout() {
+        // HACK: This is to fix a chicken and egg bug. When measuring views we want to have access to card offsets.
+        //       To get card offsets we need to access the actual layout of nodes. to get the actual layout of nodes we
+        //       need to measure the views first.
+        //
+        //       So, to work around this problem we only calculate offsets after a view has been laid out at least once,
+        //       and double check our offsets after any layout pass.
+        if (children.map { calculateCardOffsets(it) }.count { it } > 0) {
+            invalidate()
+            requestLayout()
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        viewTreeObserver.removeOnGlobalLayoutListener(this)
+    }
+    // endregion Lifecycle
 
     // region Animation
     @JvmField
