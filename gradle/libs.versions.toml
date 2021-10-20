@@ -4,6 +4,7 @@ androidx-core = "1.6.0"
 androidx-lifecycle = "2.3.1"
 dagger = "2.39.1"
 eventbus = "3.2.0"
+facebook-flipper = "0.115.0"
 firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
 gtoSupport = "3.9.1"
@@ -18,6 +19,9 @@ appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.1" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
+facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
+facebook-soloader = { module = "com.facebook.soloader:soloader", version = "0.10.1" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }

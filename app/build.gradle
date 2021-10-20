@@ -221,10 +221,10 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    debugImplementation libs.facebook.flipper
+    debugImplementation libs.facebook.flipper.plugins.network
+    debugImplementation libs.facebook.soloader
     debugImplementation libs.firebase.crashlytics.ndk
-    debugImplementation "com.facebook.flipper:flipper:${deps.facebookFlipper}"
-    debugImplementation "com.facebook.flipper:flipper-network-plugin:${deps.facebookFlipper}"
-    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
