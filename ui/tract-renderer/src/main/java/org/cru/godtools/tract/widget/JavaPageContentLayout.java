@@ -73,15 +73,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     };
     private final NestedScrollingParentHelper mParentHelper;
 
-    @Nullable
-    private OnActiveCardListener mActiveCardListener;
-
-    private int mCardPositionOffset = 2;
-    @Nullable
-    private View mActiveCard;
-    private int mActiveCardPosition = 0;
-    private int mTotalCards = 0;
-
     private final Animator.AnimatorListener mAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(final Animator animation) {
@@ -153,7 +144,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
         if (getChildType(child) == CHILD_TYPE_CARD) {
-            mTotalCards++;
+            totalCards++;
         }
         updateActiveCardPosition(false);
         updateChildrenOffsetsAndAlpha();
@@ -163,19 +154,19 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     public void onViewRemoved(final View child) {
         super.onViewRemoved(child);
         if (getChildType(child) == CHILD_TYPE_CARD) {
-            mTotalCards--;
+            totalCards--;
         }
-        if (mActiveCard != child) {
+        if (activeCard != child) {
             updateActiveCardPosition(false);
             updateChildrenOffsetsAndAlpha();
         } else {
-            changeActiveCard(getChildAt(mActiveCardPosition + mCardPositionOffset - 1), false);
+            changeActiveCard(getChildAt(activeCardPosition + cardPositionOffset - 1), false);
         }
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        return new SavedState(mActiveCardPosition, isBounceFirstCard(), super.onSaveInstanceState());
+        return new SavedState(activeCardPosition, isBounceFirstCard(), super.onSaveInstanceState());
     }
     // endregion Lifecycle
 
@@ -242,39 +233,24 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     }
     // endregion NestedScrollingParent
 
-    public void addCard(@NonNull final View card, final int position) {
-        addView(card, position + mCardPositionOffset);
-    }
-
     boolean flingCard(final float velocityY) {
         final int minVelocity =
                 ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
-        if (velocityY >= minVelocity && mActiveCardPosition >= 0) {
+        if (velocityY >= minVelocity && activeCardPosition >= 0) {
             mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
-            changeActiveCard(mActiveCardPosition - 1, true);
+            changeActiveCard(activeCardPosition - 1, true);
             return true;
         }
-        if (velocityY <= 0 - minVelocity && mCardPositionOffset + mActiveCardPosition < getChildCount() - 1) {
-            changeActiveCard(mActiveCardPosition + 1, true);
+        if (velocityY <= 0 - minVelocity && cardPositionOffset + activeCardPosition < getChildCount() - 1) {
+            changeActiveCard(activeCardPosition + 1, true);
             mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
             return true;
         }
         return false;
     }
 
-    public void setActiveCardListener(@Nullable final OnActiveCardListener listener) {
-        mActiveCardListener = listener;
-    }
-
-    void dispatchActiveCardChanged() {
-        // only dispatch change active card callback if we aren't animating
-        if (mActiveCardListener != null && activeAnimation == null) {
-            mActiveCardListener.onActiveCardChanged(mActiveCard);
-        }
-    }
-
     public void changeActiveCard(final int cardPosition, final boolean animate) {
-        changeActiveCard(getChildAt(mCardPositionOffset + cardPosition), animate);
+        changeActiveCard(getChildAt(cardPositionOffset + cardPosition), animate);
     }
 
     @UiThread
@@ -284,15 +260,15 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
 
         // update the active card
-        final View oldActiveCard = mActiveCard;
-        mActiveCard = view;
-        if (mActiveCard != null) {
-            if (getChildType(mActiveCard) != CHILD_TYPE_CARD) {
-                mActiveCard = null;
+        final View oldActiveCard = activeCard;
+        activeCard = view;
+        if (activeCard != null) {
+            if (getChildType(activeCard) != CHILD_TYPE_CARD) {
+                activeCard = null;
             }
         }
 
-        if (oldActiveCard != mActiveCard) {
+        if (oldActiveCard != activeCard) {
             updateActiveCardPosition(false);
 
             if (animate) {
@@ -319,14 +295,14 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     }
 
     private void updateActiveCardPosition(final boolean updateOffsets) {
-        final int oldPosition = mActiveCardPosition;
-        mActiveCardPosition = indexOfChild(mActiveCard) - mCardPositionOffset;
-        if (mActiveCardPosition < 0) {
-            mActiveCard = null;
-            mActiveCardPosition = -1;
+        final int oldPosition = activeCardPosition;
+        activeCardPosition = indexOfChild(activeCard) - cardPositionOffset;
+        if (activeCardPosition < 0) {
+            activeCard = null;
+            activeCardPosition = -1;
         }
 
-        if (updateOffsets && oldPosition != mActiveCardPosition) {
+        if (updateOffsets && oldPosition != activeCardPosition) {
             updateChildrenOffsetsAndAlpha();
             dispatchActiveCardChanged();
         }
@@ -334,11 +310,11 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     @Nullable
     public View getActiveCard() {
-        return mActiveCard;
+        return activeCard;
     }
 
     public int getActiveCardPosition() {
-        return mActiveCardPosition;
+        return activeCardPosition;
     }
 
     private int getChildType(final View view) {
@@ -440,7 +416,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     @UiThread
     void bounceFirstCard() {
         // short-circuit if the first card isn't being displayed
-        if (mActiveCard != null) {
+        if (activeCard != null) {
             return;
         }
 
@@ -593,7 +569,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             switch (lp.childType) {
                 case CHILD_TYPE_HERO:
                     // we are displaying the hero
-                    if (mActiveCardPosition < 0) {
+                    if (activeCardPosition < 0) {
                         return child.getTop();
                     }
                     // we are displaying a card, so hide the hero
@@ -602,12 +578,12 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
                     }
                 case CHILD_TYPE_CARD:
                     // no cards currently active, so stack the cards
-                    if (mActiveCardPosition < 0) {
+                    if (activeCardPosition < 0) {
                         return parentBottom - lp.cardStackOffset - lp.siblingStackOffset;
                     }
 
                     // this is a previous card
-                    final int activePosition = mCardPositionOffset + mActiveCardPosition;
+                    final int activePosition = cardPositionOffset + activeCardPosition;
                     if (position < activePosition) {
                         return 0 - parentBottom;
                     }
@@ -637,7 +613,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         if (child != null) {
             final int childType = getChildType(child);
             if (childType == CHILD_TYPE_CALL_TO_ACTION || childType == CHILD_TYPE_CALL_TO_ACTION_TIP) {
-                return mActiveCardPosition + 1 >= mTotalCards ? 1 : 0;
+                return activeCardPosition + 1 >= totalCards ? 1 : 0;
             }
         }
         return 1;

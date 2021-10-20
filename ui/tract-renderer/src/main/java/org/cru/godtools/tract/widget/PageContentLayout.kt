@@ -31,10 +31,6 @@ open class PageContentLayout @JvmOverloads constructor(
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), ViewTreeObserver.OnGlobalLayoutListener {
-    interface OnActiveCardListener {
-        fun onActiveCardChanged(activeCard: View?)
-    }
-
     // region Lifecycle
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -59,6 +55,33 @@ open class PageContentLayout @JvmOverloads constructor(
         viewTreeObserver.removeOnGlobalLayoutListener(this)
     }
     // endregion Lifecycle
+
+    // region Card Management
+    @JvmField
+    protected var activeCard: View? = null
+    @JvmField
+    protected var activeCardPosition = 0
+    @JvmField
+    protected var totalCards = 0
+
+    @JvmField
+    protected val cardPositionOffset = 2
+
+    var activeCardListener: OnActiveCardListener? = null
+
+    fun addCard(card: View, position: Int) {
+        addView(card, position + cardPositionOffset)
+    }
+
+    protected fun dispatchActiveCardChanged() {
+        // only dispatch change active card callback if we aren't animating
+        if (activeAnimation == null) activeCardListener?.onActiveCardChanged(activeCard)
+    }
+
+    interface OnActiveCardListener {
+        fun onActiveCardChanged(activeCard: View?)
+    }
+    // endregion Card Management
 
     // region Animation
     @JvmField
