@@ -60,6 +60,7 @@ dependencies {
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+    implementation libs.weakdelegate
 
     kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
     kapt libs.hilt.compiler

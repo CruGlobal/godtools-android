@@ -1,7 +1,12 @@
 package org.cru.godtools.tract.widget
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity
@@ -17,6 +22,7 @@ import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
 import androidx.core.view.forEachIndexed
+import com.karumi.weak.weak
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffset
@@ -29,8 +35,12 @@ import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CH
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_HERO
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_UNKNOWN
 
+private const val BOUNCE_ANIMATION_DELAY_INITIAL = 2000L
+private const val BOUNCE_ANIMATION_DELAY = 7000L
 private const val BOUNCE_ANIMATION_BOUNCES = 4
 private const val BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5
+private const val BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400L
+private const val BOUNCE_ANIMATION_HANDLER_MSG = 1
 
 open class PageContentLayout @JvmOverloads constructor(
     context: Context,
@@ -90,18 +100,79 @@ open class PageContentLayout @JvmOverloads constructor(
     }
     // endregion Card Management
 
-    // region Animation
+    // region Animations
     @JvmField
     protected var activeAnimation: Animator? = null
 
     // region Card Bounce Animation
-    open var isBounceFirstCard = false
-    @JvmField
-    protected val bounceHeight = resources.getDimension(R.dimen.card_bounce_height)
-    @JvmField
-    protected val bounceInterpolator = BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY)
+    private val bounceHeight = resources.getDimension(R.dimen.card_bounce_height)
+    private val bounceInterpolator = BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY)
+    private val bounceAnimationListener = object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            if (activeAnimation === animation) {
+                activeAnimation = null
+                updateChildrenOffsetsAndAlpha()
+            }
+        }
+    }
+    private val cardBounceHandler = CardBounceHandler(this)
+
+    var isBounceFirstCard = false
+        set(animate) {
+            field = animate
+            if (animate) {
+                cardBounceHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL)
+            } else {
+                cardBounceHandler.cancelBounce()
+            }
+        }
+
+    @UiThread
+    private fun triggerCardBounceAnimation() {
+        if (activeCard != null) return
+        if (activeAnimation != null) return
+
+        // animate the first card
+        children.firstOrNull { it.childType == CHILD_TYPE_CARD }?.let {
+            with(buildCardBounceAnimation(it)) {
+                activeAnimation = this
+                start()
+            }
+        }
+    }
+
+    @UiThread
+    private fun buildCardBounceAnimation(view: View) = ObjectAnimator.ofFloat(view, Y, view.y - bounceHeight).apply {
+        interpolator = bounceInterpolator
+        duration = bounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE)
+        addListener(bounceAnimationListener)
+    }
+
+    private class CardBounceHandler(layout: PageContentLayout) : Handler(Looper.getMainLooper()) {
+        private val layout by weak(layout)
+
+        fun enqueueBounce(delay: Long) {
+            if (!hasMessages(BOUNCE_ANIMATION_HANDLER_MSG)) sendEmptyMessageDelayed(BOUNCE_ANIMATION_HANDLER_MSG, delay)
+        }
+
+        fun cancelBounce() {
+            removeMessages(BOUNCE_ANIMATION_HANDLER_MSG)
+        }
+
+        @UiThread
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                BOUNCE_ANIMATION_HANDLER_MSG -> layout?.let {
+                    if (it.isBounceFirstCard) {
+                        it.triggerCardBounceAnimation()
+                        enqueueBounce(BOUNCE_ANIMATION_DELAY)
+                    }
+                }
+            }
+        }
+    }
     // endregion Card Bounce Animation
-    // endregion Animation
+    // endregion Animations
 
     // region View layout logic
     protected fun layoutFullyVisibleChild(

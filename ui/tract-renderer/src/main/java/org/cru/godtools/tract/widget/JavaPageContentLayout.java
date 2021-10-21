@@ -7,9 +7,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -20,7 +17,6 @@ import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,16 +40,9 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
 
-    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 2000;
-    private static final long BOUNCE_ANIMATION_DELAY = 7000;
-    private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400;
-
-    private static final int MSG_BOUNCE_ANIMATION = 1;
-
     private int mDefaultGutterSize;
     private int mGutterSize = 0;
 
-    private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     @Inject
     Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -78,16 +67,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
                 activeAnimation = null;
                 updateChildrenOffsetsAndAlpha();
                 dispatchActiveCardChanged();
-            }
-        }
-    };
-
-    private final Animator.AnimatorListener mBounceAnimationListener = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(final Animator animation) {
-            if (activeAnimation == animation) {
-                activeAnimation = null;
-                updateChildrenOffsetsAndAlpha();
             }
         }
     };
@@ -388,61 +367,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         return animation;
     }
 
-    // region Card Bounce Animation
-    @UiThread
-    @Override
-    public void setBounceFirstCard(final boolean animate) {
-        super.setBounceFirstCard(animate);
-        if (animate) {
-            mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
-        } else {
-            mHandler.cancelBounce();
-        }
-    }
-
-    /**
-     * This method will start a bounce Animation if the layout is in a supported state for the animation.
-     */
-    @UiThread
-    void bounceFirstCard() {
-        // short-circuit if the first card isn't being displayed
-        if (activeCard != null) {
-            return;
-        }
-
-        // short-circuit if another animation is running
-        if (activeAnimation != null) {
-            return;
-        }
-
-        // animate the first card child
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            switch (getChildType(child)) {
-                case CHILD_TYPE_CARD:
-                    activeAnimation = buildBounceAnimation(child);
-                    activeAnimation.start();
-                    return; // Stop after first Card View
-            }
-        }
-    }
-
-    /**
-     * This method will create a new instance of the bounce animation.
-     *
-     * @param view the Card View
-     */
-    @NonNull
-    @UiThread
-    private Animator buildBounceAnimation(@NonNull final View view) {
-        final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - bounceHeight);
-        animation.setInterpolator(bounceInterpolator);
-        animation.setDuration(bounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
-        animation.addListener(mBounceAnimationListener);
-        return animation;
-    }
-    // endregion Card Bounce Animation
-
     // region View layout logic
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
@@ -548,40 +472,4 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         updateChildrenOffsetsAndAlpha();
     }
     // endregion View layout logic
-
-    /**
-     * This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
-     */
-    private static class PageLayoutHandler extends Handler {
-        private final WeakReference<JavaPageContentLayout> mPageContentLayout;
-
-        PageLayoutHandler(@NonNull final JavaPageContentLayout layout) {
-            super(Looper.getMainLooper());
-            mPageContentLayout = new WeakReference<>(layout);
-        }
-
-        void enqueueBounce(final long delay) {
-            if (!hasMessages(MSG_BOUNCE_ANIMATION)) {
-                sendEmptyMessageDelayed(MSG_BOUNCE_ANIMATION, delay);
-            }
-        }
-
-        void cancelBounce() {
-            removeMessages(MSG_BOUNCE_ANIMATION);
-        }
-
-        @UiThread
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_BOUNCE_ANIMATION:
-                    final JavaPageContentLayout layout = mPageContentLayout.get();
-                    if (layout != null && layout.isBounceFirstCard()) {
-                        layout.bounceFirstCard();
-                        enqueueBounce(BOUNCE_ANIMATION_DELAY);
-                    }
-                    break;
-            }
-        }
-    }
 }
