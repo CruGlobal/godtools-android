@@ -95,6 +95,19 @@ open class PageContentLayout @JvmOverloads constructor(
         addView(card, position + cardPositionOffset)
     }
 
+    protected fun updateActiveCardPosition(updateOffsets: Boolean) {
+        val oldPosition = activeCardPosition
+        activeCardPosition = indexOfChild(activeCard) - cardPositionOffset
+        if (activeCardPosition < 0) {
+            activeCard = null
+            activeCardPosition = -1
+        }
+        if (oldPosition != activeCardPosition && updateOffsets) {
+            updateChildrenOffsetsAndAlpha()
+            dispatchActiveCardChanged()
+        }
+    }
+
     protected fun dispatchActiveCardChanged() {
         // only dispatch change active card callback if we aren't animating
         if (activeAnimation == null) activeCardListener?.onActiveCardChanged(activeCard)

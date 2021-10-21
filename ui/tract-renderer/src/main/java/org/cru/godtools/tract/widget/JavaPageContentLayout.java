@@ -249,20 +249,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
     }
 
-    private void updateActiveCardPosition(final boolean updateOffsets) {
-        final int oldPosition = activeCardPosition;
-        activeCardPosition = indexOfChild(activeCard) - cardPositionOffset;
-        if (activeCardPosition < 0) {
-            activeCard = null;
-            activeCardPosition = -1;
-        }
-
-        if (updateOffsets && oldPosition != activeCardPosition) {
-            updateChildrenOffsetsAndAlpha();
-            dispatchActiveCardChanged();
-        }
-    }
-
     @Nullable
     public View getActiveCard() {
         return activeCard;
