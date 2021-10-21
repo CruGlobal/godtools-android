@@ -12,6 +12,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewTreeObserver
@@ -26,12 +27,15 @@ import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.forEachIndexed
 import com.karumi.weak.weak
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffset
 import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
+import org.cru.godtools.base.Settings
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.animation.BounceInterpolator
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION
@@ -41,6 +45,7 @@ import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CH
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_UNKNOWN
 
 private const val DEFAULT_GUTTER_SIZE = 16
+private const val FLING_SCALE_FACTOR = 20
 
 private const val BOUNCE_ANIMATION_DELAY_INITIAL = 2000L
 private const val BOUNCE_ANIMATION_DELAY = 7000L
@@ -49,6 +54,7 @@ private const val BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5
 private const val BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400L
 private const val BOUNCE_ANIMATION_HANDLER_MSG = 1
 
+@AndroidEntryPoint
 open class PageContentLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -113,12 +119,11 @@ open class PageContentLayout @JvmOverloads constructor(
     // region Card Management
     var activeCard: View? = null
         private set
-    @JvmField
-    protected var activeCardPosition = 0
+    var activeCardPosition = 0
+        private set
     private var totalCards = 0
 
-    @JvmField
-    protected val cardPositionOffset = 2
+    private val cardPositionOffset = 2
 
     var activeCardListener: OnActiveCardListener? = null
 
@@ -184,6 +189,26 @@ open class PageContentLayout @JvmOverloads constructor(
         fun onActiveCardChanged(activeCard: View?)
     }
     // endregion Card Management
+
+    // region Card Navigation
+    @Inject
+    internal lateinit var settings: Settings
+
+    protected fun flingCard(velocityY: Float): Boolean {
+        val minVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity * FLING_SCALE_FACTOR
+        if (velocityY >= minVelocity && activeCardPosition >= 0) {
+            settings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED)
+            changeActiveCard(activeCardPosition - 1, true)
+            return true
+        }
+        if (velocityY <= 0 - minVelocity && cardPositionOffset + activeCardPosition < childCount - 1) {
+            changeActiveCard(activeCardPosition + 1, true)
+            settings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED)
+            return true
+        }
+        return false
+    }
+    // endregion Card Navigation
 
     // region Animations
     private var activeAnimation: Animator? = null

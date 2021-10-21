@@ -7,11 +7,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
-
-import org.cru.godtools.base.Settings;
-
-import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +16,7 @@ import androidx.core.view.NestedScrollingParentHelper;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
-    private static final int FLING_SCALE_FACTOR = 20;
-
-    @Inject
-    Settings mSettings;
+public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent {
     private final GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -128,24 +119,4 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         return mParentHelper.getNestedScrollAxes();
     }
     // endregion NestedScrollingParent
-
-    boolean flingCard(final float velocityY) {
-        final int minVelocity =
-                ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
-        if (velocityY >= minVelocity && activeCardPosition >= 0) {
-            mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
-            changeActiveCard(activeCardPosition - 1, true);
-            return true;
-        }
-        if (velocityY <= 0 - minVelocity && cardPositionOffset + activeCardPosition < getChildCount() - 1) {
-            changeActiveCard(activeCardPosition + 1, true);
-            mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
-            return true;
-        }
-        return false;
-    }
-
-    public int getActiveCardPosition() {
-        return activeCardPosition;
-    }
 }
