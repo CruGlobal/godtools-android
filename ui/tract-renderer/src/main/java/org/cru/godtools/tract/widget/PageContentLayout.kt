@@ -74,6 +74,24 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
+    override fun onViewAdded(child: View) {
+        super.onViewAdded(child)
+        if (child.childType == CHILD_TYPE_CARD) totalCards++
+        updateActiveCardPosition(false)
+        updateChildrenOffsetsAndAlpha()
+    }
+
+    override fun onViewRemoved(child: View) {
+        super.onViewRemoved(child)
+        if (child.childType == CHILD_TYPE_CARD) totalCards--
+        if (child !== activeCard) {
+            updateActiveCardPosition(false)
+            updateChildrenOffsetsAndAlpha()
+        } else {
+            changeActiveCard(getChildAt(activeCardPosition + cardPositionOffset - 1), false)
+        }
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -81,12 +99,11 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Lifecycle
 
     // region Card Management
-    @JvmField
-    protected var activeCard: View? = null
+    var activeCard: View? = null
+        private set
     @JvmField
     protected var activeCardPosition = 0
-    @JvmField
-    protected var totalCards = 0
+    private var totalCards = 0
 
     @JvmField
     protected val cardPositionOffset = 2
@@ -133,7 +150,7 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
-    protected fun updateActiveCardPosition(updateOffsets: Boolean) {
+    private fun updateActiveCardPosition(updateOffsets: Boolean) {
         val oldPosition = activeCardPosition
         activeCardPosition = indexOfChild(activeCard) - cardPositionOffset
         if (activeCardPosition < 0) {
@@ -447,7 +464,7 @@ open class PageContentLayout @JvmOverloads constructor(
     }
 
     @UiThread
-    protected fun updateChildrenOffsetsAndAlpha() {
+    private fun updateChildrenOffsetsAndAlpha() {
         // don't update positions if we are currently animating something
         if (activeAnimation != null) return
 
@@ -459,7 +476,7 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
-    protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
+    private val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
 
     private fun getChildTargetY(position: Int): Int {
         val child = getChildAt(position) ?: return paddingTop

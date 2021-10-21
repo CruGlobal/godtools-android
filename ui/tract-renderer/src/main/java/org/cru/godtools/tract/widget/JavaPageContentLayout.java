@@ -21,8 +21,6 @@ import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
-
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
     private static final int FLING_SCALE_FACTOR = 20;
@@ -82,30 +80,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
         changeActiveCard(ss.getActiveCardPosition(), false);
         setBounceFirstCard(ss.isBounceFirstCard());
-    }
-
-    @Override
-    public void onViewAdded(final View child) {
-        super.onViewAdded(child);
-        if (getChildType(child) == CHILD_TYPE_CARD) {
-            totalCards++;
-        }
-        updateActiveCardPosition(false);
-        updateChildrenOffsetsAndAlpha();
-    }
-
-    @Override
-    public void onViewRemoved(final View child) {
-        super.onViewRemoved(child);
-        if (getChildType(child) == CHILD_TYPE_CARD) {
-            totalCards--;
-        }
-        if (activeCard != child) {
-            updateActiveCardPosition(false);
-            updateChildrenOffsetsAndAlpha();
-        } else {
-            changeActiveCard(getChildAt(activeCardPosition + cardPositionOffset - 1), false);
-        }
     }
 
     @Override
@@ -191,11 +165,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             return true;
         }
         return false;
-    }
-
-    @Nullable
-    public View getActiveCard() {
-        return activeCard;
     }
 
     public int getActiveCardPosition() {
