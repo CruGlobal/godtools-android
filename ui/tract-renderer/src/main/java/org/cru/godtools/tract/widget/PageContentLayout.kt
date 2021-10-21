@@ -56,6 +56,15 @@ open class PageContentLayout @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), ViewTreeObserver.OnGlobalLayoutListener {
     // region Lifecycle
+    override fun onRestoreInstanceState(state: Parcelable?) = when (state) {
+        is SavedState -> {
+            super.onRestoreInstanceState(state.superState)
+            changeActiveCard(state.activeCardPosition, false)
+            isBounceFirstCard = state.isBounceFirstCard
+        }
+        else -> super.onRestoreInstanceState(state)
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         viewTreeObserver.addOnGlobalLayoutListener(this)
@@ -91,6 +100,9 @@ open class PageContentLayout @JvmOverloads constructor(
             changeActiveCard(getChildAt(activeCardPosition + cardPositionOffset - 1), false)
         }
     }
+
+    override fun onSaveInstanceState(): Parcelable =
+        SavedState(activeCardPosition, isBounceFirstCard, super.onSaveInstanceState())
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
@@ -593,9 +605,9 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion View layout logic
 
     @Parcelize
-    protected class SavedState(
+    private class SavedState(
         val activeCardPosition: Int,
         val isBounceFirstCard: Boolean,
-        val superState: Parcelable
+        val superState: Parcelable?
     ) : Parcelable
 }

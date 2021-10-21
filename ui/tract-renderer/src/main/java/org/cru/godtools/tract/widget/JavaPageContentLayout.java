@@ -3,7 +3,6 @@ package org.cru.godtools.tract.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -66,27 +65,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         mParentHelper = new NestedScrollingParentHelper(this);
     }
     // endregion Initialization
-
-    // region Lifecycle
-    @Override
-    protected void onRestoreInstanceState(final Parcelable state) {
-        if (!(state instanceof SavedState)) {
-            super.onRestoreInstanceState(state);
-            return;
-        }
-
-        final SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-
-        changeActiveCard(ss.getActiveCardPosition(), false);
-        setBounceFirstCard(ss.isBounceFirstCard());
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        return new SavedState(activeCardPosition, isBounceFirstCard(), super.onSaveInstanceState());
-    }
-    // endregion Lifecycle
 
     // region Touch Events
     @Override
