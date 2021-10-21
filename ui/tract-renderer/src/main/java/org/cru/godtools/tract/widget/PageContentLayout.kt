@@ -21,8 +21,10 @@ import androidx.annotation.StyleRes
 import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.core.view.forEachIndexed
 import com.karumi.weak.weak
+import kotlin.math.max
 import kotlin.math.min
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
@@ -195,7 +197,76 @@ open class PageContentLayout @JvmOverloads constructor(
     @JvmField
     protected var gutterSize = 0
 
-    protected fun calculateCardOffsets(child: View): Boolean {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // measure the call to action view first
+        val callToActionHeight = measureCallToActionHeight(widthMeasureSpec, heightMeasureSpec)
+
+        // track the next card, this is next and not previous because we are walking children backwards
+        var nextCardLp: LayoutParams? = null
+        var cardStackHeight = 0
+        var maxHeight = 0
+        var maxWidth = 0
+        var childState = 0
+
+        // measure all children (we iterate backwards to calculate card stack height)
+        // XXX: we currently end up re-measuring the call to action view
+        for (i in childCount - 1 downTo 0) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) continue
+            val lp = child.layoutParams as LayoutParams
+
+            // determine how much height is used by subsequent views
+            val heightUsed = when (lp.childType) {
+                CHILD_TYPE_CARD -> max(nextCardLp?.cardPeekOffset ?: 0, callToActionHeight)
+                CHILD_TYPE_HERO -> when (nextCardLp) {
+                    null -> callToActionHeight
+                    else -> cardStackHeight + nextCardLp.cardPaddingOffset
+                }
+                else -> 0
+            }
+
+            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)
+            maxWidth = max(child.measuredWidth + lp.leftMargin + lp.rightMargin, maxWidth)
+            maxHeight = max(child.measuredHeight + lp.topMargin + lp.bottomMargin + heightUsed, maxHeight)
+            childState = combineMeasuredStates(childState, child.measuredState)
+
+            // handle some specific sizing based on view type
+            when (lp.childType) {
+                CHILD_TYPE_CARD -> {
+                    calculateCardOffsets(child)
+                    lp.siblingStackOffset = cardStackHeight
+                    cardStackHeight += lp.cardStackOffset - lp.cardPaddingOffset
+                    nextCardLp = lp
+                }
+            }
+        }
+
+        // Include padding in maxWidth & maxHeight
+        maxWidth += paddingLeft + paddingRight
+        maxHeight += paddingTop + paddingBottom
+
+        // Check against our minimum height and width
+        maxHeight = maxHeight.coerceAtLeast(suggestedMinimumHeight)
+        maxWidth = maxWidth.coerceAtLeast(suggestedMinimumWidth)
+        setMeasuredDimension(
+            resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
+            resolveSizeAndState(maxHeight, heightMeasureSpec, childState shl MEASURED_HEIGHT_STATE_SHIFT)
+        )
+
+        updateGutterSize()
+    }
+
+    private fun measureCallToActionHeight(widthMeasureSpec: Int, heightMeasureSpec: Int): Int {
+        forEach {
+            if (it.visibility != GONE && it.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                measureChildWithMargins(it, widthMeasureSpec, 0, heightMeasureSpec, 0)
+                return it.measuredHeight
+            }
+        }
+        return 0
+    }
+
+    private fun calculateCardOffsets(child: View): Boolean {
         // only update card offsets if the child has been laid out
         if (child.isLaidOut) {
             val lp = child.layoutParams as LayoutParams
@@ -229,7 +300,7 @@ open class PageContentLayout @JvmOverloads constructor(
         return false
     }
 
-    protected fun updateGutterSize() {
+    private fun updateGutterSize() {
         gutterSize = min(defaultGutterSize, measuredHeight / 10)
     }
 
