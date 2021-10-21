@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.LanguageTestUtils
 import org.cru.godtools.ui.languages.LanguageSettingsFragmentBindingCallbacks
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -14,11 +13,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.activity.MainActivity
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -42,8 +41,7 @@ class LanguageSettingsFragmentBindingTest {
     // region Primary Language
     @Test
     fun verifyPrimaryLanguageLabel() {
-        val language = mock<Language>()
-        whenever(LanguageTestUtils.getDisplayName(language, any())).thenReturn("Language Object")
+        val language = mock<Language> { on { getDisplayName(any()) } doReturn "Language Object" }
         binding.primaryLocale = MutableLiveData(Locale.ENGLISH)
         binding.primaryLanguage = MutableLiveData(language)
         binding.invalidateAll()
@@ -75,8 +73,7 @@ class LanguageSettingsFragmentBindingTest {
     // region Parallel Language
     @Test
     fun verifyParallelLanguageLabel() {
-        val language = mock<Language>()
-        whenever(LanguageTestUtils.getDisplayName(language, any())).thenReturn("Language Object")
+        val language = mock<Language> { on { getDisplayName(any()) } doReturn "Language Object" }
         binding.parallelLocale = MutableLiveData(Locale.ENGLISH)
         binding.parallelLanguage = MutableLiveData(language)
         binding.invalidateAll()
