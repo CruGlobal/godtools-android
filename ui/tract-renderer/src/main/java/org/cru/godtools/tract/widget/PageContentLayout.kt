@@ -172,6 +172,19 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
     // endregion Card Bounce Animation
+
+    // region Card Change Animation
+    @JvmField
+    protected val cardChangeAnimationListener = object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            if (activeAnimation === animation) {
+                activeAnimation = null
+                updateChildrenOffsetsAndAlpha()
+                dispatchActiveCardChanged()
+            }
+        }
+    }
+    // endregion Card Change Animation
     // endregion Animations
 
     // region View layout logic

@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.widget;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -59,17 +58,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
     };
     private final NestedScrollingParentHelper mParentHelper;
-
-    private final Animator.AnimatorListener mAnimationListener = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(final Animator animation) {
-            if (activeAnimation == animation) {
-                activeAnimation = null;
-                updateChildrenOffsetsAndAlpha();
-                dispatchActiveCardChanged();
-            }
-        }
-    };
 
     // region Initialization
     public JavaPageContentLayout(@NonNull final Context context) {
@@ -363,7 +351,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
         // set a few overall animation parameters
         animation.setInterpolator(new DecelerateInterpolator());
-        animation.addListener(mAnimationListener);
+        animation.addListener(cardChangeAnimationListener);
         return animation;
     }
 
