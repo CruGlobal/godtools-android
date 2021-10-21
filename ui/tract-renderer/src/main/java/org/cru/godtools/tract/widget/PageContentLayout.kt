@@ -253,7 +253,7 @@ open class PageContentLayout @JvmOverloads constructor(
             resolveSizeAndState(maxHeight, heightMeasureSpec, childState shl MEASURED_HEIGHT_STATE_SHIFT)
         )
 
-        updateGutterSize()
+        gutterSize = min(defaultGutterSize, measuredHeight / 10)
     }
 
     private fun measureCallToActionHeight(widthMeasureSpec: Int, heightMeasureSpec: Int): Int {
@@ -300,24 +300,20 @@ open class PageContentLayout @JvmOverloads constructor(
         return false
     }
 
-    private fun updateGutterSize() {
-        gutterSize = min(defaultGutterSize, measuredHeight / 10)
-    }
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        val parentLeft = paddingLeft
+        val parentRight = right - left - paddingRight
+        val parentTop = paddingTop
+        val parentBottom = bottom - top - paddingBottom
 
-    @UiThread
-    protected fun updateChildrenOffsetsAndAlpha() {
-        // don't update positions if we are currently animating something
-        if (activeAnimation != null) return
-
-        forEachIndexed { i, child ->
-            child.y = getChildTargetY(i).toFloat()
-            when (child.childType) {
-                CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.alpha = getChildTargetAlpha(child)
-            }
+        forEach {
+            if (it.visibility != GONE) layoutFullyVisibleChild(it, parentLeft, parentTop, parentRight, parentBottom)
         }
+
+        updateChildrenOffsetsAndAlpha()
     }
 
-    protected fun layoutFullyVisibleChild(
+    private fun layoutFullyVisibleChild(
         child: View,
         parentLeft: Int,
         parentTop: Int,
@@ -338,6 +334,19 @@ open class PageContentLayout @JvmOverloads constructor(
         val childLeft = parentLeft + lp.leftMargin
 
         child.layout(childLeft, childTop, childLeft + width, childTop + height)
+    }
+
+    @UiThread
+    protected fun updateChildrenOffsetsAndAlpha() {
+        // don't update positions if we are currently animating something
+        if (activeAnimation != null) return
+
+        forEachIndexed { i, child ->
+            child.y = getChildTargetY(i).toFloat()
+            when (child.childType) {
+                CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.alpha = getChildTargetAlpha(child)
+            }
+        }
     }
 
     protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN

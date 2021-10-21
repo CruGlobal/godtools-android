@@ -344,26 +344,4 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         animation.addListener(cardChangeAnimationListener);
         return animation;
     }
-
-    // region View layout logic
-    @Override
-    protected void onLayout(final boolean changed, final int left, final int top, final int right, final int bottom) {
-        // calculate the bounds we can draw in
-        final int parentLeft = getPaddingLeft();
-        final int parentRight = right - left - getPaddingRight();
-        final int parentTop = getPaddingTop();
-        final int parentBottom = bottom - top - getPaddingBottom();
-
-        int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            // only layout children that aren't gone
-            final View child = getChildAt(i);
-            if (child.getVisibility() != GONE) {
-                layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
-            }
-        }
-
-        updateChildrenOffsetsAndAlpha();
-    }
-    // endregion View layout logic
 }
