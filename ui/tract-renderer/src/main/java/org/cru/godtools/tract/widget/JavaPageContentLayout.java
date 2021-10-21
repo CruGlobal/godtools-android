@@ -331,7 +331,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
                     // position offset animation only
                     final int targetY = getChildTargetY(i);
                     if (child.getY() != targetY) {
-                        offset.add(ObjectAnimator.ofFloat(child, View.Y, getChildTargetY(i)));
+                        offset.add(ObjectAnimator.ofFloat(child, View.Y, targetY));
                     }
                     break;
                 case CHILD_TYPE_CALL_TO_ACTION: {
@@ -546,57 +546,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         }
 
         updateChildrenOffsetsAndAlpha();
-    }
-
-    @SuppressWarnings("checkstyle:RightCurly")
-    private int getChildTargetY(final int position) {
-        final int parentTop = getPaddingTop();
-        final int parentBottom = getMeasuredHeight() - getPaddingBottom();
-
-        final View child = getChildAt(position);
-        if (child != null) {
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
-                case CHILD_TYPE_HERO:
-                    // we are displaying the hero
-                    if (activeCardPosition < 0) {
-                        return child.getTop();
-                    }
-                    // we are displaying a card, so hide the hero
-                    else {
-                        return 0 - parentBottom;
-                    }
-                case CHILD_TYPE_CARD:
-                    // no cards currently active, so stack the cards
-                    if (activeCardPosition < 0) {
-                        return parentBottom - lp.cardStackOffset - lp.siblingStackOffset;
-                    }
-
-                    // this is a previous card
-                    final int activePosition = cardPositionOffset + activeCardPosition;
-                    if (position < activePosition) {
-                        return 0 - parentBottom;
-                    }
-                    // this is the currently displayed card
-                    else if (position == activePosition) {
-                        return child.getTop();
-                    }
-                    // this is the next card in the stack
-                    else if (position - 1 == activePosition) {
-                        return parentBottom - lp.cardPeekOffset;
-                    }
-                    // otherwise, card is off the bottom
-                    else {
-                        return getMeasuredHeight() - getPaddingTop();
-                    }
-                case CHILD_TYPE_CALL_TO_ACTION:
-                case CHILD_TYPE_CALL_TO_ACTION_TIP:
-                default:
-                    return child.getTop();
-            }
-        }
-
-        return parentTop;
     }
 
     @UiThread

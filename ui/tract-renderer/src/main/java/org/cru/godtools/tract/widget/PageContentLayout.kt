@@ -23,6 +23,8 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.tract.animation.BounceInterpolator
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION_TIP
+import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CARD
+import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_HERO
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_UNKNOWN
 
 private const val BOUNCE_ANIMATION_BOUNCES = 4
@@ -134,7 +136,7 @@ open class PageContentLayout @JvmOverloads constructor(
             var cardStackOffset = 0
 
             when (lp.childType) {
-                LayoutParams.CHILD_TYPE_CARD -> {
+                CHILD_TYPE_CARD -> {
                     if (child is ViewGroup) {
                         cardPaddingOffset = child.calculateTopOffsetOrNull(lp.cardPaddingViewTop) ?: 0
                         cardPeekOffset = child.calculateTopOffsetOrNull(lp.cardPeekViewTop) ?: 0
@@ -158,14 +160,45 @@ open class PageContentLayout @JvmOverloads constructor(
     }
 
     protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
-    protected val View.childTargetAlpha
-        get() = when (childType) {
-            CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
-                activeCardPosition + 1 >= totalCards -> 1f
-                else -> 0f
+
+    protected fun getChildTargetY(position: Int): Int {
+        val child = getChildAt(position) ?: return paddingTop
+        val lp = child.layoutParams as LayoutParams
+        val parentBottom = measuredHeight - paddingBottom
+
+        return when (lp.childType) {
+            CHILD_TYPE_HERO -> when {
+                // we are currently displaying the hero
+                activeCardPosition < 0 -> child.top
+                else -> 0 - parentBottom
             }
-            else -> 1f
+            CHILD_TYPE_CARD -> {
+                // no cards currently active, so stack the cards
+                if (activeCardPosition < 0) {
+                    return parentBottom - lp.cardStackOffset - lp.siblingStackOffset
+                }
+
+                // this is a previous card
+                val activePosition = cardPositionOffset + activeCardPosition
+                when {
+                    position < activePosition -> 0 - parentBottom
+                    position == activePosition -> child.top
+                    position - 1 == activePosition -> parentBottom - lp.cardPeekOffset
+                    else -> measuredHeight - paddingTop
+                }
+            }
+            CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.top
+            else -> child.top
         }
+    }
+
+    protected fun getChildTargetAlpha(child: View) = when (child.childType) {
+        CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
+            activeCardPosition + 1 >= totalCards -> 1f
+            else -> 0f
+        }
+        else -> 1f
+    }
 
     // region LayoutParams
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
