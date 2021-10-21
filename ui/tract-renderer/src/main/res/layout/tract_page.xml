@@ -36,7 +36,7 @@
             app:scaleType="@{TractPageKt.getBackgroundImageScaleType(page)}"
             app:visibleIf="@{page.backgroundImage != null}" />
 
-        <org.cru.godtools.tract.widget.JavaPageContentLayout
+        <org.cru.godtools.tract.widget.PageContentLayout
             android:id="@+id/page_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -110,6 +110,6 @@
                 app:srcInsetTop="@{@dimen/tract_tips_arrow_padding}"
                 app:visibleIf="@{enableTips &amp;&amp; page.callToAction.tip != null}"
                 tools:src="@drawable/ic_tips_tip" />
-        </org.cru.godtools.tract.widget.JavaPageContentLayout>
+        </org.cru.godtools.tract.widget.PageContentLayout>
     </FrameLayout>
 </layout>

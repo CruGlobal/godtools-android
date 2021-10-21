@@ -60,7 +60,7 @@ private const val BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400L
 private const val BOUNCE_ANIMATION_HANDLER_MSG = 1
 
 @AndroidEntryPoint
-open class PageContentLayout @JvmOverloads constructor(
+class PageContentLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
