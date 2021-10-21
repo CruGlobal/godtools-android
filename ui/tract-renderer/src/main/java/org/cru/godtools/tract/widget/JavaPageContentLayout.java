@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.widget;
 
-import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -17,7 +16,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
@@ -193,51 +191,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
             return true;
         }
         return false;
-    }
-
-    public void changeActiveCard(final int cardPosition, final boolean animate) {
-        changeActiveCard(getChildAt(cardPositionOffset + cardPosition), animate);
-    }
-
-    @UiThread
-    public void changeActiveCard(@Nullable final View view, final boolean animate) {
-        if (view != null && view.getParent() != this) {
-            throw new IllegalArgumentException("can't change the active view to a view that isn't a child");
-        }
-
-        // update the active card
-        final View oldActiveCard = activeCard;
-        activeCard = view;
-        if (activeCard != null) {
-            if (getChildType(activeCard) != CHILD_TYPE_CARD) {
-                activeCard = null;
-            }
-        }
-
-        if (oldActiveCard != activeCard) {
-            updateActiveCardPosition(false);
-
-            if (animate) {
-                final Animator oldAnimation = activeAnimation;
-                activeAnimation = buildCardChangeAnimation();
-                if (oldAnimation != null) {
-                    oldAnimation.cancel();
-                }
-                activeAnimation.start();
-            } else {
-                // stop any running animation
-                final Animator oldAnimation = activeAnimation;
-                activeAnimation = null;
-                if (oldAnimation != null) {
-                    oldAnimation.cancel();
-                }
-
-                updateChildrenOffsetsAndAlpha();
-                dispatchActiveCardChanged();
-            }
-        } else {
-            updateActiveCardPosition(true);
-        }
     }
 
     @Nullable

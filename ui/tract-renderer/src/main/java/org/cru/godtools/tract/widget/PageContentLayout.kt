@@ -97,6 +97,42 @@ open class PageContentLayout @JvmOverloads constructor(
         addView(card, position + cardPositionOffset)
     }
 
+    fun changeActiveCard(cardPosition: Int, animate: Boolean = true) =
+        changeActiveCard(getChildAt(cardPositionOffset + cardPosition), animate)
+
+    @UiThread
+    fun changeActiveCard(view: View?, animate: Boolean = true) {
+        require(!(view != null && view.parent !== this)) { "can't change the active view to a view that isn't a child" }
+
+        // update the active card
+        val oldActiveCard = activeCard
+        activeCard = view?.takeIf { it.childType == CHILD_TYPE_CARD }
+
+        // update the position, also update offsets if the active card didn't change
+        updateActiveCardPosition(updateOffsets = oldActiveCard === activeCard)
+
+        // active card changed
+        if (oldActiveCard !== activeCard) {
+            if (animate) {
+                // replace current animation
+                buildCardChangeAnimation().apply {
+                    val oldAnimation = activeAnimation
+                    activeAnimation = this
+                    oldAnimation?.cancel()
+                    start()
+                }
+            } else {
+                // stop any running animation
+                activeAnimation?.apply {
+                    activeAnimation = null
+                    cancel()
+                }
+                updateChildrenOffsetsAndAlpha()
+                dispatchActiveCardChanged()
+            }
+        }
+    }
+
     protected fun updateActiveCardPosition(updateOffsets: Boolean) {
         val oldPosition = activeCardPosition
         activeCardPosition = indexOfChild(activeCard) - cardPositionOffset
@@ -110,7 +146,7 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
-    protected fun dispatchActiveCardChanged() {
+    private fun dispatchActiveCardChanged() {
         // only dispatch change active card callback if we aren't animating
         if (activeAnimation == null) activeCardListener?.onActiveCardChanged(activeCard)
     }
@@ -121,8 +157,7 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Card Management
 
     // region Animations
-    @JvmField
-    protected var activeAnimation: Animator? = null
+    private var activeAnimation: Animator? = null
 
     // region Card Bounce Animation
     private val bounceHeight = resources.getDimension(R.dimen.card_bounce_height)
@@ -194,8 +229,7 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Card Bounce Animation
 
     // region Card Change Animation
-    @JvmField
-    protected val cardChangeAnimationListener = object : AnimatorListenerAdapter() {
+    private val cardChangeAnimationListener = object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator) {
             if (activeAnimation === animation) {
                 activeAnimation = null
@@ -205,7 +239,7 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
-    protected fun buildCardChangeAnimation(): Animator {
+    private fun buildCardChangeAnimation(): Animator {
         // build individual animations
         val offset = mutableListOf<Animator>()
         val fadeIn = mutableListOf<Animator>()
