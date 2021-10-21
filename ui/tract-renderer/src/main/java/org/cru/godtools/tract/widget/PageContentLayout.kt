@@ -2,6 +2,7 @@ package org.cru.godtools.tract.widget
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Handler
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewTreeObserver
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
@@ -202,6 +204,67 @@ open class PageContentLayout @JvmOverloads constructor(
             }
         }
     }
+
+    protected fun buildCardChangeAnimation(): Animator {
+        // build individual animations
+        val offset = mutableListOf<Animator>()
+        val fadeIn = mutableListOf<Animator>()
+        val show = mutableListOf<Animator>()
+        forEachIndexed { i, child ->
+            when (child.childType) {
+                CHILD_TYPE_HERO, CHILD_TYPE_CARD -> {
+                    // position offset animation only
+                    val targetY = getChildTargetY(i).toFloat()
+                    if (child.y != targetY) {
+                        offset.add(ObjectAnimator.ofFloat(child, Y, targetY))
+                    }
+                }
+                CHILD_TYPE_CALL_TO_ACTION -> {
+                    // alpha animation only
+                    val targetAlpha = getChildTargetAlpha(child)
+                    if (child.alpha != targetAlpha) {
+                        val animation = ObjectAnimator.ofFloat(child, ALPHA, targetAlpha)
+                        if (targetAlpha > 0) {
+                            fadeIn.add(animation)
+                        } else {
+                            // fading out the call to action can happen at the same time as offset animations
+                            offset.add(animation)
+                        }
+                    }
+                }
+                CHILD_TYPE_CALL_TO_ACTION_TIP -> {
+                    // alpha animation only
+                    val targetAlpha = getChildTargetAlpha(child)
+                    if (child.alpha != targetAlpha) {
+                        val animation = ObjectAnimator.ofFloat(child, ALPHA, targetAlpha)
+                        animation.duration = 0
+                        if (targetAlpha > 0) {
+                            show.add(animation)
+                        } else {
+                            // hiding the call to action tip can happen at the same time as other animations
+                            offset.add(animation)
+                        }
+                    }
+                }
+            }
+        }
+
+        // build final animation
+        return AnimatorSet().apply {
+            // play each group together
+            playTogether(fadeIn)
+            playTogether(offset)
+            playTogether(show)
+
+            // chain groups in proper sequence
+            if (offset.isNotEmpty() && fadeIn.isNotEmpty()) play(fadeIn.first()).after(offset.first())
+            if (fadeIn.isNotEmpty() && show.isNotEmpty()) play(show.first()).after(fadeIn.first())
+
+            // set a few overall animation parameters
+            interpolator = DecelerateInterpolator()
+            addListener(cardChangeAnimationListener)
+        }
+    }
     // endregion Card Change Animation
     // endregion Animations
 
@@ -364,7 +427,7 @@ open class PageContentLayout @JvmOverloads constructor(
 
     protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
 
-    protected fun getChildTargetY(position: Int): Int {
+    private fun getChildTargetY(position: Int): Int {
         val child = getChildAt(position) ?: return paddingTop
         val lp = child.layoutParams as LayoutParams
         val parentBottom = measuredHeight - paddingBottom
@@ -395,7 +458,7 @@ open class PageContentLayout @JvmOverloads constructor(
         }
     }
 
-    protected fun getChildTargetAlpha(child: View) = when (child.childType) {
+    private fun getChildTargetAlpha(child: View) = when (child.childType) {
         CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
             activeCardPosition + 1 >= totalCards -> 1f
             else -> 0f

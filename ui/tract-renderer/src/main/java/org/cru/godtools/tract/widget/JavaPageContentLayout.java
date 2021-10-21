@@ -1,8 +1,6 @@
 package org.cru.godtools.tract.widget;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -12,12 +10,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.animation.DecelerateInterpolator;
 
 import org.cru.godtools.base.Settings;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,10 +23,7 @@ import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION_TIP;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
-import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
@@ -228,7 +219,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
             if (animate) {
                 final Animator oldAnimation = activeAnimation;
-                activeAnimation = buildAnimation();
+                activeAnimation = buildCardChangeAnimation();
                 if (oldAnimation != null) {
                     oldAnimation.cancel();
                 }
@@ -256,78 +247,5 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
     public int getActiveCardPosition() {
         return activeCardPosition;
-    }
-
-    @NonNull
-    @SuppressWarnings("checkstyle:AvoidNestedBlocks")
-    private Animator buildAnimation() {
-        // build individual animations
-        final List<Animator> offset = new ArrayList<>();
-        final List<Animator> fadeIn = new ArrayList<>();
-        final List<Animator> show = new ArrayList<>();
-        final int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            final View child = getChildAt(i);
-            switch (getChildType(child)) {
-                case CHILD_TYPE_HERO:
-                case CHILD_TYPE_CARD:
-                    // position offset animation only
-                    final int targetY = getChildTargetY(i);
-                    if (child.getY() != targetY) {
-                        offset.add(ObjectAnimator.ofFloat(child, View.Y, targetY));
-                    }
-                    break;
-                case CHILD_TYPE_CALL_TO_ACTION: {
-                    // alpha animation only
-                    final float targetAlpha = getChildTargetAlpha(child);
-                    if (child.getAlpha() != targetAlpha) {
-                        final Animator animation = ObjectAnimator.ofFloat(child, View.ALPHA, targetAlpha);
-                        if (targetAlpha > 0) {
-                            fadeIn.add(animation);
-                        } else {
-                            // fading out the call to action can happen at the same time as offset animations
-                            offset.add(animation);
-                        }
-                    }
-                    break;
-                }
-                case CHILD_TYPE_CALL_TO_ACTION_TIP: {
-                    // alpha animation only
-                    final float targetAlpha = getChildTargetAlpha(child);
-                    if (child.getAlpha() != targetAlpha) {
-                        final Animator animation = ObjectAnimator.ofFloat(child, View.ALPHA, targetAlpha);
-                        animation.setDuration(0);
-                        if (targetAlpha > 0) {
-                            show.add(animation);
-                        } else {
-                            // hiding the call to action tip can happen at the same time as other animations
-                            offset.add(animation);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        // build final animation
-        final AnimatorSet animation = new AnimatorSet();
-
-        // play each group together
-        animation.playTogether(fadeIn);
-        animation.playTogether(offset);
-        animation.playTogether(show);
-
-        // chain groups in proper sequence
-        if (!offset.isEmpty() && !fadeIn.isEmpty()) {
-            animation.play(fadeIn.get(0)).after(offset.get(0));
-        }
-        if (!fadeIn.isEmpty() && !show.isEmpty()) {
-            animation.play(show.get(0)).after(fadeIn.get(0));
-        }
-
-        // set a few overall animation parameters
-        animation.setInterpolator(new DecelerateInterpolator());
-        animation.addListener(cardChangeAnimationListener);
-        return animation;
     }
 }
