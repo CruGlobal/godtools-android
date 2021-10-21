@@ -547,23 +547,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
 
         updateChildrenOffsetsAndAlpha();
     }
-
-    @UiThread
-    void updateChildrenOffsetsAndAlpha() {
-        // update the child position if we aren't animating
-        if (activeAnimation == null) {
-            int count = getChildCount();
-            for (int i = 0; i < count; i++) {
-                final View child = getChildAt(i);
-                child.setY(getChildTargetY(i));
-
-                final int childType = getChildType(child);
-                if (getChildType(child) == CHILD_TYPE_CALL_TO_ACTION || childType == CHILD_TYPE_CALL_TO_ACTION_TIP) {
-                    child.setAlpha(getChildTargetAlpha(child));
-                }
-            }
-        }
-    }
     // endregion View layout logic
 
     /**

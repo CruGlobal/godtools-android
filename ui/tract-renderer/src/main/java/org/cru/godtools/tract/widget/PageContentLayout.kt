@@ -13,8 +13,10 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
+import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
+import androidx.core.view.forEachIndexed
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffset
@@ -157,6 +159,19 @@ open class PageContentLayout @JvmOverloads constructor(
             }
         }
         return false
+    }
+
+    @UiThread
+    protected fun updateChildrenOffsetsAndAlpha() {
+        // don't update positions if we are currently animating something
+        if (activeAnimation != null) return
+
+        forEachIndexed { i, child ->
+            child.y = getChildTargetY(i).toFloat()
+            when (child.childType) {
+                CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.alpha = getChildTargetAlpha(child)
+            }
+        }
     }
 
     protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
