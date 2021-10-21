@@ -188,29 +188,6 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Animations
 
     // region View layout logic
-    protected fun layoutFullyVisibleChild(
-        child: View,
-        parentLeft: Int,
-        parentTop: Int,
-        parentRight: Int,
-        parentBottom: Int
-    ) {
-        val lp = child.layoutParams as LayoutParams
-        val width = child.measuredWidth
-        val height = child.measuredHeight
-        val gravity = lp.gravity.takeUnless { it == FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY } ?: Gravity.TOP
-        val above = findViewById<View>(lp.above)
-
-        val childTop = when {
-            above != null -> calculateTopOffset(above) - height
-            gravity and Gravity.VERTICAL_GRAVITY_MASK == Gravity.BOTTOM -> parentBottom - height - lp.bottomMargin
-            else -> parentTop + lp.topMargin
-        }
-        val childLeft = parentLeft + lp.leftMargin
-
-        child.layout(childLeft, childTop, childLeft + width, childTop + height)
-    }
-
     protected fun calculateCardOffsets(child: View): Boolean {
         // only update card offsets if the child has been laid out
         if (child.isLaidOut) {
@@ -256,6 +233,29 @@ open class PageContentLayout @JvmOverloads constructor(
                 CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.alpha = getChildTargetAlpha(child)
             }
         }
+    }
+
+    protected fun layoutFullyVisibleChild(
+        child: View,
+        parentLeft: Int,
+        parentTop: Int,
+        parentRight: Int,
+        parentBottom: Int
+    ) {
+        val lp = child.layoutParams as LayoutParams
+        val width = child.measuredWidth
+        val height = child.measuredHeight
+        val gravity = lp.gravity.takeUnless { it == FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY } ?: Gravity.TOP
+        val above = findViewById<View>(lp.above)
+
+        val childTop = when {
+            above != null -> calculateTopOffset(above) - height
+            gravity and Gravity.VERTICAL_GRAVITY_MASK == Gravity.BOTTOM -> parentBottom - height - lp.bottomMargin
+            else -> parentTop + lp.topMargin
+        }
+        val childLeft = parentLeft + lp.leftMargin
+
+        child.layout(childLeft, childTop, childLeft + width, childTop + height)
     }
 
     protected val View.childType get() = (layoutParams as? LayoutParams)?.childType ?: CHILD_TYPE_UNKNOWN
