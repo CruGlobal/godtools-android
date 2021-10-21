@@ -26,6 +26,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
+import androidx.core.view.NestedScrollingParent
+import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.forEachIndexed
@@ -63,7 +65,9 @@ open class PageContentLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), ViewTreeObserver.OnGlobalLayoutListener {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes),
+    ViewTreeObserver.OnGlobalLayoutListener,
+    NestedScrollingParent {
     // region Lifecycle
     override fun onRestoreInstanceState(state: Parcelable?) = when (state) {
         is SavedState -> {
@@ -197,7 +201,7 @@ open class PageContentLayout @JvmOverloads constructor(
     @Inject
     internal lateinit var settings: Settings
 
-    protected fun flingCard(velocityY: Float): Boolean {
+    private fun flingCard(velocityY: Float): Boolean {
         val minVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity * FLING_SCALE_FACTOR
         if (velocityY >= minVelocity && activeCardPosition >= 0) {
             settings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED)
@@ -234,6 +238,24 @@ open class PageContentLayout @JvmOverloads constructor(
 
     private fun isEventInGutter(event: MotionEvent) = event.y > height - gutterSize
     // endregion Touch Events
+
+    // region NestedScrollingParent
+    private val nestedScrollingParentHelper = NestedScrollingParentHelper(this)
+
+    /**
+     * @return true so that we will get the onNestedFling calls from descendant NestedScrollingChild
+     */
+    override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int) = true
+    override fun onNestedScrollAccepted(child: View, target: View, axes: Int) =
+        nestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes)
+    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) = Unit
+    override fun onNestedScroll(target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int) {}
+    override fun onStopNestedScroll(child: View) = nestedScrollingParentHelper.onStopNestedScroll(child)
+    override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float) = false
+    override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean) =
+        flingCard(velocityY * -1)
+    override fun getNestedScrollAxes() = nestedScrollingParentHelper.nestedScrollAxes
+    // endregion NestedScrollingParent
     // endregion Card Navigation
 
     // region Animations
