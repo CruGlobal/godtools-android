@@ -1,9 +1,12 @@
-package org.cru.godtools.tract.activity
+package org.cru.godtools.base.tool.activity
 
 import android.content.Context
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
+import org.cru.godtools.base.tool.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -17,7 +20,6 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
 class LanguageToggleControllerTest {
@@ -29,7 +31,7 @@ class LanguageToggleControllerTest {
 
     @Before
     fun setupController() {
-        context = Robolectric.buildActivity(TractActivity::class.java).get()
+        context = ContextThemeWrapper(ApplicationProvider.getApplicationContext(), R.style.Theme_AppCompat)
         tabListener = mock()
         tabLayout = TabLayout(context)
         controller = LanguageToggleController(tabLayout)

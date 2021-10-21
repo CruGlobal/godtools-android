@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.analytics.model
+package org.cru.godtools.base.tool.analytics.model
 
 import android.os.Bundle
 import java.util.Locale

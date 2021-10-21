@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.activity
+package org.cru.godtools.base.tool.activity
 
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LruCache
@@ -34,48 +34,22 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
-private const val STATE_LIVE_SHARE_TUTORIAL_SHOWN = "liveShareTutorialShown"
 
 @HiltViewModel
-class TractActivityDataModel @Inject constructor(
-    private val dao: GodToolsDao,
-    private val downloadManager: GodToolsDownloadManager,
-    private val manifestManager: ManifestManager,
-    @Named(IS_CONNECTED_LIVE_DATA) private val isConnected: LiveData<Boolean>,
-    private val savedState: SavedStateHandle
+open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
+    dao: GodToolsDao,
+    downloadManager: GodToolsDownloadManager,
+    manifestManager: ManifestManager,
+    @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
+    protected val savedState: SavedStateHandle,
 ) : ViewModel() {
-    val tool = MutableLiveData<String?>()
-    val isInitialSyncFinished = MutableLiveData(false)
-    private val distinctTool = tool.distinctUntilChanged()
-
-    // region Active Tool
-    val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
-        .map { it?.let { Locale.forLanguageTag(it) } }
-        .distinctUntilChanged()
-    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
-
-    val activeManifest =
-        distinctTool.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
-            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
-    val activeLoadingState = distinctTool.switchCombineWith(activeLocale) { tool, l ->
-        val translation = translationCache.get(tool, l)
-        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
-            LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
-        }
-    }.distinctUntilChanged()
-
-    val downloadProgress = distinctTool.switchCombineWith(activeLocale) { t, l ->
-        when {
-            t == null || l == null -> emptyLiveData()
-            else -> downloadManager.getDownloadProgressLiveData(t, l)
-        }
-    }
-    // endregion Active Tool
-
-    // region Language Switcher
+    val toolCode = MutableLiveData<String?>()
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
     val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
+
+    // region Resolved Data
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
+    private val distinctToolCode = toolCode.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
 
     val languages = distinctLocales.switchMap {
@@ -83,20 +57,27 @@ class TractActivityDataModel @Inject constructor(
             .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*it.toTypedArray())))
             .getAsLiveData(dao)
     }.map { it.associateBy { it.code } }
-    @VisibleForTesting
-    internal val manifests =
-        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
-            distinctTool.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
-                .distinctUntilChanged()
-                .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
-        }.map { it.toMap() }
+
     @VisibleForTesting
     internal val translations =
         distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
-            distinctTool.switchMap { translationCache.get(it, locale).withInitialValue(null) }
+            distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
+
+    @VisibleForTesting
+    internal val manifests =
+        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
+            distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
+                .distinctUntilChanged()
+                .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
+        }.map { it.toMap() }
+    // endregion Resolved Data
+
+    // region Loading State
+    val isInitialSyncFinished = MutableLiveData(false)
+
     val loadingState = locales
         .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
             l.associateWith {
@@ -108,29 +89,53 @@ class TractActivityDataModel @Inject constructor(
                 )
             }
         }
+    // endregion Loading State
+
+    // region Active Tool
+    val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
+        .map { it?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
+
+    val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
+        val translation = translationCache.get(tool, l)
+        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
+            LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
+        }
+    }.distinctUntilChanged()
+
+    val activeManifest =
+        distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
+            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
+
+    internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
+        when {
+            t == null || l == null -> emptyLiveData()
+            else -> downloadManager.getDownloadProgressLiveData(t, l)
+        }
+    }
+    // endregion Active Tool
+
+    // region Available Locales
     @OptIn(ExperimentalStdlibApi::class)
     val availableLocales = activeLocale
-        .combineWith(primaryLocales, parallelLocales, loadingState) { activeLocale, primary, parallel, loadingState ->
+        .combineWith(primaryLocales, parallelLocales, loadingState) { activeLocale, primary, parallel, loaded ->
             buildList {
                 primary
-                    .filterNot {
-                        loadingState[it] == LoadingState.INVALID_TYPE || loadingState[it] == LoadingState.NOT_FOUND
-                    }
+                    .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale && loadingState[it] != LoadingState.OFFLINE }
-                            ?: it.firstOrNull { loadingState[it] == LoadingState.LOADED }
+                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
                             ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
                 parallel
                     .filterNot { contains(it) }
-                    .filterNot {
-                        loadingState[it] == LoadingState.INVALID_TYPE || loadingState[it] == LoadingState.NOT_FOUND
-                    }
+                    .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale && loadingState[it] != LoadingState.OFFLINE }
-                            ?: it.firstOrNull { loadingState[it] == LoadingState.LOADED }
+                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                            ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
                             ?: it.firstOrNull { it == activeLocale }
                             ?: it.firstOrNull()
                     }
@@ -140,13 +145,12 @@ class TractActivityDataModel @Inject constructor(
     val visibleLocales = availableLocales.combineWith(loadingState) { locales, loadingState ->
         locales.filter { loadingState[it] == LoadingState.LOADED }
     }
-    // endregion Language Switcher
+    // endregion Available Locales
 
-    var liveShareTutorialShown: Boolean
-        get() = savedState[STATE_LIVE_SHARE_TUTORIAL_SHOWN] ?: false
-        set(value) {
-            savedState[STATE_LIVE_SHARE_TUTORIAL_SHOWN] = value
-        }
+    private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
+        override fun create(key: TranslationKey) =
+            dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
+    }
 
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
         override fun create(key: TranslationKey): LiveData<Manifest?> {
@@ -154,10 +158,6 @@ class TractActivityDataModel @Inject constructor(
             val locale = key.locale ?: return emptyLiveData()
             return manifestManager.getLatestPublishedManifestLiveData(tool, locale).distinctUntilChanged()
         }
-    }
-    private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
-        override fun create(key: TranslationKey) =
-            dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
     }
 }
 

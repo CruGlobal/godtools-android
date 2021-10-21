@@ -60,6 +60,14 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // process intent and finish activity if it's in an invalid state
+        processIntent(intent, savedInstanceState)
+        if (!isValidStartState) {
+            finish()
+            return
+        }
+
         isConnected.observe(this) { if (it) syncTools() }
         setupStatusBar()
         setupFeatureDiscovery()
@@ -103,6 +111,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
+
+    // region Intent parsing
+    protected open fun processIntent(intent: Intent?, savedInstanceState: Bundle?) = Unit
+    protected open val isValidStartState get() = true
+    // endregion Intent parsing
 
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
@@ -223,7 +236,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
-    protected val isInitialSyncFinished = MutableLiveData<Boolean>()
+    protected open val isInitialSyncFinished = MutableLiveData<Boolean>()
 
     private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {
         cacheTools()

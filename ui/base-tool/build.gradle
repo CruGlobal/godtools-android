@@ -37,6 +37,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-animation:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation libs.gtoSupport.compat
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
@@ -67,6 +68,7 @@ dependencies {
     kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation project(':ui:tract-renderer')
+    testImplementation libs.androidx.arch.core.testing
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"
     kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
 }

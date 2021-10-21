@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.activity
+package org.cru.godtools.base.tool.activity
 
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale

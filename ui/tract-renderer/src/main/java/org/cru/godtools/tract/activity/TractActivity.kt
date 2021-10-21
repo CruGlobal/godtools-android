@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,7 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
-import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -24,22 +22,14 @@ import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.LocaleUtils
-import org.ccci.gto.android.common.util.graphics.toHsvColor
-import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.api.model.NavigationEvent
-import org.cru.godtools.base.EXTRA_LANGUAGES
-import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
-import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.tool.model.backgroundColor
-import org.cru.godtools.tool.model.navBarColor
-import org.cru.godtools.tool.model.navBarControlColor
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.Modal
@@ -52,7 +42,6 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ShareScreenEngagedActionEvent
 import org.cru.godtools.tract.analytics.model.ShareScreenOpenedActionEvent
-import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.State
@@ -71,10 +60,11 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 
 @AndroidEntryPoint
 class TractActivity :
-    BaseToolActivity<TractActivityBinding>(R.layout.tract_activity),
-    TabLayout.OnTabSelectedListener,
+    MultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
+    private val savedState: TractActivitySavedState by viewModels()
+
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
@@ -84,13 +74,7 @@ class TractActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        processIntent(intent, savedInstanceState)
-
-        // finish now if this activity is in an invalid start state
-        if (!validStartState()) {
-            finish()
-            return
-        }
+        if (isFinishing) return
 
         // restore any saved state
         savedInstanceState?.run {
@@ -98,9 +82,8 @@ class TractActivity :
         }
 
         // track this view
-        if (savedInstanceState == null) dataModel.tool.value?.let { trackToolOpen(it) }
+        if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it) }
 
-        setupActiveTranslationManagement()
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary(savedInstanceState)
     }
@@ -113,7 +96,6 @@ class TractActivity :
     override fun onContentChanged() {
         super.onContentChanged()
         setupBackground()
-        setupLanguageToggle()
         setupPager()
     }
 
@@ -178,11 +160,11 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    private fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+        super.processIntent(intent, savedInstanceState)
         val data = intent?.data
-        val extras = intent?.extras
         if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
-            dataModel.tool.value = data.deepLinkTool
+            dataModel.toolCode.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
@@ -190,14 +172,6 @@ class TractActivity :
                 dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
                 data.deepLinkPage?.let { initialPage = it }
             }
-        } else if (extras != null) {
-            dataModel.tool.value = extras.getString(EXTRA_TOOL, dataModel.tool.value)
-            val languages = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
-            dataModel.primaryLocales.value = if (languages.isNotEmpty()) languages.subList(0, 1) else emptyList()
-            dataModel.parallelLocales.value =
-                if (languages.size > 1) languages.subList(1, languages.size) else emptyList()
-        } else {
-            dataModel.tool.value = null
         }
     }
 
@@ -231,18 +205,9 @@ class TractActivity :
         .map { Locale.forLanguageTag(it) }
     // endregion Intent Processing
 
-    private fun validStartState() = dataModel.tool.value != null &&
-        (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
-
-    // region Data Model
-    private val dataModel: TractActivityDataModel by viewModels()
-    private val toolState: ToolStateHolder by viewModels()
-    // endregion Data Model
-
     // region UI
     override val toolbar get() = binding.appbar
-
-    override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
+    override val languageToggle get() = binding.languageToggle
 
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
@@ -258,48 +223,6 @@ class TractActivity :
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
     }
-
-    // region Language Toggle
-    private lateinit var languageToggleController: LanguageToggleController
-
-    private fun setupLanguageToggle() {
-        ViewCompat.setClipToOutline(binding.languageToggle, true)
-        dataModel.activeManifest.observe(this) { manifest ->
-            // determine colors for the language toggle
-            val controlColor = manifest.navBarControlColor
-            var selectedColor = manifest.navBarColor
-            if (Color.alpha(selectedColor) < 255) {
-                // XXX: the expected behavior is to support transparent text. But we currently don't support
-                //      transparent text, so pick white or black based on the control color
-                selectedColor = if (controlColor.toHsvColor().value > 0.6) Color.BLACK else Color.WHITE
-            }
-
-            // update colors for tab text
-            binding.languageToggle.setTabTextColors(controlColor, selectedColor)
-        }
-
-        languageToggleController = LanguageToggleController(binding.languageToggle).also { controller ->
-            dataModel.activeLocale.observe(this) { controller.activeLocale = it }
-            dataModel.activeManifest.observe(this) { controller.activeManifest = it }
-            dataModel.visibleLocales.observe(this) { controller.locales = it }
-            dataModel.languages.observe(this) { controller.languages = it }
-        }
-
-        binding.languageToggle.addOnTabSelectedListener(this)
-    }
-
-    // region TabLayout.OnTabSelectedListener
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        if (languageToggleController.isUpdatingTabs) return
-        val locale = tab.tag as? Locale ?: return
-        eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.tool.value, locale))
-        dataModel.setActiveLocale(locale)
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-    // endregion TabLayout.OnTabSelectedListener
-    // endregion Language Toggle
 
     // region Tool Pager
     @Inject
@@ -365,54 +288,12 @@ class TractActivity :
     // endregion Tool Pager
     // endregion UI
 
-    override fun cacheTools() {
-        dataModel.tool.value?.let { tool ->
-            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-        }
-    }
-
     private fun trackTractPage(
         page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
         card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard
     ) {
         page?.let { eventBus.post(TractPageAnalyticsScreenEvent(page, card)) }
     }
-
-    // region Active Translation management
-    override val activeManifestLiveData get() = dataModel.activeManifest
-    override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
-
-    private fun setupActiveTranslationManagement() {
-        isInitialSyncFinished.observe(this) { if (it) dataModel.isInitialSyncFinished.value = true }
-        dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
-            if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
-        }
-
-        dataModel.availableLocales.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
-        }
-        dataModel.activeLoadingState.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
-        }
-        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
-    }
-
-    private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
-        availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
-    ) {
-        when (activeLoadingState) {
-            // update the active language if the current active language is not found, invalid, or offline
-            LoadingState.NOT_FOUND,
-            LoadingState.INVALID_TYPE,
-            LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                    loadingState[it] != LoadingState.OFFLINE
-            }?.let { dataModel.setActiveLocale(it) }
-        }
-    }
-    // endregion Active Translation management
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
@@ -441,8 +322,8 @@ class TractActivity :
         when (it) {
             RESULT_CANCELED -> publisherController.started = false
             else -> {
-                dataModel.liveShareTutorialShown = true
-                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}")
+                savedState.liveShareTutorialShown = true
+                settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
                 shareLiveShareLink()
             }
         }
@@ -464,8 +345,8 @@ class TractActivity :
 
     internal fun shareLiveShareLink() {
         when {
-            !dataModel.liveShareTutorialShown &&
-                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.tool.value}") < 3 ->
+            !savedState.liveShareTutorialShown &&
+                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 ->
                 liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             publisherController.publisherInfo.value == null ->
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
@@ -506,7 +387,7 @@ class TractActivity :
     private fun navigateToLiveShareEvent(event: NavigationEvent?) {
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
-            dataModel.tool.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
+            dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
             dataModel.setActiveLocale(it)
         }
         event.page?.let { goToPage(it) }

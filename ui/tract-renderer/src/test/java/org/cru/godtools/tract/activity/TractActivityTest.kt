@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,9 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
+import org.cru.godtools.base.EXTRA_LANGUAGES
+import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
@@ -24,6 +28,7 @@ import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -39,6 +44,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
+
+private const val TOOL = "test"
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -72,6 +79,62 @@ class TractActivityTest {
     fun cleanup() {
         lottieUtils.closeOnDemand()
     }
+
+    // region Intent Processing
+    @Test
+    fun `processIntent() - Valid direct`() {
+        ActivityScenario.launch<TractActivity>(context.createTractActivityIntent(TOOL, Locale.ENGLISH)).use {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Valid direct with parallel language`() {
+        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)
+        ActivityScenario.launch<TractActivity>(intent).use {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(Locale.FRENCH, it.dataModel.parallelLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Invalid missing tool`() {
+        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH)
+        intent.removeExtra(EXTRA_TOOL)
+        ActivityScenario.launch<TractActivity>(intent).use {
+            assertEquals(Lifecycle.State.DESTROYED, it.state)
+        }
+    }
+
+    @Test
+    fun `processIntent() - Invalid missing locales`() {
+        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH)
+        intent.removeExtra(EXTRA_LANGUAGES)
+        ActivityScenario.launch<TractActivity>(intent).use {
+            assertEquals(Lifecycle.State.DESTROYED, it.state)
+        }
+    }
+
+    @Test
+    fun `processIntent() - Valid deeplink`() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://knowgod.com/en/test"))
+        ActivityScenario.launch<TractActivity>(intent).use {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+    // endregion Intent Processing
 
     // region Share Menu Tests
     // region Visibility
@@ -165,6 +228,8 @@ class TractActivityTest {
     }
     // endregion Visibility
     // endregion Share Menu Tests
+
+    private val TractActivity.dataModel get() = viewModels<BaseMultiLanguageToolActivityDataModel>().value
 
     private fun whenGetTranslation(tool: String? = any(), locale: Locale? = any()) =
         whenever(dao.getLatestTranslationLiveData(tool, locale, any(), any(), any()))
