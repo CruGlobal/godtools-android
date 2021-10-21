@@ -36,11 +36,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent  {
-    private static final int DEFAULT_GUTTER_SIZE = 16;
     private static final int FLING_SCALE_FACTOR = 20;
-
-    private int mDefaultGutterSize;
-    private int mGutterSize = 0;
 
     @Inject
     Settings mSettings;
@@ -73,7 +69,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         super(context, attrs, defStyleAttr);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
-        init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -82,11 +77,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
         super(context, attrs, defStyleAttr, defStyleRes);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
-        init();
-    }
-
-    private void init() {
-        mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * getResources().getDisplayMetrics().density);
     }
     // endregion Initialization
 
@@ -153,7 +143,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     }
 
     private boolean isEventInGutter(@NonNull final MotionEvent event) {
-        return event.getY() > getHeight() - mGutterSize;
+        return event.getY() > getHeight() - gutterSize;
     }
     // endregion Touch Events
 
@@ -434,10 +424,7 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
                              resolveSizeAndState(maxHeight, heightMeasureSpec,
                                                  childState << MEASURED_HEIGHT_STATE_SHIFT));
 
-        // update Gutter Size
-        final int measuredHeight = getMeasuredHeight();
-        final int maxGutterSize = measuredHeight / 10;
-        mGutterSize = Math.min(maxGutterSize, mDefaultGutterSize);
+        updateGutterSize();
     }
 
     @Override

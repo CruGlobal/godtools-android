@@ -23,6 +23,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
 import androidx.core.view.forEachIndexed
 import com.karumi.weak.weak
+import kotlin.math.min
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffset
@@ -34,6 +35,8 @@ import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CH
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CARD
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_HERO
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_UNKNOWN
+
+private const val DEFAULT_GUTTER_SIZE = 16
 
 private const val BOUNCE_ANIMATION_DELAY_INITIAL = 2000L
 private const val BOUNCE_ANIMATION_DELAY = 7000L
@@ -188,6 +191,10 @@ open class PageContentLayout @JvmOverloads constructor(
     // endregion Animations
 
     // region View layout logic
+    private val defaultGutterSize = (DEFAULT_GUTTER_SIZE * resources.displayMetrics.density).toInt()
+    @JvmField
+    protected var gutterSize = 0
+
     protected fun calculateCardOffsets(child: View): Boolean {
         // only update card offsets if the child has been laid out
         if (child.isLaidOut) {
@@ -220,6 +227,10 @@ open class PageContentLayout @JvmOverloads constructor(
             }
         }
         return false
+    }
+
+    protected fun updateGutterSize() {
+        gutterSize = min(defaultGutterSize, measuredHeight / 10)
     }
 
     @UiThread
