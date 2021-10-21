@@ -4,32 +4,16 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class JavaPageContentLayout extends PageContentLayout implements NestedScrollingParent {
-    private final GestureDetectorCompat mGestureDetector;
-    private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX,
-                               final float velocityY) {
-            // ignore flings when the initial event is in the gutter
-            if (isEventInGutter(e1)) {
-                return false;
-            }
-
-            return flingCard(velocityY);
-        }
-    };
     private final NestedScrollingParentHelper mParentHelper;
 
     // region Initialization
@@ -44,7 +28,6 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     public JavaPageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                                  final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
     }
 
@@ -52,32 +35,9 @@ public class JavaPageContentLayout extends PageContentLayout implements NestedSc
     public JavaPageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                                  final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
     }
     // endregion Initialization
-
-    // region Touch Events
-    @Override
-    public boolean onInterceptTouchEvent(final MotionEvent ev) {
-        return mGestureDetector.onTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(@NonNull final MotionEvent event) {
-        if (mGestureDetector.onTouchEvent(event)) {
-            return true;
-        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            // we always consume the down event if it reaches us so that we can continue to process future events
-            return true;
-        }
-        return super.onTouchEvent(event);
-    }
-
-    private boolean isEventInGutter(@NonNull final MotionEvent event) {
-        return event.getY() > getHeight() - gutterSize;
-    }
-    // endregion Touch Events
 
     // region NestedScrollingParent
     @Override

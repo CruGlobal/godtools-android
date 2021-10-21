@@ -10,7 +10,10 @@ import android.os.Looper
 import android.os.Message
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
@@ -208,6 +211,29 @@ open class PageContentLayout @JvmOverloads constructor(
         }
         return false
     }
+
+    // region Touch Events
+    private val gestureDetector = GestureDetector(
+        context,
+        object : SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float) = when {
+                // ignore flings when the initial event is in the gutter
+                isEventInGutter(e1) -> false
+                else -> flingCard(velocityY)
+            }
+        }
+    )
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?) = gestureDetector.onTouchEvent(ev)
+    override fun onTouchEvent(event: MotionEvent) = when {
+        gestureDetector.onTouchEvent(event) -> true
+        // we always consume the down event if it reaches us so that we can continue to process future events
+        event.action == MotionEvent.ACTION_DOWN -> true
+        else -> super.onTouchEvent(event)
+    }
+
+    private fun isEventInGutter(event: MotionEvent) = event.y > height - gutterSize
+    // endregion Touch Events
     // endregion Card Navigation
 
     // region Animations
@@ -358,8 +384,7 @@ open class PageContentLayout @JvmOverloads constructor(
 
     // region View layout logic
     private val defaultGutterSize = (DEFAULT_GUTTER_SIZE * resources.displayMetrics.density).toInt()
-    @JvmField
-    protected var gutterSize = 0
+    private var gutterSize = 0
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // measure the call to action view first
