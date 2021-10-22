@@ -260,28 +260,6 @@ subprojects {
     }
 }
 
-// configure checkstyle
-subprojects {
-    apply plugin: 'checkstyle'
-    checkstyle {
-        toolVersion '8.0'
-    }
-    task checkstyle(type: Checkstyle) {
-        configFile rootProject.file('analysis/checkstyle/checkstyle.xml')
-        source 'src'
-        include '*/java/**/*.java'
-        ignoreFailures false
-        showViolations true
-
-        classpath = files()
-    }
-    afterEvaluate {
-        ['checkProductionRelease', 'checkProductionDebug', 'checkStageDebug', 'checkRelease', 'checkDebug', 'check'].each {
-            project.tasks.findByName(it)?.dependsOn('checkstyle')
-        }
-    }
-}
-
 // configure ktlint
 subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
