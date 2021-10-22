@@ -70,7 +70,7 @@ class PageController @AssistedInject internal constructor(
         binding.controller = this
         binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or
             settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_SWIPED)
-        binding.pageContentLayout.setActiveCardListener(this)
+        binding.pageContentLayout.activeCardListener = this
 
         lifecycleOwner?.lifecycle?.apply {
             onResume { binding.isVisible = true }
