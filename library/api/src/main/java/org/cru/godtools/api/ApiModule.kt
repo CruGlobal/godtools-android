@@ -15,8 +15,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
-import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_INTERCEPTOR
 import org.ccci.gto.android.common.dagger.okhttp3.OkHttp3Module
@@ -24,6 +22,8 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
 import org.ccci.gto.android.common.jsonapi.scarlet.JsonApiMessageAdapterFactory
+import org.ccci.gto.android.common.retrofit2.converter.JSONObjectConverterFactory
+import org.ccci.gto.android.common.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
@@ -80,7 +80,7 @@ object ApiModule {
         okhttp: OkHttpClient
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(LocaleConverterFactory())
+        .addConverterFactory(LocaleConverterFactory)
         .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter))
         .callFactory(okhttp)
         .build()
@@ -146,7 +146,7 @@ object ApiModule {
     @Reusable
     fun campaignFormsApi(okhttp: OkHttpClient) =
         Retrofit.Builder().baseUrl(BuildConfig.CAMPAIGN_FORMS_API)
-            .addConverterFactory(JSONObjectConverterFactory())
+            .addConverterFactory(JSONObjectConverterFactory)
             .callFactory(okhttp)
             .build().create<CampaignFormsApi>()
     // endregion Adobe APIs
