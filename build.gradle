@@ -28,9 +28,9 @@ buildscript {
                 okta               : '1.2.0',
                 picasso            : '2.8',
                 picassoTransforms  : '2.4.0',
-                retrofit2          : '2.9.0',
+                retrofit2          : libs.versions.retrofit2.get(),
                 robolectric        : '4.6.1',
-                scarlet            : '0.1.12',
+                scarlet            : libs.versions.scarlet.get(),
                 splitties          : '3.0.0',
                 taptargetview      : '1.13.3',
                 tinderStateMachine : '0.2.0',
@@ -256,28 +256,6 @@ subprojects {
                 testImplementation "org.mockito:mockito-inline:${deps.mockito}"
                 testImplementation "org.robolectric:robolectric:${deps.robolectric}"
             }
-        }
-    }
-}
-
-// configure checkstyle
-subprojects {
-    apply plugin: 'checkstyle'
-    checkstyle {
-        toolVersion '8.0'
-    }
-    task checkstyle(type: Checkstyle) {
-        configFile rootProject.file('analysis/checkstyle/checkstyle.xml')
-        source 'src'
-        include '*/java/**/*.java'
-        ignoreFailures false
-        showViolations true
-
-        classpath = files()
-    }
-    afterEvaluate {
-        ['checkProductionRelease', 'checkProductionDebug', 'checkStageDebug', 'checkRelease', 'checkDebug', 'check'].each {
-            project.tasks.findByName(it)?.dependsOn('checkstyle')
         }
     }
 }
