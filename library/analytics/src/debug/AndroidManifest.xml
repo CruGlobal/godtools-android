@@ -5,6 +5,7 @@
         <!--suppress AndroidDomInspection -->
         <activity
             android:name="org.keynote.godtools.android.activity.MainActivity"
+            android:exported="true"
             tools:ignore="MissingClass">
             <!-- AppsFlyer deep links -->
             <intent-filter android:autoVerify="true">
