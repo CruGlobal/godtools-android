@@ -14,23 +14,23 @@ dependencies {
 
     implementation libs.kotlin.coroutines
 
-    implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-jsonapi-scarlet:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-scarlet:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-scarlet-actioncable:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    api libs.gtoSupport.jsonapi.retrofit2
+    api libs.gtoSupport.scarlet
+    api libs.gtoSupport.scarlet.actioncable
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.jsonapi.scarlet
+    implementation libs.gtoSupport.retrofit2
+    implementation libs.gtoSupport.util
 
-    api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
-    api "com.tinder.scarlet:scarlet:${deps.scarlet}"
-    implementation "com.tinder.scarlet:lifecycle-android:${deps.scarlet}"
-    implementation "com.tinder.scarlet:stream-adapter-coroutines:${deps.scarlet}"
-    implementation "com.tinder.scarlet:websocket-okhttp:${deps.scarlet}"
+    api libs.retrofit2
+    api libs.scarlet
+    implementation libs.scarlet.lifecycle.android
+    implementation libs.scarlet.adapters.stream.coroutines
+    implementation libs.scarlet.websockets.okhttp
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.dagger
+    implementation libs.hilt
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
