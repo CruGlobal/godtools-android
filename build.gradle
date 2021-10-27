@@ -10,7 +10,7 @@ buildscript {
                 dagger             : libs.versions.dagger.get(),
                 eventbus           : libs.versions.eventbus.get(),
                 findbugs           : '3.0.2',
-                godtoolsToolParser : '0.3.2',
+                godtoolsToolParser : libs.versions.godtoolsMpp.get(),
                 gradleAndroidPlugin: '7.0.3',
                 grpc               : '1.41.0',
                 gtoSupport         : libs.versions.gtoSupport.get(),

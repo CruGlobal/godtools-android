@@ -47,7 +47,7 @@ dependencies {
     api "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
+    implementation libs.godtoolsMpp.parser
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
     api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"

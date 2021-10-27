@@ -9,6 +9,7 @@ eventbus = "3.2.0"
 facebook-flipper = "0.116.0"
 firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
+godtoolsMpp = "0.3.2"
 gtoSupport = "3.10.0-SNAPSHOT"
 kotlinCoroutines = "1.5.2"
 materialComponents = "1.4.0"
@@ -42,6 +43,7 @@ firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "22.0.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
+godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsMpp" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
