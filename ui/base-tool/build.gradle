@@ -55,7 +55,7 @@ dependencies {
     implementation "com.google.dagger:dagger:${deps.dagger}"
     implementation "com.google.dagger:hilt-android:${deps.dagger}"
     implementation "com.louiscad.splitties:splitties-bitflags:${deps.splitties}"
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation libs.splitties.fragmentargs
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
     implementation "com.squareup.picasso:picasso:${deps.picasso}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"

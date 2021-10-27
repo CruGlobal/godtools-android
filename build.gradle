@@ -31,7 +31,7 @@ buildscript {
                 retrofit2          : libs.versions.retrofit2.get(),
                 robolectric        : '4.6.1',
                 scarlet            : libs.versions.scarlet.get(),
-                splitties          : '3.0.0',
+                splitties          : libs.versions.splitties.get(),
                 taptargetview      : '1.13.3',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : libs.versions.weakdelegate.get(),
