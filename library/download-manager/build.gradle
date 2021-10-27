@@ -10,21 +10,20 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
+    implementation libs.gtoSupport.base
+    implementation libs.gtoSupport.compat
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.kotlin.coroutines
+
+    implementation libs.dagger
+    implementation libs.eventbus
+    implementation libs.guava
+    implementation libs.hilt
     implementation libs.kotlin.coroutines
 
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
-
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.google.guava:guava:${deps.guava}"
-    implementation "org.greenrobot:eventbus:${deps.eventbus}"
-
-    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    testImplementation libs.androidx.arch.core.testing
     testImplementation libs.kotlin.coroutines.test
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
