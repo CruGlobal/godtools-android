@@ -1,9 +1,9 @@
 dependencies {
     implementation project(':library:initial-content')
 
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
+    implementation libs.gtoSupport.dagger
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation libs.dagger
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
 }
