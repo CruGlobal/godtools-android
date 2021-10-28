@@ -4,5 +4,12 @@
     ":switchToGradleLite"
   ],
   "labels": [ "dependencies" ],
-  "dependencyDashboard": true
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "matchManagers": ["gradle"],
+      "matchPackageNames": ["com.google.guava:guava"],
+      "allowedVersions": "!/-jre$/"
+    }
+  ]
 }
