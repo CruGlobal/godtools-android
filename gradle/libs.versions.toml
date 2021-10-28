@@ -52,6 +52,7 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging", versio
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsMpp" }
+gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
