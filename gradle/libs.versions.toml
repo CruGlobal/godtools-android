@@ -17,6 +17,7 @@ gtoSupport = "3.10.0-SNAPSHOT"
 kotlinCoroutines = "1.5.2"
 materialComponents = "1.4.0"
 okhttp3 = "4.9.2"
+picasso = "2.8"
 retrofit2 = "2.9.0"
 scarlet = "0.1.12"
 splitties = "3.0.0"
@@ -71,6 +72,7 @@ gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", vers
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.ref = "gtoSupport" }
+gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 guava = { module = "com.google.guava:guava", version = "31.0.1-android" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
@@ -84,6 +86,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 materialComponents = { module = "com.google.android.material:material", version.ref = "materialComponents" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "4.0.0" }
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-billing = { module = "com.android.billingclient:billing", version = "4.0.0" }
 play-core = { module = "com.google.android.play:core", version = "1.10.2" }
 play-installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2" }

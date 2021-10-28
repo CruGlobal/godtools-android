@@ -18,26 +18,26 @@ dependencies {
     implementation project(':ui:base')
     implementation project(':ui:base-tool')
 
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
-    implementation "androidx.hilt:hilt-work:${deps.androidX.hilt}"
-    api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.hilt.work
+    api libs.androidx.work.ktx
 
     implementation libs.firebase.perf.ktx
 
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.picasso
+    implementation libs.gtoSupport.util
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.squareup.picasso:picasso:${deps.picasso}"
+    implementation libs.dagger
+    implementation libs.hilt
+    implementation libs.picasso
 
-    testImplementation "org.ccci.gto.android.testing:gto-support-timber:${deps.gtoSupport}"
+    testImplementation libs.gtoSupport.testing.timber
     testImplementation libs.kotlin.coroutines.test
 
-    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt libs.androidx.hilt.compiler
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
+    kapt libs.eventbus.annotationProcessor
 }
