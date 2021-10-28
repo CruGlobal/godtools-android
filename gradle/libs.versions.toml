@@ -9,12 +9,14 @@ eventbus = "3.2.0"
 facebook-flipper = "0.117.0"
 firebase-crashlytics = "18.2.3"
 firebase-perf = "20.0.3"
+godtoolsMpp = "0.3.2"
 gtoSupport = "3.10.0-SNAPSHOT"
 kotlinCoroutines = "1.5.2"
 materialComponents = "1.4.0"
 okhttp3 = "4.9.2"
 retrofit2 = "2.9.0"
 scarlet = "0.1.12"
+splitties = "3.0.0"
 weakdelegate = "1.0.1"
 youtubePlayer = "10.0.5"
 
@@ -41,6 +43,7 @@ firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "22.0.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
+godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsMpp" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
@@ -61,6 +64,7 @@ gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", vers
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
+guava = { module = "com.google.guava:guava", version = "31.0.1-android" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
@@ -82,6 +86,7 @@ scarlet-adapters-stream-coroutines = { module = "com.tinder.scarlet:stream-adapt
 scarlet-lifecycle-android = { module = "com.tinder.scarlet:lifecycle-android", version.ref = "scarlet" }
 scarlet-websockets-okhttp = { module = "com.tinder.scarlet:websocket-okhttp", version.ref = "scarlet" }
 snowplow = { module = "com.snowplowanalytics:snowplow-android-tracker", version = "2.2.1" }
+splitties-fragmentargs = { module = "com.louiscad.splitties:splitties-fragmentargs", version.ref = "splitties" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 weakdelegate = { module = "com.github.Karumi:WeakDelegate", version.ref = "weakdelegate" }
 youtubePlayer = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubePlayer" }
