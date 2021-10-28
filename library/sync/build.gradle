@@ -3,23 +3,22 @@ dependencies {
     implementation project(':library:db')
     implementation project(':library:model')
 
+    implementation libs.androidx.collection.ktx
+    implementation libs.androidx.core.ktx
+    api libs.androidx.hilt.work
+    api libs.androidx.work.ktx
+
+    implementation libs.gtoSupport.base
+    api libs.gtoSupport.sync
+
+    implementation libs.dagger
+    implementation libs.eventbus
+    implementation libs.hilt
     implementation libs.kotlin.coroutines
-
-    implementation "androidx.collection:collection-ktx:${deps.androidX.collection}"
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
-    api "androidx.hilt:hilt-work:${deps.androidX.hilt}"
-    api "androidx.work:work-runtime-ktx:${deps.androidX.work}"
-
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
-
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     testImplementation libs.kotlin.coroutines.test
 
-    kapt "androidx.hilt:hilt-compiler:${deps.androidX.hilt}"
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.androidx.hilt.compiler
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
