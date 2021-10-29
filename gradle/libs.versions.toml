@@ -45,10 +45,10 @@ facebook = { module = "com.facebook.android:facebook-core", version = "12.0.1" }
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = { module = "com.facebook.soloader:soloader", version = "0.10.1" }
-firebase-core = { module = "com.google.firebase:firebase-core", version = "19.0.2" }
+firebase-core = { module = "com.google.firebase:firebase-core", version = "20.0.0" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "22.0.0" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "23.0.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsMpp" }
