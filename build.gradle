@@ -59,7 +59,7 @@ buildscript {
                 work              : libs.versions.androidx.work.get(),
         ]
         deps.firebase = [
-                inAppMessaging: '20.1.0',
+                inAppMessaging: '20.1.1',
         ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
