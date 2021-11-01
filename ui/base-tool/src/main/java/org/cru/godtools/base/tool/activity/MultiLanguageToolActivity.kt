@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayout
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.compat.view.ViewCompat
 import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
@@ -79,7 +78,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     private fun setupLanguageToggle() {
         val languageToggle = languageToggle ?: return
 
-        ViewCompat.setClipToOutline(languageToggle, true)
+        languageToggle.clipToOutline = true
         dataModel.activeManifest.observe(this) { manifest ->
             // determine colors for the language toggle
             val controlColor = manifest.navBarControlColor
