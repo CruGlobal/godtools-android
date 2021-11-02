@@ -12,28 +12,25 @@ android {
 
 dependencies {
     implementation project(':library:base')
-
     implementation project(':ui:base')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.viewpager2
 
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
-    implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
+    implementation libs.gtoSupport.androidx.databinding
+    implementation libs.gtoSupport.androidx.fragment
+    implementation libs.gtoSupport.compat
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.util
 
-    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.circleindicator
+    implementation libs.hilt
+    implementation libs.lottie
+    implementation libs.splitties.fragmentargs
+    implementation libs.splitties.intents
+    implementation libs.youtubePlayer
 
-    implementation "com.airbnb.android:lottie:${deps.lottie}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.louiscad.splitties:splitties-intents:${deps.splitties}"
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
-    implementation "me.relex:circleindicator:${deps.circleindicator}"
-
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
