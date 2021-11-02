@@ -244,6 +244,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
     fun `Property loadingState - Update Translation`() {
         val translation = MutableLiveData<Translation?>(null)
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
         wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
         wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
@@ -270,6 +271,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.setActiveLocale(Locale.ENGLISH)
 
         dataModel.activeManifest.observeForever(observer)
@@ -293,6 +295,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.setActiveLocale(Locale.FRENCH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
@@ -312,6 +315,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Manifest()))
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.setActiveLocale(Locale.FRENCH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
@@ -335,6 +339,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.setActiveLocale(Locale.ENGLISH)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.isInitialSyncFinished.value = true
@@ -359,6 +364,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
         wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
         dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = null
         dataModel.setActiveLocale(Locale.GERMAN)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.visibleLocales.observeForever(observer)
