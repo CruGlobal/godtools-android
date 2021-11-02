@@ -36,7 +36,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 @HiltViewModel
-open class BaseMultiLanguageToolActivityDataModel @Inject constructor(
+open class MultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,

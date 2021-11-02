@@ -23,7 +23,7 @@ import org.cru.godtools.tool.model.navBarControlColor
 abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int
 ) : BaseToolActivity<B>(contentLayoutId) {
-    protected open val dataModel: BaseMultiLanguageToolActivityDataModel by viewModels()
+    protected open val dataModel: MultiLanguageToolActivityDataModel by viewModels()
     protected val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle
