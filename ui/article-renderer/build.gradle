@@ -13,26 +13,24 @@ dependencies {
     api project(':ui:article-aem-renderer')
     implementation project(':ui:base-tool')
 
-    implementation "androidx.concurrent:concurrent-futures-ktx:${deps.androidX.concurrent}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
-    implementation "androidx.recyclerview:recyclerview:${deps.androidX.recyclerView}"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.swiperefreshlayout
 
-    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.fragment
+    implementation libs.gtoSupport.androidx.lifecycle
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.picasso
+    implementation libs.gtoSupport.recyclerview
+    implementation libs.gtoSupport.util
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
+    implementation libs.dagger
+    implementation libs.godtoolsMpp.parser
+    implementation libs.hilt
+    implementation libs.splitties.fragmentargs
 
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
