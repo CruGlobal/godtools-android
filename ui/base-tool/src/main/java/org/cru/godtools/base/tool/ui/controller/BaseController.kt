@@ -46,10 +46,10 @@ abstract class BaseController<T : Base> protected constructor(
         fun create(parent: ViewGroup, parentController: BaseController<*>): U
     }
 
-    private val _eventBus = eventBus
     @VisibleForTesting(otherwise = PROTECTED)
-    val eventBus: EventBus
-        get() = _eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
+    val eventBus: EventBus by lazy {
+        eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
+    }
 
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
     protected open val toolState: State get() = checkNotNull(parentController?.toolState)
