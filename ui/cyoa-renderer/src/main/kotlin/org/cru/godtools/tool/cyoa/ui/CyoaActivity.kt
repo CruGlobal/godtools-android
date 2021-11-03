@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.model.Manifest
@@ -12,6 +13,7 @@ import org.cru.godtools.tool.model.page.Page
 
 @AndroidEntryPoint
 class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA) {
+    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataModel.activeManifest.observe(this) { it?.let { showInitialPageIfNecessary(it) } }
@@ -22,6 +24,11 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         setupBinding()
         updatePageInsets()
     }
+
+    override fun onContentEvent(event: Event) {
+        checkForPageEvent(event)
+    }
+    // endregion Lifecycle
 
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
@@ -47,6 +54,12 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
         manifest.pages.firstOrNull { !it.isHidden }
             ?.let { showPage(it, false) }
+    }
+
+    private fun checkForPageEvent(event: Event) {
+        val manifest = dataModel.activeManifest.value ?: return
+        val page = manifest.pages.firstOrNull { it.listeners.contains(event.id) } ?: return
+        showPage(page, true)
     }
 
     private fun showPage(page: Page, addToBackStack: Boolean = true) {
