@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.tool.cyoa.R
@@ -18,12 +19,24 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     override fun onBindingChanged() {
         super.onBindingChanged()
         setupBinding()
+        updatePageInsets()
     }
 
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
     }
+
+    // region UI
+    private val pageInsets by viewModels<PageInsets>()
+
+    private fun updatePageInsets() {
+        // Not an ideal way to set this, but it works for now
+        // TODO: investigate how WindowInsets are propagated to child views,
+        //       it might provide a better way of handling this.
+        pageInsets.top = binding.appbar.layoutParams.height
+    }
+    // endregion UI
 
     // region Page management
     private val pageFragment get() = supportFragmentManager.primaryNavigationFragment

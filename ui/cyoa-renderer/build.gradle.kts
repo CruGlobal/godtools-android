@@ -9,7 +9,10 @@ android {
 dependencies {
     api(project(":ui:base-tool"))
 
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
     implementation(libs.gtoSupport.androidx.databinding)
+    implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.materialComponents)
 
     implementation(libs.godtoolsMpp.parser)
