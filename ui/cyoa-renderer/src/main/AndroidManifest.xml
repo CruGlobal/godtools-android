@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.cru.godtools.tool.cyoa" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.tool.cyoa">
+
+    <application>
+        <activity
+            android:name=".ui.CyoaActivity"
+            android:exported="false"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation"
+            android:theme="@style/Theme.GodTools.Tool" />
+    </application>
+</manifest>

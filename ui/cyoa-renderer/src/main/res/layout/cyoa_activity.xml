@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.List" />
+        <import type="java.util.Locale" />
+        <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState" />
+        <import type="org.cru.godtools.download.manager.DownloadProgress" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.tool.model.ManifestKt" />
+
+        <variable name="manifest" type="LiveData&lt;Manifest&gt;" />
+        <variable name="activeLocale" type="LiveData&lt;Locale&gt;" />
+        <variable name="loadingState" type="LiveData&lt;LoadingState&gt;" />
+        <variable name="loadingProgress" type="LiveData&lt;DownloadProgress&gt;" />
+        <variable name="visibleLocales" type="LiveData&lt;List&lt;Locale&gt;&gt;" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{ManifestKt.getBackgroundColor(manifest)}">
+
+        <include
+            layout="@layout/activity_tool_loading"
+            app:progress="@{loadingProgress}"
+            app:loadingState="@{loadingState}" />
+
+        <include
+            layout="@layout/activity_tool_missing"
+            app:loadingState="@{loadingState}" />
+
+        <include
+            layout="@layout/activity_tool_offline"
+            app:loadingState="@{loadingState}" />
+
+        <FrameLayout
+            android:id="@+id/mainContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visibleIf="@{loadingState == LoadingState.LOADED}">
+
+            <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:cropToPadding="false"
+                app:gravity="@{ManifestKt.getBackgroundImageGravity(manifest)}"
+                app:picassoFile="@{manifest.backgroundImage}"
+                app:scaleType="@{ManifestKt.getBackgroundImageScaleType(manifest)}"
+                app:visibleIf="@{manifest.backgroundImage != null}" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@{ManifestKt.getNavBarColor(manifest)}"
+            app:elevation="0dp"
+            app:menuItemIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+            app:navigationIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+            app:overflowIconTint="@{ManifestKt.getNavBarControlColor(manifest)}"
+            app:subtitleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}"
+            app:titleTextColor="@{ManifestKt.getNavBarControlColor(manifest)}">
+
+            <androidx.appcompat.widget.AppCompatTabLayout
+                android:id="@+id/language_toggle"
+                style="@style/Widget.GodTools.TabLayout.AppBar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/appbar_tabs_height"
+                app:backgroundTintCompat="@{ManifestKt.getNavBarControlColor(manifest)}"
+                app:tabBackground="@drawable/bkg_tab_label_tintable"
+                app:visibleIf="@{visibleLocales.size > 1 || (visibleLocales.size() == 1 &amp;&amp; !visibleLocales.contains(activeLocale))}" />
+        </androidx.appcompat.widget.Toolbar>
+    </FrameLayout>
+</layout>
