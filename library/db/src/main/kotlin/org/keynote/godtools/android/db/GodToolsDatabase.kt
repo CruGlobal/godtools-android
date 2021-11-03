@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.ccci.gto.android.common.app.ApplicationUtils
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
+import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
@@ -85,7 +85,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             }
         } catch (e: SQLException) {
             // rethrow exception on debug builds
-            if (ApplicationUtils.isDebuggable(context)) throw e
+            if (context.isApplicationDebuggable()) throw e
 
             // let's try resetting the database instead
             Timber.tag("GodToolsDatabase").e(e, "Error migrating the database")

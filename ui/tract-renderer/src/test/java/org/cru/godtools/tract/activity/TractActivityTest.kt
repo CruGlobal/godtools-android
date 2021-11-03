@@ -19,7 +19,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.tool.activity.BaseMultiLanguageToolActivityDataModel
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
@@ -229,7 +229,7 @@ class TractActivityTest {
     // endregion Visibility
     // endregion Share Menu Tests
 
-    private val TractActivity.dataModel get() = viewModels<BaseMultiLanguageToolActivityDataModel>().value
+    private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun whenGetTranslation(tool: String? = any(), locale: Locale? = any()) =
         whenever(dao.getLatestTranslationLiveData(tool, locale, any(), any(), any()))

@@ -42,7 +42,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
     private lateinit var dao: GodToolsDao
     private lateinit var downloadManager: GodToolsDownloadManager
     private lateinit var manifestManager: ManifestManager
-    private lateinit var dataModel: BaseMultiLanguageToolActivityDataModel
+    private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
 
     private lateinit var observer: Observer<Any?>
@@ -52,7 +52,7 @@ class BaseMultiLanguageToolActivityDataModelTest {
         dao = mock()
         downloadManager = mock()
         manifestManager = mock()
-        dataModel = BaseMultiLanguageToolActivityDataModel(
+        dataModel = MultiLanguageToolActivityDataModel(
             dao,
             downloadManager,
             manifestManager,
