@@ -9,6 +9,7 @@ android {
 dependencies {
     api(project(":ui:base-tool"))
 
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation(libs.gtoSupport.androidx.databinding)
@@ -17,6 +18,7 @@ dependencies {
 
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
+    implementation(libs.splitties.fragmentargs)
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)

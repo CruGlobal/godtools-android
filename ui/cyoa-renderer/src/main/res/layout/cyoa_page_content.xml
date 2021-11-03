@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
+
+        <variable name="page" type="org.cru.godtools.tool.model.page.ContentPage" />
+        <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.ContentPageController" />
+        <variable name="contentInsets" type="LiveData&lt;androidx.core.graphics.Insets&gt;" />
+    </data>
+
+    <org.ccci.gto.android.common.widget.HackyNestedScrollView
+        android:id="@+id/initial_page_content"
+        android:layout_marginTop="@{contentInsets.top}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+</layout>
