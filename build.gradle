@@ -38,7 +38,6 @@ buildscript {
         ]
         deps.androidX = [
                 activity          : '1.4.0',
-                annotation        : '1.2.0',
                 appCompat         : libs.versions.androidx.appcompat.get(),
                 archCore          : libs.versions.androidx.arch.get(),
                 cardView          : '1.0.0',
@@ -137,6 +136,7 @@ allprojects {
 
     configurations.all { configuration ->
         configuration.resolutionStrategy {
+            force "androidx.annotation:annotation:${libs.versions.androidx.annotation.get()}"
             force "androidx.lifecycle:lifecycle-viewmodel-ktx:${libs.versions.androidx.lifecycle.get()}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
@@ -243,7 +243,7 @@ subprojects {
             }
 
             dependencies {
-                compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
+                compileOnly libs.androidx.annotation
                 compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
