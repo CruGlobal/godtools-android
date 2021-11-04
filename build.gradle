@@ -136,6 +136,7 @@ allprojects {
 
     configurations.all { configuration ->
         configuration.resolutionStrategy {
+            force "androidx.annotation:annotation:${libs.versions.androidx.annotation.get()}"
             force "androidx.lifecycle:lifecycle-viewmodel-ktx:${libs.versions.androidx.lifecycle.get()}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
