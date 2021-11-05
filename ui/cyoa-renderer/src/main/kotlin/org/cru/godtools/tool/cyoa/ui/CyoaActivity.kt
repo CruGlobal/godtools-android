@@ -57,17 +57,30 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     }
 
     private fun checkForPageEvent(event: Event) {
-        val manifest = dataModel.activeManifest.value ?: return
-        val page = manifest.pages.firstOrNull { it.listeners.contains(event.id) } ?: return
-        showPage(page, true)
+        val dismissCurrentPage = pageFragment?.page?.value?.dismissListeners?.contains(event.id) == true
+        val newPage = dataModel.activeManifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
+
+        // trigger any page content listeners if we aren't dismissing the current page
+        if (!dismissCurrentPage) pageFragment?.onContentEvent(event)
+
+        // dismiss/show pages as necessary
+        when {
+            newPage != null -> showPage(newPage, addCurrentPageToBackStack = !dismissCurrentPage && pageFragment != null)
+            dismissCurrentPage -> supportFragmentManager.popBackStack()
+        }
     }
 
-    private fun showPage(page: Page, addToBackStack: Boolean = true) {
+    private fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
+        // execute any pending transactions to ensure previous page is correctly tracked,
+        // but only if we are actually modifying the backstack
+        if (addCurrentPageToBackStack) supportFragmentManager.executePendingTransactions()
+
         supportFragmentManager.commit {
             val fragment = CyoaPageFragment(page.id)
+            setReorderingAllowed(true)
+            if (addCurrentPageToBackStack) addToBackStack(pageFragment?.pageId)
             replace(R.id.page, fragment)
             setPrimaryNavigationFragment(fragment)
-            if (addToBackStack) addToBackStack(page.id)
         }
     }
     // endregion Page management

@@ -21,7 +21,8 @@ class CyoaPageFragment() : BaseFragment<CyoaPageContentBinding>(R.layout.cyoa_pa
         this.pageId = page
     }
 
-    private var pageId by arg<String>()
+    internal var pageId by arg<String>()
+        private set
 
     private val dataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
     private val toolState by activityViewModels<ToolStateHolder>()
@@ -37,9 +38,13 @@ class CyoaPageFragment() : BaseFragment<CyoaPageContentBinding>(R.layout.cyoa_pa
         binding.bindController(controllerFactory, toolState.toolState)
             .also { page.map { it as? ContentPage }.observe(viewLifecycleOwner, it) }
     }
+
+    internal fun onContentEvent(event: Event) {
+
+    }
     // endregion Lifecycle
 
     // region Page model
-    private val page by lazy { dataModel.activeManifest.map { it?.findPage(pageId) } }
+    internal val page by lazy { dataModel.activeManifest.map { it?.findPage(pageId) } }
     // endregion Page model
 }
