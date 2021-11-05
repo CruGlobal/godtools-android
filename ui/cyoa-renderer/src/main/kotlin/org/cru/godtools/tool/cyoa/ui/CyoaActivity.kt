@@ -2,6 +2,7 @@ package org.cru.godtools.tool.cyoa.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -47,7 +48,8 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     // endregion UI
 
     // region Page management
-    private val pageFragment get() = supportFragmentManager.primaryNavigationFragment as? CyoaPageFragment
+    @VisibleForTesting
+    internal val pageFragment get() = supportFragmentManager.primaryNavigationFragment as? CyoaPageFragment
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
