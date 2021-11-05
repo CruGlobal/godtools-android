@@ -103,7 +103,7 @@ class CyoaActivityTest {
 
     // region checkForPageEvent()
     @Test
-    fun `checkForPageEvent() - Go to new page`() {
+    fun `checkForPageEvent() - Single Event - Go to new page`() {
         whenever(page2.listeners) doReturn setOf(eventId1)
         manifestEnglish.value = manifest(listOf(page1, page2))
 
@@ -122,7 +122,7 @@ class CyoaActivityTest {
     }
 
     @Test
-    fun `checkForPageEvent() - dismiss initial page & Go to new page`() {
+    fun `checkForPageEvent() - Single Event - dismiss initial page & Go to new page`() {
         whenever(page1.dismissListeners) doReturn setOf(eventId1)
         whenever(page2.listeners) doReturn setOf(eventId1)
         manifestEnglish.value = manifest(listOf(page1, page2))
@@ -139,7 +139,7 @@ class CyoaActivityTest {
     }
 
     @Test
-    fun `checkForPageEvent() - Go to multiple new pages`() {
+    fun `checkForPageEvent() - Multiple Events - Go to multiple new pages`() {
         whenever(page2.listeners) doReturn setOf(eventId1)
         whenever(page3.listeners) doReturn setOf(eventId2)
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
@@ -159,6 +159,26 @@ class CyoaActivityTest {
                 assertEquals("page2", it.pageFragment!!.pageId)
                 it.supportFragmentManager.popBackStackImmediate()
                 assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `checkForPageEvent() - Multiple Events - Go to page and then dismiss it`() {
+        page2.stub {
+            on { listeners } doReturn setOf(eventId1)
+            on { dismissListeners } doReturn setOf(eventId2)
+        }
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.processContentEvent(eventId1.event())
+                it.processContentEvent(eventId2.event())
+                it.supportFragmentManager.executePendingTransactions()
+
+                assertEquals("page1", it.pageFragment!!.pageId)
+                assertEquals(0, it.supportFragmentManager.backStackEntryCount)
             }
         }
     }

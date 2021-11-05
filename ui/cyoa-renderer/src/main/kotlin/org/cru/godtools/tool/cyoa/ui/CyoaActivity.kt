@@ -49,7 +49,11 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
     // region Page management
     @VisibleForTesting
-    internal val pageFragment get() = supportFragmentManager.primaryNavigationFragment as? CyoaPageFragment
+    internal val pageFragment
+        get() = with(supportFragmentManager) {
+            executePendingTransactions()
+            primaryNavigationFragment as? CyoaPageFragment
+        }
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
@@ -59,6 +63,8 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     }
 
     private fun checkForPageEvent(event: Event) {
+        val pageFragment = pageFragment
+
         val dismissCurrentPage = pageFragment?.page?.value?.dismissListeners?.contains(event.id) == true
         val newPage = dataModel.activeManifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
 
@@ -67,20 +73,16 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
         // dismiss/show pages as necessary
         when {
-            newPage != null -> showPage(newPage, addCurrentPageToBackStack = !dismissCurrentPage && pageFragment != null)
+            newPage != null -> showPage(newPage, addCurrentPageToBackStack = !dismissCurrentPage)
             dismissCurrentPage -> supportFragmentManager.popBackStack()
         }
     }
 
     private fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
-        // execute any pending transactions to ensure previous page is correctly tracked,
-        // but only if we are actually modifying the backstack
-        if (addCurrentPageToBackStack) supportFragmentManager.executePendingTransactions()
-
         supportFragmentManager.commit {
             val fragment = CyoaPageFragment(page.id)
             setReorderingAllowed(true)
-            if (addCurrentPageToBackStack) addToBackStack(pageFragment?.pageId)
+            if (addCurrentPageToBackStack) pageFragment?.let { addToBackStack(it.pageId) }
             replace(R.id.page, fragment)
             setPrimaryNavigationFragment(fragment)
         }
