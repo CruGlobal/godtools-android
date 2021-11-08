@@ -182,5 +182,23 @@ class CyoaActivityTest {
             }
         }
     }
+
+    @Test
+    fun `checkForPageEvent() - Multiple Events - dismiss initial page & Go to new page`() {
+        whenever(page1.dismissListeners) doReturn setOf(eventId1)
+        whenever(page2.listeners) doReturn setOf(eventId2)
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.processContentEvent(eventId1.event())
+                it.processContentEvent(eventId2.event())
+                it.supportFragmentManager.executePendingTransactions()
+
+                assertEquals("page2", it.pageFragment!!.pageId)
+                assertEquals(0, it.supportFragmentManager.backStackEntryCount)
+            }
+        }
+    }
     // endregion checkForPageEvent()
 }

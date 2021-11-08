@@ -74,7 +74,10 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         // dismiss/show pages as necessary
         when {
             newPage != null -> showPage(newPage, addCurrentPageToBackStack = !dismissCurrentPage)
-            dismissCurrentPage -> supportFragmentManager.popBackStack()
+            dismissCurrentPage -> when {
+                supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+                pageFragment != null -> supportFragmentManager.commit { remove(pageFragment) }
+            }
         }
     }
 
