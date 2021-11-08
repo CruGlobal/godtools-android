@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.tool.cyoa.R
@@ -28,23 +29,36 @@ class CyoaPageFragment() : BaseFragment<CyoaPageContentBinding>(R.layout.cyoa_pa
     private val toolState by activityViewModels<ToolStateHolder>()
     private val pageInsets by activityViewModels<PageInsets>()
 
-    @Inject
-    internal lateinit var controllerFactory: ContentPageController.Factory
-
     // region Lifecycle
     override fun onBindingCreated(binding: CyoaPageContentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.contentInsets = pageInsets.insets
-        binding.bindController(controllerFactory, toolState.toolState)
-            .also { page.map { it as? ContentPage }.observe(viewLifecycleOwner, it) }
+        setupPageController(binding)
     }
 
     internal fun onContentEvent(event: Event) {
+        controller?.onContentEvent(event)
+    }
 
+    override fun onDestroyBinding(binding: CyoaPageContentBinding) {
+        cleanupPageController()
     }
     // endregion Lifecycle
 
-    // region Page model
+    // region Page
     internal val page by lazy { dataModel.activeManifest.map { it?.findPage(pageId) } }
-    // endregion Page model
+
+    @Inject
+    internal lateinit var controllerFactory: ContentPageController.Factory
+    private var controller: ContentPageController? = null
+
+    private fun setupPageController(binding: CyoaPageContentBinding) {
+        controller = binding.bindController(controllerFactory, toolState.toolState)
+            .also { page.map { it as? ContentPage }.observe(viewLifecycleOwner, it) }
+    }
+
+    private fun cleanupPageController() {
+        controller = null
+    }
+    // endregion Page
 }
