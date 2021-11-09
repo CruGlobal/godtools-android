@@ -34,7 +34,7 @@ import org.mockito.kotlin.whenever
 
 private const val TOOL = "kgp"
 
-class BaseMultiLanguageToolActivityDataModelTest {
+class MultiLanguageToolActivityDataModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
