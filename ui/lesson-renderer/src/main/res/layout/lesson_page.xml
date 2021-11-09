@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.tool.model.lesson.LessonPageKt" />
+        <import type="org.cru.godtools.tool.model.page.PageKt" />
 
         <variable name="callbacks" type="org.cru.godtools.tool.lesson.ui.LessonPageAdapter.Callbacks" />
         <variable name="controller" type="org.cru.godtools.tool.lesson.ui.controller.LessonPageController" />
@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{LessonPageKt.getBackgroundColor(model)}"
+        android:background="@{PageKt.getBackgroundColor(model)}"
         android:paddingTop="?attr/actionBarSize">
 
         <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
@@ -22,9 +22,9 @@
             android:layout_height="match_parent"
             android:cropToPadding="false"
             android:scaleType="matrix"
-            app:gravity="@{LessonPageKt.getBackgroundImageGravity(model)}"
+            app:gravity="@{PageKt.getBackgroundImageGravity(model)}"
             app:picassoFile="@{model.backgroundImage}"
-            app:scaleType="@{LessonPageKt.getBackgroundImageScaleType(model)}"
+            app:scaleType="@{PageKt.getBackgroundImageScaleType(model)}"
             app:visibleIf="@{model.backgroundImage != null}" />
 
         <org.ccci.gto.android.common.widget.HackyNestedScrollView
@@ -54,7 +54,7 @@
             android:src="@drawable/ic_action_previous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tint="@{LessonPageKt.getControlColor(model)}"
+            app:tint="@{PageKt.getControlColor(model)}"
             app:visibleIf="@{!isFirstPage}" />
 
         <ImageView
@@ -66,7 +66,7 @@
             android:src="@drawable/ic_action_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@{LessonPageKt.getControlColor(model)}"
+            app:tint="@{PageKt.getControlColor(model)}"
             app:visibleIf="@{!isLastPage}" />
 
         <androidx.constraintlayout.widget.Barrier

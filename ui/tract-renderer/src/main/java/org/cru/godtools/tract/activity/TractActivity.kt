@@ -29,6 +29,7 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Card
@@ -60,7 +61,7 @@ private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractAct
 
 @AndroidEntryPoint
 class TractActivity :
-    MultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity),
+    MultiLanguageToolActivity<TractActivityBinding>(R.layout.tract_activity, Manifest.Type.TRACT),
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
     private val savedState: TractActivitySavedState by viewModels()

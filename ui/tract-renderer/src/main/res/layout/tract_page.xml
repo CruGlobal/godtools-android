@@ -6,7 +6,7 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
-        <import type="org.cru.godtools.tool.model.tract.TractPageKt" />
+        <import type="org.cru.godtools.tool.model.page.PageKt" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
         <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
 
@@ -23,7 +23,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{TractPageKt.getBackgroundColor(page)}">
+        android:background="@{PageKt.getBackgroundColor(page)}">
 
         <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
             android:layout_width="match_parent"
@@ -31,9 +31,9 @@
             android:cropToPadding="false"
             android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}"
             android:scaleType="matrix"
-            app:gravity="@{TractPageKt.getBackgroundImageGravity(page)}"
+            app:gravity="@{PageKt.getBackgroundImageGravity(page)}"
             app:picassoFile="@{page.backgroundImage}"
-            app:scaleType="@{TractPageKt.getBackgroundImageScaleType(page)}"
+            app:scaleType="@{PageKt.getBackgroundImageScaleType(page)}"
             app:visibleIf="@{page.backgroundImage != null}" />
 
         <org.cru.godtools.tract.widget.PageContentLayout

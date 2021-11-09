@@ -51,6 +51,7 @@ import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.createArticlesIntent
+import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
@@ -300,8 +301,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // generate the target intent for this shortcut
         val intent = when (tool.type) {
-            Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
             Tool.Type.ARTICLE -> context.createArticlesIntent(code, locales[0])
+            Tool.Type.CYOA -> context.createCyoaActivityIntent(code, *locales.toTypedArray())
+            Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
             else -> return@withContext null
         }
         intent.action = Intent.ACTION_VIEW

@@ -17,13 +17,14 @@ import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.navBarControlColor
 
 abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
-    @LayoutRes contentLayoutId: Int
+    @LayoutRes contentLayoutId: Int,
+    private val supportedType: Manifest.Type
 ) : BaseToolActivity<B>(contentLayoutId) {
-    protected open val dataModel: MultiLanguageToolActivityDataModel by viewModels()
     protected val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle
@@ -31,6 +32,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         super.onCreate(savedInstanceState)
         if (isFinishing) return
 
+        setupDataModel()
         setupActiveTranslationManagement()
     }
 
@@ -39,6 +41,14 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         setupLanguageToggle()
     }
     // endregion Lifecycle
+
+    // region Data Model
+    protected open val dataModel: MultiLanguageToolActivityDataModel by viewModels()
+
+    private fun setupDataModel() {
+        dataModel.supportedType.value = supportedType
+    }
+    // endregion Data Model
 
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {

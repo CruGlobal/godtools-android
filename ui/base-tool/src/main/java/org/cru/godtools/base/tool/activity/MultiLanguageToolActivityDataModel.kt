@@ -77,18 +77,24 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Loading State
     val isInitialSyncFinished = MutableLiveData(false)
+    val supportedType = MutableLiveData<Manifest.Type>()
 
-    val loadingState = locales
-        .combineWith(manifests, translations, isConnected, isInitialSyncFinished) { l, m, t, connected, syncFinished ->
-            l.associateWith {
-                LoadingState.determineToolState(
-                    m[it], t[it],
-                    manifestType = Manifest.Type.TRACT,
-                    isConnected = connected,
-                    isSyncFinished = syncFinished
-                )
-            }
+    val loadingState = locales.combineWith(
+        manifests,
+        translations,
+        supportedType,
+        isConnected,
+        isInitialSyncFinished
+    ) { l, m, t, type, connected, syncFinished ->
+        l.associateWith {
+            LoadingState.determineToolState(
+                m[it], t[it],
+                manifestType = type,
+                isConnected = connected,
+                isSyncFinished = syncFinished
+            )
         }
+    }
     // endregion Loading State
 
     // region Active Tool
@@ -98,15 +104,16 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
+        val manifest = manifestCache.get(tool, l)
         val translation = translationCache.get(tool, l)
-        manifestCache.get(tool, l).combineWith(translation, isConnected, isInitialSyncFinished) { m, t, c, s ->
-            LoadingState.determineToolState(m, t, Manifest.Type.TRACT, isConnected = c, isSyncFinished = s)
+        manifest.combineWith(translation, supportedType, isConnected, isInitialSyncFinished) { m, t, type, c, s ->
+            LoadingState.determineToolState(m, t, type, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
     val activeManifest =
         distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
-            .map { it?.takeIf { it.type == Manifest.Type.TRACT } }
+            .combineWith(supportedType) { manifest, type -> manifest?.takeIf { it.type == type } }
 
     internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
         when {
