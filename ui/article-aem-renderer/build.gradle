@@ -27,38 +27,37 @@ dependencies {
 
     implementation project(':ui:base-tool')
 
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
-    implementation "androidx.room:room-ktx:${deps.androidX.room}"
-    api "androidx.room:room-runtime:${deps.androidX.room}"
+    api libs.androidx.room
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.room.ktx
 
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-room:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.lifecycle
+    implementation libs.gtoSupport.androidx.room
+    implementation libs.gtoSupport.base
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.kotlin.coroutines
+    implementation libs.gtoSupport.okhttp3
     implementation libs.gtoSupport.retrofit2
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.util
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
-
-    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-    implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
-    implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
-    implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
+    implementation libs.dagger
+    implementation libs.godtoolsMpp.parser
+    implementation libs.hilt
+    implementation libs.retrofit2.converters.scalars
     implementation libs.jsoup
+    implementation libs.okhttp3
+    implementation libs.retrofit2
+    implementation libs.splitties.fragmentargs
+    implementation libs.weakdelegate
 
-    testImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
-    testImplementation "androidx.room:room-testing:${deps.androidX.room}"
+    testImplementation libs.androidx.arch.core.testing
+    testImplementation libs.androidx.room.testing
     testImplementation libs.kotlin.coroutines.test
 
-    kapt "androidx.room:room-compiler:${deps.androidX.room}"
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
+    kapt libs.androidx.room.compiler
+    kapt libs.dagger.compiler
+    kapt libs.hilt.compiler
 }
