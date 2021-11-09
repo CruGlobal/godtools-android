@@ -5,13 +5,11 @@ buildscript {
         deps = [
                 advrecyclerview    : '1.0.0',
                 androidInstantApps : '1.1.0',
-                autoValue          : '1.8.2',
                 circleindicator    : libs.versions.circleindicator.get(),
                 dagger             : libs.versions.dagger.get(),
                 eventbus           : libs.versions.eventbus.get(),
                 findbugs           : '3.0.2',
                 godtoolsToolParser : libs.versions.godtoolsMpp.get(),
-                gradleAndroidPlugin: '7.0.3',
                 grpc               : '1.42.0',
                 gtoSupport         : libs.versions.gtoSupport.get(),
                 hamcrest           : '2.2',
@@ -26,12 +24,10 @@ buildscript {
                 okhttp3            : libs.versions.okhttp3.get(),
                 okta               : '1.2.1',
                 picasso            : libs.versions.picasso.get(),
-                picassoTransforms  : '2.4.0',
                 retrofit2          : libs.versions.retrofit2.get(),
                 robolectric        : '4.6.1',
                 scarlet            : libs.versions.scarlet.get(),
                 splitties          : libs.versions.splitties.get(),
-                taptargetview      : '1.13.3',
                 tinderStateMachine : '0.2.0',
                 weakdelegate       : libs.versions.weakdelegate.get(),
                 youtubeplayer      : libs.versions.youtubePlayer.get(),
@@ -45,12 +41,10 @@ buildscript {
                 concurrent        : '1.1.0',
                 constraintLayout  : libs.versions.androidx.constraintlayout.get(),
                 core              : libs.versions.androidx.core.get(),
-                databinding       : deps.gradleAndroidPlugin,
                 fragment          : libs.versions.androidx.fragment.get(),
                 hilt              : libs.versions.androidx.hilt.get(),
                 lifecycle         : libs.versions.androidx.lifecycle.get(),
                 recyclerView      : libs.versions.androidx.recyclerview.get(),
-                room              : '2.3.0',
                 swipeRefreshLayout: libs.versions.androidx.swiperefreshlayout.get(),
                 test              : '1.2.0',
                 testJUnit         : '1.1.3',
@@ -79,7 +73,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:${deps.gradleAndroidPlugin}"
+        classpath libs.android.gradle
         classpath "com.google.dagger:hilt-android-gradle-plugin:${deps.dagger}"
         classpath 'com.google.firebase:perf-plugin:1.4.0'
         classpath 'com.google.firebase:firebase-appdistribution-gradle:2.2.0'

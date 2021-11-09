@@ -207,7 +207,7 @@ dependencies {
     implementation libs.play.core
 
     implementation "com.airbnb.android:lottie:${deps.lottie}"
-    implementation "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
+    implementation libs.taptargetview
     implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
     implementation "com.google.android.material:material:${deps.materialDesign}"
