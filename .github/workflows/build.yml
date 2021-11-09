@@ -25,7 +25,7 @@ jobs:
       - name: Run Static Analysis
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: assemble check -x test --continue --stacktrace --parallel
+          arguments: assemble check -x test --scan --parallel
       - name: Archive ktlint results
         if: always()
         uses: actions/upload-artifact@v2
@@ -57,7 +57,7 @@ jobs:
       - name: Run Unit Tests
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test jacocoTestReport --continue --stacktrace --parallel
+          arguments: test jacocoTestReport --scan --parallel
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:
