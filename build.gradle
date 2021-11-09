@@ -295,12 +295,14 @@ allprojects {
     }
 }
 
-gradleEnterprise {
-    buildScan {
-        // automatically accept the scans.gradle.com TOS when running in GHA
-        if (System.getenv("GITHUB_ACTIONS")) {
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
+if (project.hasProperty('gradleEnterprise')) {
+    gradleEnterprise {
+        buildScan {
+            // automatically accept the scans.gradle.com TOS when running in GHA
+            if (System.getenv("GITHUB_ACTIONS")) {
+                termsOfServiceUrl = "https://gradle.com/terms-of-service"
+                termsOfServiceAgree = "yes"
+            }
         }
     }
 }
