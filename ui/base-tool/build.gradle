@@ -27,48 +27,45 @@ dependencies {
 
     implementation libs.kotlin.coroutines
 
-    implementation "androidx.appcompat:appcompat:${deps.androidX.appCompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
-    implementation "androidx.core:core-ktx:${deps.androidX.core}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
 
+    api libs.gtoSupport.picasso
     implementation libs.gtoSupport.androidx.databinding
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-animation:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.lifecycle
+    implementation libs.gtoSupport.animation
+    implementation libs.gtoSupport.base
     implementation libs.gtoSupport.compat
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-lottie:${deps.gtoSupport}"
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.dagger
+    implementation libs.gtoSupport.eventbus
+    implementation libs.gtoSupport.kotlin.coroutines
+    implementation libs.gtoSupport.lottie
     implementation libs.gtoSupport.materialComponents
-    api "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+    implementation libs.gtoSupport.util
 
     implementation libs.godtoolsMpp.parser
 
-    implementation "com.airbnb.android:lottie:${deps.lottie}"
-    api "com.getkeepsafe.taptargetview:taptargetview:${deps.taptargetview}"
-    implementation "com.google.auto.value:auto-value-annotations:${deps.autoValue}"
-    implementation "com.google.dagger:dagger:${deps.dagger}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
-    implementation "com.louiscad.splitties:splitties-bitflags:${deps.splitties}"
+    api libs.taptargetview
+    implementation libs.dagger
+    implementation libs.google.auto.value.annotations
+    implementation libs.hilt
+    implementation libs.lottie
+    implementation libs.picasso
+    implementation libs.picasso.transformations
+    implementation libs.splitties.bitflags
     implementation libs.splitties.fragmentargs
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
-    implementation "com.squareup.picasso:picasso:${deps.picasso}"
-    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+    implementation libs.youtubePlayer
 
-    debugImplementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
-
-    kapt "com.google.auto.value:auto-value:${deps.autoValue}"
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
-    kapt "com.google.dagger:hilt-compiler:${deps.dagger}"
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
+    kapt libs.dagger.compiler
+    kapt libs.eventbus.annotationProcessor
+    kapt libs.google.auto.value
+    kapt libs.hilt.compiler
 
     testImplementation project(':ui:tract-renderer')
     testImplementation libs.androidx.arch.core.testing
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:${deps.kotlin}"
-    kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
+    kaptTest libs.androidx.databinding.compiler
 }
