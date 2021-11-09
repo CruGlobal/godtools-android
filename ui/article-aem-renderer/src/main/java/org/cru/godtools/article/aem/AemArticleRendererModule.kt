@@ -12,8 +12,8 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.ccci.gto.android.common.retrofit2.converter.JSONObjectConverterFactory
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.enableMigrations
@@ -51,7 +51,7 @@ abstract class AemArticleRendererModule {
         fun aemApi(okhttp: OkHttpClient): AemApi = Retrofit.Builder()
             .baseUrl("https://unused.example.com")
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(JSONObjectConverterFactory())
+            .addConverterFactory(JSONObjectConverterFactory)
             .callFactory(okhttp)
             .build().create()
     }

@@ -35,12 +35,12 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-androidx-room:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-dagger:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-kotlin-coroutines:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    implementation libs.gtoSupport.retrofit2
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
