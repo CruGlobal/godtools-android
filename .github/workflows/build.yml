@@ -25,7 +25,7 @@ jobs:
       - name: Run Static Analysis
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: assemble check -x test --scan --parallel
+          arguments: assemble check -x test --scan
       - name: Archive ktlint results
         if: always()
         uses: actions/upload-artifact@v2
@@ -57,7 +57,7 @@ jobs:
       - name: Run Unit Tests
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test jacocoTestReport --scan --parallel
+          arguments: test jacocoTestReport --scan
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -90,7 +90,7 @@ jobs:
       - name: Build App
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --continue --stacktrace --parallel
+          arguments: :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --continue --stacktrace
       - name: Import Firebase API Key
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
@@ -98,4 +98,4 @@ jobs:
       - name: Upload Build to Firebase
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --parallel
+          arguments: appDistributionUploadProductionQa -PfirebaseAppDistributionBuild
