@@ -1,7 +1,8 @@
 package org.cru.godtools.article.ui.categories
 
 import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -24,13 +25,9 @@ class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, C
     @Inject
     internal lateinit var eventBus: EventBus
 
-    override val View.viewBinding get() = ArticleCategoriesFragmentBinding.bind(this)
-
     // region Lifecycle
-    override fun onBindingCreated(binding: ArticleCategoriesFragmentBinding, savedInstanceState: Bundle?) {
-        super.onBindingCreated(binding, savedInstanceState)
-        binding.setupCategoriesView()
-    }
+    override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        ArticleCategoriesFragmentBinding.inflate(inflater, container, false).apply { setupCategoriesView() }
 
     override fun onResume() {
         super.onResume()

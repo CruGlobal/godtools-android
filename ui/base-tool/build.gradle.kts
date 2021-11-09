@@ -35,6 +35,7 @@ dependencies {
 
     api(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.androidx.databinding)
+    implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.animation)
     implementation(libs.gtoSupport.base)
