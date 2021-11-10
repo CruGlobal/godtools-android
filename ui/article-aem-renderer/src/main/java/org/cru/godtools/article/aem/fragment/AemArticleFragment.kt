@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import org.ccci.gto.android.common.androidx.fragment.app.BindingFragment
 import org.cru.godtools.article.aem.databinding.AemArticleFragmentBinding
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
+import org.cru.godtools.base.ui.fragment.BaseFragment
 
 @AndroidEntryPoint
-class AemArticleFragment : BindingFragment<AemArticleFragmentBinding>() {
+class AemArticleFragment : BaseFragment<AemArticleFragmentBinding>() {
     private val viewModel: AemArticleViewModel by activityViewModels()
 
     // region Lifecycle
