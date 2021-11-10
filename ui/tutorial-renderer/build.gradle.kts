@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":library:analytics"))
     implementation(project(":library:base"))
     implementation(project(":ui:base"))
 

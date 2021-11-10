@@ -25,6 +25,7 @@ android {
 
 dependencies {
     api(project(":library:base"))
+    implementation(project(":ui:base"))
 
     implementation(libs.kotlin.coroutines)
 
