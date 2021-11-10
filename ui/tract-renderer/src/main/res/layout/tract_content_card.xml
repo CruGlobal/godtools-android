@@ -6,12 +6,12 @@
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
         <import type="org.cru.godtools.tract.R" />
         <import type="org.cru.godtools.tract.util.TipTypeKt" />
-        <import type="org.cru.godtools.tool.model.tract.CardKt" />
+        <import type="org.cru.godtools.tool.model.tract.TractPageKt" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
 
         <variable name="enableTips" type="Boolean" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.CardController" />
-        <variable name="model" type="org.cru.godtools.tool.model.tract.Card" />
+        <variable name="model" type="org.cru.godtools.tool.model.tract.TractPage.Card" />
     </data>
 
     <RelativeLayout
@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/card_margin_top"
             android:layout_marginRight="@dimen/card_margin_horiz"
             android:layout_marginBottom="@dimen/card_margin_bottom"
-            app:cardBackgroundColor="@{CardKt.getBackgroundColor(model)}"
+            app:cardBackgroundColor="@{TractPageKt.getBackgroundColor(model)}"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:cardMaxElevation="@dimen/card_elevation">
@@ -103,13 +103,13 @@
                     android:adjustViewBounds="true"
                     android:cropToPadding="false"
                     android:scaleType="matrix"
-                    app:gravity="@{CardKt.getBackgroundImageGravity(model)}"
+                    app:gravity="@{TractPageKt.getBackgroundImageGravity(model)}"
                     app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/content_scroll_view"
                     app:picassoFile="@{model.backgroundImage}"
-                    app:scaleType="@{CardKt.getBackgroundImageScaleType(model)}"
+                    app:scaleType="@{TractPageKt.getBackgroundImageScaleType(model)}"
                     app:visibleIf="@{model.backgroundImage != null}" />
 
                 <org.ccci.gto.android.common.widget.HackyNestedScrollView
