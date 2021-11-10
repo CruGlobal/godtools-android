@@ -5,12 +5,10 @@ android {
 dependencies {
     implementation(libs.kotlin.coroutines)
 
-    implementation(libs.androidx.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation(libs.gtoSupport.androidx.lifecycle)
-    implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.okta)
     implementation(libs.gtoSupport.util)
