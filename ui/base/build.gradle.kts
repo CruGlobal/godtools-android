@@ -18,7 +18,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    api(project(":library:analytics"))
+    api(project(":library:base"))
     implementation(project(":library:model"))
 
     api(libs.androidx.appcompat)

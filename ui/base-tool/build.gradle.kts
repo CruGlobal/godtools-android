@@ -18,6 +18,7 @@ android {
 }
 
 dependencies {
+    api(project(":library:analytics"))
     api(project(":library:db"))
     api(project(":library:download-manager"))
     api(project(":library:sync"))
