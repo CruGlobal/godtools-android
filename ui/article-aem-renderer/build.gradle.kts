@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.room.ktx)
 
+    implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.androidx.room)
     implementation(libs.gtoSupport.base)
