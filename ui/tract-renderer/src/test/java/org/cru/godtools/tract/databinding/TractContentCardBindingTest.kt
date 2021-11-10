@@ -9,8 +9,8 @@ import dagger.hilt.android.testing.HiltTestApplication
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.CallToAction
-import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tract.R
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -32,9 +32,9 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.model.tract.Card
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
