@@ -1,12 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="org.cru.godtools.analytics">
 
     <application>
-        <!--suppress AndroidDomInspection -->
+        <!-- region AppsFlyer -->
         <activity
-            android:name="org.keynote.godtools.android.activity.MainActivity"
-            android:exported="true"
-            tools:ignore="MissingClass">
+            android:name=".appsflyer.AppsFlyerSpringboardActivity"
+            android:exported="true">
             <!-- AppsFlyer deep links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -21,8 +20,9 @@
                 <!-- debug -->
                 <data android:pathPrefix="/lmlj" />
                 <!-- QA -->
-                <data android:pathPrefix="/07Ip" />
+                <data android:pathPrefix="/Ftl4" />
             </intent-filter>
         </activity>
+        <!-- endregion AppsFlyer -->
     </application>
 </manifest>
