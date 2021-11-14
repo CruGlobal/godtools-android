@@ -57,7 +57,7 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidx-swiperefreshlayout" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
-appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.2" }
+appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.3" }
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
