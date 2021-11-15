@@ -10,7 +10,7 @@ buildscript {
                 eventbus           : libs.versions.eventbus.get(),
                 findbugs           : '3.0.2',
                 godtoolsToolParser : libs.versions.godtoolsMpp.get(),
-                grpc               : '1.42.0',
+                grpc               : '1.42.1',
                 gtoSupport         : libs.versions.gtoSupport.get(),
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
