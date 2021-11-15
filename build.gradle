@@ -15,7 +15,7 @@ buildscript {
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
                 junit              : '4.13.2',
-                kotlin             : '1.5.31',
+                kotlin             : '1.6.0',
                 leakcanary         : '2.7',
                 lottie             : libs.versions.lottie.get(),
                 materialDesign     : libs.versions.materialComponents.get(),
