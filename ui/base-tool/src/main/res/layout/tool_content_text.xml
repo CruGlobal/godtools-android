@@ -18,7 +18,7 @@
         android:drawableStart="@{model.startImage}"
         android:drawableEnd="@{model.endImage}"
         android:drawablePadding="8dp"
-        android:gravity="center_vertical"
+        android:minLines="@{model.minimumLines}"
         android:saveEnabled="false"
         android:text="@{model}"
         android:textIsSelectable="@{controller.textEnableTextIsSelectable}"
