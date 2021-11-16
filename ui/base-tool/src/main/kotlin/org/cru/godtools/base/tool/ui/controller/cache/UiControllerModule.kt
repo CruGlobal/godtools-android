@@ -14,6 +14,7 @@ import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FallbackController
+import org.cru.godtools.base.tool.ui.controller.FlowController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
 import org.cru.godtools.base.tool.ui.controller.MultiselectController
@@ -27,6 +28,7 @@ import org.cru.godtools.tool.model.Accordion
 import org.cru.godtools.tool.model.Animation
 import org.cru.godtools.tool.model.Button
 import org.cru.godtools.tool.model.Fallback
+import org.cru.godtools.tool.model.Flow
 import org.cru.godtools.tool.model.Image
 import org.cru.godtools.tool.model.Link
 import org.cru.godtools.tool.model.Multiselect
@@ -69,6 +71,11 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Fallback::class)
     internal abstract fun fallbackControllerFactory(factory: FallbackController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Flow::class)
+    internal abstract fun flowControllerFactory(factory: FlowController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
