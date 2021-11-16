@@ -33,6 +33,7 @@ class FlowController private constructor(
     // region Lifecycle
     override fun onBind() {
         super.onBind()
+        binding.model = model
         bindItems()
     }
     // endregion Lifecycle
