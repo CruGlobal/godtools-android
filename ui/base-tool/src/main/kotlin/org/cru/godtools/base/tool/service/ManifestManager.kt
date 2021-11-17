@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.FEATURE_ANIMATION
+import org.cru.godtools.tool.FEATURE_FLOW
 import org.cru.godtools.tool.FEATURE_MULTISELECT
 import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.model.Manifest
@@ -38,7 +39,7 @@ class ManifestManager @Inject constructor(
     private val loadingMutex = MutexMap()
 
     init {
-        ParserConfig.supportedFeatures = setOf(FEATURE_ANIMATION, FEATURE_MULTISELECT)
+        ParserConfig.supportedFeatures = setOf(FEATURE_ANIMATION, FEATURE_FLOW, FEATURE_MULTISELECT)
     }
 
     @AnyThread
