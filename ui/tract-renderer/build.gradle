@@ -18,60 +18,58 @@ android {
 }
 
 dependencies {
+    api project(':ui:base-tool')
+    api project(':ui:tutorial-renderer')
     implementation project(':library:api')
     implementation project(':library:base')
     implementation project(':library:db')
     implementation project(':library:model')
     implementation project(':library:sync')
 
-    api project(':ui:base-tool')
-    api project(':ui:tutorial-renderer')
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.cardview
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
 
-    implementation "androidx.activity:activity-ktx:${deps.androidX.activity}"
-    implementation "androidx.cardview:cardview:${deps.androidX.cardView}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${deps.androidX.lifecycle}"
-    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
-    implementation "com.google.android.material:material:${deps.materialDesign}"
-
-    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-lottie:${deps.gtoSupport}"
+    api libs.gtoSupport.viewpager
+    implementation libs.gtoSupport.androidx.databinding
+    implementation libs.gtoSupport.androidx.fragment
+    implementation libs.gtoSupport.androidx.lifecycle
+    implementation libs.gtoSupport.androidx.viewpager2
+    implementation libs.gtoSupport.base
+    implementation libs.gtoSupport.compat
+    implementation libs.gtoSupport.core
+    implementation libs.gtoSupport.eventbus
+    implementation libs.gtoSupport.lottie
     implementation libs.gtoSupport.materialComponents
-    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
-    api "org.ccci.gto.android:gto-support-viewpager:${deps.gtoSupport}"
+    implementation libs.gtoSupport.picasso
+    implementation libs.gtoSupport.recyclerview
+    implementation libs.gtoSupport.util
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
-
-    implementation "com.airbnb.android:lottie:${deps.lottie}"
-    implementation 'com.duolingo.open:rtl-viewpager:2.0.0'
-    implementation "com.google.dagger:dagger:${deps.dagger}"
+    implementation libs.dagger
+    implementation libs.godtoolsMpp.parser
     implementation libs.hilt
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-    implementation "com.tinder.statemachine:statemachine:${deps.tinderStateMachine}"
-    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+    implementation libs.lottie
+    implementation libs.materialComponents
+    implementation libs.picasso.transformations
+    implementation libs.play.instantapps
+    implementation libs.rtlViewpager
+    implementation libs.splitties.fragmentargs
+    implementation libs.tinder.statemachine
     implementation libs.weakdelegate
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
+    kapt libs.eventbus.annotationProcessor
     kapt libs.hilt.compiler
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     testImplementation libs.androidx.arch.core.testing
-    testImplementation "androidx.lifecycle:lifecycle-runtime-testing:${deps.androidX.lifecycle}"
+    testImplementation libs.androidx.lifecycle.runtime.testing
+    testImplementation libs.gtoSupport.testing.dagger
+    testImplementation libs.gtoSupport.testing.picasso
     testImplementation libs.hilt.testing
-    testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
-    testImplementation "org.ccci.gto.android.testing:gto-support-picasso:${deps.gtoSupport}"
     testImplementation libs.kotlin.coroutines.test
 
-    kaptTest "androidx.databinding:databinding-compiler:${deps.androidX.databinding}"
+    kaptTest libs.androidx.databinding.compiler
     kaptTest libs.hilt.compiler
 }
