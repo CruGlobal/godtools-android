@@ -22,10 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{() -> controller.toggleOption()}"
-            app:cardBackgroundColor="@{isSelected ? MultiselectKt.getSelectedColor(model) : MultiselectKt.getBackgroundColor(model)}"
-            app:cardCornerRadius="@dimen/tool_content_accordion_section_card_corner_radius"
-            app:cardElevation="@dimen/tool_content_accordion_section_card_elevation"
-            app:cardMaxElevation="@dimen/tool_content_accordion_section_card_elevation">
+            app:cardBackgroundColor="@{isSelected ? MultiselectKt.getSelectedColor(model) : MultiselectKt.getBackgroundColor(model)}">
 
             <LinearLayout
                 android:id="@+id/content"

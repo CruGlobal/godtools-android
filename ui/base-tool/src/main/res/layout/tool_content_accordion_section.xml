@@ -16,10 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:onClick="@{() -> controller.toggleSection()}"
-        app:cardCornerRadius="@dimen/tool_content_accordion_section_card_corner_radius"
-        app:cardElevation="@dimen/tool_content_accordion_section_card_elevation"
-        app:cardMaxElevation="@dimen/tool_content_accordion_section_card_elevation">
+        android:onClick="@{() -> controller.toggleSection()}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

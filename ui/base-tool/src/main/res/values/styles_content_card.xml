@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tool_content_card_corner_radius">6dp</dimen>
+    <dimen name="tool_content_card_elevation">4dp</dimen>
+
+    <style name="Widget.GodTools.Tool.Content.Card" parent="CardView">
+        <item name="cardCornerRadius">@dimen/tool_content_card_corner_radius</item>
+        <item name="cardElevation">@dimen/tool_content_card_elevation</item>
+        <item name="cardMaxElevation">@dimen/tool_content_card_elevation</item>
+    </style>
+</resources>
