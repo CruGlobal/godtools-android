@@ -33,7 +33,7 @@ buildscript {
                 youtubeplayer      : libs.versions.youtubePlayer.get(),
         ]
         deps.androidX = [
-                activity          : '1.4.0',
+                activity          : libs.versions.androidx.activity.get(),
                 appCompat         : libs.versions.androidx.appcompat.get(),
                 archCore          : libs.versions.androidx.arch.get(),
                 cardView          : '1.0.0',

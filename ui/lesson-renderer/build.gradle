@@ -9,25 +9,25 @@ android {
 dependencies {
     api project(":ui:base-tool")
 
-    implementation "androidx.activity:activity-ktx:${deps.androidX.activity}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.viewpager2:viewpager2:${deps.androidX.viewPager2}"
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.viewpager2
 
-    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-lifecycle:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.databinding
+    implementation libs.gtoSupport.androidx.fragment
+    implementation libs.gtoSupport.androidx.lifecycle
+    implementation libs.gtoSupport.androidx.viewpager2
+    implementation libs.gtoSupport.eventbus
+    implementation libs.gtoSupport.materialComponents
+    implementation libs.gtoSupport.recyclerview
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
+    implementation libs.godtoolsMpp.parser
 
-    implementation "com.google.android.material:material:${deps.materialDesign}"
     implementation libs.hilt
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
+    implementation libs.materialComponents
+    implementation libs.splitties.fragmentargs
 
-    kapt "com.google.dagger:dagger-compiler:${deps.dagger}"
+    kapt libs.dagger.compiler
     kapt libs.hilt.compiler
 
     testImplementation project(':library:model')
