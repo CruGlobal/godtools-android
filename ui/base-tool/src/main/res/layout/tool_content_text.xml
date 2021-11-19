@@ -10,6 +10,11 @@
         <variable name="isInvisible" type="LiveData&lt;Boolean&gt;" />
     </data>
 
+    <!-- HACK: `textIsSelectable` suppresses click events propagating up to parent elements. We need to only enable it
+               when no ancestor elements are clickable to prevent interference with the ancestor click handling. A
+               practical example is that multiselect options would not be selectable by clicking on a text child.
+               Related: https://stackoverflow.com/q/19584750
+     -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +26,7 @@
         android:minLines="@{model.minimumLines}"
         android:saveEnabled="false"
         android:text="@{model}"
-        android:textIsSelectable="@{controller.textEnableTextIsSelectable}"
+        android:textIsSelectable="@{!controller.isAncestorClickable}"
         app:drawableEndSize="@{model.endImageSize}"
         app:drawableStartSize="@{model.startImageSize}"
         app:goneIf="@{isGone ?? false}"

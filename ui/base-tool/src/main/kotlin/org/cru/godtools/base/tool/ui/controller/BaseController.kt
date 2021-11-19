@@ -169,15 +169,6 @@ abstract class BaseController<T : Base> protected constructor(
     }
     // endregion Clickable
 
-    // region Text Overrides
-    // HACK: `textIsSelectable` suppresses click events propagating up to parent elements.
-    //       Providing this override point will allow controllers to suppress the `textIsSelectable` attribute when it
-    //       interferes with other click listeners
-    //       This makes it impossible for the user to toggle Multiselect Options by clicking on a child text view.
-    //       Related: https://stackoverflow.com/q/19584750
-    open val textEnableTextIsSelectable get() = !isAncestorClickable
-    // endregion Text Overrides
-
     // region Tips
     open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
 
