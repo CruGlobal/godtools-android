@@ -28,6 +28,11 @@ class CardController private constructor(
     @AssistedFactory
     interface Factory : BaseController.Factory<CardController>
 
+    init {
+        binding.lifecycleOwner = lifecycleOwner
+        binding.controller = this
+    }
+
     override fun onBind() {
         super.onBind()
         binding.model = model

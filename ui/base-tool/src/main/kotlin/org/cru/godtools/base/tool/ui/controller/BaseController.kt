@@ -155,6 +155,9 @@ abstract class BaseController<T : Base> protected constructor(
     }
 
     // region Clickable
+    open val isClickable get() = (model as? Clickable)?.isClickable ?: false
+    val isAncestorClickable: Boolean get() = parentController?.let { it.isClickable || it.isAncestorClickable } ?: false
+
     fun click(model: Clickable?) {
         if (model == null) return
         if (model is HasAnalyticsEvents) triggerAnalyticsEvents(model.getAnalyticsEvents(Trigger.CLICKED))
@@ -172,7 +175,7 @@ abstract class BaseController<T : Base> protected constructor(
     //       interferes with other click listeners
     //       This makes it impossible for the user to toggle Multiselect Options by clicking on a child text view.
     //       Related: https://stackoverflow.com/q/19584750
-    open val textEnableTextIsSelectable: Boolean get() = parentController?.textEnableTextIsSelectable ?: true
+    open val textEnableTextIsSelectable get() = !isAncestorClickable
     // endregion Text Overrides
 
     // region Tips

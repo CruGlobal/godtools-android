@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/tool_content_margin_half"
+        android:clickable="@{model.isClickable}"
         android:onClick="@{() -> controller.click(model)}"
         app:cardBackgroundColor="@{CardKt.getBackgroundColor(model)}">
 
