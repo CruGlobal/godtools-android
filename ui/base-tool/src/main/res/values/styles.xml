@@ -5,10 +5,6 @@
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>
     </style>
 
-    <style name="Theme.GodTools.Tool.NoAppBar">
-        <item name="windowActionModeOverlay">false</item>
-    </style>
-
     <style name="Theme.GodTools.Tool.Modal" parent="Theme.GodTools.Modal">
         <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Content.Button</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>

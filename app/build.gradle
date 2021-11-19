@@ -205,13 +205,13 @@ dependencies {
     implementation libs.firebase.perf
 
     implementation libs.play.core
+    implementation libs.play.instantapps
 
-    implementation "com.airbnb.android:lottie:${deps.lottie}"
+    implementation libs.lottie
     implementation libs.taptargetview
-    implementation "com.github.Karumi:WeakDelegate:${deps.weakdelegate}"
-    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation libs.weakdelegate
     implementation "com.google.android.material:material:${deps.materialDesign}"
-    implementation "com.google.dagger:hilt-android:${deps.dagger}"
+    implementation libs.hilt
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
     implementation "com.okta.android:okta-oidc-android:${deps.okta}"
@@ -222,10 +222,10 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
+    debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation libs.facebook.flipper
     debugImplementation libs.facebook.flipper.plugins.network
     debugImplementation libs.facebook.soloader
-    debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     kapt libs.dagger.compiler

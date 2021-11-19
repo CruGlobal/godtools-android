@@ -4,7 +4,6 @@ buildscript {
     ext {
         deps = [
                 advrecyclerview    : '1.0.0',
-                androidInstantApps : '1.1.0',
                 circleindicator    : libs.versions.circleindicator.get(),
                 dagger             : libs.versions.dagger.get(),
                 eventbus           : libs.versions.eventbus.get(),
@@ -28,15 +27,14 @@ buildscript {
                 robolectric        : '4.7.1',
                 scarlet            : libs.versions.scarlet.get(),
                 splitties          : libs.versions.splitties.get(),
-                tinderStateMachine : '0.2.0',
                 weakdelegate       : libs.versions.weakdelegate.get(),
                 youtubeplayer      : libs.versions.youtubePlayer.get(),
         ]
         deps.androidX = [
-                activity          : '1.4.0',
+                activity          : libs.versions.androidx.activity.get(),
                 appCompat         : libs.versions.androidx.appcompat.get(),
                 archCore          : libs.versions.androidx.arch.get(),
-                cardView          : '1.0.0',
+                cardView          : libs.versions.androidx.cardview.get(),
                 collection        : libs.versions.androidx.collection.get(),
                 concurrent        : '1.1.0',
                 constraintLayout  : libs.versions.androidx.constraintlayout.get(),
