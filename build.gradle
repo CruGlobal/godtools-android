@@ -25,7 +25,7 @@ buildscript {
                 okta               : '1.2.1',
                 picasso            : libs.versions.picasso.get(),
                 retrofit2          : libs.versions.retrofit2.get(),
-                robolectric        : '4.7',
+                robolectric        : '4.7.1',
                 scarlet            : libs.versions.scarlet.get(),
                 splitties          : libs.versions.splitties.get(),
                 tinderStateMachine : '0.2.0',
