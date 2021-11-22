@@ -18,7 +18,7 @@ buildscript {
                 leakcanary         : '2.7',
                 lottie             : libs.versions.lottie.get(),
                 materialDesign     : libs.versions.materialComponents.get(),
-                mockito            : '4.0.0',
+                mockito            : '4.1.0',
                 moshi              : '1.12.0',
                 okhttp3            : libs.versions.okhttp3.get(),
                 okta               : '1.2.1',
