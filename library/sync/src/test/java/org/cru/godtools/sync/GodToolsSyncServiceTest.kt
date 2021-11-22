@@ -5,6 +5,7 @@ import androidx.work.WorkManager
 import javax.inject.Provider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
