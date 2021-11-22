@@ -290,7 +290,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     init {
         aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
             override fun onInvalidated(tables: Set<String>) {
-                if (Resource.TABLE_NAME in tables) cleanupActor.offer(RunCleanup)
+                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(RunCleanup)
             }
         })
     }
