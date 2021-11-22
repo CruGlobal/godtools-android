@@ -176,7 +176,7 @@ class AemArticleManagerTest {
     }
 
     private fun List<Translation>.offerToArticleTranslationsJob() = apply {
-        assertTrue("Unable to trigger articleTranslationsJob", articleTranslationsChannel.offer(this))
+        assertTrue("Unable to trigger articleTranslationsJob", articleTranslationsChannel.trySend(this).isSuccess)
     }
     // endregion Translations
 
