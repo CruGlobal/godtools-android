@@ -144,21 +144,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
 
-    @VisibleForTesting
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        merge(
-            settings.primaryLanguageFlow,
-            settings.parallelLanguageFlow,
-            channel.consumeAsFlow()
-        ).conflate().collectLatest {
-            delay(DELAY_UPDATE_PENDING_SHORTCUTS)
-            updatePendingShortcuts()
-        }
-    }
-
     @AnyThread
-    private suspend fun updatePendingShortcuts() = coroutineScope {
+    @VisibleForTesting
+    internal suspend fun updatePendingShortcuts() = coroutineScope {
         synchronized(pendingShortcuts) {
             val i = pendingShortcuts.iterator()
             while (i.hasNext()) {
@@ -249,7 +237,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
-        updatePendingShortcutsActor.close()
         updateShortcutsActor.close()
         coroutineScope.coroutineContext[Job]?.cancel()
     }
@@ -319,10 +306,19 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
-    class Dispatcher @Inject constructor(
+    class Dispatcher @VisibleForTesting internal constructor(
+        private val manager: GodToolsShortcutManager,
         eventBus: EventBus,
-        private val shortcutManager: GodToolsShortcutManager
+        settings: Settings,
+        coroutineScope: CoroutineScope
     ) {
+        @Inject
+        constructor(
+            manager: GodToolsShortcutManager,
+            eventBus: EventBus,
+            settings: Settings
+        ) : this(manager, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
         // region Events
         init {
             // register event listeners
@@ -333,26 +329,44 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Subscribe
         fun onToolUpdate(event: ToolUpdateEvent) {
             // Could change which tools are visible or the label for tools
-            shortcutManager.updateShortcutsActor.trySend(Unit)
-            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+            manager.updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
         @Subscribe
         fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
             // Handles potential icon image changes.
-            shortcutManager.updateShortcutsActor.trySend(Unit)
-            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+            manager.updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
         @Subscribe
         fun onTranslationUpdate(event: TranslationUpdateEvent) {
             // Could change which tools are available or the label for tools
-            shortcutManager.updateShortcutsActor.trySend(Unit)
-            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+            manager.updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
         }
         // endregion Events
+
+        @VisibleForTesting
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+            merge(
+                settings.primaryLanguageFlow,
+                settings.parallelLanguageFlow,
+                channel.consumeAsFlow()
+            ).conflate().collectLatest {
+                delay(DELAY_UPDATE_PENDING_SHORTCUTS)
+                manager.updatePendingShortcuts()
+            }
+        }
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal fun shutdown() {
+            updatePendingShortcutsActor.close()
+        }
     }
 }
 

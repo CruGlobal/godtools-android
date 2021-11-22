@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
@@ -143,28 +144,9 @@ class GodToolsShortcutManagerTest {
         coroutineScope.advanceUntilIdle()
         clearInvocations(dao)
 
-        // update doesn't trigger before requested
-        coroutineScope.advanceUntilIdle()
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        verifyNoInteractions(dao)
-
         // trigger update
-        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
-        verifyNoInteractions(dao)
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+        runBlocking { shortcutManager.updatePendingShortcuts() }
         verify(dao).find<Tool>("kgp")
-        verifyNoMoreInteractions(dao)
-        clearInvocations(dao)
-
-        // trigger multiple updates simultaneously, it should conflate to a single update
-        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
-        coroutineScope.advanceTimeBy(1)
-        verifyNoInteractions(dao)
-        assertTrue(shortcutManager.updatePendingShortcutsActor.trySend(Unit).isSuccess)
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        verify(dao).find<Tool>("kgp")
-        verifyNoMoreInteractions(dao)
-        coroutineScope.advanceUntilIdle()
         verifyNoMoreInteractions(dao)
     }
     // endregion Pending Shortcuts
