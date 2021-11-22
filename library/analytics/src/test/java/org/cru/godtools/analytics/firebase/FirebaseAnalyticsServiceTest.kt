@@ -52,6 +52,7 @@ class FirebaseAnalyticsServiceTest {
 
     @After
     fun cleanup() {
+        userInfoChannel.close()
         coroutineScope.cleanupTestCoroutines()
     }
 
