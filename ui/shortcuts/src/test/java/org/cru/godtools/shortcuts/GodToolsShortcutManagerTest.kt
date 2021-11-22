@@ -25,14 +25,11 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.lessThan
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,12 +48,14 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.Config.NEWEST_SDK
+import org.robolectric.annotation.Config.OLDEST_SDK
 
 private const val ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT"
 private const val INSTALL_SHORTCUT_PERMISSION = "com.android.launcher.permission.INSTALL_SHORTCUT"
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [24, 25, 28])
+@Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N, Build.VERSION_CODES.N_MR1, NEWEST_SDK])
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerTest {
     private lateinit var app: Application
@@ -172,9 +171,8 @@ class GodToolsShortcutManagerTest {
 
     // region Update Existing Shortcuts
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnPrimaryLanguageUpdate() {
-        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
-
         whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
         assertUpdateExistingShortcutsInitialUpdate()
 
@@ -186,9 +184,8 @@ class GodToolsShortcutManagerTest {
     }
 
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnParallelLanguageUpdate() {
-        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
-
         whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
         assertUpdateExistingShortcutsInitialUpdate()
 
@@ -200,9 +197,8 @@ class GodToolsShortcutManagerTest {
     }
 
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsAggregateMultiple() = runBlockingTest {
-        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
-
         whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
         assertUpdateExistingShortcutsInitialUpdate()
 
@@ -222,8 +218,8 @@ class GodToolsShortcutManagerTest {
     }
 
     @Test
+    @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
     fun verifyUpdateExistingShortcutsNotAvailableForOldSdks() {
-        assumeThat(Build.VERSION.SDK_INT, lessThan(Build.VERSION_CODES.N_MR1))
         coroutineScope.advanceUntilIdle()
         assertTrue(
             "Ensure actor can still accept requests, even though they are no-ops",
@@ -234,9 +230,8 @@ class GodToolsShortcutManagerTest {
     }
 
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() {
-        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
-
         dao.stub { on { get(any<Query<Tool>>()) } doReturn emptyList() }
         ioDispatcher.pauseDispatcher()
         coroutineScope.resumeDispatcher()
@@ -259,9 +254,8 @@ class GodToolsShortcutManagerTest {
 
     // region Instant App
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() {
-        assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.N_MR1))
-
         // Instant Apps don't have access to the system ShortcutManager
         whenever(app.getSystemService<ShortcutManager>()).thenReturn(null)
         coroutineScope.resumeDispatcher()
