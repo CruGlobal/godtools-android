@@ -23,7 +23,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -213,11 +212,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     internal suspend fun refreshShortcutsNow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
         updatePendingShortcuts()
-    }
-
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    internal fun shutdown() {
-        coroutineScope.coroutineContext[Job]?.cancel()
     }
 
     private suspend fun createAllShortcuts() = withContext(ioDispatcher) {

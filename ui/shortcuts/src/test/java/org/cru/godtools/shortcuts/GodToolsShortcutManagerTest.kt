@@ -10,22 +10,23 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.picasso.Picasso
 import java.util.EnumSet
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.job
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +35,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
@@ -61,10 +63,12 @@ class GodToolsShortcutManagerTest {
     private lateinit var eventBus: EventBus
     private lateinit var picasso: Picasso
     private lateinit var settings: Settings
-    private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
-    private val ioDispatcher = TestCoroutineDispatcher()
+    @Deprecated("Transition tests to use runTest closure")
+    private val coroutineScope = TestScope()
 
-    private lateinit var shortcutManager: GodToolsShortcutManager
+    private val shortcutManager by lazy { coroutineScope.createShortcutManager() }
+    private fun TestScope.createShortcutManager() =
+        GodToolsShortcutManager(app, dao, eventBus, mock(), picasso, settings, this)
 
     @Before
     fun setup() {
@@ -88,16 +92,6 @@ class GodToolsShortcutManagerTest {
         eventBus = mock()
         picasso = mock()
         settings = mock()
-
-        shortcutManager =
-            GodToolsShortcutManager(app, dao, eventBus, mock(), picasso, settings, coroutineScope, ioDispatcher)
-    }
-
-    @After
-    fun cleanup() {
-        shortcutManager.shutdown()
-        ioDispatcher.cleanupTestCoroutines()
-        coroutineScope.cleanupTestCoroutines()
     }
 
     // region Pending Shortcuts
@@ -117,21 +111,24 @@ class GodToolsShortcutManagerTest {
     // endregion canPinShortcut(tool)
 
     @Test
-    fun verifyGetPendingToolShortcutInvalidTool() {
+    fun verifyGetPendingToolShortcutInvalidTool() = runTest {
+        val shortcutManager = createShortcutManager()
         val shortcut = shortcutManager.getPendingToolShortcut("invalid")!!
-        coroutineScope.runCurrent()
+        joinLaunchedJobs()
         verify(dao).find<Tool>("invalid")
         assertNull(shortcut.shortcut)
     }
 
     @Test
-    fun verifyUpdatePendingToolShortcuts() {
+    fun verifyUpdatePendingToolShortcuts() = runTest {
+        val shortcutManager = createShortcutManager()
+
         val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
-        coroutineScope.advanceUntilIdle()
+        joinLaunchedJobs()
         clearInvocations(dao)
 
         // trigger update
-        runBlocking { shortcutManager.updatePendingShortcuts() }
+        shortcutManager.updatePendingShortcuts()
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
     }
@@ -140,29 +137,33 @@ class GodToolsShortcutManagerTest {
     // region Update Existing Shortcuts
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() {
-        dao.stub { on { get(any<Query<Tool>>()) } doReturn emptyList() }
-        ioDispatcher.pauseDispatcher()
-        coroutineScope.resumeDispatcher()
+    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = runTest {
+        dao.stub { on { get(any<Query<Tool>>()) } doThrow CancellationException() }
+        val shortcutManager = createShortcutManager()
 
         ExceptionRaisingTree.plant().use {
-            coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.cancel()
-            ioDispatcher.resumeDispatcher()
+            launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.apply {
+                join()
+                assertTrue(isCancelled)
+            }
         }
+        verify(dao).get(any<Query<Tool>>())
+        verifyNoInteractions(shortcutManagerService)
     }
     // endregion Update Existing Shortcuts
 
     // region Instant App
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() {
+    fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() = runTest {
         // Instant Apps don't have access to the system ShortcutManager
         whenever(app.getSystemService<ShortcutManager>()).thenReturn(null)
-        coroutineScope.resumeDispatcher()
-        clearInvocations(dao)
+        val shortcutManager = createShortcutManager()
 
-        coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }
+        shortcutManager.updateDynamicShortcuts(emptyMap())
         verifyNoInteractions(dao)
     }
     // endregion Instant App
+
+    private suspend fun TestScope.joinLaunchedJobs() = coroutineContext.job.children.toList().joinAll()
 }
