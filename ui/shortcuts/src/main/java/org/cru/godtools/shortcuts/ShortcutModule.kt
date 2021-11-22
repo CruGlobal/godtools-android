@@ -16,7 +16,7 @@ abstract class ShortcutModule {
     @Binds
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
-    abstract fun shortcutManagerEagerSingleton(shortcutManager: GodToolsShortcutManager): Any
+    abstract fun shortcutManagerEagerSingleton(dispatcher: GodToolsShortcutManager.Dispatcher): Any
 
     companion object {
         @IntoSet

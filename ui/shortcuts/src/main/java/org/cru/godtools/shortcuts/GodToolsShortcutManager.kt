@@ -110,30 +110,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     // region Events
     @AnyThread
     @Subscribe
-    fun onToolUpdate(event: ToolUpdateEvent) {
-        // Could change which tools are visible or the label for tools
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
-    fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
-        // Handles potential icon image changes.
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
-    fun onTranslationUpdate(event: TranslationUpdateEvent) {
-        // Could change which tools are available or the label for tools
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
@@ -340,6 +316,43 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             .setLongLabel(label)
             .setIcon(icon)
             .build()
+    }
+
+    @Singleton
+    class Dispatcher @Inject constructor(
+        eventBus: EventBus,
+        private val shortcutManager: GodToolsShortcutManager
+    ) {
+        // region Events
+        init {
+            // register event listeners
+            eventBus.register(this)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onToolUpdate(event: ToolUpdateEvent) {
+            // Could change which tools are visible or the label for tools
+            shortcutManager.updateShortcutsActor.trySend(Unit)
+            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
+            // Handles potential icon image changes.
+            shortcutManager.updateShortcutsActor.trySend(Unit)
+            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onTranslationUpdate(event: TranslationUpdateEvent) {
+            // Could change which tools are available or the label for tools
+            shortcutManager.updateShortcutsActor.trySend(Unit)
+            shortcutManager.updatePendingShortcutsActor.trySend(Unit)
+        }
+        // endregion Events
     }
 }
 
