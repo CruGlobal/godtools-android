@@ -11,6 +11,7 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.runCurrent
 import okhttp3.ResponseBody
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -528,13 +529,17 @@ class GodToolsDownloadManagerTest {
     // region Cleanup
     @Test
     fun verifyCleanupActorAutomaticRuns() {
-        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
+        testScope.runCurrent()
         assertCleanupActorRan(0)
-        testScope.advanceTimeBy(1)
+        testScope.testScheduler.advanceTimeBy(1)
+        testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
+        testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(1)
+        testScope.testScheduler.advanceTimeBy(1)
+        testScope.runCurrent()
         assertCleanupActorRan(2)
     }
 
@@ -543,24 +548,31 @@ class GodToolsDownloadManagerTest {
         assertCleanupActorRan(0)
         runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(CLEANUP_DELAY - CLEANUP_DELAY_INITIAL - 1)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - CLEANUP_DELAY_INITIAL - 1)
+        testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(1)
+        testScope.testScheduler.advanceTimeBy(1)
+        testScope.runCurrent()
         assertCleanupActorRan(2)
     }
 
     @Test
     fun verifyCleanupActorRunsWhenTriggered() {
-        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.advanceTimeBy(2000)
+        testScope.testScheduler.advanceTimeBy(2000)
+        testScope.runCurrent()
         runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
         assertCleanupActorRan(2)
-        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
+        testScope.runCurrent()
         assertCleanupActorRan(2)
-        testScope.advanceTimeBy(1)
+        testScope.testScheduler.advanceTimeBy(1)
+        testScope.runCurrent()
         assertCleanupActorRan(3)
     }
 
