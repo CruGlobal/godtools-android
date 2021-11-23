@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem.db
 
 import android.net.Uri
-import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,40 +10,31 @@ import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.AemImport.AemImportArticle
 
 @Dao
-interface AemImportDao {
+internal interface AemImportDao {
+    @Query("SELECT * FROM aemImports WHERE uri = :uri")
+    suspend fun find(uri: Uri?): AemImport?
     @Query("SELECT * FROM aemImports")
     suspend fun getAll(): List<AemImport>
 
-    @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(aemImport: AemImport)
-
-    @WorkerThread
+    suspend fun insertOrIgnore(aemImport: AemImport)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(imports: List<AemImport>)
-
-    @WorkerThread
+    suspend fun insertOrIgnore(imports: List<AemImport>)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnoreArticles(aemImportArticle: List<AemImportArticle>)
+    suspend fun insertOrIgnoreArticles(aemImportArticle: List<AemImportArticle>)
 
-    @WorkerThread
     @Query("UPDATE aemImports SET lastAccessed = :date WHERE uri = :aemImportUri")
-    fun updateLastAccessed(aemImportUri: Uri, date: Date)
-
-    @WorkerThread
+    suspend fun updateLastAccessed(aemImportUri: Uri, date: Date)
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
-    fun updateLastProcessed(aemImportUri: Uri, date: Date)
+    suspend fun updateLastProcessed(aemImportUri: Uri, date: Date)
 
-    @WorkerThread
     @Query(
         """
         DELETE FROM aemImportArticles
         WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)
         """
     )
-    fun removeOldArticles(aemImportUri: Uri, currentArticleUris: List<@JvmSuppressWildcards Uri>)
-
-    @WorkerThread
+    suspend fun removeOldArticles(aemImportUri: Uri, currentArticleUris: List<@JvmSuppressWildcards Uri>)
     @Query(
         """
         DELETE FROM aemImports
@@ -53,8 +43,5 @@ interface AemImportDao {
             lastAccessed < :lastAccessedBefore
         """
     )
-    fun removeOrphanedAemImports(lastAccessedBefore: Date)
-
-    @Query("SELECT * FROM aemImports WHERE uri = :uri")
-    suspend fun find(uri: Uri?): AemImport?
+    suspend fun removeOrphanedAemImports(lastAccessedBefore: Date)
 }
