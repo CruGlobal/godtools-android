@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.ui
 
 import android.app.Activity
 import android.net.Uri
-import android.os.Build
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -41,8 +40,7 @@ internal class ArticleWebViewClient @Inject constructor(
     }
 
     private fun notFoundResponse() = WebResourceResponse(null, null, null).apply {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available")
+        setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available")
     }
 
     @WorkerThread
