@@ -10,6 +10,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
@@ -36,6 +37,14 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         assertFalse(repo.isProcessed(translation))
         verify(translationDao).find(TOOL, LOCALE, VERSION)
         verifyNoMoreInteractions(translationDao)
+    }
+
+    @Test
+    fun `isProcessed() - Invalid Translation`() = runBlockingTest {
+        translation.toolCode = null
+
+        assertFalse(repo.isProcessed(translation))
+        verifyNoInteractions(translationDao)
     }
 
     @Test
