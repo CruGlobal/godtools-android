@@ -14,22 +14,22 @@ private const val TRANSLATION_KEY = "tool = :tool AND language = :language AND v
 
 @Dao
 @WorkerThread
-interface TranslationDao {
-    @get:Query("SELECT * FROM translations")
-    val all: List<TranslationRef>
+internal interface TranslationDao {
+    @Query("SELECT * FROM translations")
+    suspend fun getAll(): List<TranslationRef>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(translation: TranslationRef)
+    suspend fun insertOrIgnore(translation: TranslationRef)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(translations: List<TranslationAemImport>)
+    suspend fun insertOrIgnore(translations: List<TranslationAemImport>)
 
     @Delete
-    fun remove(translations: List<TranslationRef>)
+    suspend fun remove(translations: List<TranslationRef>)
 
     @Query("SELECT * FROM translations WHERE $TRANSLATION_KEY LIMIT 1")
-    fun find(tool: String, language: Locale, version: Int): TranslationRef?
+    suspend fun find(tool: String, language: Locale, version: Int): TranslationRef?
 
     @Query("UPDATE translations SET processed = :processed WHERE $TRANSLATION_KEY")
-    fun markProcessed(tool: String, language: Locale, version: Int, processed: Boolean)
+    suspend fun markProcessed(tool: String, language: Locale, version: Int, processed: Boolean)
 }

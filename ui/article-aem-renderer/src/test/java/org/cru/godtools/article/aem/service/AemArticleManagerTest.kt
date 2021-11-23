@@ -110,7 +110,9 @@ class AemArticleManagerTest {
         val translations = listOf(translation)
         val uri = mock<Uri>()
         val manifest = mock<Manifest> { on { aemImports } doReturn listOf(uri) }
-        val repository = aemDb.translationRepository()
+        val repository = aemDb.translationRepository().stub {
+            onBlocking { isProcessed(any()) } doReturn false
+        }
         stub {
             onBlocking { manifestManager.getManifest(translation) } doReturn manifest
             onBlocking { articleManager.syncAemImportsFromManifest(any(), any()) } doReturn null
@@ -120,11 +122,11 @@ class AemArticleManagerTest {
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
+        verifyBlocking(repository) { isProcessed(translation) }
         verifyBlocking(manifestManager) { getManifest(translation) }
-        verify(repository).addAemImports(translation, manifest.aemImports)
+        verifyBlocking(repository) { addAemImports(translation, manifest.aemImports) }
         verifyBlocking(articleManager) { syncAemImportsFromManifest(eq(manifest), any()) }
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoMoreInteractions(repository)
     }
 
@@ -133,15 +135,15 @@ class AemArticleManagerTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
-            on { isProcessed(translation) } doReturn true
+            onBlocking { isProcessed(translation) } doReturn true
         }
 
         startArticleTranslationsJob()
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository) { isProcessed(translation) }
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoInteractions(manifestManager)
         verifyNoMoreInteractions(repository)
     }
@@ -150,7 +152,9 @@ class AemArticleManagerTest {
     fun `testArticleTranslationsJob - Don't process translations without a downloaded manifest`() {
         val translation = mock<Translation>()
         val translations = listOf(translation)
-        val repository = aemDb.translationRepository()
+        val repository = aemDb.translationRepository().stub {
+            onBlocking { isProcessed(translation) } doReturn false
+        }
         manifestManager.stub {
             onBlocking { getManifest(translation) } doReturn null
         }
@@ -159,10 +163,10 @@ class AemArticleManagerTest {
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
+        verifyBlocking(repository) { isProcessed(translation) }
         verifyBlocking(manifestManager) { getManifest(translation) }
-        verify(repository, never()).addAemImports(any(), any())
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository, never()) { addAemImports(any(), any()) }
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoMoreInteractions(repository)
     }
 

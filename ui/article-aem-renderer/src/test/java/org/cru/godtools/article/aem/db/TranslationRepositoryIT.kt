@@ -21,7 +21,7 @@ class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
     private val repository get() = db.translationRepository()
 
     @Test
-    fun verifyAddAemImportsTranslationAlreadyPresent() {
+    fun verifyAddAemImportsTranslationAlreadyPresent() = runBlocking {
         // setup test
         val translation = Translation().apply {
             toolCode = "kgp"
