@@ -24,9 +24,6 @@ private const val GET_ARTICLES_WHERE = """
 
 @Dao
 interface ArticleDao {
-    @get:Query("SELECT * FROM articles")
-    val allArticles: LiveData<List<Article>>
-
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(article: Article)
