@@ -110,30 +110,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     // region Events
     @AnyThread
     @Subscribe
-    fun onToolUpdate(event: ToolUpdateEvent) {
-        // Could change which tools are visible or the label for tools
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
-    fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
-        // Handles potential icon image changes.
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
-    fun onTranslationUpdate(event: TranslationUpdateEvent) {
-        // Could change which tools are available or the label for tools
-        updateShortcutsActor.trySend(Unit)
-        updatePendingShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
-    @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
@@ -168,21 +144,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         pendingShortcut.shortcut?.let { ShortcutManagerCompat.requestPinShortcut(context, it, null) }
     }
 
-    @VisibleForTesting
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        merge(
-            settings.primaryLanguageFlow,
-            settings.parallelLanguageFlow,
-            channel.consumeAsFlow()
-        ).conflate().collectLatest {
-            delay(DELAY_UPDATE_PENDING_SHORTCUTS)
-            updatePendingShortcuts()
-        }
-    }
-
     @AnyThread
-    private suspend fun updatePendingShortcuts() = coroutineScope {
+    @VisibleForTesting
+    internal suspend fun updatePendingShortcuts() = coroutineScope {
         synchronized(pendingShortcuts) {
             val i = pendingShortcuts.iterator()
             while (i.hasNext()) {
@@ -204,28 +168,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val updateShortcutsMutex = Mutex()
 
     @VisibleForTesting
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        merge(
-            settings.primaryLanguageFlow,
-            settings.parallelLanguageFlow,
-            channel.consumeAsFlow()
-        ).conflate().collectLatest {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                delay(DELAY_UPDATE_SHORTCUTS)
-                updateShortcuts()
-            }
-        }
-    }
-
-    init {
-        // launch an initial update
-        updateShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
+    internal suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
         val shortcuts = createAllShortcuts()
         updateDynamicShortcuts(shortcuts)
         updatePinnedShortcuts(shortcuts)
@@ -273,8 +217,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
-        updatePendingShortcutsActor.close()
-        updateShortcutsActor.close()
         coroutineScope.coroutineContext[Job]?.cancel()
     }
 
@@ -340,6 +282,91 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             .setLongLabel(label)
             .setIcon(icon)
             .build()
+    }
+
+    @Singleton
+    class Dispatcher @VisibleForTesting internal constructor(
+        private val manager: GodToolsShortcutManager,
+        eventBus: EventBus,
+        settings: Settings,
+        coroutineScope: CoroutineScope
+    ) {
+        @Inject
+        constructor(
+            manager: GodToolsShortcutManager,
+            eventBus: EventBus,
+            settings: Settings
+        ) : this(manager, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
+        // region Events
+        init {
+            // register event listeners
+            eventBus.register(this)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onToolUpdate(event: ToolUpdateEvent) {
+            // Could change which tools are visible or the label for tools
+            updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
+            // Handles potential icon image changes.
+            updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
+        }
+
+        @AnyThread
+        @Subscribe
+        fun onTranslationUpdate(event: TranslationUpdateEvent) {
+            // Could change which tools are available or the label for tools
+            updateShortcutsActor.trySend(Unit)
+            updatePendingShortcutsActor.trySend(Unit)
+        }
+        // endregion Events
+
+        @VisibleForTesting
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+            merge(
+                settings.primaryLanguageFlow,
+                settings.parallelLanguageFlow,
+                channel.consumeAsFlow()
+            ).conflate().collectLatest {
+                delay(DELAY_UPDATE_PENDING_SHORTCUTS)
+                manager.updatePendingShortcuts()
+            }
+        }
+
+        @VisibleForTesting
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+            merge(
+                settings.primaryLanguageFlow,
+                settings.parallelLanguageFlow,
+                channel.consumeAsFlow()
+            ).conflate().collectLatest {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    delay(DELAY_UPDATE_SHORTCUTS)
+                    manager.updateShortcuts()
+                }
+            }
+        }
+
+        init {
+            // launch an initial update
+            updateShortcutsActor.trySend(Unit)
+        }
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal fun shutdown() {
+            updatePendingShortcutsActor.close()
+            updateShortcutsActor.close()
+        }
     }
 }
 
