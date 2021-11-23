@@ -210,7 +210,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                 try {
                     api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
                         response.byteStream().use {
-                            it.writeToDisk { file ->
+                            it.writeToDisk()?.let { file ->
                                 resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
                             }
                         }
@@ -223,8 +223,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
-    @Throws(IOException::class)
-    internal suspend fun InputStream.writeToDisk(onSuccess: (File) -> Unit): File? {
+    internal suspend fun InputStream.writeToDisk(): File? {
         if (!fileManager.createDir()) return null
 
         // create a MessageDigest to dedup files
@@ -256,7 +255,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                     Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
                     tmpFile
                 }
-            }.also(onSuccess)
+            }
         }
     }
     // endregion Download Resource

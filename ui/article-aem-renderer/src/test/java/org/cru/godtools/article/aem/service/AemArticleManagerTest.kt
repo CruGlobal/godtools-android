@@ -3,7 +3,6 @@ package org.cru.godtools.article.aem.service
 import android.net.Uri
 import androidx.room.InvalidationTracker
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
 import java.security.MessageDigest
 import java.util.Date
 import kotlin.io.path.ExperimentalPathApi
@@ -234,8 +233,8 @@ class AemArticleManagerTest {
     @Test
     fun testWriteToDisk() = runBlocking {
         val data = "testWriteToDisk()"
-        lateinit var file: File
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file = it } } }
+
+        val file = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
         assertNotNull(file)
         assertArrayEquals(data.toByteArray(), file.readBytes())
     }
@@ -244,10 +243,8 @@ class AemArticleManagerTest {
     fun testWriteToDiskDedup() = runBlocking {
         val data = "testWriteToDiskDedup()"
 
-        lateinit var file1: File
-        lateinit var file2: File
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
+        val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
+        val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
 
         assertEquals(file1, file2)
     }
@@ -256,13 +253,10 @@ class AemArticleManagerTest {
     fun testWriteToDiskNoDedupWithoutDigest() = runBlocking {
         mockStatic(MessageDigest::class.java).use {
             it.`when`<MessageDigest?> { MessageDigest.getInstance("SHA-1") } doReturn null
-
             val data = "testWriteToDiskNoDedupWithoutDigest()"
 
-            lateinit var file1: File
-            lateinit var file2: File
-            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
-            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
+            val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
+            val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
 
             assertNotEquals(file1, file2)
             assertNotEquals(file1.name, file2.name)
