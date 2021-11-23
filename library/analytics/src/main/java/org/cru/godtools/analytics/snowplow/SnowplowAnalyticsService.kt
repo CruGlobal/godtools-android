@@ -22,7 +22,7 @@ import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
 import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
-import org.ccci.gto.android.common.snowplow.events.CustomEventBuilder
+import org.ccci.gto.android.common.snowplow.events.CustomEvent
 import org.ccci.gto.android.common.snowplow.events.CustomScreenView
 import org.ccci.gto.android.common.snowplow.events.CustomStructured
 import org.ccci.gto.android.common.snowplow.utils.TimberLogger
@@ -85,31 +85,25 @@ class SnowplowAnalyticsService @Inject internal constructor(
 
     @WorkerThread
     private fun handleScreenEvent(event: AnalyticsScreenEvent) {
-        CustomScreenView.builder()
-            .name(event.screen)
+        CustomScreenView(event.screen)
             .populate(event)
-            .build()
             .send()
     }
 
     @WorkerThread
     private fun handleActionEvent(event: AnalyticsActionEvent) {
-        CustomStructured.builder()
-            .category(event.snowplowCategory)
-            .action(event.action)
+        CustomStructured(event.snowplowCategory, event.action)
             .apply { event.label?.let { label(it) } }
             .populate(event)
-            .build()
             .send()
     }
 
     @WorkerThread
-    private fun <T> T.populate(
-        event: AnalyticsBaseEvent
-    ) where T : AbstractEvent.Builder<T>, T : CustomEventBuilder<T> =
+    private fun <T> T.populate(event: AnalyticsBaseEvent) where T : CustomEvent<T>, T : AbstractEvent = apply {
         contexts(listOf(idContext(), event.contentScoringContext()))
-            .attribute("url", "${event.snowplowContentScoringUri}")
-            .attribute("page", event.snowplowPageTitle)
+        attribute("url", "${event.snowplowContentScoringUri}")
+        attribute("page", event.snowplowPageTitle)
+    }
 
     private fun Event.send() = snowplowTracker.track(this)
 
@@ -118,10 +112,9 @@ class SnowplowAnalyticsService @Inject internal constructor(
         .stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     @WorkerThread
-    @OptIn(ExperimentalStdlibApi::class)
     private fun idContext() = SelfDescribingJson(
         CONTEXT_SCHEMA_IDS,
-        buildMap<String, String> {
+        buildMap {
             userProfileStateFlow.value?.let { profile ->
                 profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
                 profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
