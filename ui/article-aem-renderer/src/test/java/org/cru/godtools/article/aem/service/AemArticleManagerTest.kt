@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
@@ -189,8 +189,7 @@ class AemArticleManagerTest {
         val mediaType = "image/jpg".toMediaType()
         val resource = mock<Resource> { on { needsDownload() } doReturn true }
         whenever(resourceDao.find(uri)).thenReturn(resource)
-        wheneverDownloadingResource(uri)
-            .thenReturn(Response.success(ResponseBody.create(mediaType, data.toByteArray())))
+        wheneverDownloadingResource(uri).thenReturn(Response.success(data.toByteArray().toResponseBody(mediaType)))
 
         val startTime = System.currentTimeMillis()
         articleManager.downloadResource(uri, false)
