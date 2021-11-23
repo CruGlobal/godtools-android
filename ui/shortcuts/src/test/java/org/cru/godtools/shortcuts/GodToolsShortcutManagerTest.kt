@@ -10,15 +10,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.picasso.Picasso
 import java.util.EnumSet
-import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
@@ -30,7 +27,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -70,9 +66,6 @@ class GodToolsShortcutManagerTest {
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
     private val ioDispatcher = TestCoroutineDispatcher()
 
-    private val primaryLanguageFlow = MutableSharedFlow<Locale>(extraBufferCapacity = 20)
-    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(extraBufferCapacity = 20)
-
     private lateinit var shortcutManager: GodToolsShortcutManager
 
     @Before
@@ -97,10 +90,7 @@ class GodToolsShortcutManagerTest {
         eventBus = mock()
         fileManager = mock()
         picasso = mock()
-        settings = mock {
-            on { primaryLanguageFlow } doReturn primaryLanguageFlow
-            on { parallelLanguageFlow } doReturn parallelLanguageFlow
-        }
+        settings = mock()
 
         shortcutManager =
             GodToolsShortcutManager(app, dao, eventBus, fileManager, picasso, settings, coroutineScope, ioDispatcher)
@@ -139,7 +129,6 @@ class GodToolsShortcutManagerTest {
 
     @Test
     fun verifyUpdatePendingToolShortcuts() {
-        shortcutManager.updateShortcutsActor.close()
         val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
         coroutineScope.advanceUntilIdle()
         clearInvocations(dao)
@@ -154,65 +143,6 @@ class GodToolsShortcutManagerTest {
     // region Update Existing Shortcuts
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsOnPrimaryLanguageUpdate() {
-        whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
-        assertUpdateExistingShortcutsInitialUpdate()
-
-        // trigger a primary language update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        verifyNoInteractions(dao)
-        coroutineScope.advanceUntilIdle()
-        verify(dao).get(Tool::class.java)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsOnParallelLanguageUpdate() {
-        whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
-        assertUpdateExistingShortcutsInitialUpdate()
-
-        // trigger a primary language update
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        verifyNoInteractions(dao)
-        coroutineScope.advanceUntilIdle()
-        verify(dao).get(Tool::class.java)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsAggregateMultiple() = runBlockingTest {
-        whenever(dao.get(Tool::class.java)).thenReturn(emptyList())
-        assertUpdateExistingShortcutsInitialUpdate()
-
-        // trigger multiple updates simultaneously, it should aggregate to a single update
-        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verifyNoInteractions(dao)
-        coroutineScope.advanceUntilIdle()
-        verify(dao).get(Tool::class.java)
-    }
-
-    @Test
-    @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
-    fun verifyUpdateExistingShortcutsNotAvailableForOldSdks() {
-        coroutineScope.advanceUntilIdle()
-        assertTrue(
-            "Ensure actor can still accept requests, even though they are no-ops",
-            shortcutManager.updateShortcutsActor.trySend(Unit).isSuccess
-        )
-        coroutineScope.advanceUntilIdle()
-        verifyNoInteractions(dao)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() {
         dao.stub { on { get(any<Query<Tool>>()) } doReturn emptyList() }
         ioDispatcher.pauseDispatcher()
@@ -222,15 +152,6 @@ class GodToolsShortcutManagerTest {
             coroutineScope.launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.cancel()
             ioDispatcher.resumeDispatcher()
         }
-    }
-
-    private fun assertUpdateExistingShortcutsInitialUpdate() {
-        // ensure update shortcuts is initially delayed
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verifyNoInteractions(dao)
-        coroutineScope.advanceTimeBy(1)
-        verify(dao).get(Tool::class.java)
-        clearInvocations(dao)
     }
     // endregion Update Existing Shortcuts
 

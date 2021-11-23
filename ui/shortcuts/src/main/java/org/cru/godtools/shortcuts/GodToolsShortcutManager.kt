@@ -168,28 +168,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val updateShortcutsMutex = Mutex()
 
     @VisibleForTesting
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
-        merge(
-            settings.primaryLanguageFlow,
-            settings.parallelLanguageFlow,
-            channel.consumeAsFlow()
-        ).conflate().collectLatest {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                delay(DELAY_UPDATE_SHORTCUTS)
-                updateShortcuts()
-            }
-        }
-    }
-
-    init {
-        // launch an initial update
-        updateShortcutsActor.trySend(Unit)
-    }
-
-    @AnyThread
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
+    internal suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
         val shortcuts = createAllShortcuts()
         updateDynamicShortcuts(shortcuts)
         updatePinnedShortcuts(shortcuts)
@@ -237,7 +217,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal fun shutdown() {
-        updateShortcutsActor.close()
         coroutineScope.coroutineContext[Job]?.cancel()
     }
 
@@ -329,7 +308,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Subscribe
         fun onToolUpdate(event: ToolUpdateEvent) {
             // Could change which tools are visible or the label for tools
-            manager.updateShortcutsActor.trySend(Unit)
+            updateShortcutsActor.trySend(Unit)
             updatePendingShortcutsActor.trySend(Unit)
         }
 
@@ -337,7 +316,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Subscribe
         fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
             // Handles potential icon image changes.
-            manager.updateShortcutsActor.trySend(Unit)
+            updateShortcutsActor.trySend(Unit)
             updatePendingShortcutsActor.trySend(Unit)
         }
 
@@ -345,7 +324,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Subscribe
         fun onTranslationUpdate(event: TranslationUpdateEvent) {
             // Could change which tools are available or the label for tools
-            manager.updateShortcutsActor.trySend(Unit)
+            updateShortcutsActor.trySend(Unit)
             updatePendingShortcutsActor.trySend(Unit)
         }
         // endregion Events
@@ -363,9 +342,30 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             }
         }
 
+        @VisibleForTesting
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+            merge(
+                settings.primaryLanguageFlow,
+                settings.parallelLanguageFlow,
+                channel.consumeAsFlow()
+            ).conflate().collectLatest {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    delay(DELAY_UPDATE_SHORTCUTS)
+                    manager.updateShortcuts()
+                }
+            }
+        }
+
+        init {
+            // launch an initial update
+            updateShortcutsActor.trySend(Unit)
+        }
+
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
             updatePendingShortcutsActor.close()
+            updateShortcutsActor.close()
         }
     }
 }
