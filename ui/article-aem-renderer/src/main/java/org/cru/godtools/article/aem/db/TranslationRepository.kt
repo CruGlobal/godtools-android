@@ -12,12 +12,8 @@ import org.cru.godtools.model.Translation
 
 @Dao
 internal abstract class TranslationRepository internal constructor(private val db: ArticleRoomDatabase) {
-    private suspend fun find(key: Key?) = key?.run { db.translationDao().find(tool, language, version) }
     suspend fun isProcessed(translation: Translation) = find(translation.toTranslationRefKey())?.processed ?: false
-
-    private suspend fun markProcessed(key: Key?, processed: Boolean) {
-        key?.apply { db.translationDao().markProcessed(tool, language, version, processed) }
-    }
+    private suspend fun find(key: Key?) = key?.run { db.translationDao().find(tool, language, version) }
 
     @Transaction
     open suspend fun addAemImports(translation: Translation, uris: List<Uri>): Boolean {
@@ -38,12 +34,18 @@ internal abstract class TranslationRepository internal constructor(private val d
         return true
     }
 
+    private suspend fun markProcessed(key: Key?, processed: Boolean) {
+        key?.apply { db.translationDao().markProcessed(tool, language, version, processed) }
+    }
+
     @Transaction
     open suspend fun removeMissingTranslations(translationsToKeep: List<Translation>) {
+        val translationDao = db.translationDao()
         val valid = translationsToKeep.map { it.toTranslationRefKey() }.toSet()
-        db.translationDao().getAll()
-            .filterNot { valid.contains(it.key) }
-            .apply { db.translationDao().remove(this) }
-        db.aemImportRepository().removeOrphanedAemImports()
+        val toRemove = translationDao.getAll().filterNot { valid.contains(it.key) }
+        if (toRemove.isNotEmpty()) {
+            translationDao.remove(toRemove)
+            db.aemImportRepository().removeOrphanedAemImports()
+        }
     }
 }
