@@ -7,7 +7,7 @@ import androidx.room.Transaction
 import org.cru.godtools.article.aem.model.Article
 
 @Dao
-abstract class ArticleRepository internal constructor(private val db: ArticleRoomDatabase) {
+internal abstract class ArticleRepository(private val db: ArticleRoomDatabase) {
     @AnyThread
     @Transaction
     open suspend fun updateContent(article: Article) {
@@ -17,7 +17,7 @@ abstract class ArticleRepository internal constructor(private val db: ArticleRoo
 
     @Transaction
     @WorkerThread
-    open fun removeOrphanedArticles() {
+    open suspend fun removeOrphanedArticles() {
         db.articleDao().removeOrphanedArticles()
         db.resourceDao().removeOrphanedResources()
     }

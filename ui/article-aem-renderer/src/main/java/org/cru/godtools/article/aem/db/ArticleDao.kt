@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.db
 
 import android.net.Uri
 import androidx.annotation.AnyThread
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -24,63 +23,11 @@ private const val GET_ARTICLES_WHERE = """
 
 @Dao
 interface ArticleDao {
-    @WorkerThread
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(article: Article)
-
-    @WorkerThread
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnoreTags(tags: Collection<Article.Tag>)
-
-    @WorkerThread
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(articleResource: Article.ArticleResource)
-
-    @WorkerThread
-    @Query(
-        """
-        UPDATE articles
-        SET
-            uuid = :uuid,
-            title = :title,
-            canonicalUri = :canonicalUri
-        WHERE uri = :uri
-        """
-    )
-    fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
-
-    @AnyThread
-    @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
-    suspend fun updateContent(uri: Uri, uuid: String?, content: String?)
-
-    @WorkerThread
-    @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
-    fun removeAllTags(articleUri: Uri)
-
-    @AnyThread
-    @Query(
-        """
-        DELETE FROM articleResources
-        WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)
-        """
-    )
-    suspend fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
-
-    @Query(
-        """
-        DELETE FROM articles
-        WHERE uri NOT IN (SELECT articleUri FROM aemImportArticles)
-        """
-    )
-    fun removeOrphanedArticles()
-
-    @AnyThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
     suspend fun find(uri: Uri): Article?
-
     @AnyThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
-    fun findLiveData(uri: Uri?): LiveData<Article?>
+    fun findLiveData(uri: Uri): LiveData<Article?>
 
     @AnyThread
     @Query(
@@ -92,7 +39,6 @@ interface ArticleDao {
         """
     )
     fun getArticles(tool: String, locale: Locale): LiveData<List<Article>>
-
     @AnyThread
     @Query(
         """
@@ -105,4 +51,42 @@ interface ArticleDao {
         """
     )
     fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnore(article: Article)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnore(articleResource: Article.ArticleResource)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnoreTags(tags: Collection<Article.Tag>)
+
+    @Query(
+        """
+        UPDATE articles
+        SET
+            uuid = :uuid,
+            title = :title,
+            canonicalUri = :canonicalUri
+        WHERE uri = :uri
+        """
+    )
+    suspend fun update(uri: Uri, uuid: String, title: String, canonicalUri: Uri?)
+    @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
+    suspend fun updateContent(uri: Uri, uuid: String?, content: String?)
+
+    @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
+    suspend fun removeAllTags(articleUri: Uri)
+    @Query(
+        """
+        DELETE FROM articleResources
+        WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)
+        """
+    )
+    suspend fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
+    @Query(
+        """
+        DELETE FROM articles
+        WHERE uri NOT IN (SELECT articleUri FROM aemImportArticles)
+        """
+    )
+    suspend fun removeOrphanedArticles()
 }
