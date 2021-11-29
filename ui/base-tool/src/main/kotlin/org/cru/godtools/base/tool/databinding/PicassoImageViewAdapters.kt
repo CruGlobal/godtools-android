@@ -9,7 +9,7 @@ import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
-import org.cru.godtools.base.toolFileManager
+import org.cru.godtools.base.toolFileSystem
 import org.cru.godtools.tool.model.ImageGravity
 import org.cru.godtools.tool.model.ImageScaleType
 import org.cru.godtools.tool.model.Resource
@@ -49,4 +49,4 @@ internal fun SimpleScaledPicassoImageView.bindScaledResource(
 }
 
 private fun <T> T.setPicassoResource(resource: Resource?) where T : ImageView, T : PicassoImageView =
-    setPicassoFile(resource?.localName?.let { context.toolFileManager.getFileBlocking(it) })
+    setPicassoFile(resource?.localName?.let { context.toolFileSystem.getFileBlocking(it) })

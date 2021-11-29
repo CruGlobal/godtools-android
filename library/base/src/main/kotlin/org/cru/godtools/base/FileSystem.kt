@@ -10,7 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-open class FileManager(context: Context, dirName: String) {
+open class FileSystem(context: Context, dirName: String) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private val dirTask = coroutineScope.async { File(context.filesDir, dirName) }

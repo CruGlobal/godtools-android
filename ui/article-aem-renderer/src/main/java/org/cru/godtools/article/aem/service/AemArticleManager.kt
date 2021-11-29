@@ -45,7 +45,7 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
-import org.cru.godtools.article.aem.util.AemFileManager
+import org.cru.godtools.article.aem.util.AemFileSystem
 import org.cru.godtools.article.aem.util.addExtension
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Tool
@@ -74,7 +74,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
     private val dao: GodToolsDao,
-    private val fileManager: AemFileManager,
+    private val fs: AemFileSystem,
     private val manifestManager: ManifestManager,
     private val coroutineScope: CoroutineScope
 ) {
@@ -83,9 +83,9 @@ class AemArticleManager @VisibleForTesting internal constructor(
         aemDb: ArticleRoomDatabase,
         api: AemApi,
         dao: GodToolsDao,
-        fileManager: AemFileManager,
+        fs: AemFileSystem,
         manifestManager: ManifestManager
-    ) : this(aemDb, api, dao, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    ) : this(aemDb, api, dao, fs, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
@@ -223,7 +223,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun InputStream.writeToDisk(): File? {
-        if (!fileManager.createDir()) return null
+        if (!fs.createDir()) return null
 
         // create a MessageDigest to dedup files
         val digest = try {
@@ -236,13 +236,13 @@ class AemArticleManager @VisibleForTesting internal constructor(
         // lock the file system for writing this resource
         filesystemMutex.read.withLock {
             // write the stream to a temporary file
-            val tmpFile = fileManager.createTmpFile("aem-").apply {
+            val tmpFile = fs.createTmpFile("aem-").apply {
                 (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
                     .use { copyTo(it) }
             }
 
             // rename temporary file based on digest
-            val dedup = digest?.let { fileManager.getFile("${it.digest().toHexString()}.bin") }
+            val dedup = digest?.let { fs.getFile("${it.digest().toHexString()}.bin") }
             return when {
                 dedup == null -> tmpFile
                 dedup.exists() -> {
@@ -273,16 +273,16 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @WorkerThread
     private suspend fun cleanOrphanedFiles() {
-        if (!fileManager.createDir()) return
+        if (!fs.createDir()) return
 
         // lock the filesystem before removing any orphaned files
         filesystemMutex.write.withLock {
             // determine which files are still being referenced
             val valid = aemDb.resourceDao().getAll()
-                .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fileManager) }
+                .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
 
             // delete any files not referenced
-            fileManager.getDir().listFiles()
+            fs.getDir().listFiles()
                 ?.filterNot { it in valid }
                 ?.forEach { it.delete() }
         }

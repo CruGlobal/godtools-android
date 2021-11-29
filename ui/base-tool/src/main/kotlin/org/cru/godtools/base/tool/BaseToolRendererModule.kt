@@ -12,7 +12,7 @@ import dagger.multibindings.IntoSet
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
-import org.cru.godtools.base.ToolFileManager
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ContentEventAnalyticsHandler
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.xml.AndroidXmlPullParserFactory
@@ -36,8 +36,8 @@ abstract class BaseToolRendererModule {
 
         @Provides
         @Reusable
-        fun manifestParser(fileManager: ToolFileManager) = ManifestParser(object : AndroidXmlPullParserFactory() {
-            override suspend fun openFile(fileName: String) = fileManager.getInputStream(fileName).buffered()
+        fun manifestParser(fs: ToolFileSystem) = ManifestParser(object : AndroidXmlPullParserFactory() {
+            override suspend fun openFile(fileName: String) = fs.getInputStream(fileName).buffered()
         })
 
         @IntoSet

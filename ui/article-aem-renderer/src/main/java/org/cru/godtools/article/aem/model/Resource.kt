@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 import okhttp3.MediaType
-import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.FileSystem
 
 @Entity(tableName = Resource.TABLE_NAME)
 class Resource(@field:PrimaryKey val uri: Uri) {
@@ -27,6 +27,6 @@ class Resource(@field:PrimaryKey val uri: Uri) {
         return localFileName == null || dateDownloaded == null
     }
 
-    suspend fun getLocalFile(fileManager: FileManager) = localFileName?.let { fileManager.getFile(it) }
-    suspend fun getInputStream(fileManager: FileManager) = getLocalFile(fileManager)?.inputStream()
+    suspend fun getLocalFile(fs: FileSystem) = localFileName?.let { fs.getFile(it) }
+    suspend fun getInputStream(fs: FileSystem) = getLocalFile(fs)?.inputStream()
 }

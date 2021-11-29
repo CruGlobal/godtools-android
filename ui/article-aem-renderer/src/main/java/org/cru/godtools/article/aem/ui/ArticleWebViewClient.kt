@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.AemArticleManager
-import org.cru.godtools.article.aem.util.AemFileManager
+import org.cru.godtools.article.aem.util.AemFileSystem
 import org.cru.godtools.base.ui.util.openUrl
 import timber.log.Timber
 
@@ -24,7 +24,7 @@ private const val TAG = "ArticleWebViewClient"
 
 internal class ArticleWebViewClient @Inject constructor(
     private val aemArticleManager: AemArticleManager,
-    private val aemFileManager: AemFileManager,
+    private val fs: AemFileSystem,
     private val resourceDao: ResourceDao
 ) : WebViewClient() {
     var activity: Activity? by weak()
@@ -70,7 +70,7 @@ internal class ArticleWebViewClient @Inject constructor(
 
     private fun Resource.getData() = runBlocking {
         try {
-            getInputStream(aemFileManager)
+            getInputStream(fs)
         } catch (e: FileNotFoundException) {
             // the file wasn't found in the local cache directory. log the error and clear the local file state so
             // it is downloaded again.

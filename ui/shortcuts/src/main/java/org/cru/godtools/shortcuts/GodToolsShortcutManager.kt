@@ -47,7 +47,7 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ToolFileManager
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.createArticlesIntent
@@ -75,7 +75,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val context: Context,
     private val dao: GodToolsDao,
     eventBus: EventBus,
-    private val fileManager: ToolFileManager,
+    private val fs: ToolFileSystem,
     private val picasso: Picasso,
     private val settings: Settings,
     private val coroutineScope: CoroutineScope,
@@ -86,14 +86,14 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @ApplicationContext context: Context,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: ToolFileManager,
+        fs: ToolFileSystem,
         picasso: Picasso,
         settings: Settings
     ) : this(
         context,
         dao,
         eventBus,
-        fileManager,
+        fs,
         picasso,
         settings,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -260,7 +260,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
             ?.let { dao.find<Attachment>(it) }
-            ?.getFile(fileManager)
+            ?.getFile(fs)
             ?.let {
                 try {
                     picasso.load(it)
