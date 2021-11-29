@@ -313,7 +313,7 @@ class AemArticleManagerTest {
         val resourceDao = aemDb.resourceDao()
         verifyBlocking(fs, mode) { exists() }
         verifyBlocking(resourceDao, mode) { getAll() }
-        verifyBlocking(fs, mode) { getDir() }
+        verifyBlocking(fs, mode) { rootDir() }
         verifyNoMoreInteractions(resourceDao, fs)
         clearInvocations(resourceDao, fs)
     }

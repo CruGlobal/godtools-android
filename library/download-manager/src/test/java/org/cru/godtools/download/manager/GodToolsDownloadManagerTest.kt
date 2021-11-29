@@ -108,7 +108,7 @@ class GodToolsDownloadManagerTest {
         }
         eventBus = mock()
         fs = mock {
-            onBlocking { getDir() } doReturn resourcesDir
+            onBlocking { rootDir() } doReturn resourcesDir
             onBlocking { exists() } doReturn true
         }
         observer = mock()
@@ -567,14 +567,14 @@ class GodToolsDownloadManagerTest {
     private fun assertCleanupActorRan(times: Int = 1) {
         inOrder(dao, fs) {
             repeat(times) {
-                runBlocking { verify(fs).getDir() }
+                runBlocking { verify(fs).rootDir() }
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == TranslationFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
-                runBlocking { verify(fs).getDir() }
+                runBlocking { verify(fs).rootDir() }
             }
             verify(dao, never()).get(any<Query<*>>())
-            runBlocking { verify(fs, never()).getDir() }
+            runBlocking { verify(fs, never()).rootDir() }
         }
     }
 
@@ -584,7 +584,7 @@ class GodToolsDownloadManagerTest {
         val missingFile = getTmpFile()
         whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
         fs.stub {
-            onBlocking { getDir() } doReturn file.parentFile!!
+            onBlocking { rootDir() } doReturn file.parentFile!!
             onBlocking { getFile(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
         }
 

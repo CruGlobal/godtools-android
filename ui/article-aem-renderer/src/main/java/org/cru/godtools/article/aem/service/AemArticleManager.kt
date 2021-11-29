@@ -282,7 +282,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                 .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
 
             // delete any files not referenced
-            fs.getDir().listFiles()
+            fs.rootDir().listFiles()
                 ?.filterNot { it in valid }
                 ?.forEach { it.delete() }
         }

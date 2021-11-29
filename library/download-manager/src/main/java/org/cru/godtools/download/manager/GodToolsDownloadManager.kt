@@ -417,7 +417,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // get the set of all downloaded files
-                val files = fs.getDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
+                val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
                 // check for missing files
                 Query.select<LocalFile>().get(dao)
@@ -456,7 +456,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     }
 
                 // delete any orphaned files
-                fs.getDir().listFiles()
+                fs.rootDir().listFiles()
                     ?.filter { dao.find<LocalFile>(it.name) == null }
                     ?.forEach { it.delete() }
             }
