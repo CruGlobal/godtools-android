@@ -21,7 +21,7 @@ class FileManagerTest {
         context = mock {
             on { filesDir } doReturn rootDir
         }
-        fileManager = object : FileManager(context, "resources") {}
+        fileManager = FileManager(context, "resources")
     }
 
     @Test
