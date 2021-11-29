@@ -3,7 +3,6 @@ package org.cru.godtools.article.aem.service
 import android.net.Uri
 import androidx.room.InvalidationTracker
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
 import java.security.MessageDigest
 import java.util.Date
 import kotlin.io.path.ExperimentalPathApi
@@ -80,6 +79,7 @@ class AemArticleManagerTest {
     fun setup() {
         aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS) {
             onBlocking { aemImportDao().getAll() } doReturn emptyList()
+            onBlocking { resourceDao().getAll() } doReturn emptyList()
         }
         api = mock()
         dao = mock {
@@ -110,7 +110,9 @@ class AemArticleManagerTest {
         val translations = listOf(translation)
         val uri = mock<Uri>()
         val manifest = mock<Manifest> { on { aemImports } doReturn listOf(uri) }
-        val repository = aemDb.translationRepository()
+        val repository = aemDb.translationRepository().stub {
+            onBlocking { isProcessed(any()) } doReturn false
+        }
         stub {
             onBlocking { manifestManager.getManifest(translation) } doReturn manifest
             onBlocking { articleManager.syncAemImportsFromManifest(any(), any()) } doReturn null
@@ -120,11 +122,11 @@ class AemArticleManagerTest {
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
+        verifyBlocking(repository) { isProcessed(translation) }
         verifyBlocking(manifestManager) { getManifest(translation) }
-        verify(repository).addAemImports(translation, manifest.aemImports)
+        verifyBlocking(repository) { addAemImports(translation, manifest.aemImports) }
         verifyBlocking(articleManager) { syncAemImportsFromManifest(eq(manifest), any()) }
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoMoreInteractions(repository)
     }
 
@@ -133,15 +135,15 @@ class AemArticleManagerTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
-            on { isProcessed(translation) } doReturn true
+            onBlocking { isProcessed(translation) } doReturn true
         }
 
         startArticleTranslationsJob()
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository) { isProcessed(translation) }
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoInteractions(manifestManager)
         verifyNoMoreInteractions(repository)
     }
@@ -150,7 +152,9 @@ class AemArticleManagerTest {
     fun `testArticleTranslationsJob - Don't process translations without a downloaded manifest`() {
         val translation = mock<Translation>()
         val translations = listOf(translation)
-        val repository = aemDb.translationRepository()
+        val repository = aemDb.translationRepository().stub {
+            onBlocking { isProcessed(translation) } doReturn false
+        }
         manifestManager.stub {
             onBlocking { getManifest(translation) } doReturn null
         }
@@ -159,10 +163,10 @@ class AemArticleManagerTest {
         translations.offerToArticleTranslationsJob()
         testScope.runCurrent()
 
-        verify(repository).isProcessed(translation)
+        verifyBlocking(repository) { isProcessed(translation) }
         verifyBlocking(manifestManager) { getManifest(translation) }
-        verify(repository, never()).addAemImports(any(), any())
-        verify(repository).removeMissingTranslations(translations)
+        verifyBlocking(repository, never()) { addAemImports(any(), any()) }
+        verifyBlocking(repository) { removeMissingTranslations(translations) }
         verifyNoMoreInteractions(repository)
     }
 
@@ -230,8 +234,8 @@ class AemArticleManagerTest {
     @Test
     fun testWriteToDisk() = runBlocking {
         val data = "testWriteToDisk()"
-        lateinit var file: File
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file = it } } }
+
+        val file = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
         assertNotNull(file)
         assertArrayEquals(data.toByteArray(), file.readBytes())
     }
@@ -240,10 +244,8 @@ class AemArticleManagerTest {
     fun testWriteToDiskDedup() = runBlocking {
         val data = "testWriteToDiskDedup()"
 
-        lateinit var file1: File
-        lateinit var file2: File
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
-        with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
+        val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
+        val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
 
         assertEquals(file1, file2)
     }
@@ -252,13 +254,10 @@ class AemArticleManagerTest {
     fun testWriteToDiskNoDedupWithoutDigest() = runBlocking {
         mockStatic(MessageDigest::class.java).use {
             it.`when`<MessageDigest?> { MessageDigest.getInstance("SHA-1") } doReturn null
-
             val data = "testWriteToDiskNoDedupWithoutDigest()"
 
-            lateinit var file1: File
-            lateinit var file2: File
-            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file1 = it } } }
-            with(articleManager) { data.byteInputStream().use { it.writeToDisk { file2 = it } } }
+            val file1 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
+            val file2 = with(articleManager) { data.byteInputStream().use { it.writeToDisk()!! } }
 
             assertNotEquals(file1, file2)
             assertNotEquals(file1.name, file2.name)
@@ -313,7 +312,7 @@ class AemArticleManagerTest {
     private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
         val resourceDao = aemDb.resourceDao()
         verifyBlocking(fileManager, mode) { createDir() }
-        verify(resourceDao, mode).getAll()
+        verifyBlocking(resourceDao, mode) { getAll() }
         verifyBlocking(fileManager, mode) { getDir() }
         verifyNoMoreInteractions(resourceDao, fileManager)
         clearInvocations(resourceDao, fileManager)

@@ -42,7 +42,6 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
-import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
@@ -96,7 +95,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // region Deeplinked Article
     @AnyThread
     suspend fun downloadDeeplinkedArticle(uri: Uri) {
-        aemDb.aemImportRepository().accessAemImport(AemImport(uri).apply { lastAccessed = Date() })
+        aemDb.aemImportRepository().accessAemImport(uri)
         syncAemImport(uri, false)
         downloadArticle(uri, false)
     }
@@ -210,7 +209,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                 try {
                     api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
                         response.byteStream().use {
-                            it.writeToDisk { file ->
+                            it.writeToDisk()?.let { file ->
                                 resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
                             }
                         }
@@ -223,8 +222,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
-    @Throws(IOException::class)
-    internal suspend fun InputStream.writeToDisk(onSuccess: (File) -> Unit): File? {
+    internal suspend fun InputStream.writeToDisk(): File? {
         if (!fileManager.createDir()) return null
 
         // create a MessageDigest to dedup files
@@ -256,7 +254,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                     Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
                     tmpFile
                 }
-            }.also(onSuccess)
+            }
         }
     }
     // endregion Download Resource

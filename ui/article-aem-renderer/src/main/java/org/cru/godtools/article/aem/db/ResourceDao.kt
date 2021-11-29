@@ -1,8 +1,6 @@
 package org.cru.godtools.article.aem.db
 
 import android.net.Uri
-import androidx.annotation.AnyThread
-import androidx.annotation.WorkerThread
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,12 +10,10 @@ import okhttp3.MediaType
 import org.cru.godtools.article.aem.model.Resource
 
 @Dao
-interface ResourceDao {
-    @WorkerThread
+internal interface ResourceDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(resource: Resource)
+    suspend fun insertOrIgnore(resource: Resource)
 
-    @WorkerThread
     @Query(
         """
         UPDATE resources
@@ -25,26 +21,20 @@ interface ResourceDao {
         WHERE uri = :uri
         """
     )
-    fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
+    suspend fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
 
-    @WorkerThread
     @Query(
         """
         DELETE FROM resources
         WHERE uri NOT IN (SELECT resourceUri FROM articleResources)
         """
     )
-    fun removeOrphanedResources()
+    suspend fun removeOrphanedResources()
 
-    @AnyThread
     @Query("SELECT * FROM resources WHERE uri = :uri")
     suspend fun find(uri: Uri): Resource?
-
-    @WorkerThread
     @Query("SELECT * FROM resources")
-    fun getAll(): List<Resource>
-
-    @AnyThread
+    suspend fun getAll(): List<Resource>
     @Query(
         """
         SELECT r.*

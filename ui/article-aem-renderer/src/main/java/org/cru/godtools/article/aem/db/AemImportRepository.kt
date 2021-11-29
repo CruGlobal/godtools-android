@@ -1,6 +1,6 @@
 package org.cru.godtools.article.aem.db
 
-import androidx.annotation.WorkerThread
+import android.net.Uri
 import androidx.room.Dao
 import androidx.room.Transaction
 import java.util.Date
@@ -9,7 +9,7 @@ import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
 
 @Dao
-abstract class AemImportRepository internal constructor(private val db: ArticleRoomDatabase) {
+internal abstract class AemImportRepository(private val db: ArticleRoomDatabase) {
     @Transaction
     open suspend fun processAemImportSync(aemImport: AemImport, articles: List<Article>) {
         // insert/update any supplied articles
@@ -38,16 +38,15 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
     }
 
     @Transaction
-    open suspend fun accessAemImport(aemImport: AemImport) {
+    open suspend fun accessAemImport(uri: Uri) {
         with(db.aemImportDao()) {
-            insertOrIgnore(aemImport)
-            updateLastAccessed(aemImport.uri, aemImport.lastAccessed)
+            insertOrIgnore(AemImport(uri))
+            updateLastAccessed(uri, Date())
         }
     }
 
     @Transaction
-    @WorkerThread
-    open fun removeOrphanedAemImports() {
+    open suspend fun removeOrphanedAemImports() {
         db.aemImportDao().removeOrphanedAemImports(Date(System.currentTimeMillis() - WEEK_IN_MS))
         db.articleRepository().removeOrphanedArticles()
     }
