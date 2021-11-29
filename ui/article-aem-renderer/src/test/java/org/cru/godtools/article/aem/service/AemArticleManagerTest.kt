@@ -79,6 +79,7 @@ class AemArticleManagerTest {
     fun setup() {
         aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS) {
             onBlocking { aemImportDao().getAll() } doReturn emptyList()
+            onBlocking { resourceDao().getAll() } doReturn emptyList()
         }
         api = mock()
         dao = mock {
@@ -311,7 +312,7 @@ class AemArticleManagerTest {
     private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
         val resourceDao = aemDb.resourceDao()
         verifyBlocking(fileManager, mode) { createDir() }
-        verify(resourceDao, mode).getAll()
+        verifyBlocking(resourceDao, mode) { getAll() }
         verifyBlocking(fileManager, mode) { getDir() }
         verifyNoMoreInteractions(resourceDao, fileManager)
         clearInvocations(resourceDao, fileManager)

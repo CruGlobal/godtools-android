@@ -32,14 +32,14 @@ abstract class ArticleRoomDatabase internal constructor() : RoomDatabase() {
     // region DAOs
     internal abstract fun aemImportDao(): AemImportDao
     abstract fun articleDao(): ArticleDao
-    abstract fun resourceDao(): ResourceDao
+    internal abstract fun resourceDao(): ResourceDao
     internal abstract fun translationDao(): TranslationDao
     // endregion DAOs
 
     // region Repositories
     internal abstract fun aemImportRepository(): AemImportRepository
     internal abstract fun articleRepository(): ArticleRepository
-    abstract fun resourceRepository(): ResourceRepository
+    internal abstract fun resourceRepository(): ResourceRepository
     internal abstract fun translationRepository(): TranslationRepository
     // endregion Repositories
 }
