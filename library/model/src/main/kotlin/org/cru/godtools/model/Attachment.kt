@@ -32,6 +32,6 @@ class Attachment : Base() {
             "$sha256.$extension"
         }
 
-    suspend fun getFile(fs: FileSystem) = localFilename?.let { fs.getFile(it) }
+    suspend fun getFile(fs: FileSystem) = localFilename?.let { fs.file(it) }
     fun getFileBlocking(fs: FileSystem) = localFilename?.let { fs.getFileBlocking(it) }
 }

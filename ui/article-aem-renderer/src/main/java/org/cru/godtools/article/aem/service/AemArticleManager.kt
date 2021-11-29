@@ -242,7 +242,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
             }
 
             // rename temporary file based on digest
-            val dedup = digest?.let { fs.getFile("${it.digest().toHexString()}.bin") }
+            val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
             return when {
                 dedup == null -> tmpFile
                 dedup.exists() -> {

@@ -21,10 +21,10 @@ open class FileSystem(context: Context, dirName: String) {
 
     suspend fun createTmpFile(prefix: String, suffix: String? = null): File =
         withContext(Dispatchers.IO) { File.createTempFile(prefix, suffix, dirTask.await()) }
-    suspend fun getFile(filename: String) = File(dirTask.await(), filename)
+    suspend fun file(filename: String) = File(dirTask.await(), filename)
 
     suspend fun getInputStream(filename: String): InputStream =
-        withContext(Dispatchers.IO) { getFile(filename).inputStream() }
+        withContext(Dispatchers.IO) { file(filename).inputStream() }
 
     private val dir by lazy { runBlocking { dirTask.await() } }
     fun getFileBlocking(filename: String) = File(dir, filename)

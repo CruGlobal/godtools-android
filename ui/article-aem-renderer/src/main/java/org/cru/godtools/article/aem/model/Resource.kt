@@ -27,6 +27,6 @@ class Resource(@field:PrimaryKey val uri: Uri) {
         return localFileName == null || dateDownloaded == null
     }
 
-    suspend fun getLocalFile(fs: FileSystem) = localFileName?.let { fs.getFile(it) }
+    suspend fun getLocalFile(fs: FileSystem) = localFileName?.let { fs.file(it) }
     suspend fun getInputStream(fs: FileSystem) = getLocalFile(fs)?.inputStream()
 }
