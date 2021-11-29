@@ -42,7 +42,6 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
-import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
@@ -96,7 +95,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // region Deeplinked Article
     @AnyThread
     suspend fun downloadDeeplinkedArticle(uri: Uri) {
-        aemDb.aemImportRepository().accessAemImport(AemImport(uri).apply { lastAccessed = Date() })
+        aemDb.aemImportRepository().accessAemImport(uri)
         syncAemImport(uri, false)
         downloadArticle(uri, false)
     }

@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.db
 
+import android.net.Uri
 import androidx.room.Dao
 import androidx.room.Transaction
 import java.util.Date
@@ -37,10 +38,10 @@ internal abstract class AemImportRepository(private val db: ArticleRoomDatabase)
     }
 
     @Transaction
-    open suspend fun accessAemImport(aemImport: AemImport) {
+    open suspend fun accessAemImport(uri: Uri) {
         with(db.aemImportDao()) {
-            insertOrIgnore(aemImport)
-            updateLastAccessed(aemImport.uri, aemImport.lastAccessed)
+            insertOrIgnore(AemImport(uri))
+            updateLastAccessed(uri, Date())
         }
     }
 
