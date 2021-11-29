@@ -23,7 +23,7 @@ open class FileSystem(context: Context, dirName: String) {
         withContext(Dispatchers.IO) { File.createTempFile(prefix, suffix, dirTask.await()) }
     suspend fun file(filename: String) = File(dirTask.await(), filename)
 
-    suspend fun getInputStream(filename: String): InputStream =
+    suspend fun openInputStream(filename: String): InputStream =
         withContext(Dispatchers.IO) { file(filename).inputStream() }
 
     private val dir by lazy { runBlocking { dirTask.await() } }

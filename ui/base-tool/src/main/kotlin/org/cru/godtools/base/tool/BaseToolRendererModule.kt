@@ -37,7 +37,7 @@ abstract class BaseToolRendererModule {
         @Provides
         @Reusable
         fun manifestParser(fs: ToolFileSystem) = ManifestParser(object : AndroidXmlPullParserFactory() {
-            override suspend fun openFile(fileName: String) = fs.getInputStream(fileName).buffered()
+            override suspend fun openFile(fileName: String) = fs.openInputStream(fileName).buffered()
         })
 
         @IntoSet
