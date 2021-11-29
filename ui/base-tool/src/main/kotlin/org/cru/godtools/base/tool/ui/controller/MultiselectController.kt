@@ -88,7 +88,7 @@ class MultiselectController private constructor(
             binding.isSelected = model?.isSelectedFlow(toolState)?.asLiveData() ?: ImmutableLiveData(false)
         }
 
-        override val textEnableTextIsSelectable get() = false
+        override val isClickable = true
 
         fun toggleOption() {
             triggerAnalyticsEvents(model?.getAnalyticsEvents(AnalyticsEvent.Trigger.CLICKED))

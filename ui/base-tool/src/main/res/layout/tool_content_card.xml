@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.cru.godtools.tool.model.CardKt" />
+
+        <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.CardController" />
+        <variable name="model" type="org.cru.godtools.tool.model.Card" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/tool_content_margin_half"
+        android:clickable="@{model.isClickable}"
+        android:onClick="@{() -> controller.click(model)}"
+        app:cardBackgroundColor="@{CardKt.getBackgroundColor(model)}">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_marginVertical="@dimen/tool_content_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.cardview.widget.CardView>
+</layout>

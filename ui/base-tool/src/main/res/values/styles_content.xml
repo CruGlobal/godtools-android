@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tool_content_margin_horizontal">16dp</dimen>
+    <dimen name="tool_content_margin">16dp</dimen>
+    <dimen name="tool_content_margin_half">8dp</dimen>
+    <dimen name="tool_content_margin_horizontal">@dimen/tool_content_margin</dimen>
+
     <dimen name="tool_content_text_size_base">16sp</dimen>
 </resources>

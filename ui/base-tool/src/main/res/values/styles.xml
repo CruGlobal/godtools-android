@@ -3,10 +3,14 @@
     <style name="Theme.GodTools.Tool">
         <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Content.Button</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>
+
+        <item name="cardViewStyle">@style/Widget.GodTools.Tool.Content.Card</item>
     </style>
 
     <style name="Theme.GodTools.Tool.Modal" parent="Theme.GodTools.Modal">
         <item name="materialButtonStyle">@style/Widget.GodTools.Tool.Content.Button</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.GodTools.Tool.Content.Button.OutlinedButton</item>
+
+        <item name="cardViewStyle">@style/Widget.GodTools.Tool.Content.Card</item>
     </style>
 </resources>
