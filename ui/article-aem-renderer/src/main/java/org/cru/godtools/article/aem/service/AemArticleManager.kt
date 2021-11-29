@@ -223,7 +223,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun InputStream.writeToDisk(): File? {
-        if (!fs.createDir()) return null
+        if (!fs.exists()) return null
 
         // create a MessageDigest to dedup files
         val digest = try {
@@ -273,7 +273,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @WorkerThread
     private suspend fun cleanOrphanedFiles() {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         // lock the filesystem before removing any orphaned files
         filesystemMutex.write.withLock {

@@ -16,7 +16,7 @@ open class FileSystem(context: Context, dirName: String) {
     private val dirTask = coroutineScope.async { File(context.filesDir, dirName) }
     private val dirCreated = coroutineScope.async { dirTask.await().run { (exists() || mkdirs()) && isDirectory } }
 
-    suspend fun createDir() = dirCreated.await()
+    suspend fun exists() = dirCreated.await()
     suspend fun getDir() = dirTask.await()
 
     suspend fun createTmpFile(prefix: String, suffix: String? = null): File =

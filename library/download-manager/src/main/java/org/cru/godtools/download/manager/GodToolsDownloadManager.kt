@@ -217,7 +217,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadAttachment(attachmentId: Long) {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -252,7 +252,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importAttachment(attachmentId: Long, data: InputStream) {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -302,7 +302,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         translationsMutex.withLock(key) {
             dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
@@ -321,7 +321,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
@@ -412,7 +412,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun detectMissingFiles() {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
 
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
@@ -429,7 +429,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun cleanFilesystem() {
-        if (!fs.createDir()) return
+        if (!fs.exists()) return
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded

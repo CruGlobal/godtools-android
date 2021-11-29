@@ -25,8 +25,8 @@ class FileSystemTest {
     }
 
     @Test
-    fun testCreateDir() = runBlockingTest {
-        assertTrue(fileSystem.createDir())
+    fun testExists() = runBlockingTest {
+        assertTrue(fileSystem.exists())
         assertEquals(File(rootDir, "resources"), fileSystem.getDir())
     }
 }

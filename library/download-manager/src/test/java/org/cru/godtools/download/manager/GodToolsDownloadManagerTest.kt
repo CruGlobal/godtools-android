@@ -109,7 +109,7 @@ class GodToolsDownloadManagerTest {
         eventBus = mock()
         fs = mock {
             onBlocking { getDir() } doReturn resourcesDir
-            onBlocking { createDir() } doReturn true
+            onBlocking { exists() } doReturn true
         }
         observer = mock()
         settings = mock()
@@ -365,7 +365,7 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentUnableToCreateResourcesDir() {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         fs.stub {
-            onBlocking { createDir() } doReturn false
+            onBlocking { exists() } doReturn false
             onBlocking { attachment.getFile(this) } doReturn file
         }
 

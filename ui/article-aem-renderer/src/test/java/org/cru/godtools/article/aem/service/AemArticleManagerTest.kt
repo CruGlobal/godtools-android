@@ -270,7 +270,7 @@ class AemArticleManagerTest {
 
     // region cleanupActor
     private fun setupCleanupActor() {
-        runBlocking { whenever(fs.createDir()) doReturn true }
+        runBlocking { whenever(fs.exists()) doReturn true }
     }
 
     @Test
@@ -311,7 +311,7 @@ class AemArticleManagerTest {
 
     private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
         val resourceDao = aemDb.resourceDao()
-        verifyBlocking(fs, mode) { createDir() }
+        verifyBlocking(fs, mode) { exists() }
         verifyBlocking(resourceDao, mode) { getAll() }
         verifyBlocking(fs, mode) { getDir() }
         verifyNoMoreInteractions(resourceDao, fs)
