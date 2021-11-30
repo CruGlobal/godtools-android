@@ -10,7 +10,7 @@ import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
 import org.cru.godtools.base.toolFileSystem
-import org.cru.godtools.tool.model.ImageGravity
+import org.cru.godtools.tool.model.Gravity
 import org.cru.godtools.tool.model.ImageScaleType
 import org.cru.godtools.tool.model.Resource
 
@@ -23,7 +23,7 @@ internal fun SimplePicassoImageView.setPicassoFile(resource: Resource?) = setPic
 internal fun SimpleScaledPicassoImageView.bindScaledResource(
     resource: Resource?,
     scaleType: ImageScaleType?,
-    gravity: ImageGravity?
+    gravity: Gravity?
 ) {
     toggleBatchUpdates(true)
     setPicassoResource(resource)

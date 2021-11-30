@@ -155,12 +155,11 @@ configurations {
 
 dependencies {
     api project(':library:api')
-    implementation project(':library:base')
     api project(':library:db')
     api project(':library:download-manager')
+    implementation project(':library:base')
     implementation project(':library:model')
     implementation project(':library:sync')
-
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:cyoa-renderer')
@@ -169,71 +168,69 @@ dependencies {
     implementation project(':ui:tract-renderer')
     implementation project(':ui:tutorial-renderer')
 
-    implementation "androidx.constraintlayout:constraintlayout:${deps.androidX.constraintLayout}"
-    implementation "androidx.fragment:fragment-ktx:${deps.androidX.fragment}"
-    implementation "androidx.hilt:hilt-work:${deps.androidX.hilt}"
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.hilt.work
     implementation libs.androidx.lifecycle.livedata.ktx
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${deps.androidX.swipeRefreshLayout}"
-    implementation "androidx.work:work-runtime:${deps.androidX.work}"
+    implementation libs.androidx.swiperefreshlayout
+    implementation libs.androidx.work
 
-    implementation libs.kotlin.coroutines.android
-
-    implementation "org.ccci.gto.android:gto-support-androidx-databinding:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-drawerlayout:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-fragment:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.databinding
+    implementation libs.gtoSupport.androidx.drawerlayout
+    implementation libs.gtoSupport.androidx.fragment
     implementation libs.gtoSupport.androidx.lifecycle
-    implementation "org.ccci.gto.android:gto-support-androidx-viewpager2:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-androidx-work:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-base:${deps.gtoSupport}"
+    implementation libs.gtoSupport.androidx.viewpager2
+    implementation libs.gtoSupport.androidx.work
+    implementation libs.gtoSupport.appcompat
+    implementation libs.gtoSupport.base
     implementation libs.gtoSupport.compat
     implementation libs.gtoSupport.dagger
-    implementation "org.ccci.gto.android:gto-support-firebase-crashlytics:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-material-components:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-napier:${deps.gtoSupport}"
+    implementation libs.gtoSupport.eventbus
+    implementation libs.gtoSupport.firebase.crashlytics
+    implementation libs.gtoSupport.materialComponents
+    implementation libs.gtoSupport.napier
     implementation libs.gtoSupport.okta
-    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview:${deps.gtoSupport}"
+    implementation libs.gtoSupport.picasso
+    implementation libs.gtoSupport.recyclerview
+    implementation libs.gtoSupport.recyclerview.advrecyclerview
     implementation libs.gtoSupport.util
 
-    implementation "org.cru.godtools.kotlin:parser:${deps.godtoolsToolParser}"
-
     implementation libs.firebase.crashlytics
-    implementation "com.google.firebase:firebase-inappmessaging-display:${deps.firebase.inAppMessaging}"
+    implementation libs.firebase.inappmessaging
     implementation libs.firebase.perf
 
     implementation libs.play.core
     implementation libs.play.instantapps
 
+    api libs.eventbus
+    implementation libs.advrecyclerview
+    implementation libs.godtoolsMpp.parser
+    implementation libs.hilt
+    implementation libs.kotlin.coroutines.android
     implementation libs.lottie
+    implementation libs.materialBanner
+    implementation libs.materialComponents
+    implementation libs.okta
+    implementation libs.splitties.fragmentargs
     implementation libs.taptargetview
     implementation libs.weakdelegate
-    implementation "com.google.android.material:material:${deps.materialDesign}"
-    implementation libs.hilt
-    implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
-    implementation "com.louiscad.splitties:splitties-fragmentargs:${deps.splitties}"
-    implementation "com.okta.android:okta-oidc-android:${deps.okta}"
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:${deps.youtubeplayer}"
-    implementation "com.sergivonavi:materialbanner:1.2.0"
-    api libs.eventbus
+    implementation libs.youtubePlayer
 
-    debugImplementation "org.ccci.gto.android:gto-support-facebook-flipper:${deps.gtoSupport}"
-    debugImplementation "org.ccci.gto.android:gto-support-leakcanary2:${deps.gtoSupport}"
-    debugImplementation "org.ccci.gto.android:gto-support-okhttp3:${deps.gtoSupport}"
     debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation libs.facebook.flipper
     debugImplementation libs.facebook.flipper.plugins.network
     debugImplementation libs.facebook.soloader
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
+    debugImplementation libs.gtoSupport.facebook.flipper
+    debugImplementation libs.gtoSupport.leakcanary
+    debugImplementation libs.gtoSupport.okhttp3
+    debugImplementation libs.leakcanary
 
     kapt libs.dagger.compiler
+    kapt libs.eventbus.annotationProcessor
     kapt libs.hilt.compiler
-    kapt "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
+    testImplementation libs.gtoSupport.testing.dagger
     testImplementation libs.hilt.testing
-    testImplementation "org.ccci.gto.android.testing:gto-support-dagger:${deps.gtoSupport}"
 
     kaptTest libs.hilt.compiler
 }

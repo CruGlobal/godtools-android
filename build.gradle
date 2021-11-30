@@ -2,56 +2,6 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
     ext {
-        deps = [
-                advrecyclerview    : '1.0.0',
-                circleindicator    : libs.versions.circleindicator.get(),
-                dagger             : libs.versions.dagger.get(),
-                eventbus           : libs.versions.eventbus.get(),
-                findbugs           : '3.0.2',
-                godtoolsToolParser : libs.versions.godtoolsMpp.get(),
-                grpc               : '1.42.1',
-                gtoSupport         : libs.versions.gtoSupport.get(),
-                hamcrest           : '2.2',
-                jacoco             : '0.8.7',
-                junit              : '4.13.2',
-                kotlin             : '1.6.0',
-                leakcanary         : '2.7',
-                lottie             : libs.versions.lottie.get(),
-                materialDesign     : libs.versions.materialComponents.get(),
-                mockito            : '4.1.0',
-                moshi              : '1.12.0',
-                okhttp3            : libs.versions.okhttp3.get(),
-                okta               : '1.2.1',
-                picasso            : libs.versions.picasso.get(),
-                retrofit2          : libs.versions.retrofit2.get(),
-                robolectric        : '4.7.2',
-                scarlet            : libs.versions.scarlet.get(),
-                splitties          : libs.versions.splitties.get(),
-                weakdelegate       : libs.versions.weakdelegate.get(),
-                youtubeplayer      : libs.versions.youtubePlayer.get(),
-        ]
-        deps.androidX = [
-                activity          : libs.versions.androidx.activity.get(),
-                appCompat         : libs.versions.androidx.appcompat.get(),
-                archCore          : libs.versions.androidx.arch.get(),
-                cardView          : libs.versions.androidx.cardview.get(),
-                collection        : libs.versions.androidx.collection.get(),
-                concurrent        : '1.1.0',
-                constraintLayout  : libs.versions.androidx.constraintlayout.get(),
-                core              : libs.versions.androidx.core.get(),
-                fragment          : libs.versions.androidx.fragment.get(),
-                hilt              : libs.versions.androidx.hilt.get(),
-                lifecycle         : libs.versions.androidx.lifecycle.get(),
-                recyclerView      : libs.versions.androidx.recyclerview.get(),
-                swipeRefreshLayout: libs.versions.androidx.swiperefreshlayout.get(),
-                test              : '1.2.0',
-                testJUnit         : '1.1.3',
-                viewPager2        : libs.versions.androidx.viewpager2.get(),
-                work              : libs.versions.androidx.work.get(),
-        ]
-        deps.firebase = [
-                inAppMessaging: '20.1.1',
-        ]
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
                 attachments         : ['attr-banner', 'attr-banner-about'],
@@ -71,21 +21,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath libs.android.gradle
-        classpath "com.google.dagger:hilt-android-gradle-plugin:${deps.dagger}"
-        classpath 'com.google.firebase:perf-plugin:1.4.0'
-        classpath 'com.google.firebase:firebase-appdistribution-gradle:2.2.0'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.0'
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
+        classpath libs.android.gradlePlugin
+        classpath libs.firebase.appdistribution.gradlePlugin
+        classpath libs.firebase.crashlytics.gradlePlugin
+        classpath libs.firebase.perf.gradlePlugin
+        classpath libs.google.services.gradlePlugin
+        classpath libs.hilt.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
     }
 }
 
 plugins {
-    id "com.vanniktech.android.junit.jacoco" version "0.16.0"
+    alias libs.plugins.grgit
+    alias libs.plugins.junitJacoco
+    alias libs.plugins.ktlint
     id "de.undercouch.download" version "4.1.2" apply false
-    id "org.ajoberstar.grgit" version "4.1.0"
-    id "org.jlleitschuh.gradle.ktlint" version "10.2.0"
 }
 
 version '5.6.2-SNAPSHOT'
@@ -128,23 +78,13 @@ allprojects {
 
     configurations.all { configuration ->
         configuration.resolutionStrategy {
-            force "androidx.annotation:annotation:${libs.versions.androidx.annotation.get()}"
-            force "androidx.lifecycle:lifecycle-viewmodel-ktx:${libs.versions.androidx.lifecycle.get()}"
-            force "com.google.code.findbugs:jsr305:${deps.findbugs}"
-
-            // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
-            //      Remove this override once FIAM depends on v1.30.0+ of grpc
-            //      https://github.com/grpc/grpc-java/pull/6912
-            //      https://jira.cru.org/projects/GT/issues/GT-1122
-            //      https://github.com/firebase/firebase-android-sdk/issues/2642
-            force "io.grpc:grpc-okhttp:${deps.grpc}"
-            force "io.grpc:grpc-protobuf-lite:${deps.grpc}"
-            force "io.grpc:grpc-stub:${deps.grpc}"
+            force libs.androidx.annotation
+            force libs.androidx.lifecycle.viewmodel.ktx
 
             dependencySubstitution {
                 // use the new condensed version of hamcrest
-                substitute module('org.hamcrest:hamcrest-core') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
-                substitute module('org.hamcrest:hamcrest-library') with module("org.hamcrest:hamcrest:${deps.hamcrest}")
+                substitute module('org.hamcrest:hamcrest-core') with module("${libs.hamcrest.get()}")
+                substitute module('org.hamcrest:hamcrest-library') with module("${libs.hamcrest.get()}")
             }
         }
     }
@@ -164,8 +104,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
     apply plugin: 'kotlin-kapt'
 
     dependencies {
-        androidTestImplementation "org.ccci.gto.android.testing:gto-support-okta:${deps.gtoSupport}"
-        testImplementation "org.ccci.gto.android.testing:gto-support-okta:${deps.gtoSupport}"
+        androidTestImplementation libs.gtoSupport.testing.okta
+        testImplementation libs.gtoSupport.testing.okta
     }
 }
 
@@ -236,17 +176,16 @@ subprojects {
 
             dependencies {
                 compileOnly libs.androidx.annotation
-                compileOnly "com.google.code.findbugs:jsr305:${deps.findbugs}"
 
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${deps.kotlin}"
+                implementation libs.kotlin.stdlib
 
                 implementation libs.timber
 
-                testImplementation "androidx.test.ext:junit:${deps.androidX.testJUnit}"
+                testImplementation libs.androidx.test.junit
+                testImplementation libs.junit
+                testImplementation libs.mockito
                 testImplementation libs.mockito.kotlin
-                testImplementation "junit:junit:${deps.junit}"
-                testImplementation "org.mockito:mockito-inline:${deps.mockito}"
-                testImplementation "org.robolectric:robolectric:${deps.robolectric}"
+                testImplementation libs.robolectric
             }
         }
     }
@@ -267,7 +206,7 @@ subprojects {
 
 // jacoco config
 junitJacoco {
-    jacocoVersion = deps.jacoco
+    jacocoVersion = libs.versions.jacoco.get()
     includeNoLocationClasses = true
 }
 allprojects {

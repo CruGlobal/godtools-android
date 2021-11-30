@@ -26,7 +26,6 @@ dependencies {
     implementation(project(":library:model"))
     implementation(project(":library:sync"))
 
-    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
