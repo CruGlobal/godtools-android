@@ -43,7 +43,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ToolFileManager
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -101,7 +101,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
-    private val fileManager: ToolFileManager,
+    private val fs: ToolFileSystem,
     private val settings: Settings,
     private val translationsApi: TranslationsApi,
     private val coroutineScope: CoroutineScope,
@@ -112,14 +112,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
         eventBus: EventBus,
-        fileManager: ToolFileManager,
+        fs: ToolFileSystem,
         settings: Settings,
         translationsApi: TranslationsApi
     ) : this(
         attachmentsApi,
         dao,
         eventBus,
-        fileManager,
+        fs,
         settings,
         translationsApi,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -217,7 +217,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadAttachment(attachmentId: Long) {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -252,7 +252,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importAttachment(attachmentId: Long, data: InputStream) {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment: Attachment = dao.find(attachmentId) ?: return
@@ -302,7 +302,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
 
         translationsMutex.withLock(key) {
             dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
@@ -321,7 +321,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     suspend fun importTranslation(translation: Translation, zipStream: InputStream, size: Long) {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
@@ -412,16 +412,16 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun detectMissingFiles() {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
 
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // get the set of all downloaded files
-                val files = fileManager.getDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
+                val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
                 // check for missing files
                 Query.select<LocalFile>().get(dao)
-                    .filterNot { files.contains(it.getFile(fileManager)) }
+                    .filterNot { files.contains(it.getFile(fs)) }
                     .forEach { dao.delete(it) }
             }
         }
@@ -429,7 +429,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun cleanFilesystem() {
-        if (!fileManager.createDir()) return
+        if (!fs.exists()) return
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded
@@ -452,11 +452,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     .get(dao)
                     .forEach {
                         dao.delete(it)
-                        it.getFile(fileManager).delete()
+                        it.getFile(fs).delete()
                     }
 
                 // delete any orphaned files
-                fileManager.getDir().listFiles()
+                fs.rootDir().listFiles()
                     ?.filter { dao.find<LocalFile>(it.name) == null }
                     ?.forEach { it.delete() }
             }
@@ -480,6 +480,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
-        withContext(Dispatchers.IO) { localFile.getFile(fileManager).outputStream().use { copyTo(it) } }
+        withContext(Dispatchers.IO) { localFile.getFile(fs).outputStream().use { copyTo(it) } }
     }
 }

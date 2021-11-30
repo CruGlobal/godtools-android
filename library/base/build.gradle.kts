@@ -3,8 +3,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlin.coroutines)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
@@ -15,7 +13,10 @@ dependencies {
 
     implementation(libs.dagger)
     implementation(libs.hilt)
+    implementation(libs.kotlin.coroutines)
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.kotlin.coroutines.test)
 }

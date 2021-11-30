@@ -20,7 +20,6 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ToolFileManager
 import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
@@ -60,7 +59,6 @@ class GodToolsShortcutManagerTest {
 
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
-    private lateinit var fileManager: ToolFileManager
     private lateinit var picasso: Picasso
     private lateinit var settings: Settings
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
@@ -88,12 +86,11 @@ class GodToolsShortcutManagerTest {
         }
         dao = mock()
         eventBus = mock()
-        fileManager = mock()
         picasso = mock()
         settings = mock()
 
         shortcutManager =
-            GodToolsShortcutManager(app, dao, eventBus, fileManager, picasso, settings, coroutineScope, ioDispatcher)
+            GodToolsShortcutManager(app, dao, eventBus, mock(), picasso, settings, coroutineScope, ioDispatcher)
     }
 
     @After

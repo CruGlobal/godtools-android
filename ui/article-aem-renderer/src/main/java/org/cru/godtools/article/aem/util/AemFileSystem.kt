@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.FileSystem
 
 @Singleton
-class AemFileManager @Inject constructor(@ApplicationContext context: Context) : FileManager(context, "aem-resources")
+class AemFileSystem @Inject constructor(@ApplicationContext context: Context) : FileSystem(context, "aem-resources")

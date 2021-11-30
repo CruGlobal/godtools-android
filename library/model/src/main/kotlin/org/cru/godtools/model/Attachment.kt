@@ -3,7 +3,7 @@ package org.cru.godtools.model
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
-import org.cru.godtools.base.FileManager
+import org.cru.godtools.base.FileSystem
 
 private const val JSON_API_TYPE = "attachment"
 private const val JSON_RESOURCE = "resource"
@@ -32,6 +32,6 @@ class Attachment : Base() {
             "$sha256.$extension"
         }
 
-    suspend fun getFile(manager: FileManager) = localFilename?.let { manager.getFile(it) }
-    fun getFileBlocking(manager: FileManager) = localFilename?.let { manager.getFileBlocking(it) }
+    suspend fun getFile(fs: FileSystem) = localFilename?.let { fs.file(it) }
+    fun getFileBlocking(fs: FileSystem) = localFilename?.let { fs.getFileBlocking(it) }
 }

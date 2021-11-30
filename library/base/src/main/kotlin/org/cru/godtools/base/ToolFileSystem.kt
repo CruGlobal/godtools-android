@@ -10,14 +10,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ToolFileManager @Inject internal constructor(@ApplicationContext context: Context) :
-    FileManager(context, "resources") {
+class ToolFileSystem @Inject internal constructor(@ApplicationContext context: Context) :
+    FileSystem(context, "resources") {
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     internal interface Provider {
-        val fileManager: ToolFileManager
+        val fileSystem: ToolFileSystem
     }
 }
 
-val Context.toolFileManager
-    get() = EntryPoints.get(applicationContext, ToolFileManager.Provider::class.java).fileManager
+val Context.toolFileSystem
+    get() = EntryPoints.get(applicationContext, ToolFileSystem.Provider::class.java).fileSystem

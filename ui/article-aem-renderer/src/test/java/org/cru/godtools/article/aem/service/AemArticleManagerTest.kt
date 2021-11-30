@@ -18,7 +18,7 @@ import okhttp3.ResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
-import org.cru.godtools.article.aem.util.AemFileManager
+import org.cru.godtools.article.aem.util.AemFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
@@ -67,7 +67,7 @@ class AemArticleManagerTest {
     private lateinit var aemDb: ArticleRoomDatabase
     private lateinit var api: AemApi
     private lateinit var dao: GodToolsDao
-    private lateinit var fileManager: AemFileManager
+    private lateinit var fs: AemFileSystem
     private lateinit var manifestManager: ManifestManager
     private lateinit var testScope: TestCoroutineScope
 
@@ -85,13 +85,13 @@ class AemArticleManagerTest {
         dao = mock {
             on { getAsFlow(QUERY_ARTICLE_TRANSLATIONS) } doReturn articleTranslationsChannel.consumeAsFlow()
         }
-        fileManager = spy(AemFileManager(mock { on { filesDir } doReturn testDir }))
+        fs = spy(AemFileSystem(mock { on { filesDir } doReturn testDir }))
         manifestManager = mock()
         testScope = TestCoroutineScope().apply { pauseDispatcher() }
 
         articleManager = mock(
             defaultAnswer = CALLS_REAL_METHODS,
-            useConstructor = UseConstructor.withArguments(aemDb, api, dao, fileManager, manifestManager, testScope)
+            useConstructor = UseConstructor.withArguments(aemDb, api, dao, fs, manifestManager, testScope)
         )
     }
 
@@ -204,7 +204,7 @@ class AemArticleManagerTest {
         verify(resourceDao).updateLocalFile(eq(uri), type.capture(), fileName.capture(), date.capture())
         assertEquals(mediaType, type.firstValue)
         assertThat(date.firstValue.time, allOf(greaterThanOrEqualTo(startTime), lessThanOrEqualTo(endTime)))
-        val file = runBlocking { fileManager.getFile(fileName.firstValue) }
+        val file = runBlocking { fs.file(fileName.firstValue) }
         assertArrayEquals(data.toByteArray(), file.readBytes())
     }
 
@@ -270,7 +270,7 @@ class AemArticleManagerTest {
 
     // region cleanupActor
     private fun setupCleanupActor() {
-        runBlocking { whenever(fileManager.createDir()) doReturn true }
+        runBlocking { whenever(fs.exists()) doReturn true }
     }
 
     @Test
@@ -311,11 +311,11 @@ class AemArticleManagerTest {
 
     private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
         val resourceDao = aemDb.resourceDao()
-        verifyBlocking(fileManager, mode) { createDir() }
+        verifyBlocking(fs, mode) { exists() }
         verifyBlocking(resourceDao, mode) { getAll() }
-        verifyBlocking(fileManager, mode) { getDir() }
-        verifyNoMoreInteractions(resourceDao, fileManager)
-        clearInvocations(resourceDao, fileManager)
+        verifyBlocking(fs, mode) { rootDir() }
+        verifyNoMoreInteractions(resourceDao, fs)
+        clearInvocations(resourceDao, fs)
     }
     // endregion cleanupActor
 
