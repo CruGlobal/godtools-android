@@ -8,7 +8,7 @@ import org.ccci.gto.android.common.picasso.material.button.MaterialButtonIconTar
 import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.toolFileSystem
-import org.cru.godtools.tool.model.ImageGravity
+import org.cru.godtools.tool.model.Gravity
 import org.cru.godtools.tool.model.Resource
 
 @BindingAdapter("icon", "iconSize")
@@ -28,7 +28,7 @@ fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {
 }
 
 @BindingAdapter("iconGravity")
-fun MaterialButton.bindIconGravity(gravity: ImageGravity) {
+fun MaterialButton.bindIconGravity(gravity: Gravity) {
     iconGravity = when {
         gravity.isEnd -> ICON_GRAVITY_TEXT_END
         gravity.isStart -> ICON_GRAVITY_TEXT_START
