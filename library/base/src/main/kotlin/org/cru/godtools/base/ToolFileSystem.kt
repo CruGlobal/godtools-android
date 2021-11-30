@@ -2,8 +2,8 @@ package org.cru.godtools.base
 
 import android.content.Context
 import dagger.hilt.EntryPoint
-import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
@@ -20,4 +20,4 @@ class ToolFileSystem @Inject internal constructor(@ApplicationContext context: C
 }
 
 val Context.toolFileSystem
-    get() = EntryPoints.get(applicationContext, ToolFileSystem.Provider::class.java).fileSystem
+    get() = EntryPointAccessors.fromApplication<ToolFileSystem.Provider>(this).fileSystem

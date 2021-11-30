@@ -3,8 +3,8 @@ package org.cru.godtools.dagger.features
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
@@ -25,7 +25,7 @@ object FeaturesModule {
     fun provideBundledContentComponentProvider(
         @ApplicationContext context: Context
     ): FirstNonNullCachingProvider<SplitInstallComponent> {
-        val dependencies = EntryPoints.get(context, BundledContentFeatureDependencies::class.java)
+        val dependencies = EntryPointAccessors.fromApplication<BundledContentFeatureDependencies>(context)
         return FirstNonNullCachingProvider {
             getClassOrNull("org.cru.godtools.feature.bundledcontent.dagger.BundledContentFeatureComponentKt")
                 ?.getDeclaredMethodOrNull("create", BundledContentFeatureDependencies::class.java)
