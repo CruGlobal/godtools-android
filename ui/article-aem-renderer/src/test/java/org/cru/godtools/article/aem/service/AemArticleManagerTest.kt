@@ -176,7 +176,7 @@ class AemArticleManagerTest {
     }
 
     private fun List<Translation>.offerToArticleTranslationsJob() = apply {
-        assertTrue("Unable to trigger articleTranslationsJob", articleTranslationsChannel.offer(this))
+        assertTrue("Unable to trigger articleTranslationsJob", articleTranslationsChannel.trySend(this).isSuccess)
     }
     // endregion Translations
 
@@ -204,7 +204,7 @@ class AemArticleManagerTest {
         verify(resourceDao).updateLocalFile(eq(uri), type.capture(), fileName.capture(), date.capture())
         assertEquals(mediaType, type.firstValue)
         assertThat(date.firstValue.time, allOf(greaterThanOrEqualTo(startTime), lessThanOrEqualTo(endTime)))
-        val file = runBlocking { fs.file(fileName.firstValue) }
+        val file = fs.file(fileName.firstValue)
         assertArrayEquals(data.toByteArray(), file.readBytes())
     }
 

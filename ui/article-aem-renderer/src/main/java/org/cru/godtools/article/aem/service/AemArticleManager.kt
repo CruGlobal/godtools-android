@@ -25,7 +25,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
@@ -264,10 +263,10 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
     private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveOrNull() }
+        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
         while (!channel.isClosedForReceive) {
             cleanOrphanedFiles()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveOrNull() }
+            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
         }
     }
 
@@ -291,7 +290,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     init {
         aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
             override fun onInvalidated(tables: Set<String>) {
-                if (Resource.TABLE_NAME in tables) cleanupActor.offer(RunCleanup)
+                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(RunCleanup)
             }
         })
     }
