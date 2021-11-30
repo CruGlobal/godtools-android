@@ -27,7 +27,6 @@ buildscript {
                 youtubeplayer      : libs.versions.youtubePlayer.get(),
         ]
         deps.androidX = [
-                activity          : libs.versions.androidx.activity.get(),
                 appCompat         : libs.versions.androidx.appcompat.get(),
                 archCore          : libs.versions.androidx.arch.get(),
                 cardView          : libs.versions.androidx.cardview.get(),

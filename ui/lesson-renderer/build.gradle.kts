@@ -9,7 +9,6 @@ android {
 dependencies {
     api(project(":ui:base-tool"))
 
-    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.viewpager2)
 
