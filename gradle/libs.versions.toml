@@ -37,6 +37,7 @@ weakdelegate = "1.0.1"
 youtubePlayer = "10.0.5"
 
 [libraries]
+advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 androidx-activity-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
@@ -61,6 +62,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidx-swiperefreshlayout" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
+androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 appsflyer = { module = "com.appsflyer:af-android-sdk", version = "6.4.3" }
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
@@ -75,6 +77,7 @@ facebook-soloader = { module = "com.facebook.soloader:soloader", version = "0.10
 firebase-core = { module = "com.google.firebase:firebase-core", version = "20.0.0" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
+firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.1.1"
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version = "23.0.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
@@ -82,11 +85,14 @@ godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = 
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
 gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
+gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-fragment = { module = "org.ccci.gto.android:gto-support-androidx-fragment", version.ref = "gtoSupport" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
 gtoSupport-androidx-room = { module = "org.ccci.gto.android:gto-support-androidx-room", version.ref = "gtoSupport" }
 gtoSupport-androidx-viewpager2 = { module = "org.ccci.gto.android:gto-support-androidx-viewpager2", version.ref = "gtoSupport" }
+gtoSupport-androidx-work = { module = "org.ccci.gto.android:gto-support-androidx-work", version.ref = "gtoSupport" }
 gtoSupport-animation = { module = "org.ccci.gto.android:gto-support-animation", version.ref = "gtoSupport" }
+gtoSupport-appcompat = { module = "org.ccci.gto.android:gto-support-appcompat", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
 gtoSupport-core = { module = "org.ccci.gto.android:gto-support-core", version.ref = "gtoSupport" }
@@ -95,16 +101,21 @@ gtoSupport-db = { module = "org.ccci.gto.android:gto-support-db", version.ref = 
 gtoSupport-db-coroutines = { module = "org.ccci.gto.android:gto-support-db-coroutines", version.ref = "gtoSupport" }
 gtoSupport-db-livedata = { module = "org.ccci.gto.android:gto-support-db-livedata", version.ref = "gtoSupport" }
 gtoSupport-eventbus = { module = "org.ccci.gto.android:gto-support-eventbus", version.ref = "gtoSupport" }
+gtoSupport-facebook-flipper = { module = "org.ccci.gto.android:gto-support-facebook-flipper", version.ref = "gtoSupport" }
+gtoSupport-firebase-crashlytics = { module = "org.ccci.gto.android:gto-support-firebase-crashlytics", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
 gtoSupport-jsonapi-retrofit2 = { module = "org.ccci.gto.android:gto-support-jsonapi-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-jsonapi-scarlet = { module = "org.ccci.gto.android:gto-support-jsonapi-scarlet", version.ref = "gtoSupport" }
 gtoSupport-kotlin-coroutines = { module = "org.ccci.gto.android:gto-support-kotlin-coroutines", version.ref = "gtoSupport" }
+gtoSupport-leakcanary = { module = "org.ccci.gto.android:gto-support-leakcanary2", version.ref = "gtoSupport" }
 gtoSupport-lottie = { module = "org.ccci.gto.android:gto-support-lottie", version.ref = "gtoSupport" }
 gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-material-components", version.ref = "gtoSupport" }
+gtoSupport-napier = { module = "org.ccci.gto.android:gto-support-napier", version.ref = "gtoSupport" }
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-recyclerview = { module = "org.ccci.gto.android:gto-support-recyclerview", version.ref = "gtoSupport" }
+gtoSupport-recyclerview-advrecyclerview = { module = "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
@@ -124,10 +135,13 @@ jsoup = { module = "org.jsoup:jsoup", version = "1.14.3" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
+leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+materialBanner = "com.sergivonavi:materialbanner:1.2.0"
 materialComponents = { module = "com.google.android.material:material", version.ref = "materialComponents" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "4.0.0" }
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
+okta = "com.okta.android:okta-oidc-android:1.2.1"
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 picasso-transformations = { module = "jp.wasabeef:picasso-transformations", version = "2.4.0" }
 play-billing = { module = "com.android.billingclient:billing", version = "4.0.0" }
