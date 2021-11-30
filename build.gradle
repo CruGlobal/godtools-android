@@ -9,7 +9,6 @@ buildscript {
                 eventbus           : libs.versions.eventbus.get(),
                 findbugs           : '3.0.2',
                 godtoolsToolParser : libs.versions.godtoolsMpp.get(),
-                grpc               : '1.42.1',
                 gtoSupport         : libs.versions.gtoSupport.get(),
                 hamcrest           : '2.2',
                 jacoco             : '0.8.7',
@@ -131,15 +130,6 @@ allprojects {
             force "androidx.annotation:annotation:${libs.versions.androidx.annotation.get()}"
             force "androidx.lifecycle:lifecycle-viewmodel-ktx:${libs.versions.androidx.lifecycle.get()}"
             force "com.google.code.findbugs:jsr305:${deps.findbugs}"
-
-            // XXX: Force a newer version of grpc to work around an Android R+ crash with the FIAM library.
-            //      Remove this override once FIAM depends on v1.30.0+ of grpc
-            //      https://github.com/grpc/grpc-java/pull/6912
-            //      https://jira.cru.org/projects/GT/issues/GT-1122
-            //      https://github.com/firebase/firebase-android-sdk/issues/2642
-            force "io.grpc:grpc-okhttp:${deps.grpc}"
-            force "io.grpc:grpc-protobuf-lite:${deps.grpc}"
-            force "io.grpc:grpc-stub:${deps.grpc}"
 
             dependencySubstitution {
                 // use the new condensed version of hamcrest
