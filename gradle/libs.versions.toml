@@ -31,7 +31,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.1.0"
 androidx-browser = "androidx.browser:browser:1.4.0"
 androidx-cardview = "androidx.cardview:cardview:1.0.0"
-androidx-collection-ktx = "androidx.collection:collection-ktx:1.1.0"
+androidx-collection-ktx = "androidx.collection:collection-ktx:1.2.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.2"
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
