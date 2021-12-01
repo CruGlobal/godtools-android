@@ -65,7 +65,7 @@ facebook-soloader = "com.facebook.soloader:soloader:0.10.3"
 firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:2.2.0"
 firebase-core = "com.google.firebase:firebase-core:20.0.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
-firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
+firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.1.1"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.0.0"
