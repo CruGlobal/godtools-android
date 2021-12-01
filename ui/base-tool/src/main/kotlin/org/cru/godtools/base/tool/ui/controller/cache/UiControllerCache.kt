@@ -5,7 +5,7 @@ import androidx.core.util.Pools
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.ccci.gto.android.common.app.ApplicationUtils
+import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType.Companion.DEFAULT_VARIATION
 import org.cru.godtools.tool.model.Base
@@ -35,7 +35,7 @@ class UiControllerCache @AssistedInject internal constructor(
     private fun UiControllerType.createController() =
         controllerFactories[this]?.create(parent, parentController) ?: run {
             val e = IllegalArgumentException("Unsupported Content type specified: $this")
-            if (ApplicationUtils.isDebuggable(parent.context)) throw e
+            if (parent.context.isApplicationDebuggable) throw e
             Timber.e(e, "Unsupported Content type specified: %s", toString())
             null
         }
