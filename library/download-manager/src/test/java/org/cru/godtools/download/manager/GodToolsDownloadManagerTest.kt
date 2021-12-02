@@ -246,7 +246,7 @@ class GodToolsDownloadManagerTest {
         argumentCaptor<DownloadProgress> {
             verify(observer, times(2)).onChanged(capture())
 
-            assertEquals(DownloadProgress.INDETERMINATE, firstValue)
+            assertEquals(DownloadProgress(5, 0), firstValue)
             assertEquals(DownloadProgress(5, 10), lastValue)
         }
 
