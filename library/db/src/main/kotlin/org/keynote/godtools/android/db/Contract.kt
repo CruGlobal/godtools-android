@@ -98,7 +98,6 @@ object Contract : BaseContract() {
 
         internal val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_CODE = TABLE.field(COLUMN_CODE)
-        @JvmField
         val FIELD_TYPE = TABLE.field(COLUMN_TYPE)
         val FIELD_BANNER = TABLE.field(COLUMN_BANNER)
         val FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER)
@@ -222,13 +221,11 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_LAST_ACCESSED = "$COLUMN_LAST_ACCESSED INTEGER"
 
         val SQL_JOIN_LANGUAGE = TABLE.join(LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE))
-        @JvmField
         val SQL_JOIN_TOOL = TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
         internal val SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()))
         val SQL_WHERE_PUBLISHED = FIELD_PUBLISHED.eq(true)
-        @JvmField
         val SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true)
         const val SQL_ORDER_BY_VERSION_DESC = "$COLUMN_VERSION DESC"
 

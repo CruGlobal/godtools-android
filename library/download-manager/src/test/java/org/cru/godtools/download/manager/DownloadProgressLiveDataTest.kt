@@ -9,9 +9,8 @@ import org.junit.Rule
 import org.junit.Test
 
 class DownloadProgressLiveDataTest {
-    @Rule
-    @JvmField
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun testInitialProgress() {

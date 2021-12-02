@@ -620,32 +620,23 @@ class PageContentLayout @JvmOverloads constructor(
             const val CHILD_TYPE_CALL_TO_ACTION_TIP = 4
         }
 
-        @JvmField
-        var childType = CHILD_TYPE_UNKNOWN
+        internal var childType = CHILD_TYPE_UNKNOWN
 
         @IdRes
-        @JvmField
-        var cardPaddingViewTop = INVALID_ID_RES
+        internal var cardPaddingViewTop = INVALID_ID_RES
         @IdRes
-        @JvmField
-        var cardPeekViewTop = INVALID_ID_RES
+        internal var cardPeekViewTop = INVALID_ID_RES
         @IdRes
-        @JvmField
-        var cardStackViewTop = INVALID_ID_RES
+        internal var cardStackViewTop = INVALID_ID_RES
 
         @IdRes
-        @JvmField
-        var above = INVALID_ID_RES
+        internal var above = INVALID_ID_RES
 
         // card peek heights
-        @JvmField
-        var cardPaddingOffset = 0
-        @JvmField
-        var cardStackOffset = 0
-        @JvmField
-        var cardPeekOffset = 0
-        @JvmField
-        var siblingStackOffset = 0
+        internal var cardPaddingOffset = 0
+        internal var cardStackOffset = 0
+        internal var cardPeekOffset = 0
+        internal var siblingStackOffset = 0
 
         constructor(c: Context, attrs: AttributeSet?) : super(c, attrs) {
             c.withStyledAttributes(attrs, R.styleable.PageContentLayout_Layout) {
