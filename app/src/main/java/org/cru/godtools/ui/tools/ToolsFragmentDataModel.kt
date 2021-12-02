@@ -35,7 +35,7 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
                 MODE_LESSONS -> constants(Tool.Type.LESSON)
                 else -> constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)
             }
-        )
+        ).and(ToolTable.FIELD_HIDDEN.ne(true))
         if (mode == MODE_ADDED) where = where.and(ToolTable.FIELD_ADDED.eq(true))
         // HACK: disable CYOA tools for release builds
         if (!BuildConfig.DEBUG) where = where.and(ToolTable.FIELD_TYPE.ne(Tool.Type.CYOA))
