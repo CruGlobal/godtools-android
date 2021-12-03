@@ -150,7 +150,7 @@ play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
 play-tagmanager = "com.google.android.gms:play-services-tagmanager:17.0.1"
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 retrofit2-converters-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit2" }
-robolectric = "org.robolectric:robolectric:4.7.2"
+robolectric = "org.robolectric:robolectric:4.7.3"
 rtlViewpager = "com.duolingo.open:rtl-viewpager:2.0.0"
 scarlet = { module = "com.tinder.scarlet:scarlet", version.ref = "scarlet" }
 scarlet-adapters-stream-coroutines = { module = "com.tinder.scarlet:stream-adapter-coroutines", version.ref = "scarlet" }
