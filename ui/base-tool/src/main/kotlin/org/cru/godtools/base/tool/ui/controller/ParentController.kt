@@ -11,13 +11,13 @@ import org.cru.godtools.tool.model.Content
 import org.cru.godtools.tool.model.Parent
 import org.greenrobot.eventbus.EventBus
 
-abstract class ParentController<T> protected constructor(
+abstract class ParentController<T : Parent> protected constructor(
     clazz: KClass<T>,
     root: View,
     parentController: BaseController<*>? = null,
     cacheFactory: UiControllerCache.Factory,
     eventBus: EventBus? = null
-) : BaseController<T>(clazz, root, parentController, eventBus) where T : Parent {
+) : BaseController<T>(clazz, root, parentController, eventBus) {
     // region Lifecycle
     @CallSuper
     override fun onBind() {
