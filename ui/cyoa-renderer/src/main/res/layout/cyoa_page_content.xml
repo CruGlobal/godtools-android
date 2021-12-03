@@ -10,10 +10,10 @@
     </data>
 
     <org.ccci.gto.android.common.widget.HackyNestedScrollView
-        android:id="@+id/initial_page_content"
-        android:layout_marginTop="@{contentInsets.top}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/tool_content_margin"
+        android:layout_marginTop="@{contentInsets.top}"
         android:fillViewport="true"
         android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}">
 
