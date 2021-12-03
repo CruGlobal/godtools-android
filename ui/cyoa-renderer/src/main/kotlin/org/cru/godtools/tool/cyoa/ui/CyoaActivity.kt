@@ -52,7 +52,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     internal val pageFragment
         get() = with(supportFragmentManager) {
             executePendingTransactions()
-            primaryNavigationFragment as? CyoaPageFragment
+            primaryNavigationFragment as? CyoaPageFragment<*>
         }
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
@@ -83,7 +83,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
     private fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
         supportFragmentManager.commit {
-            val fragment = CyoaPageFragment(page.id)
+            val fragment = CyoaContentPageFragment(page.id)
             setReorderingAllowed(true)
             if (addCurrentPageToBackStack) pageFragment?.let { addToBackStack(it.pageId) }
             replace(R.id.page, fragment)
