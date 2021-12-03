@@ -13,6 +13,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DEFAULT_ORDER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER
+import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_HIDDEN
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ORDER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_OVERVIEW_VIDEO
@@ -36,6 +37,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
             COLUMN_DEFAULT_ORDER -> values.put(field, obj.defaultOrder)
             COLUMN_ORDER -> values.put(field, obj.order)
             COLUMN_ADDED -> values.put(field, obj.isAdded)
+            COLUMN_HIDDEN -> values.put(field, obj.isHidden)
             else -> super.mapField(values, field, obj)
         }
     }
@@ -55,5 +57,6 @@ internal object ToolMapper : BaseMapper<Tool>() {
         defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0)
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE)
         isAdded = getBool(c, COLUMN_ADDED, false)
+        isHidden = getBool(c, COLUMN_HIDDEN, false)
     }
 }

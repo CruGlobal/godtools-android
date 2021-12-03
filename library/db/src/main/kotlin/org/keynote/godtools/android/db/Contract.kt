@@ -94,6 +94,7 @@ object Contract : BaseContract() {
         const val COLUMN_DEFAULT_ORDER = "default_order"
         internal const val COLUMN_ORDER = "ordering"
         const val COLUMN_ADDED = "added"
+        const val COLUMN_HIDDEN = "isHidden"
 
         internal val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_CODE = TABLE.field(COLUMN_CODE)
@@ -102,6 +103,7 @@ object Contract : BaseContract() {
         val FIELD_BANNER = TABLE.field(COLUMN_BANNER)
         val FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER)
         val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
+        val FIELD_HIDDEN = TABLE.field(COLUMN_HIDDEN)
         private val FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES)
 
         internal val PROJECTION_ALL = arrayOf(
@@ -118,7 +120,8 @@ object Contract : BaseContract() {
             COLUMN_DETAILS_BANNER,
             COLUMN_DEFAULT_ORDER,
             COLUMN_ORDER,
-            COLUMN_ADDED
+            COLUMN_ADDED,
+            COLUMN_HIDDEN
         )
 
         private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT"
@@ -134,6 +137,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
         private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
         private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
+        private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
@@ -156,6 +160,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_DEFAULT_ORDER,
             SQL_COLUMN_ORDER,
             SQL_COLUMN_ADDED,
+            SQL_COLUMN_HIDDEN,
             SQL_PRIMARY_KEY
         )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
@@ -166,6 +171,8 @@ object Contract : BaseContract() {
         internal const val SQL_V42_ALTER_DEFAULT_ORDER = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DEFAULT_ORDER"
         internal const val SQL_V42_POPULATE_DEFAULT_ORDER = "UPDATE $TABLE_NAME SET $COLUMN_DEFAULT_ORDER = 0"
         internal const val SQL_V43_ALTER_CATEGORY = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_CATEGORY"
+        internal const val SQL_V45_ALTER_HIDDEN = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_HIDDEN"
+        internal const val SQL_V45_POPULATE_HIDDEN = "UPDATE $TABLE_NAME SET $COLUMN_HIDDEN = 0"
         // endregion DB migrations
     }
 
