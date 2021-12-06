@@ -1,5 +1,7 @@
 package org.cru.godtools.analytics.snowplow
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.okta.oidc.net.response.UserInfo
@@ -17,6 +19,7 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
+import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class SnowplowAnalyticsServiceTest {
@@ -24,6 +27,12 @@ class SnowplowAnalyticsServiceTest {
     private lateinit var okhttp: OkHttpClient
     private lateinit var oktaUserProfileProvider: OktaUserProfileProvider
     private val userInfoFlow = MutableSharedFlow<UserInfo?>(replay = 1)
+
+    @Before
+    fun setupShadows() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        Shadows.shadowOf(context.getSystemService(ConnectivityManager::class.java)).setActiveNetworkInfo(null)
+    }
 
     @Before
     fun setupMocks() {
