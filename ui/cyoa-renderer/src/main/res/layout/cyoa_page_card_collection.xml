@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.tool.model.page.PageKt" />
+        <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
+
+        <variable name="page" type="org.cru.godtools.tool.model.page.CardCollectionPage" />
+        <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController" />
+        <variable name="contentInsets" type="LiveData&lt;androidx.core.graphics.Insets&gt;" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{PageKt.getBackgroundColor(page)}">
+
+        <org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cropToPadding="false"
+            android:scaleType="matrix"
+            app:gravity="@{PageKt.getBackgroundImageGravity(page)}"
+            app:picassoFile="@{page.backgroundImage}"
+            app:scaleType="@{PageKt.getBackgroundImageScaleType(page)}"
+            app:visibleIf="@{page.backgroundImage != null}" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</layout>
