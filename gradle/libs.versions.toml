@@ -156,7 +156,7 @@ scarlet = { module = "com.tinder.scarlet:scarlet", version.ref = "scarlet" }
 scarlet-adapters-stream-coroutines = { module = "com.tinder.scarlet:stream-adapter-coroutines", version.ref = "scarlet" }
 scarlet-lifecycle-android = { module = "com.tinder.scarlet:lifecycle-android", version.ref = "scarlet" }
 scarlet-websockets-okhttp = { module = "com.tinder.scarlet:websocket-okhttp", version.ref = "scarlet" }
-snowplow = "com.snowplowanalytics:snowplow-android-tracker:2.2.1"
+snowplow = "com.snowplowanalytics:snowplow-android-tracker:3.0.0"
 splitties-bitflags = { module = "com.louiscad.splitties:splitties-bitflags", version.ref = "splitties" }
 splitties-fragmentargs = { module = "com.louiscad.splitties:splitties-fragmentargs", version.ref = "splitties" }
 splitties-intents = { module = "com.louiscad.splitties:splitties-intents", version.ref = "splitties" }
