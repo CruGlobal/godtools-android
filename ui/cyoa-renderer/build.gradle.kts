@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.materialComponents)
+    implementation(libs.gtoSupport.recyclerview)
 
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
