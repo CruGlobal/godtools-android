@@ -7,11 +7,14 @@ import androidx.lifecycle.LifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlin.math.abs
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
 import org.cru.godtools.tool.model.page.CardCollectionPage
@@ -46,7 +49,21 @@ class CardCollectionPageController @AssistedInject constructor(
     private val adapter = CyoaCardCollectionPageCardDataBindingAdapter()
 
     init {
-        binding.cards.adapter = adapter
+        with(binding.cards) {
+            adapter = this@CardCollectionPageController.adapter
+            offscreenPageLimit = 1
+
+            val gap = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_gap)
+            val peek = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_peek)
+            addItemDecoration(MarginItemDecoration(horizontalMargins = gap + peek))
+            setPageTransformer { p, pos ->
+                val rawScale = 0.25f * pos
+                val scale = 1 - abs(rawScale)
+                p.scaleX = scale
+                p.scaleY = scale
+                p.translationX = (-(2 * peek + gap) * pos) - (rawScale * p.measuredWidth / 2)
+            }
+        }
     }
 
     inner class CyoaCardCollectionPageCardDataBindingAdapter :
