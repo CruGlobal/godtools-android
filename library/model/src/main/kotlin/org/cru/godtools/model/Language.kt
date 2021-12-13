@@ -16,7 +16,6 @@ private const val JSON_NAME = "name"
 @JsonApiType(JSON_API_TYPE_LANGUAGE)
 class Language : Base() {
     companion object {
-        @JvmField
         val INVALID_CODE = Locale("x", "inv")
     }
 

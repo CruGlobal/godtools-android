@@ -14,7 +14,7 @@ class ParagraphController private constructor(
     private val binding: ToolContentParagraphBinding,
     parentController: BaseController<*>,
     cacheFactory: UiControllerCache.Factory
-) : ParentController<Paragraph>(Paragraph::class, binding.content, parentController, cacheFactory) {
+) : ParentController<Paragraph>(Paragraph::class, binding.root, parentController, cacheFactory) {
     @AssistedInject
     internal constructor(
         @Assisted parent: ViewGroup,

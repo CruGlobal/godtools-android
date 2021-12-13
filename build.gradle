@@ -63,7 +63,10 @@ allprojects {
         }
         maven {
             url 'https://jitpack.io'
-            content { includeGroupByRegex 'com\\.github\\..*' }
+            content {
+                includeGroupByRegex 'com\\.github\\..*'
+                excludeGroup 'com.github.ajalt.colormath'
+            }
         }
         google()
         mavenCentral()

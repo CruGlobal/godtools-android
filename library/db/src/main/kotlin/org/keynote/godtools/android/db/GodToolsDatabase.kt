@@ -91,7 +91,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             }
         } catch (e: SQLException) {
             // rethrow exception on debug builds
-            if (context.isApplicationDebuggable()) throw e
+            if (context.isApplicationDebuggable) throw e
 
             // let's try resetting the database instead
             Timber.tag("GodToolsDatabase").e(e, "Error migrating the database")

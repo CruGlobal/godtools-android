@@ -22,7 +22,6 @@ class Translation : Base() {
         const val JSON_LANGUAGE = "language"
         const val DEFAULT_PUBLISHED = false
         const val DEFAULT_VERSION = 0
-        @JvmField
         val DEFAULT_LAST_ACCESSED = Date(0)
     }
 
