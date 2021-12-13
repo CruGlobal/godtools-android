@@ -26,6 +26,8 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.androidx.lifecycle.runtime.testing)
+    testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     kaptTest(libs.hilt.compiler)
 }
