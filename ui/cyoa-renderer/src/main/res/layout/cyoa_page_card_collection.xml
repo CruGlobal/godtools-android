@@ -9,6 +9,7 @@
         <variable name="page" type="org.cru.godtools.tool.model.page.CardCollectionPage" />
         <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController" />
         <variable name="contentInsets" type="LiveData&lt;androidx.core.graphics.Insets&gt;" />
+        <variable name="currentCardIndex" type="LiveData&lt;Integer&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,9 +32,42 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingTop="@{contentInsets.top}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/actions"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/actions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="action_prev,action_next" />
+
+        <ImageView
+            android:id="@+id/action_prev"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="32dp"
+            android:onClick="@{() -> cards.setCurrentItem(cards.getCurrentItem() - 1)}"
+            android:src="@drawable/ic_cyoa_page_cardcollection_nav_prev"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@{PageKt.getControlColor(page)}"
+            app:visibleIf="@{currentCardIndex &gt; 0}" />
+
+        <ImageView
+            android:id="@+id/action_next"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:onClick="@{() -> cards.setCurrentItem(cards.getCurrentItem() + 1)}"
+            android:src="@drawable/ic_cyoa_page_cardcollection_nav_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@{PageKt.getControlColor(page)}"
+            app:visibleIf="@{currentCardIndex &lt; cards.getAdapter().itemCount - 1}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

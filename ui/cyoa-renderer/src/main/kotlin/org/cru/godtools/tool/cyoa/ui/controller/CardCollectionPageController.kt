@@ -9,6 +9,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.math.abs
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
 import org.cru.godtools.base.tool.ui.controller.BaseController
@@ -63,6 +64,8 @@ class CardCollectionPageController @AssistedInject constructor(
                 p.scaleY = scale
                 p.translationX = (-(2 * peek + gap) * pos) - (rawScale * p.measuredWidth / 2)
             }
+
+            binding.currentCardIndex = currentItemLiveData
         }
     }
 
