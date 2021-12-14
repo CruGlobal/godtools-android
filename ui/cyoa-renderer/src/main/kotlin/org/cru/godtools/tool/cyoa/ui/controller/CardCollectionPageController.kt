@@ -78,14 +78,8 @@ class CardCollectionPageController @AssistedInject constructor(
             }
 
         override fun getItemCount() = cards.size
-        override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): CyoaPageCardCollectionCardBinding {
-            return cardControllerFactory.create(parent, this@CardCollectionPageController).binding
-        }
-
-        override fun onViewDataBindingCreated(binding: CyoaPageCardCollectionCardBinding, viewType: Int) {
-            binding.lifecycleOwner = binding.controller?.lifecycleOwner
-        }
-
+        override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
+            cardControllerFactory.create(parent, this@CardCollectionPageController).binding
         override fun onBindViewDataBinding(binding: CyoaPageCardCollectionCardBinding, position: Int) {
             binding.controller?.model = cards[position]
         }
