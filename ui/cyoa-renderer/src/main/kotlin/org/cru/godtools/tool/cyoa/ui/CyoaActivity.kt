@@ -39,6 +39,9 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     }
 
     // region UI
+    override val toolbar get() = binding.appbar
+    override val languageToggle get() = binding.languageToggle
+
     private val pageInsets by viewModels<PageInsets>()
 
     private fun updatePageInsets() {
