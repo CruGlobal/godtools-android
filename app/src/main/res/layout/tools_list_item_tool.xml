@@ -97,7 +97,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/title"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{tool.type.equals(Type.TRACT) &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
             <androidx.appcompat.widget.AppCompatTextView

@@ -136,7 +136,7 @@ class ToolsListItemToolBindingTest {
 
     // region Parallel Language Label
     @Test
-    fun verifyParallelLanguageLabel() {
+    fun `language_parallel - Content`() {
         binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
         binding.executePendingBindings()
 
@@ -145,7 +145,7 @@ class ToolsListItemToolBindingTest {
     }
 
     @Test
-    fun verifyParallelLanguageLabelHiddenIfNoParallelLanguage() {
+    fun `language_parallel - Hidden - No Parallel Language`() {
         binding.parallelLanguage = MutableLiveData(null)
         binding.executePendingBindings()
 
@@ -153,7 +153,7 @@ class ToolsListItemToolBindingTest {
     }
 
     @Test
-    fun verifyParallelLanguageLabelHiddenIfPrimaryTranslationIsTheSameAsParallelLanguage() {
+    fun `language_parallel - Hidden - Primary Translation === Parallel Language`() {
         binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale("es") })
         binding.parallelLanguage = MutableLiveData(language(Locale("es")))
         binding.executePendingBindings()
@@ -162,13 +162,24 @@ class ToolsListItemToolBindingTest {
     }
 
     @Test
-    fun verifyParallelLanguageLabelHiddenIfArticleToolType() {
+    fun `language_parallel - Hidden - Article Tool Type`() {
         tool.type = Tool.Type.ARTICLE
         binding.tool = tool
         binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
+    }
+
+    @Test
+    fun `language_parallel - Visible - Cyoa Tool Type`() {
+        tool.type = Tool.Type.CYOA
+        binding.tool = tool
+        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
+        binding.executePendingBindings()
+
+        assertEquals(View.VISIBLE, binding.languageParallel.visibility)
+        assertEquals("French", binding.languageParallel.text)
     }
     // endregion Parallel Language Label
 

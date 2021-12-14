@@ -37,6 +37,8 @@ class Tool : Base() {
         LESSON(JSON_TYPE_LESSON),
         UNKNOWN(null);
 
+        val supportsParallelLanguage get() = this in setOf(TRACT, CYOA)
+
         companion object {
             val DEFAULT = UNKNOWN
 
