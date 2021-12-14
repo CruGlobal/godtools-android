@@ -10,6 +10,8 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.page.CardCollectionPage
+import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 
 @AndroidEntryPoint
@@ -52,7 +54,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     internal val pageFragment
         get() = with(supportFragmentManager) {
             executePendingTransactions()
-            primaryNavigationFragment as? CyoaPageFragment
+            primaryNavigationFragment as? CyoaPageFragment<*>
         }
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
@@ -82,8 +84,12 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     }
 
     private fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
+        val fragment = when (page) {
+            is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
+            is ContentPage -> CyoaContentPageFragment(page.id)
+            else -> return
+        }
         supportFragmentManager.commit {
-            val fragment = CyoaPageFragment(page.id)
             setReorderingAllowed(true)
             if (addCurrentPageToBackStack) pageFragment?.let { addToBackStack(it.pageId) }
             replace(R.id.page, fragment)

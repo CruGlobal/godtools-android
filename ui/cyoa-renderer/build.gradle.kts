@@ -14,7 +14,9 @@ dependencies {
 
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.viewpager2)
     implementation(libs.gtoSupport.materialComponents)
+    implementation(libs.gtoSupport.recyclerview)
 
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
@@ -24,6 +26,8 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.androidx.lifecycle.runtime.testing)
+    testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     kaptTest(libs.hilt.compiler)
 }
