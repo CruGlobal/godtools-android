@@ -1,10 +1,13 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
+import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
@@ -26,6 +29,20 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         super.onBindingChanged()
         setupBinding()
         updatePageInsets()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            val parentId = activeManifest?.findPage(pageFragment?.pageId)?.parentPage?.id
+            if (parentId != null) {
+                if (supportFragmentManager.backStackEntries.any { it.name == parentId }) {
+                    supportFragmentManager.popBackStack(parentId, POP_BACK_STACK_INCLUSIVE)
+                    return true
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onContentEvent(event: Event) {
