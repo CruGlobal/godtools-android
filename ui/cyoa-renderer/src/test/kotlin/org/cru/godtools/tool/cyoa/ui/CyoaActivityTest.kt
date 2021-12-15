@@ -111,12 +111,10 @@ class CyoaActivityTest {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
                 it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
 
-                assertEquals("page2", it.pageFragment!!.pageId)
-                assertEquals(1, it.supportFragmentManager.backStackEntryCount)
-                assertEquals("page1", it.supportFragmentManager.getBackStackEntryAt(0).name)
                 it.supportFragmentManager.popBackStackImmediate()
-                assertEquals("page1", it.pageFragment!!.pageId)
+                it.assertPageStack("page1")
             }
         }
     }
@@ -132,8 +130,7 @@ class CyoaActivityTest {
                 it.processContentEvent(eventId1.event())
                 it.supportFragmentManager.executePendingTransactions()
 
-                assertEquals("page2", it.pageFragment!!.pageId)
-                assertEquals(0, it.supportFragmentManager.backStackEntryCount)
+                it.assertPageStack("page2")
             }
         }
     }
@@ -149,16 +146,12 @@ class CyoaActivityTest {
                 it.processContentEvent(eventId1.event())
                 it.processContentEvent(eventId2.event())
                 it.supportFragmentManager.executePendingTransactions()
-
-                assertEquals("page3", it.pageFragment!!.pageId)
-                assertEquals(2, it.supportFragmentManager.backStackEntryCount)
-                assertEquals("page1", it.supportFragmentManager.getBackStackEntryAt(0).name)
-                assertEquals("page2", it.supportFragmentManager.getBackStackEntryAt(1).name)
+                it.assertPageStack("page1", "page2", "page3")
 
                 it.supportFragmentManager.popBackStackImmediate()
-                assertEquals("page2", it.pageFragment!!.pageId)
+                it.assertPageStack("page1", "page2")
                 it.supportFragmentManager.popBackStackImmediate()
-                assertEquals("page1", it.pageFragment!!.pageId)
+                it.assertPageStack("page1")
             }
         }
     }
@@ -177,8 +170,7 @@ class CyoaActivityTest {
                 it.processContentEvent(eventId2.event())
                 it.supportFragmentManager.executePendingTransactions()
 
-                assertEquals("page1", it.pageFragment!!.pageId)
-                assertEquals(0, it.supportFragmentManager.backStackEntryCount)
+                it.assertPageStack("page1")
             }
         }
     }
@@ -195,10 +187,17 @@ class CyoaActivityTest {
                 it.processContentEvent(eventId2.event())
                 it.supportFragmentManager.executePendingTransactions()
 
-                assertEquals("page2", it.pageFragment!!.pageId)
-                assertEquals(0, it.supportFragmentManager.backStackEntryCount)
+                it.assertPageStack("page2")
             }
         }
     }
     // endregion checkForPageEvent()
+
+    private fun CyoaActivity.assertPageStack(vararg pages: String) {
+        assertEquals(pages.size - 1, supportFragmentManager.backStackEntryCount)
+        pages.dropLast(1).forEachIndexed { i, page ->
+            assertEquals(page, supportFragmentManager.getBackStackEntryAt(i).name)
+        }
+        assertEquals(pages.last(), pageFragment!!.pageId)
+    }
 }
