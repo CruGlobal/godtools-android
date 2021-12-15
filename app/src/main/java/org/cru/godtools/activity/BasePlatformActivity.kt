@@ -18,6 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
+import com.okta.oidc.AuthenticationPayload
 import com.okta.oidc.clients.BaseAuth.REMOVE_TOKENS
 import com.okta.oidc.clients.BaseAuth.SIGN_OUT_SESSION
 import com.okta.oidc.clients.web.WebAuthClient
@@ -288,7 +289,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     }
 
     private fun launchLogin() {
-        oktaClient.signIn(this, null)
+        oktaClient.signIn(this, AuthenticationPayload.Builder().addParameter("prompt", "login").build())
     }
 
     private fun launchContactUs() {
