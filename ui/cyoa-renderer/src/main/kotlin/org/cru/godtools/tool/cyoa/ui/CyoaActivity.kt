@@ -31,18 +31,9 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         updatePageInsets()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            val parentId = activeManifest?.findPage(pageFragment?.pageId)?.parentPage?.id
-            if (parentId != null) {
-                if (supportFragmentManager.backStackEntries.any { it.name == parentId }) {
-                    supportFragmentManager.popBackStack(parentId, POP_BACK_STACK_INCLUSIVE)
-                    return true
-                }
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when {
+        item.itemId == android.R.id.home && navigateToParentPage() -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onContentEvent(event: Event) {
@@ -70,6 +61,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     // endregion UI
 
     // region Page management
+    private val activePage get() = activeManifest?.findPage(pageFragment?.pageId)
     @VisibleForTesting
     internal val pageFragment
         get() = with(supportFragmentManager) {
@@ -103,7 +95,37 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         }
     }
 
-    private fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
+    @VisibleForTesting
+    internal fun navigateToParentPage(): Boolean {
+        val parent = activePage?.parentPage
+        if (parent != null) {
+            with(supportFragmentManager) {
+                // find closest ancestor that is currently in the back stack
+                val seen = mutableSetOf<String>()
+                var ancestor = parent
+                while (ancestor != null && !seen.contains(ancestor.id)) {
+                    val ancestorId = ancestor.id
+                    if (backStackEntries.any { it.name == ancestorId }) {
+                        popBackStack(ancestorId, POP_BACK_STACK_INCLUSIVE)
+                        if (ancestor !== parent) showPage(parent)
+                        return true
+                    }
+
+                    seen += ancestorId
+                    ancestor = ancestor.parentPage
+                }
+
+                // otherwise pop entire backstack and show parent page as the root page
+                if (backStackEntryCount > 0) popBackStack(getBackStackEntryAt(0).id, POP_BACK_STACK_INCLUSIVE)
+                showPage(parent, false)
+                return true
+            }
+        }
+        return false
+    }
+
+    @VisibleForTesting
+    internal fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
         val fragment = when (page) {
             is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
             is ContentPage -> CyoaContentPageFragment(page.id)

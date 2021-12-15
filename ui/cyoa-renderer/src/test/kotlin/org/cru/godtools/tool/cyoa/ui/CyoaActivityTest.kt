@@ -19,6 +19,8 @@ import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,6 +30,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.whenever
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -55,6 +58,7 @@ class CyoaActivityTest {
     private val page1 = contentPage("page1")
     private val page2 = contentPage("page2")
     private val page3 = contentPage("page3")
+    private val page4 = contentPage("page4")
 
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
@@ -100,6 +104,146 @@ class CyoaActivityTest {
             }
         }
     }
+
+    // region navigateToParentPage()
+    @Test
+    fun `navigateToParentPage() - No Parents`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+
+                // TODO: There isn't a reliable way to ensure that regular up navigation is processed, so for now we use
+                //       the underlying navigateToParentPage() for this test
+//                shadowOf(it).clickMenuItem(android.R.id.home)
+                assertFalse(it.navigateToParentPage())
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Simple`() {
+        whenever(page2.parentPage) doReturn page1
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Skip extra entries`() {
+        whenever(page3.parentPage) doReturn page1
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Parent not in backstack`() {
+        whenever(page3.parentPage) doReturn page2
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Parent not in backstack - Initial page`() {
+        whenever(page1.parentPage) doReturn page2
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("page1")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Parent not in backstack - Grandparent exists`() {
+        whenever(page2.parentPage) doReturn page1
+        whenever(page3.parentPage) doReturn page1
+        whenever(page4.parentPage) doReturn page2
+        manifestEnglish.value = manifest(listOf(page1, page2, page3, page4))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page3)
+                it.showPage(page4)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page3", "page4")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Cycle`() {
+        whenever(page1.parentPage) doReturn page2
+        whenever(page2.parentPage) doReturn page3
+        whenever(page3.parentPage) doReturn page2
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("page1")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page2")
+
+                repeat(3) { _ ->
+                    assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                    it.supportFragmentManager.executePendingTransactions()
+                    it.assertPageStack("page3")
+
+                    assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                    it.supportFragmentManager.executePendingTransactions()
+                    it.assertPageStack("page2")
+                }
+            }
+        }
+    }
+    // endregion Up navigation
 
     // region checkForPageEvent()
     @Test
