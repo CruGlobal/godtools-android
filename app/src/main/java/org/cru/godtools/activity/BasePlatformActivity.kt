@@ -18,7 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
-import com.okta.oidc.OktaAuthenticationActivity
+import com.okta.oidc.AuthenticationPayload
 import com.okta.oidc.clients.BaseAuth.REMOVE_TOKENS
 import com.okta.oidc.clients.BaseAuth.SIGN_OUT_SESSION
 import com.okta.oidc.clients.web.WebAuthClient
@@ -65,15 +65,6 @@ internal val URI_HELP = Uri.parse("https://godtoolsapp.com/faq/")
 internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
 internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
 internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
-private val URI_SIGNUP = Uri.parse(BuildConfig.THEKEY_URI).buildUpon()
-    .appendQueryParameter("response_type", "code")
-    .appendQueryParameter("client_id", BuildConfig.THEKEY_CLIENT_ID)
-    .appendQueryParameter("action", "signup")
-    .appendQueryParameter("scope", "")
-    .appendQueryParameter("redirect_uri", "${BuildConfig.OKTA_AUTH_SCHEME}:/signup")
-    .build()
-
-private const val REQUEST_SIGNUP = 100
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
@@ -146,12 +137,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             startProfileActivity()
             true
         }
-        R.id.action_login -> {
+        R.id.action_login, R.id.action_signup -> {
             launchLogin()
-            true
-        }
-        R.id.action_signup -> {
-            launchSignup()
             true
         }
         R.id.action_logout -> {
@@ -199,13 +186,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         else -> onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_SIGNUP -> if (resultCode == RESULT_OK) launchLogin()
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
     override fun onBackPressed() = when {
@@ -308,15 +288,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         }
     }
 
-    private fun launchSignup() {
-        val intent = Intent(this, OktaAuthenticationActivity::class.java)
-            .putExtra("com.okta.auth.AUTH_URI", URI_SIGNUP)
-            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivityForResult(intent, REQUEST_SIGNUP)
-    }
-
     private fun launchLogin() {
-        oktaClient.signIn(this, null)
+        oktaClient.signIn(this, AuthenticationPayload.Builder().addParameter("prompt", "login").build())
     }
 
     private fun launchContactUs() {
