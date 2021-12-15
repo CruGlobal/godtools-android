@@ -10,8 +10,10 @@ import dagger.assisted.AssistedInject
 import kotlin.math.abs
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
+import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
+import org.ccci.gto.android.common.support.v4.util.IdUtils
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
@@ -42,7 +44,9 @@ class CardCollectionPageController @AssistedInject constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-        adapter.cards = model?.cards.orEmpty()
+        binding.cards.whileMaintainingVisibleCurrentItem {
+            adapter.cards = model?.cards.orEmpty()
+        }
     }
 
 
@@ -71,6 +75,10 @@ class CardCollectionPageController @AssistedInject constructor(
 
     inner class CyoaCardCollectionPageCardDataBindingAdapter :
         SimpleDataBindingAdapter<CyoaPageCardCollectionCardBinding>() {
+        init {
+            setHasStableIds(true)
+        }
+
         var cards = emptyList<Card>()
             set(value) {
                 field = value
@@ -78,6 +86,8 @@ class CardCollectionPageController @AssistedInject constructor(
             }
 
         override fun getItemCount() = cards.size
+        override fun getItemId(position: Int) = IdUtils.convertId(cards[position].id)
+
         override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
             cardControllerFactory.create(parent, this@CardCollectionPageController).binding
         override fun onBindViewDataBinding(binding: CyoaPageCardCollectionCardBinding, position: Int) {
