@@ -73,7 +73,6 @@ allprojects {
         jcenter {
             content {
                 includeModule 'com.duolingo.open', 'rtl-viewpager'
-                includeModule 'com.pierfrancescosoffritti.androidyoutubeplayer', 'core'
                 includeModule 'com.sergivonavi', 'materialbanner'
             }
         }
