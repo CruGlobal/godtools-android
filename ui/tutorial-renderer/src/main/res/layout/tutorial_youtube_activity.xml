@@ -20,7 +20,6 @@
             app:lifecycleOwner="@{lifecycleOwner2}"
             app:autoPlay="@{true}"
             app:recue="@{true}"
-            app:useWebUi="true"
             app:onPlaybackEnded="@{() -> activity.finish()}"
             app:videoId="@{videoId}" />
     </FrameLayout>
