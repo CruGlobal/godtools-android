@@ -15,6 +15,5 @@
         app:lifecycleOwner="@{controller.lifecycleOwner}"
         app:pauseVideoWhen="@{!isVisible}"
         app:recue="@{true}"
-        app:useWebUi="true"
         app:videoId="@{model.videoId}" />
 </layout>

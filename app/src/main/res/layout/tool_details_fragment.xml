@@ -55,11 +55,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:lifecycleOwner="@{fragment.viewLifecycleOwner}"
                     app:recue="@{true}"
-                    app:showFullScreenButton="false"
-                    app:showSeekBar="false"
-                    app:showVideoCurrentTime="false"
-                    app:showVideoDuration="false"
-                    app:showYouTubeButton="false"
                     app:videoId="@{tool.overviewVideo}"
                     app:visibleIf="@{!TextUtils.isEmpty(tool.overviewVideo)}" />
 

@@ -60,7 +60,6 @@
             app:lifecycleOwner="@{lifecycleOwner2}"
             app:pauseVideoWhen="@{!isVisible}"
             app:recue="@{true}"
-            app:useWebUi="true"
             app:videoId="ELRAmQxLqHE" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
