@@ -16,6 +16,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 import org.junit.Assert.assertEquals
@@ -60,6 +61,9 @@ class CyoaActivityTest {
     private val page3 = contentPage("page3")
     private val page4 = contentPage("page4")
 
+    private val cardCollectionPage1 = cardCollectionPage("page1")
+    private val cardCollectionPage2 = cardCollectionPage("page2")
+
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
 
@@ -80,6 +84,12 @@ class CyoaActivityTest {
 
     private fun contentPage(id: String, stubbing: KStubbing<ContentPage>.(ContentPage) -> Unit = {}) =
         mock<ContentPage> {
+            on { this.id } doReturn id
+            stubbing(it)
+        }
+
+    private fun cardCollectionPage(id: String, stubbing: KStubbing<CardCollectionPage>.(CardCollectionPage) -> Unit = {}) =
+        mock<CardCollectionPage> {
             on { this.id } doReturn id
             stubbing(it)
         }
@@ -336,6 +346,126 @@ class CyoaActivityTest {
         }
     }
     // endregion checkForPageEvent()
+
+    // region Update Manifest
+    @Test
+    fun `Update Manifest - page removed - current`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+
+                manifestEnglish.value = manifest(listOf(page1))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - parent`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, page3))
+                it.onBackPressed()
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - multiple`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - current`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - parent`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2, page3))
+                it.onBackPressed()
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - parent & current removed`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+                it.showPage(page3)
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2))
+                it.supportFragmentManager.executePendingTransactions()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+    // endregion Update Manifest
 
     private fun CyoaActivity.assertPageStack(vararg pages: String) {
         assertEquals(pages.size - 1, supportFragmentManager.backStackEntryCount)
