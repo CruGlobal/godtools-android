@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.map
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.graphics.toHsvColor
@@ -40,6 +41,11 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         super.onContentChanged()
         setupLanguageToggle()
     }
+
+    override fun onSetupActionBar() {
+        super.onSetupActionBar()
+        setupActionBarTitle()
+    }
     // endregion Lifecycle
 
     // region Data Model
@@ -67,6 +73,12 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region UI
     override val activeDownloadProgressLiveData get() = dataModel.activeToolDownloadProgress
+
+    private fun setupActionBarTitle() {
+        dataModel.activeLocale.combineWith(dataModel.visibleLocales) { active, locales ->
+            locales.isEmpty() || (locales.size < 2 && locales.contains(active))
+        }.observe(this) { supportActionBar?.setDisplayShowTitleEnabled(it) }
+    }
 
     // region Language Toggle
     protected open val languageToggle: TabLayout? = null

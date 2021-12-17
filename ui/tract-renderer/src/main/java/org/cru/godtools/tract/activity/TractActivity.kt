@@ -103,7 +103,6 @@ class TractActivity :
     @CallSuper
     override fun onSetupActionBar() {
         super.onSetupActionBar()
-        setupActionBarTitle()
         if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(R.drawable.ic_close)
     }
 
@@ -213,12 +212,6 @@ class TractActivity :
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
-    }
-
-    private fun setupActionBarTitle() {
-        dataModel.activeLocale.combineWith(dataModel.visibleLocales) { active, locales ->
-            locales.isEmpty() || (locales.size < 2 && locales.contains(active))
-        }.observe(this) { supportActionBar?.setDisplayShowTitleEnabled(it) }
     }
 
     private fun setupBackground() {
