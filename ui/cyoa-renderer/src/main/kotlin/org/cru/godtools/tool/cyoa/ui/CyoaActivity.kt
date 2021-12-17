@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
+import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
@@ -18,7 +19,8 @@ import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 
 @AndroidEntryPoint
-class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA) {
+class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
+    CyoaPageFragment.InvalidPageListener {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,14 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == android.R.id.home && navigateToParentPage() -> true
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onInvalidPage(fragment: CyoaPageFragment<*>, page: Page?) {
+        if (fragment !== pageFragment) return
+        when (page) {
+            null -> supportFragmentManager.popBackStack()
+            else -> showPage(page, false)
+        }
     }
 
     override fun onContentEvent(event: Event) {
@@ -61,13 +71,13 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     // endregion UI
 
     // region Page management
-    private val activePage get() = activeManifest?.findPage(pageFragment?.pageId)
     @VisibleForTesting
     internal val pageFragment
         get() = with(supportFragmentManager) {
-            executePendingTransactions()
+            if (hasPendingActions) executePendingTransactions()
             primaryNavigationFragment as? CyoaPageFragment<*>
         }
+    private val activePage get() = pageFragment?.page?.value
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
