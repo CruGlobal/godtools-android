@@ -40,9 +40,10 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
     override fun onInvalidPage(fragment: CyoaPageFragment<*>, page: Page?) {
         if (fragment !== pageFragment) return
-        when (page) {
-            null -> supportFragmentManager.popBackStack()
-            else -> showPage(page, false)
+        when {
+            page != null -> showPage(page, false)
+            supportFragmentManager.backStackEntryCount == 0 -> finish()
+            else -> supportFragmentManager.popBackStack()
         }
     }
 

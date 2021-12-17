@@ -343,6 +343,20 @@ class CyoaActivityTest {
     }
 
     @Test
+    fun `Update Manifest - page removed - current - initial`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("page1")
+
+                manifestEnglish.value = manifest(listOf(page2))
+                assertTrue(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
     fun `Update Manifest - page removed - parent`() {
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
 
@@ -355,6 +369,23 @@ class CyoaActivityTest {
                 manifestEnglish.value = manifest(listOf(page1, page3))
                 it.onBackPressed()
                 it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - parent - initial`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+
+                manifestEnglish.value = manifest(listOf(page2))
+                assertFalse(it.isFinishing)
+                it.onBackPressed()
+                assertTrue(it.isFinishing)
             }
         }
     }
