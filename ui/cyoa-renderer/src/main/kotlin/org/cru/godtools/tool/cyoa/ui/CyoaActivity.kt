@@ -38,7 +38,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onInvalidPage(fragment: CyoaPageFragment<*>, page: Page?) {
+    override fun onInvalidPage(fragment: CyoaPageFragment<*, *>, page: Page?) {
         if (fragment !== pageFragment) return
         when {
             page != null -> showPage(page, false)
@@ -76,7 +76,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     internal val pageFragment
         get() = with(supportFragmentManager) {
             if (hasPendingActions) executePendingTransactions()
-            primaryNavigationFragment as? CyoaPageFragment<*>
+            primaryNavigationFragment as? CyoaPageFragment<*, *>
         }
     private val activePage get() = pageFragment?.page?.value
 

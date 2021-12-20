@@ -15,7 +15,7 @@ import org.cru.godtools.tool.cyoa.BR
 import org.cru.godtools.tool.model.page.Page
 import splitties.fragmentargs.arg
 
-abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, page: String?) :
+abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
     BaseFragment<B>(layoutId) {
     private val dataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
     internal val toolState by activityViewModels<ToolStateHolder>()
@@ -53,7 +53,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, p
 
     // region InvalidPageListener
     fun interface InvalidPageListener {
-        fun onInvalidPage(fragment: CyoaPageFragment<*>, page: Page?)
+        fun onInvalidPage(fragment: CyoaPageFragment<*, *>, page: Page?)
     }
 
     internal abstract fun supportsPage(page: Page): Boolean
@@ -64,7 +64,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, p
     // endregion InvalidPageListener
 
     // region Controller
-    protected var controller: BaseController<*>? = null
+    protected var controller: C? = null
 
     protected open fun setupPageController(binding: B) = Unit
     protected open fun cleanupPageController() {
