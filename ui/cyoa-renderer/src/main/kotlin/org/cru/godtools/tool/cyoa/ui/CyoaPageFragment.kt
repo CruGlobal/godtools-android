@@ -5,12 +5,14 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.map
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.tool.cyoa.BR
+import org.cru.godtools.tool.model.page.Page
 import splitties.fragmentargs.arg
 
 abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, page: String?) :
@@ -20,6 +22,11 @@ abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, p
     private val pageInsets by activityViewModels<PageInsets>()
 
     // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        page.observe(this) { triggerInvalidPageListenerIfNeeded(it) }
+    }
+
     override fun onBindingCreated(binding: B, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.setVariable(BR.contentInsets, pageInsets.insets)
@@ -43,6 +50,18 @@ abstract class CyoaPageFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int, p
     init {
         page?.let { pageId = page }
     }
+
+    // region InvalidPageListener
+    fun interface InvalidPageListener {
+        fun onInvalidPage(fragment: CyoaPageFragment<*>, page: Page?)
+    }
+
+    internal abstract fun supportsPage(page: Page): Boolean
+
+    private fun triggerInvalidPageListenerIfNeeded(page: Page?) {
+        if (page == null || !supportsPage(page)) findListener<InvalidPageListener>()?.onInvalidPage(this, page)
+    }
+    // endregion InvalidPageListener
 
     // region Controller
     protected var controller: BaseController<*>? = null

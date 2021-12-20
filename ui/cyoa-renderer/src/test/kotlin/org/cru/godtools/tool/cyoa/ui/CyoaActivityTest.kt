@@ -16,6 +16,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 import org.junit.Assert.assertEquals
@@ -60,6 +61,9 @@ class CyoaActivityTest {
     private val page3 = contentPage("page3")
     private val page4 = contentPage("page4")
 
+    private val cardCollectionPage1 = cardCollectionPage("page1")
+    private val cardCollectionPage2 = cardCollectionPage("page2")
+
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
 
@@ -80,6 +84,12 @@ class CyoaActivityTest {
 
     private fun contentPage(id: String, stubbing: KStubbing<ContentPage>.(ContentPage) -> Unit = {}) =
         mock<ContentPage> {
+            on { this.id } doReturn id
+            stubbing(it)
+        }
+
+    private fun cardCollectionPage(id: String, stubbing: KStubbing<CardCollectionPage>.(CardCollectionPage) -> Unit = {}) =
+        mock<CardCollectionPage> {
             on { this.id } doReturn id
             stubbing(it)
         }
@@ -113,7 +123,6 @@ class CyoaActivityTest {
         scenario {
             it.onActivity {
                 it.showPage(page2)
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2")
 
                 // TODO: There isn't a reliable way to ensure that regular up navigation is processed, so for now we use
@@ -132,11 +141,9 @@ class CyoaActivityTest {
         scenario {
             it.onActivity {
                 it.showPage(page2)
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1")
             }
         }
@@ -151,11 +158,9 @@ class CyoaActivityTest {
             it.onActivity {
                 it.showPage(page2)
                 it.showPage(page3)
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2", "page3")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1")
             }
         }
@@ -169,11 +174,9 @@ class CyoaActivityTest {
         scenario {
             it.onActivity {
                 it.showPage(page3)
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page3")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page2")
             }
         }
@@ -189,7 +192,6 @@ class CyoaActivityTest {
                 it.assertPageStack("page1")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page2")
             }
         }
@@ -206,11 +208,9 @@ class CyoaActivityTest {
             it.onActivity {
                 it.showPage(page3)
                 it.showPage(page4)
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page3", "page4")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2")
             }
         }
@@ -228,16 +228,13 @@ class CyoaActivityTest {
                 it.assertPageStack("page1")
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page2")
 
                 repeat(3) { _ ->
                     assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                    it.supportFragmentManager.executePendingTransactions()
                     it.assertPageStack("page3")
 
                     assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
-                    it.supportFragmentManager.executePendingTransactions()
                     it.assertPageStack("page2")
                 }
             }
@@ -254,7 +251,6 @@ class CyoaActivityTest {
         scenario {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2")
 
                 it.supportFragmentManager.popBackStackImmediate()
@@ -272,8 +268,6 @@ class CyoaActivityTest {
         scenario {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
-                it.supportFragmentManager.executePendingTransactions()
-
                 it.assertPageStack("page2")
             }
         }
@@ -289,7 +283,6 @@ class CyoaActivityTest {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
                 it.processContentEvent(eventId2.event())
-                it.supportFragmentManager.executePendingTransactions()
                 it.assertPageStack("page1", "page2", "page3")
 
                 it.supportFragmentManager.popBackStackImmediate()
@@ -312,8 +305,6 @@ class CyoaActivityTest {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
                 it.processContentEvent(eventId2.event())
-                it.supportFragmentManager.executePendingTransactions()
-
                 it.assertPageStack("page1")
             }
         }
@@ -329,15 +320,152 @@ class CyoaActivityTest {
             it.onActivity {
                 it.processContentEvent(eventId1.event())
                 it.processContentEvent(eventId2.event())
-                it.supportFragmentManager.executePendingTransactions()
-
                 it.assertPageStack("page2")
             }
         }
     }
     // endregion checkForPageEvent()
 
+    // region Update Manifest
+    @Test
+    fun `Update Manifest - page removed - current`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+
+                manifestEnglish.value = manifest(listOf(page1))
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - current - initial`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("page1")
+
+                manifestEnglish.value = manifest(listOf(page2))
+                assertTrue(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - parent`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.showPage(page3)
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, page3))
+                it.onBackPressed()
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - parent - initial`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+
+                manifestEnglish.value = manifest(listOf(page2))
+                assertFalse(it.isFinishing)
+                it.onBackPressed()
+                assertTrue(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page removed - multiple`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.showPage(page3)
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1))
+                it.assertPageStack("page1")
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - current`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2))
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - parent`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+                it.showPage(page3)
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2, page3))
+                it.onBackPressed()
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+
+    @Test
+    fun `Update Manifest - page type changed - parent & current removed`() {
+        manifestEnglish.value = manifest(listOf(page1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaContentPageFragment)
+
+                it.showPage(page3)
+                it.assertPageStack("page1", "page2", "page3")
+
+                manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2))
+                it.assertPageStack("page1", "page2")
+                assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+            }
+        }
+    }
+    // endregion Update Manifest
+
     private fun CyoaActivity.assertPageStack(vararg pages: String) {
+        supportFragmentManager.executePendingTransactions()
         assertEquals(pages.size - 1, supportFragmentManager.backStackEntryCount)
         pages.dropLast(1).forEachIndexed { i, page ->
             assertEquals(page, supportFragmentManager.getBackStackEntryAt(i).name)
