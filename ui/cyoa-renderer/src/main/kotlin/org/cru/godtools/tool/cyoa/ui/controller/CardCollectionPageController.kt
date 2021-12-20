@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.math.abs
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
+import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
@@ -56,8 +59,8 @@ class CardCollectionPageController @AssistedInject constructor(
     init {
         with(binding.cards) {
             adapter = this@CardCollectionPageController.adapter
-            offscreenPageLimit = 1
 
+            // card peek and scaling effects
             val gap = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_gap)
             val peek = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_peek)
             addItemDecoration(MarginItemDecoration(horizontalMargins = gap + peek))
@@ -68,6 +71,7 @@ class CardCollectionPageController @AssistedInject constructor(
                 p.scaleY = scale
                 p.translationX = (-(2 * peek + gap) * pos) - (rawScale * p.measuredWidth / 2)
             }
+            offscreenPageLimit = 1
 
             binding.currentCardIndex = currentItemLiveData
         }
@@ -79,6 +83,8 @@ class CardCollectionPageController @AssistedInject constructor(
             setHasStableIds(true)
         }
 
+        private var primaryItemObserver: PrimaryItemChangeObserver<*>? = null
+
         var cards = emptyList<Card>()
             set(value) {
                 field = value
@@ -88,11 +94,26 @@ class CardCollectionPageController @AssistedInject constructor(
         override fun getItemCount() = cards.size
         override fun getItemId(position: Int) = IdUtils.convertId(cards[position].id)
 
+        // region Lifecycle
         override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
             cardControllerFactory.create(parent, this@CardCollectionPageController).binding
+
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+            primaryItemObserver = onUpdatePrimaryItem(recyclerView) { primary, previous ->
+                previous?.binding?.controller?.lifecycleOwner?.apply { maxState = minOf(maxState, Lifecycle.State.STARTED) }
+                primary?.binding?.controller?.lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.RESUMED) }
+            }
+        }
+
         override fun onBindViewDataBinding(binding: CyoaPageCardCollectionCardBinding, position: Int) {
             binding.controller?.model = cards[position]
         }
+
+        override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+            primaryItemObserver?.unregister()
+            primaryItemObserver = null
+        }
+        // endregion Lifecycle
     }
     // endregion Cards ViewPager
 
