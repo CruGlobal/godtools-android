@@ -164,7 +164,7 @@ taptargetview = "com.getkeepsafe.taptargetview:taptargetview:1.13.3"
 timber = "com.jakewharton.timber:timber:5.0.1"
 tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
-youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.0"
+youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1"
 
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "4.1.1" }
