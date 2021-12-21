@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "id": "tool_opens",
+      "type": "user-counter",
+      "attributes": {
+        "count": 41,
+        "decayed-count": 26.00076844851781,
+        "last-decay": "2021-12-21"
+      }
+    }
+  ]
+}
