@@ -85,12 +85,14 @@ class CyoaActivityTest {
     private fun contentPage(id: String, stubbing: KStubbing<ContentPage>.(ContentPage) -> Unit = {}) =
         mock<ContentPage> {
             on { this.id } doReturn id
+            on { manifest } doReturn manifest()
             stubbing(it)
         }
 
     private fun cardCollectionPage(id: String, stubbing: KStubbing<CardCollectionPage>.(CardCollectionPage) -> Unit = {}) =
         mock<CardCollectionPage> {
             on { this.id } doReturn id
+            on { manifest } doReturn manifest()
             stubbing(it)
         }
 
