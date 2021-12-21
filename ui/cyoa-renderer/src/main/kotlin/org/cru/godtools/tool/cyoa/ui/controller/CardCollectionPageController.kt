@@ -9,7 +9,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlin.math.abs
+import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.lifecycle.onPause
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
@@ -23,6 +26,7 @@ import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.CardCollectionPage.Card
 import org.cru.godtools.tool.state.State
@@ -44,6 +48,10 @@ class CardCollectionPageController @AssistedInject constructor(
         ): CardCollectionPageController
     }
 
+    init {
+        binding.controller = this
+    }
+
     override fun onBind() {
         super.onBind()
         binding.page = model
@@ -52,9 +60,25 @@ class CardCollectionPageController @AssistedInject constructor(
         }
     }
 
+    // region Analytics Events
+    private var pendingVisibleAnalyticsEvents: List<Job>? = null
+
+    init {
+        lifecycleOwner.lifecycle.apply {
+            onResume {
+                pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
+            }
+            onPause {
+                pendingVisibleAnalyticsEvents?.cancelPendingAnalyticsEvents()
+                triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.HIDDEN))
+            }
+        }
+    }
+    // endregion Analytics Events
 
     // region Cards ViewPager
     private val adapter = CyoaCardCollectionPageCardDataBindingAdapter()
+    internal val currentCard get() = model?.cards?.getOrNull(binding.cards.currentItem)
 
     init {
         with(binding.cards) {
@@ -144,6 +168,22 @@ class CardCollectionPageController @AssistedInject constructor(
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
         }
+
+        // region Analytics Events
+        private var pendingVisibleAnalyticsEvents: List<Job>? = null
+
+        init {
+            lifecycleOwner?.lifecycle?.apply {
+                onResume {
+                    pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
+                }
+                onPause {
+                    pendingVisibleAnalyticsEvents?.cancelPendingAnalyticsEvents()
+                    triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.HIDDEN))
+                }
+            }
+        }
+        // endregion Analytics Events
     }
 }
 
