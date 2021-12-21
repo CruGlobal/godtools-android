@@ -4,6 +4,7 @@ import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.cru.godtools.tool.cyoa.R
+import org.cru.godtools.tool.cyoa.analytics.model.CyoaPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.cyoa.ui.controller.ContentPageController
 import org.cru.godtools.tool.cyoa.ui.controller.bindController
@@ -25,4 +26,11 @@ class CyoaContentPageFragment(
             .also { page.map { it as? ContentPage }.observe(viewLifecycleOwner, it) }
     }
     // endregion Controller
+
+    // region Analytics
+    override fun triggerAnalyticsScreenView() {
+        val page = page.value ?: return
+        eventBus.post(CyoaPageAnalyticsScreenEvent(page))
+    }
+    // endregion Analytics
 }

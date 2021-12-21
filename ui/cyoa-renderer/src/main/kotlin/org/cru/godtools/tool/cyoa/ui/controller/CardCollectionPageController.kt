@@ -78,6 +78,7 @@ class CardCollectionPageController @AssistedInject constructor(
 
     // region Cards ViewPager
     private val adapter = CyoaCardCollectionPageCardDataBindingAdapter()
+    internal val currentCard get() = model?.cards?.getOrNull(binding.cards.currentItem)
 
     init {
         with(binding.cards) {
