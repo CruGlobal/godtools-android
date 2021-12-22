@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.annotation.AnyThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
 import androidx.room.InvalidationTracker
 import java.io.File
 import java.io.IOException
@@ -41,6 +40,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
@@ -74,6 +74,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     private val api: AemApi,
     private val dao: GodToolsDao,
     private val fs: AemFileSystem,
+    private val fileManager: FileManager,
     private val manifestManager: ManifestManager,
     private val coroutineScope: CoroutineScope
 ) {
@@ -83,12 +84,13 @@ class AemArticleManager @VisibleForTesting internal constructor(
         api: AemApi,
         dao: GodToolsDao,
         fs: AemFileSystem,
+        fileManager: FileManager,
         manifestManager: ManifestManager
-    ) : this(aemDb, api, dao, fs, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    ) : this(aemDb, api, dao, fs, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
-    private val filesystemMutex = ReadWriteMutex()
+    private val filesystemMutex get() = fileManager.filesystemMutex
     private val resourceMutex = MutexMap()
 
     // region Deeplinked Article
@@ -265,25 +267,8 @@ class AemArticleManager @VisibleForTesting internal constructor(
     private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
         withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
         while (!channel.isClosedForReceive) {
-            cleanOrphanedFiles()
+            fileManager.removeOrphanedFiles()
             withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
-        }
-    }
-
-    @WorkerThread
-    private suspend fun cleanOrphanedFiles() {
-        if (!fs.exists()) return
-
-        // lock the filesystem before removing any orphaned files
-        filesystemMutex.write.withLock {
-            // determine which files are still being referenced
-            val valid = aemDb.resourceDao().getAll()
-                .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
-
-            // delete any files not referenced
-            fs.rootDir().listFiles()
-                ?.filterNot { it in valid }
-                ?.forEach { it.delete() }
         }
     }
 
@@ -303,6 +288,32 @@ class AemArticleManager @VisibleForTesting internal constructor(
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
+    }
+
+    @Singleton
+    internal class FileManager @Inject constructor(
+        private val fs: AemFileSystem,
+        private val resourceDao: ResourceDao,
+    ) {
+        internal val filesystemMutex = ReadWriteMutex()
+
+        internal suspend fun removeOrphanedFiles() {
+            if (!fs.exists()) return
+
+            // lock the filesystem before removing any orphaned files
+            filesystemMutex.write.withLock {
+                // determine which files are still being referenced
+                val valid = resourceDao.getAll()
+                    .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
+
+                // delete any files not referenced
+                withContext(Dispatchers.IO) {
+                    fs.rootDir().listFiles()
+                        ?.filterNot { it in valid }
+                        ?.forEach { it.delete() }
+                }
+            }
+        }
     }
 }
 

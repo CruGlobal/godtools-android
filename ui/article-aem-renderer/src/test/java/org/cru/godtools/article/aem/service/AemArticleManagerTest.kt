@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
@@ -51,12 +52,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.stub
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.mockito.verification.VerificationMode
 import retrofit2.Response
 
 @RunWith(AndroidJUnit4::class)
@@ -68,6 +67,7 @@ class AemArticleManagerTest {
     private lateinit var api: AemApi
     private lateinit var dao: GodToolsDao
     private lateinit var fs: AemFileSystem
+    private lateinit var fileManager: AemArticleManager.FileManager
     private lateinit var manifestManager: ManifestManager
     private lateinit var testScope: TestCoroutineScope
 
@@ -86,12 +86,16 @@ class AemArticleManagerTest {
             on { getAsFlow(QUERY_ARTICLE_TRANSLATIONS) } doReturn articleTranslationsChannel.consumeAsFlow()
         }
         fs = spy(AemFileSystem(mock { on { filesDir } doReturn testDir }))
+        fileManager = mock {
+            // TODO: this should be temporary until we finish refactoring
+            on { filesystemMutex } doReturn ReadWriteMutex()
+        }
         manifestManager = mock()
         testScope = TestCoroutineScope().apply { pauseDispatcher() }
 
         articleManager = mock(
             defaultAnswer = CALLS_REAL_METHODS,
-            useConstructor = UseConstructor.withArguments(aemDb, api, dao, fs, manifestManager, testScope)
+            useConstructor = UseConstructor.withArguments(aemDb, api, dao, fs, fileManager, manifestManager, testScope)
         )
     }
 
@@ -268,53 +272,39 @@ class AemArticleManagerTest {
     // endregion Download Resource
 
     // region cleanupActor
-    private fun setupCleanupActor() {
-        runBlocking { whenever(fs.exists()) doReturn true }
-    }
-
     @Test
     fun `testCleanupActor - Runs after pre-set delays`() {
-        setupCleanupActor()
-
         testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
-        assertCleanupActorRan(never())
+        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
         testScope.advanceTimeBy(1)
-        assertCleanupActorRan()
+        verifyBlocking(fileManager) { removeOrphanedFiles() }
+        clearInvocations(fileManager)
 
         testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        assertCleanupActorRan(never())
+        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
         testScope.advanceTimeBy(1)
-        assertCleanupActorRan()
+        verifyBlocking(fileManager) { removeOrphanedFiles() }
     }
 
     @Test
     fun `testCleanupActor - Runs after db invalidation`() {
-        setupCleanupActor()
         val captor = argumentCaptor<InvalidationTracker.Observer>()
         verify(aemDb.invalidationTracker).addObserver(captor.capture())
         val observer = captor.firstValue
 
         // multiple invalidations should be conflated to a single invalidation
-        assertCleanupActorRan(never())
+        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
         repeat(10) { observer.onInvalidated(setOf(Resource.TABLE_NAME)) }
         testScope.runCurrent()
-        assertCleanupActorRan()
         assertEquals(0, testScope.currentTime)
+        verifyBlocking(fileManager) { removeOrphanedFiles() }
+        clearInvocations(fileManager)
 
         // any invalidations should reset the cleanup delay counter
         testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        assertCleanupActorRan(never())
+        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
         testScope.advanceTimeBy(1)
-        assertCleanupActorRan()
-    }
-
-    private fun assertCleanupActorRan(mode: VerificationMode = times(1)) {
-        val resourceDao = aemDb.resourceDao()
-        verifyBlocking(fs, mode) { exists() }
-        verifyBlocking(resourceDao, mode) { getAll() }
-        verifyBlocking(fs, mode) { rootDir() }
-        verifyNoMoreInteractions(resourceDao, fs)
-        clearInvocations(resourceDao, fs)
+        verifyBlocking(fileManager) { removeOrphanedFiles() }
     }
     // endregion cleanupActor
 
