@@ -1,7 +1,6 @@
 package org.cru.godtools.article.aem.service
 
 import android.net.Uri
-import androidx.room.InvalidationTracker
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.io.path.ExperimentalPathApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,8 +27,6 @@ import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.UseConstructor
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -194,43 +191,6 @@ class AemArticleManagerTest {
         verifyNoInteractions(api)
     }
     // endregion Download Resource
-
-    // region cleanupActor
-    @Test
-    fun `testCleanupActor - Runs after pre-set delays`() {
-        testScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
-        testScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-        clearInvocations(fileManager)
-
-        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
-        testScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-    }
-
-    @Test
-    fun `testCleanupActor - Runs after db invalidation`() {
-        val captor = argumentCaptor<InvalidationTracker.Observer>()
-        verify(aemDb.invalidationTracker).addObserver(captor.capture())
-        val observer = captor.firstValue
-
-        // multiple invalidations should be conflated to a single invalidation
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
-        repeat(10) { observer.onInvalidated(setOf(Resource.TABLE_NAME)) }
-        testScope.runCurrent()
-        assertEquals(0, testScope.currentTime)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-        clearInvocations(fileManager)
-
-        // any invalidations should reset the cleanup delay counter
-        testScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
-        testScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-    }
-    // endregion cleanupActor
 
     @Test
     fun testRoundTimestamp() {

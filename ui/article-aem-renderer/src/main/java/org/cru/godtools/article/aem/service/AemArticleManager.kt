@@ -213,32 +213,47 @@ class AemArticleManager @VisibleForTesting internal constructor(
     }
     // endregion Download Resource
 
-    // region Cleanup
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
-        while (!channel.isClosedForReceive) {
-            fileManager.removeOrphanedFiles()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
-        }
-    }
-
-    init {
-        aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
-            override fun onInvalidated(tables: Set<String>) {
-                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(Unit)
-            }
-        })
-    }
-    // endregion Cleanup
-
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal suspend fun shutdown() {
         articleTranslationsJob.cancel()
-        cleanupActor.close()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
+    }
+
+    @Singleton
+    internal class Dispatcher(
+        aemDb: ArticleRoomDatabase,
+        fileManager: FileManager,
+        coroutineScope: CoroutineScope
+    ) {
+        @Inject
+        constructor(aemDb: ArticleRoomDatabase, fileManager: FileManager) :
+            this(aemDb, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
+        // region Cleanup
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
+            withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
+            while (!channel.isClosedForReceive) {
+                fileManager.removeOrphanedFiles()
+                withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
+            }
+        }
+
+        init {
+            aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
+                override fun onInvalidated(tables: Set<String>) {
+                    if (Resource.TABLE_NAME in tables) cleanupActor.trySend(Unit)
+                }
+            })
+        }
+        // endregion Cleanup
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal fun shutdown() {
+            cleanupActor.close()
+        }
     }
 
     @Singleton
