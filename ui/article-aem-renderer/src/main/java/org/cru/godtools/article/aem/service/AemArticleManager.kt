@@ -261,10 +261,8 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Download Resource
 
     // region Cleanup
-    private object RunCleanup
-
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
+    private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
         withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
         while (!channel.isClosedForReceive) {
             fileManager.removeOrphanedFiles()
@@ -275,7 +273,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     init {
         aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
             override fun onInvalidated(tables: Set<String>) {
-                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(RunCleanup)
+                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(Unit)
             }
         })
     }
