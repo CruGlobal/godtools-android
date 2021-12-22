@@ -3,16 +3,12 @@ package org.cru.godtools.article.aem.service
 import android.net.Uri
 import androidx.room.InvalidationTracker
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
-import java.util.Date
 import kotlin.io.path.ExperimentalPathApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -20,10 +16,6 @@ import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -169,30 +161,17 @@ class AemArticleManagerTest {
 
     // region Download Resource
     @Test
-    fun testDownloadResource() = runBlocking {
-        val resourceDao = aemDb.resourceDao()
-        val data = "testDownloadResource()"
+    fun testDownloadResource(): Unit = runBlocking {
         val uri = mock<Uri>()
-        val mediaType = "image/jpg".toMediaType()
-        val resource = mock<Resource> { on { needsDownload() } doReturn true }
-        val file = mock<File> { on { name } doReturn "file.ext" }
-        whenever(resourceDao.find(uri)).thenReturn(resource)
-        wheneverDownloadingResource(uri).thenReturn(Response.success(data.toByteArray().toResponseBody(mediaType)))
-        whenever(fileManager.writeFileToDisk(any())) doReturn file
+        val resource = Resource(uri)
+        val response = ByteArray(0).toResponseBody()
+        whenever(aemDb.resourceDao().find(uri)) doReturn resource
+        whenever(api.downloadResource(uri)) doReturn Response.success(response)
 
-        val startTime = System.currentTimeMillis()
         articleManager.downloadResource(uri, false)
-        val endTime = System.currentTimeMillis()
         verify(aemDb.resourceDao()).find(uri)
-        verifyBlocking(api) { downloadResource(uri) }
-
-        val type = argumentCaptor<MediaType>()
-        val fileName = argumentCaptor<String>()
-        val date = argumentCaptor<Date>()
-        verify(resourceDao).updateLocalFile(eq(uri), type.capture(), fileName.capture(), date.capture())
-        assertEquals(mediaType, type.firstValue)
-        assertThat(date.firstValue.time, allOf(greaterThanOrEqualTo(startTime), lessThanOrEqualTo(endTime)))
-        assertEquals("file.ext", fileName.firstValue)
+        verify(api).downloadResource(uri)
+        verify(fileManager).storeResponse(response, resource)
     }
 
     @Test
@@ -214,8 +193,6 @@ class AemArticleManagerTest {
         verify(resource).needsDownload()
         verifyNoInteractions(api)
     }
-
-    private fun wheneverDownloadingResource(uri: Uri = any()) = runBlocking { whenever(api.downloadResource(uri)) }
     // endregion Download Resource
 
     // region cleanupActor

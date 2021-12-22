@@ -1,9 +1,11 @@
 package org.cru.godtools.article.aem.service
 
+import android.net.Uri
 import java.io.File
 import java.security.MessageDigest
 import kotlin.io.path.createTempDirectory
 import kotlinx.coroutines.runBlocking
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.util.AemFileSystem
@@ -17,7 +19,9 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.mockito.Mockito.mockStatic
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
@@ -38,34 +42,37 @@ class AemArticleManagerFileManagerTest {
         testDir.deleteRecursively()
     }
 
-    // region writeFileToDisk()
+    // region storeResponse()
     @Test
-    fun testWriteToDisk() = runBlocking {
+    fun `storeResponse()`() = runBlocking {
         val data = "testWriteToDisk()"
+        val uri = mock<Uri>()
+        val resource = Resource(uri)
 
-        val file = data.byteInputStream().use { fileManager.writeFileToDisk(it)!! }
+        val file = fileManager.storeResponse(data.toByteArray().toResponseBody(), resource)
+        verify(resourceDao).updateLocalFile(eq(uri), anyOrNull(), any(), any())
         assertNotNull(file)
-        assertArrayEquals(data.toByteArray(), file.readBytes())
+        assertArrayEquals(data.toByteArray(), file!!.readBytes())
     }
 
     @Test
-    fun testWriteToDiskDedup() = runBlocking {
+    fun `storeResponse() - Dedup`() = runBlocking {
         val data = "testWriteToDiskDedup()"
 
-        val file1 = data.byteInputStream().use { fileManager.writeFileToDisk(it)!! }
-        val file2 = data.byteInputStream().use { fileManager.writeFileToDisk(it)!! }
+        val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
+        val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
 
         assertEquals(file1, file2)
     }
 
     @Test
-    fun testWriteToDiskNoDedupWithoutDigest() = runBlocking {
+    fun `storeResponse() - No Dedup Without Digest`() = runBlocking {
         mockStatic(MessageDigest::class.java).use {
             it.`when`<MessageDigest?> { MessageDigest.getInstance("SHA-1") } doReturn null
             val data = "testWriteToDiskNoDedupWithoutDigest()"
 
-            val file1 = data.byteInputStream().use { fileManager.writeFileToDisk(it)!! }
-            val file2 = data.byteInputStream().use { fileManager.writeFileToDisk(it)!! }
+            val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
+            val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
 
             assertNotEquals(file1, file2)
             assertNotEquals(file1.name, file2.name)
@@ -73,7 +80,7 @@ class AemArticleManagerFileManagerTest {
             assertThat(file2.name, startsWith("aem-"))
         }
     }
-    // endregion writeFileToDisk()
+    // endregion storeResponse()
 
     // region removeOrphanedFiles()
     @Test

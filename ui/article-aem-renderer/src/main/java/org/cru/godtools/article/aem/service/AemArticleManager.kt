@@ -7,7 +7,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.InvalidationTracker
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection.HTTP_OK
 import java.security.DigestOutputStream
 import java.security.MessageDigest
@@ -32,6 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import okhttp3.ResponseBody
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.db.Query
@@ -195,23 +195,16 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @AnyThread
     suspend fun downloadResource(uri: Uri, force: Boolean) {
-        val resourceDao = aemDb.resourceDao()
-
         resourceMutex.withLock(uri) {
             // short-circuit if the resource doesn't exist or it doesn't need to be downloaded
-            val resource = resourceDao.find(uri)
+            val resource = aemDb.resourceDao().find(uri)
             if (resource == null || (!force && !resource.needsDownload())) return
 
             // download the resource
             withContext(Dispatchers.IO) {
                 try {
-                    api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
-                        response.byteStream().use {
-                            fileManager.writeFileToDisk(it)?.let { file ->
-                                resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
-                            }
-                        }
-                    }
+                    api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()
+                        ?.let { fileManager.storeResponse(it, resource) }
                 } catch (e: IOException) {
                     Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
                 }
@@ -255,7 +248,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     ) {
         private val filesystemMutex = ReadWriteMutex()
 
-        internal suspend fun writeFileToDisk(stream: InputStream): File? {
+        internal suspend fun storeResponse(response: ResponseBody, resource: Resource): File? {
             if (!fs.exists()) return null
 
             // create a MessageDigest to dedup files
@@ -269,9 +262,11 @@ class AemArticleManager @VisibleForTesting internal constructor(
             // lock the file system for writing this resource
             filesystemMutex.read.withLock {
                 // write the stream to a temporary file
-                val tmpFile = fs.createTmpFile("aem-").apply {
-                    (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
-                        .use { stream.copyTo(it) }
+                val tmpFile = response.byteStream().use { stream ->
+                    fs.createTmpFile("aem-").apply {
+                        (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
+                            .use { stream.copyTo(it) }
+                    }
                 }
 
                 // rename temporary file based on digest
@@ -288,6 +283,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                         tmpFile
                     }
                 }
+                resourceDao.updateLocalFile(resource.uri, response.contentType(), output.name, Date())
                 return output
             }
         }
