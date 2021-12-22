@@ -73,7 +73,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
     private val dao: GodToolsDao,
-    private val fs: AemFileSystem,
     private val fileManager: FileManager,
     private val manifestManager: ManifestManager,
     private val coroutineScope: CoroutineScope
@@ -83,14 +82,12 @@ class AemArticleManager @VisibleForTesting internal constructor(
         aemDb: ArticleRoomDatabase,
         api: AemApi,
         dao: GodToolsDao,
-        fs: AemFileSystem,
         fileManager: FileManager,
         manifestManager: ManifestManager
-    ) : this(aemDb, api, dao, fs, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    ) : this(aemDb, api, dao, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
-    private val filesystemMutex get() = fileManager.filesystemMutex
     private val resourceMutex = MutexMap()
 
     // region Deeplinked Article
@@ -210,50 +207,13 @@ class AemArticleManager @VisibleForTesting internal constructor(
                 try {
                     api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
                         response.byteStream().use {
-                            it.writeToDisk()?.let { file ->
+                            fileManager.writeFileToDisk(it)?.let { file ->
                                 resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
                             }
                         }
                     }
                 } catch (e: IOException) {
                     Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
-                }
-            }
-        }
-    }
-
-    @VisibleForTesting
-    internal suspend fun InputStream.writeToDisk(): File? {
-        if (!fs.exists()) return null
-
-        // create a MessageDigest to dedup files
-        val digest = try {
-            MessageDigest.getInstance("SHA-1")
-        } catch (e: NoSuchAlgorithmException) {
-            Timber.tag(TAG).d(e, "Unable to create MessageDigest to dedup AEM resources")
-            null
-        }
-
-        // lock the file system for writing this resource
-        filesystemMutex.read.withLock {
-            // write the stream to a temporary file
-            val tmpFile = fs.createTmpFile("aem-").apply {
-                (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
-                    .use { copyTo(it) }
-            }
-
-            // rename temporary file based on digest
-            val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
-            return when {
-                dedup == null -> tmpFile
-                dedup.exists() -> {
-                    tmpFile.delete()
-                    dedup
-                }
-                tmpFile.renameTo(dedup) -> dedup
-                else -> {
-                    Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
-                    tmpFile
                 }
             }
         }
@@ -293,7 +253,44 @@ class AemArticleManager @VisibleForTesting internal constructor(
         private val fs: AemFileSystem,
         private val resourceDao: ResourceDao,
     ) {
-        internal val filesystemMutex = ReadWriteMutex()
+        private val filesystemMutex = ReadWriteMutex()
+
+        internal suspend fun writeFileToDisk(stream: InputStream): File? {
+            if (!fs.exists()) return null
+
+            // create a MessageDigest to dedup files
+            val digest = try {
+                MessageDigest.getInstance("SHA-1")
+            } catch (e: NoSuchAlgorithmException) {
+                Timber.tag(TAG).d(e, "Unable to create MessageDigest to dedup AEM resources")
+                null
+            }
+
+            // lock the file system for writing this resource
+            filesystemMutex.read.withLock {
+                // write the stream to a temporary file
+                val tmpFile = fs.createTmpFile("aem-").apply {
+                    (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
+                        .use { stream.copyTo(it) }
+                }
+
+                // rename temporary file based on digest
+                val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
+                val output = when {
+                    dedup == null -> tmpFile
+                    dedup.exists() -> {
+                        tmpFile.delete()
+                        dedup
+                    }
+                    tmpFile.renameTo(dedup) -> dedup
+                    else -> {
+                        Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
+                        tmpFile
+                    }
+                }
+                return output
+            }
+        }
 
         internal suspend fun removeOrphanedFiles() {
             if (!fs.exists()) return
