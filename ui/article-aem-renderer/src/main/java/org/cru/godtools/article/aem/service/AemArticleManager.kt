@@ -24,8 +24,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
@@ -64,27 +65,18 @@ internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 private const val CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS
 
 @VisibleForTesting
-internal val QUERY_ARTICLE_TRANSLATIONS = Query.select<Translation>()
+internal val QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS = Query.select<Translation>()
     .join(TranslationTable.SQL_JOIN_TOOL)
     .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
 
 @Singleton
-class AemArticleManager @VisibleForTesting internal constructor(
+class AemArticleManager @Inject internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
-    private val dao: GodToolsDao,
     private val fileManager: FileManager,
-    private val manifestManager: ManifestManager,
-    private val coroutineScope: CoroutineScope
+    private val manifestManager: ManifestManager
 ) {
-    @Inject
-    internal constructor(
-        aemDb: ArticleRoomDatabase,
-        api: AemApi,
-        dao: GodToolsDao,
-        fileManager: FileManager,
-        manifestManager: ManifestManager
-    ) : this(aemDb, api, dao, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
@@ -100,29 +92,28 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Deeplinked Article
 
     // region Translations
-    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
-        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
-    }
-
-    private val articleTranslationsJob = coroutineScope.launch {
+    @VisibleForTesting
+    internal suspend fun processDownloadedTranslations(translations: List<Translation>) = coroutineScope {
         val repository = aemDb.translationRepository()
-        dao.getAsFlow(QUERY_ARTICLE_TRANSLATIONS).conflate().collect { translations ->
-            translations.filterNot { repository.isProcessed(it) }.map { translation ->
-                launch {
-                    manifestManager.getManifest(translation)?.let { manifest ->
-                        repository.addAemImports(translation, manifest.aemImports)
-                        coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
-                    }
+        translations.filterNot { repository.isProcessed(it) }.map { translation ->
+            launch {
+                manifestManager.getManifest(translation)?.let { manifest ->
+                    repository.addAemImports(translation, manifest.aemImports)
+                    coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
                 }
-            }.joinAll()
+            }
+        }.joinAll()
 
-            // prune any translations that we no longer have downloaded.
-            repository.removeMissingTranslations(translations)
-        }
+        // prune any translations that we no longer have downloaded.
+        repository.removeMissingTranslations(translations)
     }
     // endregion Translations
 
     // region AEM Import
+    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
+        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
+    }
+
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
      *
@@ -215,7 +206,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal suspend fun shutdown() {
-        articleTranslationsJob.cancel()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
@@ -223,17 +213,30 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @Singleton
     internal class Dispatcher(
+        aemArticleManager: AemArticleManager,
         aemDb: ArticleRoomDatabase,
+        dao: GodToolsDao,
         fileManager: FileManager,
         coroutineScope: CoroutineScope
     ) {
         @Inject
-        constructor(aemDb: ArticleRoomDatabase, fileManager: FileManager) :
-            this(aemDb, fileManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        constructor(
+            aemArticleManager: AemArticleManager,
+            aemDb: ArticleRoomDatabase,
+            dao: GodToolsDao,
+            fileManager: FileManager
+        ) : this(aemArticleManager, aemDb, dao, fileManager, CoroutineScope(Dispatchers.Default))
+
+        // region Translations
+        private val articleTranslationsJob = dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS).conflate()
+            .onEach { aemArticleManager.processDownloadedTranslations(it) }
+            .launchIn(coroutineScope)
+        // endregion Translations
 
         // region Cleanup
+        @VisibleForTesting
         @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
+        internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
             withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
             while (!channel.isClosedForReceive) {
                 fileManager.removeOrphanedFiles()
@@ -252,6 +255,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
+            articleTranslationsJob.cancel()
             cleanupActor.close()
         }
     }

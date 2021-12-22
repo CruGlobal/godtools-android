@@ -3,16 +3,21 @@ package org.cru.godtools.article.aem.service
 import androidx.room.InvalidationTracker
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
+import org.cru.godtools.model.Translation
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -20,21 +25,37 @@ import org.mockito.kotlin.verifyBlocking
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerDispatcherTest {
+    private val downloadedTranslationsFlow = MutableSharedFlow<List<Translation>>(extraBufferCapacity = 20)
+
+    private val aemArticleManager = mock<AemArticleManager>()
     private val aemDb = mock<ArticleRoomDatabase>(defaultAnswer = RETURNS_DEEP_STUBS)
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
+    private val dao = mock<GodToolsDao> {
+        on { getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS) } doReturn downloadedTranslationsFlow
+    }
     private val fileManager = mock<AemArticleManager.FileManager>()
 
     private lateinit var dispatcher: AemArticleManager.Dispatcher
 
     @Before
     fun setup() {
-        dispatcher = AemArticleManager.Dispatcher(aemDb, fileManager, coroutineScope)
+        dispatcher = AemArticleManager.Dispatcher(aemArticleManager, aemDb, dao, fileManager, coroutineScope)
     }
 
     @After
     fun cleanup() {
         dispatcher.shutdown()
         coroutineScope.cleanupTestCoroutines()
+    }
+
+    @Test
+    fun verifyArticleTranslationsJob() {
+        dispatcher.cleanupActor.close()
+        coroutineScope.resumeDispatcher()
+        val translations = emptyList<Translation>()
+
+        assertTrue(downloadedTranslationsFlow.tryEmit(translations))
+        verifyBlocking(aemArticleManager) { processDownloadedTranslations(translations) }
     }
 
     // region cleanupActor

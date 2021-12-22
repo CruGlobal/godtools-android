@@ -2,12 +2,7 @@ package org.cru.godtools.article.aem.service
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlin.io.path.ExperimentalPathApi
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineScope
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -17,11 +12,9 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.Mockito.CALLS_REAL_METHODS
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.Mockito.verifyNoInteractions
@@ -33,24 +26,18 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import retrofit2.Response
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalPathApi::class)
 class AemArticleManagerTest {
     private lateinit var aemDb: ArticleRoomDatabase
     private lateinit var api: AemApi
-    private lateinit var dao: GodToolsDao
     private lateinit var fileManager: AemArticleManager.FileManager
     private lateinit var manifestManager: ManifestManager
-    private lateinit var testScope: TestCoroutineScope
 
     private lateinit var articleManager: AemArticleManager
-
-    private val articleTranslationsChannel = Channel<List<Translation>>()
 
     @Before
     fun setup() {
@@ -59,29 +46,23 @@ class AemArticleManagerTest {
             onBlocking { resourceDao().getAll() } doReturn emptyList()
         }
         api = mock()
-        dao = mock {
-            on { getAsFlow(QUERY_ARTICLE_TRANSLATIONS) } doReturn articleTranslationsChannel.consumeAsFlow()
-        }
         fileManager = mock()
         manifestManager = mock()
-        testScope = TestCoroutineScope().apply { pauseDispatcher() }
 
         articleManager = mock(
             defaultAnswer = CALLS_REAL_METHODS,
-            useConstructor = UseConstructor.withArguments(aemDb, api, dao, fileManager, manifestManager, testScope)
+            useConstructor = UseConstructor.withArguments(aemDb, api, fileManager, manifestManager)
         )
     }
 
     @After
     fun cleanup() {
-        articleTranslationsChannel.close()
         runBlocking { articleManager.shutdown() }
-        testScope.cleanupTestCoroutines()
     }
 
     // region Translations
     @Test
-    fun testArticleTranslationsJob() {
+    fun `processDownloadedTranslations()`() = runBlocking {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val uri = mock<Uri>()
@@ -89,70 +70,50 @@ class AemArticleManagerTest {
         val repository = aemDb.translationRepository().stub {
             onBlocking { isProcessed(any()) } doReturn false
         }
-        stub {
-            onBlocking { manifestManager.getManifest(translation) } doReturn manifest
-            onBlocking { articleManager.syncAemImportsFromManifest(any(), any()) } doReturn null
-        }
+        whenever(manifestManager.getManifest(translation)) doReturn manifest
+        whenever(articleManager.syncAemImportsFromManifest(any(), any())) doReturn null
 
-        startArticleTranslationsJob()
-        translations.offerToArticleTranslationsJob()
-        testScope.runCurrent()
-
-        verifyBlocking(repository) { isProcessed(translation) }
-        verifyBlocking(manifestManager) { getManifest(translation) }
-        verifyBlocking(repository) { addAemImports(translation, manifest.aemImports) }
-        verifyBlocking(articleManager) { syncAemImportsFromManifest(eq(manifest), any()) }
-        verifyBlocking(repository) { removeMissingTranslations(translations) }
+        articleManager.processDownloadedTranslations(translations)
+        verify(repository).isProcessed(translation)
+        verify(manifestManager).getManifest(translation)
+        verify(repository).addAemImports(translation, manifest.aemImports)
+        verify(articleManager).syncAemImportsFromManifest(eq(manifest), any())
+        verify(repository).removeMissingTranslations(translations)
         verifyNoMoreInteractions(repository)
     }
 
     @Test
-    fun `testArticleTranslationsJob - Don't process translations that have already been processed`() {
+    fun `processDownloadedTranslations() - Don't process already processed translations`() = runBlocking {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
             onBlocking { isProcessed(translation) } doReturn true
         }
 
-        startArticleTranslationsJob()
-        translations.offerToArticleTranslationsJob()
-        testScope.runCurrent()
-
-        verifyBlocking(repository) { isProcessed(translation) }
-        verifyBlocking(repository) { removeMissingTranslations(translations) }
+        articleManager.processDownloadedTranslations(translations)
+        verify(repository).isProcessed(translation)
+        verify(repository).removeMissingTranslations(translations)
         verifyNoInteractions(manifestManager)
+        verify(articleManager, never()).syncAemImportsFromManifest(any(), any())
         verifyNoMoreInteractions(repository)
     }
 
     @Test
-    fun `testArticleTranslationsJob - Don't process translations without a downloaded manifest`() {
+    fun `processDownloadedTranslations() - Don't process translations without a downloaded manifest`() = runBlocking {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
             onBlocking { isProcessed(translation) } doReturn false
         }
-        manifestManager.stub {
-            onBlocking { getManifest(translation) } doReturn null
-        }
+        whenever(manifestManager.getManifest(translation)) doReturn null
 
-        startArticleTranslationsJob()
-        translations.offerToArticleTranslationsJob()
-        testScope.runCurrent()
-
-        verifyBlocking(repository) { isProcessed(translation) }
-        verifyBlocking(manifestManager) { getManifest(translation) }
-        verifyBlocking(repository, never()) { addAemImports(any(), any()) }
-        verifyBlocking(repository) { removeMissingTranslations(translations) }
+        articleManager.processDownloadedTranslations(translations)
+        verify(repository).isProcessed(translation)
+        verify(manifestManager).getManifest(translation)
+        verify(repository, never()).addAemImports(any(), any())
+        verify(articleManager, never()).syncAemImportsFromManifest(any(), any())
+        verify(repository).removeMissingTranslations(translations)
         verifyNoMoreInteractions(repository)
-    }
-
-    private fun startArticleTranslationsJob() {
-        testScope.runCurrent()
-        verify(dao).getAsFlow(QUERY_ARTICLE_TRANSLATIONS)
-    }
-
-    private fun List<Translation>.offerToArticleTranslationsJob() = apply {
-        assertTrue("Unable to trigger articleTranslationsJob", articleTranslationsChannel.trySend(this).isSuccess)
     }
     // endregion Translations
 
