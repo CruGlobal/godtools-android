@@ -143,13 +143,6 @@ class AemArticleManager @Inject internal constructor(
         }
     }
 
-    init {
-        coroutineScope.launch {
-            aemDb.aemImportDao().getAll()
-                .filter { it.isStale() }
-                .forEach { launch { syncAemImport(it.uri, false) } }
-        }
-    }
     // endregion AEM Import
 
     // region Download Article
@@ -233,6 +226,14 @@ class AemArticleManager @Inject internal constructor(
             .launchIn(coroutineScope)
         // endregion Translations
 
+        // region Stale AemImports Refresh
+        private val staleAemImportsJob = coroutineScope.launch {
+            aemDb.aemImportDao().getAll()
+                .filter { it.isStale() }
+                .forEach { launch { aemArticleManager.syncAemImport(it.uri, false) } }
+        }
+        // endregion Stale AemImports Refresh
+
         // region Cleanup
         @VisibleForTesting
         @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
@@ -255,6 +256,7 @@ class AemArticleManager @Inject internal constructor(
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
+            staleAemImportsJob.cancel()
             articleTranslationsJob.cancel()
             cleanupActor.close()
         }

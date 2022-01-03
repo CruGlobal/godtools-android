@@ -28,7 +28,9 @@ class AemArticleManagerDispatcherTest {
     private val downloadedTranslationsFlow = MutableSharedFlow<List<Translation>>(extraBufferCapacity = 20)
 
     private val aemArticleManager = mock<AemArticleManager>()
-    private val aemDb = mock<ArticleRoomDatabase>(defaultAnswer = RETURNS_DEEP_STUBS)
+    private val aemDb = mock<ArticleRoomDatabase>(defaultAnswer = RETURNS_DEEP_STUBS) {
+        onBlocking { aemImportDao().getAll() } doReturn emptyList()
+    }
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
     private val dao = mock<GodToolsDao> {
         on { getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS) } doReturn downloadedTranslationsFlow

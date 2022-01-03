@@ -42,7 +42,6 @@ class AemArticleManagerTest {
     @Before
     fun setup() {
         aemDb = mock(defaultAnswer = RETURNS_DEEP_STUBS) {
-            onBlocking { aemImportDao().getAll() } doReturn emptyList()
             onBlocking { resourceDao().getAll() } doReturn emptyList()
         }
         api = mock()
