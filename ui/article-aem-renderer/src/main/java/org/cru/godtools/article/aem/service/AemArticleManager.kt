@@ -4,11 +4,9 @@ import android.net.Uri
 import androidx.annotation.AnyThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
 import androidx.room.InvalidationTracker
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection.HTTP_OK
 import java.security.DigestOutputStream
 import java.security.MessageDigest
@@ -26,13 +24,15 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import okhttp3.ResponseBody
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.db.Query
@@ -41,6 +41,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
+import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.article.aem.service.support.extractResources
 import org.cru.godtools.article.aem.service.support.findAemArticles
@@ -64,31 +65,21 @@ internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 private const val CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS
 
 @VisibleForTesting
-internal val QUERY_ARTICLE_TRANSLATIONS = Query.select<Translation>()
+internal val QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS = Query.select<Translation>()
     .join(TranslationTable.SQL_JOIN_TOOL)
     .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
 
 @Singleton
-class AemArticleManager @VisibleForTesting internal constructor(
+class AemArticleManager @Inject internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
-    private val dao: GodToolsDao,
-    private val fs: AemFileSystem,
-    private val manifestManager: ManifestManager,
-    private val coroutineScope: CoroutineScope
+    private val fileManager: FileManager,
+    private val manifestManager: ManifestManager
 ) {
-    @Inject
-    internal constructor(
-        aemDb: ArticleRoomDatabase,
-        api: AemApi,
-        dao: GodToolsDao,
-        fs: AemFileSystem,
-        manifestManager: ManifestManager
-    ) : this(aemDb, api, dao, fs, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()
-    private val filesystemMutex = ReadWriteMutex()
     private val resourceMutex = MutexMap()
 
     // region Deeplinked Article
@@ -101,29 +92,28 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Deeplinked Article
 
     // region Translations
-    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
-        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
-    }
-
-    private val articleTranslationsJob = coroutineScope.launch {
+    @VisibleForTesting
+    internal suspend fun processDownloadedTranslations(translations: List<Translation>) = coroutineScope {
         val repository = aemDb.translationRepository()
-        dao.getAsFlow(QUERY_ARTICLE_TRANSLATIONS).conflate().collect { translations ->
-            translations.filterNot { repository.isProcessed(it) }.map { translation ->
-                launch {
-                    manifestManager.getManifest(translation)?.let { manifest ->
-                        repository.addAemImports(translation, manifest.aemImports)
-                        coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
-                    }
+        translations.filterNot { repository.isProcessed(it) }.map { translation ->
+            launch {
+                manifestManager.getManifest(translation)?.let { manifest ->
+                    repository.addAemImports(translation, manifest.aemImports)
+                    coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
                 }
-            }.joinAll()
+            }
+        }.joinAll()
 
-            // prune any translations that we no longer have downloaded.
-            repository.removeMissingTranslations(translations)
-        }
+        // prune any translations that we no longer have downloaded.
+        repository.removeMissingTranslations(translations)
     }
     // endregion Translations
 
     // region AEM Import
+    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
+        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
+    }
+
     /**
      * This method is responsible for syncing an individual AEM Import url to the AEM Article database.
      *
@@ -153,13 +143,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
         }
     }
 
-    init {
-        coroutineScope.launch {
-            aemDb.aemImportDao().getAll()
-                .filter { it.isStale() }
-                .forEach { launch { syncAemImport(it.uri, false) } }
-        }
-    }
     // endregion AEM Import
 
     // region Download Article
@@ -196,113 +179,153 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     @AnyThread
     suspend fun downloadResource(uri: Uri, force: Boolean) {
-        val resourceDao = aemDb.resourceDao()
-
         resourceMutex.withLock(uri) {
             // short-circuit if the resource doesn't exist or it doesn't need to be downloaded
-            val resource = resourceDao.find(uri)
+            val resource = aemDb.resourceDao().find(uri)
             if (resource == null || (!force && !resource.needsDownload())) return
 
             // download the resource
             withContext(Dispatchers.IO) {
                 try {
-                    api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()?.let { response ->
-                        response.byteStream().use {
-                            it.writeToDisk()?.let { file ->
-                                resourceDao.updateLocalFile(uri, response.contentType(), file.name, Date())
-                            }
-                        }
-                    }
+                    api.downloadResource(uri).takeIf { it.code() == HTTP_OK }?.body()
+                        ?.let { fileManager.storeResponse(it, resource) }
                 } catch (e: IOException) {
                     Timber.tag(TAG).d(e, "Error downloading attachment %s", uri)
                 }
             }
         }
     }
-
-    @VisibleForTesting
-    internal suspend fun InputStream.writeToDisk(): File? {
-        if (!fs.exists()) return null
-
-        // create a MessageDigest to dedup files
-        val digest = try {
-            MessageDigest.getInstance("SHA-1")
-        } catch (e: NoSuchAlgorithmException) {
-            Timber.tag(TAG).d(e, "Unable to create MessageDigest to dedup AEM resources")
-            null
-        }
-
-        // lock the file system for writing this resource
-        filesystemMutex.read.withLock {
-            // write the stream to a temporary file
-            val tmpFile = fs.createTmpFile("aem-").apply {
-                (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
-                    .use { copyTo(it) }
-            }
-
-            // rename temporary file based on digest
-            val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
-            return when {
-                dedup == null -> tmpFile
-                dedup.exists() -> {
-                    tmpFile.delete()
-                    dedup
-                }
-                tmpFile.renameTo(dedup) -> dedup
-                else -> {
-                    Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
-                    tmpFile
-                }
-            }
-        }
-    }
     // endregion Download Resource
-
-    // region Cleanup
-    private object RunCleanup
-
-    @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    private val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
-        while (!channel.isClosedForReceive) {
-            cleanOrphanedFiles()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
-        }
-    }
-
-    @WorkerThread
-    private suspend fun cleanOrphanedFiles() {
-        if (!fs.exists()) return
-
-        // lock the filesystem before removing any orphaned files
-        filesystemMutex.write.withLock {
-            // determine which files are still being referenced
-            val valid = aemDb.resourceDao().getAll()
-                .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
-
-            // delete any files not referenced
-            fs.rootDir().listFiles()
-                ?.filterNot { it in valid }
-                ?.forEach { it.delete() }
-        }
-    }
-
-    init {
-        aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
-            override fun onInvalidated(tables: Set<String>) {
-                if (Resource.TABLE_NAME in tables) cleanupActor.trySend(RunCleanup)
-            }
-        })
-    }
-    // endregion Cleanup
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal suspend fun shutdown() {
-        articleTranslationsJob.cancel()
-        cleanupActor.close()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
+    }
+
+    @Singleton
+    internal class Dispatcher(
+        aemArticleManager: AemArticleManager,
+        aemDb: ArticleRoomDatabase,
+        dao: GodToolsDao,
+        fileManager: FileManager,
+        coroutineScope: CoroutineScope
+    ) {
+        @Inject
+        constructor(
+            aemArticleManager: AemArticleManager,
+            aemDb: ArticleRoomDatabase,
+            dao: GodToolsDao,
+            fileManager: FileManager
+        ) : this(aemArticleManager, aemDb, dao, fileManager, CoroutineScope(Dispatchers.Default))
+
+        // region Translations
+        private val articleTranslationsJob = dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS).conflate()
+            .onEach { aemArticleManager.processDownloadedTranslations(it) }
+            .launchIn(coroutineScope)
+        // endregion Translations
+
+        // region Stale AemImports Refresh
+        private val staleAemImportsJob = coroutineScope.launch {
+            aemDb.aemImportDao().getAll()
+                .filter { it.isStale() }
+                .forEach { launch { aemArticleManager.syncAemImport(it.uri, false) } }
+        }
+        // endregion Stale AemImports Refresh
+
+        // region Cleanup
+        @VisibleForTesting
+        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
+            withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
+            while (!channel.isClosedForReceive) {
+                fileManager.removeOrphanedFiles()
+                withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
+            }
+        }
+
+        init {
+            aemDb.invalidationTracker.addObserver(object : InvalidationTracker.Observer(Resource.TABLE_NAME) {
+                override fun onInvalidated(tables: Set<String>) {
+                    if (Resource.TABLE_NAME in tables) cleanupActor.trySend(Unit)
+                }
+            })
+        }
+        // endregion Cleanup
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal fun shutdown() {
+            staleAemImportsJob.cancel()
+            articleTranslationsJob.cancel()
+            cleanupActor.close()
+        }
+    }
+
+    @Singleton
+    internal class FileManager @Inject constructor(
+        private val fs: AemFileSystem,
+        private val resourceDao: ResourceDao,
+    ) {
+        private val filesystemMutex = ReadWriteMutex()
+
+        internal suspend fun storeResponse(response: ResponseBody, resource: Resource): File? {
+            if (!fs.exists()) return null
+
+            // create a MessageDigest to dedup files
+            val digest = try {
+                MessageDigest.getInstance("SHA-1")
+            } catch (e: NoSuchAlgorithmException) {
+                Timber.tag(TAG).d(e, "Unable to create MessageDigest to dedup AEM resources")
+                null
+            }
+
+            // lock the file system for writing this resource
+            filesystemMutex.read.withLock {
+                // write the stream to a temporary file
+                val tmpFile = response.byteStream().use { stream ->
+                    fs.createTmpFile("aem-").apply {
+                        (if (digest != null) DigestOutputStream(outputStream(), digest) else outputStream())
+                            .use { stream.copyTo(it) }
+                    }
+                }
+
+                // rename temporary file based on digest
+                val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
+                val output = when {
+                    dedup == null -> tmpFile
+                    dedup.exists() -> {
+                        tmpFile.delete()
+                        dedup
+                    }
+                    tmpFile.renameTo(dedup) -> dedup
+                    else -> {
+                        Timber.tag(TAG).d("cannot rename tmp file %s to %s", tmpFile, dedup)
+                        tmpFile
+                    }
+                }
+                resourceDao.updateLocalFile(resource.uri, response.contentType(), output.name, Date())
+                return output
+            }
+        }
+
+        internal suspend fun removeOrphanedFiles() {
+            if (!fs.exists()) return
+
+            // lock the filesystem before removing any orphaned files
+            filesystemMutex.write.withLock {
+                // determine which files are still being referenced
+                val valid = resourceDao.getAll()
+                    .mapNotNullTo(mutableSetOf()) { it.getLocalFile(fs) }
+
+                // delete any files not referenced
+                withContext(Dispatchers.IO) {
+                    fs.rootDir().listFiles()
+                        ?.filterNot { it in valid }
+                        ?.forEach { it.delete() }
+                }
+            }
+        }
     }
 }
 
