@@ -63,8 +63,6 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-private const val TAG = "GodToolsDownloadManager"
-
 @VisibleForTesting
 internal const val CLEANUP_DELAY = HOUR_IN_MS
 @VisibleForTesting

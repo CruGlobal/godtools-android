@@ -2,7 +2,8 @@ package org.cru.godtools.base
 
 import android.content.Context
 import java.io.File
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -10,6 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FileSystemTest {
     private lateinit var context: Context
     private val rootDir = File.createTempFile("abc", null).parentFile!!
@@ -25,7 +27,7 @@ class FileSystemTest {
     }
 
     @Test
-    fun testExists() = runBlockingTest {
+    fun testExists() = runTest {
         assertTrue(fileSystem.exists())
         assertEquals(File(rootDir, "resources"), fileSystem.rootDir())
     }

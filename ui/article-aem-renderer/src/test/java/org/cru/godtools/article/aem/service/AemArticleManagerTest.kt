@@ -2,7 +2,9 @@ package org.cru.godtools.article.aem.service
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.api.AemApi
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
@@ -10,7 +12,6 @@ import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -31,11 +32,13 @@ import org.mockito.kotlin.whenever
 import retrofit2.Response
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerTest {
     private lateinit var aemDb: ArticleRoomDatabase
     private lateinit var api: AemApi
     private lateinit var fileManager: AemArticleManager.FileManager
     private lateinit var manifestManager: ManifestManager
+    private val testScope = TestScope()
 
     private lateinit var articleManager: AemArticleManager
 
@@ -50,18 +53,13 @@ class AemArticleManagerTest {
 
         articleManager = mock(
             defaultAnswer = CALLS_REAL_METHODS,
-            useConstructor = UseConstructor.withArguments(aemDb, api, fileManager, manifestManager)
+            useConstructor = UseConstructor.withArguments(aemDb, api, fileManager, manifestManager, testScope)
         )
-    }
-
-    @After
-    fun cleanup() {
-        runBlocking { articleManager.shutdown() }
     }
 
     // region Translations
     @Test
-    fun `processDownloadedTranslations()`() = runBlocking {
+    fun `processDownloadedTranslations()`() = testScope.runTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val uri = mock<Uri>()
@@ -73,6 +71,7 @@ class AemArticleManagerTest {
         whenever(articleManager.syncAemImportsFromManifest(any(), any())) doReturn null
 
         articleManager.processDownloadedTranslations(translations)
+        testScheduler.advanceUntilIdle()
         verify(repository).isProcessed(translation)
         verify(manifestManager).getManifest(translation)
         verify(repository).addAemImports(translation, manifest.aemImports)
@@ -82,7 +81,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `processDownloadedTranslations() - Don't process already processed translations`() = runBlocking {
+    fun `processDownloadedTranslations() - Don't process already processed translations`() = testScope.runTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
@@ -98,7 +97,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `processDownloadedTranslations() - Don't process translations without a downloaded manifest`() = runBlocking {
+    fun `processDownloadedTranslations() - Don't process without a downloaded manifest`() = testScope.runTest {
         val translation = mock<Translation>()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository().stub {
@@ -118,7 +117,7 @@ class AemArticleManagerTest {
 
     // region Download Resource
     @Test
-    fun testDownloadResource(): Unit = runBlocking {
+    fun testDownloadResource() = testScope.runTest {
         val uri = mock<Uri>()
         val resource = Resource(uri)
         val response = ByteArray(0).toResponseBody()
@@ -132,7 +131,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `Don't download resource if it doesn't exist in the database`() = runBlocking {
+    fun `Don't download resource if it doesn't exist in the database`() = testScope.runTest {
         val uri = mock<Uri>()
         articleManager.downloadResource(uri, false)
         verify(aemDb.resourceDao()).find(uri)
@@ -140,7 +139,7 @@ class AemArticleManagerTest {
     }
 
     @Test
-    fun `Don't download resource if it has already been downloaded`() = runBlocking {
+    fun `Don't download resource if it has already been downloaded`() = testScope.runTest {
         val uri = mock<Uri>()
         val resource = mock<Resource> { on { needsDownload() } doReturn false }
         whenever(aemDb.resourceDao().find(uri)).thenReturn(resource)

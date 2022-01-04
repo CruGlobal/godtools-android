@@ -70,13 +70,20 @@ internal val QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS = Query.select<Translation>()
     .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
 
 @Singleton
-class AemArticleManager @Inject internal constructor(
+class AemArticleManager @VisibleForTesting internal constructor(
     private val aemDb: ArticleRoomDatabase,
     private val api: AemApi,
     private val fileManager: FileManager,
-    private val manifestManager: ManifestManager
+    private val manifestManager: ManifestManager,
+    private val coroutineScope: CoroutineScope
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    @Inject
+    internal constructor(
+        aemDb: ArticleRoomDatabase,
+        api: AemApi,
+        fileManager: FileManager,
+        manifestManager: ManifestManager
+    ) : this(aemDb, api, fileManager, manifestManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
     private val aemImportMutex = MutexMap()
     private val articleMutex = MutexMap()

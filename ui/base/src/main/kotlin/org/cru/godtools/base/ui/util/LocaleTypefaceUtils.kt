@@ -12,8 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import java.util.Locale
 import org.cru.godtools.base.ui.R
 
-@OptIn(ExperimentalStdlibApi::class)
-private val typefaces = buildMap<Locale, Int> {
+private val typefaces = buildMap {
     // Sinhala, only needed for Android pre-Marshmallow
     //
     // https://forum.xda-developers.com/android/general/font-sinhala-font-android-5-0-lollipop-t3150536

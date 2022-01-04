@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.viewpager2)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.recyclerview)
+    implementation(libs.gtoSupport.util)
 
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)

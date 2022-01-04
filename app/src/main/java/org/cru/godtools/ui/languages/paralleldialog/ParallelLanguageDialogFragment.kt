@@ -17,7 +17,7 @@ import org.ccci.gto.android.common.androidx.fragment.app.DataBindingDialogFragme
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
@@ -58,7 +58,7 @@ class ParallelLanguageDialogFragment :
 
         // TODO: can this be done in data binding?
         binding.parallelLanguage.setOnItemClickListener { _, _, _, id ->
-            dataModel.selectedLocale.value = IdUtils.convertId(id) as? Locale
+            dataModel.selectedLocale.value = Ids.lookup(id) as? Locale
         }
     }
 
