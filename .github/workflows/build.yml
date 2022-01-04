@@ -87,7 +87,7 @@ jobs:
       - name: Upload QA Build to Firebase
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: :app:packageProductionQaUniversalApk appDistributionUploadProductionQa -PfirebaseAppDistributionBuild
+          arguments: :app:packageProductionQaUniversalApk appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
         env:
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}          
