@@ -102,7 +102,7 @@ android {
                 signingConfig signingConfigs.firebaseAppDistribution
 
                 firebaseAppDistribution {
-                    apkPath = new File(buildDir, 'outputs/universal_apk/productionQa/app-production-qa-universal.apk')
+                    artifactPath = new File(buildDir, 'outputs/universal_apk/productionQa/app-production-qa-universal.apk')
                     releaseNotes = generateFirebaseAppDistributionReleaseNotes()
                     serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json")
                     groups = 'android-testers'
@@ -229,13 +229,13 @@ dependencies {
     kaptTest libs.hilt.compiler
 }
 
-// make crashlytics upload task dependent on the assemble task for all build variants
+// make firebase upload task dependent on the package universal apk task for all build variants
 afterEvaluate {
     android.applicationVariants.all { variant ->
-        def assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
+        def packageTask = project.tasks.getByName("package${variant.name.capitalize()}UniversalApk")
 
         def appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
-        appDistributionTask.dependsOn assembleTask
+        appDistributionTask.dependsOn packageTask
     }
 }
 
