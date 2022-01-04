@@ -151,7 +151,7 @@ class LessonActivity :
     }
 
     private fun checkForPageEvent(event: Event) {
-        val page = dataModel.manifest.value?.lessonPages?.firstOrNull { it.listeners.contains(event.id) }
+        val page = dataModel.manifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
         if (page != null) {
             dataModel.visiblePages += page.id
             dataModel.pages.value?.indexOfFirst { it.id == page.id }?.takeIf { it >= 0 }?.let {
@@ -211,7 +211,7 @@ class LessonActivityDataModel @Inject constructor(
     val visiblePages = SetLiveData<String>(synchronous = true)
 
     val pages = manifest.combineWith(visiblePages) { manifest, visible ->
-        manifest?.lessonPages.orEmpty().filter { !it.isHidden || it.id in visible }
+        manifest?.pages.orEmpty().filterIsInstance<LessonPage>().filter { !it.isHidden || it.id in visible }
     }.distinctUntilChanged()
 
     val pageReached = savedState.getLiveData("pageReached", 0)
