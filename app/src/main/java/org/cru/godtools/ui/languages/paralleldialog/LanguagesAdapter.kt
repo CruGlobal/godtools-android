@@ -3,7 +3,7 @@ package org.cru.godtools.ui.languages.paralleldialog
 import android.content.Context
 import android.widget.Filter
 import org.ccci.gto.android.common.androidx.databinding.widget.DataBindingArrayAdapter
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.R
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.LanguagesParallelDialogItemBinding as ItemBinding
@@ -11,7 +11,7 @@ import org.cru.godtools.model.Language
 
 class LanguagesAdapter(context: Context) :
     DataBindingArrayAdapter<ItemBinding, Language>(context, R.layout.languages_parallel_dialog_item) {
-    override fun getItemId(position: Int) = getItem(position)?.code?.let { IdUtils.convertId(it) } ?: -1
+    override fun getItemId(position: Int) = getItem(position)?.code?.let { Ids.generate(it) } ?: -1
 
     override fun onBindingCreated(binding: ItemBinding) = Unit
     override fun onBind(binding: ItemBinding, position: Int) {

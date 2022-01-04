@@ -19,7 +19,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveDat
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
@@ -116,7 +116,7 @@ class CardCollectionPageController @AssistedInject constructor(
             }
 
         override fun getItemCount() = cards.size
-        override fun getItemId(position: Int) = IdUtils.convertId(cards[position].id)
+        override fun getItemId(position: Int) = Ids.generate(cards[position].id)
 
         // region Lifecycle
         override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =

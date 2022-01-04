@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.databinding.ListItemArticleBinding
 import org.cru.godtools.tool.model.Manifest
@@ -34,7 +34,7 @@ class ArticlesAdapter(
 
     override fun getItemCount() = articles?.size ?: 0
     private fun getItem(position: Int) = articles?.get(position)
-    override fun getItemId(position: Int) = getItem(position)?.uri?.let { IdUtils.convertId(it) } ?: NO_ID
+    override fun getItemId(position: Int) = getItem(position)?.uri?.let { Ids.generate(it) } ?: NO_ID
 
     // region Lifecycle
     override fun onChanged(articles: List<Article>?) {

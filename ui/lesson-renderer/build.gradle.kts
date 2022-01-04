@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.gtoSupport.eventbus)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.recyclerview)
+    implementation(libs.gtoSupport.util)
 
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)

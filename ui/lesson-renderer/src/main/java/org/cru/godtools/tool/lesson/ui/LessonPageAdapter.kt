@@ -11,7 +11,7 @@ import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.tool.lesson.ui.controller.LessonPageController
 import org.cru.godtools.tool.lesson.ui.controller.bindController
@@ -48,7 +48,7 @@ class LessonPageAdapter @AssistedInject internal constructor(
 
     override fun getItemCount() = pages.size
     private fun getItem(position: Int) = pages[position]
-    override fun getItemId(position: Int) = IdUtils.convertId(getItem(position).id)
+    override fun getItemId(position: Int) = Ids.generate(getItem(position).id)
 
     // region Lifecycle
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

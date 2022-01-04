@@ -11,7 +11,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.eventbus.lifecycle.register
-import org.ccci.gto.android.common.support.v4.util.IdUtils
+import org.ccci.gto.android.common.util.Ids
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
@@ -63,9 +63,9 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
     override fun getCount() = manifest?.tractPages?.size ?: 0
     private fun getItem(position: Int) = manifest?.tractPages?.getOrNull(position)
-    override fun getItemId(position: Int) = getItem(position)?.id?.let { IdUtils.convertId(it) } ?: NO_ID
+    override fun getItemId(position: Int) = getItem(position)?.id?.let { Ids.generate(it) } ?: NO_ID
     override fun getItemPositionFromId(id: Long) =
-        manifest?.tractPages?.indexOfFirst { id == IdUtils.convertId(it.id) } ?: PagerAdapter.POSITION_NONE
+        manifest?.tractPages?.indexOfFirst { id == Ids.generate(it.id) } ?: PagerAdapter.POSITION_NONE
 
     private val primaryItemController get() = primaryItemBinding?.controller
     private val primaryItemPage get() = primaryItemController?.model
