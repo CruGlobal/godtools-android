@@ -29,35 +29,36 @@ class LanguagesSyncTasks @Inject internal constructor(
 ) : BaseDataSyncTasks(dao, eventBus) {
     private val languagesMutex = Mutex()
 
-    suspend fun syncLanguages(args: Bundle) = withContext(Dispatchers.IO) {
+    suspend fun syncLanguages(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
         languagesMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
                 System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
             ) return@withContext true
 
-            // fetch & store languages
-            languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body()?.let { json ->
-                dao.transaction {
-                    val existing = dao.get(Query.select<Language>())
-                        .groupingBy { it.code }
-                        .reduce { _, lang1, lang2 ->
-                            Timber.tag("LanguagesSyncTask").d(
-                                RuntimeException("Duplicate Language sync error"),
-                                "Duplicate languages detected: %s %s", lang1, lang2
-                            )
-                            dao.delete(
-                                Language::class.java,
-                                LanguageTable.FIELD_ID.`in`(*constants(lang1.id, lang2.id))
-                            )
-                            lang1
-                        }
-                        .toMutableMap()
-                    storeLanguages(json.data, existing)
-                }
+            // fetch languages from the API
+            val json = languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body() ?: return@withContext false
 
-                dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
-            } ?: return@withContext false
+            // fetch & store languages
+            dao.transaction {
+                val existing = dao.get(Query.select<Language>())
+                    .groupingBy { it.code }
+                    .reduce { _, lang1, lang2 ->
+                        Timber.tag("LanguagesSyncTask").d(
+                            RuntimeException("Duplicate Language sync error"),
+                            "Duplicate languages detected: %s %s", lang1, lang2
+                        )
+                        dao.delete(
+                            Language::class.java,
+                            LanguageTable.FIELD_ID.`in`(*constants(lang1.id, lang2.id))
+                        )
+                        lang1
+                    }
+                    .toMutableMap()
+                storeLanguages(json.data, existing)
+            }
+
+            dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
         }
         return@withContext true
     }

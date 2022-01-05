@@ -22,6 +22,7 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
+import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.greenrobot.eventbus.EventBus
@@ -54,7 +55,9 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         coroutineScope.launch {
             try {
                 when (syncType) {
-                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> { syncLanguages(task.args) }
+                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
+                        if (!syncLanguages(task.args)) workManager.scheduleSyncLanguagesWork()
+                    }
                     SYNCTYPE_TOOLS -> with<ToolSyncTasks> {
                         if (!syncTools(task.args)) workManager.scheduleSyncToolsWork()
                     }
@@ -69,6 +72,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
                 when (syncType) {
+                    SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
                     SYNCTYPE_TOOLS -> workManager.scheduleSyncToolsWork()
                     SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
                     SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
