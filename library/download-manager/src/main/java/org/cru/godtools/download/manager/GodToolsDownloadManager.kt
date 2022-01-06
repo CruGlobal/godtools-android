@@ -8,7 +8,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
+import dagger.Lazy
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
@@ -25,7 +27,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
@@ -44,6 +45,7 @@ import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
@@ -102,6 +104,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val fs: ToolFileSystem,
     private val settings: Settings,
     private val translationsApi: TranslationsApi,
+    private val workManager: Lazy<WorkManager>,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
@@ -112,7 +115,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         eventBus: EventBus,
         fs: ToolFileSystem,
         settings: Settings,
-        translationsApi: TranslationsApi
+        translationsApi: TranslationsApi,
+        workManager: Lazy<WorkManager>
     ) : this(
         attachmentsApi,
         dao,
@@ -120,6 +124,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         fs,
         settings,
         translationsApi,
+        workManager,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
@@ -298,23 +303,28 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
     }
 
-    @VisibleForTesting
-    internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey) {
-        if (!fs.exists()) return
+    internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey): Boolean {
+        require(fs.exists())
 
         translationsMutex.withLock(key) {
-            dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }?.let { trans ->
-                startProgress(key)
-                try {
-                    translationsApi.download(trans.id).takeIf { it.isSuccessful }?.body()?.let { body ->
-                        body.byteStream().extractZipFor(trans, body.contentLength())
-                        pruneStaleTranslations()
-                    }
-                } catch (ignored: IOException) {
-                } finally {
-                    finishDownload(key)
-                }
+            val translation = dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }
+                ?: return true
+
+            startProgress(key)
+            val downloaded = try {
+                val body = translationsApi.download(translation.id).takeIf { it.isSuccessful }?.body()
+                if (body != null) {
+                    body.byteStream().extractZipFor(translation, body.contentLength())
+                    pruneStaleTranslations()
+                    true
+                } else false
+            } catch (e: IOException) {
+                false
+            } finally {
+                finishDownload(key)
             }
+            if (!downloaded) workManager.get().scheduleDownloadTranslationWork(key)
+            return downloaded
         }
     }
 

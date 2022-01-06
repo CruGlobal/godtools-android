@@ -46,7 +46,7 @@ class ToolSyncTasks @Inject internal constructor(
     private val sharesMutex = Mutex()
 
     @AnyThread
-    suspend fun syncTools(args: Bundle) = withContext(Dispatchers.IO) {
+    suspend fun syncTools(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&

@@ -2,7 +2,10 @@ package org.cru.godtools.download.manager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import java.io.File
+import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,6 +15,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -53,6 +57,7 @@ import org.mockito.kotlin.anyVararg
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -67,6 +72,8 @@ import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import retrofit2.Response
 
@@ -88,6 +95,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var fs: ToolFileSystem
     private lateinit var settings: Settings
     private lateinit var translationsApi: TranslationsApi
+    private lateinit var workManager: WorkManager
     private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: GodToolsDownloadManager
@@ -115,10 +123,21 @@ class GodToolsDownloadManagerTest {
         observer = mock()
         settings = mock()
         translationsApi = mock()
+        workManager = mock {
+            on { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } doReturn mock()
+        }
         testScope = TestCoroutineScope()
 
         downloadManager = GodToolsDownloadManager(
-            attachmentsApi, dao, eventBus, fs, settings, translationsApi, testScope, testScope.coroutineContext
+            attachmentsApi,
+            dao,
+            eventBus,
+            fs,
+            settings,
+            translationsApi,
+            { workManager },
+            testScope,
+            testScope.coroutineContext
         )
     }
 
@@ -422,26 +441,23 @@ class GodToolsDownloadManagerTest {
         isDownloaded = false
     }
 
+    // region downloadLatestPublishedTranslation()
     @Test
-    fun verifyDownloadLatestPublishedTranslation() {
+    fun `downloadLatestPublishedTranslation()`() = runTest {
         val files = Array(3) { getTmpFile() }
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
-        dao.stub {
-            on { getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true) } doReturn translation
-        }
+        whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
         fs.stub {
             onBlocking { file("a.txt") } doReturn files[0]
             onBlocking { file("b.txt") } doReturn files[1]
             onBlocking { file("c.txt") } doReturn files[2]
         }
         val response: ResponseBody = mock { on { byteStream() } doReturn getInputStreamForResource("abc.zip") }
-        translationsApi.stub {
-            onBlocking { download(translation.id) } doReturn Response.success(response)
-        }
+        whenever(translationsApi.download(translation.id)) doReturn Response.success(response)
 
-        runBlocking { downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)) }
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        runBlocking { verify(translationsApi).download(translation.id) }
+        verify(translationsApi).download(translation.id)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -454,11 +470,32 @@ class GodToolsDownloadManagerTest {
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
         assertTrue(translation.isDownloaded)
         verify(eventBus).post(TranslationUpdateEvent)
+        verifyNoInteractions(workManager)
         argumentCaptor<DownloadProgress> {
             verify(observer, atLeastOnce()).onChanged(capture())
             assertNull(lastValue)
         }
     }
+
+    @Test
+    fun `downloadLatestPublishedTranslation() - API IOException`() = runTest {
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+        whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
+        whenever(translationsApi.download(translation.id)) doAnswer { throw IOException() }
+        clearInvocations(dao)
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+        verify(translationsApi).download(translation.id)
+        verify(workManager).enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>())
+        verifyNoMoreInteractions(dao)
+        verifyNoInteractions(eventBus)
+        argumentCaptor<DownloadProgress> {
+            verify(observer, atLeastOnce()).onChanged(capture())
+            assertNull(lastValue)
+        }
+    }
+    // endregion downloadLatestPublishedTranslation()
 
     @Test
     fun verifyImportTranslation() {

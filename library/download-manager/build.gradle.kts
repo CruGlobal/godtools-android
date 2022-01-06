@@ -8,6 +8,10 @@ dependencies {
     implementation(project(":library:db"))
     implementation(project(":library:model"))
 
+    api(libs.androidx.hilt.work)
+    api(libs.androidx.work.ktx)
+
+    implementation(libs.gtoSupport.androidx.work)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)

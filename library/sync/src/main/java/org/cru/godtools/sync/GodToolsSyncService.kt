@@ -22,7 +22,9 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
+import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
+import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.greenrobot.eventbus.EventBus
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
@@ -49,11 +51,16 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
+        val syncType = task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)
         coroutineScope.launch {
             try {
-                when (task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
-                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> { syncLanguages(task.args) }
-                    SYNCTYPE_TOOLS -> with<ToolSyncTasks> { syncTools(task.args) }
+                when (syncType) {
+                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
+                        if (!syncLanguages(task.args)) workManager.scheduleSyncLanguagesWork()
+                    }
+                    SYNCTYPE_TOOLS -> with<ToolSyncTasks> {
+                        if (!syncTools(task.args)) workManager.scheduleSyncToolsWork()
+                    }
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
                         if (!syncShares()) workManager.scheduleSyncToolSharesWork()
                     }
@@ -63,7 +70,13 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
                 }
             } catch (e: IOException) {
-                // TODO: should we queue up work tasks here because of the IOException?
+                // queue up work tasks here because of the IOException
+                when (syncType) {
+                    SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
+                    SYNCTYPE_TOOLS -> workManager.scheduleSyncToolsWork()
+                    SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
+                    SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
+                }
             } finally {
                 SyncRegistry.finishSync(syncId)
                 eventBus.post(SyncFinishedEvent(syncId))
