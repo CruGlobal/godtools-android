@@ -147,7 +147,7 @@ play-billing = "com.android.billingclient:billing:4.0.0"
 play-core = "com.google.android.play:core:1.10.2"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
-play-tagmanager = "com.google.android.gms:play-services-tagmanager:18.0.0"
+play-tagmanager = "com.google.android.gms:play-services-tagmanager:18.0.1"
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 retrofit2-converters-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit2" }
 robolectric = "org.robolectric:robolectric:4.7.3"
