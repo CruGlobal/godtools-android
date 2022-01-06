@@ -2,6 +2,7 @@ package org.cru.godtools.download.manager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.work.WorkManager
 import java.io.File
 import java.util.Locale
 import kotlin.random.Random
@@ -88,6 +89,7 @@ class GodToolsDownloadManagerTest {
     private lateinit var fs: ToolFileSystem
     private lateinit var settings: Settings
     private lateinit var translationsApi: TranslationsApi
+    private lateinit var workManager: WorkManager
     private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: GodToolsDownloadManager
@@ -115,10 +117,19 @@ class GodToolsDownloadManagerTest {
         observer = mock()
         settings = mock()
         translationsApi = mock()
+        workManager = mock()
         testScope = TestCoroutineScope()
 
         downloadManager = GodToolsDownloadManager(
-            attachmentsApi, dao, eventBus, fs, settings, translationsApi, testScope, testScope.coroutineContext
+            attachmentsApi,
+            dao,
+            eventBus,
+            fs,
+            settings,
+            translationsApi,
+            { workManager },
+            testScope,
+            testScope.coroutineContext
         )
     }
 
