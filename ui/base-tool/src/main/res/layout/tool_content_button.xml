@@ -13,8 +13,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="@{ButtonKt.getWidth(model), default=match_parent}"
         android:layout_height="wrap_content"
+        android:layout_gravity="@{ButtonKt.getGravity(model)}"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
         android:onClick="@{() -> controller.click(model)}"
