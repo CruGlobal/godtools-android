@@ -87,31 +87,31 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun analyticsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AnalyticsApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.analyticsApi() = create<AnalyticsApi>()
 
     @Provides
     @Reusable
-    fun attachmentsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AttachmentsApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.attachmentsApi() = create<AttachmentsApi>()
 
     @Provides
     @Reusable
-    fun followupApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): FollowupApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.followupApi() = create<FollowupApi>()
 
     @Provides
     @Reusable
-    fun languagesApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): LanguagesApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.languagesApi() = create<LanguagesApi>()
 
     @Provides
     @Reusable
-    fun toolsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ToolsApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.toolsApi() = create<ToolsApi>()
 
     @Provides
     @Reusable
-    fun translationsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): TranslationsApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.translationsApi() = create<TranslationsApi>()
 
     @Provides
     @Reusable
-    fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.viewsApi() = create<ViewsApi>()
 
     @Provides
     @Singleton
