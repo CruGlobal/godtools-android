@@ -15,6 +15,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
+import org.cru.godtools.model.UserCounter
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
 import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
@@ -459,6 +460,51 @@ object Contract : BaseContract() {
             LanguageCode.SQL_COLUMN_LANGUAGE,
             SQL_COLUMN_TIP_ID,
             SQL_COLUMN_IS_COMPLETE,
+            SQL_PRIMARY_KEY
+        )
+        // endregion DB Migrations
+    }
+
+    internal object UserCounterTable : Base {
+        internal const val TABLE_NAME = "user_counters"
+        private val TABLE = Table.forClass<UserCounter>()
+
+        internal const val COLUMN_COUNTER_ID = "counter_id"
+        internal const val COLUMN_COUNT = "count"
+        internal const val COLUMN_DECAYED_COUNT = "decayed_count"
+        internal const val COLUMN_DELTA = "delta"
+
+        private val FIELD_COUNTER_ID = TABLE.field(COLUMN_COUNTER_ID)
+
+        internal val PROJECTION_ALL = arrayOf(COLUMN_COUNTER_ID, COLUMN_COUNT, COLUMN_DECAYED_COUNT, COLUMN_DELTA)
+
+        private const val SQL_COLUMN_COUNTER_ID = "$COLUMN_COUNTER_ID TEXT"
+        private const val SQL_COLUMN_COUNT = "$COLUMN_COUNT INTEGER"
+        private const val SQL_COLUMN_DECAYED_COUNT = "$COLUMN_DECAYED_COUNT REAL"
+        private const val SQL_COLUMN_DELTA = "$COLUMN_DELTA INTEGER"
+        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_COUNTER_ID)
+
+        internal val SQL_WHERE_PRIMARY_KEY = FIELD_COUNTER_ID.eq(bind())
+
+        internal val SQL_CREATE_TABLE = create(
+            TABLE_NAME,
+            SQL_COLUMN_ROWID,
+            SQL_COLUMN_COUNTER_ID,
+            SQL_COLUMN_COUNT,
+            SQL_COLUMN_DECAYED_COUNT,
+            SQL_COLUMN_DELTA,
+            SQL_PRIMARY_KEY
+        )
+        internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
+
+        // region DB Migrations
+        internal val SQL_V46_CREATE_USER_COUNTERS = create(
+            TABLE_NAME,
+            SQL_COLUMN_ROWID,
+            SQL_COLUMN_COUNTER_ID,
+            SQL_COLUMN_COUNT,
+            SQL_COLUMN_DECAYED_COUNT,
+            SQL_COLUMN_DELTA,
             SQL_PRIMARY_KEY
         )
         // endregion DB Migrations
