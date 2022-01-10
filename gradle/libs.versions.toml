@@ -58,7 +58,7 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-processor", version.ref = "eventbus" }
-facebook = "com.facebook.android:facebook-core:12.2.0"
+facebook = "com.facebook.android:facebook-core:12.3.0"
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = "com.facebook.soloader:soloader:0.10.3"
