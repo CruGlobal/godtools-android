@@ -37,6 +37,7 @@ import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.UserCounter
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
 import retrofit2.create
@@ -65,6 +66,7 @@ object ApiModule {
         .addClasses(AuthToken.Request::class.java, AuthToken::class.java)
         .addClasses(GlobalActivityAnalytics::class.java)
         .addClasses(PublisherInfo::class.java, NavigationEvent::class.java)
+        .addClasses(UserCounter::class.java)
         .addConverters(ToolTypeConverter)
         .addConverters(LocaleTypeConverter)
         .build()
@@ -129,6 +131,10 @@ object ApiModule {
     @Provides
     @Reusable
     fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.translationsApi() = create<TranslationsApi>()
+
+    @Provides
+    @Reusable
+    fun @receiver:Named(MOBILE_CONTENT_API_AUTHENTICATED) Retrofit.userCountersApi() = create<UserCountersApi>()
 
     @Provides
     @Reusable
