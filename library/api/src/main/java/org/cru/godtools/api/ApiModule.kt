@@ -27,6 +27,7 @@ import org.ccci.gto.android.common.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
+import org.cru.godtools.api.model.AuthToken
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.api.model.PublisherInfo
 import org.cru.godtools.api.model.ToolViews
@@ -61,6 +62,7 @@ object ApiModule {
         .addClasses(Attachment::class.java)
         .addClasses(Translation::class.java)
         .addClasses(Followup::class.java)
+        .addClasses(AuthToken.Request::class.java, AuthToken::class.java)
         .addClasses(GlobalActivityAnalytics::class.java)
         .addClasses(PublisherInfo::class.java, NavigationEvent::class.java)
         .addConverters(ToolTypeConverter)
@@ -70,6 +72,7 @@ object ApiModule {
     // region mobile-content-api APIs
     const val MOBILE_CONTENT_API_URL = "MOBILE_CONTENT_API_BASE_URL"
     private const val MOBILE_CONTENT_API = "MOBILE_CONTENT_API"
+    private const val MOBILE_CONTENT_API_AUTHENTICATED = "MOBILE_CONTENT_API_AUTHENTICATED"
 
     @Provides
     @Reusable
@@ -87,11 +90,29 @@ object ApiModule {
 
     @Provides
     @Reusable
+    @Named(MOBILE_CONTENT_API_AUTHENTICATED)
+    fun mobileContentApiAuthenticatedRetrofit(
+        @Named(MOBILE_CONTENT_API) retrofit: Retrofit,
+        okhttp: OkHttpClient,
+        sessionInterceptor: GodToolsSessionInterceptor
+    ): Retrofit = retrofit.newBuilder()
+        .callFactory(
+            okhttp.newBuilder()
+                .addInterceptor(sessionInterceptor)
+                .build()
+        ).build()
+
+    @Provides
+    @Reusable
     fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.analyticsApi() = create<AnalyticsApi>()
 
     @Provides
     @Reusable
     fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.attachmentsApi() = create<AttachmentsApi>()
+
+    @Provides
+    @Reusable
+    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.authApi() = create<AuthApi>()
 
     @Provides
     @Reusable
