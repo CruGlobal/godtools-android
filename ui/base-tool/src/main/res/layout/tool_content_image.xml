@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.tool.model.ImageKt" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.ImageController" />
         <variable name="model" type="org.cru.godtools.tool.model.Image" />
@@ -11,8 +12,9 @@
     </data>
 
     <org.cru.godtools.base.ui.view.DaggerPicassoImageView
-        android:layout_width="match_parent"
+        android:layout_width="@{ImageKt.getWidth(model), default=match_parent}"
         android:layout_height="wrap_content"
+        android:layout_gravity="@{ImageKt.getGravity(model)}"
         android:layout_marginLeft="@dimen/tool_content_margin_horizontal"
         android:layout_marginRight="@dimen/tool_content_margin_horizontal"
         android:adjustViewBounds="true"
