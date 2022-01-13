@@ -8,13 +8,15 @@ dependencies {
     api(libs.androidx.hilt.work)
     api(libs.androidx.work.ktx)
 
-    implementation(libs.gtoSupport.base)
     api(libs.gtoSupport.sync)
+    implementation(libs.gtoSupport.base)
+    implementation(libs.gtoSupport.okta)
 
     implementation(libs.dagger)
     implementation(libs.eventbus)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
+    implementation(libs.okta)
 
     testImplementation(libs.kotlin.coroutines.test)
 

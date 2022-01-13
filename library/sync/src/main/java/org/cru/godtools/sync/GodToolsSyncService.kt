@@ -21,6 +21,7 @@ import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
+import org.cru.godtools.sync.task.UserCounterSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
@@ -34,6 +35,7 @@ private const val SYNCTYPE_TOOLS = 3
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
+private const val SYNCTYPE_USER_COUNTERS = 7
 
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
@@ -68,6 +70,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                         if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
                     }
                     SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
+                    SYNCTYPE_USER_COUNTERS -> with<UserCounterSyncTasks> { syncCounters(task.args) }
                 }
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
@@ -107,6 +110,13 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(
             EXTRA_SYNCTYPE to SYNCTYPE_GLOBAL_ACTIVITY,
+            ContentResolver.SYNC_EXTRAS_MANUAL to force
+        )
+    )
+
+    fun syncUserCounters(force: Boolean = false): SyncTask = GtSyncTask(
+        bundleOf(
+            EXTRA_SYNCTYPE to SYNCTYPE_USER_COUNTERS,
             ContentResolver.SYNC_EXTRAS_MANUAL to force
         )
     )

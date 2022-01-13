@@ -465,13 +465,13 @@ object Contract : BaseContract() {
         // endregion DB Migrations
     }
 
-    internal object UserCounterTable : Base {
+    object UserCounterTable : Base {
         internal const val TABLE_NAME = "user_counters"
         private val TABLE = Table.forClass<UserCounter>()
 
         internal const val COLUMN_COUNTER_ID = "counter_id"
-        internal const val COLUMN_COUNT = "count"
-        internal const val COLUMN_DECAYED_COUNT = "decayed_count"
+        const val COLUMN_COUNT = "count"
+        const val COLUMN_DECAYED_COUNT = "decayed_count"
         internal const val COLUMN_DELTA = "delta"
 
         private val FIELD_COUNTER_ID = TABLE.field(COLUMN_COUNTER_ID)
