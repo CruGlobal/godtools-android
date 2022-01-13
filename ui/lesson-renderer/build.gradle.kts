@@ -10,6 +10,7 @@ dependencies {
     api(project(":ui:base-tool"))
 
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.viewpager2)
 
     implementation(libs.gtoSupport.androidx.databinding)

@@ -70,7 +70,7 @@ firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.1.1"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.0.0"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
-firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.0"
+firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.3.5"
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsMpp" }
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
