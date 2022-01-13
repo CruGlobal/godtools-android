@@ -6,11 +6,14 @@ import com.okta.oidc.clients.sessions.SessionClient
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.get
 import org.cru.godtools.api.UserCountersApi
 import org.cru.godtools.model.UserCounter
 import org.keynote.godtools.android.db.Contract.UserCounterTable
@@ -30,6 +33,7 @@ class UserCounterSyncTasks @Inject internal constructor(
     private val sessionClient: SessionClient
 ) : BaseSyncTasks() {
     private val countersMutex = Mutex()
+    private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = withContext(Dispatchers.IO) {
         countersMutex.withLock {
@@ -48,6 +52,30 @@ class UserCounterSyncTasks @Inject internal constructor(
             dao.updateLastSyncTime(SYNC_TIME_COUNTERS)
 
             true
+        }
+    }
+
+    suspend fun syncDirtyCounters(): Boolean = withContext(Dispatchers.IO) {
+        countersUpdateMutex.withLock {
+            if (!sessionClient.isAuthenticated) return@withContext true
+
+            // process any counters that need to be updated
+            QUERY_DIRTY_COUNTERS.get(dao)
+                .map { counter ->
+                    async {
+                        val updated = countersApi.updateCounter(counter.id, counter).takeIf { it.isSuccessful }
+                            ?.body()?.takeUnless { it.hasErrors() }
+                            ?.dataSingle ?: return@async false
+
+                        dao.transaction {
+                            dao.updateUserCounterDelta(counter.id, 0 - (counter.delta ?: 0))
+                            storeUserCounter(updated)
+                        }
+
+                        true
+                    }
+                }
+                .awaitAll().all { it }
         }
     }
 

@@ -475,6 +475,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_DELTA = "delta"
 
         private val FIELD_COUNTER_ID = TABLE.field(COLUMN_COUNTER_ID)
+        val FIELD_DELTA = TABLE.field(COLUMN_DELTA)
 
         internal val PROJECTION_ALL = arrayOf(COLUMN_COUNTER_ID, COLUMN_COUNT, COLUMN_DECAYED_COUNT, COLUMN_DELTA)
 
