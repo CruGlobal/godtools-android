@@ -199,5 +199,26 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
             }
         }
     }
+
+    // region User Counters
+    @WorkerThread
+    fun updateUserCounterDelta(counterId: String, change: Int) {
+        if (change == 0) return
+
+        // build query
+        val where = compileExpression(getPrimaryKeyWhere(UserCounter::class.java, counterId))
+        val sql = """
+            UPDATE ${getTable(UserCounter::class.java)}
+            SET ${UserCounterTable.COLUMN_DELTA} = coalesce(${UserCounterTable.COLUMN_DELTA}, 0) + ?
+            WHERE ${where.sql}
+        """
+        val args = bindValues(change) + where.args
+
+        transaction(exclusive = false) { db ->
+            db.execSQL(sql, args)
+            invalidateClass(UserCounter::class.java)
+        }
+    }
+    // endregion User Counters
     // endregion Custom DAO methods
 }
