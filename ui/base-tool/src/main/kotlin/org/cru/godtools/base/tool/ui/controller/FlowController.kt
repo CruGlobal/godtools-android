@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -74,6 +75,7 @@ class FlowController private constructor(
 
         init {
             binding.root.id = View.generateViewId()
+            binding.lifecycleOwner = lifecycleOwner
         }
 
         override val childContainer get() = binding.content
@@ -81,6 +83,8 @@ class FlowController private constructor(
         override fun onBind() {
             super.onBind()
             binding.model = model
+            binding.isGone = model?.isGoneFlow(toolState)?.asLiveData()
+            binding.isInvisible = model?.isInvisibleFlow(toolState)?.asLiveData()
         }
     }
 }
