@@ -9,16 +9,13 @@ import androidx.lifecycle.map
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
+import org.ccci.gto.android.common.db.CoroutinesAsyncDao
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
-import org.ccci.gto.android.common.db.LiveDataRegistry
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -43,11 +40,8 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @Singleton
-class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
-    AbstractDao(database), CoroutinesFlowDao, LiveDataDao {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    override val liveDataRegistry = LiveDataRegistry()
-
+class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), CoroutinesAsyncDao,
+    CoroutinesFlowDao, LiveDataDao {
     init {
         registerType(
             Followup::class.java, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, FollowupMapper,
@@ -96,11 +90,6 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
         is TrainingTip -> getPrimaryKeyWhere(TrainingTip::class.java, obj.tool, obj.locale, obj.tipId)
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
-    }
-
-    override fun onInvalidateClass(clazz: Class<*>) {
-        super.onInvalidateClass(clazz)
-        liveDataRegistry.invalidate(clazz)
     }
 
     // region Custom DAO methods
@@ -165,7 +154,8 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
         if (trackAccess) {
             val obj = Translation().apply { updateLastAccessed() }
             val where = TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-            coroutineScope.launch { update(obj, where, TranslationTable.COLUMN_LAST_ACCESSED) }
+            @Suppress("DeferredResultUnused")
+            updateAsync(obj, where, TranslationTable.COLUMN_LAST_ACCESSED)
         }
         return getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
             .getAsLiveData(this).map { it.firstOrNull() }
@@ -185,7 +175,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) :
         val args = bindValues(shares) + where.args
 
         // execute query
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatcher) {
             transaction(exclusive = false) { db ->
                 db.execSQL(sql, args)
                 invalidateClass(Tool::class.java)
