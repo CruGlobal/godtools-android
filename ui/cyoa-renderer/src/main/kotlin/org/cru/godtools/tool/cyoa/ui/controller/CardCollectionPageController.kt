@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
+import org.ccci.gto.android.common.androidx.viewpager2.widget.registerPageTransformerFix
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
@@ -95,6 +96,7 @@ class CardCollectionPageController @AssistedInject constructor(
                 p.scaleY = scale
                 p.translationX = (-(2 * peek + gap) * pos) - (rawScale * p.measuredWidth / 2)
             }
+            registerPageTransformerFix(this@CardCollectionPageController.adapter)
             offscreenPageLimit = 1
 
             binding.currentCardIndex = currentItemLiveData
