@@ -20,10 +20,11 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
+import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 45
+private const val DATABASE_VERSION = 46
 
 /*
  * Version history
@@ -40,6 +41,7 @@ private const val DATABASE_VERSION = 45
  * 44: 2020-08-10
  * v5.3.1 - v5.6.1
  * 45: 2021-12-02
+ * 46: 2022-01-07
  */
 
 @Singleton
@@ -58,6 +60,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_CREATE_TABLE)
             db.execSQL(TrainingTipTable.SQL_CREATE_TABLE)
+            db.execSQL(UserCounterTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -83,6 +86,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
                         db.execSQL(ToolTable.SQL_V45_ALTER_HIDDEN)
                         db.execSQL(ToolTable.SQL_V45_POPULATE_HIDDEN)
                     }
+                    46 -> db.execSQL(UserCounterTable.SQL_V46_CREATE_USER_COUNTERS)
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
@@ -116,6 +120,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)
             db.execSQL(TrainingTipTable.SQL_DELETE_TABLE)
+            db.execSQL(UserCounterTable.SQL_DELETE_TABLE)
 
             // legacy tables
             db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS)

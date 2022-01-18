@@ -11,9 +11,9 @@ import org.greenrobot.eventbus.EventBus
 
 @WorkerThread
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseSyncTasks internal constructor(private val eventBus: EventBus) {
+abstract class BaseSyncTasks internal constructor(private val eventBus: EventBus? = null) {
     fun sendEvents(events: SimpleArrayMap<Class<*>, Any>) {
-        for (i in 0 until events.size()) eventBus.post(events.valueAt(i))
+        for (i in 0 until events.size()) eventBus?.post(events.valueAt(i))
         events.clear()
     }
 

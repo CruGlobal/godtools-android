@@ -29,6 +29,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
+import org.cru.godtools.model.UserCounter
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
@@ -38,6 +39,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
+import org.keynote.godtools.android.db.Contract.UserCounterTable
 
 @Singleton
 class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), CoroutinesAsyncDao,
@@ -80,6 +82,10 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
             TrainingTip::class.java, TrainingTipTable.TABLE_NAME, TrainingTipTable.PROJECTION_ALL, TrainingTipMapper,
             TrainingTipTable.SQL_WHERE_PRIMARY_KEY
         )
+        registerType(
+            UserCounter::class.java, UserCounterTable.TABLE_NAME, UserCounterTable.PROJECTION_ALL, UserCounterMapper,
+            UserCounterTable.SQL_WHERE_PRIMARY_KEY
+        )
     }
 
     public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
@@ -88,6 +94,7 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
         is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)
         is Tool -> getPrimaryKeyWhere(Tool::class.java, obj.code!!)
         is TrainingTip -> getPrimaryKeyWhere(TrainingTip::class.java, obj.tool, obj.locale, obj.tipId)
+        is UserCounter -> getPrimaryKeyWhere(UserCounter::class.java, obj.id)
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
     }
@@ -182,5 +189,26 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
             }
         }
     }
+
+    // region User Counters
+    @WorkerThread
+    fun updateUserCounterDelta(counterId: String, change: Int) {
+        if (change == 0) return
+
+        // build query
+        val where = compileExpression(getPrimaryKeyWhere(UserCounter::class.java, counterId))
+        val sql = """
+            UPDATE ${getTable(UserCounter::class.java)}
+            SET ${UserCounterTable.COLUMN_DELTA} = coalesce(${UserCounterTable.COLUMN_DELTA}, 0) + ?
+            WHERE ${where.sql}
+        """
+        val args = bindValues(change) + where.args
+
+        transaction(exclusive = false) { db ->
+            db.execSQL(sql, args)
+            invalidateClass(UserCounter::class.java)
+        }
+    }
+    // endregion User Counters
     // endregion Custom DAO methods
 }

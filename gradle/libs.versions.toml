@@ -83,6 +83,7 @@ gtoSupport-androidx-room = { module = "org.ccci.gto.android:gto-support-androidx
 gtoSupport-androidx-viewpager2 = { module = "org.ccci.gto.android:gto-support-androidx-viewpager2", version.ref = "gtoSupport" }
 gtoSupport-androidx-work = { module = "org.ccci.gto.android:gto-support-androidx-work", version.ref = "gtoSupport" }
 gtoSupport-animation = { module = "org.ccci.gto.android:gto-support-animation", version.ref = "gtoSupport" }
+gtoSupport-api-okhttp3 = { module = "org.ccci.gto.android:gto-support-api-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-appcompat = { module = "org.ccci.gto.android:gto-support-appcompat", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }

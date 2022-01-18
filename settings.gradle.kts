@@ -9,6 +9,7 @@ include("library:download-manager")
 include("library:initial-content")
 include("library:model")
 include("library:sync")
+include("library:user-data")
 
 include("ui:article-aem-renderer")
 include("ui:article-renderer")

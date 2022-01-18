@@ -21,6 +21,7 @@ import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
+import org.cru.godtools.sync.task.UserCounterSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
@@ -34,6 +35,8 @@ private const val SYNCTYPE_TOOLS = 3
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
+private const val SYNCTYPE_USER_COUNTERS = 7
+private const val SYNCTYPE_DIRTY_USER_COUNTERS = 8
 
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
@@ -51,8 +54,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     private fun processSyncTask(task: GtSyncTask): Int {
         val syncId = SyncRegistry.startSync()
-        val syncType = task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)
         coroutineScope.launch {
+            val syncType = task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)
             try {
                 when (syncType) {
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
@@ -68,6 +71,11 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                         if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
                     }
                     SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
+                    SYNCTYPE_USER_COUNTERS -> with<UserCounterSyncTasks> {
+                        syncCounters(task.args)
+                        syncDirtyCounters()
+                    }
+                    SYNCTYPE_DIRTY_USER_COUNTERS -> with<UserCounterSyncTasks> { syncDirtyCounters() }
                 }
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
@@ -111,8 +119,16 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         )
     )
 
+    fun syncUserCounters(force: Boolean = false): SyncTask = GtSyncTask(
+        bundleOf(
+            EXTRA_SYNCTYPE to SYNCTYPE_USER_COUNTERS,
+            ContentResolver.SYNC_EXTRAS_MANUAL to force
+        )
+    )
+
     fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
     fun syncFollowups(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_FOLLOWUPS))
+    fun syncDirtyUserCounters(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_DIRTY_USER_COUNTERS))
 
     private inner class GtSyncTask(val args: Bundle) : SyncTask {
         override fun sync() = processSyncTask(this)
