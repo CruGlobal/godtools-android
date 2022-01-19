@@ -345,7 +345,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
     // endregion Feature Discovery
 
-    protected fun trackToolOpen(tool: String) {
+    protected fun trackToolOpen(tool: String, type: Manifest.Type? = null) {
         eventBus.post(ToolUsedEvent(tool))
         eventBus.post(ToolOpenedAnalyticsActionEvent(first = !settings.isFeatureDiscovered(FEATURE_TOOL_OPENED)))
         if (intent.isShortcutLaunch) eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
