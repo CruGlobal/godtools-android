@@ -171,6 +171,11 @@ class CardCollectionPageController @AssistedInject constructor(
             binding.controller = this
         }
 
+        override fun onBind() {
+            super.onBind()
+            binding.model = model
+        }
+
         // region Analytics Events
         private var pendingVisibleAnalyticsEvents: List<Job>? = null
 

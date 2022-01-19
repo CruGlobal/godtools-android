@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.tool.model.page.PageKt" />
+
+        <variable name="model" type="org.cru.godtools.tool.model.page.CardCollectionPage.Card" />
         <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController.CardController" />
         <variable name="position" type="int" />
         <variable name="totalCards" type="int" />
@@ -52,6 +55,7 @@
                     android:layout_marginEnd="@dimen/tool_content_margin"
                     android:layout_marginBottom="@dimen/tool_content_margin"
                     android:text="@{@string/cyoa_page_cardcollection_card_position(position + 1, totalCards)}"
+                    android:textColor="@{PageKt.getControlColor(model.page)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="1/4" />
