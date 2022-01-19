@@ -131,6 +131,8 @@ class CardCollectionPageController @AssistedInject constructor(
 
         override fun onBindViewDataBinding(binding: CyoaPageCardCollectionCardBinding, position: Int) {
             binding.controller?.model = cards[position]
+            binding.position = position
+            binding.totalCards = itemCount
         }
 
         override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
