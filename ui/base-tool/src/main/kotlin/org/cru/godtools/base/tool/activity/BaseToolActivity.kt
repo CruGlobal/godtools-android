@@ -21,7 +21,6 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
@@ -353,7 +352,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
         settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
 
-        GlobalScope.launch { dao.updateSharesDelta(tool, 1) }
+        dao.updateSharesDeltaAsync(tool, 1)
     }
 
     private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false

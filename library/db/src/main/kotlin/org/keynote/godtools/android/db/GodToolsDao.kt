@@ -168,6 +168,8 @@ class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : Abs
             .getAsLiveData(this).map { it.firstOrNull() }
     }
 
+    fun updateSharesDeltaAsync(toolCode: String?, shares: Int) =
+        coroutineScope.launch { updateSharesDelta(toolCode, shares) }
     suspend fun updateSharesDelta(toolCode: String?, shares: Int) {
         if (toolCode == null) return
         if (shares == 0) return

@@ -8,22 +8,21 @@ import org.cru.godtools.tool.model.AnalyticsEvent
 
 class ContentAnalyticsEventAnalyticsActionEvent(@VisibleForTesting val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty()) {
-    override fun isForSystem(system: AnalyticsSystem) = event.isForSystem(
-        when (system) {
-            AnalyticsSystem.ADOBE -> AnalyticsEvent.System.ADOBE
-            AnalyticsSystem.APPSFLYER -> AnalyticsEvent.System.APPSFLYER
-            AnalyticsSystem.FACEBOOK -> AnalyticsEvent.System.FACEBOOK
-            AnalyticsSystem.FIREBASE -> AnalyticsEvent.System.FIREBASE
-            AnalyticsSystem.SNOWPLOW -> AnalyticsEvent.System.SNOWPLOW
-        }
-    )
+    override fun isForSystem(system: AnalyticsSystem) = when (system) {
+        AnalyticsSystem.APPSFLYER -> event.isForSystem(AnalyticsEvent.System.APPSFLYER)
+        AnalyticsSystem.FACEBOOK -> event.isForSystem(AnalyticsEvent.System.FACEBOOK)
+        AnalyticsSystem.FIREBASE ->
+            event.isForSystem(AnalyticsEvent.System.ADOBE) || event.isForSystem(AnalyticsEvent.System.FIREBASE)
+        AnalyticsSystem.SNOWPLOW -> event.isForSystem(AnalyticsEvent.System.SNOWPLOW)
+    }
 
     override val appSection get() = event.manifest.code
 
     override val adobeAttributes get() = event.attributes
 
     override val firebaseEventName get() = when {
-        isForSystem(AnalyticsSystem.ADOBE) -> event.action?.sanitizeAdobeNameForFirebase().orEmpty()
+        event.isForSystem(AnalyticsEvent.System.FIREBASE) -> super.firebaseEventName
+        event.isForSystem(AnalyticsEvent.System.ADOBE) -> event.action?.sanitizeAdobeNameForFirebase().orEmpty()
         else -> super.firebaseEventName
     }
 

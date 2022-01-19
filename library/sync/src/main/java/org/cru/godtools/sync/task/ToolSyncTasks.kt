@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -78,20 +78,18 @@ class ToolSyncTasks @Inject internal constructor(
      */
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
-            coroutineScope {
-                Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
-                    .map {
-                        async {
-                            try {
-                                val views = ToolViews(it)
-                                viewsApi.submitViews(views).isSuccessful
-                                    .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
-                            } catch (ignored: IOException) {
-                                false
-                            }
+            Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
+                .map {
+                    async {
+                        try {
+                            val views = ToolViews(it)
+                            viewsApi.submitViews(views).isSuccessful
+                                .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
+                        } catch (ignored: IOException) {
+                            false
                         }
-                    }.all { it.await() }
-            }
+                    }
+                }.awaitAll().all { it }
         }
     }
 }
