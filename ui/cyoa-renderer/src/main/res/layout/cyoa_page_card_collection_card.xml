@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="org.cru.godtools.tool.model.page.PageKt" />
+
+        <variable name="model" type="org.cru.godtools.tool.model.page.CardCollectionPage.Card" />
         <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController.CardController" />
+        <variable name="position" type="int" />
+        <variable name="totalCards" type="int" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,18 +25,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <org.ccci.gto.android.common.widget.HackyNestedScrollView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginVertical="@dimen/tool_content_margin"
-                    android:orientation="vertical" />
-            </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+                <org.ccci.gto.android.common.widget.HackyNestedScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/tool_content_margin_half"
+                    android:fillViewport="true"
+                    app:layout_constraintBottom_toTopOf="@id/page_counter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="@dimen/tool_content_margin"
+                        android:orientation="vertical" />
+                </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+
+                <TextView
+                    android:id="@+id/page_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="@dimen/tool_content_margin"
+                    android:layout_marginBottom="@dimen/tool_content_margin"
+                    android:text="@{@string/cyoa_page_cardcollection_card_position(position + 1, totalCards)}"
+                    android:textColor="@{PageKt.getControlColor(model.page)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="1/4" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
