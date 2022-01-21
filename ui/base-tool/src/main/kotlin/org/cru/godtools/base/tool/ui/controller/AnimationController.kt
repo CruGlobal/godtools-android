@@ -8,6 +8,9 @@ import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.databinding.ToolContentAnimationBinding
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.model.Animation
+import timber.log.Timber
+
+private const val TAG = "AnimationController"
 
 internal class AnimationController private constructor(
     private val binding: ToolContentAnimationBinding,
@@ -21,6 +24,10 @@ internal class AnimationController private constructor(
 
     init {
         binding.controller = this
+        binding.animation.setFailureListener {
+            Timber.tag(TAG)
+                .e(it, "Error loading animation. tool: ${model?.manifest?.code} animation: ${model?.resource?.name}")
+        }
     }
 
     public override fun onBind() {
