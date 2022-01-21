@@ -63,4 +63,6 @@ open class AnalyticsScreenEvent(val screen: String, locale: Locale? = null) : An
         get() = super.snowplowContentScoringUri
             .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
             .appendPath(screen)
+
+    override val userCounterName get() = screen
 }

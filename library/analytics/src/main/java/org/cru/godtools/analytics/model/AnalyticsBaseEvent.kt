@@ -27,4 +27,6 @@ abstract class AnalyticsBaseEvent internal constructor(
     open val snowplowContentScoringUri: Uri.Builder get() =
         Uri.Builder()
             .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME)
+
+    open val userCounterName: String? get() = null
 }
