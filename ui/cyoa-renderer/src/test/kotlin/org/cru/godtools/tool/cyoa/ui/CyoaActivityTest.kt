@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.content.Context
+import android.view.ViewGroup
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
@@ -14,6 +15,7 @@ import javax.inject.Inject
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createCyoaActivityIntent
+import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.page.CardCollectionPage
@@ -421,6 +423,9 @@ class CyoaActivityTest {
                 manifestEnglish.value = manifest(listOf(page1, cardCollectionPage2))
                 it.assertPageStack("page1", "page2")
                 assertTrue(it.pageFragment is CyoaCardCollectionPageFragment)
+
+                it.onBackPressed()
+                it.assertPageStack("page1")
             }
         }
     }
@@ -473,5 +478,6 @@ class CyoaActivityTest {
             assertEquals(page, supportFragmentManager.getBackStackEntryAt(i).name)
         }
         assertEquals(pages.last(), pageFragment!!.pageId)
+        assertEquals(1, findViewById<ViewGroup>(R.id.page).childCount)
     }
 }
