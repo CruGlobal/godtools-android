@@ -14,6 +14,7 @@ class ContentAnalyticsEventAnalyticsActionEvent(@VisibleForTesting val event: An
         AnalyticsSystem.FIREBASE ->
             event.isForSystem(AnalyticsEvent.System.ADOBE) || event.isForSystem(AnalyticsEvent.System.FIREBASE)
         AnalyticsSystem.SNOWPLOW -> event.isForSystem(AnalyticsEvent.System.SNOWPLOW)
+        AnalyticsSystem.USER -> event.isForSystem(AnalyticsEvent.System.USER)
     }
 
     override val appSection get() = event.manifest.code
