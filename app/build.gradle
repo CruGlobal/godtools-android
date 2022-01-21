@@ -151,6 +151,7 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:model')
     implementation project(':library:sync')
+    implementation project(':library:user-data')
     implementation project(':ui:article-renderer')
     implementation project(':ui:base')
     implementation project(':ui:cyoa-renderer')
