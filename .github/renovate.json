@@ -10,6 +10,11 @@
       "matchManagers": ["gradle"],
       "matchPackageNames": ["com.google.guava:guava"],
       "allowedVersions": "!/-jre$/"
+    },
+    {
+      "matchManagers": [ "gradle" ],
+      "matchPackagePrefixes": [ "com.google.firebase:firebase-crashlytics" ],
+      "groupName": "firebase-crashlytics"
     }
   ]
 }
