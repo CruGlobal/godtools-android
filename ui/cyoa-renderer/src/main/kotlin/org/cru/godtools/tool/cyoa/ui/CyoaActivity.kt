@@ -41,7 +41,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     override fun onInvalidPage(fragment: CyoaPageFragment<*, *>, page: Page?) {
         if (fragment !== pageFragment) return
         when {
-            page != null -> showPage(page, false)
+            page != null -> showPage(page, true)
             supportFragmentManager.backStackEntryCount == 0 -> finish()
             else -> supportFragmentManager.popBackStack()
         }
@@ -84,7 +84,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         if (pageFragment != null) return
 
         manifest.pages.firstOrNull { !it.isHidden }
-            ?.let { showPage(it, false) }
+            ?.let { showPage(it, true) }
     }
 
     private fun checkForPageEvent(event: Event) {
@@ -98,7 +98,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
         // dismiss/show pages as necessary
         when {
-            newPage != null -> showPage(newPage, addCurrentPageToBackStack = !dismissCurrentPage)
+            newPage != null -> showPage(newPage, replaceCurrentPage = dismissCurrentPage)
             dismissCurrentPage -> when {
                 supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
                 pageFragment != null -> supportFragmentManager.commit { remove(pageFragment) }
@@ -128,7 +128,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
 
                 // otherwise pop entire backstack and show parent page as the root page
                 if (backStackEntryCount > 0) popBackStack(getBackStackEntryAt(0).id, POP_BACK_STACK_INCLUSIVE)
-                showPage(parent, false)
+                showPage(parent, true)
                 return true
             }
         }
@@ -136,7 +136,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     }
 
     @VisibleForTesting
-    internal fun showPage(page: Page, addCurrentPageToBackStack: Boolean = true) {
+    internal fun showPage(page: Page, replaceCurrentPage: Boolean = false) {
         val fragment = when (page) {
             is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
             is ContentPage -> CyoaContentPageFragment(page.id)
@@ -144,7 +144,7 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         }
         supportFragmentManager.commit {
             setReorderingAllowed(true)
-            if (addCurrentPageToBackStack) pageFragment?.let { addToBackStack(it.pageId) }
+            if (!replaceCurrentPage) pageFragment?.let { addToBackStack(it.pageId) }
             replace(R.id.page, fragment)
             setPrimaryNavigationFragment(fragment)
         }
