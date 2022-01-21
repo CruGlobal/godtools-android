@@ -84,10 +84,14 @@ jobs:
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
         run: echo $FIREBASE_API_KEY > firebase/firebase_api_key.json
+      - name: Build QA Universal APK
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
+        env:
+          ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
       - name: Upload QA Build to Firebase
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: :app:packageProductionQaUniversalApk appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
-        env:
-          ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
-          ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}          
+          arguments: appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
