@@ -142,11 +142,22 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
             is ContentPage -> CyoaContentPageFragment(page.id)
             else -> return
         }
-        supportFragmentManager.commit {
+        val fm = supportFragmentManager
+        fm.commit {
             setReorderingAllowed(true)
-            if (!replaceCurrentPage) pageFragment?.let { addToBackStack(it.pageId) }
             replace(R.id.page, fragment)
             setPrimaryNavigationFragment(fragment)
+            pageFragment?.let {
+                if (replaceCurrentPage) {
+                    val backStackSize = fm.backStackEntryCount
+                    if (backStackSize > 0) {
+                        addToBackStack(fm.getBackStackEntryAt(backStackSize - 1).name)
+                        fm.popBackStack()
+                    }
+                } else {
+                    addToBackStack(it.pageId)
+                }
+            }
         }
     }
     // endregion Page management
