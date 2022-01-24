@@ -56,9 +56,7 @@ class CardCollectionPageController @AssistedInject constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-        binding.cards.whileMaintainingVisibleCurrentItem {
-            adapter.cards = model?.cards.orEmpty()
-        }
+        bindCards(model?.cards.orEmpty())
     }
 
     // region Analytics Events
@@ -83,8 +81,6 @@ class CardCollectionPageController @AssistedInject constructor(
 
     init {
         with(binding.cards) {
-            adapter = this@CardCollectionPageController.adapter
-
             // card peek and scaling effects
             val gap = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_gap)
             val peek = resources.getDimensionPixelSize(R.dimen.cyoa_page_cardcollection_card_peek)
@@ -96,10 +92,18 @@ class CardCollectionPageController @AssistedInject constructor(
                 p.scaleY = scale
                 p.translationX = (-(2 * peek + gap) * pos) - (rawScale * p.measuredWidth / 2)
             }
-            registerPageTransformerFix(this@CardCollectionPageController.adapter)
             offscreenPageLimit = 1
+            registerPageTransformerFix(this@CardCollectionPageController.adapter)
 
             binding.currentCardIndex = currentItemLiveData
+        }
+    }
+
+    private fun bindCards(cards: List<Card>) {
+        binding.cards.whileMaintainingVisibleCurrentItem {
+            adapter.cards = cards
+            // lazily set the adapter now that cards are bound so it will correctly restore SavedState
+            if (binding.cards.adapter == null) binding.cards.adapter = adapter
         }
     }
 
