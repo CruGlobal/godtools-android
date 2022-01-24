@@ -40,6 +40,10 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     private val deepLinkResolvers: Set<AppsFlyerDeepLinkResolver>,
     private val appsFlyer: AppsFlyerLib
 ) : Application.ActivityLifecycleCallbacks {
+    companion object {
+        const val AF_DEEP_LINK_VALUE = "deep_link_value"
+    }
+
     @Inject
     internal constructor(
         app: Application,
