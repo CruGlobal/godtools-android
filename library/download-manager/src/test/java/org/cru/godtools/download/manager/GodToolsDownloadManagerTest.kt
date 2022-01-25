@@ -334,14 +334,15 @@ class GodToolsDownloadManagerTest {
         assertTrue(attachment.isDownloaded)
     }
 
+    // region downloadAttachment()
     @Test
-    fun verifyDownloadAttachment() {
+    fun `downloadAttachment()`() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
+        whenever(attachmentsApi.download(any())) doReturn Response.success(response)
+        whenever(attachment.getFile(fs)) doReturn file
 
-        runBlocking { downloadManager.downloadAttachment(attachment.id) }
+        downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
@@ -351,22 +352,70 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyDownloadAttachmentAlreadyDownloaded() {
+    fun `downloadAttachment() - Already Downloaded`() = runTest {
         attachment.isDownloaded = true
         stubbing(dao) {
             on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
 
-        runBlocking { downloadManager.downloadAttachment(attachment.id) }
+        downloadManager.downloadAttachment(attachment.id)
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).find<LocalFile>(attachment.localFilename!!)
-        verifyBlocking(attachmentsApi, never()) { download(any()) }
+        verify(attachmentsApi, never()).download(any())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(AttachmentUpdateEvent)
         assertTrue(attachment.isDownloaded)
     }
+
+    @Test
+    fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = runTest {
+        attachment.isDownloaded = true
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        whenever(attachmentsApi.download(any())) doReturn Response.success(response)
+        whenever(attachment.getFile(fs)) doReturn file
+
+        downloadManager.downloadAttachment(attachment.id)
+        assertArrayEquals(testData, file.readBytes())
+        verify(dao).find<Attachment>(attachment.id)
+        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
+        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(AttachmentUpdateEvent)
+        assertTrue(attachment.isDownloaded)
+    }
+
+    @Test
+    fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = runTest {
+        attachment.isDownloaded = true
+        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        whenever(attachmentsApi.download(any())) doAnswer { throw IOException() }
+        whenever(attachment.getFile(fs)) doReturn file
+
+        downloadManager.downloadAttachment(attachment.id)
+        assertFalse(file.exists())
+        verify(dao).find<Attachment>(attachment.id)
+        verify(dao, never()).updateOrInsert(any())
+        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+        verify(eventBus).post(AttachmentUpdateEvent)
+        assertFalse(attachment.isDownloaded)
+    }
+
+    @Test
+    fun `downloadAttachment() - Download fails`() = runTest {
+        whenever(dao.find<Attachment>(attachment.id)) doReturn attachment
+        whenever(attachmentsApi.download(any())) doAnswer { throw IOException() }
+
+        downloadManager.downloadAttachment(attachment.id)
+        verify(dao).find<Attachment>(attachment.id)
+        verify(attachmentsApi).download(any())
+        verify(dao, never()).updateOrInsert(any())
+        verify(dao, never()).update(any(), anyVararg<String>())
+        verify(eventBus, never()).post(AttachmentUpdateEvent)
+        assertFalse(attachment.isDownloaded)
+    }
+    // endregion downloadAttachment()
 
     @Test
     fun verifyImportAttachment() {
