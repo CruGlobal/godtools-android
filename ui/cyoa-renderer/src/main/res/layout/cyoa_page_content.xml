@@ -29,10 +29,11 @@
         <org.ccci.gto.android.common.widget.HackyNestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/tool_content_margin"
             android:layout_marginTop="@{contentInsets.top}"
+            android:clipToPadding="false"
             android:fillViewport="true"
-            android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}">
+            android:layoutDirection="@{BaseUtilsKt.getLayoutDirection(page)}"
+            android:paddingHorizontal="@dimen/tool_content_margin">
 
             <LinearLayout
                 android:id="@+id/content"
