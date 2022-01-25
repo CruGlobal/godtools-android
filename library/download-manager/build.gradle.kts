@@ -26,6 +26,7 @@ dependencies {
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.kotlin.coroutines.test)
 
+    kapt(libs.androidx.hilt.compiler)
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 }
