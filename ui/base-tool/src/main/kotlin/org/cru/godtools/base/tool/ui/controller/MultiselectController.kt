@@ -3,31 +3,35 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.databinding.ToolContentMultiselectBinding
-import org.cru.godtools.base.tool.databinding.ToolContentMultiselectOptionBinding
+import org.cru.godtools.base.tool.databinding.ToolContentMultiselectOptionCardBinding
+import org.cru.godtools.base.tool.databinding.ToolContentMultiselectOptionFlatBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.Multiselect
 
 class MultiselectController private constructor(
     private val binding: ToolContentMultiselectBinding,
     parentController: BaseController<*>,
-    private val optionFactory: OptionController.Factory
+    private val cacheFactory: UiControllerCache.Factory
 ) : BaseController<Multiselect>(Multiselect::class, binding.root, parentController) {
     @AssistedInject
     constructor(
         @Assisted parent: ViewGroup,
         @Assisted parentController: BaseController<*>,
-        optionFactory: OptionController.Factory
+        cacheFactory: UiControllerCache.Factory
     ) : this(
         ToolContentMultiselectBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         parentController,
-        optionFactory
+        cacheFactory
     )
 
     @AssistedFactory
@@ -41,51 +45,38 @@ class MultiselectController private constructor(
     // endregion Lifecycle
 
     // region Options
-    private var optionControllers = emptyList<OptionController>()
+    private val optionCache by lazy { cacheFactory.create(binding.options, this) }
+    private var optionControllers = emptyList<BaseController<Multiselect.Option>>()
 
     private fun bindOptions() {
         optionControllers = binding.options.bindModels(
-            model?.options.orEmpty(),
-            optionControllers.toMutableList()
-        ) { optionFactory.create(binding.options, this) }
+            models = model?.options.orEmpty(),
+            existing = optionControllers.toMutableList(),
+            releaseController = { it.releaseTo(optionCache) }
+        ) { optionCache.acquire(it) }
 
         binding.flow.referencedIds = optionControllers.map { it.root.id }.toIntArray()
     }
     // endregion Options
 
-    class OptionController private constructor(
-        private val binding: ToolContentMultiselectOptionBinding,
-        parentController: MultiselectController,
+    sealed class OptionController<B : ViewDataBinding>(
+        protected val binding: B,
+        parentController: BaseController<*>,
         cacheFactory: UiControllerCache.Factory
     ) : ParentController<Multiselect.Option>(Multiselect.Option::class, binding.root, parentController, cacheFactory) {
-        @AssistedInject
-        internal constructor(
-            @Assisted parent: ViewGroup,
-            @Assisted parentController: MultiselectController,
-            cacheFactory: UiControllerCache.Factory
-        ) : this(
-            binding = ToolContentMultiselectOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            parentController = parentController,
-            cacheFactory = cacheFactory
-        )
-
-        @AssistedFactory
-        interface Factory {
-            fun create(parent: ViewGroup, multiselectController: MultiselectController): OptionController
-        }
-
         init {
             binding.root.id = View.generateViewId()
             binding.lifecycleOwner = lifecycleOwner
-            binding.controller = this
+            binding.setVariable(BR.controller, this)
         }
-
-        override val childContainer get() = binding.content
 
         override fun onBind() {
             super.onBind()
-            binding.model = model
-            binding.isSelected = model?.isSelectedFlow(toolState)?.asLiveData() ?: ImmutableLiveData(false)
+            binding.setVariable(BR.model, model)
+            binding.setVariable(
+                BR.isSelected,
+                model?.isSelectedFlow(toolState)?.asLiveData() ?: ImmutableLiveData(false)
+            )
         }
 
         override val isClickable = true
@@ -93,6 +84,56 @@ class MultiselectController private constructor(
         fun toggleOption() {
             triggerAnalyticsEvents(model?.getAnalyticsEvents(AnalyticsEvent.Trigger.CLICKED))
             model?.toggleSelected(toolState)
+        }
+
+        class CardOptionController(
+            binding: ToolContentMultiselectOptionCardBinding,
+            parentController: BaseController<*>,
+            cacheFactory: UiControllerCache.Factory
+        ) : OptionController<ToolContentMultiselectOptionCardBinding>(binding, parentController, cacheFactory) {
+            @AssistedInject
+            internal constructor(
+                @Assisted parent: ViewGroup,
+                @Assisted parentController: BaseController<*>,
+                cacheFactory: UiControllerCache.Factory
+            ) : this(
+                binding = ToolContentMultiselectOptionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                parentController = parentController,
+                cacheFactory = cacheFactory
+            )
+
+            @AssistedFactory
+            interface Factory : BaseController.Factory<CardOptionController>
+
+            override val childContainer get() = binding.content
+
+            override fun supportsModel(model: Base) =
+                model is Multiselect.Option && model.style == Multiselect.Option.Style.CARD
+        }
+
+        class FlatOptionController(
+            binding: ToolContentMultiselectOptionFlatBinding,
+            parentController: BaseController<*>,
+            cacheFactory: UiControllerCache.Factory
+        ) : OptionController<ToolContentMultiselectOptionFlatBinding>(binding, parentController, cacheFactory) {
+            @AssistedInject
+            internal constructor(
+                @Assisted parent: ViewGroup,
+                @Assisted parentController: BaseController<*>,
+                cacheFactory: UiControllerCache.Factory
+            ) : this(
+                binding = ToolContentMultiselectOptionFlatBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                parentController = parentController,
+                cacheFactory = cacheFactory
+            )
+
+            @AssistedFactory
+            interface Factory : BaseController.Factory<FlatOptionController>
+
+            override val childContainer get() = binding.content
+
+            override fun supportsModel(model: Base) =
+                model is Multiselect.Option && model.style == Multiselect.Option.Style.FLAT
         }
     }
 }
