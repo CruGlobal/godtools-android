@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_FAVORITE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TRAINING
@@ -37,8 +36,6 @@ class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, s
             }
         ).and(ToolTable.FIELD_HIDDEN.ne(true))
         if (mode == MODE_ADDED) where = where.and(ToolTable.FIELD_ADDED.eq(true))
-        // HACK: disable CYOA tools for release builds
-        if (!BuildConfig.DEBUG) where = where.and(ToolTable.FIELD_TYPE.ne(Tool.Type.CYOA))
         Query.select<Tool>()
             .where(where)
             .orderBy(if (mode == MODE_ADDED) ToolTable.SQL_ORDER_BY_ORDER else ToolTable.COLUMN_DEFAULT_ORDER)
