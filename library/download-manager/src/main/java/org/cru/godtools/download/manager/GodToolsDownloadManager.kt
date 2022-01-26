@@ -223,8 +223,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val attachment = dao.find<Attachment>(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
+            val wasDownloaded = attachment.isDownloaded
 
             filesystemMutex.read.withLock {
                 filesMutex.withLock(filename) {
@@ -247,8 +248,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                         }
                     }
 
-                    dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-                    eventBus.post(AttachmentUpdateEvent)
+                    if (attachment.isDownloaded || wasDownloaded) {
+                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                        eventBus.post(AttachmentUpdateEvent)
+                    }
                 }
             }
         }
