@@ -54,6 +54,7 @@ class LessonActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
+        if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.LESSON)
         setupFeedbackDialog()
     }
 

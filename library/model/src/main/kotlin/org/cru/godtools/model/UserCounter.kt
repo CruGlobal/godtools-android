@@ -12,6 +12,10 @@ private const val JSON_INCREMENT = "increment"
 
 @JsonApiType(JSON_API_TYPE)
 class UserCounter @JvmOverloads constructor(@JsonApiId val id: String = "") {
+    companion object {
+        val VALID_NAME = Regex("[a-zA-Z0-9_\\-.]+")
+    }
+
     @JsonApiAttribute(JSON_INCREMENT, deserialize = false)
     var delta: Int = 0
 

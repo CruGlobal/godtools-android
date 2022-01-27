@@ -61,6 +61,7 @@ class UserCounterSyncTasks @Inject internal constructor(
 
             // process any counters that need to be updated
             QUERY_DIRTY_COUNTERS.get(dao)
+                .filter { UserCounter.VALID_NAME.matches(it.id) }
                 .map { counter ->
                     async {
                         val updated = countersApi.updateCounter(counter.id, counter).takeIf { it.isSuccessful }

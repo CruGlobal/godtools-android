@@ -81,8 +81,8 @@ class TractActivity :
             initialPage = getInt(EXTRA_INITIAL_PAGE, initialPage)
         }
 
-        // track this view
-        if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it) }
+        // track this tool open
+        if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it, Manifest.Type.TRACT) }
 
         attachLiveSharePublishExitBehavior()
         startLiveShareSubscriberIfNecessary(savedInstanceState)

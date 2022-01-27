@@ -8,7 +8,8 @@ private const val ACTION_SHARE_SCREEN_PUBLISHER = "share_screen_engaged"
 private const val ACTION_SHARE_SCREEN_SUBSCRIBER = "share_screen_opened"
 
 object ShareScreenEngagedActionEvent : AnalyticsActionEvent(action = ACTION_SHARE_SCREEN_PUBLISHER) {
-    override fun isForSystem(system: AnalyticsSystem) = system == AnalyticsSystem.FIREBASE
+    override fun isForSystem(system: AnalyticsSystem) =
+        system == AnalyticsSystem.FIREBASE || system == AnalyticsSystem.USER
 }
 
 object ShareScreenOpenedActionEvent : AnalyticsActionEvent(action = ACTION_SHARE_SCREEN_SUBSCRIBER) {

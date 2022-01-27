@@ -345,12 +345,14 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
     // endregion Feature Discovery
 
-    protected fun trackToolOpen(tool: String) {
+    protected fun trackToolOpen(tool: String, type: Manifest.Type? = null) {
         eventBus.post(ToolUsedEvent(tool))
-        eventBus.post(ToolOpenedAnalyticsActionEvent(first = !settings.isFeatureDiscovered(FEATURE_TOOL_OPENED)))
+        eventBus.post(ToolOpenedAnalyticsActionEvent(tool, type, !settings.isFeatureDiscovered(FEATURE_TOOL_OPENED)))
         if (intent.isShortcutLaunch) eventBus.post(ToolOpenedViaShortcutAnalyticsActionEvent)
 
-        settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
+        if (type == Manifest.Type.ARTICLE || type == Manifest.Type.CYOA || type == Manifest.Type.TRACT) {
+            settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
+        }
 
         dao.updateSharesDeltaAsync(tool, 1)
     }

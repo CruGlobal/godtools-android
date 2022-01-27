@@ -24,6 +24,10 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // track this tool open
+        if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it, Manifest.Type.CYOA) }
+
         dataModel.activeManifest.observe(this) { it?.let { showInitialPageIfNecessary(it) } }
     }
 

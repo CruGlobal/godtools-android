@@ -17,6 +17,7 @@ import org.cru.godtools.article.ui.categories.CategorySelectedListener
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.tool.model.Category
+import org.cru.godtools.tool.model.Manifest
 
 @AndroidEntryPoint
 class ArticlesActivity :
@@ -27,7 +28,7 @@ class ArticlesActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFinishing) return
-        if (savedInstanceState == null) trackToolOpen(tool)
+        if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.ARTICLE)
         setupFragments()
     }
 
