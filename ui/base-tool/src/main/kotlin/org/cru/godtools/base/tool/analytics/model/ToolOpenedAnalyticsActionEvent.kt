@@ -10,10 +10,7 @@ class ToolOpenedAnalyticsActionEvent(
     tool: String,
     private val type: Manifest.Type? = null,
     first: Boolean = false
-) : AnalyticsActionEvent(
-    action = if (first) "first-tool-opened" else "tool-opened",
-    systems = listOf(AnalyticsSystem.APPSFLYER, AnalyticsSystem.USER)
-) {
+) : AnalyticsActionEvent(action = if (first) "first-tool-opened" else "tool-opened") {
     override fun isForSystem(system: AnalyticsSystem) = when (system) {
         AnalyticsSystem.APPSFLYER -> type in setOf(Manifest.Type.ARTICLE, Manifest.Type.CYOA, Manifest.Type.TRACT)
         AnalyticsSystem.USER -> true
