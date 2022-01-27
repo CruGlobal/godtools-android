@@ -92,6 +92,7 @@ object Contract : BaseContract() {
         const val COLUMN_BANNER = "banner"
         const val COLUMN_DETAILS_BANNER = "banner_details"
         const val COLUMN_OVERVIEW_VIDEO = "overview_video"
+        const val COLUMN_SCREEN_SHARE_DISABLED = "screen_share_disabled"
         const val COLUMN_DEFAULT_ORDER = "default_order"
         internal const val COLUMN_ORDER = "ordering"
         const val COLUMN_ADDED = "added"
@@ -118,6 +119,7 @@ object Contract : BaseContract() {
             COLUMN_BANNER,
             COLUMN_OVERVIEW_VIDEO,
             COLUMN_DETAILS_BANNER,
+            COLUMN_SCREEN_SHARE_DISABLED,
             COLUMN_DEFAULT_ORDER,
             COLUMN_ORDER,
             COLUMN_ADDED,
@@ -134,6 +136,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_BANNER = "$COLUMN_BANNER INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER = "$COLUMN_DETAILS_BANNER INTEGER"
         private const val SQL_COLUMN_OVERVIEW_VIDEO = "$COLUMN_OVERVIEW_VIDEO TEXT"
+        private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
         private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
         private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
         private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
@@ -157,6 +160,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_BANNER,
             SQL_COLUMN_DETAILS_BANNER,
             SQL_COLUMN_OVERVIEW_VIDEO,
+            SQL_COLUMN_SCREEN_SHARE_DISABLED,
             SQL_COLUMN_DEFAULT_ORDER,
             SQL_COLUMN_ORDER,
             SQL_COLUMN_ADDED,
@@ -173,6 +177,8 @@ object Contract : BaseContract() {
         internal const val SQL_V43_ALTER_CATEGORY = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_CATEGORY"
         internal const val SQL_V45_ALTER_HIDDEN = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_HIDDEN"
         internal const val SQL_V45_POPULATE_HIDDEN = "UPDATE $TABLE_NAME SET $COLUMN_HIDDEN = 0"
+        internal const val SQL_V47_ALTER_SCREEN_SHARE_DISABLED =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SCREEN_SHARE_DISABLED"
         // endregion DB migrations
     }
 

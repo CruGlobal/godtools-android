@@ -22,6 +22,7 @@ private const val JSON_BANNER_DETAILS = "attr-banner-about"
 private const val JSON_OVERVIEW_VIDEO = "attr-about-overview-video-youtube"
 private const val JSON_DEFAULT_ORDER = "attr-default-order"
 private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
+private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(JSON_API_TYPE)
 class Tool : Base() {
@@ -83,6 +84,9 @@ class Tool : Base() {
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
     var initialFavoritesPriority: Int? = Int.MAX_VALUE
+
+    @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
+    var isScreenShareDisabled = false
 
     @JsonApiAttribute(JSON_DEFAULT_ORDER)
     var defaultOrder: Int? = 0
