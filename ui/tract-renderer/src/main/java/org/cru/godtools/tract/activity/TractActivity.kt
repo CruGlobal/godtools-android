@@ -28,6 +28,7 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.model.Tool
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.tips.Tip
@@ -325,15 +326,23 @@ class TractActivity :
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
     }
-    private var liveShareMenuObserver: Observer<Pair<State, State>>? = null
+    private var liveShareMenuObserver: Observer<Tool?>? = null
+    private var liveShareActiveMenuObserver: Observer<Pair<State, State>>? = null
     private fun Menu.setupLiveShareMenuItemVisibility() {
-        liveShareMenuObserver?.let { liveShareState.removeObserver(it) }
+        liveShareMenuObserver?.let { dataModel.tool.removeObserver(it) }
+        liveShareMenuObserver = findItem(R.id.action_live_share_publish)?.let { item ->
+            Observer<Tool?> { item.isVisible = it?.isScreenShareDisabled != true }
+                .also { dataModel.tool.observe(this@TractActivity, it) }
+        }
 
-        val liveShareItem = findItem(R.id.action_live_share_active)
-        liveShareItem?.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
-        liveShareMenuObserver = Observer<Pair<State, State>> { (publisherState, subscriberState) ->
-            liveShareItem?.isVisible = publisherState == State.On || subscriberState == State.On
-        }.also { liveShareState.observe(this@TractActivity, it) }
+        liveShareActiveMenuObserver?.let { liveShareState.removeObserver(it) }
+        liveShareActiveMenuObserver = findItem(R.id.action_live_share_active)?.let { item ->
+            item.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
+
+            Observer<Pair<State, State>> { (publisherState, subscriberState) ->
+                item.isVisible = publisherState == State.On || subscriberState == State.On
+            }.also { liveShareState.observe(this@TractActivity, it) }
+        }
     }
 
     internal fun shareLiveShareLink() {

@@ -16,17 +16,20 @@ import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tool.model.Manifest
@@ -51,6 +54,8 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
     private val distinctToolCode = toolCode.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
+
+    val tool = distinctToolCode.switchMap { it?.let { dao.findLiveData<Tool>(it) }.orEmpty() }
 
     val languages = distinctLocales.switchMap {
         Query.select<Language>()
