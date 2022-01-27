@@ -19,6 +19,8 @@ import org.cru.godtools.base.tool.ui.controller.FlowController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
 import org.cru.godtools.base.tool.ui.controller.MultiselectController
+import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.CardOptionController
+import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.FlatOptionController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
@@ -42,6 +44,9 @@ import org.cru.godtools.tool.model.Video
 
 private const val VARIATION_BUTTON_CONTAINED = 1
 private const val VARIATION_BUTTON_OUTLINED = 2
+
+private const val VARIATION_MULTISELECT_OPTION_CARD = 1
+private const val VARIATION_MULTISELECT_OPTION_FLAT = 2
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -101,6 +106,16 @@ abstract class UiControllerModule {
 
     @Binds
     @IntoMap
+    @UiControllerType(Multiselect.Option::class, VARIATION_MULTISELECT_OPTION_CARD)
+    internal abstract fun cardOptionControllerFactory(f: CardOptionController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
+    @UiControllerType(Multiselect.Option::class, VARIATION_MULTISELECT_OPTION_FLAT)
+    internal abstract fun flatOptionControllerFactory(f: FlatOptionController.Factory): BaseController.Factory<*>
+
+    @Binds
+    @IntoMap
     @UiControllerType(Paragraph::class)
     internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
 
@@ -132,6 +147,17 @@ abstract class UiControllerModule {
             when ((it as? Button)?.style) {
                 Button.Style.CONTAINED -> VARIATION_BUTTON_CONTAINED
                 Button.Style.OUTLINED -> VARIATION_BUTTON_OUTLINED
+                else -> null
+            }
+        }
+
+        @Provides
+        @Reusable
+        @IntoSet
+        fun multiselectOptionVariationResolver() = VariationResolver {
+            when ((it as? Multiselect.Option)?.style) {
+                Multiselect.Option.Style.CARD -> VARIATION_MULTISELECT_OPTION_CARD
+                Multiselect.Option.Style.FLAT -> VARIATION_MULTISELECT_OPTION_FLAT
                 else -> null
             }
         }
