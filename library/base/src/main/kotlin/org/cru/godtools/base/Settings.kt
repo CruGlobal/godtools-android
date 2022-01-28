@@ -28,8 +28,6 @@ private const val PREF_LAUNCHES = "launches"
 private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
-private const val VERSION_5_1_4 = 4033503
-private const val VERSION_5_2_0 = 4035089
 private const val VERSION_5_5_0 = 4037627
 
 @Singleton
@@ -117,20 +115,12 @@ class Settings @Inject internal constructor(
         if (!discovered) {
             var changed = false
             when (feature) {
-                FEATURE_TUTORIAL_ONBOARDING -> if (firstLaunchVersion <= VERSION_5_1_4) {
-                    setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)
-                    changed = true
-                }
                 FEATURE_PARALLEL_LANGUAGE -> if (firstLaunchVersion <= VERSION_5_5_0 || parallelLanguage != null) {
                     setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
                     changed = true
                 }
                 FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
                     setFeatureDiscovered(FEATURE_LOGIN)
-                    changed = true
-                }
-                FEATURE_TOOL_SHARE -> if (firstLaunchVersion <= VERSION_5_2_0) {
-                    setFeatureDiscovered(FEATURE_TOOL_SHARE)
                     changed = true
                 }
             }
@@ -189,15 +179,6 @@ class Settings @Inject internal constructor(
 
     private fun trackFirstLaunchVersion() {
         if (prefs.contains(PREF_VERSION_FIRST_LAUNCH)) return
-
-        // The app was used before we started tracking the initial version, so just assume it was the most recent
-        // version before we started tracking the first launch version
-        if (prefs.contains(PREF_PRIMARY_LANGUAGE)) {
-            firstLaunchVersion = VERSION_5_1_4
-            return
-        }
-
-        // resolve the current version code as the first launch code
         firstLaunchVersion = BuildConfig.VERSION_CODE
     }
 
