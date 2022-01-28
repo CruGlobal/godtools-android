@@ -38,8 +38,8 @@ plugins {
     id "de.undercouch.download" version "4.1.2" apply false
 }
 
-version '5.7.0-SNAPSHOT'
-ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029765
+version '5.7.0'
+ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029265
 
 // define dependency versions for this project
 ext {
