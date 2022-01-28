@@ -15,6 +15,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.api.okhttp3.interceptor.SessionRetryInterceptor
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_INTERCEPTOR
 import org.ccci.gto.android.common.dagger.okhttp3.OkHttp3Module
@@ -100,7 +101,8 @@ object ApiModule {
     ): Retrofit = retrofit.newBuilder()
         .callFactory(
             okhttp.newBuilder()
-                .addInterceptor(sessionInterceptor)
+                .addNetworkInterceptor(sessionInterceptor)
+                .addInterceptor(SessionRetryInterceptor(sessionInterceptor, 3))
                 .build()
         ).build()
 
