@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
-
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="hasSpotLight" type="LiveData&lt;Boolean&gt;" />
@@ -13,11 +14,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            
-        </FrameLayout>
+
+            <fragment
+                android:id="@+id/fragmentSpotlight"
+                android:name="org.cru.godtools.ui.tools.ToolsSpotlightFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleIf="@{hasSpotLight}"
+                tools:layout="@layout/tools_spotlight_fragment" />
+
+            <fragment
+                android:id="@+id/fragmentCategory"
+                android:name="org.cru.godtools.ui.tools.ToolsCategoryFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentSpotlight"
+                tools:layout="@layout/tools_category_fragment" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
