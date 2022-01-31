@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentSpotlight"
                 android:name="org.cru.godtools.ui.tools.ToolsSpotlightFragment"
                 android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 app:visibleIf="@{hasSpotLight}"
                 tools:layout="@layout/tools_spotlight_fragment" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentCategory"
                 android:name="org.cru.godtools.ui.tools.ToolsCategoryFragment"
                 android:layout_width="match_parent"
