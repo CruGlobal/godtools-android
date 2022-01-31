@@ -52,7 +52,7 @@ import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
-class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
+class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
     companion object {
         const val MODE_ADDED = 1
         const val MODE_ALL = 2
@@ -169,7 +169,7 @@ class ToolsFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tool
     // endregion Banners
 
     // region Data Model
-    private val dataModel: ToolsFragmentDataModel by viewModels()
+    private val dataModel: ToolsListFragmentDataModel by viewModels()
     private fun setupDataModel() {
         dataModel.mode.value = mode
     }
@@ -289,7 +289,7 @@ class RemoveFavoriteConfirmationDialogFragment() : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.tools_list_remove_favorite_dialog_title, name))
             .setPositiveButton(R.string.tools_list_remove_favorite_dialog_confirm) { _, _ ->
-                findListener<ToolsFragment>()?.removeFavorite(code)
+                findListener<ToolsListFragment>()?.removeFavorite(code)
             }
             .setNegativeButton(R.string.tools_list_remove_favorite_dialog_dismiss, null)
             .create()

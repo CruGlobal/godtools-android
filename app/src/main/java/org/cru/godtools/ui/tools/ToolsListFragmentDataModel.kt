@@ -16,15 +16,15 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_FAVORITE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TRAINING
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ALL
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_LESSONS
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
-class ToolsFragmentDataModel @Inject constructor(private val dao: GodToolsDao, settings: Settings) :
+class ToolsListFragmentDataModel @Inject constructor(private val dao: GodToolsDao, settings: Settings) :
     ViewModel() {
     val mode = MutableLiveData(MODE_ADDED)
 
