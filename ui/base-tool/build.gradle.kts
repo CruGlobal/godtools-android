@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     api(libs.gtoSupport.picasso)
+    implementation(libs.gtoSupport.androidx.constraintlayout)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.animation)
