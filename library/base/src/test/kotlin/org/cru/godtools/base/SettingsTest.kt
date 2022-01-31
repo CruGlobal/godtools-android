@@ -41,12 +41,6 @@ class SettingsTest {
     }
 
     @Test
-    fun verifyFeatureDiscoveryTutorialOnboardingUpgrade() {
-        settings.firstLaunchVersion = 1
-        assertTrue(settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING))
-    }
-
-    @Test
     fun verifyFeatureDiscoveryTutorialOnboardingNewInstall() {
         assertFalse(settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING))
     }
