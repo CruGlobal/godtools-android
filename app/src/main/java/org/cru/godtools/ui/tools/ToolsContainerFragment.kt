@@ -8,7 +8,7 @@ import org.cru.godtools.databinding.ToolsContainerFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 
 @AndroidEntryPoint
-class ToolsContainerFragment(): BasePlatformFragment<ToolsContainerFragmentBinding>(R.layout.tools_container_fragment) {
+class ToolsContainerFragment : BasePlatformFragment<ToolsContainerFragmentBinding>(R.layout.tools_container_fragment) {
 
     private val dataModel: ToolsContainerFragmentDataModel by viewModels()
     override fun onBindingCreated(binding: ToolsContainerFragmentBinding, savedInstanceState: Bundle?) {
