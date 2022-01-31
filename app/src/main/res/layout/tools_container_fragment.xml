@@ -6,7 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
-        <variable name="hasSpotLight" type="LiveData&lt;Boolean&gt;" />
+        <variable name="hasSpotlight" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,18 +20,18 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentSpotlight"
-                android:name="org.cru.godtools.ui.tools.ToolsSpotlightFragment"
+                android:name="org.cru.godtools.ui.dashboard.tools.ToolsSpotlightFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:visibleIf="@{hasSpotLight}"
+                app:visibleIf="@{hasSpotlight}"
                 tools:layout="@layout/tools_spotlight_fragment" />
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentCategory"
-                android:name="org.cru.godtools.ui.tools.ToolsCategoryFragment"
+                android:name="org.cru.godtools.ui.dashboard.tools.ToolsCategoryFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
