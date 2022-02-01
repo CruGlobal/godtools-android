@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.databinding
+package org.cru.godtools.tool.tips.databinding
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView

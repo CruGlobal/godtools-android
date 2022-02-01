@@ -1,8 +1,8 @@
-package org.cru.godtools.tract.ui.tips
+package org.cru.godtools.tool.tips.ui.shape
 
 import android.content.Context
 import org.ccci.gto.android.common.material.shape.AngledCutCornerTreatment
-import org.cru.godtools.tract.R
+import org.cru.godtools.tool.tips.R
 
 internal object TipArrowShape {
     @JvmStatic

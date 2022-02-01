@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.tips
+package org.cru.godtools.tool.tips.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -28,16 +28,16 @@ import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tract.R
-import org.cru.godtools.tract.analytics.model.TipAnalyticsScreenEvent
-import org.cru.godtools.tract.databinding.TractTipBinding
+import org.cru.godtools.tool.tips.R
+import org.cru.godtools.tool.tips.analytics.model.TipAnalyticsScreenEvent
+import org.cru.godtools.tool.tips.databinding.ToolTipBinding
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
-class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBinding>(), TipCallbacks {
+class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<ToolTipBinding>(), TipCallbacks {
     companion object {
         fun create(tip: Tip): TipBottomSheetDialogFragment? = TipBottomSheetDialogFragment().apply {
             tool = tip.manifest.code ?: return null
@@ -71,7 +71,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        inflater.inflate(R.layout.tract_tip, container, false)
+        inflater.inflate(R.layout.tool_tip, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,7 +83,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
         if (context?.resources?.getBoolean(R.bool.tract_tips_show_full_height) == true) makeFullScreen()
     }
 
-    override fun onBindingCreated(binding: TractTipBinding, savedInstanceState: Bundle?) {
+    override fun onBindingCreated(binding: ToolTipBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         dataModel.tip.observe(viewLifecycleOwner) { binding.tip = it }
         binding.isComplete = dataModel.isCompleted
@@ -100,7 +100,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
     @Inject
     lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
 
-    private fun TractTipBinding.setupPages() {
+    private fun ToolTipBinding.setupPages() {
         pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner, toolState.toolState).also {
             it.callbacks = this@TipBottomSheetDialogFragment
             dataModel.tip.observe(viewLifecycleOwner, it)

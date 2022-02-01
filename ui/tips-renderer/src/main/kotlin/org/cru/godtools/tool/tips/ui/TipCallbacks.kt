@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.tips
+package org.cru.godtools.tool.tips.ui
 
 interface TipCallbacks {
     fun goToNextPage()

@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.controller.tips
+package org.cru.godtools.tool.tips.ui.controller
 
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -7,18 +7,18 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.tips.TipPage
 import org.cru.godtools.tool.state.State
-import org.cru.godtools.tract.databinding.TractTipPageBinding
+import org.cru.godtools.tool.tips.databinding.ToolTipPageBinding
 import org.greenrobot.eventbus.EventBus
 
 class TipPageController @AssistedInject internal constructor(
-    @Assisted private val binding: TractTipPageBinding,
+    @Assisted private val binding: ToolTipPageBinding,
     @Assisted override val toolState: State,
     eventBus: EventBus,
     cacheFactory: UiControllerCache.Factory
 ) : ParentController<TipPage>(TipPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
-        fun create(binding: TractTipPageBinding, toolState: State): TipPageController
+        fun create(binding: ToolTipPageBinding, toolState: State): TipPageController
     }
 
     init {
@@ -34,5 +34,5 @@ class TipPageController @AssistedInject internal constructor(
     }
 }
 
-fun TractTipPageBinding.bindController(factory: TipPageController.Factory, toolState: State) =
+fun ToolTipPageBinding.bindController(factory: TipPageController.Factory, toolState: State) =
     controller ?: factory.create(this, toolState)

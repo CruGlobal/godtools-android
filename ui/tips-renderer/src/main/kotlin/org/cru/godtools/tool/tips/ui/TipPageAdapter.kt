@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.tips
+package org.cru.godtools.tool.tips.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,15 +10,15 @@ import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.state.State
-import org.cru.godtools.tract.databinding.TractTipPageBinding
-import org.cru.godtools.tract.ui.controller.tips.TipPageController
-import org.cru.godtools.tract.ui.controller.tips.bindController
+import org.cru.godtools.tool.tips.databinding.ToolTipPageBinding
+import org.cru.godtools.tool.tips.ui.controller.TipPageController
+import org.cru.godtools.tool.tips.ui.controller.bindController
 
 class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     @Assisted private val toolState: State,
     private val controllerFactory: TipPageController.Factory
-) : SimpleDataBindingAdapter<TractTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
+) : SimpleDataBindingAdapter<ToolTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
     @AssistedFactory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner, toolState: State): TipPageAdapter
@@ -41,12 +41,12 @@ class TipPageAdapter @AssistedInject internal constructor(
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        TractTipPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
+        ToolTipPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
             bindController(controllerFactory, toolState)
             callbacks = this@TipPageAdapter
         }
 
-    override fun onBindViewDataBinding(binding: TractTipPageBinding, position: Int) {
+    override fun onBindViewDataBinding(binding: ToolTipPageBinding, position: Int) {
         binding.controller?.model = getItem(position)
     }
     // endregion Lifecycle

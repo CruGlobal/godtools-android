@@ -34,6 +34,7 @@ import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
+import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -50,7 +51,6 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
-import org.cru.godtools.tract.ui.tips.TipBottomSheetDialogFragment
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet

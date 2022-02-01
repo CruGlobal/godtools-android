@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.controller.tips
+package org.cru.godtools.tool.tips.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,11 +7,11 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.tool.model.tips.InlineTip
-import org.cru.godtools.tract.databinding.TractContentInlineTipBinding
+import org.cru.godtools.tool.tips.databinding.ToolContentInlineTipBinding
 import org.keynote.godtools.android.db.GodToolsDao
 
 internal class InlineTipController private constructor(
-    private val binding: TractContentInlineTipBinding,
+    private val binding: ToolContentInlineTipBinding,
     parentController: BaseController<*>,
     private val dao: GodToolsDao
 ) : BaseController<InlineTip>(InlineTip::class, binding.root, parentController) {
@@ -21,7 +21,7 @@ internal class InlineTipController private constructor(
         @Assisted parentController: BaseController<*>,
         dao: GodToolsDao
     ) : this(
-        TractContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        ToolContentInlineTipBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         parentController,
         dao
     )

@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.analytics.model
+package org.cru.godtools.tool.tips.analytics.model
 
 import java.util.Locale
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent

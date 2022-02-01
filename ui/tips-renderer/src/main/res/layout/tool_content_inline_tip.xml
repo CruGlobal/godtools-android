@@ -6,19 +6,19 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.tract.util.TipTypeKt" />
+        <import type="org.cru.godtools.tool.tips.util.TipTypeKt" />
 
         <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
-        <variable name="controller" type="org.cru.godtools.tract.ui.controller.tips.InlineTipController" />
+        <variable name="controller" type="org.cru.godtools.tool.tips.ui.controller.InlineTipController" />
         <variable name="model" type="org.cru.godtools.tool.model.tips.InlineTip" />
         <variable name="isCompleted" type="LiveData&lt;Boolean&gt;" />
     </data>
 
     <com.google.android.material.imageview.ShapeableImageView
         style="@style/Widget.GodTools.Tip.Badge"
-        android:layout_marginLeft="@dimen/tract_content_margin_horizontal"
+        android:layout_marginLeft="@dimen/tool_content_margin"
         android:layout_marginTop="4dp"
-        android:layout_marginRight="@dimen/tract_content_margin_horizontal"
+        android:layout_marginRight="@dimen/tool_content_margin"
         android:layout_marginBottom="4dp"
         android:background="@{isCompleted ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
         android:onClick="@{() -> controller.showTip(model.tip)}"
