@@ -36,17 +36,17 @@ import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
-import org.cru.godtools.ui.tools.ToolsFragment
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ADDED
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_ALL
-import org.cru.godtools.ui.tools.ToolsFragment.Companion.MODE_LESSONS
+import org.cru.godtools.ui.tools.ToolsListFragment
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ALL
+import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
 
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
 class MainActivity :
-    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsFragment.Callbacks {
+    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsListFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
@@ -116,9 +116,9 @@ class MainActivity :
         if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 
         val fragment = when (page) {
-            Page.LESSONS -> ToolsFragment(MODE_LESSONS)
-            Page.ALL_TOOLS -> ToolsFragment(MODE_ALL)
-            Page.FAVORITE_TOOLS -> ToolsFragment(MODE_ADDED)
+            Page.LESSONS -> ToolsListFragment(MODE_LESSONS)
+            Page.ALL_TOOLS -> ToolsListFragment(MODE_ALL)
+            Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
         }.apply {
             val transition = MaterialFadeThrough()
             enterTransition = transition

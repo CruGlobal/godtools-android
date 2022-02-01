@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.tools
+package org.cru.godtools.databinding
 
 import android.app.Application
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.model.Tool
 import org.junit.Assert.assertEquals
 import org.junit.Before
