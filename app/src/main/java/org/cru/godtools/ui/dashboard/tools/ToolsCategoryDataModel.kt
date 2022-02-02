@@ -1,17 +1,13 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
+import javax.inject.Inject
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Tool
-import org.cru.godtools.tool.model.Category
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.*
-import javax.inject.Inject
 
 @HiltViewModel
 class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao) : ViewModel() {
@@ -23,5 +19,4 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao) : ViewModel()
             tool.category
         }.distinct()
     }
-
 }

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
-import org.cru.godtools.tool.model.Category
 
 class CategoryAdapter() : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(), Observer<List<String>> {
 
@@ -31,7 +30,4 @@ class CategoryAdapter() : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(), Ob
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.category = categories[position]
     }
-
-
 }
-

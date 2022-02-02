@@ -39,7 +39,6 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsListFragment
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
-import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ALL
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_LESSONS
 import org.cru.godtools.util.openToolActivity
 
