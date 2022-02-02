@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">தொலை பகிர்வு அமர்விலிருந்து இப்போது வெளியேற வேண்டுமா?</string>
     <string name="tract_live_share_exit_dialog_confirm">வெளியேறு</string>
     <string name="tract_live_share_exit_dialog_cancel">ரத்துசெய்</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">அடுத்தது</string>
-    <string name="tract_tips_tip_action_close">நெருக்கமான</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">கேளுங்கள்</string>
-    <string name="tract_tips_type_consider">கவனியுங்கள்</string>
-    <string name="tract_tips_type_prepare">தயார்</string>
-    <string name="tract_tips_type_quote">மேற்கோள்</string>
-    <string name="tract_tips_type_tip">உதவிக்குறிப்பு</string>
 </resources>

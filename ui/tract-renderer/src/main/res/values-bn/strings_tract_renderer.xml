@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">"এখন রিমোট শেয়ার করা সেশন থেকে বেরিয়ে আসুন "</string>
     <string name="tract_live_share_exit_dialog_confirm">"বেরিয়ে আসুন "</string>
     <string name="tract_live_share_exit_dialog_cancel">"বাতিল করুন "</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">"পরেরটি "</string>
-    <string name="tract_tips_tip_action_close">"বন্ধ করুন "</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">"জিজ্ঞাসা করুন "</string>
-    <string name="tract_tips_type_consider">"বিবেচনা করুন "</string>
-    <string name="tract_tips_type_prepare">"প্রস্তুত করুন "</string>
-    <string name="tract_tips_type_quote">"উদ্ধৃত করুন "</string>
-    <string name="tract_tips_type_tip">"টিপ "</string>
 </resources>

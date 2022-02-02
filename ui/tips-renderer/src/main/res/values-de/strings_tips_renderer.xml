@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <!-- Tip Types -->
+    <string name="tract_tips_type_prepare">Vorbereitung</string>
+</resources>

@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">હવે દૂરસ્થ શેરિંગ સત્રથી બહાર નીકળવું છે?</string>
     <string name="tract_live_share_exit_dialog_confirm">બહાર નીકળો</string>
     <string name="tract_live_share_exit_dialog_cancel">રદ કરો</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">આગળ</string>
-    <string name="tract_tips_tip_action_close">બંધ</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">પુછવું</string>
-    <string name="tract_tips_type_consider">ધ્યાનમાં લો</string>
-    <string name="tract_tips_type_prepare">તૈયાર કરો</string>
-    <string name="tract_tips_type_quote">ટાંકવુ</string>
-    <string name="tract_tips_type_tip">સૂચના</string>
 </resources>

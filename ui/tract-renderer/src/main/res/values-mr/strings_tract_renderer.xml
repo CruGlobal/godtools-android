@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">रिमोट शेअरिंग सत्र आता सोडायचे?</string>
     <string name="tract_live_share_exit_dialog_confirm">सोडा</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करा</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">पुढे</string>
-    <string name="tract_tips_tip_action_close">बंद</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">विचारा</string>
-    <string name="tract_tips_type_consider">विचार करा</string>
-    <string name="tract_tips_type_prepare">तयार करा</string>
-    <string name="tract_tips_type_quote">अवतरण</string>
-    <string name="tract_tips_type_tip">टीप</string>
 </resources>
