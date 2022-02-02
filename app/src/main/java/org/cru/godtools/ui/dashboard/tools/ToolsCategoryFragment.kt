@@ -9,7 +9,7 @@ import org.cru.godtools.databinding.DashboardToolsCategoryFragmentBinding
 
 @AndroidEntryPoint
 class ToolsCategoryFragment() :
-    BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment) {
+    BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment), CategoryAdapterCallbacks {
 
     // region Data Model
     private val dataModel: ToolsCategoryDataModel by viewModels()
@@ -17,7 +17,7 @@ class ToolsCategoryFragment() :
     // endregion Data Model
 
     private val adapter: CategoryAdapter by lazy {
-        CategoryAdapter().also { adapter ->
+        CategoryAdapter(this as CategoryAdapterCallbacks).also { adapter ->
             dataModel.categories.observe(this, adapter)
         }
     }
@@ -26,5 +26,10 @@ class ToolsCategoryFragment() :
         super.onBindingCreated(binding, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.categoryRecyclerView.adapter = adapter
+    }
+
+    override fun onCategorySelected(category: String) {
+        val selectedCategory: String? = if (adapter.selectedCategory == category) { null } else { category }
+        adapter.selectedCategory = selectedCategory
     }
 }

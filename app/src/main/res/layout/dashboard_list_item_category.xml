@@ -6,6 +6,8 @@
     <data>
 
         <variable name="category" type="String" />
+        <variable name="isSelected" type="Boolean" />
+        <variable name="callbacks" type="org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks"/>
     </data>
 
     <FrameLayout
@@ -19,7 +21,10 @@
             android:layout_margin="4dp"
             android:padding="@dimen/tools_card_corner_radius"
             android:shadowColor="@color/tintable"
+            tools:cardBackgrounColor="@color/gray_80"
+            app:cardBackgroundColor="@{isSelected ? @color/gray_80 : @color/white }"
             app:cardCornerRadius="@dimen/card_corner_radius"
+            android:onClick="@{() -> callbacks.onCategorySelected(category)}"
             app:cardElevation="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
