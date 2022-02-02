@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
+import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
@@ -25,7 +26,6 @@ import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
-import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.model.Tool
@@ -69,8 +69,6 @@ class TractActivity :
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
-
-    private val showTips get() = intent?.getBooleanExtra(EXTRA_SHOW_TIPS, false) ?: false
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,9 +221,8 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this, toolState.toolState).also { adapter ->
+        pagerAdapterFactory.create(this, dataModel.showTips, toolState.toolState).also { adapter ->
             adapter.callbacks = this
-            adapter.showTips = showTips
             dataModel.activeManifest.observe(this) { manifest ->
                 val sameLocale = adapter.manifest?.locale == manifest?.locale
                 adapter.manifest = manifest
@@ -291,7 +288,11 @@ class TractActivity :
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
-        activeManifestLiveData.combineWith(subscriberController.state) { manifest, subscriberState ->
+        combine(
+            activeManifestLiveData,
+            subscriberController.state,
+            dataModel.showTips
+        ) { manifest, subscriberState, showTips ->
             manifest != null && subscriberState == State.Off && !showTips
         }
     }

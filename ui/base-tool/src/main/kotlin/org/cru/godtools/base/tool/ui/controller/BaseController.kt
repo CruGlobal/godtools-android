@@ -170,7 +170,7 @@ abstract class BaseController<T : Base> protected constructor(
     // endregion Clickable
 
     // region Tips
-    open val isTipsEnabled: Boolean get() = parentController?.isTipsEnabled ?: false
+    open val showTips: LiveData<Boolean> = parentController?.showTips ?: ImmutableLiveData(false)
 
     open fun showTip(tip: Tip?) {
         parentController?.showTip(tip)

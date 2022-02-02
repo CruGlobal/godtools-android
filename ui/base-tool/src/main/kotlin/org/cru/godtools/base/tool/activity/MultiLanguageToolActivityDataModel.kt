@@ -27,6 +27,7 @@ import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -49,6 +50,7 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     val toolCode = MutableLiveData<String?>()
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
     val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
+    val showTips: MutableLiveData<Boolean> = savedState.getLiveData(EXTRA_SHOW_TIPS, false)
 
     // region Resolved Data
     val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
