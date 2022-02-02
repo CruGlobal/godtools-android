@@ -33,6 +33,7 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
 import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
+import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
@@ -117,7 +118,7 @@ class MainActivity :
 
         val fragment = when (page) {
             Page.LESSONS -> ToolsListFragment(MODE_LESSONS)
-            Page.ALL_TOOLS -> ToolsListFragment(MODE_ALL)
+            Page.ALL_TOOLS -> ToolsFragment()
             Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
         }.apply {
             val transition = MaterialFadeThrough()

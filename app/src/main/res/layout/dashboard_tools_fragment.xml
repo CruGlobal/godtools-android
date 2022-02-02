@@ -14,11 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+            android:orientation="vertical">
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentSpotlight"
@@ -33,8 +32,10 @@
                 android:name="org.cru.godtools.ui.dashboard.tools.ToolsCategoryFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                tools:layout_height="match_parent"
+                android:tag="ToolsCategory"
                 tools:layout="@layout/dashboard_tools_category_fragment" />
-        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
