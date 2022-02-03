@@ -55,7 +55,7 @@ class CardController private constructor(
     init {
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
-        binding.enableTips = pageController.showTips
+        binding.enableTips = pageController.enableTips
 
         lifecycleOwner?.lifecycle?.apply {
             onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }

@@ -32,14 +32,18 @@ import org.greenrobot.eventbus.ThreadMode
 
 class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
-    @Assisted private val showTips: LiveData<Boolean>,
+    @Assisted private val enableTips: LiveData<Boolean>,
     @Assisted private val toolState: State,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
 ) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
     @AssistedFactory
     interface Factory {
-        fun create(lifecycleOwner: LifecycleOwner, showTips: LiveData<Boolean>, toolState: State): ManifestPagerAdapter
+        fun create(
+            lifecycleOwner: LifecycleOwner,
+            enableTips: LiveData<Boolean>,
+            toolState: State
+        ): ManifestPagerAdapter
     }
 
     interface Callbacks {
@@ -80,7 +84,7 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun onViewDataBindingCreated(binding: TractPageBinding) {
-        binding.bindController(pageControllerFactory, lifecycleOwner, showTips, toolState).also {
+        binding.bindController(pageControllerFactory, lifecycleOwner, enableTips, toolState).also {
             it.callbacks = this
         }
     }

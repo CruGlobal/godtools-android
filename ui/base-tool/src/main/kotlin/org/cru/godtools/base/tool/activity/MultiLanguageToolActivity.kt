@@ -146,6 +146,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // region Training Tips
     private fun Menu.setupTrainingTipsMenuItem() {
         findItem(R.id.action_tips)?.let { item ->
+            dataModel.hasTips.observe(this@MultiLanguageToolActivity, item) { isVisible = it }
             dataModel.showTips.observe(this@MultiLanguageToolActivity, item) { isChecked = it }
         }
     }
