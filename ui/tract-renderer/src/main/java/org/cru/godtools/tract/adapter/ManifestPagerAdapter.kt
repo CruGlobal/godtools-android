@@ -23,6 +23,7 @@ import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.state.State
+import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController
 import org.cru.godtools.tract.ui.controller.bindController
@@ -46,10 +47,9 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         ): ManifestPagerAdapter
     }
 
-    interface Callbacks {
+    interface Callbacks : ShowTipCallback {
         fun onUpdateActiveCard(page: TractPage, card: Card?)
         fun showModal(modal: Modal)
-        fun showTip(tip: Tip)
         fun goToPage(position: Int)
     }
 

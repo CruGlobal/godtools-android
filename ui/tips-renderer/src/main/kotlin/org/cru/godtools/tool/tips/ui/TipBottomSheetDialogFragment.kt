@@ -98,7 +98,7 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<ToolTipBindin
 
     // region Pages
     @Inject
-    lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
+    internal lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
 
     private fun ToolTipBinding.setupPages() {
         pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner, toolState.toolState).also {
