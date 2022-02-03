@@ -11,7 +11,7 @@ eventbus = "3.3.1"
 facebook-flipper = "0.131.1"
 firebase-crashlytics = "18.2.7"
 firebase-perf = "20.0.4"
-godtoolsMpp = "0.5.0"
+godtoolsMpp = "0.5.1-SNAPSHOT"
 google-auto-value = "1.9"
 gtoSupport = "3.11.2-SNAPSHOT"
 jacoco = "0.8.7"
@@ -75,6 +75,7 @@ godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = 
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
 google-services-gradlePlugin = "com.google.gms:google-services:4.3.10"
+gtoSupport-androidx-constraintlayout = { module = "org.ccci.gto.android:gto-support-androidx-constraintlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
 gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-fragment = { module = "org.ccci.gto.android:gto-support-androidx-fragment", version.ref = "gtoSupport" }

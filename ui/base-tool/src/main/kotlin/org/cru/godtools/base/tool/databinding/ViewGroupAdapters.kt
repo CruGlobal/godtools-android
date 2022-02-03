@@ -13,7 +13,7 @@ import org.cru.godtools.tool.model.Dimension.Pixels
 import timber.log.Timber
 
 @BindingAdapter("android:layout_width")
-internal fun View.setLayoutWidth(w: Dimension) {
+internal fun View.setLayoutWidth(w: Dimension?) {
     val lp = layoutParams
     when (w) {
         is Pixels -> {
