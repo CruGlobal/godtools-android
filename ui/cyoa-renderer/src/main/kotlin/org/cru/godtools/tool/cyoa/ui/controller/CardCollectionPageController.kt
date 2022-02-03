@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -30,12 +31,15 @@ import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
 import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.CardCollectionPage.Card
+import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.state.State
+import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 
 class CardCollectionPageController @AssistedInject constructor(
     @Assisted private val binding: CyoaPageCardCollectionBinding,
     @Assisted override val lifecycleOwner: LifecycleOwner,
+    @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     private val cardControllerFactory: CardController.Factory,
     eventBus: EventBus
@@ -45,9 +49,12 @@ class CardCollectionPageController @AssistedInject constructor(
         fun create(
             binding: CyoaPageCardCollectionBinding,
             lifecycleOwner: LifecycleOwner,
+            enableTips: LiveData<Boolean>,
             toolState: State
         ): CardCollectionPageController
     }
+
+    internal var callbacks: ShowTipCallback? = null
 
     init {
         binding.controller = this
@@ -74,6 +81,12 @@ class CardCollectionPageController @AssistedInject constructor(
         }
     }
     // endregion Analytics Events
+
+    // region Tips
+    override fun showTip(tip: Tip?) {
+        tip?.let { callbacks?.showTip(tip) }
+    }
+    // endregion Tips
 
     // region Cards ViewPager
     private val adapter = CyoaCardCollectionPageCardDataBindingAdapter()
@@ -203,5 +216,6 @@ class CardCollectionPageController @AssistedInject constructor(
 fun CyoaPageCardCollectionBinding.bindController(
     factory: CardCollectionPageController.Factory,
     lifecycleOwner: LifecycleOwner,
+    enableTips: LiveData<Boolean>,
     toolState: State
-) = controller ?: factory.create(this, lifecycleOwner, toolState)
+) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)

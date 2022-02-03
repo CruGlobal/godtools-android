@@ -1,9 +1,9 @@
 package org.cru.godtools.tool.cyoa.ui
 
-import androidx.lifecycle.map
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.analytics.model.CyoaCardCollectionPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
@@ -26,12 +26,14 @@ class CyoaCardCollectionPageFragment(
     internal lateinit var controllerFactory: CardCollectionPageController.Factory
 
     override fun setupPageController(binding: CyoaPageCardCollectionBinding) {
-        controller = binding.bindController(controllerFactory, viewLifecycleOwner, toolState.toolState).also {
-            page.map { it as? CardCollectionPage }.observe(viewLifecycleOwner, it)
-            binding.cards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) = triggerAnalyticsScreenView()
-            })
-        }
+        binding.cards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = triggerAnalyticsScreenView()
+        })
+
+        controller =
+            binding.bindController(controllerFactory, viewLifecycleOwner, dataModel.enableTips, toolState.toolState)
+                .also { page.filterIsInstance<CardCollectionPage>().observe(viewLifecycleOwner, it) }
+                .also { it.callbacks = this }
     }
     // endregion Controller
 
