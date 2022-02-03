@@ -25,6 +25,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.R
 import org.junit.After
@@ -193,7 +194,7 @@ class TractActivityTest {
     @Test
     fun verifyShareMenuHiddenWhenShowingTips() {
         whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest()))
+        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(tips = { listOf(Tip()) })))
 
         val intent = context.createTractActivityIntent("test", Locale.ENGLISH, showTips = true)
         ActivityScenario.launch<TractActivity>(intent).use {

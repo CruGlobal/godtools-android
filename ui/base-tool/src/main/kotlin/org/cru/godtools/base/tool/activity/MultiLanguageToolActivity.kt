@@ -8,12 +8,12 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.Observer
 import androidx.lifecycle.map
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
@@ -144,13 +144,11 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // endregion Language Toggle
 
     // region Training Tips
-    private var trainingTipsMenuObserver: Observer<Boolean>? = null
     private fun Menu.setupTrainingTipsMenuItem() {
-        trainingTipsMenuObserver?.let { dataModel.showTips.removeObserver(it) }
-
-        trainingTipsMenuObserver = findItem(R.id.action_tips)
-            ?.let { item -> Observer<Boolean> { item.isChecked = it } }
-            ?.also { dataModel.showTips.observe(this@MultiLanguageToolActivity, it) }
+        findItem(R.id.action_tips)?.let { item ->
+            dataModel.hasTips.observe(this@MultiLanguageToolActivity, item) { isVisible = it }
+            dataModel.showTips.observe(this@MultiLanguageToolActivity, item) { isChecked = it }
+        }
     }
     // endregion Training Tips
     // endregion UI

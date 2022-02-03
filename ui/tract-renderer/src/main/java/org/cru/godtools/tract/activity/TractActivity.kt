@@ -220,7 +220,7 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this, dataModel.showTips, toolState.toolState).also { adapter ->
+        pagerAdapterFactory.create(this, dataModel.enableTips, toolState.toolState).also { adapter ->
             adapter.callbacks = this
             dataModel.activeManifest.observe(this) { manifest ->
                 val sameLocale = adapter.manifest?.locale == manifest?.locale
@@ -290,9 +290,9 @@ class TractActivity :
         combine(
             activeManifestLiveData,
             subscriberController.state,
-            dataModel.showTips
-        ) { manifest, subscriberState, showTips ->
-            manifest != null && subscriberState == State.Off && !showTips
+            dataModel.enableTips
+        ) { manifest, subscriberState, enableTips ->
+            manifest != null && subscriberState == State.Off && !enableTips
         }
     }
 

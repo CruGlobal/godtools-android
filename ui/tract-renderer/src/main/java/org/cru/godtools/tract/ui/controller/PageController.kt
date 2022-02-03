@@ -33,7 +33,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
-    @Assisted override val showTips: LiveData<Boolean>,
+    @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     private val dao: GodToolsDao,
     eventBus: EventBus,
@@ -49,7 +49,7 @@ class PageController @AssistedInject internal constructor(
         fun create(
             binding: TractPageBinding,
             lifecycleOwner: LifecycleOwner?,
-            showTips: LiveData<Boolean>,
+            enableTips: LiveData<Boolean>,
             toolState: State
         ): PageController
     }
@@ -283,6 +283,6 @@ class PageController @AssistedInject internal constructor(
 internal fun TractPageBinding.bindController(
     factory: PageController.Factory,
     lifecycleOwner: LifecycleOwner? = null,
-    showTips: LiveData<Boolean>,
+    enableTips: LiveData<Boolean>,
     toolState: State
-) = controller ?: factory.create(this, lifecycleOwner, showTips, toolState)
+) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)
