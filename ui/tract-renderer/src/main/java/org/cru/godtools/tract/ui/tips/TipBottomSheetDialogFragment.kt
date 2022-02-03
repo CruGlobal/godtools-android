@@ -17,8 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -122,7 +120,8 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<TractTipBindi
         if (completed) {
             val trainingTip = TrainingTip(tool, locale, tip)
             trainingTip.isCompleted = true
-            GlobalScope.launch { dao.updateOrInsert(trainingTip, TrainingTipTable.COLUMN_IS_COMPLETED) }
+            @Suppress("DeferredResultUnused")
+            dao.updateOrInsertAsync(trainingTip, TrainingTipTable.COLUMN_IS_COMPLETED)
         }
         dismissAllowingStateLoss()
     }

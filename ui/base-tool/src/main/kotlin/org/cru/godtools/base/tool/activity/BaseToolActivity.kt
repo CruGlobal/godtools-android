@@ -39,6 +39,7 @@ import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.download.manager.DownloadProgress
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
@@ -152,15 +153,13 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
     protected open val shareMenuItemVisible: LiveData<Boolean> get() = _shareMenuItemVisible
 
-    private var shareMenuItemObserver: Observer<Boolean>? = null
     protected fun Menu.setupShareMenuItem() {
-        shareMenuItemObserver?.let { shareMenuItemVisible.removeObserver(it) }
-        shareMenuItemObserver = Observer<Boolean> {
-            findItem(R.id.action_share)?.apply {
+        findItem(R.id.action_share)?.let { item ->
+            shareMenuItemVisible.observe(this@BaseToolActivity, item) {
                 isVisible = it
                 isEnabled = it
             }
-        }.also { shareMenuItemVisible.observe(this@BaseToolActivity, it) }
+        }
     }
 
     protected fun updateShareMenuItem() {

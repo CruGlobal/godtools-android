@@ -35,10 +35,10 @@ class UserCounterSyncTasks @Inject internal constructor(
     private val countersMutex = Mutex()
     private val countersUpdateMutex = Mutex()
 
-    suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = withContext(Dispatchers.IO) {
-        countersMutex.withLock {
-            if (!sessionClient.isAuthenticated) return@withContext true
+    suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
+        if (!sessionClient.isAuthenticated) return true
 
+        withContext(Dispatchers.IO) {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
                 System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_COUNTERS) < STALE_DURATION_COUNTERS
@@ -55,10 +55,10 @@ class UserCounterSyncTasks @Inject internal constructor(
         }
     }
 
-    suspend fun syncDirtyCounters(): Boolean = withContext(Dispatchers.IO) {
-        countersUpdateMutex.withLock {
-            if (!sessionClient.isAuthenticated) return@withContext true
+    suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
+        if (!sessionClient.isAuthenticated) return true
 
+        withContext(Dispatchers.IO) {
             // process any counters that need to be updated
             QUERY_DIRTY_COUNTERS.get(dao)
                 .filter { UserCounter.VALID_NAME.matches(it.id) }
