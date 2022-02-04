@@ -2,18 +2,26 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ObservableField
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import org.cru.godtools.base.Settings
 import org.cru.godtools.databinding.DashboardListItemToolsBinding
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 
 class ToolsCategoryAdapter(
-    val callbacks: ToolsAdapterCallbacks,
-    val dataModel: ToolsAdapterViewModel
+    viewModelProvider: ViewModelProvider
 ) : RecyclerView.Adapter<ToolsCategoryAdapter.ViewHolder>(), Observer<List<Tool>> {
+
+    interface Callbacks {
+        fun onToolInfo(code: String?)
+        fun addTool(code: String?)
+        fun removeTool(tool: Tool?, translation: Translation?)
+    }
+    val callbacks = ObservableField<Callbacks>()
+    private val dataModel = viewModelProvider.get(ToolsAdapterViewModel::class.java)
 
     private var tools: List<Tool> = emptyList()
         set(value) {
@@ -30,18 +38,20 @@ class ToolsCategoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context)).also {
-
+            it.callbacks = callbacks.get()
         }
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tool = tools[position]
         holder.binding.tool = tool
-        val toolViewModel = dataModel.ToolViewModel(tool.code ?: "")
-        holder.binding.parallelLanguage = toolViewModel.parallelLanguage
-        holder.binding.parallelTranslation = toolViewModel.parallelTranslation
-        holder.binding.primaryTranslation = toolViewModel.firstTranslation
-        holder.binding.banner = toolViewModel.banner
 
+        tool.code?.let {
+            holder.binding.parallelLanguage = dataModel.getToolViewModel(it).parallelLanguage
+            holder.binding.parallelTranslation = dataModel.getToolViewModel(it).parallelTranslation
+            holder.binding.primaryTranslation = dataModel.getToolViewModel(it).firstTranslation
+            holder.binding.downloadProgress = dataModel.getToolViewModel(it).downloadProgress
+            holder.binding.banner = dataModel.getToolViewModel(it).banner
+        }
     }
 }

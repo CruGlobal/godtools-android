@@ -6,7 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
-class CategoryAdapter(val callbacks: CategoryAdapterCallbacks) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(),
+class CategoryAdapter(val callbacks: CategoryAdapterCallbacks) :
+    RecyclerView.Adapter<CategoryAdapter.ViewHolder>(),
     Observer<List<String>> {
     var selectedCategory: String? = null
         set(value) {

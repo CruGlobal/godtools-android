@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.model.Tool

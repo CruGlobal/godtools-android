@@ -2,8 +2,10 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
-import org.ccci.gto.android.common.androidx.fragment.app.findListener
+import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.fragment.BaseFragment
@@ -11,15 +13,14 @@ import org.cru.godtools.databinding.DashboardToolsCategoryFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
-import org.cru.godtools.ui.tools.ToolsListFragment
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ToolsCategoryFragment() :
     BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment),
-    CategoryAdapterCallbacks, ToolsAdapterCallbacks {
+    CategoryAdapterCallbacks,
+    ToolsCategoryAdapter.Callbacks {
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
@@ -40,7 +41,9 @@ class ToolsCategoryFragment() :
     }
 
     private val toolsAdapter: ToolsCategoryAdapter by lazy {
-        ToolsCategoryAdapter(this, toolsDataModel).also { adapter ->
+        ToolsCategoryAdapter(ViewModelProvider(this)).also { adapter ->
+            adapter.callbacks.set(this)
+            lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.viewTools.observe(this, adapter)
         }
     }
@@ -62,22 +65,17 @@ class ToolsCategoryFragment() :
         categoryAdapter.selectedCategory = selectedCategory
     }
 
-    // region ToolsAdapterCallbacks
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {}
-
+    // region ToolsCategoryAdapterCallbacks
     override fun addTool(code: String?) {
         code?.let { downloadManager.pinToolAsync(it) }
     }
 
     override fun removeTool(tool: Tool?, translation: Translation?) {
         tool?.code?.let { downloadManager.unpinToolAsync(it) }
-
     }
 
     override fun onToolInfo(code: String?) {
-        findListener<ToolsListFragment.Callbacks>()?.onToolInfo(code)
+        code?.let { requireActivity().startToolDetailsActivity(code) }
     }
-
-    override fun onToolsReordered(vararg ids: Long) {}
-    // endregion ToolsAdapterCallbacks
+    // endregion ToolsCategoryAdapterCallbacks
 }
