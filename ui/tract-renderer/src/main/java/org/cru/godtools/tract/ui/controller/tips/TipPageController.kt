@@ -8,7 +8,6 @@ import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.tips.TipPage
 import org.cru.godtools.tool.state.State
 import org.cru.godtools.tract.databinding.TractTipPageBinding
-import org.cru.godtools.tract.ui.tips.TipCallbacks
 import org.greenrobot.eventbus.EventBus
 
 class TipPageController @AssistedInject internal constructor(
@@ -27,13 +26,6 @@ class TipPageController @AssistedInject internal constructor(
     }
 
     override val lifecycleOwner get() = binding.lifecycleOwner
-
-    var callbacks: TipCallbacks?
-        get() = binding.callbacks
-        set(value) {
-            binding.callbacks = value
-        }
-
     override val childContainer get() = binding.content
 
     override fun onBind() {

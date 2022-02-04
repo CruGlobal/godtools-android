@@ -210,6 +210,7 @@ dependencies {
 
     debugImplementation libs.firebase.crashlytics.ndk
     debugImplementation libs.facebook.flipper
+    debugImplementation libs.facebook.flipper.plugins.leakcanary2
     debugImplementation libs.facebook.flipper.plugins.network
     debugImplementation libs.facebook.soloader
     debugImplementation libs.gtoSupport.facebook.flipper
