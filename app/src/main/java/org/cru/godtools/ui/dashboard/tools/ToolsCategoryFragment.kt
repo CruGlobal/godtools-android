@@ -43,7 +43,7 @@ class ToolsCategoryFragment() :
     }
 
     private val toolsAdapter: ToolsCategoryAdapter by lazy {
-        ToolsCategoryAdapter(ViewModelProvider(this)).also { adapter ->
+        ToolsCategoryAdapter(ViewModelProvider(this), viewLifecycleOwner).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.viewTools.observe(this, adapter)

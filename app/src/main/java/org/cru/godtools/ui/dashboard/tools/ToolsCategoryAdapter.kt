@@ -3,23 +3,24 @@ package org.cru.godtools.ui.dashboard.tools
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
+import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemToolsBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 
-class ToolsCategoryAdapter(
-    viewModelProvider: ViewModelProvider
-) : RecyclerView.Adapter<ToolsCategoryAdapter.ViewHolder>(), Observer<List<Tool>> {
+class ToolsCategoryAdapter(viewModelProvider: ViewModelProvider, lifecycleOwner: LifecycleOwner) :
+    SimpleDataBindingAdapter<DashboardListItemToolsBinding>(lifecycleOwner), Observer<List<Tool>> {
 
     interface Callbacks {
         fun onToolInfo(code: String?)
         fun addTool(code: String?)
         fun removeTool(tool: Tool?, translation: Translation?)
     }
+
     val callbacks = ObservableField<Callbacks>()
     private val dataModel = viewModelProvider.get(ToolsAdapterViewModel::class.java)
 
@@ -34,24 +35,22 @@ class ToolsCategoryAdapter(
         tools = t ?: emptyList()
     }
 
-    class ViewHolder(val binding: DashboardListItemToolsBinding) : RecyclerView.ViewHolder(binding.root)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
         DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context)).also {
             it.callbacks = callbacks.get()
+            it.lifecycleOwner = lifecycleOwner
         }
-    )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewDataBinding(binding: DashboardListItemToolsBinding, position: Int) {
         val tool = tools[position]
-        holder.binding.tool = tool
+        binding.tool = tool
 
         tool.code?.let {
-            holder.binding.parallelLanguage = dataModel.getToolViewModel(it).parallelLanguage
-            holder.binding.parallelTranslation = dataModel.getToolViewModel(it).parallelTranslation
-            holder.binding.primaryTranslation = dataModel.getToolViewModel(it).firstTranslation
-            holder.binding.downloadProgress = dataModel.getToolViewModel(it).downloadProgress
-            holder.binding.banner = dataModel.getToolViewModel(it).banner
+            binding.parallelLanguage = dataModel.getToolViewModel(it).parallelLanguage
+            binding.parallelTranslation = dataModel.getToolViewModel(it).parallelTranslation
+            binding.primaryTranslation = dataModel.getToolViewModel(it).firstTranslation
+            binding.downloadProgress = dataModel.getToolViewModel(it).downloadProgress
+            binding.banner = dataModel.getToolViewModel(it).banner
         }
     }
 }
