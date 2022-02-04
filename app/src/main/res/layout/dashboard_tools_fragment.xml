@@ -33,7 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout_height="match_parent"
-                android:tag="ToolsCategory"
                 tools:layout="@layout/dashboard_tools_category_fragment" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

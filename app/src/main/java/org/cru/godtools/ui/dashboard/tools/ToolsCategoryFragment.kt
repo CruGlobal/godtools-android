@@ -14,13 +14,15 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
+import org.cru.godtools.ui.tools.ToolsAdapter
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 
 @AndroidEntryPoint
 class ToolsCategoryFragment() :
     BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment),
     CategoryAdapterCallbacks,
-    ToolsCategoryAdapter.Callbacks {
+    ToolsAdapterCallbacks {
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
@@ -42,8 +44,8 @@ class ToolsCategoryFragment() :
         }
     }
 
-    private val toolsAdapter: ToolsCategoryAdapter by lazy {
-        ToolsCategoryAdapter(ViewModelProvider(this), viewLifecycleOwner).also { adapter ->
+    private val toolsAdapter: ToolsAdapter by lazy {
+        ToolsAdapter(viewLifecycleOwner, ViewModelProvider(this), true).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.viewTools.observe(this, adapter)
@@ -79,5 +81,8 @@ class ToolsCategoryFragment() :
     override fun onToolInfo(code: String?) {
         code?.let { requireActivity().startToolDetailsActivity(code) }
     }
+
+    override fun onToolsReordered(vararg ids: Long) {}
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {}
     // endregion ToolsCategoryAdapterCallbacks
 }

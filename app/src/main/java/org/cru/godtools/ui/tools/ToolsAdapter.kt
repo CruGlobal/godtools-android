@@ -16,6 +16,7 @@ import com.karumi.weak.weak
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleDataBindingDraggableItemAdapter
 import org.cru.godtools.BR
+import org.cru.godtools.databinding.DashboardListItemToolsBinding
 import org.cru.godtools.databinding.ToolsListItemLessonBinding
 import org.cru.godtools.databinding.ToolsListItemToolBinding
 import org.cru.godtools.model.Tool
@@ -25,8 +26,11 @@ private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 private const val VIEW_TYPE_TOOL = 1
 private const val VIEW_TYPE_LESSON = 2
 
-class ToolsAdapter(lifecycleOwner: LifecycleOwner, viewModelProvider: ViewModelProvider) :
-    SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
+class ToolsAdapter(
+    lifecycleOwner: LifecycleOwner,
+    viewModelProvider: ViewModelProvider,
+    private val isAllTools: Boolean = false
+) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
     }
@@ -61,7 +65,13 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, viewModelProvider: ViewModelP
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
         VIEW_TYPE_LESSON -> ToolsListItemLessonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        else -> ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        else -> {
+            if(isAllTools){
+                DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            }else {
+                ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            }
+        }
     }.also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
