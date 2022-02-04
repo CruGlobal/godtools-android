@@ -78,6 +78,7 @@ class PageController @AssistedInject internal constructor(
         binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or
             settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_SWIPED)
         binding.pageContentLayout.activeCardListener = this
+        binding.enableTips = enableTips
 
         lifecycleOwner?.lifecycle?.apply {
             onResume { binding.isVisible = true }
