@@ -2,7 +2,6 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
