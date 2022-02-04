@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.CallToAction
@@ -55,7 +56,7 @@ class TractContentCardBindingTest {
     fun verifyTipsIndicatorHiddenWhenTipsDisabled() {
         card.setTips(tip)
         callToAction.setTip(tip)
-        binding.enableTips = false
+        binding.enableTips = ImmutableLiveData(false)
         binding.model = card
         binding.executePendingBindings()
 
@@ -64,7 +65,7 @@ class TractContentCardBindingTest {
 
     @Test
     fun verifyTipsIndicatorHiddenWhenCardAndCallToActionHaveNoTips() {
-        binding.enableTips = true
+        binding.enableTips = ImmutableLiveData(true)
         binding.model = card
         binding.executePendingBindings()
 
@@ -74,7 +75,7 @@ class TractContentCardBindingTest {
     @Test
     fun verifyTipsIndicatorVisibleWhenCardContainsTips() {
         card.setTips(tip)
-        binding.enableTips = true
+        binding.enableTips = ImmutableLiveData(true)
         binding.model = card
         binding.executePendingBindings()
 
@@ -84,7 +85,7 @@ class TractContentCardBindingTest {
     @Test
     fun verifyTipsIndicatorVisibleWhenCallToActionHasATip() {
         callToAction.setTip(tip)
-        binding.enableTips = true
+        binding.enableTips = ImmutableLiveData(true)
         binding.model = card
         binding.executePendingBindings()
 
@@ -95,7 +96,7 @@ class TractContentCardBindingTest {
     fun verifyTipsIndicatorHiddenWhenCallToActionHasATipButThisIsntTheLastCard() {
         whenever(card.isLastVisibleCard) doReturn false
         callToAction.setTip(tip)
-        binding.enableTips = true
+        binding.enableTips = ImmutableLiveData(true)
         binding.model = card
         binding.executePendingBindings()
 

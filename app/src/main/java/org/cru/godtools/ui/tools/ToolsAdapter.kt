@@ -8,7 +8,6 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange
@@ -28,14 +27,12 @@ private const val VIEW_TYPE_LESSON = 2
 
 class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
-    viewModelProvider: ViewModelProvider,
+    private val dataModel: ToolsAdapterViewModel,
     private val isAllTools: Boolean = false
 ) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
     }
-
-    private val viewModel = viewModelProvider.get(ToolsAdapterViewModel::class.java)
 
     val callbacks = ObservableField<ToolsAdapterCallbacks>()
     private var tools: List<Tool>? = null
@@ -76,15 +73,15 @@ class ToolsAdapter(
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         val tool = getItem(position)
-        val toolViewModel = tool?.code?.let { viewModel.getToolViewModel(it) }
+        val toolDataModel = tool?.code?.let { dataModel.getToolViewModel(it) }
 
         binding.setVariable(BR.tool, tool)
-        binding.setVariable(BR.downloadProgress, toolViewModel?.downloadProgress)
-        binding.setVariable(BR.banner, toolViewModel?.banner)
-        binding.setVariable(BR.primaryTranslation, toolViewModel?.firstTranslation)
-        binding.setVariable(BR.primaryLanguage, toolViewModel?.firstLanguage)
-        binding.setVariable(BR.parallelTranslation, toolViewModel?.parallelTranslation)
-        binding.setVariable(BR.parallelLanguage, toolViewModel?.parallelLanguage)
+        binding.setVariable(BR.downloadProgress, toolDataModel?.downloadProgress)
+        binding.setVariable(BR.banner, toolDataModel?.banner)
+        binding.setVariable(BR.primaryTranslation, toolDataModel?.firstTranslation)
+        binding.setVariable(BR.primaryLanguage, toolDataModel?.firstLanguage)
+        binding.setVariable(BR.parallelTranslation, toolDataModel?.parallelTranslation)
+        binding.setVariable(BR.parallelLanguage, toolDataModel?.parallelLanguage)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

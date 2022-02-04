@@ -9,6 +9,7 @@ import java.util.Locale
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.tract.activity.TractActivity
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.arrayContaining

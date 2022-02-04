@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
 import dagger.assisted.Assisted
@@ -31,13 +32,18 @@ import org.greenrobot.eventbus.ThreadMode
 
 class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
+    @Assisted private val enableTips: LiveData<Boolean>,
     @Assisted private val toolState: State,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
 ) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
     @AssistedFactory
     interface Factory {
-        fun create(lifecycleOwner: LifecycleOwner, toolState: State): ManifestPagerAdapter
+        fun create(
+            lifecycleOwner: LifecycleOwner,
+            enableTips: LiveData<Boolean>,
+            toolState: State
+        ): ManifestPagerAdapter
     }
 
     interface Callbacks {
@@ -54,7 +60,6 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
             if (changed) notifyDataSetChanged()
         }
     var callbacks: Callbacks? = null
-    var showTips: Boolean = false
 
     init {
         setHasStableIds(true)
@@ -79,9 +84,8 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun onViewDataBindingCreated(binding: TractPageBinding) {
-        binding.bindController(pageControllerFactory, lifecycleOwner, toolState).also {
+        binding.bindController(pageControllerFactory, lifecycleOwner, enableTips, toolState).also {
             it.callbacks = this
-            it.isTipsEnabled = showTips
         }
     }
 

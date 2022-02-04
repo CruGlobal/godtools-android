@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.state.State
@@ -61,6 +62,7 @@ class PageControllerTest {
         controller = PageController(
             binding,
             baseLifecycleOwner,
+            ImmutableLiveData(false),
             State(),
             dao,
             eventBus,

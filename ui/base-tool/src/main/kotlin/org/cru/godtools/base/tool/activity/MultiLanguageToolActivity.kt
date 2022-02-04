@@ -3,6 +3,8 @@ package org.cru.godtools.base.tool.activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
@@ -11,11 +13,13 @@ import com.google.android.material.tabs.TabLayout
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.tool.model.Manifest
@@ -45,6 +49,19 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         setupActionBarTitle()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
+        menuInflater.inflate(R.menu.activity_tool_multilanguage, menu)
+        menu.setupTrainingTipsMenuItem()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_tips -> {
+            dataModel.showTips.value = !dataModel.showTips.value!!
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
 
@@ -125,6 +142,15 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         languageToggle.addOnTabSelectedListener(languageToggleListener)
     }
     // endregion Language Toggle
+
+    // region Training Tips
+    private fun Menu.setupTrainingTipsMenuItem() {
+        findItem(R.id.action_tips)?.let { item ->
+            dataModel.hasTips.observe(this@MultiLanguageToolActivity, item) { isVisible = it }
+            dataModel.showTips.observe(this@MultiLanguageToolActivity, item) { isChecked = it }
+        }
+    }
+    // endregion Training Tips
     // endregion UI
 
     // region Tool sync

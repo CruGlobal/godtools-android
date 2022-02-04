@@ -11,24 +11,23 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
+import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
-import org.cru.godtools.base.tool.EXTRA_SHOW_TIPS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.model.Tool
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.tips.Tip
@@ -69,8 +68,6 @@ class TractActivity :
     // Inject the FollowupService to ensure it is running to capture any followup forms
     @Inject
     internal lateinit var followupService: FollowupService
-
-    private val showTips get() = intent?.getBooleanExtra(EXTRA_SHOW_TIPS, false) ?: false
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,9 +220,8 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this, toolState.toolState).also { adapter ->
+        pagerAdapterFactory.create(this, dataModel.enableTips, toolState.toolState).also { adapter ->
             adapter.callbacks = this
-            adapter.showTips = showTips
             dataModel.activeManifest.observe(this) { manifest ->
                 val sameLocale = adapter.manifest?.locale == manifest?.locale
                 adapter.manifest = manifest
@@ -291,8 +287,12 @@ class TractActivity :
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
-        activeManifestLiveData.combineWith(subscriberController.state) { manifest, subscriberState ->
-            manifest != null && subscriberState == State.Off && !showTips
+        combine(
+            activeManifestLiveData,
+            subscriberController.state,
+            dataModel.enableTips
+        ) { manifest, subscriberState, enableTips ->
+            manifest != null && subscriberState == State.Off && !enableTips
         }
     }
 
@@ -326,22 +326,17 @@ class TractActivity :
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
     }
-    private var liveShareMenuObserver: Observer<Tool?>? = null
-    private var liveShareActiveMenuObserver: Observer<Pair<State, State>>? = null
     private fun Menu.setupLiveShareMenuItemVisibility() {
-        liveShareMenuObserver?.let { dataModel.tool.removeObserver(it) }
-        liveShareMenuObserver = findItem(R.id.action_live_share_publish)?.let { item ->
-            Observer<Tool?> { item.isVisible = it?.isScreenShareDisabled != true }
-                .also { dataModel.tool.observe(this@TractActivity, it) }
+        findItem(R.id.action_live_share_publish)?.let { item ->
+            dataModel.tool.observe(this@TractActivity, item) { isVisible = it?.isScreenShareDisabled != true }
         }
 
-        liveShareActiveMenuObserver?.let { liveShareState.removeObserver(it) }
-        liveShareActiveMenuObserver = findItem(R.id.action_live_share_active)?.let { item ->
+        findItem(R.id.action_live_share_active)?.let { item ->
             item.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
 
-            Observer<Pair<State, State>> { (publisherState, subscriberState) ->
-                item.isVisible = publisherState == State.On || subscriberState == State.On
-            }.also { liveShareState.observe(this@TractActivity, it) }
+            liveShareState.observe(this@TractActivity, item) { (publisherState, subscriberState) ->
+                isVisible = publisherState == State.On || subscriberState == State.On
+            }
         }
     }
 

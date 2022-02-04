@@ -14,6 +14,7 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
@@ -27,6 +28,7 @@ import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -158,6 +160,13 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
         locales.filter { loadingState[it] == LoadingState.LOADED }
     }
     // endregion Available Locales
+
+    // region Training Tips
+    val showTips: MutableLiveData<Boolean> = savedState.getLiveData(EXTRA_SHOW_TIPS, false)
+
+    val hasTips = activeManifest.map { !it?.tips.isNullOrEmpty() }
+    val enableTips = hasTips and showTips
+    // endregion Training Tips
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =

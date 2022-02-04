@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -32,6 +33,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
+    @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     private val dao: GodToolsDao,
     eventBus: EventBus,
@@ -44,7 +46,12 @@ class PageController @AssistedInject internal constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(binding: TractPageBinding, lifecycleOwner: LifecycleOwner?, toolState: State): PageController
+        fun create(
+            binding: TractPageBinding,
+            lifecycleOwner: LifecycleOwner?,
+            enableTips: LiveData<Boolean>,
+            toolState: State
+        ): PageController
     }
 
     interface Callbacks {
@@ -265,11 +272,6 @@ class PageController @AssistedInject internal constructor(
     // endregion Content Events
 
     // region Tips
-    override var isTipsEnabled: Boolean
-        get() = binding.enableTips ?: false
-        set(value) {
-            binding.enableTips = value
-        }
     override fun showTip(tip: Tip?) {
         tip?.let { callbacks?.showTip(tip) }
     }
@@ -281,5 +283,6 @@ class PageController @AssistedInject internal constructor(
 internal fun TractPageBinding.bindController(
     factory: PageController.Factory,
     lifecycleOwner: LifecycleOwner? = null,
+    enableTips: LiveData<Boolean>,
     toolState: State
-) = controller ?: factory.create(this, lifecycleOwner, toolState)
+) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)

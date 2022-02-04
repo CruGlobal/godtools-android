@@ -32,7 +32,7 @@ internal class InlineTipController private constructor(
     init {
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
-        binding.enableTips = isTipsEnabled
+        binding.enableTips = enableTips
     }
 
     public override fun onBind() {
