@@ -82,7 +82,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
 
     override fun onBindingCreated(binding: ToolTipBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
-        dataModel.tip.observe(viewLifecycleOwner) { binding.tip = it }
+        binding.tip = dataModel.tip
         binding.isComplete = dataModel.isCompleted
         binding.setupPages()
     }
