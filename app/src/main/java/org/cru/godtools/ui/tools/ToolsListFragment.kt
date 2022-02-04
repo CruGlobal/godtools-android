@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
@@ -209,8 +208,9 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     // endregion Remove Favorite
 
     // region Tools List
+    private val toolsAdapterDataModel by viewModels<ToolsAdapterViewModel>()
     private val toolsAdapter: ToolsAdapter by lazy {
-        ToolsAdapter(this, ViewModelProvider(this)).also { adapter ->
+        ToolsAdapter(this, toolsAdapterDataModel).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.tools.observe(this, adapter)
