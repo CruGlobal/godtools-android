@@ -2,7 +2,6 @@ package org.cru.godtools.tool.tips.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
@@ -21,6 +20,7 @@ import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
+import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
 import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -91,26 +91,35 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
         findListener<Callbacks>()?.onDismissTip()
         super.onDismiss(dialog)
     }
+
+    override fun onDestroyBinding(binding: ToolTipBinding) {
+        super.onDestroyBinding(binding)
+        cleanupPages()
+    }
     // endregion Lifecycle
 
     // region Pages
+    private var pages: ViewPager2? = null
+
     @Inject
     lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
 
     private fun ToolTipBinding.setupPages() {
+        this@TipBottomSheetDialogFragment.pages = pages
         pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner, toolState.toolState).also {
-            it.callbacks = this@TipBottomSheetDialogFragment
             dataModel.tip.observe(viewLifecycleOwner, it)
+            it.callbacks = callbacks
         }
-        pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) = trackScreenAnalytics(position)
-        })
+        pages.currentItemLiveData.observe(viewLifecycleOwner) { trackScreenAnalytics(it) }
     }
-    // endregion Pages
+
+    private fun cleanupPages() {
+        this@TipBottomSheetDialogFragment.pages = null
+    }
 
     // region TipPageController.Callbacks
     override fun goToNextPage() {
-        binding?.apply { pages.currentItem += 1 }
+        pages?.apply { currentItem += 1 }
     }
 
     override fun closeTip(completed: Boolean) {
@@ -123,8 +132,9 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
+    // endregion Pages
 
-    private fun trackScreenAnalytics(page: Int = binding?.pages?.currentItem ?: 0) {
+    private fun trackScreenAnalytics(page: Int) {
         eventBus.post(TipAnalyticsScreenEvent(tool, locale, tip, page))
     }
 
