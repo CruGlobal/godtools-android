@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">ಈಗ ದೂರಸ್ಥ ಹಂಚಿಕೆ ಅಧಿವೇಶನದಿಂದ ನಿರ್ಗಮಿಸುವುದೇ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ನಿರ್ಗಮಿಸಿ</string>
     <string name="tract_live_share_exit_dialog_cancel">ರದ್ದುಮಾಡಿ</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">ಮುಂದೆನದು</string>
-    <string name="tract_tips_tip_action_close">ಮುಚ್ಚಿ</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">ಕೇಳಿ</string>
-    <string name="tract_tips_type_consider">ಪರಿಗಣಿಸಿ</string>
-    <string name="tract_tips_type_prepare">ತಯಾರಿಸಿ</string>
-    <string name="tract_tips_type_quote">ಉಲ್ಲೇಖ</string>
-    <string name="tract_tips_type_tip">ಸಲಹೆ</string>
 </resources>

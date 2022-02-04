@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":library:db"))
     implementation(project(":library:model"))
     implementation(project(":library:sync"))
+    implementation(project(":ui:tips-renderer"))
 
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)

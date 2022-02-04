@@ -13,13 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">अब दूरस्थ साझाकरण सत्र से बाहर निकलें?</string>
     <string name="tract_live_share_exit_dialog_confirm">बाहर निकलें</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करें</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">अगला</string>
-    <string name="tract_tips_tip_action_close">बन्द करें</string>
-    <!-- Tip Types -->
-    <string name="tract_tips_type_ask">पूछें</string>
-    <string name="tract_tips_type_consider">विचार करें</string>
-    <string name="tract_tips_type_prepare">तैयारी करें</string>
-    <string name="tract_tips_type_quote">हवाला</string>
-    <string name="tract_tips_type_tip">टिप</string>
 </resources>

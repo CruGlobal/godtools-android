@@ -17,17 +17,4 @@
     <string name="tract_live_share_exit_dialog_message">Exit the remote sharing session now?</string>
     <string name="tract_live_share_exit_dialog_confirm">Exit</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancel</string>
-
-    <!-- Training Tips -->
-    <eat-comment />
-    <string name="tract_tips_tip_action_next">Next</string>
-    <string name="tract_tips_tip_action_close">Close</string>
-
-    <!-- Tip Types -->
-    <eat-comment />
-    <string name="tract_tips_type_ask">Ask</string>
-    <string name="tract_tips_type_consider">Consider</string>
-    <string name="tract_tips_type_prepare">Prepare</string>
-    <string name="tract_tips_type_quote">Quote</string>
-    <string name="tract_tips_type_tip">Tip</string>
 </resources>
