@@ -6,105 +6,112 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="androidx.lifecycle.LiveData" />
 
-        <variable name="callbacks" type="org.cru.godtools.ui.tools.ToolsAdapterCallbacks" />
+<!--        <variable name="callbacks" type="org.cru.godtools.ui.tools.ToolsAdapterCallbacks" />-->
         <variable name="tool" type="org.cru.godtools.model.Tool" />
-        <variable name="hasParallel" type="Boolean" />
+        <variable name="banner" type="LiveData&lt;org.cru.godtools.model.Attachment&gt;" />
         <variable name="primaryTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="parallelTranslation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
         <variable name="parallelLanguage" type="LiveData&lt;org.cru.godtools.model.Language&gt;" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        android:onClick="@{() ->callbacks.onToolInfo(tool.code)">
+        android:layout_height="160dp"
+        android:padding="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="150dp"
+            android:layout_margin="8dp"
+            android:elevation="@dimen/card_elevation"
+            app:cardCornerRadius="@dimen/card_corner_radius">
+            <!--        android:onClick="@{() ->callbacks.onToolInfo(tool.code)">-->
 
-            <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                android:layout_height="match_parent">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="11dp"
-                android:background="@color/white"
-                app:cardCornerRadius="40dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
+                <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
-                    android:padding="3dp"
-                    android:tint="@color/gt_blue"
-                    app:selected="@{tool.isAdded}"
-                    app:srcCompat="@drawable/ic_favorite" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:src="@{banner}"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginEnd="11dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="3dp"
+                        android:tint="@color/gt_blue"
+                        app:selected="@{tool.isAdded}"
+                        app:srcCompat="@drawable/ic_favorite" />
+                    <!--                android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}" />-->
+
+                </androidx.cardview.widget.CardView>
 
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_end="62dp" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="4dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_end="62dp" />
+                <TextView
+                    android:id="@+id/toolName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@{tool.name}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guideline2"
+                    tools:text="Tool Name" />
 
-            <TextView
-                android:id="@+id/toolName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:text="@{tool.name}"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guideline2"
-                tools:text="Tool Name" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@{tool.category}"
+                    android:textColor="@color/gray_97"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolName"
+                    tools:text="Category" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@{tool.category}"
-                android:textColor="@color/gray_97"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolName"
-                tools:text="Category" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="21dp"
+                    android:drawableEnd="@drawable/ic_tool_checkmark"
+                    android:drawablePadding="3dp"
+                    android:text="@{parallelLanguage.getDisplayName(context)}"
+                    android:textColor="@color/gray_97"
+                    app:drawableTint="@color/gray_97"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guideline2"
+                    app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                    tools:text="Spanish" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="21dp"
-                android:drawableEnd="@drawable/ic_tool_checkmark"
-                android:drawablePadding="3dp"
-                android:text="@{parallelLanguage.getDisplayName(context)}"
-                android:textColor="@color/gray_97"
-                app:drawableTint="@color/gray_97"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guideline2"
-                app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
-                tools:text="Spanish" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 </layout>
