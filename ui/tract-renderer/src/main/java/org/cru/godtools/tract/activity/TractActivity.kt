@@ -12,6 +12,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -288,23 +289,24 @@ class TractActivity :
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
         combine(
-            activeManifestLiveData,
+            shareLinkUriLiveData,
             subscriberController.state,
             dataModel.enableTips
-        ) { manifest, subscriberState, enableTips ->
-            manifest != null && subscriberState == State.Off && !enableTips
+        ) { shareUri, subscriberState, enableTips ->
+            shareUri != null && subscriberState == State.Off && !enableTips
         }
     }
 
-    override val shareLinkUri get() = buildShareLink()?.build()?.toString()
-    private fun buildShareLink(): Uri.Builder? {
-        val manifest = activeManifest ?: return null
-        val tool = manifest.code ?: return null
-        val locale = manifest.locale ?: return null
+    override val shareLinkUriLiveData by lazy {
+        activeManifestLiveData.map { it?.buildShareLink()?.build()?.toString() }
+    }
+    private fun Manifest.buildShareLink(page: Int = pager.currentItem): Uri.Builder? {
+        val tool = code ?: return null
+        val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
             .appendEncodedPath(locale.toLanguageTag().lowercase(Locale.ENGLISH))
             .appendPath(tool)
-            .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
+            .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
     // endregion Share Menu Logic
@@ -349,7 +351,7 @@ class TractActivity :
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
             else -> {
                 val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
-                val shareUrl = (buildShareLink() ?: return)
+                val shareUrl = (activeManifest?.buildShareLink() ?: return)
                     .apply {
                         dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
                             ?.joinToString(",") { it.toLanguageTag() }

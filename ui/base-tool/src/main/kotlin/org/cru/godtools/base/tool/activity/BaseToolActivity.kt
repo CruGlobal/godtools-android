@@ -14,6 +14,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import java.io.IOException
@@ -21,6 +22,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
@@ -149,8 +151,13 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Status Bar / Toolbar logic
 
     // region Share tool logic
-    private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
-    protected open val shareMenuItemVisible: LiveData<Boolean> get() = _shareMenuItemVisible
+    protected open val shareMenuItemVisible by lazy { shareLinkUriLiveData.map { it != null } }
+    protected open val shareLinkUriLiveData = emptyLiveData<String>()
+
+    protected open val shareLinkTitle get() = activeManifest?.title
+    @get:StringRes
+    protected open val shareLinkMessageRes get() = R.string.share_general_message
+    private val shareLinkUri get() = shareLinkUriLiveData.value
 
     protected fun Menu.setupShareMenuItem() {
         findItem(R.id.action_share)?.let { item ->
@@ -162,14 +169,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected fun updateShareMenuItem() {
-        _shareMenuItemVisible.value = shareLinkUri != null
         showNextFeatureDiscovery()
     }
-
-    protected open val shareLinkTitle get() = activeManifest?.title
-    @get:StringRes
-    protected open val shareLinkMessageRes get() = R.string.share_general_message
-    protected open val shareLinkUri: String? get() = null
 
     protected fun shareCurrentTool() {
         // short-circuit if we don't have a share tool url
