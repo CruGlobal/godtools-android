@@ -94,7 +94,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        updateShareMenuItem()
+        // Tool Share feature discovery is dependent on the toolbar being available, so we trigger it now since the
+        // toolbar will exist
+        showNextFeatureDiscovery()
 
         // invalidate the binding to force it to re-color the updated menu
         // TODO: this is a very brute-force way of forcing a recoloring of menu items.
@@ -139,10 +141,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private fun setupToolbar() {
-        activeManifestLiveData.observe(this) {
-            updateToolbarTitle()
-            updateShareMenuItem()
-        }
+        activeManifestLiveData.observe(this) { updateToolbarTitle() }
     }
 
     protected open fun updateToolbarTitle() {
@@ -166,10 +165,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
                 isEnabled = it
             }
         }
-    }
-
-    protected fun updateShareMenuItem() {
-        showNextFeatureDiscovery()
     }
 
     protected fun shareCurrentTool() {

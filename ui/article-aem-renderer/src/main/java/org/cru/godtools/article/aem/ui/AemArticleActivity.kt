@@ -115,7 +115,6 @@ class AemArticleActivity :
     private fun setupDataModel() {
         articleDataModel.articleUri.value = articleUri
 
-        articleDataModel.article.observe(this) { updateShareMenuItem() }
         articleDataModel.article.observe(this) { onUpdateArticle(it) }
     }
 
