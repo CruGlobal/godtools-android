@@ -22,10 +22,10 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
-import org.cru.godtools.base.ui.fragment.BaseBottomSheetDialogFragment
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.tips.R
@@ -37,7 +37,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
-class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<ToolTipBinding>(), TipCallbacks {
+class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBinding>(R.layout.tool_tip), TipCallbacks {
     companion object {
         fun create(tip: Tip): TipBottomSheetDialogFragment? = TipBottomSheetDialogFragment().apply {
             tool = tip.manifest.code ?: return null
@@ -69,9 +69,6 @@ class TipBottomSheetDialogFragment : BaseBottomSheetDialogFragment<ToolTipBindin
         dataModel.locale.value = locale
         dataModel.tipId.value = tip
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        inflater.inflate(R.layout.tool_tip, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
