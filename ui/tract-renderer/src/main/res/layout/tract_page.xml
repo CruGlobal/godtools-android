@@ -15,7 +15,7 @@
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
         <variable name="isVisible" type="Boolean" />
         <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />
-        <variable name="enableTips" type="Boolean" />
+        <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="isHeaderTipComplete" type="LiveData&lt;Boolean&gt;" />
         <variable name="isCallToActionTipComplete" type="LiveData&lt;Boolean&gt;" />
     </data>
