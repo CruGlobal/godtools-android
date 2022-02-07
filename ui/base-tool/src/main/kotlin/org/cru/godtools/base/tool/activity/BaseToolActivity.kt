@@ -180,15 +180,15 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected fun showShareActivityChooser(
+        title: String? = shareLinkTitle,
         @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri
     ) {
         if (shareUrl == null) return
 
-        val title = shareLinkTitle
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tool_subject, title))
+            putExtra(Intent.EXTRA_SUBJECT, title.orEmpty())
             putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)))
