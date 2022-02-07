@@ -17,10 +17,13 @@ import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.tips.ShowTipCallback
+import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 
 @AndroidEntryPoint
 class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
-    CyoaPageFragment.InvalidPageListener {
+    CyoaPageFragment.InvalidPageListener, ShowTipCallback {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +76,12 @@ class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyo
         //       it might provide a better way of handling this.
         pageInsets.top = binding.appbar.layoutParams.height
     }
+
+    // region Training Tips
+    override fun showTip(tip: Tip) {
+        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
+    }
+    // endregion Training Tips
     // endregion UI
 
     // region Page management

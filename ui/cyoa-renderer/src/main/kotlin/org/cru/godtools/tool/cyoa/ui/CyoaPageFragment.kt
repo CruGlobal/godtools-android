@@ -16,15 +16,17 @@ import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.tool.cyoa.BR
 import org.cru.godtools.tool.model.page.Page
+import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 
 abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
-    BaseFragment<B>(layoutId) {
+    BaseFragment<B>(layoutId), ShowTipCallback {
     @Inject
     protected lateinit var eventBus: EventBus
 
-    private val dataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
+    protected val dataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
     internal val toolState by activityViewModels<ToolStateHolder>()
     private val pageInsets by activityViewModels<PageInsets>()
 
@@ -84,6 +86,12 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     }
     // endregion Controller
     // endregion Page
+
+    // region Training Tips
+    override fun showTip(tip: Tip) {
+        findListener<ShowTipCallback>()?.showTip(tip)
+    }
+    // endregion Training Tips
 
     // region Analytics
     protected abstract fun triggerAnalyticsScreenView()

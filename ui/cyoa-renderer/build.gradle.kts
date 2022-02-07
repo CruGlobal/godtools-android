@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(project(":ui:base-tool"))
+    implementation(project(":ui:tips-renderer"))
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)

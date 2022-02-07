@@ -102,7 +102,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
     private var pages: ViewPager2? = null
 
     @Inject
-    lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
+    internal lateinit var tipPageAdapterFactory: TipPageAdapter.Factory
 
     private fun ToolTipBinding.setupPages() {
         this@TipBottomSheetDialogFragment.pages = pages
