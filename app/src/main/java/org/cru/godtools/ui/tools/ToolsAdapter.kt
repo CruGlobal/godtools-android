@@ -24,6 +24,7 @@ private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 
 private const val VIEW_TYPE_TOOL = 1
 private const val VIEW_TYPE_LESSON = 2
+private const val VIEW_TYPE_ALL_TOOL = 3
 
 class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
@@ -57,18 +58,13 @@ class ToolsAdapter(
 
     override fun getItemViewType(position: Int) = when (getItem(position)?.type) {
         Tool.Type.LESSON -> VIEW_TYPE_LESSON
-        else -> VIEW_TYPE_TOOL
+        else -> if (isAllTools) { VIEW_TYPE_ALL_TOOL } else { VIEW_TYPE_TOOL }
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
         VIEW_TYPE_LESSON -> ToolsListItemLessonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        else -> {
-            if (isAllTools) {
-                DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            } else {
-                ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            }
-        }
+        VIEW_TYPE_ALL_TOOL ->  DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        else -> ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }.also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
