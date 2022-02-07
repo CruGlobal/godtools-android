@@ -20,6 +20,11 @@
         <item name="android:progressDrawable">@drawable/progress_download</item>
     </style>
 
+    <style name="Widget.GodTools.Tools.ShapeableImageView.Shape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Widget.GodTools.Tools.Card.ParallelLanguage" parent="Base">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.ParallelLanguage</item>
 
