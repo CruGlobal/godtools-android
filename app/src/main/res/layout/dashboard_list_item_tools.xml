@@ -22,7 +22,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:elevation="@dimen/card_elevation"
             android:onClick="@{() ->callbacks.onToolInfo(tool.code)}"

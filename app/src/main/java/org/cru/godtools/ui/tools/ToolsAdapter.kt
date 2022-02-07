@@ -63,7 +63,7 @@ class ToolsAdapter(
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
         VIEW_TYPE_LESSON -> ToolsListItemLessonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        VIEW_TYPE_ALL_TOOL ->  DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        VIEW_TYPE_ALL_TOOL -> DashboardListItemToolsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         else -> ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }.also { it.setVariable(BR.callbacks, callbacks) }
 
