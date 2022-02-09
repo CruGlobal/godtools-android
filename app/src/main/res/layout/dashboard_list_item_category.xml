@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="kotlin.Pair"/>
 
-        <variable name="category" type="String" />
+        <variable name="category" type="Pair&lt;String,String>" />
         <variable name="isSelected" type="Boolean" />
         <variable name="callbacks" type="org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks"/>
     </data>
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:minHeight="64dp"
-            android:onClick="@{() -> callbacks.onCategorySelected(category)}"
+            android:onClick="@{() -> callbacks.onCategorySelected(category.first)}"
             android:padding="6dp"
             app:cardBackgroundColor="@{isSelected ? @color/gray_80 : @color/white }"
             app:cardCornerRadius="@dimen/card_corner_radius"
@@ -32,7 +33,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@{category.replace('_', ' ')}"
+                android:text="@{category.second}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

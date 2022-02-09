@@ -1,11 +1,12 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import android.content.Context
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
@@ -15,10 +16,9 @@ import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
-import java.util.*
 
 @HiltViewModel
-class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Context) : ViewModel() {
+class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Application) : AndroidViewModel(context) {
 
     val selectedCategory = MutableLiveData<String?>(null)
 
@@ -29,7 +29,7 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Cont
 
     val categories = allTools.map {
         it.mapNotNull { tool ->
-            tool.category
+            tool.category?.let { category -> Pair(category, tool.getCategory(getApplication(), Locale.getDefault())) }
         }.distinct()
     }
 
