@@ -40,6 +40,7 @@ class ToolsCategoryFragment() :
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
+            dataModel.selectedCategory.observe(this) { adapter.selectedCategory.set(it) }
         }
     }
 
@@ -72,7 +73,6 @@ class ToolsCategoryFragment() :
             category
         }
         dataModel.selectedCategory.value = selectedCategory
-        categoryAdapter.selectedCategory = selectedCategory
     }
 
     // region ToolsCategoryAdapterCallbacks

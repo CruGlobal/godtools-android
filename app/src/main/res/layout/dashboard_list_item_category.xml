@@ -5,10 +5,11 @@
 
     <data>
         <import type="kotlin.Pair"/>
+        <import type="androidx.databinding.ObservableField"/>
 
         <variable name="category" type="Pair&lt;String,String>" />
-        <variable name="isSelected" type="Boolean" />
-        <variable name="callbacks" type="org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks"/>
+        <variable name="selectedCategory" type="ObservableField&lt;String>" />
+        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
     </data>
 
     <FrameLayout
@@ -22,7 +23,7 @@
             android:minHeight="64dp"
             android:onClick="@{() -> callbacks.onCategorySelected(category.first)}"
             android:padding="6dp"
-            app:cardBackgroundColor="@{isSelected ? @color/gray_80 : @color/white }"
+            app:cardBackgroundColor="@{category.first.equals(selectedCategory) ? @color/gray_80 : @color/white }"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="4dp"
             tools:cardBackgrounColor="@color/gray_80">
@@ -38,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Categroy" />
+                tools:text="Category" />
 
         </androidx.cardview.widget.CardView>
     </FrameLayout>

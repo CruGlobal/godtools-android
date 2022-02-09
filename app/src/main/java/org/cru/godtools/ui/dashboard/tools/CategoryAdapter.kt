@@ -11,11 +11,7 @@ class CategoryAdapter() :
     SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(), Observer<List<Pair<String, String>>> {
 
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
-    var selectedCategory: String? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    var selectedCategory = ObservableField<String>()
 
     private var categories: List<Pair<String, String>> = emptyList()
         set(value) {
@@ -31,13 +27,13 @@ class CategoryAdapter() :
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = DashboardListItemCategoryBinding
         .inflate(LayoutInflater.from(parent.context)).also {
-            it.callbacks = callbacks.get()
+            it.callbacks = callbacks
         }
 
     override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
         val category = categories[position]
         binding.category = category
-        binding.isSelected = category.first == selectedCategory
+        binding.selectedCategory = selectedCategory
     }
 }
 
