@@ -56,12 +56,10 @@ class ToolsAdapter(
         tools = t
     }
 
-    override fun getItemViewType(position: Int) = when (getItem(position)?.type) {
-        Tool.Type.LESSON -> VIEW_TYPE_LESSON
-        else -> when (isAllTools) {
-            true -> VIEW_TYPE_ALL_TOOL
-            false -> VIEW_TYPE_TOOL
-        }
+    override fun getItemViewType(position: Int) = when {
+        getItem(position)?.type == Tool.Type.LESSON -> VIEW_TYPE_LESSON
+        isAllTools -> VIEW_TYPE_ALL_TOOL
+        else -> VIEW_TYPE_TOOL
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
