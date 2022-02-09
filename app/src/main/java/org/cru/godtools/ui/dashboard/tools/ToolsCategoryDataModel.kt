@@ -27,7 +27,7 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
             .and(Contract.ToolTable.FIELD_HIDDEN.ne(true))
     ).getAsLiveData(dao)
 
-    val categories = allTools.map {
+    val categories: LiveData<List<Pair<String, String>>> = allTools.map {
         it.mapNotNull { tool ->
             tool.category?.let { category -> Pair(category, tool.getCategory(getApplication(), Locale.getDefault())) }
         }.distinct()
