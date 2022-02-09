@@ -8,12 +8,12 @@ import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
 class CategoryAdapter() :
-    SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(), Observer<List<Pair<String, String>>> {
+    SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(), Observer<List<String>> {
 
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
     var selectedCategory = ObservableField<String>()
 
-    private var categories: List<Pair<String, String>> = emptyList()
+    private var categories: List<String> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -21,7 +21,7 @@ class CategoryAdapter() :
 
     override fun getItemCount() = categories.size
 
-    override fun onChanged(t: List<Pair<String, String>>) {
+    override fun onChanged(t: List<String>) {
         categories = t
     }
 

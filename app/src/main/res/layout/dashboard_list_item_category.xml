@@ -6,8 +6,9 @@
     <data>
         <import type="kotlin.Pair"/>
         <import type="androidx.databinding.ObservableField"/>
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
-        <variable name="category" type="Pair&lt;String,String>" />
+        <variable name="category" type="String" />
         <variable name="selectedCategory" type="ObservableField&lt;String>" />
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
     </data>
@@ -21,9 +22,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:minHeight="64dp"
-            android:onClick="@{() -> callbacks.onCategorySelected(category.first)}"
+            android:onClick="@{() -> callbacks.onCategorySelected(category)}"
             android:padding="6dp"
-            app:cardBackgroundColor="@{category.first.equals(selectedCategory) ? @color/gray_80 : @color/white }"
+            app:cardBackgroundColor="@{category.equals(selectedCategory) ? @color/gray_80 : @color/white }"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="4dp"
             tools:cardBackgrounColor="@color/gray_80">
@@ -34,7 +35,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@{category.second}"
+                android:text="@{ModelUtils.getLocalStringFromToolCategory(category, context)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

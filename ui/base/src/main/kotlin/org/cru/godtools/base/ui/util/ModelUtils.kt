@@ -34,4 +34,5 @@ private fun Context.getToolCategoryStringRes(category: String) =
         0 -> null
         else -> resources.getString(id)
     }
+fun String.getLocalStringFromToolCategory(context: Context) = context.getToolCategoryStringRes(this)
 // endregion Tool Category

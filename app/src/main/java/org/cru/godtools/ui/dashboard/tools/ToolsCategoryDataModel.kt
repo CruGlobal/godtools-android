@@ -6,13 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
@@ -27,9 +25,9 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
             .and(Contract.ToolTable.FIELD_HIDDEN.ne(true))
     ).getAsLiveData(dao)
 
-    val categories: LiveData<List<Pair<String, String>>> = allTools.map {
+    val categories = allTools.map {
         it.mapNotNull { tool ->
-            tool.category?.let { category -> Pair(category, tool.getCategory(getApplication(), Locale.getDefault())) }
+            tool.category
         }.distinct()
     }
 
