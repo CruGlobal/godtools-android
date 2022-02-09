@@ -51,6 +51,7 @@ class ToolsCategoryFragment() :
         }
     }
 
+    // region lifecycle
     override fun onBindingCreated(binding: DashboardToolsCategoryFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -58,8 +59,14 @@ class ToolsCategoryFragment() :
         binding.toolsRecyclerView.adapter = toolsAdapter
     }
 
+    override fun onDestroyBinding(binding: DashboardToolsCategoryFragmentBinding) {
+        binding.categoryRecyclerView.adapter = null
+        binding.toolsRecyclerView.adapter = null
+    }
+    //endregion lifecycle
+
     override fun onCategorySelected(category: String) {
-        val selectedCategory: String? = if (categoryAdapter.selectedCategory == category) {
+        val selectedCategory: String? = if (categoryAdapter.selectedCategory.get() == category) {
             null
         } else {
             category
