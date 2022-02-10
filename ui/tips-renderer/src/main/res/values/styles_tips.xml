@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="tract_tips_red">#E53660</color>
-    <color name="tract_tips_orange">#E55536</color>
+    <color name="tool_tips_red">#E53660</color>
+    <color name="tool_tips_orange">#E55536</color>
 
-    <dimen name="tract_tip_margin_horiz">32dp</dimen>
-    <dimen name="tract_tip_text_size_label">16sp</dimen>
+    <dimen name="tool_tip_margin_horiz">32dp</dimen>
+    <dimen name="tool_tip_text_size_label">16sp</dimen>
 
-    <dimen name="tract_tips_tip_elevation">4dp</dimen>
-    <dimen name="tract_tips_tip_corner_radius">6dp</dimen>
+    <dimen name="tool_tips_tip_elevation">4dp</dimen>
+    <dimen name="tool_tips_tip_corner_radius">6dp</dimen>
 
-    <bool name="tract_tips_show_full_height">true</bool>
+    <bool name="tool_tips_show_full_height">true</bool>
 
     <!-- region Badge -->
-    <dimen name="tract_tips_badge_size">40dp</dimen>
-    <dimen name="tract_tips_badge_padding">8dp</dimen>
+    <dimen name="tool_tips_badge_size">40dp</dimen>
+    <dimen name="tool_tips_badge_padding">8dp</dimen>
 
     <style name="Widget.GodTools.Tip.Badge" parent="Base">
-        <item name="android:layout_width">@dimen/tract_tips_badge_size</item>
-        <item name="android:layout_height">@dimen/tract_tips_badge_size</item>
-        <item name="android:elevation" tools:targetApi="lollipop">@dimen/tract_tips_tip_elevation</item>
+        <item name="android:layout_width">@dimen/tool_tips_badge_size</item>
+        <item name="android:layout_height">@dimen/tool_tips_badge_size</item>
+        <item name="android:elevation" tools:targetApi="lollipop">@dimen/tool_tips_tip_elevation</item>
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Badge</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
+        <item name="cornerSize">@dimen/tool_tips_tip_corner_radius</item>
     </style>
     <!-- endregion Badge -->
 
     <!-- region Arrow -->
-    <dimen name="tract_tips_arrow_height">48dp</dimen>
-    <dimen name="tract_tips_arrow_width">@dimen/tract_tips_badge_size</dimen>
-    <dimen name="tract_tips_arrow_padding">@dimen/tract_tips_badge_padding</dimen>
-    <dimen name="tract_tips_arrow_padding_arrow">16dp</dimen>
-    <dimen name="tract_tips_arrow_size">12dp</dimen>
+    <dimen name="tool_tips_arrow_height">48dp</dimen>
+    <dimen name="tool_tips_arrow_width">@dimen/tool_tips_badge_size</dimen>
+    <dimen name="tool_tips_arrow_padding">@dimen/tool_tips_badge_padding</dimen>
+    <dimen name="tool_tips_arrow_padding_arrow">16dp</dimen>
+    <dimen name="tool_tips_arrow_size">12dp</dimen>
 
     <style name="Widget.GodTools.Tip.Arrow" parent="Base">
-        <item name="android:elevation" tools:targetApi="lollipop">@dimen/tract_tips_tip_elevation</item>
+        <item name="android:elevation" tools:targetApi="lollipop">@dimen/tool_tips_tip_elevation</item>
         <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Arrow</item>
     </style>
 
     <style name="Widget.GodTools.Tip.Arrow.Vertical">
-        <item name="android:layout_width">@dimen/tract_tips_arrow_width</item>
-        <item name="android:layout_height">@dimen/tract_tips_arrow_height</item>
+        <item name="android:layout_width">@dimen/tool_tips_arrow_width</item>
+        <item name="android:layout_height">@dimen/tool_tips_arrow_height</item>
     </style>
 
     <style name="ShapeAppearance.GodTools.Tip.Arrow" parent="ShapeAppearance.MaterialComponents">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/tract_tips_tip_corner_radius</item>
+        <item name="cornerSize">@dimen/tool_tips_tip_corner_radius</item>
     </style>
     <!-- endregion Arrow -->
 </resources>

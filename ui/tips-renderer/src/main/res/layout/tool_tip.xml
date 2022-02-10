@@ -55,23 +55,23 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"
             style="@style/Widget.GodTools.Tip.Badge"
-            android:layout_marginStart="@dimen/tract_tip_margin_horiz"
+            android:layout_marginStart="@dimen/tool_tip_margin_horiz"
             android:layout_marginTop="8dp"
             android:background="@{isComplete ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip, default=@drawable/bkg_tips_tip}"
             android:src="@{isComplete ? TipTypeKt.getDoneDrawable(tip.type, context) : TipTypeKt.getDrawable(tip.type, context)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appbar"
-            app:srcInset="@{@dimen/tract_tips_badge_padding}" />
+            app:srcInset="@{@dimen/tool_tips_badge_padding}" />
 
         <TextView
             android:id="@+id/label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="@dimen/tract_tip_margin_horiz"
+            android:layout_marginEnd="@dimen/tool_tip_margin_horiz"
             android:text="@{ContextKt.getString(context, tip.manifest.locale, TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
             android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
-            android:textSize="@dimen/tract_tip_text_size_label"
+            android:textSize="@dimen/tool_tip_text_size_label"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/icon"
             app:layout_constraintEnd_toEndOf="parent"
