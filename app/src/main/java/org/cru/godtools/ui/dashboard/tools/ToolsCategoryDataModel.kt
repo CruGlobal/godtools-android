@@ -24,7 +24,7 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
     private val allTools = Query.select<Tool>().where(
         Contract.ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
             .and(Contract.ToolTable.FIELD_HIDDEN.ne(true))
-    ).getAsLiveData(dao)
+    ).orderBy(Contract.ToolTable.COLUMN_DEFAULT_ORDER).getAsLiveData(dao)
 
     val categories = allTools.map {
         it.mapNotNull { tool -> tool.category }.distinct()
