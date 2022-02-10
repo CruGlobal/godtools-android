@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Tiếp theo</string>
+    <string name="tract_tips_tip_action_close">Đóng</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Hỏi</string>
+    <string name="tract_tips_type_consider">Xem xét</string>
+    <string name="tract_tips_type_prepare">Chuẩn bị</string>
+    <string name="tract_tips_type_quote">Trích dẫn</string>
+    <string name="tract_tips_type_tip">Lời gợi ý</string>
+</resources>

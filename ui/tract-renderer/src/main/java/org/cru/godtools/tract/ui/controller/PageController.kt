@@ -25,6 +25,7 @@ import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.state.State
+import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.greenrobot.eventbus.EventBus
@@ -54,10 +55,9 @@ class PageController @AssistedInject internal constructor(
         ): PageController
     }
 
-    interface Callbacks {
+    interface Callbacks : ShowTipCallback {
         fun onUpdateActiveCard(page: TractPage?, card: Card?)
         fun showModal(modal: Modal)
-        fun showTip(tip: Tip)
         fun goToNextPage()
     }
 
@@ -78,6 +78,7 @@ class PageController @AssistedInject internal constructor(
         binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or
             settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_SWIPED)
         binding.pageContentLayout.activeCardListener = this
+        binding.enableTips = enableTips
 
         lifecycleOwner?.lifecycle?.apply {
             onResume { binding.isVisible = true }

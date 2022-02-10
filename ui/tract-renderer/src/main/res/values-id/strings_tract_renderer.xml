@@ -12,8 +12,4 @@
     <string name="tract_live_share_exit_dialog_message">Keluar dari sesi berbagi jarak jauh sekarang?</string>
     <string name="tract_live_share_exit_dialog_confirm">Keluar</string>
     <string name="tract_live_share_exit_dialog_cancel">Batal</string>
-    <!-- Training Tips -->
-    <string name="tract_tips_tip_action_next">Selajutnya</string>
-    <string name="tract_tips_tip_action_close">Tutup</string>
-    <!-- Tip Types -->
 </resources>

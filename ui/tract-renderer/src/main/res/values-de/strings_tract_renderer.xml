@@ -12,7 +12,4 @@
     <string name="tract_live_share_exit_dialog_message">Fernfreigabe-Sitzung jetzt beenden?</string>
     <string name="tract_live_share_exit_dialog_confirm">Beenden</string>
     <string name="tract_live_share_exit_dialog_cancel">Abbrechen</string>
-    <!-- Training Tips -->
-    <!-- Tip Types -->
-    <string name="tract_tips_type_prepare">Vorbereitung</string>
 </resources>

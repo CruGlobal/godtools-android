@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Siguiente</string>
+    <string name="tract_tips_tip_action_close">Cerrar</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Pregunta</string>
+    <string name="tract_tips_type_consider">Considera</string>
+    <string name="tract_tips_type_prepare">Prepara</string>
+    <string name="tract_tips_type_quote">Citar</string>
+    <string name="tract_tips_type_tip">Consejo</string>
+</resources>

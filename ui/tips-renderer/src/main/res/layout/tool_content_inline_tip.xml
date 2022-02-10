@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.TractActivity">
+
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="org.cru.godtools.tool.tips.util.TipTypeKt" />
+
+        <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
+        <variable name="controller" type="org.cru.godtools.tool.tips.ui.controller.InlineTipController" />
+        <variable name="model" type="org.cru.godtools.tool.model.tips.InlineTip" />
+        <variable name="isCompleted" type="LiveData&lt;Boolean&gt;" />
+    </data>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        style="@style/Widget.GodTools.Tip.Badge"
+        android:layout_marginLeft="@dimen/tool_content_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="@dimen/tool_content_margin"
+        android:layout_marginBottom="4dp"
+        android:background="@{isCompleted ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
+        android:onClick="@{() -> controller.showTip(model.tip)}"
+        android:src="@{isCompleted ? TipTypeKt.getDoneDrawable(model.tip.type, context) : TipTypeKt.getDrawable(model.tip.type, context)}"
+        app:srcInset="@{@dimen/tract_tips_badge_padding}"
+        app:visibleIf="@{enableTips}"
+        tools:src="@drawable/ic_tips_tip" />
+</layout>

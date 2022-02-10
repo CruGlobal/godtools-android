@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
         <import type="org.cru.godtools.tool.model.page.PageKt" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
-        <import type="org.cru.godtools.tract.ui.tips.TipArrowShape" />
+        <import type="org.cru.godtools.tool.tips.ui.shape.TipArrowShape" />
+        <import type="org.cru.godtools.tool.tips.util.TipTypeKt" />
 
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.PageController" />
         <variable name="page" type="org.cru.godtools.tool.model.tract.TractPage" />
         <variable name="callbacks" type="org.cru.godtools.tract.ui.controller.PageController.Callbacks" />
         <variable name="isVisible" type="Boolean" />
         <variable name="cardsDiscovered" type="LiveData&lt;Boolean&gt;" />
-        <variable name="enableTips" type="Boolean" />
+        <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="isHeaderTipComplete" type="LiveData&lt;Boolean&gt;" />
         <variable name="isCallToActionTipComplete" type="LiveData&lt;Boolean&gt;" />
     </data>

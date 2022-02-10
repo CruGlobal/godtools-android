@@ -18,6 +18,7 @@ include("ui:base-tool")
 include("ui:cyoa-renderer")
 include("ui:lesson-renderer")
 include("ui:shortcuts")
+include("ui:tips-renderer")
 include("ui:tract-renderer")
 include("ui:tutorial-renderer")
 

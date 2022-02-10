@@ -6,9 +6,9 @@
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
         <import type="org.cru.godtools.tract.R" />
-        <import type="org.cru.godtools.tract.util.TipTypeKt" />
         <import type="org.cru.godtools.tool.model.tract.TractPageKt" />
         <import type="org.cru.godtools.tool.model.StylesKt" />
+        <import type="org.cru.godtools.tool.tips.util.TipTypeKt" />
 
         <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="controller" type="org.cru.godtools.tract.ui.controller.CardController" />

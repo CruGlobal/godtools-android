@@ -1,8 +1,8 @@
 package org.cru.godtools.tool.cyoa.ui
 
-import androidx.lifecycle.map
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.analytics.model.CyoaPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
@@ -22,8 +22,9 @@ class CyoaContentPageFragment(
     internal lateinit var controllerFactory: ContentPageController.Factory
 
     override fun setupPageController(binding: CyoaPageContentBinding) {
-        controller = binding.bindController(controllerFactory, toolState.toolState)
-            .also { page.map { it as? ContentPage }.observe(viewLifecycleOwner, it) }
+        controller = binding.bindController(controllerFactory, dataModel.enableTips, toolState.toolState)
+            .also { page.filterIsInstance<ContentPage>().observe(viewLifecycleOwner, it) }
+            .also { it.callbacks = this }
     }
     // endregion Controller
 
