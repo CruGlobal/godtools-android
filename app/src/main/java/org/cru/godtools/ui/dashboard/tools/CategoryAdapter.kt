@@ -8,7 +8,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
-class CategoryAdapter :
+class CategoryAdapter() :
     SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(), Observer<List<String>> {
 
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
@@ -27,7 +27,7 @@ class CategoryAdapter :
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = DashboardListItemCategoryBinding
-        .inflate(LayoutInflater.from(parent.context)).also {
+        .inflate(LayoutInflater.from(parent.context), parent, false).also {
             it.callbacks = callbacks
         }
 
