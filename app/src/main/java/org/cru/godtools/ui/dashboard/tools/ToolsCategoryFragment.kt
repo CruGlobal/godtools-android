@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
@@ -36,16 +37,15 @@ class ToolsCategoryFragment() :
     // endregion Data Model
 
     private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter().also { adapter ->
+        CategoryAdapter(this, dataModel).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
-            adapter.selectedCategory = dataModel.selectedCategory
         }
     }
 
     private val toolsAdapter: ToolsAdapter by lazy {
-        ToolsAdapter(this, toolsDataModel, true).also { adapter ->
+        ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tools).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.viewTools.observe(this, adapter)
@@ -67,7 +67,7 @@ class ToolsCategoryFragment() :
     //endregion lifecycle
 
     override fun onCategorySelected(category: String) {
-        val selectedCategory: String? = if (categoryAdapter.selectedCategory.value == category) {
+        val selectedCategory: String? = if (dataModel.selectedCategory.value == category) {
             null
         } else {
             category

@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="kotlin.Pair"/>
         <import type="androidx.databinding.ObservableField"/>
-        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
         <import type="androidx.lifecycle.LiveData"/>
 
         <variable name="category" type="String" />
+        <variable name="formattedCategory" type="String" />
         <variable name="selectedCategory" type="LiveData&lt;String>" />
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
     </data>
@@ -36,7 +35,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@{ModelUtils.getLocalStringFromToolCategory(category, context)}"
+                android:text="@{formattedCategory}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

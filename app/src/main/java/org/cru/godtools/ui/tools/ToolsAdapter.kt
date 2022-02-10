@@ -3,6 +3,7 @@ package org.cru.godtools.ui.tools
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
@@ -15,6 +16,7 @@ import com.karumi.weak.weak
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleDataBindingDraggableItemAdapter
 import org.cru.godtools.BR
+import org.cru.godtools.R
 import org.cru.godtools.databinding.DashboardListItemToolsBinding
 import org.cru.godtools.databinding.ToolsListItemLessonBinding
 import org.cru.godtools.databinding.ToolsListItemToolBinding
@@ -29,7 +31,8 @@ private const val VIEW_TYPE_ALL_TOOL = 3
 class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
     private val dataModel: ToolsAdapterViewModel,
-    private val isAllTools: Boolean = false
+    @LayoutRes
+    private val itemLayout: Int? = null
 ) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
@@ -58,7 +61,7 @@ class ToolsAdapter(
 
     override fun getItemViewType(position: Int) = when {
         getItem(position)?.type == Tool.Type.LESSON -> VIEW_TYPE_LESSON
-        isAllTools -> VIEW_TYPE_ALL_TOOL
+        itemLayout == R.layout.dashboard_list_item_tools -> VIEW_TYPE_ALL_TOOL
         else -> VIEW_TYPE_TOOL
     }
 

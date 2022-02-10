@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.ui.util.getLocalStringFromToolCategory
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
@@ -26,16 +27,12 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
     ).getAsLiveData(dao)
 
     val categories = allTools.map {
-        it.mapNotNull { tool ->
-            tool.category
-        }.distinct()
+        it.mapNotNull { tool -> tool.category }.distinct()
     }
 
-    val viewTools: LiveData<List<Tool>> = selectedCategory.combineWith(allTools) { selectedCategory, tools ->
-        if (selectedCategory == null) {
-            tools
-        } else {
-            tools.filter { it.category == selectedCategory }
-        }
+    fun getFormattedCategory(category: String) = category.getLocalStringFromToolCategory(getApplication())
+
+    val viewTools: LiveData<List<Tool>> = allTools.combineWith(selectedCategory) { tools, selectedCategory ->
+        tools.filter { tool -> selectedCategory?.let { tool.category == it } ?: true }
     }
 }
