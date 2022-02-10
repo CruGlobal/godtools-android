@@ -40,7 +40,7 @@ class ToolsCategoryFragment() :
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
-            dataModel.selectedCategory.observe(this) { adapter.selectedCategory.set(it) }
+            adapter.selectedCategory = dataModel.selectedCategory
         }
     }
 
@@ -67,7 +67,7 @@ class ToolsCategoryFragment() :
     //endregion lifecycle
 
     override fun onCategorySelected(category: String) {
-        val selectedCategory: String? = if (categoryAdapter.selectedCategory.get() == category) {
+        val selectedCategory: String? = if (categoryAdapter.selectedCategory.value == category) {
             null
         } else {
             category

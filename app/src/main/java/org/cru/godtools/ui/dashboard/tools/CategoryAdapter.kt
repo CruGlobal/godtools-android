@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
 import androidx.lifecycle.Observer
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
-class CategoryAdapter() :
+class CategoryAdapter :
     SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(), Observer<List<String>> {
 
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
-    var selectedCategory = ObservableField<String>()
+    var selectedCategory = emptyLiveData<String>()
 
     private var categories: List<String> = emptyList()
         set(value) {
