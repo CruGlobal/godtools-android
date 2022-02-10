@@ -15,7 +15,6 @@ buildscript {
 
 plugins {
     alias libs.plugins.hilt apply false
-    alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
 }
 
@@ -39,27 +38,5 @@ subprojects {
                 java.srcDirs("src/$name/kotlin")
             }
         }
-    }
-}
-
-// jacoco config
-junitJacoco {
-    jacocoVersion = libs.versions.jacoco.get()
-    includeNoLocationClasses = true
-}
-allprojects {
-    afterEvaluate {
-        tasks.withType(Test) {
-            jacoco.excludes = ['jdk.internal.*']
-        }
-    }
-}
-task jacocoTestReport {
-    subprojects.each { dependsOn(it.tasks.withType(JacocoReport)) }
-}
-allprojects {
-    if (gradle.startParameter.excludedTaskNames.contains("test")) {
-        // exclude all test type tasks when the test task is excluded
-        tasks.withType(Test).all { gradle.startParameter.excludedTaskNames += it.name }
     }
 }

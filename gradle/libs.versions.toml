@@ -19,10 +19,10 @@ firebase-perf = "20.3.2"
 godtoolsShared = "0.9.1"
 google-auto-value = "1.10.1"
 gtoSupport = "4.0.1"
-jacoco = "0.8.10"
 ktlint = "0.48.2"
 kotlin = "1.8.21"
 kotlinCoroutines = "1.7.1"
+kotlinKover = "0.7.0"
 lottie = "6.0.0"
 okhttp3 = "4.11.0"
 retrofit2 = "2.9.0"
@@ -169,6 +169,7 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.11"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
@@ -205,7 +206,6 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0"
 
 # HACK: dependencies used to trigger renovate upgrades
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
-jacoco = { module = "org.jacoco:jacoco", version.ref = "jacoco" }
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 
 [bundles]
@@ -218,6 +218,5 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-junitJacoco = { id = "com.vanniktech.android.junit.jacoco", version = "0.16.0" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.3.2" }
