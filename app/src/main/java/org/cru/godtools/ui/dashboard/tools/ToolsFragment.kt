@@ -21,6 +21,5 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
         helper.sync(syncService.syncTools(force))
-        helper.sync(syncService.syncLanguages(force))
     }
 }
