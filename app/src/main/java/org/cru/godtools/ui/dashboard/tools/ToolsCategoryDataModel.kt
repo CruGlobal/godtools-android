@@ -30,6 +30,6 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
     }
 
     val viewTools: LiveData<List<Tool>> = allTools.combineWith(selectedCategory) { tools, selectedCategory ->
-        tools.filter { tool -> selectedCategory?.let { tool.category == it } ?: true }
+        tools.filter { selectedCategory == null || it.category == selectedCategory }
     }
 }
