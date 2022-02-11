@@ -59,9 +59,8 @@ class ToolsAdapter(
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false).also {
-            it.setVariable(BR.callbacks, callbacks)
-        }
+        DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false)
+            .also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         val tool = getItem(position)
