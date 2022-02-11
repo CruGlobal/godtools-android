@@ -23,7 +23,7 @@
         android:background="@{isCompleted ? @drawable/bkg_tips_tip_done : @drawable/bkg_tips_tip}"
         android:onClick="@{() -> controller.showTip(model.tip)}"
         android:src="@{isCompleted ? TipTypeKt.getDoneDrawable(model.tip.type, context) : TipTypeKt.getDrawable(model.tip.type, context)}"
-        app:srcInset="@{@dimen/tract_tips_badge_padding}"
+        app:srcInset="@{@dimen/tool_tips_badge_padding}"
         app:visibleIf="@{enableTips}"
         tools:src="@drawable/ic_tips_tip" />
 </layout>

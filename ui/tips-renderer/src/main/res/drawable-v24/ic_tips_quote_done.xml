@@ -15,10 +15,10 @@
                 android:startY="18.0027"
                 android:type="linear">
                 <item
-                    android:color="@color/tract_tips_red"
+                    android:color="@color/tool_tips_red"
                     android:offset="0" />
                 <item
-                    android:color="@color/tract_tips_orange"
+                    android:color="@color/tool_tips_orange"
                     android:offset="1" />
             </gradient>
         </aapt:attr>
@@ -34,10 +34,10 @@
                 android:startY="18.0027"
                 android:type="linear">
                 <item
-                    android:color="@color/tract_tips_red"
+                    android:color="@color/tool_tips_red"
                     android:offset="0" />
                 <item
-                    android:color="@color/tract_tips_orange"
+                    android:color="@color/tool_tips_orange"
                     android:offset="1" />
             </gradient>
         </aapt:attr>

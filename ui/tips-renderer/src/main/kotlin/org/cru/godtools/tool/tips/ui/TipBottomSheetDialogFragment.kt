@@ -77,7 +77,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
 
     override fun onStart() {
         super.onStart()
-        if (context?.resources?.getBoolean(R.bool.tract_tips_show_full_height) == true) makeFullScreen()
+        if (context?.resources?.getBoolean(R.bool.tool_tips_show_full_height) == true) makeFullScreen()
     }
 
     override fun onBindingCreated(binding: ToolTipBinding, savedInstanceState: Bundle?) {

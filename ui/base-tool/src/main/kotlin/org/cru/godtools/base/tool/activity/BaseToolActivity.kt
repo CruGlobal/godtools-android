@@ -13,7 +13,6 @@ import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -22,6 +21,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
@@ -39,7 +39,6 @@ import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.download.manager.DownloadProgress
-import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
