@@ -47,7 +47,7 @@ class ToolsCategoryFragment() :
         ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tools).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
-            dataModel.viewTools.observe(this, adapter)
+            dataModel.filteredTools.observe(this, adapter)
         }
     }
 

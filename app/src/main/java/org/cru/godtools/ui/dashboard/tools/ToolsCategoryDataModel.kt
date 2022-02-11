@@ -15,17 +15,15 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
 class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao) : ViewModel() {
-
-    val selectedCategory = MutableLiveData<String?>(null)
-
-    private val allTools = Query.select<Tool>().where(
+    private val tools = Query.select<Tool>().where(
         ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
             .and(ToolTable.FIELD_HIDDEN.ne(true))
     ).orderBy(ToolTable.COLUMN_DEFAULT_ORDER).getAsLiveData(dao)
 
-    val categories = allTools.map { it.mapNotNull { it.category }.distinct() }
+    val categories = tools.map { it.mapNotNull { it.category }.distinct() }
+    val selectedCategory = MutableLiveData<String?>(null)
 
-    val viewTools = allTools.combineWith(selectedCategory) { tools, category ->
+    val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }
 }
