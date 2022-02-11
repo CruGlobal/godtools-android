@@ -33,7 +33,6 @@ class CategoryAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: Too
     override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
         val category = categories[position]
         binding.category = category
-        binding.formattedCategory = dataModel.getFormattedCategory(category)
         binding.selectedCategory = dataModel.selectedCategory
     }
 }

@@ -6,9 +6,10 @@
     <data>
         <import type="androidx.databinding.ObservableField"/>
         <import type="androidx.lifecycle.LiveData"/>
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="java.util.Locale" />
 
         <variable name="category" type="String" />
-        <variable name="formattedCategory" type="String" />
         <variable name="selectedCategory" type="LiveData&lt;String>" />
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
     </data>
@@ -35,7 +36,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@{formattedCategory}"
+                android:text="@{ModelUtils.getCategoryName(category, context, Locale.getDefault())}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
