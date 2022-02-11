@@ -13,4 +13,7 @@
 
     <string name="tract_content_input_error_required">%1$s is required</string>
     <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
+
+    <!-- Share Sheet -->
+    <string name="tool_share_sheet_more_apps">More</string>
 </resources>

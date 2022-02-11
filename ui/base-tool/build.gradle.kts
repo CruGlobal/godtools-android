@@ -1,5 +1,6 @@
 plugins {
     id("dagger.hilt.android.plugin")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -33,6 +34,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.recyclerview)
 
     api(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.androidx.constraintlayout)
@@ -47,6 +49,7 @@ dependencies {
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
+    implementation(libs.gtoSupport.recyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.godtoolsMpp.parser)
