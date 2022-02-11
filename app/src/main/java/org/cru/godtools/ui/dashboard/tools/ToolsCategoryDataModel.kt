@@ -12,7 +12,7 @@ import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.model.Tool
-import org.keynote.godtools.android.db.Contract
+import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
@@ -21,9 +21,9 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
     val selectedCategory = MutableLiveData<String?>(null)
 
     private val allTools = Query.select<Tool>().where(
-        Contract.ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
-            .and(Contract.ToolTable.FIELD_HIDDEN.ne(true))
-    ).orderBy(Contract.ToolTable.COLUMN_DEFAULT_ORDER).getAsLiveData(dao)
+        ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
+            .and(ToolTable.FIELD_HIDDEN.ne(true))
+    ).orderBy(ToolTable.COLUMN_DEFAULT_ORDER).getAsLiveData(dao)
 
     val categories = allTools.map {
         it.mapNotNull { tool -> tool.category }.distinct()
