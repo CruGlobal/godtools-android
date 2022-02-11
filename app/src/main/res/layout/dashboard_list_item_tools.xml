@@ -68,7 +68,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:selected="@{tool.isAdded}"
-                    app:shapeAppearance="@style/ShapeAppearance.GodTools.Tools.ShapeableImageView.Shape.Circle"
+                    app:shapeAppearance="@style/ShapeAppearance.GodTools.Tools.Action.Favorite"
                     app:srcCompat="@drawable/ic_favorite" />
 
                 <androidx.constraintlayout.widget.Guideline

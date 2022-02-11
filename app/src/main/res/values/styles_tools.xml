@@ -20,7 +20,7 @@
         <item name="android:progressDrawable">@drawable/progress_download</item>
     </style>
 
-    <style name="ShapeAppearance.GodTools.Tools.ShapeableImageView.Shape.Circle" parent="">
+    <style name="ShapeAppearance.GodTools.Tools.Action.Favorite" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
