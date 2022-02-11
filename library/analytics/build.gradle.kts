@@ -29,7 +29,6 @@ dependencies {
 
     implementation(libs.kotlin.coroutines)
 
-    implementation(libs.firebase.core)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
 

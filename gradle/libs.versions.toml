@@ -63,7 +63,6 @@ facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = "com.facebook.soloader:soloader:0.10.3"
 firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.0.0"
-firebase-core = "com.google.firebase:firebase-core:20.0.2"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
