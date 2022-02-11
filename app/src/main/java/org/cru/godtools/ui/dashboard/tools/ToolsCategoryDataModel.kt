@@ -27,7 +27,7 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Appl
 
     val categories = allTools.map { it.mapNotNull { it.category }.distinct() }
 
-    val viewTools: LiveData<List<Tool>> = allTools.combineWith(selectedCategory) { tools, selectedCategory ->
-        tools.filter { selectedCategory == null || it.category == selectedCategory }
+    val viewTools = allTools.combineWith(selectedCategory) { tools, category ->
+        tools.filter { category == null || it.category == category }
     }
 }
