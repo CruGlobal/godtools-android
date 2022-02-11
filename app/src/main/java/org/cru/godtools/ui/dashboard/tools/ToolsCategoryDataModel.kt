@@ -1,9 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,7 +14,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
-class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, context: Application) : AndroidViewModel(context) {
+class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao) : ViewModel() {
 
     val selectedCategory = MutableLiveData<String?>(null)
 

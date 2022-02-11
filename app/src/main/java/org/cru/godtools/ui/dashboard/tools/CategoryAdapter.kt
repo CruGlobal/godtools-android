@@ -4,12 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
-class CategoryAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: ToolsCategoryDataModel) :
-    SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(lifecycleOwner), Observer<List<String>> {
+class CategoryAdapter(
+    lifecycleOwner: LifecycleOwner,
+    private val selectedCategory: LiveData<String?>
+) : SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(lifecycleOwner), Observer<List<String>> {
 
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
 
@@ -33,7 +36,7 @@ class CategoryAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: Too
     override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
         val category = categories[position]
         binding.category = category
-        binding.selectedCategory = dataModel.selectedCategory
+        binding.selectedCategory = selectedCategory
     }
 }
 

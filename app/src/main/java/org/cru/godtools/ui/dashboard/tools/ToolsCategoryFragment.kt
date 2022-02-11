@@ -36,7 +36,7 @@ class ToolsCategoryFragment() :
     // endregion Data Model
 
     private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(this, dataModel).also { adapter ->
+        CategoryAdapter(this, dataModel.selectedCategory).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
@@ -54,7 +54,6 @@ class ToolsCategoryFragment() :
     // region lifecycle
     override fun onBindingCreated(binding: DashboardToolsCategoryFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.categoryRecyclerView.adapter = categoryAdapter
         binding.toolsRecyclerView.adapter = toolsAdapter
     }
@@ -66,12 +65,7 @@ class ToolsCategoryFragment() :
     //endregion lifecycle
 
     override fun onCategorySelected(category: String) {
-        val selectedCategory: String? = if (dataModel.selectedCategory.value == category) {
-            null
-        } else {
-            category
-        }
-        dataModel.selectedCategory.value = selectedCategory
+        with(dataModel.selectedCategory) { value = if (value != category) category else null }
     }
 
     // region ToolsCategoryAdapterCallbacks
@@ -87,7 +81,7 @@ class ToolsCategoryFragment() :
         code?.let { requireActivity().startToolDetailsActivity(code) }
     }
 
-    override fun onToolsReordered(vararg ids: Long) {}
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {}
+    override fun onToolsReordered(vararg ids: Long) = Unit
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) = Unit
     // endregion ToolsCategoryAdapterCallbacks
 }
