@@ -36,7 +36,7 @@ class ToolsCategoryFragment() :
     // endregion Data Model
 
     private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(this, dataModel.selectedCategoryLiveData).also { adapter ->
+        CategoryAdapter(this, dataModel.selectedCategory).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
@@ -65,8 +65,7 @@ class ToolsCategoryFragment() :
     //endregion lifecycle
 
     override fun onCategorySelected(category: String) {
-        dataModel.selectedCategoryLiveData.value =
-            if (dataModel.selectedCategoryLiveData.value != category) category else null
+        with(dataModel.selectedCategory) { value = if (value != category) category else null }
     }
 
     // region ToolsCategoryAdapterCallbacks
