@@ -18,7 +18,7 @@ import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 
 @AndroidEntryPoint
-class ToolsCategoryFragment() :
+class ToolsCategoryFragment :
     BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment),
     CategoryAdapterCallbacks,
     ToolsAdapterCallbacks {
