@@ -42,8 +42,9 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.Contract.UserCounterTable
 
 @Singleton
-class GodToolsDao @Inject internal constructor(database: GodToolsDatabase) : AbstractDao(database), CoroutinesAsyncDao,
-    CoroutinesFlowDao, LiveDataDao {
+class GodToolsDao @Inject internal constructor(
+    database: GodToolsDatabase
+) : AbstractDao(database), CoroutinesAsyncDao, CoroutinesFlowDao, LiveDataDao {
     init {
         registerType(
             Followup::class.java, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, FollowupMapper,

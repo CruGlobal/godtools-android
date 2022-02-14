@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import org.cru.godtools.base.Settings

@@ -97,7 +97,7 @@ class MultiselectController private constructor(
                 @Assisted parentController: BaseController<*>,
                 cacheFactory: UiControllerCache.Factory
             ) : this(
-                binding = ToolContentMultiselectOptionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                ToolContentMultiselectOptionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 parentController = parentController,
                 cacheFactory = cacheFactory
             )
@@ -122,7 +122,7 @@ class MultiselectController private constructor(
                 @Assisted parentController: BaseController<*>,
                 cacheFactory: UiControllerCache.Factory
             ) : this(
-                binding = ToolContentMultiselectOptionFlatBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                ToolContentMultiselectOptionFlatBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 parentController = parentController,
                 cacheFactory = cacheFactory
             )

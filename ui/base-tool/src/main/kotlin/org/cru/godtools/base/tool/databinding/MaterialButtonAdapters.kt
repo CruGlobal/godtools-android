@@ -29,7 +29,7 @@ fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {
 
 @BindingAdapter("iconGravity")
 fun MaterialButton.bindIconGravity(gravity: Gravity.Horizontal) {
-    iconGravity = when(gravity) {
+    iconGravity = when (gravity) {
         Gravity.Horizontal.END -> ICON_GRAVITY_TEXT_END
         Gravity.Horizontal.START -> ICON_GRAVITY_TEXT_START
         else -> ICON_GRAVITY_TEXT_START
