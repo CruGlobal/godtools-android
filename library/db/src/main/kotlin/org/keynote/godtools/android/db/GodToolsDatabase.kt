@@ -91,7 +91,10 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
                     }
                     46 -> db.execSQL(UserCounterTable.SQL_V46_CREATE_USER_COUNTERS)
                     47 -> db.execSQL(ToolTable.SQL_V47_ALTER_SCREEN_SHARE_DISABLED)
-                    48 -> db.execSQL(ToolTable.SQL_V48_POPULATE_SPOTLIGHT)
+                    48 -> {
+                        db.execSQL(ToolTable.SQL_V48_CREATE_SPOTLIGHT)
+                        db.execSQL(ToolTable.SQL_V48_POPULATE_SPOTLIGHT)
+                    }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
