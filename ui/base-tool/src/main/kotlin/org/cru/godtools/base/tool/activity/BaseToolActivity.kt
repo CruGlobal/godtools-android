@@ -22,6 +22,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.Ordered
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.eventbus.lifecycle.register
@@ -37,6 +38,9 @@ import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
+import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
+import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
@@ -168,15 +172,33 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected fun shareCurrentTool() {
-        // short-circuit if we don't have a share tool url
-        val shareUrl = shareLinkUri ?: return
+        val shareItems = getShareItems().sortedWith(Ordered.COMPARATOR)
+        if (shareItems.isEmpty()) return
 
         // track the share action
         eventBus.post(ShareActionEvent)
         settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
         // start the share activity chooser with our share link
-        showShareActivityChooser(shareUrl = shareUrl)
+        when (shareItems.size) {
+            1 -> shareItems.first().triggerAction(this)
+            else -> ShareBottomSheetDialogFragment(shareItems).show(supportFragmentManager, null)
+        }
+    }
+
+    protected open fun getShareItems(): List<ShareItem> =
+        listOfNotNull(buildShareIntent()?.let { DefaultShareItem(shareLinkTitle, it) })
+
+    private fun buildShareIntent(
+        title: String? = shareLinkTitle,
+        @StringRes message: Int = shareLinkMessageRes,
+        shareUrl: String? = shareLinkUri
+    ) = shareUrl?.let {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, title.orEmpty())
+            putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
+        }
     }
 
     protected fun showShareActivityChooser(
@@ -184,14 +206,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri
     ) {
-        if (shareUrl == null) return
-
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, title.orEmpty())
-            putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
-        }
-        startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)))
+        val intent = buildShareIntent(title, message, shareUrl) ?: return
+        DefaultShareItem(title, intent).triggerAction(this)
     }
     // endregion Share tool logic
 
