@@ -24,7 +24,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 47
+private const val DATABASE_VERSION = 48
 
 /*
  * Version history
