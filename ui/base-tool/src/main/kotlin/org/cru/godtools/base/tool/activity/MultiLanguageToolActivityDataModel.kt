@@ -6,24 +6,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
@@ -41,6 +47,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 open class MultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
@@ -57,7 +64,8 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     private val distinctToolCode = toolCode.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
 
-    val tool = distinctToolCode.switchMap { it?.let { dao.findLiveData<Tool>(it) }.orEmpty() }
+    val tool = distinctToolCode.asFlow().flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: emptyFlow() }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val languages = distinctLocales.switchMap {
         Query.select<Language>()

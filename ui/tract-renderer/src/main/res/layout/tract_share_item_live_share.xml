@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.base.tool.ui.share.OtherActionsAdapter.Callbacks" />
+        <variable name="item" type="org.cru.godtools.base.tool.ui.share.model.ShareItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Widget.GodTools.Tool.ShareSheet.Item.Other"
+        android:onClick="@{() -> callbacks.triggerAction(item)}">
+        <!-- TODO: define an actual ShapeAppearanceOverlay -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/background"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="@color/gray_F5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_tract_live_share"
+            app:layout_constraintBottom_toTopOf="@id/text"
+            app:layout_constraintEnd_toEndOf="@id/background"
+            app:layout_constraintStart_toStartOf="@id/background"
+            app:layout_constraintTop_toTopOf="@id/background"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="@color/gt_blue" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="top|center_horizontal"
+            android:text="@string/menu_live_share_publish"
+            app:layout_constraintBottom_toBottomOf="@id/background"
+            app:layout_constraintEnd_toEndOf="@id/background"
+            app:layout_constraintStart_toStartOf="@id/background"
+            app:layout_constraintTop_toBottomOf="@id/icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
