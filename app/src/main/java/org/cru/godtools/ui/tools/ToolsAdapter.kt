@@ -34,7 +34,7 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: ToolsA
     private var tools: List<Tool>? = null
         set(value) {
             field = value
-            reordering = value?.indices?.toList()?.toIntArray() ?: IntArray(0)
+            reordering = value?.let { IntArray(value.size) { it } } ?: IntArray(0)
             notifyDataSetChanged()
         }
 
