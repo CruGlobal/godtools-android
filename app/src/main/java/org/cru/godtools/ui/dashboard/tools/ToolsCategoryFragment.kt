@@ -40,9 +40,6 @@ class ToolsCategoryFragment() :
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)
-
-            // Sets live data to prevent blank tools list
-            dataModel.selectedCategoryLiveData.value = dataModel.selectedCategory
         }
     }
 
@@ -68,7 +65,8 @@ class ToolsCategoryFragment() :
     //endregion lifecycle
 
     override fun onCategorySelected(category: String) {
-        dataModel.selectedCategory = if (dataModel.selectedCategory != category) category else null
+        dataModel.selectedCategoryLiveData.value =
+            if (dataModel.selectedCategoryLiveData.value != category) category else null
     }
 
     // region ToolsCategoryAdapterCallbacks

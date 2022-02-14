@@ -16,13 +16,10 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val ATTR_SELECTED_CATEGORY = "selectedCategory"
 
 @HiltViewModel
-class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, private val savedState: SavedStateHandle) :
+class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, savedState: SavedStateHandle) :
     ViewModel() {
-    var selectedCategory: String?
-        get() = savedState.get(ATTR_SELECTED_CATEGORY)
-        set(value) { savedState.set(ATTR_SELECTED_CATEGORY, value) }
 
-    val selectedCategoryLiveData = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY)
+    val selectedCategoryLiveData = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
 
     private val tools = Query.select<Tool>().where(
         ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
@@ -32,6 +29,6 @@ class ToolsCategoryDataModel @Inject constructor(dao: GodToolsDao, private val s
     val categories = tools.map { t -> t.mapNotNull { it.category }.distinct() }
 
     val filteredTools = tools.combineWith(selectedCategoryLiveData) { tools, category ->
-        tools.filter { category == null || it.category == category } ?: tools
+        tools.filter { category == null || it.category == category }
     }
 }
