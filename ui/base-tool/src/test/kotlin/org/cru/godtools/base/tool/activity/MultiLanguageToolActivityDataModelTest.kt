@@ -144,7 +144,6 @@ class MultiLanguageToolActivityDataModelTest {
     }
     // endregion Property: translations
 
-
     // region Property: manifests
     @Test
     fun `Property manifests`() {

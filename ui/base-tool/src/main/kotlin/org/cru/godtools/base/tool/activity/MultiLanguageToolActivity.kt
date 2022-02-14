@@ -9,13 +9,13 @@ import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.map
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.util.graphics.toHsvColor
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
@@ -125,7 +125,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
             if (Color.alpha(selectedColor) < 255) {
                 // XXX: the expected behavior is to support transparent text. But we currently don't support
                 //      transparent text, so pick white or black based on the control color
-                selectedColor = if (controlColor.toHsvColor().value > 0.6) Color.BLACK else Color.WHITE
+                selectedColor = if (MaterialColors.isColorLight(controlColor)) Color.BLACK else Color.WHITE
             }
 
             // update colors for tab text

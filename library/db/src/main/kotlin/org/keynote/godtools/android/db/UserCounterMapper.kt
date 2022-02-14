@@ -23,7 +23,6 @@ internal object UserCounterMapper : AbstractMapper<UserCounter>() {
         }
     }
 
-
     override fun newObject(c: Cursor) = UserCounter(c.getString(COLUMN_COUNTER_ID).orEmpty())
     override fun toObject(c: Cursor) = super.toObject(c).apply {
         apiCount = c.getInt(COLUMN_COUNT, 0)
