@@ -68,7 +68,7 @@ class ToolsCategoryFragment :
         with(dataModel.selectedCategory) { value = if (value != category) category else null }
     }
 
-    // region ToolsCategoryAdapterCallbacks
+    // region ToolsAdapterCallbacks
     override fun addTool(code: String?) {
         code?.let { downloadManager.pinToolAsync(it) }
     }
@@ -83,5 +83,5 @@ class ToolsCategoryFragment :
 
     override fun onToolsReordered(vararg ids: Long) = Unit
     override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) = Unit
-    // endregion ToolsCategoryAdapterCallbacks
+    // endregion ToolsAdapterCallbacks
 }
