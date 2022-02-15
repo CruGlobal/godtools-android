@@ -6,7 +6,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.cru.godtools.R
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.databinding.DashboardToolsCategoryFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -25,9 +24,6 @@ class ToolsCategoryFragment :
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
-
-    @Inject
-    internal lateinit var settings: Settings
 
     // region Data Model
     private val dataModel: ToolsCategoryDataModel by viewModels()
