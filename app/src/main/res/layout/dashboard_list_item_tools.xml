@@ -29,11 +29,11 @@
             android:layout_height="match_parent">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
+                android:id="@+id/toolImageView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="89dp"
                 android:scaleType="centerCrop"
                 android:src="@{banner}"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +45,7 @@
                 android:layout_height="10dp"
                 android:progress="@{downloadProgress}"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/guideline2"
+                app:layout_constraintBottom_toBottomOf="@id/toolImageView"
                 tools:max="12"
                 tools:progress="5"
                 tools:visibility="visible" />
@@ -66,13 +66,6 @@
                 app:shapeAppearance="@style/ShapeAppearance.GodTools.Tools.Action.Favorite"
                 app:srcCompat="@drawable/ic_favorite" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_end="62dp" />
-
             <TextView
                 android:id="@+id/toolName"
                 android:layout_width="wrap_content"
@@ -83,7 +76,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@id/toolImageView"
                 tools:text="Tool Name" />
 
             <TextView
@@ -97,10 +90,10 @@
                 tools:text="Category" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="36dp"
                 android:drawableEnd="@drawable/ic_tool_checkmark"
                 android:drawablePadding="4dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
@@ -108,8 +101,9 @@
                 android:textColor="@color/gray_97"
                 android:textSize="10sp"
                 app:drawableTint="@color/gray_97"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/toolName"
+                app:layout_constraintTop_toBottomOf="@id/toolImageView"
                 app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Spanish" />
 
