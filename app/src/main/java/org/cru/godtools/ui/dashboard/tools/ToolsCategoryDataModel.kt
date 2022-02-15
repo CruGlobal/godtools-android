@@ -37,6 +37,5 @@ class ToolsCategoryDataModel @Inject constructor(
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }
-    private val primaryTranslation = settings.primaryLanguageLiveData
-    val primaryLanguage = primaryTranslation.switchMap { dao.findLiveData<Language>(it.isO3Language) }.orEmpty()
+    val primaryLanguage = settings.primaryLanguageLiveData.orEmpty()
 }
