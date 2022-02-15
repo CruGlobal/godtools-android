@@ -97,6 +97,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_ORDER = "ordering"
         const val COLUMN_ADDED = "added"
         const val COLUMN_HIDDEN = "isHidden"
+        const val COLUMN_SPOTLIGHT = "isSpotlight"
 
         internal val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_CODE = TABLE.field(COLUMN_CODE)
@@ -105,6 +106,7 @@ object Contract : BaseContract() {
         val FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER)
         val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
         val FIELD_HIDDEN = TABLE.field(COLUMN_HIDDEN)
+        val FIELD_SPOTLIGHT = TABLE.field(COLUMN_SPOTLIGHT)
         private val FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES)
 
         internal val PROJECTION_ALL = arrayOf(
@@ -123,7 +125,8 @@ object Contract : BaseContract() {
             COLUMN_DEFAULT_ORDER,
             COLUMN_ORDER,
             COLUMN_ADDED,
-            COLUMN_HIDDEN
+            COLUMN_HIDDEN,
+            COLUMN_SPOTLIGHT
         )
 
         private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT"
@@ -141,6 +144,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
         private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
         private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
+        private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
@@ -165,6 +169,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_ORDER,
             SQL_COLUMN_ADDED,
             SQL_COLUMN_HIDDEN,
+            SQL_COLUMN_SPOTLIGHT,
             SQL_PRIMARY_KEY
         )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
@@ -179,6 +184,8 @@ object Contract : BaseContract() {
         internal const val SQL_V45_POPULATE_HIDDEN = "UPDATE $TABLE_NAME SET $COLUMN_HIDDEN = 0"
         internal const val SQL_V47_ALTER_SCREEN_SHARE_DISABLED =
             "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SCREEN_SHARE_DISABLED"
+        internal const val SQL_V48_CREATE_SPOTLIGHT = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SPOTLIGHT"
+        internal const val SQL_V48_POPULATE_SPOTLIGHT = "UPDATE $TABLE_NAME SET $COLUMN_SPOTLIGHT = 0"
         // endregion DB migrations
     }
 
