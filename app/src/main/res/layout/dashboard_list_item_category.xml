@@ -15,46 +15,28 @@
         <variable name="primaryLanguage" type="LiveData&lt;Locale&gt;" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="@drawable/bkg_list_item_category_selected"
         android:onClick="@{() -> callbacks.onCategorySelected(category)}"
         android:padding="6dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        app:rippleColor="@color/gt_blue"
+        app:strokeColor="@{category.equals(selectedCategory) ? @color/gt_blue : @color/white}"
+        app:strokeWidth="@{category.equals(selectedCategory) ? 10f : 0f}">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="64dp">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@{ModelUtils.getToolCategoryName(category, context, primaryLanguage)}"
+            tools:text="Category" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:selected="@{category.equals(selectedCategory)}"
-                app:srcCompat="@drawable/bck_list_item_category_selector" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="@{ModelUtils.getToolCategoryName(category, context, primaryLanguage)}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Category" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
