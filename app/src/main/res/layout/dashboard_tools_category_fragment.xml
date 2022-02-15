@@ -10,22 +10,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:lineHeight="20sp"
+            android:text="@string/tool_category_label"
+            android:textSize="22sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="75dp"
             android:layout_margin="8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            android:minHeight="75dp"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
             tools:itemCount="5"
             tools:listitem="@layout/dashboard_list_item_category" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/gray_E6" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/toolsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="10"

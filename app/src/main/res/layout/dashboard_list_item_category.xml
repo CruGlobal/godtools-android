@@ -14,24 +14,34 @@
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
     </data>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/bkg_list_item_category_selected"
+        android:onClick="@{() -> callbacks.onCategorySelected(category)}"
+        android:padding="6dp"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="4dp">
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:minHeight="64dp"
-            android:onClick="@{() -> callbacks.onCategorySelected(category)}"
-            android:padding="6dp"
-            app:cardBackgroundColor="@{category.equals(selectedCategory) ? @color/gray_80 : @color/white }"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="4dp"
-            tools:cardBackgrounColor="@color/gray_80">
+            android:layout_height="match_parent"
+            android:minHeight="64dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:selected="@{category.equals(selectedCategory)}"
+                app:srcCompat="@drawable/bck_list_item_category_selector" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/textView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
@@ -42,8 +52,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Category" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
 
+    </androidx.cardview.widget.CardView>
 </layout>
