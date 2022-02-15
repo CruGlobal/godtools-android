@@ -32,7 +32,7 @@ class ToolsCategoryFragment :
     // endregion Data Model
 
     private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(this, dataModel.selectedCategory).also { adapter ->
+        CategoryAdapter(this, dataModel).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.categories.observe(this, adapter)

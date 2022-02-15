@@ -12,6 +12,7 @@
         <variable name="category" type="String" />
         <variable name="selectedCategory" type="LiveData&lt;String>" />
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
+        <variable name="primaryLanguage" type="LiveData&lt;org.cru.godtools.model.Language&gt;" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -46,7 +47,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="@{ModelUtils.getToolCategoryName(category, context, Locale.getDefault())}"
+                android:text="@{ModelUtils.getToolCategoryName(category, context, primaryLanguage.code)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
