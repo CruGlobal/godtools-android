@@ -25,8 +25,8 @@
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="4dp"
         app:rippleColor="@color/gt_blue"
-        app:strokeColor="@{category.equals(selectedCategory) ? @color/gt_blue : @color/white}"
-        app:strokeWidth="@{category.equals(selectedCategory) ? 10f : 0f}">
+        app:strokeColor="@{category == selectedCategory ? @color/gt_blue : @color/white}"
+        app:strokeWidth="@{category == selectedCategory ? 10f : 0f}">
 
         <TextView
             android:id="@+id/textView"

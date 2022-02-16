@@ -6,7 +6,6 @@ import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
@@ -34,5 +33,5 @@ class ToolsCategoryDataModel @Inject constructor(
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }
-    val primaryLanguage = settings.primaryLanguageLiveData.orEmpty()
+    val primaryLanguage = settings.primaryLanguageLiveData
 }
