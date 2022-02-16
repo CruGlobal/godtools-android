@@ -6,14 +6,12 @@ import com.okta.oidc.Okta
 import com.okta.oidc.clients.sessions.SessionClient
 import com.okta.oidc.clients.web.WebAuthClient
 import com.okta.oidc.storage.SharedPreferenceStorage
-import com.okta.oidc.storage.security.DefaultEncryptionManager
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.lang.Exception
 import javax.inject.Named
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
@@ -22,6 +20,7 @@ import org.ccci.gto.android.common.okta.oidc.clients.sessions.isAuthenticatedLiv
 import org.ccci.gto.android.common.okta.oidc.net.OkHttpOktaHttpClient
 import org.ccci.gto.android.common.okta.oidc.storage.makeChangeAware
 import org.ccci.gto.android.common.okta.oidc.storage.security.NoopEncryptionManager
+import org.ccci.gto.android.common.okta.oidc.storage.security.createDefaultEncryptionManager
 import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
 import org.cru.godtools.BuildConfig.OKTA_CLIENT_ID
 import org.cru.godtools.BuildConfig.OKTA_DISCOVERY_URI
@@ -48,7 +47,7 @@ object OktaModule {
     @Singleton
     fun oktaClient(@ApplicationContext context: Context, config: OIDCConfig, okhttp: OkHttpClient): WebAuthClient {
         val encryptionManager = try {
-            DefaultEncryptionManager(context)
+            createDefaultEncryptionManager(context)
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading the DefaultEncryptionManager, disabling optional encryption")
             NoopEncryptionManager

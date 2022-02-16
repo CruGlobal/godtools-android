@@ -143,8 +143,12 @@ class CardCollectionPageController @AssistedInject constructor(
 
         override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             primaryItemObserver = onUpdatePrimaryItem(recyclerView) { primary, previous ->
-                previous?.binding?.controller?.lifecycleOwner?.apply { maxState = minOf(maxState, Lifecycle.State.STARTED) }
-                primary?.binding?.controller?.lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.RESUMED) }
+                previous?.binding?.controller?.lifecycleOwner?.apply {
+                    maxState = minOf(maxState, Lifecycle.State.STARTED)
+                }
+                primary?.binding?.controller?.lifecycleOwner?.apply {
+                    maxState = maxOf(maxState, Lifecycle.State.RESUMED)
+                }
             }
         }
 

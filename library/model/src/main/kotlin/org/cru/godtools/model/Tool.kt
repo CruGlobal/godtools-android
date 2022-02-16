@@ -15,6 +15,7 @@ private const val JSON_ABBREVIATION = "abbreviation"
 private const val JSON_NAME = "name"
 private const val JSON_CATEGORY = "attr-category"
 private const val JSON_HIDDEN = "attr-hidden"
+private const val JSON_SPOTLIGHT = "attr-spotlight"
 private const val JSON_DESCRIPTION = "description"
 private const val JSON_TOTAL_VIEWS = "total-views"
 private const val JSON_BANNER = "attr-banner"
@@ -104,4 +105,6 @@ class Tool : Base() {
     var isAdded = false
     @JsonApiAttribute(JSON_HIDDEN)
     var isHidden = false
+    @JsonApiAttribute(JSON_SPOTLIGHT)
+    var isSpotlight = false
 }

@@ -67,7 +67,7 @@ android.libraryVariants.all { variant ->
 
                     def rawName = attachment.attributes.get('file-file-name')
                     def fileName = attachment.attributes.sha256 + rawName.substring(rawName.lastIndexOf('.'))
-                    download {
+                    download.run {
                         src "${mobileContentApi}attachments/${attachmentId}/download"
                         dest new File(attachmentsDir, fileName)
                         overwrite false

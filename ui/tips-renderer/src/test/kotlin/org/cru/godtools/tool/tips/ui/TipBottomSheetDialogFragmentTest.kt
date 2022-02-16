@@ -4,7 +4,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test

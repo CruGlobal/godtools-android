@@ -22,8 +22,10 @@ import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 
 @AndroidEntryPoint
-class CyoaActivity : MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
-    CyoaPageFragment.InvalidPageListener, ShowTipCallback {
+class CyoaActivity :
+    MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
+    CyoaPageFragment.InvalidPageListener,
+    ShowTipCallback {
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
