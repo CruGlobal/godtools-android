@@ -142,7 +142,7 @@ class TractActivityTest {
     @Test
     fun verifyShareMenuVisible() {
         whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest()))
+        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         ActivityScenario.launch<TractActivity>(context.createTractActivityIntent("test", Locale.ENGLISH)).use {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -158,7 +158,7 @@ class TractActivityTest {
     @Test
     fun verifyShareMenuVisibleForDeepLink() {
         whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest()))
+        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         val intent = Intent(context, TractActivity::class.java).apply {
             action = Intent.ACTION_VIEW
@@ -194,7 +194,8 @@ class TractActivityTest {
     @Test
     fun verifyShareMenuHiddenWhenShowingTips() {
         whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(tips = { listOf(Tip()) })))
+        whenGetManifest()
+            .thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
         val intent = context.createTractActivityIntent("test", Locale.ENGLISH, showTips = true)
         ActivityScenario.launch<TractActivity>(intent).use {
@@ -211,7 +212,7 @@ class TractActivityTest {
     @Test
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
         whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest()))
+        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         val intent = Intent(context, TractActivity::class.java).apply {
             action = Intent.ACTION_VIEW
