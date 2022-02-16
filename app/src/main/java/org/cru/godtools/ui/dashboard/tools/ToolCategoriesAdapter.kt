@@ -15,7 +15,11 @@ class ToolCategoriesAdapter(
     private val selectedCategory: LiveData<String?>,
     private val primaryLanguage: LiveData<Locale>
 ) : SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(lifecycleOwner), Observer<List<String>> {
-    val callbacks = ObservableField<CategoryAdapterCallbacks>()
+    interface Callbacks {
+        fun onCategorySelected(category: String?)
+    }
+
+    val callbacks = ObservableField<Callbacks>()
     private var categories = emptyList<String>()
         set(value) {
             field = value
@@ -38,8 +42,4 @@ class ToolCategoriesAdapter(
     override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
         binding.category = categories[position]
     }
-}
-
-interface CategoryAdapterCallbacks {
-    fun onCategorySelected(category: String?)
 }

@@ -19,16 +19,14 @@ import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 @AndroidEntryPoint
 class ToolsCategoryFragment :
     BaseFragment<DashboardToolsCategoryFragmentBinding>(R.layout.dashboard_tools_category_fragment),
-    CategoryAdapterCallbacks,
+    ToolCategoriesAdapter.Callbacks,
     ToolsAdapterCallbacks {
-
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
 
     // region Data Model
     private val dataModel: ToolsCategoryDataModel by viewModels()
     private val toolsDataModel: ToolsAdapterViewModel by viewModels()
-
     // endregion Data Model
 
     private val categoryAdapter: ToolCategoriesAdapter by lazy {
@@ -47,7 +45,7 @@ class ToolsCategoryFragment :
         }
     }
 
-    // region lifecycle
+    // region Lifecycle
     override fun onBindingCreated(binding: DashboardToolsCategoryFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.categoryRecyclerView.adapter = categoryAdapter
@@ -58,7 +56,7 @@ class ToolsCategoryFragment :
         binding.categoryRecyclerView.adapter = null
         binding.toolsRecyclerView.adapter = null
     }
-    //endregion lifecycle
+    //endregion Lifecycle
 
     override fun onCategorySelected(category: String?) {
         with(dataModel.selectedCategory) { value = if (value != category) category else null }

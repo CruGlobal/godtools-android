@@ -11,7 +11,7 @@
 
         <variable name="category" type="String" />
         <variable name="selectedCategory" type="LiveData&lt;String>" />
-        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.CategoryAdapterCallbacks>"/>
+        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.ToolCategoriesAdapter.Callbacks&gt;"/>
         <variable name="primaryLanguage" type="LiveData&lt;Locale&gt;" />
     </data>
 
