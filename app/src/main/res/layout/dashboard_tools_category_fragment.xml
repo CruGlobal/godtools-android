@@ -31,11 +31,10 @@
             tools:itemCount="5"
             tools:listitem="@layout/dashboard_list_item_category" />
 
-        <View
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="8dp"
-            android:background="@color/gray_E6" />
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/toolsRecyclerView"
