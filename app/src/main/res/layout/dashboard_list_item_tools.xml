@@ -6,6 +6,8 @@
         <import type="androidx.databinding.ObservableField" />
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
         <variable name="tool" type="org.cru.godtools.model.Tool" />
@@ -18,7 +20,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}"
         android:layout_margin="8dp"
         android:elevation="@dimen/card_elevation"
         android:onClick="@{() ->callbacks.onToolInfo(tool.code)}"
@@ -68,23 +71,29 @@
 
             <TextView
                 android:id="@+id/toolName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:text="@{tool.name}"
+                android:layout_marginEnd="175dp"
+                android:text="@{ModelUtils.getTranslationName(primaryTranslation ?? parallelTranslation, tool, context)}"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolImageView"
                 tools:text="Tool Name" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="175dp"
+                android:layout_marginBottom="15dp"
                 android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
                 android:textColor="@color/gray_97"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolName"
                 tools:text="Category" />
