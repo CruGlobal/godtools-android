@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region Apps -->
+    <style name="Widget.GodTools.Tool.ShareSheet.App" parent="Base">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Widget.GodTools.Tool.ShareSheet.App.Icon" parent="Base">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="Widget.GodTools.Tool.ShareSheet.App.Name" parent="Base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">2</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tool.ShareSheet.App.Name</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tool.ShareSheet.App.Name" parent="TextAppearance.GodTools.Small" />
+    <!-- endregion Apps -->
+
+    <!-- region Other Actions -->
+    <dimen name="tool_share_sheet_other_action_size">128dp</dimen>
+    <dimen name="tool_share_sheet_other_action_padding">8dp</dimen>
+
+    <style name="Widget.GodTools.Tool.ShareSheet.Item.Other" parent="Base">
+        <item name="android:layout_width">@dimen/tool_share_sheet_other_action_size</item>
+        <item name="android:layout_height">@dimen/tool_share_sheet_other_action_size</item>
+        <item name="android:padding">@dimen/tool_share_sheet_other_action_padding</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+    <!-- endregion Other Actions -->
+</resources>

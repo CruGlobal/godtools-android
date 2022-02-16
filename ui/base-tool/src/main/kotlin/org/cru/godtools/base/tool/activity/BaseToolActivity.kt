@@ -14,6 +14,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import java.io.IOException
@@ -21,6 +22,8 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.Ordered
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
@@ -35,6 +38,9 @@ import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
+import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
+import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
@@ -92,7 +98,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        updateShareMenuItem()
+        // Tool Share feature discovery is dependent on the toolbar being available, so we trigger it now since the
+        // toolbar will exist
+        showNextFeatureDiscovery()
 
         // invalidate the binding to force it to re-color the updated menu
         // TODO: this is a very brute-force way of forcing a recoloring of menu items.
@@ -137,10 +145,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private fun setupToolbar() {
-        activeManifestLiveData.observe(this) {
-            updateToolbarTitle()
-            updateShareMenuItem()
-        }
+        activeManifestLiveData.observe(this) { updateToolbarTitle() }
     }
 
     protected open fun updateToolbarTitle() {
@@ -149,8 +154,13 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Status Bar / Toolbar logic
 
     // region Share tool logic
-    private val _shareMenuItemVisible by lazy { MutableLiveData(shareLinkUri != null) }
-    protected open val shareMenuItemVisible: LiveData<Boolean> get() = _shareMenuItemVisible
+    protected open val shareMenuItemVisible by lazy { shareLinkUriLiveData.map { it != null } }
+    protected open val shareLinkUriLiveData = emptyLiveData<String>()
+
+    protected open val shareLinkTitle get() = activeManifest?.title
+    @get:StringRes
+    protected open val shareLinkMessageRes get() = R.string.share_general_message
+    private val shareLinkUri get() = shareLinkUriLiveData.value
 
     protected fun Menu.setupShareMenuItem() {
         findItem(R.id.action_share)?.let { item ->
@@ -161,41 +171,43 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    protected fun updateShareMenuItem() {
-        _shareMenuItemVisible.value = shareLinkUri != null
-        showNextFeatureDiscovery()
-    }
-
-    protected open val shareLinkTitle get() = activeManifest?.title
-    @get:StringRes
-    protected open val shareLinkMessageRes get() = R.string.share_general_message
-    protected open val shareLinkUri: String? get() = null
-
     protected fun shareCurrentTool() {
-        // short-circuit if we don't have a share tool url
-        val shareUrl = shareLinkUri ?: return
+        val shareItems = getShareItems().sortedWith(Ordered.COMPARATOR)
+        if (shareItems.isEmpty()) return
 
         // track the share action
         eventBus.post(ShareActionEvent)
         settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
         // start the share activity chooser with our share link
-        showShareActivityChooser(shareUrl = shareUrl)
+        when (shareItems.size) {
+            1 -> shareItems.first().triggerAction(this)
+            else -> ShareBottomSheetDialogFragment(shareItems).show(supportFragmentManager, null)
+        }
+    }
+
+    protected open fun getShareItems(): List<ShareItem> =
+        listOfNotNull(buildShareIntent()?.let { DefaultShareItem(shareLinkTitle, it) })
+
+    private fun buildShareIntent(
+        title: String? = shareLinkTitle,
+        @StringRes message: Int = shareLinkMessageRes,
+        shareUrl: String? = shareLinkUri
+    ) = shareUrl?.let {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, title.orEmpty())
+            putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
+        }
     }
 
     protected fun showShareActivityChooser(
+        title: String? = shareLinkTitle,
         @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri
     ) {
-        if (shareUrl == null) return
-
-        val title = shareLinkTitle
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tool_subject, title))
-            putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
-        }
-        startActivity(Intent.createChooser(intent, getString(R.string.share_tool_title, title)))
+        val intent = buildShareIntent(title, message, shareUrl) ?: return
+        DefaultShareItem(title, intent).triggerAction(this)
     }
     // endregion Share tool logic
 

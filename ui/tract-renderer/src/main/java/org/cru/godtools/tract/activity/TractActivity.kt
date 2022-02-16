@@ -12,6 +12,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -51,6 +52,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
+import org.cru.godtools.tract.ui.share.model.LiveShareItem
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -104,11 +106,9 @@ class TractActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
-        menu.removeItem(R.id.action_share)
         menuInflater.inflate(R.menu.activity_tract, menu)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
-        menu.setupLiveShareMenuItemVisibility()
-        menu.setupShareMenuItem()
+        menu.setupLiveShareMenuItem()
 
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
@@ -117,17 +117,6 @@ class TractActivity :
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, -1, "instantapp")
-            true
-        }
-        item.itemId == R.id.action_live_share_publish -> {
-            publisherController.started = true
-            shareLiveShareLink()
-            true
-        }
-        // override default share action to support live share submenu
-        item.itemId == R.id.action_share -> true
-        item.itemId == R.id.action_share_tool -> {
-            shareCurrentTool()
             true
         }
         // handle close button if this is an instant app
@@ -288,24 +277,30 @@ class TractActivity :
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
         combine(
-            activeManifestLiveData,
+            shareLinkUriLiveData,
             subscriberController.state,
             dataModel.enableTips
-        ) { manifest, subscriberState, enableTips ->
-            manifest != null && subscriberState == State.Off && !enableTips
+        ) { shareUri, subscriberState, enableTips ->
+            shareUri != null && subscriberState == State.Off && !enableTips
         }
     }
 
-    override val shareLinkUri get() = buildShareLink()?.build()?.toString()
-    private fun buildShareLink(): Uri.Builder? {
-        val manifest = activeManifest ?: return null
-        val tool = manifest.code ?: return null
-        val locale = manifest.locale ?: return null
+    override val shareLinkUriLiveData by lazy {
+        activeManifestLiveData.map { it?.buildShareLink()?.build()?.toString() }
+    }
+    private fun Manifest.buildShareLink(page: Int = pager.currentItem): Uri.Builder? {
+        val tool = code ?: return null
+        val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
             .appendEncodedPath(locale.toLanguageTag().lowercase(Locale.ENGLISH))
             .appendPath(tool)
-            .apply { if (pager.currentItem > 0) appendPath(pager.currentItem.toString()) }
+            .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
+    }
+
+    override fun getShareItems() = buildList {
+        addAll(super.getShareItems())
+        if (dataModel.tool.value?.isScreenShareDisabled != true) add(LiveShareItem(shareLinkTitle))
     }
     // endregion Share Menu Logic
 
@@ -326,11 +321,7 @@ class TractActivity :
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
     }
-    private fun Menu.setupLiveShareMenuItemVisibility() {
-        findItem(R.id.action_live_share_publish)?.let { item ->
-            dataModel.tool.observe(this@TractActivity, item) { isVisible = it?.isScreenShareDisabled != true }
-        }
-
+    private fun Menu.setupLiveShareMenuItem() {
         findItem(R.id.action_live_share_active)?.let { item ->
             item.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
 
@@ -349,7 +340,7 @@ class TractActivity :
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
             else -> {
                 val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
-                val shareUrl = (buildShareLink() ?: return)
+                val shareUrl = (activeManifest?.buildShareLink() ?: return)
                     .apply {
                         dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
                             ?.joinToString(",") { it.toLanguageTag() }

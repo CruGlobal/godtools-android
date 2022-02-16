@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Share</string>
-    <string name="share_tool_subject" translatable="false">%1$s</string>
     <string name="share_tool_title">Share “%1$s” using</string>
     <string name="share_tool_message_article">I wanted to share this article with you and would like to hear your thoughts about it.\n%1$s</string>
 
@@ -14,4 +13,7 @@
 
     <string name="tract_content_input_error_required">%1$s is required</string>
     <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
+
+    <!-- Share Sheet -->
+    <string name="tool_share_sheet_more_apps">More</string>
 </resources>

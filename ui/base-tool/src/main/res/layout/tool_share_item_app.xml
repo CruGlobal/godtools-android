@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.base.tool.ui.share.ShareAppsAdapter.Callbacks" />
+        <variable name="info" type="android.content.pm.ResolveInfo" />
+    </data>
+
+    <RelativeLayout
+        style="@style/Widget.GodTools.Tool.ShareSheet.App"
+        android:onClick="@{() -> callbacks.onOpenApp(info)}">
+
+        <ImageView
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Tool.ShareSheet.App.Icon"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@{info.loadIcon(context.packageManager)}"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Widget.GodTools.Tool.ShareSheet.App.Name"
+            android:layout_below="@id/icon"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="@{info.loadLabel(context.packageManager)}"
+            tools:text="GodTools" />
+    </RelativeLayout>
+</layout>

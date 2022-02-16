@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.base.tool.ui.share.ShareAppsAdapter.Callbacks" />
+    </data>
+
+    <RelativeLayout
+        style="@style/Widget.GodTools.Tool.ShareSheet.App"
+        android:onClick="@{() -> callbacks.onShowChooser()}">
+
+        <ImageView
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Tool.ShareSheet.App.Icon"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_more_horiz_24dp"
+            app:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Widget.GodTools.Tool.ShareSheet.App.Name"
+            android:layout_below="@id/icon"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="@string/tool_share_sheet_more_apps" />
+    </RelativeLayout>
+</layout>
