@@ -4,18 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import java.util.Locale
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardListItemCategoryBinding
 
-class CategoryAdapter(
+class ToolCategoriesAdapter(
     lifecycleOwner: LifecycleOwner,
-    private val dataModel: ToolsCategoryDataModel
+    private val selectedCategory: LiveData<String?>,
+    private val primaryLanguage: LiveData<Locale>
 ) : SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(lifecycleOwner), Observer<List<String>> {
-
     val callbacks = ObservableField<CategoryAdapterCallbacks>()
-
-    private var categories: List<String> = emptyList()
+    private var categories = emptyList<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -27,19 +28,18 @@ class CategoryAdapter(
         categories = t
     }
 
-    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = DashboardListItemCategoryBinding
-        .inflate(LayoutInflater.from(parent.context), parent, false).also {
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
+        DashboardListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false).also {
             it.callbacks = callbacks
+            it.selectedCategory = selectedCategory
+            it.primaryLanguage = primaryLanguage
         }
 
     override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
-        val category = categories[position]
-        binding.category = category
-        binding.selectedCategory = dataModel.selectedCategory
-        binding.primaryLanguage = dataModel.primaryLanguage
+        binding.category = categories[position]
     }
 }
 
 interface CategoryAdapterCallbacks {
-    fun onCategorySelected(category: String)
+    fun onCategorySelected(category: String?)
 }
