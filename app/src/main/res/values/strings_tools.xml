@@ -14,6 +14,7 @@
     <string name="tools_list_favorites_banner_action_dismiss">Dismiss</string>
     <string name="tools_list_lesson_info_length">%1$d Min Read</string>
     <string name="tools_list_lesson_info_language_available">Available in %1$s</string>
+    <string name="label_tool_categories">Categories</string>
 
     <!-- Tool Details UI -->
     <eat-comment />

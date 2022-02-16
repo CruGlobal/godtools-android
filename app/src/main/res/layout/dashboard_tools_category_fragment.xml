@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:lineHeight="20sp"
-            android:text="@string/tool_category_label"
+            android:text="@string/label_tool_categories"
             android:textSize="22sp" />
 
         <androidx.recyclerview.widget.RecyclerView
