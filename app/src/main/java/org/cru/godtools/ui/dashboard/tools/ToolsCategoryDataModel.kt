@@ -33,5 +33,10 @@ class ToolsCategoryDataModel @Inject constructor(
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }
+
+    val spotlightTools = tools.map { it.filter { t -> t.isSpotlight } }
+
+    val hasSpotlight = spotlightTools.map { it.isNotEmpty() }
+
     val primaryLanguage = settings.primaryLanguageLiveData
 }
