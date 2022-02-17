@@ -38,7 +38,7 @@ class ToolsCategoryFragment :
     }
 
     private val toolsAdapter: ToolsAdapter by lazy {
-        ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tools).also { adapter ->
+        ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tool).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.filteredTools.observe(this, adapter)

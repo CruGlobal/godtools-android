@@ -19,23 +19,35 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}"
-        android:layout_margin="8dp"
-        android:elevation="@dimen/card_elevation"
-        android:onClick="@{() ->callbacks.onToolInfo(tool.code)}"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        android:onClick="@{() ->callbacks.onToolInfo(tool.code)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/margin_start"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/margin_end"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/toolImageView"
+                style="@style/Widget.GodTools.Tools.Card.Banner"
                 android:layout_width="match_parent"
                 android:layout_height="89dp"
-                android:scaleType="centerCrop"
                 android:src="@{banner}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,66 +68,56 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="11dp"
+                android:layout_marginTop="12dp"
                 android:background="@color/white"
                 android:elevation="@dimen/card_elevation"
                 android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
                 android:tint="@color/gt_blue"
                 app:contentPadding="3dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:selected="@{tool.isAdded}"
                 app:shapeAppearance="@style/ShapeAppearance.GodTools.Tools.Action.Favorite"
                 app:srcCompat="@drawable/ic_favorite" />
 
             <TextView
-                android:id="@+id/toolName"
+                android:id="@+id/title"
+                style="@style/Widget.GodTools.Tools.Card.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="175dp"
+                android:layout_marginTop="12dp"
                 android:text="@{ModelUtils.getTranslationName(primaryTranslation ?? parallelTranslation, tool, context)}"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/language_parallel"
+                app:layout_constraintStart_toEndOf="@id/margin_start"
                 app:layout_constraintTop_toBottomOf="@id/toolImageView"
                 tools:text="Tool Name" />
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/language_parallel"
+                style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="175dp"
-                android:layout_marginBottom="15dp"
-                android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
-                android:textColor="@color/gray_97"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolName"
-                tools:text="Category" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="10dp"
-                android:drawableEnd="@drawable/ic_tool_checkmark"
-                android:drawablePadding="4dp"
+                android:layout_marginStart="4dp"
+                android:maxWidth="72dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
                 android:textAlignment="viewEnd"
-                android:textColor="@color/gray_97"
-                android:textSize="10sp"
-                app:drawableTint="@color/gray_97"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/toolName"
-                app:layout_constraintTop_toBottomOf="@id/toolImageView"
+                app:layout_constraintBaseline_toBaselineOf="@id/title"
+                app:layout_constraintEnd_toStartOf="@id/margin_end"
+                app:layout_constraintStart_toEndOf="@id/title"
                 app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Spanish" />
 
+            <TextView
+                style="@style/Widget.GodTools.Tools.Card.Subtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/margin_end"
+                app:layout_constraintStart_toEndOf="@id/margin_start"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="Category" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
