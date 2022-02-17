@@ -22,7 +22,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/root"
-        style="@style/Widget.GodTools.Tools.CardView"
+        style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -37,11 +37,10 @@
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/banner"
+                style="@style/Widget.GodTools.Tools.Card.Banner"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:adjustViewBounds="true"
-                android:background="@color/gray_E6"
-                android:scaleType="centerCrop"
                 android:src="@{banner}"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,13 +72,11 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"
+                style="@style/Widget.GodTools.Tools.Card.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:ellipsize="end"
-                android:lines="1"
                 android:text="@{ModelUtils.getTranslationName(primaryTranslation ?? parallelTranslation, tool, context)}"
-                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 app:layout_constraintEnd_toStartOf="@id/language_parallel"
                 app:layout_constraintStart_toEndOf="@id/margin_start"
                 app:layout_constraintTop_toBottomOf="@id/banner"
