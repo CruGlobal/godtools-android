@@ -11,6 +11,7 @@
     <!-- region Tool List Cards -->
     <dimen name="tools_card_corner_radius">6dp</dimen>
     <dimen name="tools_card_elevation">4dp</dimen>
+    <dimen name="tools_card_border_width">2dp</dimen>
     <dimen name="tools_card_margin_horiz">16dp</dimen>
     <dimen name="tools_card_margin_vert">12dp</dimen>
 
