@@ -24,6 +24,21 @@
                 android:orientation="vertical">
 
                 <!-- region: Spotlight Section-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Tool Spotlight"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Here are some tools we thought you might like"
+                    android:layout_marginStart="8dp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="10dp"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/spotlightRecyclerView"
                     android:layout_width="wrap_content"
