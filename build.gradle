@@ -26,13 +26,13 @@ buildscript {
         classpath libs.firebase.crashlytics.gradlePlugin
         classpath libs.firebase.perf.gradlePlugin
         classpath libs.google.services.gradlePlugin
-        classpath libs.hilt.gradlePlugin
         classpath libs.kotlin.gradlePlugin
     }
 }
 
 plugins {
     alias libs.plugins.grgit
+    alias libs.plugins.hilt apply false
     alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
     id "de.undercouch.download" version "5.0.1" apply false
