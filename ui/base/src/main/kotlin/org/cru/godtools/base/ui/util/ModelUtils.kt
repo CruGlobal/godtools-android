@@ -24,9 +24,9 @@ private fun Translation.getTypeface(context: Context?) = context?.getTypeface(la
 
 // region Tool Category
 @JvmName("getToolCategory")
-fun Tool?.getCategory(context: Context, locale: Locale? = null) =
-    this?.category?.let { c -> (locale?.let { context.localize(it) } ?: context).getToolCategoryStringRes(c) ?: c }
-        .orEmpty()
+fun Tool?.getCategory(context: Context, locale: Locale? = null) = getToolCategoryName(this?.category, context, locale)
+fun getToolCategoryName(category: String?, context: Context, locale: Locale? = null) =
+    category?.let { c -> (locale?.let { context.localize(it) } ?: context).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
 private const val STRING_RES_CATEGORY_NAME_PREFIX = "tool_category_"
 private fun Context.getToolCategoryStringRes(category: String) =

@@ -20,7 +20,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/root"
-        style="@style/Widget.GodTools.Tools.CardView"
+        style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"

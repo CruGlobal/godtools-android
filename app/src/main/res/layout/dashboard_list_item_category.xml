@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="androidx.databinding.ObservableField"/>
+        <import type="androidx.lifecycle.LiveData"/>
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="java.util.Locale" />
+
+        <variable name="category" type="String" />
+        <variable name="selectedCategory" type="LiveData&lt;String>" />
+        <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.dashboard.tools.ToolCategoriesAdapter.Callbacks&gt;"/>
+        <variable name="primaryLanguage" type="LiveData&lt;Locale&gt;" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:onClick="@{() -> callbacks.onCategorySelected(category)}"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/tools_card_corner_radius"
+        app:cardElevation="@dimen/tools_card_elevation"
+        app:contentPadding="16dp"
+        app:rippleColor="@color/gt_blue"
+        app:strokeColor="@color/gt_blue"
+        app:strokeWidth="@{category == selectedCategory ? @dimen/tools_card_border_width : 0f}">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|top"
+            android:minLines="2"
+            android:text="@{ModelUtils.getToolCategoryName(category, context, primaryLanguage)}"
+            android:textColor="@{selectedCategory == null || selectedCategory == category ? @color/gray_5A : @color/gray_97, default=@color/gray_5A}"
+            android:textStyle="bold"
+            tools:text="@string/tool_category_conversation_starter" />
+    </com.google.android.material.card.MaterialCardView>
+</layout>

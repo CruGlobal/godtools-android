@@ -3,7 +3,9 @@ package org.cru.godtools.ui.tools
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
@@ -15,17 +17,16 @@ import com.karumi.weak.weak
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleDataBindingDraggableItemAdapter
 import org.cru.godtools.BR
-import org.cru.godtools.databinding.ToolsListItemLessonBinding
-import org.cru.godtools.databinding.ToolsListItemToolBinding
+import org.cru.godtools.R
 import org.cru.godtools.model.Tool
 
 private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 
-private const val VIEW_TYPE_TOOL = 1
-private const val VIEW_TYPE_LESSON = 2
-
-class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: ToolsAdapterViewModel) :
-    SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
+class ToolsAdapter(
+    lifecycleOwner: LifecycleOwner,
+    private val dataModel: ToolsAdapterViewModel,
+    @LayoutRes private val itemLayout: Int? = null
+) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
     }
@@ -51,15 +52,15 @@ class ToolsAdapter(lifecycleOwner: LifecycleOwner, private val dataModel: ToolsA
         tools = t
     }
 
-    override fun getItemViewType(position: Int) = when (getItem(position)?.type) {
-        Tool.Type.LESSON -> VIEW_TYPE_LESSON
-        else -> VIEW_TYPE_TOOL
+    override fun getItemViewType(position: Int) = when {
+        itemLayout != null -> itemLayout
+        getItem(position)?.type == Tool.Type.LESSON -> R.layout.tools_list_item_lesson
+        else -> R.layout.tools_list_item_tool
     }
 
-    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (viewType) {
-        VIEW_TYPE_LESSON -> ToolsListItemLessonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        else -> ToolsListItemToolBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    }.also { it.setVariable(BR.callbacks, callbacks) }
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
+        DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false)
+            .also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         val tool = getItem(position)

@@ -115,7 +115,6 @@ class AemArticleActivity :
     private fun setupDataModel() {
         articleDataModel.articleUri.value = articleUri
 
-        articleDataModel.article.observe(this) { updateShareMenuItem() }
         articleDataModel.article.observe(this) { onUpdateArticle(it) }
     }
 
@@ -156,9 +155,10 @@ class AemArticleActivity :
     // endregion Sync logic
 
     // region Share Link logic
-    override val shareMenuItemVisible by lazy { articleDataModel.article.map { it?.canonicalUri != null } }
     override val shareLinkTitle get() = articleDataModel.article.value?.title ?: super.shareLinkTitle
-    override val shareLinkUri get() = articleDataModel.article.value?.let { it.shareUri ?: it.canonicalUri }?.toString()
+    override val shareLinkUriLiveData by lazy {
+        articleDataModel.article.map { (it?.shareUri ?: it?.canonicalUri)?.toString() }
+    }
     // endregion Share Link logic
 
     override val activeToolLoadingStateLiveData by lazy {

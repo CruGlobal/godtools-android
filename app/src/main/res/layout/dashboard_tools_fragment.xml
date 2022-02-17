@@ -14,27 +14,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+            android:layout_height="match_parent">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentSpotlight"
-                android:name="org.cru.godtools.ui.dashboard.tools.ToolsSpotlightFragment"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:visibleIf="@{hasSpotlight}"
-                tools:layout="@layout/dashboard_tools_spotlight_fragment" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentCategory"
-                android:name="org.cru.godtools.ui.dashboard.tools.ToolsCategoryFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout="@layout/dashboard_tools_category_fragment" />
-        </androidx.recyclerview.widget.RecyclerView>
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentSpotlight"
+                    android:name="org.cru.godtools.ui.dashboard.tools.ToolsSpotlightFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:visibleIf="@{hasSpotlight}"
+                    tools:layout="@layout/dashboard_tools_spotlight_fragment" />
 
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentCategory"
+                    android:name="org.cru.godtools.ui.dashboard.tools.ToolsCategoryFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout="@layout/dashboard_tools_category_fragment" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -18,6 +22,7 @@ import org.hamcrest.Matchers.anEmptyMap
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasEntry
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,6 +54,7 @@ class MultiLanguageToolActivityDataModelTest {
 
     @Before
     fun setupDataModel() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         dao = mock()
         downloadManager = mock()
         manifestManager = mock()
@@ -64,6 +70,11 @@ class MultiLanguageToolActivityDataModelTest {
     @Before
     fun setupObserver() {
         observer = mock()
+    }
+
+    @After
+    fun cleanupDataModel() {
+        Dispatchers.resetMain()
     }
 
     private fun wheneverGetManifest(tool: String, locale: Locale) =
