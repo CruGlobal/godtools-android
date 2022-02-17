@@ -66,19 +66,12 @@
                 tools:visibility="visible" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="12dp"
-                android:background="@color/white"
-                android:elevation="@dimen/card_elevation"
                 android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
-                android:tint="@color/gt_blue"
-                app:contentPadding="3dp"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintTop_toTopOf="parent"
-                app:selected="@{tool.isAdded}"
-                app:shapeAppearance="@style/ShapeAppearance.GodTools.Tools.Action.Favorite"
-                app:srcCompat="@drawable/ic_favorite" />
+                app:selected="@{tool.isAdded}" />
 
             <TextView
                 android:id="@+id/title"

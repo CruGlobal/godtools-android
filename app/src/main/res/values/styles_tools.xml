@@ -64,7 +64,22 @@
         <item name="android:drawablePadding">4dp</item>
     </style>
 
-    <style name="ShapeAppearance.GodTools.Tools.Action.Favorite" parent="">
+    <style name="Widget.GodTools.Tools.Card.Action.Favorite" parent="Base">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:elevation">6dp</item>
+
+        <item name="android:background">@color/white</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tools.Action.Favorite</item>
+
+        <item name="android:src">@drawable/ic_favorite</item>
+        <item name="android:tint">@color/gt_blue</item>
+        <item name="contentPadding">5dp</item>
+        <item name="contentPaddingTop">6dp</item>
+        <item name="contentPaddingBottom">4dp</item>
+    </style>
+
+    <style name="ShapeAppearance.GodTools.Tools.Action.Favorite" parent="Base">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
