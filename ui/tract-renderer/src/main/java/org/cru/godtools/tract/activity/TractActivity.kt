@@ -247,7 +247,7 @@ class TractActivity :
     }
 
     private fun checkForPageEvent(event: Event) {
-        activeManifest?.tractPages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
+        activeManifest?.pages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
     }
 
     private fun propagateEventToPage(event: Event) {
