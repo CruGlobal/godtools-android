@@ -14,82 +14,89 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mainRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"/>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+<!--        <androidx.core.widget.NestedScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
-                <!-- region: Spotlight Section-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginStart="8dp"
-                    android:text="Tool Spotlight"
-                    android:textSize="22sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Here are some tools we thought you might like"
-                    android:layout_marginStart="8dp"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="10dp"/>
+<!--            <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical">-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/spotlightRecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/dashboard_tools_spotlight_list_item" />
-                <!-- endregion: Spotlight Section-->
+<!--                &lt;!&ndash; region: Spotlight Section&ndash;&gt;-->
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:text="Tool Spotlight"-->
+<!--                    android:textSize="22sp"/>-->
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Here are some tools we thought you might like"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_marginBottom="10dp"/>-->
 
-                <!-- region: Category Section -->
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:lineHeight="20sp"
-                    android:text="@string/dashboard_tools_section_categories_label"
-                    android:textSize="22sp" />
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/spotlightRecyclerView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    tools:listitem="@layout/dashboard_tools_spotlight_list_item" />-->
+<!--                &lt;!&ndash; endregion: Spotlight Section&ndash;&gt;-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/categoryRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:minHeight="75dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:itemCount="5"
-                    tools:listitem="@layout/dashboard_list_item_category" />
+<!--                &lt;!&ndash; region: Category Section &ndash;&gt;-->
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:lineHeight="20sp"-->
+<!--                    android:text="@string/dashboard_tools_section_categories_label"-->
+<!--                    android:textSize="22sp" />-->
 
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/tools_card_margin_horiz"
-                    android:layout_marginRight="@dimen/tools_card_margin_horiz" />
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/categoryRecyclerView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:minHeight="75dp"-->
+<!--                    android:nestedScrollingEnabled="false"-->
+<!--                    android:orientation="vertical"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
+<!--                    app:spanCount="3"-->
+<!--                    tools:itemCount="5"-->
+<!--                    tools:listitem="@layout/dashboard_list_item_category" />-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/toolsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:paddingBottom="12dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/dashboard_list_item_tool" />
-                <!-- endregion: Category Section -->
+<!--                <com.google.android.material.divider.MaterialDivider-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/tools_card_margin_horiz"-->
+<!--                    android:layout_marginRight="@dimen/tools_card_margin_horiz" />-->
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.core.widget.NestedScrollView>
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/toolsRecyclerView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:clipToPadding="false"-->
+<!--                    android:nestedScrollingEnabled="false"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:paddingBottom="12dp"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    tools:itemCount="10"-->
+<!--                    tools:listitem="@layout/dashboard_list_item_tool" />-->
+<!--                &lt;!&ndash; endregion: Category Section &ndash;&gt;-->
+
+<!--            </androidx.appcompat.widget.LinearLayoutCompat>-->
+<!--        </androidx.core.widget.NestedScrollView>-->
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

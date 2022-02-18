@@ -16,8 +16,9 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:layout_margin="4dp"
         android:onClick="@{() -> callbacks.onCategorySelected(category)}"
         app:cardBackgroundColor="@color/white"

@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -53,6 +54,33 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
         }
     }
 
+    private val combinedToolsAdapter: ConcatAdapter by lazy {
+        ConcatAdapter(
+            GridConcatAdapter(
+                this,
+                toolsSpotlightAdapter,
+                1,
+                getString(R.string.dashboard_tools_section_spotlight_label),
+                getString(R.string.dashboard_tools_section_spotlight_sub_label)
+            ).also { adapter ->
+                toolsCategoryDataModel.spotlightTools.observe(this) {
+                    adapter.hasviews = it.isNotEmpty()
+                }
+            },
+            GridConcatAdapter(
+                this,
+                categoryAdapter,
+                2,
+                getString(R.string.dashboard_tools_section_categories_label)
+            ).also { adapter ->
+                toolsCategoryDataModel.categories.observe(this) {
+                    adapter.hasviews = it.isNotEmpty()
+                }
+            },
+            toolsCategoryAdapter
+        )
+    }
+
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
         helper.sync(syncService.syncTools(force))
@@ -63,15 +91,11 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
         super.onBindingCreated(binding, savedInstanceState)
         binding.refresh.setupSwipeRefresh()
         binding.hasSpotlight = toolsCategoryDataModel.hasSpotlight
-        binding.categoryRecyclerView.adapter = categoryAdapter
-        binding.toolsRecyclerView.adapter = toolsCategoryAdapter
-        binding.spotlightRecyclerView.adapter = toolsSpotlightAdapter
+        binding.mainRecyclerView.adapter = combinedToolsAdapter
     }
 
     override fun onDestroyBinding(binding: DashboardToolsFragmentBinding) {
-        binding.categoryRecyclerView.adapter = null
-        binding.toolsRecyclerView.adapter = null
-        binding.spotlightRecyclerView.adapter = null
+        binding.mainRecyclerView.adapter = null
     }
     //endregion Lifecycle
 
