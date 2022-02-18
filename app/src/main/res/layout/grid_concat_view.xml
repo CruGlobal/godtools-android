@@ -5,7 +5,7 @@
     <data>
         <variable name="titleText" type="String" />
         <variable name="subTitleText" type="String" />
-        <variable name="rowCount" type="Integer" />
+        <variable name="showDivider" type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,6 +52,19 @@
             app:layout_constraintTop_toBottomOf="@id/concatSubTitleText"
             tools:listitem="@layout/dashboard_tools_spotlight_list_item"
             tools:spanCount="1" />
+
+        <com.google.android.material.divider.MaterialDivider
+            visibleIf="@{showDivider}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/concatRecyclerView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

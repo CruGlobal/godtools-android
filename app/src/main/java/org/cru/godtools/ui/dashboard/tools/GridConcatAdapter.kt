@@ -2,7 +2,6 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +12,9 @@ class GridConcatAdapter(
     lifecycleOwner: LifecycleOwner,
     private val recyclerAdapter: RecyclerView.Adapter<*>,
     private val rowCount: Int = 1,
-   val titleText: String,
-    val subTitleText: String? = null
+    private val titleText: String,
+    private val subTitleText: String? = null,
+    private val showDivider: Boolean = false
 ) : SimpleDataBindingAdapter<GridConcatViewBinding>(lifecycleOwner) {
     var hasviews = false
         set(value) {
@@ -32,7 +32,7 @@ class GridConcatAdapter(
     override fun onBindViewDataBinding(binding: GridConcatViewBinding, position: Int) {
         binding.titleText = titleText
         binding.subTitleText = subTitleText
-        binding.rowCount = rowCount
+        binding.showDivider = showDivider
         binding.concatRecyclerView.adapter = recyclerAdapter
         (binding.concatRecyclerView.layoutManager as? GridLayoutManager)?.spanCount = rowCount
     }

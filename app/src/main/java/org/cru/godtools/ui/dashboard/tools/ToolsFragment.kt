@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -16,10 +17,10 @@ import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsAdapter
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layout.dashboard_tools_fragment),
+class ToolsFragment :
+    BasePlatformFragment<DashboardToolsFragmentBinding>(R.layout.dashboard_tools_fragment),
     ToolCategoriesAdapter.Callbacks,
     ToolsAdapterCallbacks {
     @Inject
@@ -31,7 +32,11 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
     // endregion Data Model
 
     private val categoryAdapter: ToolCategoriesAdapter by lazy {
-        ToolCategoriesAdapter(this, toolsCategoryDataModel.selectedCategory, toolsCategoryDataModel.primaryLanguage).also { adapter ->
+        ToolCategoriesAdapter(
+            this,
+            toolsCategoryDataModel.selectedCategory,
+            toolsCategoryDataModel.primaryLanguage
+        ).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             toolsCategoryDataModel.categories.observe(this, adapter)
@@ -57,21 +62,22 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
     private val combinedToolsAdapter: ConcatAdapter by lazy {
         ConcatAdapter(
             GridConcatAdapter(
-                this,
-                toolsSpotlightAdapter,
-                1,
-                getString(R.string.dashboard_tools_section_spotlight_label),
-                getString(R.string.dashboard_tools_section_spotlight_sub_label)
+                lifecycleOwner = this,
+                recyclerAdapter = toolsSpotlightAdapter,
+                rowCount = 1,
+                titleText = getString(R.string.dashboard_tools_section_spotlight_label),
+                subTitleText = getString(R.string.dashboard_tools_section_spotlight_sub_label)
             ).also { adapter ->
                 toolsCategoryDataModel.spotlightTools.observe(this) {
                     adapter.hasviews = it.isNotEmpty()
                 }
             },
             GridConcatAdapter(
-                this,
-                categoryAdapter,
-                2,
-                getString(R.string.dashboard_tools_section_categories_label)
+                lifecycleOwner = this,
+                recyclerAdapter = categoryAdapter,
+                rowCount = 2,
+                titleText = getString(R.string.dashboard_tools_section_categories_label),
+                showDivider = true
             ).also { adapter ->
                 toolsCategoryDataModel.categories.observe(this) {
                     adapter.hasviews = it.isNotEmpty()
@@ -90,7 +96,6 @@ class ToolsFragment : BasePlatformFragment<DashboardToolsFragmentBinding>(R.layo
     override fun onBindingCreated(binding: DashboardToolsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.refresh.setupSwipeRefresh()
-        binding.hasSpotlight = toolsCategoryDataModel.hasSpotlight
         binding.mainRecyclerView.adapter = combinedToolsAdapter
     }
 
