@@ -2,38 +2,40 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
-import org.cru.godtools.databinding.GridConcatViewBinding
+import org.cru.godtools.R
 
 class GridConcatAdapter(
     lifecycleOwner: LifecycleOwner,
     private val recyclerAdapter: RecyclerView.Adapter<*>,
-    private val rowCount: Int = 1,
-    private val titleText: String,
-    private val subTitleText: String? = null,
-    private val showDivider: Boolean = false
-) : SimpleDataBindingAdapter<GridConcatViewBinding>(lifecycleOwner) {
+    @LayoutRes private val layoutRes: Int
+) : SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner), Observer<Boolean> {
     var hasviews = false
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
     override fun getItemCount() = if (hasviews) {
         1
     } else {
         0
     }
-    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        GridConcatViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-    override fun onBindViewDataBinding(binding: GridConcatViewBinding, position: Int) {
-        binding.titleText = titleText
-        binding.subTitleText = subTitleText
-        binding.showDivider = showDivider
-        binding.concatRecyclerView.adapter = recyclerAdapter
-        (binding.concatRecyclerView.layoutManager as? GridLayoutManager)?.spanCount = rowCount
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ViewDataBinding =
+        DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutRes, parent, false)
+
+    override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
+        binding.root.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = recyclerAdapter
+    }
+
+    override fun onChanged(t: Boolean?) {
+        hasviews = t ?: false
     }
 }

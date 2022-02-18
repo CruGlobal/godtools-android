@@ -28,6 +28,8 @@ class ToolsCategoryDataModel @Inject constructor(
     ).orderBy(ToolTable.COLUMN_DEFAULT_ORDER).getAsLiveData(dao)
 
     val categories = tools.map { it.mapNotNull { it.category }.distinct() }
+    val hasCategories = categories.map { it.isNotEmpty() }
+
     val selectedCategory = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
 
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
@@ -35,6 +37,7 @@ class ToolsCategoryDataModel @Inject constructor(
     }
 
     val spotlightTools = tools.map { it.filter { t -> t.isSpotlight } }
+    val hasSpotlight = spotlightTools.map { it.isNotEmpty() }
 
     val primaryLanguage = settings.primaryLanguageLiveData
 }

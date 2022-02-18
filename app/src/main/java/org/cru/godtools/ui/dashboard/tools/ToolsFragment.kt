@@ -64,24 +64,16 @@ class ToolsFragment :
             GridConcatAdapter(
                 lifecycleOwner = this,
                 recyclerAdapter = toolsSpotlightAdapter,
-                rowCount = 1,
-                titleText = getString(R.string.dashboard_tools_section_spotlight_label),
-                subTitleText = getString(R.string.dashboard_tools_section_spotlight_sub_label)
+                R.layout.dashboard_spotlight_concat
             ).also { adapter ->
-                toolsCategoryDataModel.spotlightTools.observe(this) {
-                    adapter.hasviews = it.isNotEmpty()
-                }
+                toolsCategoryDataModel.hasSpotlight.observe(this, adapter)
             },
             GridConcatAdapter(
                 lifecycleOwner = this,
                 recyclerAdapter = categoryAdapter,
-                rowCount = 2,
-                titleText = getString(R.string.dashboard_tools_section_categories_label),
-                showDivider = true
+                R.layout.dashboard_categories_concat
             ).also { adapter ->
-                toolsCategoryDataModel.categories.observe(this) {
-                    adapter.hasviews = it.isNotEmpty()
-                }
+                toolsCategoryDataModel.hasCategories.observe(this, adapter)
             },
             toolsCategoryAdapter
         )

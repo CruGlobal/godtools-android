@@ -52,7 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                tools:src="@tools:sample/backgrounds/scenic" />
 
             <ProgressBar
                 style="@style/Widget.GodTools.Tools.Download.ProgressBar"
