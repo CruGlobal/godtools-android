@@ -23,6 +23,7 @@ import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tool.model.tract.Modal
+import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.EXTRA_MODAL
 import org.cru.godtools.tract.EXTRA_PAGE
 import org.cru.godtools.tract.R
@@ -109,6 +110,6 @@ class ModalActivityDataModel @Inject constructor(manifestManager: ManifestManage
 
     val modal =
         manifest.combineWith(pageId.distinctUntilChanged(), modalId.distinctUntilChanged()) { manifest, page, modal ->
-            manifest?.findPage(page)?.findModal(modal)
+            (manifest?.findPage(page) as? TractPage)?.findModal(modal)
         }
 }
