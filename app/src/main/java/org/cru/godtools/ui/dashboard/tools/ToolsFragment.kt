@@ -61,22 +61,20 @@ class ToolsFragment :
         }
     }
 
-    private val combinedToolsAdapter: ConcatAdapter by lazy {
-        ConcatAdapter().also { concatAdapter ->
-            concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
-                it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = toolsSpotlightAdapter
-            }.also { spotlight ->
-                dataModel.hasSpotlight.observe(this) { spotlight.repeat = if (it) 1 else 0 }
-            }
-            concatAdapter.addLayout(R.layout.dashboard_tools_ui_categories) {
-                it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = categoryAdapter
-            }.also { category ->
-                dataModel.hasCategories.observe(this) {
-                    category.repeat = if (it) 1 else 0
-                }
-            }
-            concatAdapter.addAdapter(toolsAdapter)
+    private fun createCombinedAdapter() = ConcatAdapter().also { concatAdapter ->
+        concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
+            it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = toolsSpotlightAdapter
+        }.also { spotlight ->
+            dataModel.hasSpotlight.observe(this) { spotlight.repeat = if (it) 1 else 0 }
         }
+        concatAdapter.addLayout(R.layout.dashboard_tools_ui_categories) {
+            it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = categoryAdapter
+        }.also { category ->
+            dataModel.hasCategories.observe(this) {
+                category.repeat = if (it) 1 else 0
+            }
+        }
+        concatAdapter.addAdapter(toolsAdapter)
     }
 
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
@@ -88,7 +86,7 @@ class ToolsFragment :
     override fun onBindingCreated(binding: DashboardToolsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.refresh.setupSwipeRefresh()
-        binding.mainRecyclerView.adapter = combinedToolsAdapter
+        binding.mainRecyclerView.adapter = createCombinedAdapter()
     }
 
     override fun onDestroyBinding(binding: DashboardToolsFragmentBinding) {
