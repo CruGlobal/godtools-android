@@ -25,7 +25,7 @@
         android:textSize="12sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/concatRecyclerView"
+        android:id="@+id/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,5 +34,4 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="1"
         tools:listitem="@layout/dashboard_tools_spotlight_list_item" />
-
 </LinearLayout>

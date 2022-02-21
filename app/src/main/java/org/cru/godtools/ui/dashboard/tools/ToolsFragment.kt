@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.androidx.recyclerview.widget.addLayout
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -33,62 +32,52 @@ class ToolsFragment :
     private val toolsDataModel: ToolsAdapterViewModel by viewModels()
     // endregion Data Model
 
-    private fun createCategoryAdapter() = ToolCategoriesAdapter(
-        this,
-        dataModel.selectedCategory,
-        dataModel.primaryLanguage
-    ).also { adapter ->
-        adapter.callbacks.set(this)
-        lifecycle.onDestroy { adapter.callbacks.set(null) }
-        dataModel.categories.observe(this, adapter)
-    }
-
-    private fun createToolsAdapter() =
-        ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tool).also { adapter ->
-            adapter.callbacks.set(this)
-            lifecycle.onDestroy { adapter.callbacks.set(null) }
-            dataModel.filteredTools.observe(this, adapter)
-        }
-
-    private fun createToolsSpotlightAdapter() =
-        ToolsAdapter(this, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also { adapter ->
-            adapter.callbacks.set(this)
-            lifecycle.onDestroy { adapter.callbacks.set(null) }
-            dataModel.spotlightTools.observe(this, adapter)
-        }
-
-    private fun createCombinedAdapter() = ConcatAdapter().also { concatAdapter ->
-        concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
-            it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = createToolsSpotlightAdapter()
-        }.also { spotlight ->
-            dataModel.hasSpotlight.observe(this) { spotlight.repeat = if (it) 1 else 0 }
-        }
-        concatAdapter.addLayout(R.layout.dashboard_tools_ui_categories) {
-            it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = createCategoryAdapter()
-        }.also { category ->
-            dataModel.hasCategories.observe(this) {
-                category.repeat = if (it) 1 else 0
-            }
-        }
-        concatAdapter.addAdapter(createToolsAdapter())
+    // region Lifecycle
+    override fun onBindingCreated(binding: DashboardToolsFragmentBinding, savedInstanceState: Bundle?) {
+        super.onBindingCreated(binding, savedInstanceState)
+        binding.refresh.setupSwipeRefresh()
+        binding.recyclerView.setupRecyclerView()
     }
 
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
         super.onSyncData(helper, force)
         helper.sync(syncService.syncTools(force))
     }
-
-    // region Lifecycle
-    override fun onBindingCreated(binding: DashboardToolsFragmentBinding, savedInstanceState: Bundle?) {
-        super.onBindingCreated(binding, savedInstanceState)
-        binding.refresh.setupSwipeRefresh()
-        binding.mainRecyclerView.adapter = createCombinedAdapter()
-    }
-
-    override fun onDestroyBinding(binding: DashboardToolsFragmentBinding) {
-        binding.mainRecyclerView.adapter = null
-    }
     //endregion Lifecycle
+
+    // region UI
+    private fun RecyclerView.setupRecyclerView() {
+        adapter =  ConcatAdapter().apply {
+            // Tool Spotlight adapter
+            val spotlightAdapter =
+                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also {
+                    dataModel.spotlightTools.observe(viewLifecycleOwner, it)
+                    it.callbacks.set(this@ToolsFragment)
+                }
+            addLayout(R.layout.dashboard_spotlight_concat) {
+                it.findViewById<RecyclerView>(R.id.tools)?.adapter = spotlightAdapter
+            }.apply { dataModel.spotlightTools.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
+
+            // Tool Categories
+            val categoriesAdapter =
+                ToolCategoriesAdapter(viewLifecycleOwner, dataModel.selectedCategory, dataModel.primaryLanguage).also {
+                    dataModel.categories.observe(viewLifecycleOwner, it)
+                    it.callbacks.set(this@ToolsFragment)
+                }
+            addLayout(R.layout.dashboard_tools_ui_categories) {
+                it.findViewById<RecyclerView>(R.id.categories)?.adapter = categoriesAdapter
+            }.apply { dataModel.categories.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
+
+            // Tools
+            addAdapter(
+                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_list_item_tool).also {
+                    dataModel.filteredTools.observe(viewLifecycleOwner, it)
+                    it.callbacks.set(this@ToolsFragment)
+                }
+            )
+        }
+    }
+    // endregion UI
 
     override fun onCategorySelected(category: String?) {
         with(dataModel.selectedCategory) { value = if (value != category) category else null }
