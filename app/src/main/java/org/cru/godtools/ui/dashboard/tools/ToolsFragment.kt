@@ -29,27 +29,27 @@ class ToolsFragment :
     internal lateinit var downloadManager: GodToolsDownloadManager
 
     // region Data Model
-    private val toolsCategoryDataModel: ToolsCategoryDataModel by viewModels()
+    private val dataModel: ToolsCategoryDataModel by viewModels()
     private val toolsDataModel: ToolsAdapterViewModel by viewModels()
     // endregion Data Model
 
     private val categoryAdapter: ToolCategoriesAdapter by lazy {
         ToolCategoriesAdapter(
             this,
-            toolsCategoryDataModel.selectedCategory,
-            toolsCategoryDataModel.primaryLanguage
+            dataModel.selectedCategory,
+            dataModel.primaryLanguage
         ).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
-            toolsCategoryDataModel.categories.observe(this, adapter)
+            dataModel.categories.observe(this, adapter)
         }
     }
 
-    private val toolsCategoryAdapter: ToolsAdapter by lazy {
+    private val toolsAdapter: ToolsAdapter by lazy {
         ToolsAdapter(this, toolsDataModel, R.layout.dashboard_list_item_tool).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
-            toolsCategoryDataModel.filteredTools.observe(this, adapter)
+            dataModel.filteredTools.observe(this, adapter)
         }
     }
 
@@ -57,7 +57,7 @@ class ToolsFragment :
         ToolsAdapter(this, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
-            toolsCategoryDataModel.spotlightTools.observe(this, adapter)
+            dataModel.spotlightTools.observe(this, adapter)
         }
     }
 
@@ -65,11 +65,17 @@ class ToolsFragment :
         ConcatAdapter().also { concatAdapter ->
             concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
                 it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = toolsSpotlightAdapter
+            }.also { spotlight ->
+                dataModel.hasSpotlight.observe(this) { spotlight.repeat = if (it) 1 else 0 }
             }
             concatAdapter.addLayout(R.layout.dashboard_tools_ui_categories) {
                 it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = categoryAdapter
+            }.also { category ->
+                dataModel.hasCategories.observe(this) {
+                    category.repeat = if (it) 1 else 0
+                }
             }
-            concatAdapter.addAdapter(toolsCategoryAdapter)
+            concatAdapter.addAdapter(toolsAdapter)
         }
     }
 
@@ -91,7 +97,7 @@ class ToolsFragment :
     //endregion Lifecycle
 
     override fun onCategorySelected(category: String?) {
-        with(toolsCategoryDataModel.selectedCategory) { value = if (value != category) category else null }
+        with(dataModel.selectedCategory) { value = if (value != category) category else null }
     }
 
     // region ToolsAdapterCallbacks
