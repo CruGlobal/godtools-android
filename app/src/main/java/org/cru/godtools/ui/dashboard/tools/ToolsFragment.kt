@@ -66,7 +66,7 @@ class ToolsFragment :
             concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
                 it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = toolsSpotlightAdapter
             }
-            concatAdapter.addLayout(R.layout.dashboard_categories_concat) {
+            concatAdapter.addLayout(R.layout.dashboard_tools_ui_categories) {
                 it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = categoryAdapter
             }
             concatAdapter.addAdapter(toolsCategoryAdapter)
