@@ -3,9 +3,11 @@ package org.cru.godtools.ui.dashboard.tools
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
+import org.ccci.gto.android.common.androidx.recyclerview.widget.addLayout
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.databinding.DashboardToolsFragmentBinding
@@ -60,23 +62,15 @@ class ToolsFragment :
     }
 
     private val combinedToolsAdapter: ConcatAdapter by lazy {
-        ConcatAdapter(
-            GridConcatAdapter(
-                lifecycleOwner = this,
-                recyclerAdapter = toolsSpotlightAdapter,
-                R.layout.dashboard_spotlight_concat
-            ).also { adapter ->
-                toolsCategoryDataModel.hasSpotlight.observe(this, adapter)
-            },
-            GridConcatAdapter(
-                lifecycleOwner = this,
-                recyclerAdapter = categoryAdapter,
-                R.layout.dashboard_categories_concat
-            ).also { adapter ->
-                toolsCategoryDataModel.hasCategories.observe(this, adapter)
-            },
-            toolsCategoryAdapter
-        )
+        ConcatAdapter().also { concatAdapter ->
+            concatAdapter.addLayout(R.layout.dashboard_spotlight_concat) {
+                it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = toolsSpotlightAdapter
+            }
+            concatAdapter.addLayout(R.layout.dashboard_categories_concat) {
+                it.findViewById<RecyclerView>(R.id.concatRecyclerView).adapter = categoryAdapter
+            }
+            concatAdapter.addAdapter(toolsCategoryAdapter)
+        }
     }
 
     override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
