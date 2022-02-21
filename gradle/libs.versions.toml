@@ -6,7 +6,7 @@ androidx-lifecycle = "2.4.1"
 androidx-room = "2.4.1"
 androidx-viewpager2 = "1.0.0"
 androidx-work = "2.7.1"
-dagger = "2.40.5"
+dagger = "2.41"
 eventbus = "3.3.1"
 facebook-flipper = "0.135.0"
 firebase-crashlytics = "18.2.8"
@@ -125,7 +125,6 @@ guava = { module = "com.google.guava:guava", version = "31.0.1-android" }
 hamcrest = "org.hamcrest:hamcrest:2.2"
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
-hilt-gradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 json = "org.json:json:20211205"
 jsoup = "org.jsoup:jsoup:1.14.3"
@@ -170,5 +169,6 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1"
 
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 junitJacoco = { id = "com.vanniktech.android.junit.jacoco", version = "0.16.0" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "10.2.1" }
