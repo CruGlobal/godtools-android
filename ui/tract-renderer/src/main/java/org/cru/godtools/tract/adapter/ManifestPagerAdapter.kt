@@ -66,11 +66,11 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         eventBus.register(lifecycleOwner, this)
     }
 
-    override fun getCount() = manifest?.tractPages?.size ?: 0
-    private fun getItem(position: Int) = manifest?.tractPages?.getOrNull(position)
+    override fun getCount() = manifest?.pages?.size ?: 0
+    private fun getItem(position: Int) = manifest?.pages?.getOrNull(position)
     override fun getItemId(position: Int) = getItem(position)?.id?.let { Ids.generate(it) } ?: NO_ID
     override fun getItemPositionFromId(id: Long) =
-        manifest?.tractPages?.indexOfFirst { id == Ids.generate(it.id) } ?: PagerAdapter.POSITION_NONE
+        manifest?.pages?.indexOfFirst { id == Ids.generate(it.id) } ?: PagerAdapter.POSITION_NONE
 
     private val primaryItemController get() = primaryItemBinding?.controller
     private val primaryItemPage get() = primaryItemController?.model
