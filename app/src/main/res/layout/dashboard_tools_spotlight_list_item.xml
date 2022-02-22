@@ -61,7 +61,6 @@
                 style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="11dp"
-                android:elevation="@dimen/card_elevation"
                 android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -70,13 +69,13 @@
 
             <TextView
                 android:id="@+id/toolName"
+                style="@style/TextAppearance.GodTools.Tools.Card.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
+                android:lines="2"
                 android:text="@{tool.name}"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/parallelLanguageText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolsImage"
@@ -84,6 +83,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/parallelLanguageText"
+                style="@style/Widget.GodTools.Tools.Card.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -92,7 +92,7 @@
                 android:drawablePadding="3dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
                 android:textColor="@color/gray_97"
-                android:textSize="10dp"
+                android:textSize="12sp"
                 app:drawableTint="@color/gray_97"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

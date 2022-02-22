@@ -54,7 +54,7 @@ class ToolsFragment :
                     dataModel.spotlightTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
-            addLayout(R.layout.dashboard_spotlight_concat) {
+            addLayout(R.layout.dashboard_tools_spotlight) {
                 it.findViewById<RecyclerView>(R.id.tools)?.adapter = spotlightAdapter
             }.apply { dataModel.spotlightTools.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
 
