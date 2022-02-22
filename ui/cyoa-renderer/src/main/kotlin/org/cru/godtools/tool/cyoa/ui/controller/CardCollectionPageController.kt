@@ -14,13 +14,13 @@ import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.androidx.recyclerview.decorator.MarginItemDecoration
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
 import org.ccci.gto.android.common.androidx.viewpager2.widget.registerPageTransformerFix
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
-import org.ccci.gto.android.common.recyclerview.decorator.MarginItemDecoration
 import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController

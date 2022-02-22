@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.R
 
