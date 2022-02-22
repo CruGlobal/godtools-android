@@ -47,7 +47,7 @@ class ToolsFragment :
 
     // region UI
     private fun RecyclerView.setupRecyclerView() {
-        adapter =  ConcatAdapter().apply {
+        adapter = ConcatAdapter().apply {
             // Tool Spotlight adapter
             val spotlightAdapter =
                 ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also {
