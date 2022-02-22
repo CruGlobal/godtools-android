@@ -64,10 +64,11 @@ class ToolsFragment :
 
             // Tool Categories
             val categoriesAdapter =
-                ToolCategoriesAdapter(viewLifecycleOwner, dataModel.selectedCategory, dataModel.primaryLanguage).also {
-                    dataModel.categories.observe(viewLifecycleOwner, it)
-                    it.callbacks.set(this@ToolsFragment)
-                }
+                ToolCategoriesAdapter(viewLifecycleOwner, dataModel.selectedCategory, settings.primaryLanguageLiveData)
+                    .also {
+                        dataModel.categories.observe(viewLifecycleOwner, it)
+                        it.callbacks.set(this@ToolsFragment)
+                    }
             addLayout(R.layout.dashboard_tools_ui_categories) {
                 it.findViewById<RecyclerView>(R.id.categories)?.adapter = categoriesAdapter
             }.apply { dataModel.categories.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }

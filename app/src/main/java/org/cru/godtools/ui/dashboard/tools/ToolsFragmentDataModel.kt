@@ -17,11 +17,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val ATTR_SELECTED_CATEGORY = "selectedCategory"
 
 @HiltViewModel
-class ToolsFragmentDataModel @Inject constructor(
-    dao: GodToolsDao,
-    savedState: SavedStateHandle,
-    val settings: Settings
-) : ViewModel() {
+class ToolsFragmentDataModel @Inject constructor(dao: GodToolsDao, savedState: SavedStateHandle) : ViewModel() {
     private val tools = Query.select<Tool>().where(
         ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
             .and(ToolTable.FIELD_HIDDEN.ne(true))
@@ -34,6 +30,4 @@ class ToolsFragmentDataModel @Inject constructor(
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }
-
-    val primaryLanguage = settings.primaryLanguageLiveData
 }
