@@ -39,7 +39,6 @@
                 style="@style/Widget.GodTools.Tools.Card.Banner"
                 android:layout_width="match_parent"
                 android:layout_height="161dp"
-                android:scaleType="centerCrop"
                 android:src="@{banner}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,8 +63,7 @@
                 android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:selected="@{tool.isAdded}"
-                app:srcCompat="@drawable/ic_favorite" />
+                app:selected="@{tool.isAdded}" />
 
             <TextView
                 android:id="@+id/toolName"
@@ -83,17 +81,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/parallelLanguageText"
-                style="@style/Widget.GodTools.Tools.Card.Subtitle"
+                style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="12dp"
-                android:drawableEnd="@drawable/ic_tool_checkmark"
-                android:drawablePadding="3dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
-                android:textColor="@color/gray_97"
-                android:textSize="12sp"
-                app:drawableTint="@color/gray_97"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
