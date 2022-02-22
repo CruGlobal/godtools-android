@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ConcatAdapter.Config
+import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -48,34 +49,22 @@ class ToolsFragment :
 
     // region UI
     private fun RecyclerView.setupRecyclerView() {
-        adapter = ConcatAdapter(
-            Config.Builder().setStableIdMode(Config.StableIdMode.ISOLATED_STABLE_IDS).build()
-        ).apply {
+        adapter = ConcatAdapter(Config.Builder().setStableIdMode(ISOLATED_STABLE_IDS).build()).apply {
             // Tool Spotlight adapter
             val spotlightAdapter =
-                ToolsAdapter(
-                    viewLifecycleOwner,
-                    toolsDataModel,
-                    R.layout.dashboard_tools_spotlight_list_item
-                ).also {
+                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also {
                     dataModel.spotlightTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
             addLayout(R.layout.dashboard_tools_spotlight) {
                 it.findViewById<RecyclerView>(R.id.tools)?.adapter = spotlightAdapter
             }.apply {
-                dataModel.spotlightTools.observe(viewLifecycleOwner) {
-                    repeat = if (it.isNotEmpty()) 1 else 0
-                }
+                dataModel.spotlightTools.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 }
             }
 
             // Tool Categories
             val categoriesAdapter =
-                ToolCategoriesAdapter(
-                    viewLifecycleOwner,
-                    dataModel.selectedCategory,
-                    dataModel.primaryLanguage
-                ).also {
+                ToolCategoriesAdapter(viewLifecycleOwner, dataModel.selectedCategory, dataModel.primaryLanguage).also {
                     dataModel.categories.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
