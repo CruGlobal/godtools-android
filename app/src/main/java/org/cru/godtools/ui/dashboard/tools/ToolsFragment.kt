@@ -28,7 +28,7 @@ class ToolsFragment :
     internal lateinit var downloadManager: GodToolsDownloadManager
 
     // region Data Model
-    private val dataModel: ToolsCategoryDataModel by viewModels()
+    private val dataModel: ToolsFragmentDataModel by viewModels()
     private val toolsDataModel: ToolsAdapterViewModel by viewModels()
     // endregion Data Model
 

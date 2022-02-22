@@ -17,7 +17,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val ATTR_SELECTED_CATEGORY = "selectedCategory"
 
 @HiltViewModel
-class ToolsCategoryDataModel @Inject constructor(
+class ToolsFragmentDataModel @Inject constructor(
     dao: GodToolsDao,
     savedState: SavedStateHandle,
     val settings: Settings
