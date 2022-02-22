@@ -25,7 +25,7 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        tools:listitem="@layout/dashboard_list_item_category" />
+        tools:listitem="@layout/dashboard_tools_categories_category" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"

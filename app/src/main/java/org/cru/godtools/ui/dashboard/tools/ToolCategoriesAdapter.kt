@@ -7,14 +7,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.util.Locale
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
-import org.cru.godtools.databinding.DashboardListItemCategoryBinding
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
+import org.cru.godtools.databinding.DashboardToolsCategoriesCategoryBinding
 
 class ToolCategoriesAdapter(
     lifecycleOwner: LifecycleOwner,
     private val selectedCategory: LiveData<String?>,
     private val primaryLanguage: LiveData<Locale>
-) : SimpleDataBindingAdapter<DashboardListItemCategoryBinding>(lifecycleOwner), Observer<List<String>> {
+) : SimpleDataBindingAdapter<DashboardToolsCategoriesCategoryBinding>(lifecycleOwner), Observer<List<String>> {
     interface Callbacks {
         fun onCategorySelected(category: String?)
     }
@@ -33,13 +33,13 @@ class ToolCategoriesAdapter(
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        DashboardListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false).also {
+        DashboardToolsCategoriesCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false).also {
             it.callbacks = callbacks
             it.selectedCategory = selectedCategory
             it.primaryLanguage = primaryLanguage
         }
 
-    override fun onBindViewDataBinding(binding: DashboardListItemCategoryBinding, position: Int) {
+    override fun onBindViewDataBinding(binding: DashboardToolsCategoriesCategoryBinding, position: Int) {
         binding.category = categories[position]
     }
 }
