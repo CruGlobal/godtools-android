@@ -21,10 +21,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
-        android:elevation="@dimen/card_elevation"
+        android:layout_margin="@dimen/dashboard_tools_spotlight_tool_margin"
+        android:elevation="@dimen/tools_card_elevation"
         android:minHeight="240dp"
         android:onClick="@{() ->callbacks.onToolInfo(tool.code)}"
         app:cardCornerRadius="@dimen/card_corner_radius"
@@ -34,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
-
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/toolsImage"
@@ -73,8 +70,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
                 android:lines="2"
                 android:text="@{tool.name}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,13 +87,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="12dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
-                app:layout_constraintTop_toBottomOf="@id/toolName"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolName"
                 app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 tools:text="Spanish" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>

@@ -7,22 +7,19 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/concatTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/tools_card_margin_horiz"
-        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
+        android:layout_marginStart="@dimen/dashboard_margin_horiz"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/dashboard_margin_horiz"
         android:text="@string/dashboard_tools_section_spotlight_label"
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/concatSubTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/tools_card_margin_horiz"
-        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/dashboard_margin_horiz"
+        android:layout_marginEnd="@dimen/dashboard_margin_horiz"
         android:text="@string/dashboard_tools_section_spotlight_sub_label"
         android:textSize="12sp" />
 
@@ -31,11 +28,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingEnd="@dimen/card_margin_horiz"
-        android:paddingStart="@dimen/card_margin_horiz"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
+        android:paddingStart="@dimen/dashboard_tools_spotlight_recycler_margin_horiz"
+        android:paddingEnd="@dimen/dashboard_tools_spotlight_recycler_margin_horiz"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="1"
-        tools:listitem="@layout/dashboard_tools_spotlight_list_item" />
+        tools:listitem="@layout/dashboard_tools_spotlight_tool" />
 </LinearLayout>

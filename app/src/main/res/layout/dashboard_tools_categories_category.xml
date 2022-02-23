@@ -18,9 +18,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="122sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
+        android:layout_margin="@dimen/dashboard_tools_categories_category_margin"
         android:onClick="@{() -> callbacks.onCategorySelected(category)}"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/tools_card_corner_radius"

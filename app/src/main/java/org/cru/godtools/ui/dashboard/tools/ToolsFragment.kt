@@ -52,7 +52,7 @@ class ToolsFragment :
         adapter = ConcatAdapter(Config.Builder().setStableIdMode(ISOLATED_STABLE_IDS).build()).apply {
             // Tool Spotlight adapter
             val spotlightAdapter =
-                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_list_item).also {
+                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_tool).also {
                     dataModel.spotlightTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
@@ -69,7 +69,7 @@ class ToolsFragment :
                         dataModel.categories.observe(viewLifecycleOwner, it)
                         it.callbacks.set(this@ToolsFragment)
                     }
-            addLayout(R.layout.dashboard_tools_ui_categories) {
+            addLayout(R.layout.dashboard_tools_categories) {
                 it.findViewById<RecyclerView>(R.id.categories)?.adapter = categoriesAdapter
             }.apply { dataModel.categories.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
 

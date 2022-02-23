@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dashboard_margin_horiz">16dp</dimen>
+
+    <!-- region Tools UI -->
+    <dimen name="dashboard_tools_margin_horiz">@dimen/dashboard_margin_horiz</dimen>
+
+    <!-- region Spotlight -->
+    <!-- @dimen/dashboard_margin_horiz - @dimen/dashboard_tools_spotlight_tool_margin -->
+    <dimen name="dashboard_tools_spotlight_recycler_margin_horiz">8dp</dimen>
+    <dimen name="dashboard_tools_spotlight_tool_margin">8dp</dimen>
+    <!-- endregion Spotlight -->
+
+    <!-- region Categories -->
+    <!-- @dimen/dashboard_margin_horiz - @dimen/dashboard_tools_categories_category_margin -->
+    <dimen name="dashboard_tools_categories_recycler_margin_horiz">12dp</dimen>
+    <dimen name="dashboard_tools_categories_category_margin">4dp</dimen>
+    <!-- endregion Categories -->
+    <!-- endregion Tools UI -->
+</resources>
