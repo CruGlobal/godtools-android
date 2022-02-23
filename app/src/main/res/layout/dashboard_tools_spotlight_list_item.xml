@@ -20,7 +20,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:elevation="@dimen/card_elevation"
         android:minHeight="240dp"
@@ -68,13 +68,14 @@
             <TextView
                 android:id="@+id/toolName"
                 style="@style/TextAppearance.GodTools.Tools.Card.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="10dp"
                 android:lines="2"
                 android:text="@{tool.name}"
-                app:layout_constraintBottom_toTopOf="@id/parallelLanguageText"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolsImage"
                 tools:text="Tool Name" />
@@ -87,6 +88,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="12dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
+                app:layout_constraintTop_toBottomOf="@id/toolName"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
