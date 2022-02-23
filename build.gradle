@@ -204,6 +204,13 @@ subprojects {
             reporter(ReporterType.CHECKSTYLE)
         }
     }
+
+    // HACK: workaround https://github.com/JLLeitschuh/ktlint-gradle/issues/524
+    if (project.hasProperty('android')) {
+        android.sourceSets.configureEach {
+            java.srcDirs("src/$name/kotlin")
+        }
+    }
 }
 
 // jacoco config
