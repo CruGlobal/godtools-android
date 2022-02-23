@@ -56,7 +56,7 @@ class ToolsFragment :
                     dataModel.spotlightTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
-            addLayout(R.layout.dashboard_tools_spotlight) {
+            addLayout(R.layout.dashboard_tools_spotlight, 0) {
                 it.findViewById<RecyclerView>(R.id.tools)?.adapter = spotlightAdapter
             }.apply {
                 dataModel.spotlightTools.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 }
@@ -69,7 +69,7 @@ class ToolsFragment :
                         dataModel.categories.observe(viewLifecycleOwner, it)
                         it.callbacks.set(this@ToolsFragment)
                     }
-            addLayout(R.layout.dashboard_tools_categories) {
+            addLayout(R.layout.dashboard_tools_categories, 0) {
                 it.findViewById<RecyclerView>(R.id.categories)?.adapter = categoriesAdapter
             }.apply { dataModel.categories.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
 
