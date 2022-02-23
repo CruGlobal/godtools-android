@@ -7,6 +7,7 @@ import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
 import org.ccci.gto.android.common.picasso.view.PicassoImageView
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.tool.widget.SimpleScaledPicassoImageView
 import org.cru.godtools.base.toolFileSystem
@@ -49,4 +50,4 @@ internal fun SimpleScaledPicassoImageView.bindScaledResource(
 }
 
 private fun <T> T.setPicassoResource(resource: Resource?) where T : ImageView, T : PicassoImageView =
-    setPicassoFile(resource?.localName?.let { context.toolFileSystem.getFileBlocking(it) })
+    setPicassoFile(resource?.getFileBlocking(context.toolFileSystem))
