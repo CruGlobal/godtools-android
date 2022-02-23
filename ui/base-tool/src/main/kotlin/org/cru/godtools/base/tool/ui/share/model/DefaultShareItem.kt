@@ -11,6 +11,8 @@ class DefaultShareItem(override val shareTitle: String? = null, override val sha
     override val order get() = Ordered.HIGHEST_PRECEDENCE
 
     override fun triggerAction(activity: Activity) {
-        activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_tool_title, shareTitle)))
+        activity.startActivity(
+            Intent.createChooser(shareIntent, activity.getString(R.string.share_tool_title, shareTitle))
+        )
     }
 }
