@@ -10,7 +10,8 @@
         android:id="@+id/concatTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/tools_card_margin_horiz"
+        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
         android:layout_marginTop="24dp"
         android:text="@string/dashboard_tools_section_spotlight_label"
         android:textSize="22sp" />
@@ -19,7 +20,8 @@
         android:id="@+id/concatSubTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/tools_card_margin_horiz"
+        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
         android:layout_marginBottom="10dp"
         android:text="@string/dashboard_tools_section_spotlight_sub_label"
         android:textSize="12sp" />

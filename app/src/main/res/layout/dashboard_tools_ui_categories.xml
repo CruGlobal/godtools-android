@@ -10,8 +10,9 @@
         android:id="@+id/concatTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/tools_card_margin_horiz"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
         android:text="@string/dashboard_tools_section_categories_label"
         android:textSize="22sp" />
 
@@ -29,9 +30,9 @@
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/tools_card_margin_horiz"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/tools_card_margin_horiz"
         android:layout_marginBottom="20dp" />
 </LinearLayout>
 
