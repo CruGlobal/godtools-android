@@ -23,14 +23,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dashboard_tools_spotlight_tool_margin"
         android:elevation="@dimen/tools_card_elevation"
-        android:minHeight="240dp"
         android:onClick="@{() ->callbacks.onToolInfo(tool.code)}"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        tools:layout_height="240dp">
+        app:cardCornerRadius="@dimen/card_corner_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="12dp"
             android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
@@ -85,13 +84,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="12dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolName"
-                app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
-                tools:text="Spanish" />
+                app:invisibleIf="@{!tool.type.supportsParallelLanguage || parallelLanguage == null || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                app:goneIf="@{!tool.type.supportsParallelLanguage || parallelLanguage == null || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
+                tools:text="Spanish"
+                tools:visibility="gone"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
