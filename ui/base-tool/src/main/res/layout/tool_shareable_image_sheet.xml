@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="kotlinx.coroutines.flow.StateFlow" />
+
+        <variable name="shareable" type="StateFlow&lt;org.cru.godtools.tool.model.shareable.ShareableImage&gt;" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingLeft="48dp"
+        android:paddingTop="48dp"
+        android:paddingRight="48dp"
+        android:paddingBottom="32dp">
+
+        <org.cru.godtools.base.ui.view.DaggerPicassoImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:picassoFile="@{shareable.resource}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@{shareable.description.text}"
+            app:goneIf="@{shareable.description == null}"
+            tools:lines="5"
+            tools:text="@tools:sample/lorem/random" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_share"
+            style="@style/Widget.GodTools.Tool.Content.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:minWidth="144dp"
+            android:text="@string/tool_shareable_action_share_image"
+            app:icon="@drawable/ic_share"
+            app:iconSize="16dp" />
+    </LinearLayout>
+</layout>

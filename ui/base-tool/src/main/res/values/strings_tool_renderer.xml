@@ -15,5 +15,10 @@
     <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
 
     <!-- Share Sheet -->
+    <eat-comment />
     <string name="tool_share_sheet_more_apps">More</string>
+
+    <!-- Shareables -->
+    <eat-comment />
+    <string name="tool_shareable_action_share_image">Share image</string>
 </resources>
