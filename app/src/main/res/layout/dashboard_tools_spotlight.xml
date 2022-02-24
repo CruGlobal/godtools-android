@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dashboard_margin_horiz"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/dashboard_margin_horiz"
         android:text="@string/dashboard_tools_section_spotlight_label"
         android:textSize="22sp" />
