@@ -29,8 +29,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="12dp"
-            android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+            android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}"
+            android:paddingBottom="12dp">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/toolsImage"
@@ -78,20 +78,23 @@
                 app:layout_constraintTop_toBottomOf="@id/toolsImage"
                 tools:text="Tool Name" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/parallelLanguageText"
                 style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@{parallelLanguage.getDisplayName(context)}"
+                app:goneIf="@{parallelTranslation == null &amp;&amp; parallelLanguage == null}"
+                app:invisibleIf="@{!tool.type.supportsParallelLanguage || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolName"
-                app:invisibleIf="@{!tool.type.supportsParallelLanguage || parallelLanguage == null || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
-                app:goneIf="@{!tool.type.supportsParallelLanguage || parallelLanguage == null || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
-                tools:text="Spanish"
-                tools:visibility="gone"/>
+                tools:text="Bosnian(Bosnia &amp; herzegovina)"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
