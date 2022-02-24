@@ -1,14 +1,14 @@
 [versions]
-android-gradle-plugin = "7.1.1"
+android-gradle-plugin = "7.1.2"
 androidx-core = "1.7.0"
 androidx-hilt = "1.0.0"
 androidx-lifecycle = "2.4.1"
-androidx-room = "2.4.1"
+androidx-room = "2.4.2"
 androidx-viewpager2 = "1.0.0"
 androidx-work = "2.7.1"
 dagger = "2.41"
 eventbus = "3.3.1"
-facebook-flipper = "0.135.0"
+facebook-flipper = "0.136.0"
 firebase-crashlytics = "18.2.8"
 firebase-perf = "20.0.5"
 godtoolsMpp = "0.5.1-SNAPSHOT"
@@ -57,7 +57,7 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-processor", version.ref = "eventbus" }
-facebook = "com.facebook.android:facebook-core:12.3.0"
+facebook = "com.facebook.android:facebook-core:13.0.0"
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
@@ -135,7 +135,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
-lottie = "com.airbnb.android:lottie:4.2.2"
+lottie = "com.airbnb.android:lottie:5.0.1"
 materialBanner = "com.sergivonavi:materialbanner:1.2.0"
 materialComponents = "com.google.android.material:material:1.5.0"
 mockito = "org.mockito:mockito-inline:4.3.1"
@@ -144,7 +144,7 @@ okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 okta = "com.okta.android:okta-oidc-android:1.2.2"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
-play-billing = "com.android.billingclient:billing:4.0.0"
+play-billing = "com.android.billingclient:billing:4.1.0"
 play-core = "com.google.android.play:core:1.10.3"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"

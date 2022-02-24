@@ -332,6 +332,7 @@ class TractActivity :
     }
 
     internal fun shareLiveShareLink() {
+        publisherController.started = true
         when {
             !savedState.liveShareTutorialShown &&
                 settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 ->

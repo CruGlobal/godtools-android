@@ -8,8 +8,9 @@ import androidx.lifecycle.switchMap
 import dagger.Reusable
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -36,6 +37,7 @@ class ManifestManager @Inject constructor(
     private val eventBus: EventBus,
     private val parser: ManifestParser
 ) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val cache = WeakLruCache<String, ParserResult.Data>(6)
     private val loadingMutex = MutexMap()
 
@@ -46,7 +48,7 @@ class ManifestManager @Inject constructor(
 
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
-        GlobalScope.launch(Dispatchers.Default) {
+        coroutineScope.launch {
             val t = dao.getLatestTranslation(toolCode, locale, isPublished = true, isDownloaded = true)
             if (t != null) getManifest(t)
         }

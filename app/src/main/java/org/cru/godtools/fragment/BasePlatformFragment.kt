@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
-import androidx.databinding.ViewDataBinding
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewbinding.ViewBinding
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
-abstract class BasePlatformFragment<B : ViewDataBinding>(@LayoutRes layoutId: Int) : BaseFragment<B>(layoutId) {
+abstract class BasePlatformFragment<B : ViewBinding>(@LayoutRes layoutId: Int) : BaseFragment<B>(layoutId) {
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
