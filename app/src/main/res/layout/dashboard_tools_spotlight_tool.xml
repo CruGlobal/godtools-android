@@ -81,7 +81,7 @@
             <TextView
                 android:id="@+id/parallelLanguageText"
                 style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -92,6 +92,7 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolName"
+                app:layout_constraintWidth_max="wrap"
                 tools:text="Bosnian(Bosnia &amp; herzegovina)"
                 tools:visibility="visible" />
 
