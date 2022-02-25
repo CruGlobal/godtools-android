@@ -17,8 +17,8 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.and
@@ -64,7 +64,7 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     private val distinctToolCode = toolCode.distinctUntilChanged()
     private val distinctLocales = locales.distinctUntilChanged()
 
-    val tool = distinctToolCode.asFlow().flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: emptyFlow() }
+    val tool = distinctToolCode.asFlow().flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val languages = distinctLocales.switchMap {
