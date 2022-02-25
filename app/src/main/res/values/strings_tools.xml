@@ -16,7 +16,7 @@
     <string name="tools_list_lesson_info_language_available">Available in %1$s</string>
     <string name="dashboard_tools_section_categories_label">Categories</string>
     <string name="dashboard_tools_section_spotlight_label">Tool Spotlight</string>
-    <string name="dashboard_tools_section_spotlight_sub_label">Here are some tools we thought you might like</string>
+    <string name="dashboard_tools_section_spotlight_description">Here are some tools we thought you might like</string>
 
     <!-- Tool Details UI -->
     <eat-comment />

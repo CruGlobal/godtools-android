@@ -5,10 +5,25 @@
     <!-- region Tools UI -->
     <dimen name="dashboard_tools_margin_horiz">@dimen/dashboard_margin_horiz</dimen>
 
+    <style name="TextAppearance.GodTools.Dashboard.Tools.Section.Title" parent="TextAppearance.GodTools.Large">
+        <item name="android:textColor">@color/gray_5A</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Dashboard.Tools.Section.Description" parent="TextAppearance.GodTools.Small">
+        <item name="android:textColor">@color/gray_5A</item>
+    </style>
+
     <!-- region Spotlight -->
     <!-- @dimen/dashboard_margin_horiz - @dimen/dashboard_tools_spotlight_tool_margin -->
     <dimen name="dashboard_tools_spotlight_recycler_margin_horiz">8dp</dimen>
     <dimen name="dashboard_tools_spotlight_tool_margin">8dp</dimen>
+
+    <style name="Widget.GodTools.Dashboard.Tools.Spotlight.Tool.Card" parent="Widget.GodTools.Tools.Card">
+        <item name="android:layout_marginLeft">@dimen/dashboard_tools_spotlight_tool_margin</item>
+        <item name="android:layout_marginRight">@dimen/dashboard_tools_spotlight_tool_margin</item>
+        <item name="android:layout_marginTop">@dimen/dashboard_tools_spotlight_tool_margin</item>
+        <item name="android:layout_marginBottom">@dimen/dashboard_tools_spotlight_tool_margin</item>
+    </style>
     <!-- endregion Spotlight -->
 
     <!-- region Categories -->

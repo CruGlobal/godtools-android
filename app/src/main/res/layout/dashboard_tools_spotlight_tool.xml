@@ -19,13 +19,9 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        style="@style/Widget.GodTools.Tools.Card"
+        style="@style/Widget.GodTools.Dashboard.Tools.Spotlight.Tool.Card"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dashboard_tools_spotlight_tool_margin"
-        android:layout_marginTop="@dimen/dashboard_tools_spotlight_tool_margin"
-        android:layout_marginRight="@dimen/dashboard_tools_spotlight_tool_margin"
-        android:layout_marginBottom="@dimen/dashboard_tools_spotlight_tool_margin"
         android:onClick="@{() ->callbacks.onToolInfo(tool.code)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
