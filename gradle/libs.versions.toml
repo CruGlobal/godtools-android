@@ -80,6 +80,7 @@ gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-a
 gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-fragment = { module = "org.ccci.gto.android:gto-support-androidx-fragment", version.ref = "gtoSupport" }
 gtoSupport-androidx-lifecycle = { module = "org.ccci.gto.android:gto-support-androidx-lifecycle", version.ref = "gtoSupport" }
+gtoSupport-androidx-recyclerview = { module = "org.ccci.gto.android:gto-support-androidx-recyclerview", version.ref = "gtoSupport"}
 gtoSupport-androidx-room = { module = "org.ccci.gto.android:gto-support-androidx-room", version.ref = "gtoSupport" }
 gtoSupport-androidx-viewpager2 = { module = "org.ccci.gto.android:gto-support-androidx-viewpager2", version.ref = "gtoSupport" }
 gtoSupport-androidx-work = { module = "org.ccci.gto.android:gto-support-androidx-work", version.ref = "gtoSupport" }

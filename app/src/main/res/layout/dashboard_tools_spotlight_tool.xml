@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="androidx.databinding.ObservableField" />
         <import type="androidx.lifecycle.LiveData" />
@@ -19,15 +19,46 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        style="@style/Widget.GodTools.Tools.Card"
-        android:layout_width="match_parent"
+        style="@style/Widget.GodTools.Dashboard.Tools.Spotlight.Tool.Card"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:onClick="@{() ->callbacks.onToolInfo(tool.code)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layoutDirection="@{primaryTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(primaryTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+
+            <org.cru.godtools.base.ui.view.DaggerPicassoImageView
+                android:id="@+id/toolsImage"
+                style="@style/Widget.GodTools.Tools.Card.Banner"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:src="@{banner}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <ProgressBar
+                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:progress="@{downloadProgress}"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/toolsImage"
+                tools:max="12"
+                tools:progress="5"
+                tools:visibility="visible" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:selected="@{tool.isAdded}" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/margin_start"
@@ -43,75 +74,36 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <org.cru.godtools.base.ui.view.DaggerPicassoImageView
-                android:id="@+id/toolImageView"
-                style="@style/Widget.GodTools.Tools.Card.Banner"
-                android:layout_width="match_parent"
-                android:layout_height="89dp"
-                android:src="@{banner}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <ProgressBar
-                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:progress="@{downloadProgress}"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/toolImageView"
-                tools:max="12"
-                tools:progress="5"
-                tools:visibility="visible" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, primaryTranslation ?? parallelTranslation) : callbacks.addTool(tool.code)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:selected="@{tool.isAdded}" />
-
             <TextView
-                android:id="@+id/title"
-                style="@style/Widget.GodTools.Tools.Card.Title"
+                android:id="@+id/toolName"
+                style="@style/TextAppearance.GodTools.Tools.Card.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@{ModelUtils.getTranslationName(primaryTranslation ?? parallelTranslation, tool, context)}"
-                app:layout_constraintEnd_toStartOf="@id/language_parallel"
+                android:layout_marginTop="10dp"
+                android:lines="2"
+                android:text="@{tool.name}"
+                app:layout_constraintBottom_toTopOf="@id/parallelLanguageText"
+                app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/margin_start"
-                app:layout_constraintTop_toBottomOf="@id/toolImageView"
+                app:layout_constraintTop_toBottomOf="@id/toolsImage"
                 tools:text="Tool Name" />
 
             <TextView
-                android:id="@+id/language_parallel"
+                android:id="@+id/parallelLanguageText"
                 style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:maxWidth="72dp"
-                android:text="@{parallelLanguage.getDisplayName(context)}"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBaseline_toBaselineOf="@id/title"
-                app:layout_constraintEnd_toStartOf="@id/margin_end"
-                app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; parallelLanguage != null &amp;&amp; !primaryTranslation.languageCode.equals(parallelLanguage.code)}"
-                tools:text="Spanish" />
-
-            <TextView
-                style="@style/Widget.GodTools.Tools.Card.Subtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@{ModelUtils.getToolCategory(tool, context, primaryTranslation.languageCode)}"
+                android:layout_marginBottom="12dp"
+                android:text="@{parallelLanguage.getDisplayName(context)}"
+                app:invisibleIf="@{!tool.type.supportsParallelLanguage || parallelLanguage == null || primaryTranslation.languageCode.equals(parallelLanguage.code)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/margin_start"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                tools:text="Category" />
+                app:layout_constraintTop_toBottomOf="@id/toolName"
+                app:layout_constraintWidth_max="wrap"
+                tools:text="Bosnian (Bosnia &amp; herzegovina)"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -16,9 +16,9 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+        android:layout_width="122sp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/dashboard_tools_categories_category_margin"
         android:onClick="@{() -> callbacks.onCategorySelected(category)}"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/tools_card_corner_radius"
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:minLines="2"
+            android:lines="2"
             android:text="@{ModelUtils.getToolCategoryName(category, context, primaryLanguage)}"
             android:textColor="@{selectedCategory == null || selectedCategory == category ? @color/gray_5A : @color/gray_97, default=@color/gray_5A}"
             android:textStyle="bold"
