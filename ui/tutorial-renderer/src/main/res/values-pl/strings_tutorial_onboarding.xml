@@ -18,7 +18,7 @@
     <string name="tutorial_onboarding_links_tools_subhead">Chcę podzielić się z kimś ewangelią</string>
     <string name="tutorial_onboarding_links_tools_action">Wybierz jedno z naszych narzędzi</string>
     <string name="tutorial_onboarding_action_begin">Zacznij</string>
-    <string name="tutorial_onboarding_action_next">Następny</string>
+    <string name="tutorial_onboarding_action_next">Următorul</string>
     <string name="tutorial_onboarding_action_skip">Pomiń</string>
     <string name="tutorial_onboarding_action_start">Rozpocznij</string>
 </resources>

@@ -3,4 +3,12 @@
     <!-- Tips Tutorial -->
     <string name="tutorial_tips_learn_headline">Aprende a compartir esta herramienta</string>
     <string name="tutorial_tips_learn_text">Practica utilizando tantos consejos como necesites para sentirte seguro al compartir esta herramienta con los demás.</string>
+    <string name="tutorial_tips_light_headline">Consejos para iluminar el camino</string>
+    <string name="tutorial_tips_light_text1">En determinadas pantallas, verás una serie de iconos. Pulsa el icono para revelar un consejo que te ayudará a hablar sobre el contenido de la pantalla.</string>
+    <string name="tutorial_tips_light_text2">"Para las pantallas sin consejos, se recomienda leer el contenido y discutirlo según sea necesario. "</string>
+    <string name="tutorial_tips_start_headline">Ilumina los consejos</string>
+    <string name="tutorial_tips_start_text">Cuando un consejo se ilumina, has completado esa parte del entrenamiento. No es necesario utilizar todos los consejos en cada conversación.</string>
+    <string name="tutorial_tips_action_continue">Continuar</string>
+    <string name="tutorial_tips_action_skip">Omitir</string>
+    <string name="tutorial_tips_action_start">Comenzar entrenamiento</string>
 </resources>

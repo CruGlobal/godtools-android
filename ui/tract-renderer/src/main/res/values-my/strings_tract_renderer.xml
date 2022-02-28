@@ -3,7 +3,7 @@
     <string name="menu_install">" install လုပ်ပါ"</string>
     <string name="menu_share_tract">ဤကိရိယာကို ပေးပို့မည်</string>
     <string name="tract_card_previous">အရှေ့သို့</string>
-    <string name="tract_card_next">နောက်ထပ်</string>
+    <string name="tract_card_next">နောက်စာမျက်နှ</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">သင်၏မျက်နှာပြင်ကိုမျှဝေပါ</string>
     <string name="share_tool_message_tract_live_share">မင်္ဂလာပါ၊ GodTools တွင် မျက်နှာပြင် မျှဝေခြင်းမှတစ်ဆင့် ကျွန်ုပ်နှင့်အတူ ပါဝင်ပါ။ လင့်ခ်- %1$s\n\nသင်သည် ခဏကြာသည်အထိ ဤမက်ဆေ့ချ်ကို မရရှိလျှင် လင့်ခ် အလုပ်မလုပ်သေးခြင်း ဖြစ်နိုင်သည်။ ကျွန်ုပ်တို့ နောက်တစ်ခါမှ ထပ်စမ်းကြည့်နိုင်ပါသည်။</string>
