@@ -187,7 +187,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected open fun getShareItems(): List<ShareItem> =
-        listOfNotNull(buildShareIntent()?.let { DefaultShareItem(shareLinkTitle, it) })
+        listOfNotNull(buildShareIntent()?.let { DefaultShareItem(it) })
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
@@ -207,7 +207,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         shareUrl: String? = shareLinkUri
     ) {
         val intent = buildShareIntent(title, message, shareUrl) ?: return
-        DefaultShareItem(title, intent).triggerAction(this)
+        DefaultShareItem(intent).triggerAction(this)
     }
     // endregion Share tool logic
 

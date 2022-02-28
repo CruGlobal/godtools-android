@@ -55,9 +55,7 @@ internal class ShareBottomSheetDialogFragment() :
 
     override fun onShowChooser() {
         val shareItem = primaryShareItem
-        shareItem?.shareIntent?.let {
-            startActivity(Intent.createChooser(it, getString(R.string.share_tool_title, shareItem.shareTitle)))
-        }
+        shareItem?.shareIntent?.let { startActivity(Intent.createChooser(it, null)) }
         dismissAllowingStateLoss()
     }
     // endregion ResolveInfoAdapter.Callbacks

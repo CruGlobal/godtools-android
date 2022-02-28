@@ -300,7 +300,7 @@ class TractActivity :
 
     override fun getShareItems() = buildList {
         addAll(super.getShareItems())
-        if (dataModel.tool.value?.isScreenShareDisabled != true) add(LiveShareItem(shareLinkTitle))
+        if (dataModel.tool.value?.isScreenShareDisabled != true) add(LiveShareItem())
     }
     // endregion Share Menu Logic
 

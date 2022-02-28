@@ -8,7 +8,7 @@ import org.cru.godtools.tract.R
 import org.cru.godtools.tract.activity.TractActivity
 
 @Parcelize
-class LiveShareItem(override val shareTitle: String?) : ShareItem {
+class LiveShareItem : ShareItem {
     @IgnoredOnParcel
     override val actionLayout = R.layout.tract_share_item_live_share
 
