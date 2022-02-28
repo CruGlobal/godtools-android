@@ -34,7 +34,7 @@
             android:gravity="start|top"
             android:minLines="2"
             android:lines="2"
-            android:text="@{category != null ? ModelUtils.getToolCategoryName(category, context, primaryLanguage) : @string/tool_category_all_tools}"
+            android:text="@{category != null ? ModelUtils.getToolCategoryName(category, context, primaryLanguage) : @string/dashboard_tools_section_categories_all}"
             android:textColor="@{selectedCategory == null || selectedCategory == category ? @color/gray_5A : @color/gray_97, default=@color/gray_5A}"
             android:textStyle="bold"
             tools:text="@string/tool_category_conversation_starter" />
