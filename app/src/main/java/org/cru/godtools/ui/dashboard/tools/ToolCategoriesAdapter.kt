@@ -10,6 +10,8 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.databinding.DashboardToolsCategoriesCategoryBinding
 
+const val CONSTANT_ALL_TOOLS = "all_tools"
+
 class ToolCategoriesAdapter(
     lifecycleOwner: LifecycleOwner,
     private val selectedCategory: LiveData<String?>,
@@ -26,7 +28,7 @@ class ToolCategoriesAdapter(
             notifyDataSetChanged()
         }
 
-    override fun getItemCount() = categories.size
+    override fun getItemCount() = if (categories.isNotEmpty()) categories.size + 1 else 0
 
     override fun onChanged(t: List<String>) {
         categories = t
@@ -40,6 +42,9 @@ class ToolCategoriesAdapter(
         }
 
     override fun onBindViewDataBinding(binding: DashboardToolsCategoriesCategoryBinding, position: Int) {
-        binding.category = categories[position]
+        binding.category = when (position) {
+            0 -> CONSTANT_ALL_TOOLS
+            else -> categories[position - 1]
+        }
     }
 }
