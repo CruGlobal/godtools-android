@@ -14,21 +14,21 @@ class ToolCategoriesAdapter(
     lifecycleOwner: LifecycleOwner,
     private val selectedCategory: LiveData<String?>,
     private val primaryLanguage: LiveData<Locale>
-) : SimpleDataBindingAdapter<DashboardToolsCategoriesCategoryBinding>(lifecycleOwner), Observer<List<String?>> {
+) : SimpleDataBindingAdapter<DashboardToolsCategoriesCategoryBinding>(lifecycleOwner), Observer<List<String>> {
     interface Callbacks {
         fun onCategorySelected(category: String?)
     }
 
     val callbacks = ObservableField<Callbacks>()
-    private var categories = emptyList<String?>()
+    private var categories = emptyList<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    override fun getItemCount() = if (categories.isNotEmpty()) categories.size + 1 else 0
+    override fun getItemCount() = categories.size + 1
 
-    override fun onChanged(t: List<String?>) {
+    override fun onChanged(t: List<String>) {
         categories = t
     }
 
@@ -40,9 +40,6 @@ class ToolCategoriesAdapter(
         }
 
     override fun onBindViewDataBinding(binding: DashboardToolsCategoriesCategoryBinding, position: Int) {
-        binding.category = when (position) {
-            categories.size -> null
-            else -> categories[position]
-        }
+        binding.category = categories.getOrNull(position)
     }
 }
