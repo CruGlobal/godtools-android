@@ -26,7 +26,7 @@ class ToolCategoriesAdapter(
             notifyDataSetChanged()
         }
 
-    override fun getItemCount() = categories.size
+    override fun getItemCount() = categories.size + 1
 
     override fun onChanged(t: List<String>) {
         categories = t
@@ -40,6 +40,6 @@ class ToolCategoriesAdapter(
         }
 
     override fun onBindViewDataBinding(binding: DashboardToolsCategoriesCategoryBinding, position: Int) {
-        binding.category = categories[position]
+        binding.category = categories.getOrNull(position)
     }
 }
