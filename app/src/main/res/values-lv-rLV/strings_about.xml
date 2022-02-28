@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_about">Par lietotni</string>
+    <string name="title_about">Par rīku</string>
     <string name="general_about_1">\'GodTools\' var palīdzēt tev pastāstīt citiem par Jēzu Kristu ērtā un vienkārša veidā.</string>
     <string name="general_about_2">Šie rīki palīdz tev pastāstīt citiem, kā uzsākt attiecības ar Dievu caur Jēzu Kristu, pat, ja nekad neesi to darījis vai ja sarunbiedrs runā citā valodā.</string>
     <string name="general_about_3">Izvēlies rīkus atbilstoši savām vēlmēm un auditorijai. Ne visi rīki ir pieejami visās valodās.</string>
@@ -10,5 +10,5 @@
     <string name="general_about_7">Šo rīku tīmekļa versijas ir pieejamas vietnē KnowGod.com/lv. Papildini savu tīmekļa vietni ar šo saiti!</string>
     <string name="general_about_8">Apmeklē GodToolsApp.com, lai uzzinātu vairāk.</string>
     <string name="general_about_9">Uzņemoties iniciatīvu dalīties savā ticībā, atcerieties, ka Dievs pārliecina cilvēku. Mīliet ikvienu, uzklausot un meklējot sapratni.</string>
-    <string name="general_about_10">\"Lai tava runa vienmēr ir labvēlīga, pieredzes bagāta, lai tu vienmēr spētu atbildēt ikvienam.\" Kolosieši 4:6</string>
+    <string name="general_about_10">\"Jūsu runa lai vienmēr ir labvēlīga, lai tajā ir sāls, un lai jūs zinātu, kā jums ikvienam jāatbild.\" Kolosiešiem 4:6</string>
 </resources>

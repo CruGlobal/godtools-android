@@ -4,11 +4,13 @@
     <string name="share_prompt">Valitse, miten haluat jakaa</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Yleistä</string>
+    <string name="menu_heading_account">Tili</string>
     <string name="menu_heading_share">Jakaminen</string>
     <string name="menu_heading_legal">Juridiset</string>
     <string name="menu_about">Info</string>
     <string name="menu_help">Usein kysytyt kysymykset</string>
     <string name="menu_contact_us">Ota yhteyttä</string>
+    <string name="menu_tutorial">Opastus</string>
     <string name="menu_login">Kirjaudu sisään</string>
     <string name="menu_signup">Luo tili</string>
     <string name="menu_logout">Kirjaudu ulos</string>
@@ -18,7 +20,7 @@
     <string name="menu_privacy_policy">Tietosuojakäytäntö</string>
     <string name="menu_copyright">Tekijänoikeudet</string>
     <!-- Share a story -->
-    <string name="share_story_subject">Kuule, kuinka Jumala liikkuu!</string>
+    <string name="share_story_subject">GodTools-tarina</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ kieltä</string>
     <string name="menu_language_settings">Kieliasetukset</string>
@@ -31,4 +33,8 @@
     <string name="label_language_none">Ei mitään</string>
     <string name="label_language_search">Suodata kieliä</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Haluatko määrittää toissijaisen kielen?</string>
+    <string name="languages_parallel_dialog_select">Valitse kieli</string>
+    <string name="languages_parallel_dialog_action_start">Aloittaminen</string>
+    <string name="languages_parallel_dialog_action_cancel">Ei kiitos</string>
 </resources>
