@@ -27,6 +27,6 @@ class ToolsFragmentDataModel @Inject constructor(dao: GodToolsDao, savedState: S
 
     val spotlightTools = tools.map { it.filter { t -> t.isSpotlight } }
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
-        tools.filter { category == null || it.category == category }
+        tools.filter { category == null || category == CONSTANT_ALL_TOOLS || it.category == category }
     }
 }
