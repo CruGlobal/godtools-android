@@ -14,8 +14,7 @@ internal fun ShareableImage.buildShareIntent(context: Context): Intent? {
             val uri = FileProvider.getUriForFile(context, authority, file, resource.name.orEmpty())
 
             Intent(Intent.ACTION_SEND)
-                .setType("image/png")
-//                .putExtra(Intent.EXTRA_SUBJECT, "Shareable Image")
+                .setType("image/*")
                 .putExtra(Intent.EXTRA_STREAM, uri)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
