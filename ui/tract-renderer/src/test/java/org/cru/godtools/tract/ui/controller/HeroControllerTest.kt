@@ -7,7 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
@@ -33,13 +34,15 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 class HeroControllerTest {
     private val baseLifecycleOwner = TestLifecycleOwner(Lifecycle.State.CREATED)
     private lateinit var eventBus: EventBus
-    private val mainDispatcher = TestCoroutineDispatcher()
+    private lateinit var scheduler: TestCoroutineScheduler
 
     private lateinit var controller: HeroController
 
     @Before
     fun setup() {
-        Dispatchers.setMain(mainDispatcher)
+        val dispatcher = StandardTestDispatcher()
+        scheduler = dispatcher.scheduler
+        Dispatchers.setMain(dispatcher)
 
         eventBus = mock()
         val binding = TractPageHeroBinding.inflate(LayoutInflater.from(ApplicationProvider.getApplicationContext()))
@@ -53,7 +56,6 @@ class HeroControllerTest {
 
     @After
     fun cleanup() {
-        mainDispatcher.cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
 
@@ -66,24 +68,23 @@ class HeroControllerTest {
         verifyNoInteractions(eventBus)
 
         // event1 with no delay
-        mainDispatcher.pauseDispatcher()
         baseLifecycleOwner.currentState = Lifecycle.State.RESUMED
-        mainDispatcher.runCurrent()
+        scheduler.runCurrent()
         verify(eventBus).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event1 })
         verifyNoMoreInteractions(eventBus)
 
         // event2 with 1 second delay
-        mainDispatcher.advanceTimeBy(999)
+        scheduler.advanceTimeBy(1000)
         verifyNoMoreInteractions(eventBus)
-        mainDispatcher.advanceTimeBy(1)
+        scheduler.runCurrent()
         verify(eventBus).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event2 })
         verifyNoMoreInteractions(eventBus)
 
         // event3 with 2 second delay, lifecycle is paused before event can fire
-        mainDispatcher.advanceTimeBy(999)
+        scheduler.advanceTimeBy(1000)
         verifyNoMoreInteractions(eventBus)
         baseLifecycleOwner.currentState = Lifecycle.State.STARTED
-        mainDispatcher.advanceUntilIdle()
+        scheduler.advanceUntilIdle()
         verify(eventBus, never()).post(argThat<ContentAnalyticsEventAnalyticsActionEvent> { event == event3 })
         verifyNoMoreInteractions(eventBus)
     }

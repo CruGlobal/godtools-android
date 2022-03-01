@@ -7,7 +7,6 @@ import androidx.annotation.LayoutRes
 import org.ccci.gto.android.common.Ordered
 
 interface ShareItem : Parcelable, Ordered {
-    val shareTitle: String? get() = null
     val shareIntent: Intent? get() = null
 
     @get:LayoutRes

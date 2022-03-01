@@ -315,7 +315,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             .setType("text/plain")
             .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
             .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_general_message, shareLink))
-            .let { Intent.createChooser(it, getString(R.string.share_prompt)) }
+            .let { Intent.createChooser(it, null) }
             .also { startActivity(it) }
     }
 

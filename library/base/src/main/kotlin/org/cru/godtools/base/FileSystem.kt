@@ -13,14 +13,12 @@ import kotlinx.coroutines.withContext
 open class FileSystem(context: Context, dirName: String) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val dirTask = coroutineScope.async { File(context.filesDir, dirName) }
+    protected val dirTask = coroutineScope.async { File(context.filesDir, dirName) }
     private val dirCreated = coroutineScope.async { dirTask.await().run { (exists() || mkdirs()) && isDirectory } }
 
     suspend fun exists() = dirCreated.await()
     suspend fun rootDir() = dirTask.await()
 
-    suspend fun createTmpFile(prefix: String, suffix: String? = null): File =
-        withContext(Dispatchers.IO) { File.createTempFile(prefix, suffix, dirTask.await()) }
     suspend fun file(filename: String) = File(dirTask.await(), filename)
 
     suspend fun openInputStream(filename: String): InputStream =

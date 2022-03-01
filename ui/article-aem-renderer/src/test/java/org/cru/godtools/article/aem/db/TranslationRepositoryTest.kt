@@ -2,7 +2,7 @@ package org.cru.godtools.article.aem.db
 
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
 import org.cru.godtools.model.Translation
@@ -35,7 +35,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
 
     // region isProcessed()
     @Test
-    fun `isProcessed() - Missing Translation`() = runBlockingTest {
+    fun `isProcessed() - Missing Translation`() = runTest {
         whenFindingTranslation().thenReturn(null)
 
         assertFalse(repo.isProcessed(translation))
@@ -44,7 +44,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     }
 
     @Test
-    fun `isProcessed() - Invalid Translation`() = runBlockingTest {
+    fun `isProcessed() - Invalid Translation`() = runTest {
         translation.toolCode = null
 
         assertFalse(repo.isProcessed(translation))
@@ -52,7 +52,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     }
 
     @Test
-    fun `isProcessed() - Not Processed`() = runBlockingTest {
+    fun `isProcessed() - Not Processed`() = runTest {
         whenFindingTranslation().thenReturn(translationRef)
 
         assertFalse(repo.isProcessed(translation))
@@ -61,7 +61,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     }
 
     @Test
-    fun `isProcessed() - Processed`() = runBlockingTest {
+    fun `isProcessed() - Processed`() = runTest {
         translationRef.processed = true
         whenFindingTranslation().thenReturn(translationRef)
 
@@ -75,7 +75,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
 
     // region removeMissingTranslations()
     @Test
-    fun `removeMissingTranslations()`() = runBlockingTest {
+    fun `removeMissingTranslations()`() = runTest {
         val translation2 = Translation().apply {
             toolCode = "invalid"
             languageCode = LOCALE
@@ -95,7 +95,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     }
 
     @Test
-    fun `removeMissingTranslations() - Nothing to remove`() = runBlockingTest {
+    fun `removeMissingTranslations() - Nothing to remove`() = runTest {
         translationDao.stub {
             onBlocking { getAll() } doReturn listOf(translationRef)
         }

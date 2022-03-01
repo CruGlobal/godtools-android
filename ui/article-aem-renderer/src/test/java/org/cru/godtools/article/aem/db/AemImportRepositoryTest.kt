@@ -2,7 +2,8 @@ package org.cru.godtools.article.aem.db
 
 import android.net.Uri
 import java.util.Date
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.cru.godtools.article.aem.model.AemImport
 import org.hamcrest.MatcherAssert.assertThat
@@ -15,11 +16,12 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AemImportRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : AemImportRepository(db) {}
 
     @Test
-    fun `accessAemImport()`() = runBlockingTest {
+    fun `accessAemImport()`() = runTest {
         val uri = mock<Uri>()
         val start = Date()
         repo.accessAemImport(uri)
@@ -38,7 +40,7 @@ class AemImportRepositoryTest : AbstractArticleRoomDatabaseTest() {
     }
 
     @Test
-    fun `removeOrphanedAemImports()`() = runBlockingTest {
+    fun `removeOrphanedAemImports()`() = runTest {
         repo.removeOrphanedAemImports()
 
         val accessedBefore = argumentCaptor<Date>()
