@@ -121,7 +121,7 @@ gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-suppor
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 gtoSupport-viewpager = { module = "org.ccci.gto.android:gto-support-viewpager", version.ref = "gtoSupport" }
-guava = { module = "com.google.guava:guava", version = "31.0.1-android" }
+guava = "com.google.guava:guava:31.1-android"
 hamcrest = "org.hamcrest:hamcrest:2.2"
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
