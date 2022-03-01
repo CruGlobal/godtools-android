@@ -194,6 +194,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
                 loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
                     loadingState[it] != LoadingState.OFFLINE
             }?.let { dataModel.setActiveLocale(it) }
+            else -> Unit
         }
     }
     // endregion Active Translation management
