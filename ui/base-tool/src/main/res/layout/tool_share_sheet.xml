@@ -8,9 +8,6 @@
 
         <variable name="primaryShareItem" type="ShareItem" />
         <variable name="otherShareItems" type="List&lt;ShareItem&gt;" />
-
-        <!-- HACK: placeholder to provide BR.item, can be removed once we have shareables support added -->
-        <variable name="item" type="org.cru.godtools.base.tool.ui.share.model.ShareItem" />
     </data>
 
     <LinearLayout

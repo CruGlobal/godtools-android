@@ -12,4 +12,6 @@ interface ShareItem : Parcelable, Ordered {
     @get:LayoutRes
     val actionLayout: Int? get() = null
     fun triggerAction(activity: Activity)
+
+    val isValid get() = true
 }

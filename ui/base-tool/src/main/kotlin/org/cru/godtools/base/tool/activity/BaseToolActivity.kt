@@ -41,6 +41,7 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
+import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
@@ -51,6 +52,7 @@ import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.navBarColor
+import org.cru.godtools.tool.model.shareable.ShareableImage
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
@@ -186,8 +188,16 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    protected open fun getShareItems(): List<ShareItem> =
-        listOfNotNull(buildShareIntent()?.let { DefaultShareItem(it) })
+    protected open fun getShareItems(): Collection<ShareItem> = buildList {
+        buildShareIntent()?.let { add(DefaultShareItem(it)) }
+        addAll(getShareableShareItems())
+    }.filter { it.isValid }
+
+    @Inject
+    internal lateinit var shareableShareItemFactory: ShareableImageShareItem.Factory
+
+    private fun getShareableShareItems() = activeManifest?.shareables?.filterIsInstance<ShareableImage>()
+        ?.map { shareableShareItemFactory.create(it) }.orEmpty()
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
