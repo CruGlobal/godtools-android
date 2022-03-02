@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
-import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
@@ -76,7 +75,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         intent?.extras?.let { extras ->
-            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
             val locales = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
             dataModel.primaryLocales.value = locales.take(1)
             dataModel.parallelLocales.value = locales.drop(1)

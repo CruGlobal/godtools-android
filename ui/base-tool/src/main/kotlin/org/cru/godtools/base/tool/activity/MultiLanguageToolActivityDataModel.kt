@@ -25,6 +25,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
@@ -32,6 +33,7 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -56,7 +58,7 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     protected val savedState: SavedStateHandle,
 ) : ViewModel() {
-    val toolCode = MutableLiveData<String?>()
+    val toolCode by savedState.livedata<String?>(EXTRA_TOOL, null)
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
     val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
 
