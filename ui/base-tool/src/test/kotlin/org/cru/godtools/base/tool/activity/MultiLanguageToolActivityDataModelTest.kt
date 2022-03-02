@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -39,6 +40,7 @@ import org.mockito.kotlin.whenever
 
 private const val TOOL = "kgp"
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MultiLanguageToolActivityDataModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
