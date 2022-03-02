@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool
+package org.cru.godtools.base.ui
 
 import android.app.Activity
 import android.content.ComponentName
@@ -9,10 +9,9 @@ import java.util.Locale
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.tract.activity.TractActivity
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.arrayContaining
+import org.hamcrest.Matchers
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -37,18 +36,7 @@ class ActivitiesTest {
         doNothing().whenever(activity).startActivity(any())
     }
 
-    @Test
-    fun verifyCreateTractActivityIntent() {
-        val intent = activity.createTractActivityIntent(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA)
-        intent.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA))
-    }
-
-    @Test
-    fun verifyCreateTractActivityIntentWithShowTips() {
-        val intent = activity.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH, showTips = true)
-        intent.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH), showTips = true)
-    }
-
+    // region TractActivity
     @Test
     fun verifyStartTractActivity() {
         activity.startTractActivity(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA, showTips = false)
@@ -70,10 +58,23 @@ class ActivitiesTest {
         }
     }
 
+    @Test
+    fun verifyCreateTractActivityIntent() {
+        val intent = activity.createTractActivityIntent(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA)
+        intent.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA))
+    }
+
+    @Test
+    fun verifyCreateTractActivityIntentWithShowTips() {
+        val intent = activity.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH, showTips = true)
+        intent.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH), showTips = true)
+    }
+
     private fun Intent.assertTractIntent(tool: String = TOOL, vararg languages: Locale, showTips: Boolean = false) {
         assertEquals(ComponentName(activity, TractActivity::class.java), component)
         assertEquals(tool, getStringExtra(EXTRA_TOOL))
-        assertThat(extras!!.getLocaleArray(EXTRA_LANGUAGES)!!, arrayContaining(*languages))
+        assertThat(extras!!.getLocaleArray(EXTRA_LANGUAGES)!!, Matchers.arrayContaining(*languages))
         assertEquals(showTips, getBooleanExtra(EXTRA_SHOW_TIPS, !showTips))
     }
+    // endregion TractActivity
 }

@@ -40,4 +40,6 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(project(":ui:tract-renderer"))
 }

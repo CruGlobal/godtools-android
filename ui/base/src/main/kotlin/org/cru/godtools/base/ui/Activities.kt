@@ -48,6 +48,19 @@ fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?
         .putLanguagesExtra(*languages)
 // endregion CyoaActivity
 
+// region TractActivity
+private const val ACTIVITY_CLASS_TRACT = "org.cru.godtools.tract.activity.TractActivity"
+
+fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
+    startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
+
+fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
+    Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
+        .putExtra(EXTRA_TOOL, toolCode)
+        .putLanguagesExtra(*languages)
+        .putExtra(EXTRA_SHOW_TIPS, showTips)
+// endregion TractActivity
+
 fun Context.buildToolExtras(toolCode: String?, language: Locale?) = BaseActivity.buildExtras(this).apply {
     putString(EXTRA_TOOL, toolCode)
     putLocale(EXTRA_LANGUAGE, language)

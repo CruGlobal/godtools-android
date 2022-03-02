@@ -70,7 +70,6 @@ dependencies {
     kapt(libs.google.auto.value)
     kapt(libs.hilt.compiler)
 
-    testImplementation(project(":ui:tract-renderer"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.kotlin.coroutines.test)
     kaptTest(libs.androidx.databinding.compiler)
