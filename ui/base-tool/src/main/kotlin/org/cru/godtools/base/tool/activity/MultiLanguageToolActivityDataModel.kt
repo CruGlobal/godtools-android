@@ -51,12 +51,12 @@ private const val STATE_ACTIVE_LOCALE = "activeLocale"
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-open class MultiLanguageToolActivityDataModel @Inject constructor(
+class MultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
-    protected val savedState: SavedStateHandle,
+    private val savedState: SavedStateHandle,
 ) : ViewModel() {
     val toolCode by savedState.livedata<String?>(EXTRA_TOOL, null)
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
