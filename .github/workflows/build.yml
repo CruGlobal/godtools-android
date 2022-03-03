@@ -28,13 +28,13 @@ jobs:
           arguments: assemble check -x test --scan
       - name: Archive ktlint results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ktlint-results
           path: "**/build/reports/ktlint/"
       - name: Archive lint results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lint-results
           path: "**/build/reports/lint-results*.*"
@@ -65,7 +65,7 @@ jobs:
           verbose: true
       - name: Archive Unit Test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: unit-test-results
           path: "**/build/reports/tests/"
