@@ -40,6 +40,6 @@ class ToolCategoriesAdapter(
         }
 
     override fun onBindViewDataBinding(binding: DashboardToolsCategoriesCategoryBinding, position: Int) {
-        binding.category = categories.getOrNull(position)
+        binding.category = categories.getOrNull(position - 1)
     }
 }
