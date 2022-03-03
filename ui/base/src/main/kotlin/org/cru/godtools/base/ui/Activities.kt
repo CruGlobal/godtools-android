@@ -61,7 +61,7 @@ fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale
         .putExtra(EXTRA_SHOW_TIPS, showTips)
 // endregion TractActivity
 
-fun Context.buildToolExtras(toolCode: String?, language: Locale?) = BaseActivity.buildExtras(this).apply {
+fun Context.buildToolExtras(toolCode: String, language: Locale) = BaseActivity.buildExtras(this).apply {
     putString(EXTRA_TOOL, toolCode)
     putLocale(EXTRA_LANGUAGE, language)
 }
