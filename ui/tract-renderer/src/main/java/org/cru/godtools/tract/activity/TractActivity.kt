@@ -155,7 +155,7 @@ class TractActivity :
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
             if (savedInstanceState == null) {
-                dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
+                dataModel.activeLocale.value = data.deepLinkSelectedLanguage
                 data.deepLinkPage?.let { initialPage = it }
             }
         }
@@ -377,7 +377,7 @@ class TractActivity :
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
             dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-            dataModel.setActiveLocale(it)
+            dataModel.activeLocale.value = it
         }
         event.page?.let { goToPage(it) }
         eventBus.post(event)

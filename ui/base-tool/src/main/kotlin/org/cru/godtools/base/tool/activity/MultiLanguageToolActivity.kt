@@ -104,7 +104,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
                 if (languageToggleController.isUpdatingTabs) return
                 val locale = tab.tag as? Locale ?: return
                 eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.toolCode.value, locale))
-                dataModel.setActiveLocale(locale)
+                dataModel.activeLocale.value = locale
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) = Unit
@@ -167,7 +167,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     private fun setupActiveTranslationManagement() {
         dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
-            if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
+            if (dataModel.activeLocale.value == null) dataModel.activeLocale.value = it
         }
 
         dataModel.availableLocales.observe(this) {
@@ -191,7 +191,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
             LoadingState.OFFLINE -> availableLocales.firstOrNull {
                 loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
                     loadingState[it] != LoadingState.OFFLINE
-            }?.let { dataModel.setActiveLocale(it) }
+            }?.let { dataModel.activeLocale.value = it }
             else -> Unit
         }
     }

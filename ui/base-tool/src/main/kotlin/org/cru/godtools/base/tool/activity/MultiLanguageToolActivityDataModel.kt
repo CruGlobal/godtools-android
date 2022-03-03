@@ -47,8 +47,6 @@ import org.cru.godtools.tool.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-private const val STATE_ACTIVE_LOCALE = "activeLocale"
-
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class MultiLanguageToolActivityDataModel @Inject constructor(
@@ -56,7 +54,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
-    private val savedState: SavedStateHandle,
+    savedState: SavedStateHandle,
 ) : ViewModel() {
     val toolCode by savedState.livedata<String?>(EXTRA_TOOL, null)
     val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
@@ -116,10 +114,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Loading State
 
     // region Active Tool
-    val activeLocale = savedState.getLiveData<String?>(STATE_ACTIVE_LOCALE)
-        .map { it?.let { Locale.forLanguageTag(it) } }
-        .distinctUntilChanged()
-    fun setActiveLocale(locale: Locale) = savedState.set(STATE_ACTIVE_LOCALE, locale.toLanguageTag())
+    val activeLocale by savedState.livedata<Locale?>()
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val manifest = manifestCache.get(tool, l)
