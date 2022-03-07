@@ -20,8 +20,8 @@ import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
-import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest

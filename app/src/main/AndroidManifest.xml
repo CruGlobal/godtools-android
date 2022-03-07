@@ -110,6 +110,10 @@
             android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
+            android:name=".tool.cyoa.ui.CyoaActivity"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
+
+        <activity
             android:name=".tract.activity.TractActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity" />
 

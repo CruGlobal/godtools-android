@@ -4,13 +4,12 @@ import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.pauseDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -30,7 +29,7 @@ import org.robolectric.annotation.Config
 class GodToolsShortcutManagerDispatcherTest {
     private lateinit var settings: Settings
     private lateinit var shortcutManager: GodToolsShortcutManager
-    private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
+    private val coroutineScope = TestScope()
 
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(extraBufferCapacity = 20)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(extraBufferCapacity = 20)
@@ -51,7 +50,6 @@ class GodToolsShortcutManagerDispatcherTest {
     @After
     fun cleanup() {
         dispatcher.shutdown()
-        coroutineScope.cleanupTestCoroutines()
     }
 
     @Test
@@ -67,6 +65,7 @@ class GodToolsShortcutManagerDispatcherTest {
         assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         verifyNoInteractions(shortcutManager)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+        coroutineScope.runCurrent()
         verifyBlocking(shortcutManager) { updatePendingShortcuts() }
         verifyNoMoreInteractions(shortcutManager)
         clearInvocations(shortcutManager)
@@ -74,9 +73,11 @@ class GodToolsShortcutManagerDispatcherTest {
         // trigger multiple updates simultaneously, it should conflate to a single update
         assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(1)
+        coroutineScope.runCurrent()
         verifyNoInteractions(shortcutManager)
         assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+        coroutineScope.runCurrent()
         verifyBlocking(shortcutManager) { updatePendingShortcuts() }
         verifyNoMoreInteractions(shortcutManager)
         coroutineScope.advanceUntilIdle()
@@ -114,7 +115,7 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, Config.NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsAggregateMultiple() = runBlockingTest {
+    fun verifyUpdateExistingShortcutsAggregateMultiple() = runTest {
         dispatcher.updatePendingShortcutsActor.close()
         assertUpdateExistingShortcutsInitialUpdate()
 
@@ -148,9 +149,9 @@ class GodToolsShortcutManagerDispatcherTest {
 
     private fun assertUpdateExistingShortcutsInitialUpdate() {
         // ensure update shortcuts is initially delayed
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
+        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
         verifyNoInteractions(shortcutManager)
-        coroutineScope.advanceTimeBy(1)
+        coroutineScope.runCurrent()
         verifyBlocking(shortcutManager) { updateShortcuts() }
         coroutineScope.advanceUntilIdle()
         verifyNoMoreInteractions(shortcutManager)

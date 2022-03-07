@@ -48,9 +48,9 @@ import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
-import org.cru.godtools.base.tool.createTractActivityIntent
 import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createCyoaActivityIntent
+import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool

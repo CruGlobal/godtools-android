@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.and
+import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
@@ -140,15 +141,15 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Available Locales
     @OptIn(ExperimentalStdlibApi::class)
-    val availableLocales = activeLocale
-        .combineWith(primaryLocales, parallelLocales, loadingState) { activeLocale, primary, parallel, loaded ->
+    val availableLocales =
+        combine(activeLocale, primaryLocales, parallelLocales, loadingState) { active, primary, parallel, loaded ->
             buildList {
                 primary
                     .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                        it.firstOrNull { it == active && loaded[it] != LoadingState.OFFLINE }
                             ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
-                            ?: it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull { it == active }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }
@@ -156,9 +157,9 @@ open class MultiLanguageToolActivityDataModel @Inject constructor(
                     .filterNot { contains(it) }
                     .filterNot { loaded[it] == LoadingState.INVALID_TYPE || loaded[it] == LoadingState.NOT_FOUND }
                     .let {
-                        it.firstOrNull { it == activeLocale && loaded[it] != LoadingState.OFFLINE }
+                        it.firstOrNull { it == active && loaded[it] != LoadingState.OFFLINE }
                             ?: it.firstOrNull { loaded[it] == LoadingState.LOADED }
-                            ?: it.firstOrNull { it == activeLocale }
+                            ?: it.firstOrNull { it == active }
                             ?: it.firstOrNull()
                     }
                     ?.let { add(it) }

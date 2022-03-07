@@ -32,7 +32,7 @@ import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.ui.buildToolExtras
 
-fun Activity.startAemArticleActivity(toolCode: String?, language: Locale, articleUri: Uri) {
+fun Activity.startAemArticleActivity(toolCode: String, language: Locale, articleUri: Uri) {
     val extras = buildToolExtras(toolCode, language).apply {
         putParcelable(EXTRA_ARTICLE, articleUri)
     }
