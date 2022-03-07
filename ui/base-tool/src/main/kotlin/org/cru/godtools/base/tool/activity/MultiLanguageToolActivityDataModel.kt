@@ -17,6 +17,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -61,14 +62,13 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
 
     // region Resolved Data
-    val locales = primaryLocales.combineWith(parallelLocales) { primary, parallel -> primary + parallel }
     private val distinctToolCode = toolCode.distinctUntilChanged()
-    private val distinctLocales = locales.distinctUntilChanged()
+    val locales = combine(primaryLocales, parallelLocales) { prim, para -> prim + para }.distinctUntilChanged()
 
     val tool = distinctToolCode.asFlow().flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    val languages = distinctLocales.switchMap {
+    val languages = locales.switchMap {
         Query.select<Language>()
             .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*it.toTypedArray())))
             .getAsLiveData(dao)
@@ -76,7 +76,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     @VisibleForTesting
     internal val translations =
-        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
+        locales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
             distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
@@ -84,7 +84,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     @VisibleForTesting
     internal val manifests =
-        distinctLocales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
+        locales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
             distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
