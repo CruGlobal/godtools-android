@@ -136,7 +136,6 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Active Tool
 
     // region Available Locales
-    @OptIn(ExperimentalStdlibApi::class)
     val availableLocales =
         combine(activeLocale, primaryLocales, parallelLocales, loadingState) { active, primary, parallel, loaded ->
             buildList {
