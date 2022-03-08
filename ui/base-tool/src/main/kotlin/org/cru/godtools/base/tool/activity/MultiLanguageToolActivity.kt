@@ -8,10 +8,15 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -153,11 +158,13 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Tool sync
     override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished
-
-    override fun cacheTools() {
-        dataModel.toolCode.value?.let { tool ->
-            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-        }
+    override val toolsToDownload by lazy {
+        dataModel.toolCode.map { listOfNotNull(it) }
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
+    }
+    override val localesToDownload by lazy {
+        dataModel.locales.asFlow()
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
     // endregion Tool sync
 

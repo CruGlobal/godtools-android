@@ -7,8 +7,13 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import java.util.Locale
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -60,10 +65,15 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             }
         }
 
-    override fun cacheTools() {
-        val toolCode = dataModel.toolCode.value ?: return
-        val locale = dataModel.locale.value ?: return
-        downloadManager.downloadLatestPublishedTranslationAsync(toolCode, locale)
+    override val toolsToDownload by lazy {
+        dataModel.toolCode.asFlow()
+            .map { listOfNotNull(it) }
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
+    }
+    override val localesToDownload by lazy {
+        dataModel.locale.asFlow()
+            .map { listOfNotNull(it) }
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress

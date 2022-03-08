@@ -13,14 +13,19 @@ import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.Ordered
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -63,6 +68,9 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     internal lateinit var dao: GodToolsDao
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
+    @Inject
+    @Named(IS_CONNECTED_LIVE_DATA)
+    internal lateinit var isConnected: LiveData<Boolean>
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +83,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
             return
         }
 
-        isConnected.observe(this) { if (it) syncTools() }
+        setupToolSync()
         setupStatusBar()
         setupFeatureDiscovery()
         eventBus.register(this, this)
@@ -252,22 +260,33 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // region Tool sync/download logic
     @Inject
     internal lateinit var toolSyncTasks: ToolSyncTasks
-    @Inject
-    @Named(IS_CONNECTED_LIVE_DATA)
-    internal lateinit var isConnected: LiveData<Boolean>
     protected open val isInitialSyncFinished = MutableLiveData<Boolean>()
 
-    private fun syncTools() = lifecycleScope.launch(Dispatchers.Main.immediate) {
-        cacheTools()
+    protected abstract val toolsToDownload: StateFlow<List<String>>
+    protected abstract val localesToDownload: StateFlow<List<Locale>>
+
+    private fun setupToolSync() {
+        combine(toolsToDownload, localesToDownload) { tools, locales -> Pair(tools, locales) }
+            .flowWithLifecycle(lifecycle)
+            .onEach { downloadTranslations(it.first, it.second) }
+            .launchIn(lifecycleScope)
+
+        isConnected.observe(this) { if (it) syncTools() }
+    }
+
+    private fun syncTools() = lifecycleScope.launch {
         try {
             toolSyncTasks.syncTools(Bundle.EMPTY)
             isInitialSyncFinished.value = true
         } catch (ignored: IOException) {
         }
-        cacheTools()
+        downloadTranslations()
     }
 
-    protected abstract fun cacheTools()
+    private fun downloadTranslations(
+        tools: List<String> = toolsToDownload.value,
+        locales: List<Locale> = localesToDownload.value
+    ) = tools.forEach { t -> locales.forEach { l -> downloadManager.downloadLatestPublishedTranslationAsync(t, l) } }
     // endregion Tool sync/download logic
 
     // region Content Event Logic
