@@ -293,11 +293,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         ) : this(manager, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
         // region Events
-        init {
-            // register event listeners
-            eventBus.register(this)
-        }
-
         @AnyThread
         @Subscribe
         fun onToolUpdate(event: ToolUpdateEvent) {
@@ -352,6 +347,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
 
         init {
+            // register event listeners
+            eventBus.register(this)
+
             // launch an initial update
             updateShortcutsActor.trySend(Unit)
         }
