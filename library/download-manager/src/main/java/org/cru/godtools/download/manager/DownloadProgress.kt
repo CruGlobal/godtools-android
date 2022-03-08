@@ -8,7 +8,7 @@ class DownloadProgress(progress: Long, max: Long) {
     }
 
     val max = max.toInt().coerceAtLeast(0)
-    val progress: Int = progress.toInt().coerceAtLeast(0).coerceAtMost(this.max)
+    val progress = progress.toInt().coerceAtLeast(0).coerceAtMost(this.max)
 
     val isIndeterminate get() = max == INDETERMINATE_VAL.toInt()
 
