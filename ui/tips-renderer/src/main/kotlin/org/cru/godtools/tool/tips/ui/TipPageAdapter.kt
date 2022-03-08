@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.state.State
 import org.cru.godtools.tool.tips.databinding.ToolTipPageBinding
