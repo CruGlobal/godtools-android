@@ -148,8 +148,10 @@ class TractActivity :
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
-        val data = intent?.data
-        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
+        if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
+            if (intent?.action != Intent.ACTION_VIEW) return
+            val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return
+
             dataModel.toolCode.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
