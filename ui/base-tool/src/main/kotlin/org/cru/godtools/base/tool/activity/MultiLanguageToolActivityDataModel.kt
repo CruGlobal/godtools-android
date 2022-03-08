@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -17,7 +16,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +24,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
@@ -57,15 +56,15 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
 ) : ViewModel() {
-    val toolCode by savedState.livedata<String?>(EXTRA_TOOL, null)
-    val primaryLocales = MutableLiveData<List<Locale>>(emptyList())
-    val parallelLocales = MutableLiveData<List<Locale>>(emptyList())
+    val toolCode = savedState.getStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
+    val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
+    val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
     // region Resolved Data
-    private val distinctToolCode = toolCode.distinctUntilChanged()
+    private val distinctToolCode = savedState.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged()
     val locales = combine(primaryLocales, parallelLocales) { prim, para -> prim + para }.distinctUntilChanged()
 
-    val tool = distinctToolCode.asFlow().flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
+    val tool = toolCode.flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val languages = locales.switchMap {
