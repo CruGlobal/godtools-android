@@ -109,7 +109,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
                 isSyncFinished = syncFinished
             )
         }
-    }
+    }.distinctUntilChanged()
     // endregion Loading State
 
     // region Active Tool
@@ -160,7 +160,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
                     }
                     ?.let { add(it) }
             }
-        }
+        }.distinctUntilChanged()
     val visibleLocales = availableLocales.combineWith(loadingState) { locales, loadingState ->
         locales.filter { loadingState[it] == LoadingState.LOADED }
     }

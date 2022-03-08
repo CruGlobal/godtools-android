@@ -177,29 +177,21 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
             if (dataModel.activeLocale.value == null) dataModel.activeLocale.value = it
         }
 
-        dataModel.availableLocales.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
-        }
-        dataModel.activeLoadingState.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
-        }
-        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
-    }
-
-    private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
-        availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
-    ) {
-        when (activeLoadingState) {
-            // update the active language if the current active language is not found, invalid, or offline
-            LoadingState.NOT_FOUND,
-            LoadingState.INVALID_TYPE,
-            LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                    loadingState[it] != LoadingState.OFFLINE
-            }?.let { dataModel.activeLocale.value = it }
-            else -> Unit
+        observe(
+            dataModel.activeLoadingState,
+            dataModel.availableLocales,
+            dataModel.loadingState
+        ) { activeLoadingState, availableLocales, loadingState ->
+            when (activeLoadingState) {
+                // update the active language if the current active language is not found, invalid, or offline
+                LoadingState.NOT_FOUND,
+                LoadingState.INVALID_TYPE,
+                LoadingState.OFFLINE -> availableLocales.firstOrNull {
+                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                        loadingState[it] != LoadingState.OFFLINE
+                }?.let { dataModel.activeLocale.value = it }
+                else -> Unit
+            }
         }
     }
     // endregion Active Translation management
