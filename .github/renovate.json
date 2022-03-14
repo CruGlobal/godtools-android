@@ -13,8 +13,18 @@
     },
     {
       "matchManagers": [ "gradle" ],
+      "matchPackagePrefixes": [ "com.google.firebase:firebase-appdistribution" ],
+      "groupName": "firebase-appdistribution"
+    },
+    {
+      "matchManagers": [ "gradle" ],
       "matchPackagePrefixes": [ "com.google.firebase:firebase-crashlytics" ],
       "groupName": "firebase-crashlytics"
+    },
+    {
+      "matchManagers": [ "gradle" ],
+      "matchPackagePrefixes": [ "com.google.firebase:firebase-inappmessaging" ],
+      "groupName": "firebase-inappmessaging"
     },
     {
       "matchManagers": [ "gradle" ],
