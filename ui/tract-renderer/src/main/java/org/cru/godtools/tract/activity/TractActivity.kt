@@ -148,14 +148,16 @@ class TractActivity :
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
-        val data = intent?.data
-        if (intent?.action == Intent.ACTION_VIEW && data?.isTractDeepLink() == true) {
+        if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
+            if (intent?.action != Intent.ACTION_VIEW) return
+            val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return
+
             dataModel.toolCode.value = data.deepLinkTool
             val (primary, parallel) = data.deepLinkLanguages
             dataModel.primaryLocales.value = primary
             dataModel.parallelLocales.value = parallel
             if (savedInstanceState == null) {
-                dataModel.setActiveLocale(data.deepLinkSelectedLanguage)
+                dataModel.activeLocale.value = data.deepLinkSelectedLanguage
                 data.deepLinkPage?.let { initialPage = it }
             }
         }
@@ -377,7 +379,7 @@ class TractActivity :
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
             dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-            dataModel.setActiveLocale(it)
+            dataModel.activeLocale.value = it
         }
         event.page?.let { goToPage(it) }
         eventBus.post(event)

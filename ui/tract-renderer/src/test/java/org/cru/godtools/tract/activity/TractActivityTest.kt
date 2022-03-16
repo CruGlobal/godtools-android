@@ -126,11 +126,78 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Valid deeplink`() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://knowgod.com/en/test"))
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")
+        )
         ActivityScenario.launch<TractActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
+                assertEquals(Locale.FRENCH, it.dataModel.activeLocale.value)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Preserve tool and language changes - Direct`() {
+        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)
+        ActivityScenario.launch<TractActivity>(intent).use {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(Locale.FRENCH, it.dataModel.parallelLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+
+            // update tool & languages
+            it.onActivity {
+                it.dataModel.toolCode.value = "other"
+                it.dataModel.primaryLocales.value = listOf(Locale.GERMAN)
+                it.dataModel.parallelLocales.value = listOf(Locale.CHINESE)
+            }
+
+            // recreate activity, which should keep previously set tool and locales
+            it.recreate()
+            it.onActivity {
+                assertEquals("other", it.dataModel.toolCode.value)
+                assertEquals(Locale.GERMAN, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(Locale.CHINESE, it.dataModel.parallelLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Preserve tool and language changes - Deeplink`() {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")
+        )
+        ActivityScenario.launch<TractActivity>(intent).use {
+            // initially parse deep link
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
+                assertFalse(it.isFinishing)
+            }
+
+            // update tool & languages
+            it.onActivity {
+                it.dataModel.toolCode.value = "other"
+                it.dataModel.primaryLocales.value = listOf(Locale.GERMAN)
+                it.dataModel.parallelLocales.value = listOf(Locale.CHINESE)
+            }
+
+            // recreate activity, which should keep previously set tool and locales
+            it.recreate()
+            it.onActivity {
+                assertEquals("other", it.dataModel.toolCode.value)
+                assertEquals(Locale.GERMAN, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(Locale.CHINESE, it.dataModel.parallelLocales.value!!.single())
                 assertFalse(it.isFinishing)
             }
         }

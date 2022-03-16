@@ -8,17 +8,21 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
-import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
@@ -75,8 +79,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Intent Processing
     override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
-        intent?.extras?.let { extras ->
-            dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
+        if (dataModel.primaryLocales.value.isNullOrEmpty()) {
+            val extras = intent?.extras ?: return
             val locales = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
             dataModel.primaryLocales.value = locales.take(1)
             dataModel.parallelLocales.value = locales.drop(1)
@@ -106,7 +110,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
                 if (languageToggleController.isUpdatingTabs) return
                 val locale = tab.tag as? Locale ?: return
                 eventBus.post(ToggleLanguageAnalyticsActionEvent(dataModel.toolCode.value, locale))
-                dataModel.setActiveLocale(locale)
+                dataModel.activeLocale.value = locale
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) = Unit
@@ -155,11 +159,13 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Tool sync
     override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished
-
-    override fun cacheTools() {
-        dataModel.toolCode.value?.let { tool ->
-            dataModel.locales.value?.forEach { downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
-        }
+    override val toolsToDownload by lazy {
+        dataModel.toolCode.map { listOfNotNull(it) }
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
+    }
+    override val localesToDownload by lazy {
+        dataModel.locales.asFlow()
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
     // endregion Tool sync
 
@@ -169,32 +175,24 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     private fun setupActiveTranslationManagement() {
         dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
-            if (dataModel.activeLocale.value == null) dataModel.setActiveLocale(it)
+            if (dataModel.activeLocale.value == null) dataModel.activeLocale.value = it
         }
 
-        dataModel.availableLocales.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(availableLocales = it)
-        }
-        dataModel.activeLoadingState.observe(this) {
-            updateActiveLocaleToAvailableLocaleIfNecessary(activeLoadingState = it)
-        }
-        dataModel.loadingState.observe(this) { updateActiveLocaleToAvailableLocaleIfNecessary(loadingState = it) }
-    }
-
-    private fun updateActiveLocaleToAvailableLocaleIfNecessary(
-        activeLoadingState: LoadingState? = dataModel.activeLoadingState.value,
-        availableLocales: List<Locale> = dataModel.availableLocales.value.orEmpty(),
-        loadingState: Map<Locale, LoadingState> = dataModel.loadingState.value.orEmpty()
-    ) {
-        when (activeLoadingState) {
-            // update the active language if the current active language is not found, invalid, or offline
-            LoadingState.NOT_FOUND,
-            LoadingState.INVALID_TYPE,
-            LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                    loadingState[it] != LoadingState.OFFLINE
-            }?.let { dataModel.setActiveLocale(it) }
-            else -> Unit
+        observe(
+            dataModel.activeLoadingState,
+            dataModel.availableLocales,
+            dataModel.loadingState
+        ) { activeLoadingState, availableLocales, loadingState ->
+            when (activeLoadingState) {
+                // update the active language if the current active language is not found, invalid, or offline
+                LoadingState.NOT_FOUND,
+                LoadingState.INVALID_TYPE,
+                LoadingState.OFFLINE -> availableLocales.firstOrNull {
+                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                        loadingState[it] != LoadingState.OFFLINE
+                }?.let { dataModel.activeLocale.value = it }
+                else -> Unit
+            }
         }
     }
     // endregion Active Translation management
