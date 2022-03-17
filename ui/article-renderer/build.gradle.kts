@@ -22,9 +22,9 @@ dependencies {
 
     implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.picasso)
-    implementation(libs.gtoSupport.recyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.dagger)

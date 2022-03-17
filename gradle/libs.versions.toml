@@ -108,7 +108,6 @@ gtoSupport-napier = { module = "org.ccci.gto.android:gto-support-napier", versio
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-okta = { module = "org.ccci.gto.android:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
-gtoSupport-recyclerview = { module = "org.ccci.gto.android:gto-support-recyclerview", version.ref = "gtoSupport" }
 gtoSupport-recyclerview-advrecyclerview = { module = "org.ccci.gto.android:gto-support-recyclerview-advrecyclerview", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }

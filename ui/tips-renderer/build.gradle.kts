@@ -16,10 +16,10 @@ dependencies {
 
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.androidx.viewpager2)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.materialComponents)
-    implementation(libs.gtoSupport.recyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.godtoolsMpp.parser)

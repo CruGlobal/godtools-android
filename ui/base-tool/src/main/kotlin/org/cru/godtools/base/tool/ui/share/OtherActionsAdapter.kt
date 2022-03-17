@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 

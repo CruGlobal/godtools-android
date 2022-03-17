@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
-import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration
+import org.ccci.gto.android.common.androidx.recyclerview.decorator.MarginItemDecoration
 import org.cru.godtools.article.R
 import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
@@ -43,7 +43,9 @@ class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, C
     private fun ArticleCategoriesFragmentBinding.setupCategoriesView() {
         categories.apply {
             setHasFixedSize(true)
-            addItemDecoration(VerticalSpaceItemDecoration(R.dimen.categories_list_gap))
+            addItemDecoration(
+                MarginItemDecoration(bottomMargin = resources.getDimensionPixelSize(R.dimen.categories_list_gap))
+            )
             adapter = CategoriesAdapter(viewLifecycleOwner).apply {
                 callbacks.set(this@CategoriesFragment)
                 toolDataModel.manifest.map { it?.categories }.observe(viewLifecycleOwner, this)

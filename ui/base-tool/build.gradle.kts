@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.constraintlayout)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.animation)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
@@ -49,7 +50,6 @@ dependencies {
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
-    implementation(libs.gtoSupport.recyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.godtoolsMpp.parser)

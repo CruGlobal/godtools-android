@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
-import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.tool.lesson.ui.controller.LessonPageController
