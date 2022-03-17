@@ -118,7 +118,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val manifest = manifestCache.get(tool, l)
         val translation = translationCache.get(tool, l)
-        manifest.combineWith(translation, supportedType, isConnected, isInitialSyncFinished) { m, t, type, c, s ->
+        combine(manifest, translation, supportedType, isConnected, isInitialSyncFinished) { m, t, type, c, s ->
             LoadingState.determineToolState(m, t, type, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
@@ -136,7 +136,6 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Active Tool
 
     // region Available Locales
-    @OptIn(ExperimentalStdlibApi::class)
     val availableLocales =
         combine(activeLocale, primaryLocales, parallelLocales, loadingState) { active, primary, parallel, loaded ->
             buildList {

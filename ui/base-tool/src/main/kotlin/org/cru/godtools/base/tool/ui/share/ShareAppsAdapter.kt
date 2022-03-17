@@ -30,4 +30,8 @@ internal class ShareAppsAdapter(private val items: List<ResolveInfo>, private va
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         binding.setVariable(BR.info, items.getOrNull(position))
     }
+
+    override fun onViewDataBindingRecycled(binding: ViewDataBinding) {
+        binding.setVariable(BR.info, null)
+    }
 }

@@ -17,7 +17,7 @@ import java.util.Locale
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
@@ -96,7 +96,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     override val activeDownloadProgressLiveData get() = dataModel.activeToolDownloadProgress
 
     private fun setupActionBarTitle() {
-        dataModel.activeLocale.combineWith(dataModel.visibleLocales) { active, locales ->
+        combine(dataModel.visibleLocales, dataModel.activeLocale) { locales, active ->
             locales.isEmpty() || (locales.size < 2 && locales.contains(active))
         }.observe(this) { supportActionBar?.setDisplayShowTitleEnabled(it) }
     }
