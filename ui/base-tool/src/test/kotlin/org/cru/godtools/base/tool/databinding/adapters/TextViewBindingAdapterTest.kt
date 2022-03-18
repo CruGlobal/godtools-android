@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import android.app.Activity
 import android.graphics.Color
@@ -27,7 +27,7 @@ import org.robolectric.android.controller.ActivityController
 import splitties.bitflags.hasFlag
 
 @RunWith(AndroidJUnit4::class)
-class TextViewAdaptersTest {
+class TextViewBindingAdapterTest {
     private lateinit var activityController: ActivityController<Activity>
     private lateinit var activity: Activity
     private lateinit var view: TextView

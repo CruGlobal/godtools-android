@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.databinding.BindingAdapter

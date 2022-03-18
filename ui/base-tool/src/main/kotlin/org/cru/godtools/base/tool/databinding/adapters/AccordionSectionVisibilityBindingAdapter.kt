@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import android.view.View
 import androidx.databinding.BindingAdapter
@@ -9,7 +9,7 @@ import org.ccci.gto.android.common.animation.HeightAndAlphaVisibilityAnimator
 private const val VISIBLE_IF = "accordionSectionVisibleIf"
 
 @BindingAdapter(VISIBLE_IF)
-fun View.animatedVisibleIf(visible: Boolean) {
+internal fun View.animatedVisibleIf(visible: Boolean) {
     val animator = HeightAndAlphaVisibilityAnimator.of(this, isVisible = visible) {
         interpolator = FastOutSlowInInterpolator()
         visibleIf(visible)

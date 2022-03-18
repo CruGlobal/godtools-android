@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.databinding
+package org.cru.godtools.tract.databinding.adapters
 
 import android.text.InputType
 import android.widget.TextView

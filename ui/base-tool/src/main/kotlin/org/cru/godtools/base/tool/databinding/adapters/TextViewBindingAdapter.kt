@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -24,7 +24,7 @@ import splitties.bitflags.minusFlag
 import splitties.bitflags.withFlag
 
 @BindingAdapter("android:text", "android:textSize", requireAll = false)
-fun TextView.bindTextNode(text: Text?, textSize: Float?) {
+internal fun TextView.bindTextNode(text: Text?, textSize: Float?) {
     this.text = text?.text
     setTypeface(text?.manifest?.getTypeface(context), text?.typefaceStyle ?: Typeface.NORMAL)
     paintFlags = paintFlags.let {
@@ -41,7 +41,7 @@ fun TextView.bindTextNode(text: Text?, textSize: Float?) {
 }
 
 @BindingAdapter("android:drawableStart", "drawableStartSize")
-fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: Int) {
+internal fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: Int) {
     val target = TextViewDrawableStartTarget.of(this)
     val file = resource?.getFileBlocking(context.toolFileSystem)
     val imageSize = dpToPixelSize(drawableStartSize, resources)
@@ -57,7 +57,7 @@ fun TextView.bindDrawableStartResource(resource: Resource?, drawableStartSize: I
 }
 
 @BindingAdapter("android:drawableEnd", "drawableEndSize")
-fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) {
+internal fun TextView.bindDrawableEndResource(resource: Resource?, drawableEndSize: Int) {
     val target = TextViewDrawableEndTarget.of(this)
     val file = resource?.getFileBlocking(context.toolFileSystem)
     val imageSize = dpToPixelSize(drawableEndSize, resources)
