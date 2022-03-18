@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Share</string>
-    <string name="share_tool_title">Share “%1$s” using</string>
     <string name="share_tool_message_article">I wanted to share this article with you and would like to hear your thoughts about it.\n%1$s</string>
 
     <string name="tool_not_found">The tool you requested cannot be found</string>

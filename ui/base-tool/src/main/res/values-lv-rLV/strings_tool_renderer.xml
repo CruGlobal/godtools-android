@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Dalies</string>
-    <string name="share_tool_title">Dalies ar “%1$s”, izmantojot</string>
     <string name="share_tool_message_article">Izlasīju šo rakstu un iedomājos par tevi. Labprāt dzirdētu tavas domas par to.\n\n%1$s</string>
     <string name="tool_not_found">Pieprasīto rīku neizdevās atrast</string>
     <string name="tool_loading">Tavs pieprasītais rīks tiek ielādēts…</string>

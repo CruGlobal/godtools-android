@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">شارك</string>
-    <string name="share_tool_title">شارك \"%1$s\" باستعمال</string>
     <string name="tool_not_found">لا يمكن إيجاد الأداة التي طلبتها</string>
     <string name="tool_loading">جاري تحميل الأداة التي طلبتها…</string>
     <string name="tool_offline">الأداة التي طلبتها تستلزم فتح الاتصال بالإنترنت</string>

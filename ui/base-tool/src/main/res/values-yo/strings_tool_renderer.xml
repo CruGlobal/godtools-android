@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Se ajopin</string>
-    <string name="share_tool_title">Se ajopin “%1$s” nipa lilo</string>
     <string name="share_tool_message_article">Mo fẹ lati se ajopin akosile yii pẹlu rẹ, a si wu milati gbọ awọn ero rẹ nipa rẹ.\n% 1 $ s</string>
     <string name="tool_not_found">Ako ri ohun elo ti o beere</string>
     <string name="tool_loading">Ohun elo ti o beere fun  n korajọpọ…</string>

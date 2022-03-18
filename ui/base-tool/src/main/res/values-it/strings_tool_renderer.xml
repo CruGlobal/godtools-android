@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Condividi</string>
-    <string name="share_tool_title">Condividi “%1$s” usando</string>
     <string name="tool_not_found">Non è stato possibile trovare lo strumento che hai richiesto</string>
     <string name="tool_loading">Caricamento dello strumento richiesto in corso…</string>
     <string name="tool_offline">Per aprire lo strumento da te richiesto, è necessaria una connessione internet</string>

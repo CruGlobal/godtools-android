@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Chia sẻ</string>
-    <string name="share_tool_title">Chia sẻ công cụ “%1$s”</string>
     <string name="share_tool_message_article">Tôi muốn chia sẻ bài viết này với bạn và cũng muốn nghe suy nghĩ của bạn sau khi đọc.\n%1$s</string>
     <string name="tool_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
     <string name="tool_loading">Công cụ bạn yêu cầu đang được tải...</string>

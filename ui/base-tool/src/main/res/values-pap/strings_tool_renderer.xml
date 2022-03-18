@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Kompartí</string>
-    <string name="share_tool_title">Kompartí “%1$s” uzando</string>
     <string name="share_tool_message_article">Mi ke a kompartí e artíkulo aki ku bo i lo mi ke tende ki bo ta pensa di dje.\n\n%1$s</string>
     <string name="tool_not_found">No por haña e hèrmènt ku bo ta buska</string>
     <string name="tool_loading">E hèrmènt ku bo a pidi ta kargando...</string>

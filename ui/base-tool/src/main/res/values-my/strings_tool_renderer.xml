@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">ဝေငှ ပါ</string>
-    <string name="share_tool_title">%1$sကိုအသုံးပြု၍ ဝေငှပါ။</string>
     <string name="tool_not_found">ရှာဖွေသော tool  ကိုရှာ၍ မရပါ။</string>
     <string name="tool_loading">သင်တောင်းဆိုထားသော tool သည် လုတ်ဒင်း ဖြစ်လျက်ရှိသည်။</string>
     <string name="tool_offline">သင်တောင်းဆိုသောကိရိယာကိုအသုံးပြုဖို့အတွက် အင်တာနက်ဖွင့်ရန်လိုအပ်ပါသည်</string>

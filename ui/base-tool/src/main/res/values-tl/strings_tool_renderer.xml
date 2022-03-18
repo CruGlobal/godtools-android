@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Ibahagi</string>
-    <string name="share_tool_title">Ibahagi ang “%1$s” gamit ang</string>
     <string name="tool_not_found">Hindi mahanap ang tool na hiniling mo</string>
     <string name="tool_loading">Naglo-load ang hiniling mong tool…</string>
     <string name="tool_offline">Ang ni-request mong tool ay kailangan ng koneksyon sa internet para magbukas</string>
