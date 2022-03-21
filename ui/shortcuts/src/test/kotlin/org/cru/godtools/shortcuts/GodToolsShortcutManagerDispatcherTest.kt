@@ -30,6 +30,8 @@ import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.Config.NEWEST_SDK
+import org.robolectric.annotation.Config.OLDEST_SDK
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -93,7 +95,7 @@ class GodToolsShortcutManagerDispatcherTest {
 
     // region updateShortcutsActor
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, Config.NEWEST_SDK])
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnPrimaryLanguageUpdate() {
         dispatcher.updatePendingShortcutsActor.close()
         assertUpdateExistingShortcutsInitialUpdate()
@@ -107,7 +109,7 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, Config.NEWEST_SDK])
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnParallelLanguageUpdate() {
         dispatcher.updatePendingShortcutsActor.close()
         assertUpdateExistingShortcutsInitialUpdate()
@@ -121,7 +123,7 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, Config.NEWEST_SDK])
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsAggregateMultiple() = runTest {
         dispatcher.updatePendingShortcutsActor.close()
         assertUpdateExistingShortcutsInitialUpdate()
@@ -143,7 +145,7 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Config.OLDEST_SDK, Build.VERSION_CODES.N])
+    @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
     fun verifyUpdateExistingShortcutsNotAvailableForOldSdks() {
         coroutineScope.advanceUntilIdle()
         assertTrue(
