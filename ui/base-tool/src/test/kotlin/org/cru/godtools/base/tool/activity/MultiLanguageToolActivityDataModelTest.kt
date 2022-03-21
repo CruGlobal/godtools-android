@@ -4,16 +4,23 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
+import io.mockk.every
+import io.mockk.excludeRecords
+import io.mockk.mockk
+import io.mockk.verifyAll
+import io.mockk.verifySequence
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import org.ccci.gto.android.common.db.findAsFlow
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tool.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,15 +37,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.nullableArgumentCaptor
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 
 private const val TOOL = "kgp"
 
@@ -49,31 +47,28 @@ class MultiLanguageToolActivityDataModelTest {
 
     // region Objects & Mocks
     private lateinit var dao: GodToolsDao
-    private lateinit var downloadManager: GodToolsDownloadManager
     private lateinit var manifestManager: ManifestManager
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
 
-    private lateinit var observer: Observer<Any?>
-
     @Before
     fun setupDataModel() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        dao = mock()
-        downloadManager = mock()
-        manifestManager = mock()
+        dao = mockk {
+            every { findAsFlow<Tool>(any<String>()) } returns emptyFlow()
+            every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
+        }
+        manifestManager = mockk {
+            every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
+        }
         dataModel = MultiLanguageToolActivityDataModel(
             dao,
-            downloadManager,
+            mockk(),
             manifestManager,
             isConnnected,
             SavedStateHandle()
         )
-    }
-
-    @Before
-    fun setupObserver() {
-        observer = mock()
+        excludeRecords { dao.findAsFlow<Tool>(any<String>()) }
     }
 
     @After
@@ -81,10 +76,10 @@ class MultiLanguageToolActivityDataModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun wheneverGetManifest(tool: String, locale: Locale) =
-        whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))
-    private fun wheneverGetTranslation(tool: String, locale: Locale) =
-        whenever(dao.getLatestTranslationLiveData(tool, locale, trackAccess = true))
+    private fun everyGetManifest(tool: String, locale: Locale) =
+        every { manifestManager.getLatestPublishedManifestLiveData(tool, locale) }
+    private fun everyGetTranslation(tool: String, locale: Locale) =
+        every { dao.getLatestTranslationLiveData(tool, locale, trackAccess = true) }
     // endregion Objects & Mocks
 
     // region Resolved Data
@@ -92,163 +87,185 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property translations`() {
         val translation = Translation()
-        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        wheneverGetTranslation(TOOL, Locale.CHINESE).thenReturn(MutableLiveData(translation))
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData()
+        everyGetTranslation(TOOL, Locale.CHINESE) returns MutableLiveData(translation)
+        val observer = mockk<Observer<Map<Locale, Translation?>>>(relaxUnitFun = true)
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
 
         dataModel.translations.observeForever(observer)
-        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
-        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
-        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.CHINESE), any(), any(), any())
-        argumentCaptor<Map<Locale, Translation?>> {
-            verify(observer).onChanged(capture())
-            assertThat(
-                lastValue,
-                allOf(
-                    aMapWithSize(3),
-                    hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Translation?>(Locale.FRENCH, null),
-                    hasEntry(Locale.CHINESE, translation)
-                )
+        verifyAll {
+            dao.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
+            dao.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
+            dao.getLatestTranslationLiveData(TOOL, Locale.CHINESE, trackAccess = true)
+            observer.onChanged(
+                withArg {
+                    assertThat(
+                        it,
+                        allOf(
+                            aMapWithSize(3),
+                            hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
+                            hasEntry<Locale, Translation?>(Locale.FRENCH, null),
+                            hasEntry(Locale.CHINESE, translation)
+                        )
+                    )
+                }
             )
         }
     }
 
     @Test
     fun `Property translations - No Locales`() {
+        val observer = mockk<Observer<Map<Locale, Translation?>>>(relaxUnitFun = true)
         dataModel.translations.observeForever(observer)
         assertThat(dataModel.translations.value, anEmptyMap())
         dataModel.toolCode.value = TOOL
         assertThat(dataModel.translations.value, anEmptyMap())
-        verify(observer).onChanged(eq(emptyMap<Locale, Translation?>()))
+        verifyAll { observer.onChanged(eq(emptyMap())) }
     }
 
     @Test
     fun `Property translations - Update Translation`() {
         val french = MutableLiveData<Translation?>(null)
-        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(french)
+        val translations = mutableListOf<Map<Locale, Translation?>>()
+        val observer = mockk<Observer<Map<Locale, Translation?>>> {
+            every { onChanged(capture(translations)) } returns Unit
+        }
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetTranslation(TOOL, Locale.FRENCH) returns french
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.translations.observeForever(observer)
         french.value = Translation()
-        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.ENGLISH), any(), any(), any())
-        verify(dao).getLatestTranslationLiveData(any(), eq(Locale.FRENCH), any(), any(), any())
-        argumentCaptor<Map<Locale, Translation?>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(
-                firstValue,
+        verifyAll {
+            dao.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
+            dao.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
+            repeat(2) { observer.onChanged(any()) }
+        }
+        assertThat(
+            translations,
+            contains(
                 allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Translation?>(Locale.FRENCH, null)
-                )
-            )
-            assertThat(
-                lastValue,
+                ),
                 allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Translation?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Translation?>(Locale.FRENCH, french.value)
                 )
             )
-        }
+        )
     }
     // endregion Property: translations
 
     // region Property: manifests
     @Test
     fun `Property manifests`() {
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        val observer = mockk<Observer<Map<Locale, Manifest?>>>(relaxUnitFun = true)
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData()
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer).onChanged(capture())
-            assertThat(
-                lastValue,
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
-                )
+        verifyAll {
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.FRENCH)
+            observer.onChanged(
+                withArg {
+                    assertThat(
+                        it,
+                        allOf(
+                            aMapWithSize(2),
+                            hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                            hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
+                        )
+                    )
+                }
             )
         }
     }
 
     @Test
     fun `Property manifests - No Locales`() {
+        val observer = mockk<Observer<Map<Locale, Manifest?>>>(relaxUnitFun = true)
         dataModel.manifests.observeForever(observer)
         assertThat(dataModel.manifests.value, anEmptyMap())
         dataModel.toolCode.value = TOOL
         assertThat(dataModel.manifests.value, anEmptyMap())
-        verify(observer).onChanged(eq(emptyMap<Locale, Manifest?>()))
+        verifyAll { observer.onChanged(emptyMap()) }
     }
 
     @Test
     fun `Property manifests - Update Locales`() {
         val french = MutableLiveData(Manifest())
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
+        val manifests = mutableListOf<Map<Locale, Manifest?>>()
+        val observer = mockk<Observer<Map<Locale, Manifest?>>> {
+            every { onChanged(capture(manifests)) } returns Unit
+        }
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns french
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
         dataModel.primaryLocales.value = listOf(Locale.FRENCH)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(
-                firstValue,
+        verifyAll {
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.FRENCH)
+            repeat(2) { observer.onChanged(any()) }
+        }
+        assertThat(
+            manifests,
+            contains(
                 allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-                )
+                ),
+                allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value))
             )
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)))
-        }
+        )
     }
 
     @Test
     fun `Property manifests - Update Manifest`() {
         val french = MutableLiveData<Manifest?>()
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(french)
+        val manifests = mutableListOf<Map<Locale, Manifest?>>()
+        val observer = mockk<Observer<Map<Locale, Manifest?>>> {
+            every { onChanged(capture(manifests)) } returns Unit
+        }
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns french
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
         dataModel.manifests.observeForever(observer)
-        french.value = Manifest()
 
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        argumentCaptor<Map<Locale, Manifest?>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(
-                firstValue,
+        french.value = Manifest()
+        verifyAll {
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.FRENCH)
+            repeat(2) { observer.onChanged(any()) }
+        }
+        assertThat(
+            manifests,
+            contains(
                 allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Manifest?>(Locale.FRENCH, null)
-                )
-            )
-            assertThat(
-                lastValue,
+                ),
                 allOf(
                     aMapWithSize(2),
                     hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
                     hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
                 )
             )
-        }
+        )
     }
     // endregion Property: manifests
     // endregion Resolved Data
@@ -256,12 +273,15 @@ class MultiLanguageToolActivityDataModelTest {
     // region Property: loadingState
     @Test
     fun `Property loadingState - Update Translation`() {
+        val state = mutableListOf<Map<Locale, LoadingState>>()
+        val observer = mockk<Observer<Map<Locale, LoadingState>>> {
+            every { onChanged(capture(state)) } returns Unit
+        }
         val translation = MutableLiveData<Translation?>(null)
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns translation
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
-        wheneverGetManifest(any(), any()).thenReturn(emptyLiveData())
-        wheneverGetTranslation(TOOL, Locale.ENGLISH).thenReturn(translation)
         dataModel.isInitialSyncFinished.value = true
 
         dataModel.loadingState.observeForever(observer)
@@ -271,11 +291,14 @@ class MultiLanguageToolActivityDataModelTest {
         )
         translation.value = Translation()
         assertThat(dataModel.loadingState.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
-        argumentCaptor<Map<Locale, LoadingState>> {
-            verify(observer, times(2)).onChanged(capture())
-            assertThat(firstValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND)))
-            assertThat(lastValue, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
-        }
+        verifyAll { repeat(2) { observer.onChanged(any()) } }
+        assertThat(
+            state,
+            contains(
+                allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND)),
+                allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING))
+            )
+        )
     }
     // endregion Property: loadingState
 
@@ -292,20 +315,25 @@ class MultiLanguageToolActivityDataModelTest {
     // region Property: activeManifest
     @Test
     fun `Property activeManifest - Change Active Locale`() {
-        wheneverGetManifest(TOOL, Locale.ENGLISH).thenReturn(emptyLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
+        val frenchManifest = Manifest(type = Manifest.Type.TRACT)
+        val observer = mockk<Observer<Manifest?>>(relaxUnitFun = true)
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(frenchManifest)
         dataModel.toolCode.value = TOOL
-        dataModel.supportedType.value = null
+        dataModel.supportedType.value = Manifest.Type.TRACT
         dataModel.activeLocale.value = Locale.ENGLISH
 
         dataModel.activeManifest.observeForever(observer)
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager, never()).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
+        verifySequence {
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
+            observer.onChanged(null)
+        }
         dataModel.activeLocale.value = Locale.FRENCH
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.ENGLISH))
-        verify(manifestManager).getLatestPublishedManifestLiveData(any(), eq(Locale.FRENCH))
-        nullableArgumentCaptor<Manifest> {
-            verify(observer, times(2)).onChanged(capture())
+        verifySequence {
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
+            observer.onChanged(null)
+            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.FRENCH)
+            observer.onChanged(frenchManifest)
         }
     }
     // endregion Property: activeManifest
@@ -315,15 +343,15 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Downloaded`() {
         // setup test
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
-        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
-        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest())
+        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.FRENCH
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
-        dataModel.visibleLocales.observeForever(observer)
+        dataModel.visibleLocales.observeForever(mockk(relaxUnitFun = true))
 
         // run logic and verify results
         assertThat(
@@ -335,15 +363,15 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Loading, Active Second Primary Downloaded`() {
         // setup test
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
-        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData())
-        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Manifest()))
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData(Manifest())
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.FRENCH
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
-        dataModel.visibleLocales.observeForever(observer)
+        dataModel.visibleLocales.observeForever(mockk(relaxUnitFun = true))
 
         // run logic and verify results
         assertThat(
@@ -359,16 +387,16 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Missing, Second Primary Loading, Neither Active`() {
         // setup test
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
-        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(null))
-        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(null)
+        everyGetTranslation(TOOL, Locale.GERMAN) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(null)
+        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.ENGLISH
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
         dataModel.isInitialSyncFinished.value = true
-        dataModel.visibleLocales.observeForever(observer)
+        dataModel.visibleLocales.observeForever(mockk(relaxUnitFun = true))
 
         // run logic and verify results
         assertThat(
@@ -384,15 +412,15 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Loaded, Second Primary Loading And Active`() {
         // setup test
-        wheneverGetTranslation(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Translation()))
-        wheneverGetTranslation(TOOL, Locale.GERMAN).thenReturn(MutableLiveData(Translation()))
-        wheneverGetManifest(TOOL, Locale.FRENCH).thenReturn(MutableLiveData(Manifest()))
-        wheneverGetManifest(TOOL, Locale.GERMAN).thenReturn(MutableLiveData())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest())
+        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.GERMAN
         dataModel.primaryLocales.value = listOf(Locale.FRENCH, Locale.GERMAN)
-        dataModel.visibleLocales.observeForever(observer)
+        dataModel.visibleLocales.observeForever(mockk(relaxUnitFun = true))
 
         // run logic and verify results
         assertThat(
