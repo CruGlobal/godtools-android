@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Sdílet</string>
-    <string name="share_tool_title">Sdílet “%1$s” přes</string>
     <string name="tool_not_found">Požadovaný nástroj nebyl nalezen</string>
     <string name="tool_loading">Požadovaný nástroj se načítá…</string>
     <string name="tool_offline">Pro otevření požadovaného nástroje musíte být připojeni k internetu</string>

@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
@@ -13,7 +13,7 @@ import org.cru.godtools.tool.model.Gravity
 import org.cru.godtools.tool.model.Resource
 
 @BindingAdapter("icon", "iconSize")
-fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {
+internal fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {
     val target = MaterialButtonIconTarget.of(this)
     val file = resource?.getFileBlocking(context.toolFileSystem)
     val imageSize = dpToPixelSize(size, resources)
@@ -29,7 +29,7 @@ fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {
 }
 
 @BindingAdapter("iconGravity")
-fun MaterialButton.bindIconGravity(gravity: Gravity.Horizontal) {
+internal fun MaterialButton.bindIconGravity(gravity: Gravity.Horizontal) {
     iconGravity = when (gravity) {
         Gravity.Horizontal.END -> ICON_GRAVITY_TEXT_END
         Gravity.Horizontal.START -> ICON_GRAVITY_TEXT_START

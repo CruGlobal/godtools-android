@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Jagamine</string>
-    <string name="share_tool_title">Jaga “%1$s” jagamist</string>
     <string name="tool_not_found">Soovitud tööriista ei leitud</string>
     <string name="tool_loading">Soovitud tööriista laadimine…</string>
     <string name="tool_offline">Soovitud tööriista avamiseks on vajalik võrguühendus</string>

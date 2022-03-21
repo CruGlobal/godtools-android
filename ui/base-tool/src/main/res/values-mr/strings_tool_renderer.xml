@@ -2,7 +2,6 @@
 <resources>
     <string name="menu_share_tool">"सांगा
        "</string>
-    <string name="share_tool_title">सांगा “%1$s” उपयोग करून</string>
     <string name="share_tool_message_article">मला हा लेख आपल्याबरोबर सामायिक करायचा आहे आणि त्याबद्दल आपले विचार ऐकायला आवडेल.\n%1$s</string>
     <string name="tool_not_found">आपण विनंती केलेले टूल आढळले नाही</string>
     <string name="tool_loading">आपण विनंती केलेले टूल लोड होत आहे</string>

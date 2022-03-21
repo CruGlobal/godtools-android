@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.databinding
+package org.cru.godtools.tract.databinding.adapters
 
 import androidx.databinding.BindingAdapter
 import com.google.android.material.imageview.ShapeableImageView

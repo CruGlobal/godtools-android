@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tool">Zdieľanie</string>
-    <string name="share_tool_title">Zdieľať „%1$s“ pomocou</string>
     <string name="tool_not_found">Nástroj, o ktorý ste požiadali, sa nepodarilo nájsť</string>
     <string name="tool_loading">Nástroj, o ktorý ste požiadali, sa načítava…</string>
     <string name="tool_offline">Nástroj, ktorý ste si vyžiadali, si na otvorenie vyžaduje internetové pripojenie</string>

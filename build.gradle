@@ -44,9 +44,9 @@ ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029265
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 31
+    compileSdk    = 32
     minSdk        = 21
-    targetSdk     = 31
+    targetSdk     = 32
 }
 
 // configure dependency resolution
