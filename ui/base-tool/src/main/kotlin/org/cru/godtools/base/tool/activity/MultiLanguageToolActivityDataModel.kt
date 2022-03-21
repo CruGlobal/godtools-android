@@ -26,6 +26,8 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
+import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
@@ -131,6 +133,13 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
         when {
             t == null || l == null -> emptyLiveData()
             else -> downloadManager.getDownloadProgressLiveData(t, l)
+        }
+    }
+
+    init {
+        // initialize the activeLocale if it hasn't been initialized yet
+        locales.map { it.firstOrNull() }.notNull().observeOnce {
+            if (activeLocale.value == null) activeLocale.value = it
         }
     }
     // endregion Active Tool

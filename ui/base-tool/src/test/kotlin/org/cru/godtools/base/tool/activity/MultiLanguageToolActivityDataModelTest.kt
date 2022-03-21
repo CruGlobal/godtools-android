@@ -24,6 +24,8 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasEntry
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -277,6 +279,16 @@ class MultiLanguageToolActivityDataModelTest {
     }
     // endregion Property: loadingState
 
+    // region Active Tool
+    // region Property: activeLocale
+    @Test
+    fun `Property activeLocale - Initialize when locales initialized`() {
+        assertNull(dataModel.activeLocale.value)
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
+        assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
+    }
+    // endregion Property: activeLocale
+
     // region Property: activeManifest
     @Test
     fun `Property activeManifest - Change Active Locale`() {
@@ -297,6 +309,7 @@ class MultiLanguageToolActivityDataModelTest {
         }
     }
     // endregion Property: activeManifest
+    // endregion Active Tool
 
     // region Property: visibleLocales
     @Test
