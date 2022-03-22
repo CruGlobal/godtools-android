@@ -39,7 +39,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         if (isFinishing) return
 
         setupDataModel()
-        setupActiveTranslationManagement()
     }
 
     override fun onContentChanged() {
@@ -169,24 +168,5 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
     override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
-
-    private fun setupActiveTranslationManagement() {
-        observe(
-            dataModel.activeLoadingState,
-            dataModel.availableLocales,
-            dataModel.loadingState
-        ) { activeLoadingState, availableLocales, loadingState ->
-            when (activeLoadingState) {
-                // update the active language if the current active language is not found, invalid, or offline
-                LoadingState.NOT_FOUND,
-                LoadingState.INVALID_TYPE,
-                LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                        loadingState[it] != LoadingState.OFFLINE
-                }?.let { dataModel.activeLocale.value = it }
-                else -> Unit
-            }
-        }
-    }
     // endregion Active Translation management
 }

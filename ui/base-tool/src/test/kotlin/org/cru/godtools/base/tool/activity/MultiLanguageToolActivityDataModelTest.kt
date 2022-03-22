@@ -310,6 +310,56 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
         assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
     }
+
+    @Test
+    fun `Property activeLocale - Updates when activeLoadingState is INVALID_TYPE`() {
+        val englishManifest = MutableLiveData<Manifest?>()
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns MutableLiveData(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.ENGLISH) returns englishManifest
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = Manifest.Type.TRACT
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.isInitialSyncFinished.value = true
+
+        assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
+        englishManifest.value = Manifest(type = Manifest.Type.LESSON)
+        assertEquals(Locale.FRENCH, dataModel.activeLocale.value)
+    }
+
+    @Test
+    fun `Property activeLocale - Updates when activeLoadingState is NOT_FOUND`() {
+        val englishTranslation = MutableLiveData<Translation?>()
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns englishTranslation
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = Manifest.Type.TRACT
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.isInitialSyncFinished.value = true
+
+        assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
+        englishTranslation.value = null
+        assertEquals(Locale.FRENCH, dataModel.activeLocale.value)
+    }
+
+    @Test
+    fun `Property activeLocale - Updates when activeLoadingState is OFFLINE`() {
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns MutableLiveData(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns MutableLiveData(Translation())
+        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        dataModel.toolCode.value = TOOL
+        dataModel.supportedType.value = Manifest.Type.TRACT
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
+        dataModel.isInitialSyncFinished.value = true
+
+        assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
+        isConnnected.value = false
+        assertEquals(Locale.FRENCH, dataModel.activeLocale.value)
+    }
     // endregion Property: activeLocale
 
     // region Property: activeManifest
