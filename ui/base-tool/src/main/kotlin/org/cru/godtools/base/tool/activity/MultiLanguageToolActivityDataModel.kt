@@ -26,6 +26,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
+import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import org.ccci.gto.android.common.androidx.lifecycle.observeForever
+import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
@@ -136,7 +139,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Active Tool
 
     // region Available Locales
-    val availableLocales =
+    @VisibleForTesting
+    internal val availableLocales =
         combine(activeLocale, primaryLocales, parallelLocales, loadingState) { active, primary, parallel, loaded ->
             buildList {
                 primary
@@ -171,6 +175,31 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val hasTips = activeManifest.map { !it?.tips.isNullOrEmpty() }
     val enableTips = hasTips and showTips
     // endregion Training Tips
+
+    init {
+        // initialize the activeLocale if it hasn't been initialized yet
+        locales.map { it.firstOrNull() }.notNull().observeOnce {
+            if (activeLocale.value == null) activeLocale.value = it
+        }
+
+        // update the activeLocale if the current activeLocale is invalid
+        observeForever(
+            activeLoadingState,
+            availableLocales,
+            loadingState
+        ) { activeLoadingState, availableLocales, loadingState ->
+            when (activeLoadingState) {
+                // update the active language if the current active language is not found, invalid, or offline
+                LoadingState.NOT_FOUND,
+                LoadingState.INVALID_TYPE,
+                LoadingState.OFFLINE -> availableLocales.firstOrNull {
+                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                        loadingState[it] != LoadingState.OFFLINE
+                }?.let { activeLocale.value = it }
+                else -> Unit
+            }
+        }
+    }
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =

@@ -10,7 +10,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
@@ -18,9 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combine
-import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.tool.R
@@ -42,7 +39,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         if (isFinishing) return
 
         setupDataModel()
-        setupActiveTranslationManagement()
     }
 
     override fun onContentChanged() {
@@ -172,28 +168,5 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // region Active Translation management
     override val activeManifestLiveData get() = dataModel.activeManifest
     override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
-
-    private fun setupActiveTranslationManagement() {
-        dataModel.locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
-            if (dataModel.activeLocale.value == null) dataModel.activeLocale.value = it
-        }
-
-        observe(
-            dataModel.activeLoadingState,
-            dataModel.availableLocales,
-            dataModel.loadingState
-        ) { activeLoadingState, availableLocales, loadingState ->
-            when (activeLoadingState) {
-                // update the active language if the current active language is not found, invalid, or offline
-                LoadingState.NOT_FOUND,
-                LoadingState.INVALID_TYPE,
-                LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
-                        loadingState[it] != LoadingState.OFFLINE
-                }?.let { dataModel.activeLocale.value = it }
-                else -> Unit
-            }
-        }
-    }
     // endregion Active Translation management
 }

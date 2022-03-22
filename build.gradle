@@ -187,6 +187,7 @@ subprojects {
                 testImplementation libs.junit
                 testImplementation libs.mockito
                 testImplementation libs.mockito.kotlin
+                testImplementation libs.mockk
                 testImplementation libs.robolectric
             }
         }

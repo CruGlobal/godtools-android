@@ -7,12 +7,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.every
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -40,9 +42,6 @@ import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.MockedStatic
 import org.mockito.Mockito.mockStatic
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.stub
 import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
@@ -68,11 +67,9 @@ class TractActivityTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        dao.stub {
-            on {
-                getLiveData(argThat<Query<Language>> { table.type == Language::class.java })
-            } doReturn ImmutableLiveData(emptyList())
-        }
+        every {
+            dao.getLiveData(match<Query<Language>> { it.table.type == Language::class.java })
+        } returns MutableLiveData(emptyList())
         lottieUtils = mockStatic(Class.forName("org.cru.godtools.tract.util.LottieUtilsKt"))
     }
 
@@ -208,7 +205,7 @@ class TractActivityTest {
     // region Visibility
     @Test
     fun verifyShareMenuVisible() {
-        whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
+        everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         ActivityScenario.launch<TractActivity>(context.createTractActivityIntent("test", Locale.ENGLISH)).use {
@@ -224,7 +221,7 @@ class TractActivityTest {
 
     @Test
     fun verifyShareMenuVisibleForDeepLink() {
-        whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
+        everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         val intent = Intent(context, TractActivity::class.java).apply {
@@ -244,7 +241,7 @@ class TractActivityTest {
 
     @Test
     fun verifyShareMenuHiddenWhenNoManifest() {
-        whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
+        everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(null))
 
         ActivityScenario.launch<TractActivity>(context.createTractActivityIntent("test", Locale.ENGLISH)).use {
@@ -260,7 +257,7 @@ class TractActivityTest {
 
     @Test
     fun verifyShareMenuHiddenWhenShowingTips() {
-        whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
+        everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest()
             .thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
@@ -278,7 +275,7 @@ class TractActivityTest {
 
     @Test
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
-        whenGetTranslation().thenReturn(ImmutableLiveData(Translation()))
+        everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
         val intent = Intent(context, TractActivity::class.java).apply {
@@ -300,8 +297,8 @@ class TractActivityTest {
 
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
-    private fun whenGetTranslation(tool: String? = any(), locale: Locale? = any()) =
-        whenever(dao.getLatestTranslationLiveData(tool, locale, any(), any(), any()))
+    private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
+        every { dao.getLatestTranslationLiveData(tool ?: any(), locale ?: any(), any(), any(), any()) }
     private fun whenGetManifest(tool: String = any(), locale: Locale = any()) =
         whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))
 }
