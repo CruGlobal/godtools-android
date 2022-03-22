@@ -1,20 +1,20 @@
-package org.cru.godtools.ui.languages.paralleldialog
+package org.cru.godtools.base.ui.languages
 
 import android.content.Context
 import android.widget.Filter
 import org.ccci.gto.android.common.androidx.databinding.widget.DataBindingArrayAdapter
 import org.ccci.gto.android.common.util.Ids
-import org.cru.godtools.R
+import org.cru.godtools.base.ui.R
+import org.cru.godtools.base.ui.databinding.LanguagesDropdownItemBinding
 import org.cru.godtools.base.util.deviceLocale
-import org.cru.godtools.databinding.LanguagesParallelDialogItemBinding as ItemBinding
 import org.cru.godtools.model.Language
 
-class LanguagesAdapter(context: Context) :
-    DataBindingArrayAdapter<ItemBinding, Language>(context, R.layout.languages_parallel_dialog_item) {
+class LanguagesDropdownAdapter(context: Context) :
+    DataBindingArrayAdapter<LanguagesDropdownItemBinding, Language>(context, R.layout.languages_dropdown_item) {
     override fun getItemId(position: Int) = getItem(position)?.code?.let { Ids.generate(it) } ?: -1
 
-    override fun onBindingCreated(binding: ItemBinding) = Unit
-    override fun onBind(binding: ItemBinding, position: Int) {
+    override fun onBindingCreated(binding: LanguagesDropdownItemBinding) = Unit
+    override fun onBind(binding: LanguagesDropdownItemBinding, position: Int) {
         binding.language = getItem(position)
     }
 

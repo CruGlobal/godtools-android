@@ -17,9 +17,9 @@ import org.ccci.gto.android.common.androidx.fragment.app.DataBindingDialogFragme
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
-import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.LanguagesParallelDialogBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -52,13 +52,11 @@ class ParallelLanguageDialogFragment :
         binding.deviceLocale = dataModel.deviceLocale
         binding.selectedLanguage = dataModel.selectedLanguage
 
-        with(binding.parallelLanguage) {
-            setAdapter(LanguagesAdapter(context).also { dataModel.sortedLanguages.observe(dialogLifecycleOwner, it) })
-        }
-
-        // TODO: can this be done in data binding?
-        binding.parallelLanguage.setOnItemClickListener { _, _, _, id ->
-            dataModel.selectedLocale.value = Ids.lookup(id) as? Locale
+        binding.parallelLanguage.apply {
+            val adapter = LanguagesDropdownAdapter(context)
+            dataModel.sortedLanguages.observe(dialogLifecycleOwner, adapter)
+            setAdapter(adapter)
+            setOnItemClickListener { _, _, pos, _ -> dataModel.selectedLocale.value = adapter.getItem(pos)?.code }
         }
     }
 
