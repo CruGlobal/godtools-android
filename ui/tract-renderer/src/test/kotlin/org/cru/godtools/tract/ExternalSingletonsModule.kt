@@ -6,7 +6,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.api.ApiModule
@@ -15,6 +19,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.sync.SyncModule
 import org.cru.godtools.sync.task.SyncTaskModule
@@ -40,8 +45,10 @@ import org.mockito.kotlin.mock
 class ExternalSingletonsModule {
     @get:Provides
     val dao by lazy {
-        mock<GodToolsDao> {
-            on { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } doAnswer { MutableLiveData(null) }
+        mockk<GodToolsDao> {
+            every { findAsFlow<Tool>(any<String>()) } returns flowOf(null)
+            every { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } answers { MutableLiveData(null) }
+            every { updateSharesDeltaAsync(any(), any()) } returns mockk()
         }
     }
     @get:Provides
