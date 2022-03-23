@@ -379,6 +379,10 @@ class TractActivity :
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
             dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
+            // The requested locale is not an available locale, so add it as a parallelLocale
+            if (it !in dataModel.locales.value.orEmpty()) {
+                dataModel.parallelLocales.value = dataModel.parallelLocales.value.orEmpty() + it
+            }
             dataModel.activeLocale.value = it
         }
         event.page?.let { goToPage(it) }
