@@ -12,8 +12,7 @@
         <variable name="selected" type="LiveData&lt;java.util.Locale&gt;" />
     </data>
 
-    <androidx.appcompat.widget.AppCompatRelativeLayoutImpl
-        android:id="@+id/root"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_list_item_language"
@@ -21,7 +20,7 @@
         android:onClick="@{() -> listener.onLanguageSelected(language)}"
         app:selected="@{ObjectsCompat.equals(language.code, selected)}">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/action_add"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -30,9 +29,9 @@
             android:layout_marginStart="-8dp"
             android:layout_marginEnd="8dp"
             android:padding="8dp"
-            android:tint="@color/gt_green"
             app:visibleIf="@{language != null &amp;&amp; !language.added}"
-            app:srcCompat="@drawable/ic_download" />
+            app:srcCompat="@drawable/ic_download"
+            app:tint="@color/gt_green" />
 
         <TextView
             android:id="@+id/title"
@@ -49,5 +48,5 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textIsSelectable="false"
             tools:text="really really really really really really really really long language name" />
-    </androidx.appcompat.widget.AppCompatRelativeLayoutImpl>
+    </RelativeLayout>
 </layout>
