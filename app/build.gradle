@@ -128,7 +128,7 @@ android {
 
     sourceSets {
         qa {
-            java.srcDir 'src/debug/java'
+            kotlin.srcDir 'src/debug/kotlin'
             res.srcDir 'src/debug/res/values'
             manifest.srcFile 'src/debug/AndroidManifest.xml'
         }
