@@ -9,9 +9,11 @@
         <import type="org.cru.godtools.base.tool.ui.share.model.ShareItem" />
         <import type="org.cru.godtools.model.Tool" />
         <import type="org.cru.godtools.model.Language" />
+        <import type="org.cru.godtools.tool.model.Manifest" />
 
         <variable name="callbacks" type="org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks" />
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />
+        <variable name="activeManifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="hasTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="shareables" type="List&lt;ShareItem&gt;" />
         <variable name="primaryLanguage" type="LiveData&lt;Language&gt;" />
@@ -65,6 +67,12 @@
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <!-- region action_share -->
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="action_share,action_share_icon,action_share_label"
+            app:goneIf="@{activeManifest == null}" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action_share"
             style="@style/Widget.GodTools.Tract.Settings.Action"
@@ -101,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="action_share_screen,action_share_screen_icon,action_share_screen_label"
-            app:goneIf="@{tool.screenShareDisabled}" />
+            app:goneIf="@{tool.screenShareDisabled || activeManifest == null}" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action_share_screen"

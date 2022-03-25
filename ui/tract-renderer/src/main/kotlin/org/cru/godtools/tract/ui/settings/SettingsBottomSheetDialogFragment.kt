@@ -34,6 +34,7 @@ class SettingsBottomSheetDialogFragment :
     override fun onBindingCreated(binding: TractSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         binding.tool = activityDataModel.tool
+        binding.activeManifest = activityDataModel.activeManifest
         binding.hasTips = activityDataModel.hasTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
