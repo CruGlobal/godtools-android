@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.GodTools.Tract.Settings.Title" parent="TextAppearance.GodTools">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tract.Settings.Section.Title" parent="TextAppearance.GodTools">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tract.Settings.Section.Description" parent="TextAppearance.GodTools">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- region Action styles -->
+    <style name="Widget.GodTools.Tract.Settings.Action" parent="Widget.MaterialComponents.ShapeableImageView">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">96dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tract.Settings.Action</item>
+    </style>
+
+    <style name="Widget.GodTools.Tract.Settings.Action.Icon" parent="Base">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <style name="Widget.GodTools.Tract.Settings.Action.Label" parent="Base">
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:gravity">center_horizontal|top</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tract.Settings.Action.Label</item>
+    </style>
+
+    <style name="ShapeAppearance.GodTools.Tract.Settings.Action" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.Tract.Settings.Action.Label" parent="TextAppearance.GodTools">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <!-- endregion Action styles -->
+
+    <!-- region Language Selector styles -->
+    <style name="Widget.GodTools.Tract.Settings.LanguageDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.GodTools.Tract.Settings.LanguageDropdown</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tract.Settings.Languages</item>
+    </style>
+
+    <style name="ShapeAppearance.GodTools.Tract.Settings.Languages" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="ThemeOverlay.GodTools.Tract.Settings.LanguageDropdown" parent="ThemeOverlay.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense">
+        <item name="autoCompleteTextViewStyle">
+            @style/Widget.GodTools.Tract.Settings.LanguageDropdown.AutoCompleteTextView
+        </item>
+    </style>
+
+    <style name="Widget.GodTools.Tract.Settings.LanguageDropdown.AutoCompleteTextView" parent="Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox.Dense">
+        <item name="android:ellipsize">end</item>
+        <item name="android:inputType">none</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <!-- endregion Language Selector styles -->
+</resources>

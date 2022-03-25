@@ -181,7 +181,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    protected fun shareCurrentTool() {
+    fun shareCurrentTool() {
         val shareItems = getShareItems().sortedWith(Ordered.COMPARATOR)
         if (shareItems.isEmpty()) return
 

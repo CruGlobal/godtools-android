@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="java.util.List" />
+        <import type="kotlinx.coroutines.flow.StateFlow" />
+        <import type="org.cru.godtools.base.tool.ui.share.model.ShareItem" />
+        <import type="org.cru.godtools.model.Tool" />
+        <import type="org.cru.godtools.model.Language" />
+
+        <variable name="callbacks" type="org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks" />
+        <variable name="tool" type="StateFlow&lt;Tool&gt;" />
+        <variable name="hasTips" type="LiveData&lt;Boolean&gt;" />
+        <variable name="shareables" type="List&lt;ShareItem&gt;" />
+        <variable name="primaryLanguage" type="LiveData&lt;Language&gt;" />
+        <variable name="parallelLanguage" type="LiveData&lt;Language&gt;" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/margin_start"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/margin_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/tract_settings_title"
+            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Title"
+            app:layout_constraintBottom_toTopOf="@id/actions"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/actions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:constraint_referenced_ids="action_share,action_share_screen,action_tips"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalGap="16dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toTopOf="@id/languages_divider"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <!-- region action_share -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/action_share"
+            style="@style/Widget.GodTools.Tract.Settings.Action"
+            android:background="@color/gt_blue"
+            android:onClick="@{() -> callbacks.shareLink()}" />
+
+        <ImageView
+            android:id="@+id/action_share_icon"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            android:padding="4dp"
+            android:src="@drawable/ic_share"
+            app:layout_constraintBottom_toTopOf="@id/action_share_label"
+            app:layout_constraintEnd_toEndOf="@id/action_share"
+            app:layout_constraintStart_toStartOf="@id/action_share"
+            app:layout_constraintTop_toTopOf="@id/action_share"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/action_share_label"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tract_settings_action_share"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/action_share"
+            app:layout_constraintEnd_toEndOf="@id/action_share"
+            app:layout_constraintStart_toStartOf="@id/action_share"
+            app:layout_constraintTop_toBottomOf="@id/action_share_icon" />
+        <!-- endregion action_share -->
+
+        <!-- region action_share_screen -->
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="action_share_screen,action_share_screen_icon,action_share_screen_label"
+            app:goneIf="@{tool.screenShareDisabled}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/action_share_screen"
+            style="@style/Widget.GodTools.Tract.Settings.Action"
+            android:background="@color/gray_F5"
+            android:onClick="@{() -> callbacks.shareScreen()}" />
+
+        <ImageView
+            android:id="@+id/action_share_screen_icon"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            android:padding="4dp"
+            android:src="@drawable/ic_tract_live_share"
+            app:layout_constraintBottom_toTopOf="@id/action_share_screen_label"
+            app:layout_constraintEnd_toEndOf="@id/action_share_screen"
+            app:layout_constraintStart_toStartOf="@id/action_share_screen"
+            app:layout_constraintTop_toTopOf="@id/action_share_screen"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="@color/gt_blue" />
+
+        <TextView
+            android:id="@+id/action_share_screen_label"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_live_share_publish"
+            app:layout_constraintBottom_toBottomOf="@id/action_share_screen"
+            app:layout_constraintEnd_toEndOf="@id/action_share_screen"
+            app:layout_constraintStart_toStartOf="@id/action_share_screen"
+            app:layout_constraintTop_toBottomOf="@id/action_share_screen_icon" />
+        <!-- endregion action_share_screen -->
+
+        <!-- region action_tips -->
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="action_tips,action_tips_icon,action_tips_label"
+            app:visibleIf="@{hasTips}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/action_tips"
+            style="@style/Widget.GodTools.Tract.Settings.Action"
+            android:background="@drawable/bkg_tips_tip_done"
+            android:onClick="@{() -> callbacks.toggleTrainingTips()}" />
+
+        <ImageView
+            android:id="@+id/action_tips_icon"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            android:src="@drawable/ic_tips_tip_done"
+            app:layout_constraintBottom_toTopOf="@id/action_tips_label"
+            app:layout_constraintEnd_toEndOf="@id/action_tips"
+            app:layout_constraintStart_toStartOf="@id/action_tips"
+            app:layout_constraintTop_toTopOf="@id/action_tips"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/action_tips_label"
+            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_training_tips"
+            app:layout_constraintBottom_toBottomOf="@id/action_tips"
+            app:layout_constraintEnd_toEndOf="@id/action_tips"
+            app:layout_constraintStart_toStartOf="@id/action_tips"
+            app:layout_constraintTop_toBottomOf="@id/action_tips_icon" />
+        <!-- endregion action_tips -->
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/languages_divider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/languages_title"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/actions" />
+
+        <TextView
+            android:id="@+id/languages_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tract_settings_languages_title"
+            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Section.Title"
+            app:layout_constraintBottom_toTopOf="@id/languages_description"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/languages_divider" />
+
+        <TextView
+            android:id="@+id/languages_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/tract_settings_languages_description"
+            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Section.Description"
+            app:layout_constraintBottom_toTopOf="@id/languages"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/languages_title"
+            app:layout_goneMarginBottom="16dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/languages"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:minHeight="52dp"
+            android:src="@color/gray_F5"
+            app:layout_constraintBottom_toTopOf="@id/shareables_divider"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/languages_description"
+            app:shapeAppearance="@style/ShapeAppearance.GodTools.Tract.Settings.Languages" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/language_primary"
+            style="@style/Widget.GodTools.Tract.Settings.LanguageDropdown"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/languages"
+            app:layout_constraintEnd_toStartOf="@id/language_swap"
+            app:layout_constraintStart_toStartOf="@id/languages"
+            app:layout_constraintTop_toTopOf="@id/languages">
+
+            <AutoCompleteTextView
+                android:id="@+id/language_primary_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{primaryLanguage.getDisplayName(context)}"
+                android:textSize="12sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/language_swap"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:enabled="@{parallelLanguage != null}"
+            android:onClick="@{() -> callbacks.swapLanguages()}"
+            android:padding="15dp"
+            android:src="@drawable/ic_swap"
+            app:layout_constraintBottom_toBottomOf="@id/languages"
+            app:layout_constraintEnd_toStartOf="@id/language_parallel"
+            app:layout_constraintStart_toEndOf="@id/language_primary"
+            app:layout_constraintTop_toTopOf="@id/languages"
+            app:tint="@color/gt_blue" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/language_parallel"
+            style="@style/Widget.GodTools.Tract.Settings.LanguageDropdown"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/languages"
+            app:layout_constraintEnd_toEndOf="@id/languages"
+            app:layout_constraintStart_toEndOf="@id/language_swap"
+            app:layout_constraintTop_toTopOf="@id/languages">
+
+            <AutoCompleteTextView
+                android:id="@+id/language_parallel_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{parallelLanguage.getDisplayName(context)}"
+                android:textSize="12sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/shareables_divider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/shareables_actions"
+            app:layout_constraintEnd_toStartOf="@id/margin_end"
+            app:layout_constraintStart_toEndOf="@id/margin_start"
+            app:layout_constraintTop_toBottomOf="@id/languages"
+            app:visibleIf="@{shareables != null &amp;&amp; !shareables.empty}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shareables_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:visibleIf="@{shareables != null &amp;&amp; !shareables.empty}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
