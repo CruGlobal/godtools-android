@@ -44,5 +44,5 @@ fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale
     associateBy { it.getDisplayName(context, displayLocale) }
         .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
 
-fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null) =
+fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
     toDisplayNameSortedMap(context, displayLocale).values.toList()
