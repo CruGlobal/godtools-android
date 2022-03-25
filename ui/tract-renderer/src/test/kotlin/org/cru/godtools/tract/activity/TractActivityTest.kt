@@ -35,6 +35,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -204,6 +205,7 @@ class TractActivityTest {
     // region Share Menu Tests
     // region Visibility
     @Test
+    @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisible() {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
@@ -220,6 +222,7 @@ class TractActivityTest {
     }
 
     @Test
+    @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisibleForDeepLink() {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
@@ -240,6 +243,7 @@ class TractActivityTest {
     }
 
     @Test
+    @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenNoManifest() {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(null))
@@ -256,6 +260,7 @@ class TractActivityTest {
     }
 
     @Test
+    @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenShowingTips() {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest()
@@ -274,6 +279,7 @@ class TractActivityTest {
     }
 
     @Test
+    @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
