@@ -20,6 +20,7 @@
 
     <!-- Settings -->
     <eat-comment />
+    <string name="menu_settings">Settings</string>
     <string name="tract_settings_title">Tool Settings</string>
     <string name="tract_settings_action_share">Share link</string>
     <string name="tract_settings_languages_title">Parallel Language</string>

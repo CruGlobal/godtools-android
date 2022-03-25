@@ -7,4 +7,11 @@
         android:orderInCategory="300"
         android:title="@string/menu_install"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="400"
+        android:title="@string/menu_settings"
+        app:showAsAction="always" />
 </menu>
