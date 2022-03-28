@@ -27,7 +27,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
-import org.ccci.gto.android.common.androidx.lifecycle.observeForever
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
@@ -178,12 +178,12 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     init {
         // initialize the activeLocale if it hasn't been initialized yet
-        locales.map { it.firstOrNull() }.notNull().observeOnce {
+        locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
             if (activeLocale.value == null) activeLocale.value = it
         }
 
         // update the activeLocale if the current activeLocale is invalid
-        observeForever(
+        observe(
             activeLoadingState,
             availableLocales,
             loadingState
