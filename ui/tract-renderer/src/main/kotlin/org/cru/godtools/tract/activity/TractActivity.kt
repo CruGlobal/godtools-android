@@ -53,7 +53,6 @@ import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
-import org.cru.godtools.tract.ui.share.model.LiveShareItem
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -305,11 +304,6 @@ class TractActivity :
             .appendPath(tool)
             .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
-    }
-
-    override fun getShareItems() = buildList {
-        addAll(super.getShareItems())
-        if (dataModel.tool.value?.isScreenShareDisabled != true) add(LiveShareItem())
     }
     // endregion Share Menu Logic
 
