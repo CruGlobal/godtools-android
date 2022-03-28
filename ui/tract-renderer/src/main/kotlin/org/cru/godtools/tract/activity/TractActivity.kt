@@ -52,6 +52,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
+import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
 import org.cru.godtools.tract.ui.share.model.LiveShareItem
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
@@ -107,6 +108,8 @@ class TractActivity :
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tract, menu)
+        menu.removeItem(R.id.action_share)
+        menu.removeItem(R.id.action_tips)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menu.setupLiveShareMenuItem()
 
@@ -117,6 +120,10 @@ class TractActivity :
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, -1, "instantapp")
+            true
+        }
+        item.itemId == R.id.action_settings -> {
+            SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
             true
         }
         // handle close button if this is an instant app
@@ -379,6 +386,10 @@ class TractActivity :
         if (event == null) return
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
             dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
+            // The requested locale is not an available locale, so add it as a parallelLocale
+            if (it !in dataModel.locales.value.orEmpty()) {
+                dataModel.parallelLocales.value = dataModel.parallelLocales.value.orEmpty() + it
+            }
             dataModel.activeLocale.value = it
         }
         event.page?.let { goToPage(it) }

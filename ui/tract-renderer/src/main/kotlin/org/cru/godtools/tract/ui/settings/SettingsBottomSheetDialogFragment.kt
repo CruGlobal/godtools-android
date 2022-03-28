@@ -1,0 +1,121 @@
+package org.cru.godtools.tract.ui.settings
+
+import android.os.Bundle
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
+import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
+import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
+import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
+import org.cru.godtools.tract.R
+import org.cru.godtools.tract.activity.TractActivity
+import org.cru.godtools.tract.databinding.TractSettingsSheetBinding
+import org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks
+
+@AndroidEntryPoint
+class SettingsBottomSheetDialogFragment :
+    BindingBottomSheetDialogFragment<TractSettingsSheetBinding>(R.layout.tract_settings_sheet),
+    TractSettingsSheetCallbacks {
+    // region Lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupDataModel()
+    }
+
+    override fun onBindingCreated(binding: TractSettingsSheetBinding, savedInstanceState: Bundle?) {
+        binding.callbacks = this
+        binding.tool = activityDataModel.tool
+        binding.hasTips = activityDataModel.hasTips
+        binding.primaryLanguage = primaryLanguage
+        binding.parallelLanguage = parallelLanguage
+        setupLanguageViews(binding)
+    }
+    // endregion Lifecycle
+
+    // region Data Model
+    private val activityDataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
+    private val dataModel by viewModels<SettingsBottomSheetDialogFragmentDataModel>()
+
+    private val primaryLanguage by lazy {
+        dataModel.sortedLanguages.combineWith(activityDataModel.primaryLocales) { languages, prim ->
+            languages.firstOrNull { it.code in prim }
+        }
+    }
+    private val parallelLanguage by lazy {
+        dataModel.sortedLanguages.combineWith(activityDataModel.parallelLocales) { languages, para ->
+            languages.firstOrNull { it.code in para }
+        }
+    }
+
+    private fun setupDataModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // sync toolCode from activity to local DataModel
+                activityDataModel.toolCode.filterNotNull().collect { dataModel.toolCode.value = it }
+            }
+        }
+    }
+    // endregion Data Model
+
+    // region UI
+    private fun setupLanguageViews(binding: TractSettingsSheetBinding) {
+        binding.languagePrimaryDropdown.apply {
+            val adapter = LanguagesDropdownAdapter(context)
+            dataModel.sortedLanguages
+                .combineWith(parallelLanguage) { langs, para -> langs.filterNot { it.code == para?.code } }
+                .observe(viewLifecycleOwner, adapter)
+            setAdapter(adapter)
+            setOnItemClickListener { _, _, pos, _ -> adapter.getItem(pos)?.code?.let { updatePrimaryLanguage(it) } }
+        }
+        binding.languageParallelDropdown.apply {
+            val adapter = LanguagesDropdownAdapter(context)
+            dataModel.sortedLanguages
+                .combineWith(primaryLanguage) { langs, prim -> langs.filterNot { it.code == prim?.code } }
+                .observe(viewLifecycleOwner, adapter)
+            setAdapter(adapter)
+            setOnItemClickListener { _, _, pos, _ -> updateParallelLanguage(adapter.getItem(pos)?.code) }
+        }
+    }
+    // endregion UI
+
+    private fun updatePrimaryLanguage(locale: Locale) = with(activityDataModel) {
+        val updateActiveLocale = activeLocale.value in primaryLocales.value.orEmpty()
+        primaryLocales.value = listOf(locale)
+        if (updateActiveLocale) activeLocale.value = locale
+    }
+
+    private fun updateParallelLanguage(locale: Locale?) = with(activityDataModel) {
+        val updateActiveLocale = activeLocale.value in parallelLocales.value.orEmpty()
+        parallelLocales.value = listOfNotNull(locale)
+        if (updateActiveLocale) activeLocale.value = locale
+    }
+
+    // region TractSettingsSheetCallbacks
+    override fun shareLink() {
+        (activity as? BaseToolActivity<*>)?.shareCurrentTool()
+        dismissAllowingStateLoss()
+    }
+
+    override fun shareScreen() {
+        (activity as? TractActivity)?.shareLiveShareLink()
+        dismissAllowingStateLoss()
+    }
+
+    override fun toggleTrainingTips() = activityDataModel.showTips.toggleValue()
+
+    override fun swapLanguages() {
+        val languages = activityDataModel.primaryLocales.value
+        activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
+        activityDataModel.parallelLocales.value = languages
+    }
+    // endregion TractSettingsSheetCallbacks
+}

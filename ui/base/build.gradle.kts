@@ -26,6 +26,7 @@ dependencies {
     compileOnly(libs.androidx.fragment.ktx)
 
     api(libs.gtoSupport.androidx.fragment)
+    implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
