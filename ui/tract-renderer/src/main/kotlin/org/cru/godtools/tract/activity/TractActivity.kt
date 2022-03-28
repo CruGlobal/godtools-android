@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
-import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -285,13 +284,9 @@ class TractActivity :
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
-        combine(
-            shareLinkUriLiveData,
-            subscriberController.state,
-            dataModel.enableTips
-        ) { shareUri, subscriberState, enableTips ->
-            shareUri != null && subscriberState == State.Off && !enableTips
-        }
+        // HACK: make this dependent on shareLinkUriLiveData so that there is a subscriber to actually resolve the uri
+        //       before the user clicks the share action
+        shareLinkUriLiveData.map { false }
     }
 
     override val shareLinkUriLiveData by lazy {
