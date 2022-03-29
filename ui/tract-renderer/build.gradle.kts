@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.eventbus)
+    implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.picasso)

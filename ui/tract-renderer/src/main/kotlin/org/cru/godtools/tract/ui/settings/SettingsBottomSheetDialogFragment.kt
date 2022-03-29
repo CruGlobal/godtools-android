@@ -12,11 +12,13 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
+import org.ccci.gto.android.common.kotlin.coroutines.collectInto
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
+import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.tool.model.shareable.ShareableImage
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.activity.TractActivity
@@ -64,9 +66,10 @@ class SettingsBottomSheetDialogFragment :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // sync toolCode from activity to local DataModel
-                activityDataModel.toolCode.filterNotNull().collect { dataModel.toolCode.value = it }
+                activityDataModel.toolCode.filterNotNull().collectInto(dataModel.toolCode)
             }
         }
+        context?.deviceLocale?.let { dataModel.deviceLocale.value = it }
     }
     // endregion Data Model
 
