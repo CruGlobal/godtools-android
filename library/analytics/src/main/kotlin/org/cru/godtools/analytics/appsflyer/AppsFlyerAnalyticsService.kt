@@ -11,6 +11,9 @@ import androidx.annotation.WorkerThread
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import com.appsflyer.deeplink.DeepLink
+import com.appsflyer.deeplink.DeepLinkListener
+import com.appsflyer.deeplink.DeepLinkResult
 import com.karumi.weak.weak
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -83,6 +86,7 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     // endregion Application.ActivityLifecycleCallbacks
 
     // region AppsFlyerConversionListener
+    @Deprecated("The legacy AppsFlyerConversionListener should be removed in favor of the DeepLinkListener")
     @VisibleForTesting
     internal val conversionListener = object : AppsFlyerConversionListener {
         override fun onConversionDataSuccess(data: Map<String, Any?>) {
@@ -105,10 +109,18 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     }
     // endregion AppsFlyerConversionListener
 
+    private val deepLinkListener = DeepLinkListener { result ->
+        if (result.status != DeepLinkResult.Status.FOUND) return@DeepLinkListener
+        val deepLink = result.deepLink ?: return@DeepLinkListener
+        val intent = deepLinkResolvers.mapNotNull { it.resolve(app, deepLink) }.firstOrNull()
+        if (intent != null) activeActivity?.startActivity(intent)
+    }
+
     init {
         appsFlyer.apply {
             if (BuildConfig.DEBUG) setLogLevel(AFLogger.LogLevel.DEBUG)
             setOneLinkCustomDomain(HOST_GET_GODTOOLSAPP_COM)
+            subscribeForDeepLink(deepLinkListener)
             init(BuildConfig.APPSFLYER_DEV_KEY, conversionListener, app)
             start(app)
         }
@@ -118,5 +130,12 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
 }
 
 interface AppsFlyerDeepLinkResolver {
-    fun resolve(context: Context, uri: Uri?, data: Map<String, String?>): Intent?
+    fun resolve(context: Context, deepLink: DeepLink): Intent? = deepLink.deepLinkValue?.let { resolve(context, it) }
+    fun resolve(context: Context, deepLinkValue: String): Intent? = null
+
+    @Deprecated(
+        "This is the callback for the legacy AppsFlyerConversionListener, " +
+            "this should be replaced with logic to handle AppsFlyer DeepLinks"
+    )
+    fun resolve(context: Context, uri: Uri?, data: Map<String, String?>): Intent? = null
 }
