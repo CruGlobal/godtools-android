@@ -55,11 +55,16 @@ private const val ACTIVITY_CLASS_TRACT = "org.cru.godtools.tract.activity.TractA
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
     startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
 
-fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
-    Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
-        .putExtra(EXTRA_TOOL, toolCode)
-        .putLanguagesExtra(*languages)
-        .putExtra(EXTRA_SHOW_TIPS, showTips)
+fun Context.createTractActivityIntent(
+    toolCode: String,
+    vararg languages: Locale?,
+    page: Int = 0,
+    showTips: Boolean = false
+) = Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
+    .putExtra(EXTRA_TOOL, toolCode)
+    .putLanguagesExtra(*languages)
+    .putExtra(EXTRA_PAGE, page)
+    .putExtra(EXTRA_SHOW_TIPS, showTips)
 // endregion TractActivity
 
 fun Context.buildToolExtras(toolCode: String, language: Locale) = BaseActivity.buildExtras(this).apply {
