@@ -9,6 +9,7 @@ import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
+import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
@@ -98,7 +99,7 @@ class CyoaActivity :
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
 
-        manifest.pages.firstOrNull { !it.isHidden }
+        manifest.findPage(intent?.getStringExtra(EXTRA_PAGE)) ?: manifest.pages.firstOrNull { !it.isHidden }
             ?.let { showPage(it, true) }
     }
 

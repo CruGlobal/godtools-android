@@ -22,7 +22,7 @@ class CyoaAppsFlyerDeepLinkResolverTest {
     @Before
     fun setupMocks() {
         mockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
-        every { context.createCyoaActivityIntent(any(), *anyVararg()) } returns intent
+        every { context.createCyoaActivityIntent(any(), *anyVararg(), pageId = any()) } returns intent
     }
 
     @Test
@@ -40,6 +40,14 @@ class CyoaAppsFlyerDeepLinkResolverTest {
         assertSame(intent, CyoaAppsFlyerDeepLinkResolver.resolve(context, "tool|cyoa|test|en-US"))
         verifyOrder {
             context.createCyoaActivityIntent("test", Locale.forLanguageTag("en-US"))
+        }
+    }
+
+    @Test
+    fun testToolDeepLinkWithPage() {
+        assertSame(intent, CyoaAppsFlyerDeepLinkResolver.resolve(context, "tool|cyoa|test|en-US|pageId"))
+        verifyOrder {
+            context.createCyoaActivityIntent("test", Locale.forLanguageTag("en-US"), pageId = "pageId")
         }
     }
 }

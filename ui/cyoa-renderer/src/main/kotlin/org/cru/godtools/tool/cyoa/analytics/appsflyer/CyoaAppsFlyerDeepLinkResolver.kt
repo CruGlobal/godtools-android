@@ -9,5 +9,5 @@ internal object CyoaAppsFlyerDeepLinkResolver : AppsFlyerDeepLinkResolver {
     override fun resolve(context: Context, deepLinkValue: String) = deepLinkValue
         .takeIf { it.startsWith("tool|cyoa|") }
         ?.split("|")?.takeIf { it.size >= 4 }
-        ?.let { context.createCyoaActivityIntent(it[2], Locale.forLanguageTag(it[3])) }
+        ?.let { context.createCyoaActivityIntent(it[2], Locale.forLanguageTag(it[3]), pageId = it.getOrNull(4)) }
 }

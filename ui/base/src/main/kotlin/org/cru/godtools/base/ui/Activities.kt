@@ -42,10 +42,11 @@ private const val ACTIVITY_CLASS_CYOA = "org.cru.godtools.tool.cyoa.ui.CyoaActiv
 fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?) =
     startActivity(createCyoaActivityIntent(toolCode, *languages))
 
-fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?) =
+fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?, pageId: String? = null) =
     Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
         .putExtra(EXTRA_TOOL, toolCode)
         .putLanguagesExtra(*languages)
+        .putExtra(EXTRA_PAGE, pageId)
 // endregion CyoaActivity
 
 // region TractActivity
