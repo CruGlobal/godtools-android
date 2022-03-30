@@ -34,8 +34,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
 
     // region Intent processing
-    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
-        intent?.extras?.let { extras ->
+    override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
+        intent.extras?.let { extras ->
             dataModel.toolCode.value = extras.getString(EXTRA_TOOL, dataModel.toolCode.value)
             dataModel.locale.value = extras.getLocale(EXTRA_LANGUAGE, dataModel.locale.value)
         }

@@ -152,10 +152,10 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+    override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
-            if (intent?.action != Intent.ACTION_VIEW) return
+            if (intent.action != Intent.ACTION_VIEW) return
             val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return
 
             dataModel.toolCode.value = data.deepLinkTool

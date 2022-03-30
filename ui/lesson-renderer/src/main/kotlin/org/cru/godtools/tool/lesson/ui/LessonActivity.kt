@@ -80,10 +80,10 @@ class LessonActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    override fun processIntent(intent: Intent?, savedInstanceState: Bundle?) {
+    override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
-        val data = intent?.data
-        when (intent?.action) {
+        val data = intent.data
+        when (intent.action) {
             ACTION_VIEW -> when {
                 data?.isLessonDeepLink() == true -> {
                     dataModel.toolCode.value = data.lessonDeepLinkCode
