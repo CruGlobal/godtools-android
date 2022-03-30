@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.EXTRA_LANGUAGE
+import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -25,7 +26,6 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tract.EXTRA_MODAL
-import org.cru.godtools.tract.EXTRA_PAGE
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController

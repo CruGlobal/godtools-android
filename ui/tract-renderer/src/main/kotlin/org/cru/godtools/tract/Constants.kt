@@ -7,5 +7,4 @@ const val PARAM_PARALLEL_LANGUAGE = "parallelLanguage"
 const val PARAM_LIVE_SHARE_STREAM = "liveShareStream"
 
 // common extras
-const val EXTRA_PAGE = "page"
 const val EXTRA_MODAL = "modal"
