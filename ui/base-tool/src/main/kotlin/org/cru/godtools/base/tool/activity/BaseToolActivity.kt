@@ -77,7 +77,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         super.onCreate(savedInstanceState)
 
         // process intent and finish activity if it's in an invalid state
-        processIntent(intent, savedInstanceState)
+        intent?.let { processIntent(it, savedInstanceState) }
         if (!isValidStartState) {
             finish()
             return
@@ -130,7 +130,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // endregion Lifecycle
 
     // region Intent parsing
-    protected open fun processIntent(intent: Intent?, savedInstanceState: Bundle?) = Unit
+    protected open fun processIntent(intent: Intent, savedInstanceState: Bundle?) = Unit
     protected open val isValidStartState get() = true
     // endregion Intent parsing
 
