@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
-import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -29,6 +28,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.backgroundColor
 import org.cru.godtools.tool.model.tips.Tip
@@ -53,7 +53,6 @@ import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
-import org.cru.godtools.tract.ui.share.model.LiveShareItem
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -285,13 +284,9 @@ class TractActivity :
 
     // region Share Menu Logic
     override val shareMenuItemVisible by lazy {
-        combine(
-            shareLinkUriLiveData,
-            subscriberController.state,
-            dataModel.enableTips
-        ) { shareUri, subscriberState, enableTips ->
-            shareUri != null && subscriberState == State.Off && !enableTips
-        }
+        // HACK: make this dependent on shareLinkUriLiveData so that there is a subscriber to actually resolve the uri
+        //       before the user clicks the share action
+        shareLinkUriLiveData.map { false }
     }
 
     override val shareLinkUriLiveData by lazy {
@@ -307,10 +302,7 @@ class TractActivity :
             .appendQueryParameter("icid", "gtshare")
     }
 
-    override fun getShareItems() = buildList {
-        addAll(super.getShareItems())
-        if (dataModel.tool.value?.isScreenShareDisabled != true) add(LiveShareItem())
-    }
+    override fun getShareableShareItems() = emptyList<ShareableImageShareItem>()
     // endregion Share Menu Logic
 
     // region Live Share Logic

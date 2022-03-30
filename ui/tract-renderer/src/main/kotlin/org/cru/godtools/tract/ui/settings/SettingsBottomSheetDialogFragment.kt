@@ -12,10 +12,14 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
+import org.ccci.gto.android.common.kotlin.coroutines.collectInto
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
+import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
+import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.tool.model.shareable.ShareableImage
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.databinding.TractSettingsSheetBinding
@@ -34,10 +38,12 @@ class SettingsBottomSheetDialogFragment :
     override fun onBindingCreated(binding: TractSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         binding.tool = activityDataModel.tool
+        binding.activeManifest = activityDataModel.activeManifest
         binding.hasTips = activityDataModel.hasTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
         setupLanguageViews(binding)
+        setupShareables(binding)
     }
     // endregion Lifecycle
 
@@ -60,9 +66,10 @@ class SettingsBottomSheetDialogFragment :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // sync toolCode from activity to local DataModel
-                activityDataModel.toolCode.filterNotNull().collect { dataModel.toolCode.value = it }
+                activityDataModel.toolCode.filterNotNull().collectInto(dataModel.toolCode)
             }
         }
+        context?.deviceLocale?.let { dataModel.deviceLocale.value = it }
     }
     // endregion Data Model
 
@@ -84,6 +91,12 @@ class SettingsBottomSheetDialogFragment :
             setAdapter(adapter)
             setOnItemClickListener { _, _, pos, _ -> updateParallelLanguage(adapter.getItem(pos)?.code) }
         }
+    }
+
+    private fun setupShareables(binding: TractSettingsSheetBinding) {
+        val adapter = ShareablesAdapter(viewLifecycleOwner, this)
+        activityDataModel.activeManifest.observe(viewLifecycleOwner) { adapter.shareables = it?.shareables }
+        binding.shareables.adapter = adapter
     }
     // endregion UI
 
@@ -107,6 +120,18 @@ class SettingsBottomSheetDialogFragment :
 
     override fun shareScreen() {
         (activity as? TractActivity)?.shareLiveShareLink()
+        dismissAllowingStateLoss()
+    }
+
+    override fun shareShareable(shareable: ShareableImage?) {
+        val manifest = shareable?.manifest
+        val tool = manifest?.code
+        val locale = manifest?.locale
+        val id = shareable?.id
+        if (tool != null && locale != null && id != null) {
+            activity?.supportFragmentManager
+                ?.let { ShareableImageBottomSheetDialogFragment(tool, locale, id).show(it, null) }
+        }
         dismissAllowingStateLoss()
     }
 

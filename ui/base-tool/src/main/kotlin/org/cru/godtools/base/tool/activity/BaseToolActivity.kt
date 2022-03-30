@@ -165,14 +165,14 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     // region Share tool logic
     protected open val shareMenuItemVisible by lazy { shareLinkUriLiveData.map { it != null } }
-    protected open val shareLinkUriLiveData = emptyLiveData<String>()
 
     protected open val shareLinkTitle get() = activeManifest?.title
     @get:StringRes
     protected open val shareLinkMessageRes get() = R.string.share_general_message
+    protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 
-    protected fun Menu.setupShareMenuItem() {
+    private fun Menu.setupShareMenuItem() {
         findItem(R.id.action_share)?.let { item ->
             shareMenuItemVisible.observe(this@BaseToolActivity, item) {
                 isVisible = it
@@ -189,14 +189,14 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         eventBus.post(ShareActionEvent)
         settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
-        // start the share activity chooser with our share link
+        // launch the appropriate Share Dialog based on shareItems
         when (shareItems.size) {
             1 -> shareItems.first().triggerAction(this)
             else -> ShareBottomSheetDialogFragment(shareItems).show(supportFragmentManager, null)
         }
     }
 
-    protected open fun getShareItems(): Collection<ShareItem> = buildList {
+    private fun getShareItems(): Collection<ShareItem> = buildList {
         buildShareIntent()?.let { add(DefaultShareItem(it)) }
         addAll(getShareableShareItems())
     }.filter { it.isValid }
@@ -204,7 +204,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Inject
     internal lateinit var shareableShareItemFactory: ShareableImageShareItem.Factory
 
-    private fun getShareableShareItems() = activeManifest?.shareables?.filterIsInstance<ShareableImage>()
+    protected open fun getShareableShareItems() = activeManifest?.shareables?.filterIsInstance<ShareableImage>()
         ?.map { shareableShareItemFactory.create(it) }.orEmpty()
 
     private fun buildShareIntent(

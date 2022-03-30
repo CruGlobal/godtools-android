@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="callbacks" type="org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks" />
+        <variable name="item" type="org.cru.godtools.tool.model.shareable.ShareableImage" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:padding="8dp"
+        android:onClick="@{() -> callbacks.shareShareable(item)}">
+
+        <org.cru.godtools.base.ui.view.DaggerPicassoImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:placeholder="@color/gray_F5"
+            app:picassoFile="@{item.resource}" />
+    </FrameLayout>
+</layout>
