@@ -21,7 +21,7 @@ private const val ACTIVITY_CLASS_DASHBOARD = "org.keynote.godtools.android.activ
 
 fun Activity.startDashboardActivity(page: Page? = null) = startActivity(createDashboardIntent(page))
 
-private fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
+fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
     .putExtra(EXTRA_PAGE, page)
 // endregion DashboardActivity (MainActivity)
 
