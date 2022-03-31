@@ -99,7 +99,7 @@ class CyoaActivity :
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
 
-        manifest.findPage(intent?.getStringExtra(EXTRA_PAGE)) ?: manifest.pages.firstOrNull { !it.isHidden }
+        (manifest.findPage(intent?.getStringExtra(EXTRA_PAGE)) ?: manifest.pages.firstOrNull { !it.isHidden })
             ?.let { showPage(it, true) }
     }
 
