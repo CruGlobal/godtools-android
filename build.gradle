@@ -35,7 +35,7 @@ plugins {
     alias libs.plugins.hilt apply false
     alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
-    id "de.undercouch.download" version "5.0.2" apply false
+    id "de.undercouch.download" version "5.0.4" apply false
 }
 
 version '6.0.0-SNAPSHOT'
