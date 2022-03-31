@@ -58,7 +58,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         this.mode = mode
     }
 
-    private var mode: Int by argOrDefault(MODE_ADDED)
+    private var mode by argOrDefault(MODE_ADDED)
 
     @Inject
     internal lateinit var dao: GodToolsDao
