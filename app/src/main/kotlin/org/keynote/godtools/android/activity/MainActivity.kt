@@ -25,6 +25,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
@@ -33,6 +34,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
+import org.cru.godtools.ui.dashboard.RemoveFavoriteConfirmationDialogFragment
 import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
@@ -50,10 +52,15 @@ private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 class MainActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
     ToolsListFragment.Callbacks,
-    ToolsFragment.Callbacks {
+    ToolsFragment.Callbacks,
+    RemoveFavoriteConfirmationDialogFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
+
+    @Inject
+    internal lateinit var lazyDownloadManager: Lazy<GodToolsDownloadManager>
+    private val downloadManager: GodToolsDownloadManager get() = lazyDownloadManager.get()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,9 +151,18 @@ class MainActivity :
         }.also { savedState.selectedPageLiveData.observe(this@MainActivity, it) }
     }
 
+    // region Remove Favorite Dialog
+    private fun showRemoveFavoriteConfirmationDialog(tool: Tool?, translation: Translation?) {
+        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, this).toString())
+            .show(supportFragmentManager, null)
+    }
+
+    override fun removeFavorite(code: String) {
+        downloadManager.unpinToolAsync(code)
+    }
+    // endregion Remove Favorite Dialog
+
     // region ToolsAdapterCallbacks
-    @Inject
-    internal lateinit var downloadManager: GodToolsDownloadManager
     @Inject
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
@@ -170,7 +186,10 @@ class MainActivity :
     }
 
     override fun unpinTool(tool: Tool?, translation: Translation?) {
-        tool?.code?.let { downloadManager.unpinToolAsync(it) }
+        when (savedState.selectedPage) {
+            Page.FAVORITE_TOOLS -> showRemoveFavoriteConfirmationDialog(tool, translation)
+            else -> tool?.code?.let { removeFavorite(it) }
+        }
     }
     // endregion ToolsAdapterCallbacks
 
