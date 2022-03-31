@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.content.Context
+import android.content.Intent
 import android.view.ViewGroup
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +24,7 @@ import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -42,15 +44,17 @@ private const val TOOL = "test"
 @RunWith(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class CyoaActivityTest {
+    private val context get() = ApplicationProvider.getApplicationContext<Context>()
+
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private fun <R> scenario(block: (ActivityScenario<CyoaActivity>) -> R): R {
-        val intent = ApplicationProvider.getApplicationContext<Context>().createCyoaActivityIntent(TOOL, Locale.ENGLISH)
-        return ActivityScenario.launch<CyoaActivity>(intent).use(block)
-    }
+    private fun <R> scenario(
+        intent: Intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH),
+        block: (ActivityScenario<CyoaActivity>) -> R
+    ): R = ActivityScenario.launch<CyoaActivity>(intent).use(block)
 
     // region Mocks
     @Inject
@@ -120,6 +124,52 @@ class CyoaActivityTest {
             }
         }
     }
+
+    // region Intent Processing
+    @Test
+    fun `Intent Processing - Normal Launch`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH)) {
+            it.onActivity {
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Normal Launch - Deferred Manifest`() {
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH)) {
+            it.onActivity {
+                assertNull(it.pageFragment)
+                manifestEnglish.value = manifest(listOf(page1, page2))
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Open Specific Page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, pageId = "page2")) {
+            it.onActivity {
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Open Specific Page - Deferred Manifest`() {
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, pageId = "page2")) {
+            it.onActivity {
+                assertNull(it.pageFragment)
+                manifestEnglish.value = manifest(listOf(page1, page2))
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
+    // endregion Intent Processing
 
     // region navigateToParentPage()
     @Test

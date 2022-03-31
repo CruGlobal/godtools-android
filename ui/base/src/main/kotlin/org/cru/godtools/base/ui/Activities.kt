@@ -21,7 +21,7 @@ private const val ACTIVITY_CLASS_DASHBOARD = "org.keynote.godtools.android.activ
 
 fun Activity.startDashboardActivity(page: Page? = null) = startActivity(createDashboardIntent(page))
 
-private fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
+fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
     .putExtra(EXTRA_PAGE, page)
 // endregion DashboardActivity (MainActivity)
 
@@ -42,10 +42,11 @@ private const val ACTIVITY_CLASS_CYOA = "org.cru.godtools.tool.cyoa.ui.CyoaActiv
 fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?) =
     startActivity(createCyoaActivityIntent(toolCode, *languages))
 
-fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?) =
+fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?, pageId: String? = null) =
     Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
         .putExtra(EXTRA_TOOL, toolCode)
         .putLanguagesExtra(*languages)
+        .putExtra(EXTRA_PAGE, pageId)
 // endregion CyoaActivity
 
 // region TractActivity
@@ -54,11 +55,16 @@ private const val ACTIVITY_CLASS_TRACT = "org.cru.godtools.tract.activity.TractA
 fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean) =
     startActivity(createTractActivityIntent(toolCode, *languages, showTips = showTips))
 
-fun Context.createTractActivityIntent(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
-    Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
-        .putExtra(EXTRA_TOOL, toolCode)
-        .putLanguagesExtra(*languages)
-        .putExtra(EXTRA_SHOW_TIPS, showTips)
+fun Context.createTractActivityIntent(
+    toolCode: String,
+    vararg languages: Locale?,
+    page: Int = 0,
+    showTips: Boolean = false
+) = Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
+    .putExtra(EXTRA_TOOL, toolCode)
+    .putLanguagesExtra(*languages)
+    .putExtra(EXTRA_PAGE, page)
+    .putExtra(EXTRA_SHOW_TIPS, showTips)
 // endregion TractActivity
 
 fun Context.buildToolExtras(toolCode: String, language: Locale) = BaseActivity.buildExtras(this).apply {

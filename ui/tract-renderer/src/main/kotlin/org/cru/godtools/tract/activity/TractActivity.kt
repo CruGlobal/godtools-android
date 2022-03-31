@@ -24,6 +24,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.model.NavigationEvent
+import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -154,6 +155,7 @@ class TractActivity :
     // region Intent Processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
+        if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
         if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
             if (intent.action != Intent.ACTION_VIEW) return
             val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return

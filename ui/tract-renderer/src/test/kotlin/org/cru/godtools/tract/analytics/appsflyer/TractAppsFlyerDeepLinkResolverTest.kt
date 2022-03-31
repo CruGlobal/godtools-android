@@ -1,44 +1,49 @@
 package org.cru.godtools.tract.analytics.appsflyer
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.tract.activity.TractActivity
-import org.junit.Assert.assertEquals
+import io.mockk.Called
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.verify
+import io.mockk.verifyAll
+import java.util.Locale
+import org.cru.godtools.base.ui.createTractActivityIntent
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class TractAppsFlyerDeepLinkResolverTest {
-    private lateinit var context: Context
+    private val context = mockk<Context>()
+    private val intent = mockk<Intent>()
 
     @Before
-    fun setup() {
-        context = ApplicationProvider.getApplicationContext()
+    fun setupMocks() {
+        mockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
+        every { context.createTractActivityIntent(any(), *anyVararg(), page = any()) } returns intent
     }
 
     @Test
-    fun verifyResolveNoUri() {
-        assertNull(TractAppsFlyerDeepLinkResolver.resolve(context, null, emptyMap()))
+    fun testInvalidDeepLinks() {
+        listOf("", "dashboard", "tool|lesson|kgp|en", "tool|cyoa|", "tool|cyoa|test").forEach {
+            assertNull("$it should not resolve to an intent", TractAppsFlyerDeepLinkResolver.resolve(context, it))
+            verify {
+                context.createTractActivityIntent(any(), *anyVararg(), page = any(), showTips = any()) wasNot Called
+            }
+        }
     }
 
     @Test
-    fun verifyResolveInvalidUri() {
-        assertNull(TractAppsFlyerDeepLinkResolver.resolve(context, Uri.parse("https://example.com/en/kgp"), emptyMap()))
+    fun testTractDeepLink() {
+        assertSame(intent, TractAppsFlyerDeepLinkResolver.resolve(context, "tool|tract|test|en-US"))
+        verifyAll { context.createTractActivityIntent("test", Locale.forLanguageTag("en-US")) }
     }
 
     @Test
-    fun verifyResolveValidUri() {
-        val uri = Uri.parse("https://knowgod.com/en/kgp")
-
-        val intent = TractAppsFlyerDeepLinkResolver.resolve(context, uri, emptyMap())!!
-        assertEquals(Intent.ACTION_VIEW, intent.action)
-        assertEquals(uri, intent.data)
-        assertEquals(ComponentName(context, TractActivity::class.java), intent.component)
+    fun testTractDeepLinkWithPage() {
+        assertSame(intent, TractAppsFlyerDeepLinkResolver.resolve(context, "tool|tract|test|en-US|5"))
+        verifyAll { context.createTractActivityIntent("test", Locale.forLanguageTag("en-US"), page = 5) }
     }
 }
