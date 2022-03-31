@@ -5,6 +5,7 @@ import org.cru.godtools.model.Translation
 
 interface ToolsAdapterCallbacks {
     fun onToolInfo(code: String?)
+    fun openTool(tool: Tool?, primary: Translation?) = openTool(tool, primary, null)
     fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?)
     fun addTool(code: String?)
     fun removeTool(tool: Tool?, translation: Translation?)

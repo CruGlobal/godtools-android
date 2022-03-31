@@ -44,11 +44,11 @@ class ToolsAdapterViewModel @Inject constructor(
         private val primaryTranslation =
             settings.primaryLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(tool, it) }
         private val defaultTranslation = dao.getLatestTranslationLiveData(tool, Settings.defaultLanguage)
-        internal val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
-        internal val parallelTranslation =
+        val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
+        val parallelTranslation =
             settings.parallelLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(tool, it) }
 
-        internal val firstLanguage = firstTranslation.switchMap { t ->
+        val firstLanguage = firstTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
         internal val parallelLanguage = parallelTranslation.switchMap { t ->
