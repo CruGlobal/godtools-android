@@ -17,7 +17,7 @@
         style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() ->callbacks.onToolInfo(tool.code)}">
+        android:onClick="@{() ->callbacks.onToolClicked(tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> tool.isAdded ? callbacks.removeTool(tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.addTool(tool.code)}"
+                android:onClick="@{() -> tool.isAdded ? callbacks.unpinTool(tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.pinTool(tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:selected="@{tool.isAdded}" />

@@ -15,7 +15,6 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropM
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,7 +43,6 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
@@ -58,9 +56,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         const val MODE_LESSONS = 3
     }
 
-    interface Callbacks {
-        fun onToolInfo(code: String?)
-        fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale)
+    interface Callbacks : ToolsAdapterCallbacks {
         fun onNoToolsAvailableAction()
     }
 
@@ -100,8 +96,8 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         helper.sync(syncService.syncTools(force))
     }
 
-    override fun onToolInfo(code: String?) {
-        findListener<Callbacks>()?.onToolInfo(code)
+    override fun showToolDetails(code: String?) {
+        findListener<ToolsAdapterCallbacks>()?.showToolDetails(code)
     }
 
     override fun onToolsReordered(vararg ids: Long) {
@@ -176,23 +172,15 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
 
     // region ToolsAdapterCallbacks
     override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
-        if (tool == null) return
-        val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
-        if (languages.isEmpty()) return
-
-        findListener<Callbacks>()?.onToolSelect(tool.code, tool.type, *languages.toTypedArray())
-        eventBus.post(ToolOpenTapAnalyticsActionEvent)
+        findListener<Callbacks>()?.openTool(tool, primary, parallel)
     }
 
-    override fun addTool(code: String?) {
-        code?.let { downloadManager.pinToolAsync(it) }
+    override fun pinTool(code: String?) {
+        findListener<Callbacks>()?.pinTool(code)
     }
 
-    override fun removeTool(tool: Tool?, translation: Translation?) {
-        when (mode) {
-            MODE_ADDED -> showRemoveFavoriteConfirmationDialog(tool, translation)
-            else -> removeFavorite(tool?.code)
-        }
+    override fun unpinTool(tool: Tool?, translation: Translation?) {
+        findListener<Callbacks>()?.unpinTool(tool, translation)
     }
     // endregion ToolsAdapterCallbacks
 

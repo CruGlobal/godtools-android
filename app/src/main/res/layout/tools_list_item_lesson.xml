@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:clipToPadding="false"
-        android:onClick="@{() -> callbacks.openTool(tool, toolViewModel.firstTranslation)}">
+        android:onClick="@{() -> callbacks.onToolClicked(tool, toolViewModel.firstTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"

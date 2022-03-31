@@ -212,8 +212,8 @@ class ToolsListItemToolBindingTest {
 
         assertFalse(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks).addTool(eq("test"))
-        verify(callbacks, never()).removeTool(any(), any())
+        verify(callbacks).pinTool(eq("test"))
+        verify(callbacks, never()).unpinTool(any(), any())
     }
 
     @Test
@@ -225,8 +225,8 @@ class ToolsListItemToolBindingTest {
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation.value))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
     }
 
     @Test
@@ -238,8 +238,8 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation.value))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
     }
 
     @Test
@@ -251,8 +251,8 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(parallelTranslation.value))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(parallelTranslation.value))
     }
 
     @Test
@@ -265,8 +265,8 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(null))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(null))
     }
     // endregion Favorite Action
 
@@ -275,7 +275,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.actionDetails.performClick()
-        verify(callbacks).onToolInfo(eq("test"))
+        verify(callbacks).showToolDetails(eq("test"))
     }
 
     // region Select Action
