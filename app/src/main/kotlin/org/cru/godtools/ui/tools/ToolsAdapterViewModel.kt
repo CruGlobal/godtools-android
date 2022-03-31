@@ -51,11 +51,11 @@ class ToolsAdapterViewModel @Inject constructor(
         val firstLanguage = firstTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
-        internal val parallelLanguage = parallelTranslation.switchMap { t ->
+        val parallelLanguage = parallelTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
 
-        internal val downloadProgress =
+        val downloadProgress =
             primaryTranslation.switchCombineWith(defaultTranslation, parallelTranslation) { prim, def, para ->
                 when {
                     prim != null -> downloadManager.getDownloadProgressLiveData(tool, prim.languageCode)
