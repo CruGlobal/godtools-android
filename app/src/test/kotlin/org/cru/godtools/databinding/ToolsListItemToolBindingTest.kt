@@ -278,43 +278,43 @@ class ToolsListItemToolBindingTest {
         verify(callbacks).showToolDetails(eq("test"))
     }
 
-    // region Select Action
+    // region Click Action
     @Test
-    fun verifyClickTriggersSelectCallbackWithBothTranslations() {
+    fun `root view - onClick - Triggers Callback With Both Translations`() {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, primaryTranslation.value, parallelTranslation.value)
+        verify(callbacks).onToolClicked(tool, primaryTranslation.value, parallelTranslation.value)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithOnlyPrimaryTranslation() {
+    fun `root view - onClick - Triggers Callback With Only Primary Translation`() {
         parallelTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, primaryTranslation.value, null)
+        verify(callbacks).onToolClicked(tool, primaryTranslation.value, null)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithOnlyParallelTranslation() {
+    fun `root view - onClick - Triggers Callback With Only Parallel Translation`() {
         primaryTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, null, parallelTranslation.value)
+        verify(callbacks).onToolClicked(tool, null, parallelTranslation.value)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithNoTranslations() {
+    fun `root view - onClick -  Triggers Callback With No Translations`() {
         primaryTranslation.value = null
         parallelTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, null, null)
+        verify(callbacks).onToolClicked(tool, null, null)
     }
-    // endregion Select Action
+    // endregion Click Action
 
     private fun language(code: Locale) = Language().apply { this.code = code }
 }
