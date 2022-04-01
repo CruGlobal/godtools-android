@@ -194,6 +194,19 @@ class CyoaActivityTest {
             }
         }
     }
+
+    @Test
+    fun `Intent Processing - Uri Scheme Deep Link - Specific Page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/cyoa/test/en/page2"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
     // endregion Intent Processing
 
     // region navigateToParentPage()

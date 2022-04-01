@@ -14,7 +14,6 @@ import javax.inject.Named
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
-import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
@@ -34,6 +33,8 @@ class CyoaActivity :
     MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
     CyoaPageFragment.InvalidPageListener,
     ShowTipCallback {
+    private val savedState by viewModels<CyoaActivitySavedState>()
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +84,7 @@ class CyoaActivity :
                 dataModel.toolCode.value = path.getOrNull(2)
                 dataModel.primaryLocales.value = listOfNotNull(path.getOrNull(3)?.let { Locale.forLanguageTag(it) })
                 dataModel.parallelLocales.value = emptyList()
+                savedState.initialPage = path.getOrNull(4)
             }
         }
     }
@@ -130,7 +132,7 @@ class CyoaActivity :
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
 
-        (manifest.findPage(intent?.getStringExtra(EXTRA_PAGE)) ?: manifest.pages.firstOrNull { !it.isHidden })
+        (manifest.findPage(savedState.initialPage) ?: manifest.pages.firstOrNull { !it.isHidden })
             ?.let { showPage(it, true) }
     }
 
