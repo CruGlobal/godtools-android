@@ -2,18 +2,24 @@ package org.cru.godtools.databinding
 
 import android.view.LayoutInflater
 import android.view.View
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
+import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -36,6 +42,8 @@ import org.robolectric.annotation.Config
 class ToolsListItemToolBindingTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
+    @get:Rule
+    val instantTaskRule = InstantTaskExecutorRule()
 
     private lateinit var binding: ToolsListItemToolBinding
     private lateinit var callbacks: ToolsAdapterCallbacks
@@ -46,15 +54,27 @@ class ToolsListItemToolBindingTest {
         description = "toolDescription"
         category = "gospel"
     }
-    private val primaryTranslation = Translation().apply {
-        languageCode = Locale("en")
-        name = "primaryName"
-        tagline = "primaryTagline"
-    }
-    private val parallelTranslation = Translation().apply {
-        languageCode = Locale("fr")
-        name = "parallelName"
-        tagline = "parallelTagline"
+    private val primaryTranslation = MutableLiveData(
+        Translation().apply {
+            languageCode = Locale("en")
+            name = "primaryName"
+            tagline = "primaryTagline"
+        }
+    )
+    private val parallelTranslation = MutableLiveData(
+        Translation().apply {
+            languageCode = Locale("fr")
+            name = "parallelName"
+            tagline = "parallelTagline"
+        }
+    )
+    private val parallelLanguage = MutableLiveData<Language?>(null)
+    private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
+        every { banner } returns emptyLiveData()
+        every { downloadProgress } returns emptyLiveData()
+        every { firstTranslation } returns primaryTranslation
+        every { parallelTranslation } returns this@ToolsListItemToolBindingTest.parallelTranslation
+        every { parallelLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage
     }
 
     @Before
@@ -63,18 +83,17 @@ class ToolsListItemToolBindingTest {
         callbacks = mock()
 
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activity), null, false)
-        binding.lifecycleOwner = activity
+        binding.lifecycleOwner = TestLifecycleOwner()
         binding.callbacks = ObservableField(callbacks)
         binding.tool = tool
-        binding.primaryTranslation = MutableLiveData(primaryTranslation)
-        binding.parallelTranslation = MutableLiveData(parallelTranslation)
+        binding.toolViewModel = toolViewModel
         binding.executePendingBindings()
     }
 
     // region Layout Direction
     @Test
     fun verifyLayoutDirectionWithoutTranslation() {
-        binding.primaryTranslation = MutableLiveData(null)
+        primaryTranslation.value = null
         binding.executePendingBindings()
 
         assertTrue(binding.content.isLayoutDirectionInherit())
@@ -82,7 +101,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyLayoutDirectionWithLtrTranslation() {
-        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale.ENGLISH })
+        primaryTranslation.value = Translation().apply { languageCode = Locale.ENGLISH }
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())
@@ -91,7 +110,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyLayoutDirectionWithRtlTranslation() {
-        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale("ar") })
+        primaryTranslation.value = Translation().apply { languageCode = Locale("ar") }
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())
@@ -116,7 +135,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyTitleAndTaglineFromParallelTranslation() {
-        binding.primaryTranslation = MutableLiveData(null)
+        primaryTranslation.value = null
         binding.executePendingBindings()
 
         assertEquals("parallelName", binding.title.text)
@@ -125,8 +144,8 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyTitleAndTaglineFromTool() {
-        binding.primaryTranslation = MutableLiveData(null)
-        binding.parallelTranslation = MutableLiveData(null)
+        primaryTranslation.value = null
+        parallelTranslation.value = null
         binding.executePendingBindings()
 
         assertEquals("toolName", binding.title.text)
@@ -137,7 +156,7 @@ class ToolsListItemToolBindingTest {
     // region Parallel Language Label
     @Test
     fun `language_parallel - Content`() {
-        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
+        parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
         assertEquals(View.VISIBLE, binding.languageParallel.visibility)
@@ -146,7 +165,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun `language_parallel - Hidden - No Parallel Language`() {
-        binding.parallelLanguage = MutableLiveData(null)
+        parallelLanguage.value = null
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
@@ -154,8 +173,8 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun `language_parallel - Hidden - Primary Translation === Parallel Language`() {
-        binding.primaryTranslation = MutableLiveData(Translation().apply { languageCode = Locale("es") })
-        binding.parallelLanguage = MutableLiveData(language(Locale("es")))
+        primaryTranslation.value = Translation().apply { languageCode = Locale("es") }
+        parallelLanguage.value = language(Locale("es"))
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
@@ -165,7 +184,7 @@ class ToolsListItemToolBindingTest {
     fun `language_parallel - Hidden - Article Tool Type`() {
         tool.type = Tool.Type.ARTICLE
         binding.tool = tool
-        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
+        parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
@@ -175,7 +194,7 @@ class ToolsListItemToolBindingTest {
     fun `language_parallel - Visible - Cyoa Tool Type`() {
         tool.type = Tool.Type.CYOA
         binding.tool = tool
-        binding.parallelLanguage = MutableLiveData(language(Locale.FRENCH))
+        parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
         assertEquals(View.VISIBLE, binding.languageParallel.visibility)
@@ -193,8 +212,8 @@ class ToolsListItemToolBindingTest {
 
         assertFalse(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks).addTool(eq("test"))
-        verify(callbacks, never()).removeTool(any(), any())
+        verify(callbacks).pinTool(eq("test"))
+        verify(callbacks, never()).unpinTool(any(), any())
     }
 
     @Test
@@ -206,48 +225,48 @@ class ToolsListItemToolBindingTest {
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoritePrimaryTranslationOnly() {
         tool.isAdded = true
         binding.tool = tool
-        binding.parallelTranslation = MutableLiveData(null)
+        parallelTranslation.value = null
         binding.executePendingBindings()
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(primaryTranslation))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteParallelTranslationOnly() {
         tool.isAdded = true
         binding.tool = tool
-        binding.primaryTranslation = MutableLiveData(null)
+        primaryTranslation.value = null
         binding.executePendingBindings()
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(parallelTranslation))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(parallelTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteNoTranslations() {
         tool.isAdded = true
         binding.tool = tool
-        binding.primaryTranslation = MutableLiveData(null)
-        binding.parallelTranslation = MutableLiveData(null)
+        primaryTranslation.value = null
+        parallelTranslation.value = null
         binding.executePendingBindings()
         reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).addTool(any())
-        verify(callbacks).removeTool(eq(tool), eq(null))
+        verify(callbacks, never()).pinTool(any())
+        verify(callbacks).unpinTool(eq(tool), eq(null))
     }
     // endregion Favorite Action
 
@@ -256,46 +275,46 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.actionDetails.performClick()
-        verify(callbacks).onToolInfo(eq("test"))
+        verify(callbacks).showToolDetails(eq("test"))
     }
 
-    // region Select Action
+    // region Click Action
     @Test
-    fun verifyClickTriggersSelectCallbackWithBothTranslations() {
+    fun `root view - onClick - Triggers Callback With Both Translations`() {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, primaryTranslation, parallelTranslation)
+        verify(callbacks).onToolClicked(tool, primaryTranslation.value, parallelTranslation.value)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithOnlyPrimaryTranslation() {
-        binding.parallelTranslation = MutableLiveData(null)
+    fun `root view - onClick - Triggers Callback With Only Primary Translation`() {
+        parallelTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, primaryTranslation, null)
+        verify(callbacks).onToolClicked(tool, primaryTranslation.value, null)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithOnlyParallelTranslation() {
-        binding.primaryTranslation = MutableLiveData(null)
+    fun `root view - onClick - Triggers Callback With Only Parallel Translation`() {
+        primaryTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, null, parallelTranslation)
+        verify(callbacks).onToolClicked(tool, null, parallelTranslation.value)
     }
 
     @Test
-    fun verifyClickTriggersSelectCallbackWithNoTranslations() {
-        binding.primaryTranslation = MutableLiveData(null)
-        binding.parallelTranslation = MutableLiveData(null)
+    fun `root view - onClick -  Triggers Callback With No Translations`() {
+        primaryTranslation.value = null
+        parallelTranslation.value = null
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).openTool(tool, null, null)
+        verify(callbacks).onToolClicked(tool, null, null)
     }
-    // endregion Select Action
+    // endregion Click Action
 
     private fun language(code: Locale) = Language().apply { this.code = code }
 }

@@ -64,15 +64,16 @@ class ToolsAdapter(
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
         val tool = getItem(position)
-        val toolDataModel = tool?.code?.let { dataModel.getToolViewModel(it) }
+        val toolViewModel = tool?.code?.let { dataModel.getToolViewModel(it) }
 
         binding.setVariable(BR.tool, tool)
-        binding.setVariable(BR.downloadProgress, toolDataModel?.downloadProgress)
-        binding.setVariable(BR.banner, toolDataModel?.banner)
-        binding.setVariable(BR.primaryTranslation, toolDataModel?.firstTranslation)
-        binding.setVariable(BR.primaryLanguage, toolDataModel?.firstLanguage)
-        binding.setVariable(BR.parallelTranslation, toolDataModel?.parallelTranslation)
-        binding.setVariable(BR.parallelLanguage, toolDataModel?.parallelLanguage)
+        binding.setVariable(BR.toolViewModel, toolViewModel)
+        binding.setVariable(BR.downloadProgress, toolViewModel?.downloadProgress)
+        binding.setVariable(BR.banner, toolViewModel?.banner)
+        binding.setVariable(BR.primaryTranslation, toolViewModel?.firstTranslation)
+        binding.setVariable(BR.primaryLanguage, toolViewModel?.firstLanguage)
+        binding.setVariable(BR.parallelTranslation, toolViewModel?.parallelTranslation)
+        binding.setVariable(BR.parallelLanguage, toolViewModel?.parallelLanguage)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

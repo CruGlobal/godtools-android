@@ -1,21 +1,17 @@
 package org.cru.godtools.ui.tools
 
-import android.app.Dialog
 import android.graphics.drawable.NinePatchDrawable
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,9 +29,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_AL
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LESSONS
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ToolsFragmentBinding
-import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -44,10 +38,8 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
-import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
@@ -58,9 +50,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         const val MODE_LESSONS = 3
     }
 
-    interface Callbacks {
-        fun onToolInfo(code: String?)
-        fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale)
+    interface Callbacks : ToolsAdapterCallbacks {
         fun onNoToolsAvailableAction()
     }
 
@@ -72,8 +62,6 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
 
     @Inject
     internal lateinit var dao: GodToolsDao
-    @Inject
-    internal lateinit var downloadManager: GodToolsDownloadManager
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,8 +88,8 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         helper.sync(syncService.syncTools(force))
     }
 
-    override fun onToolInfo(code: String?) {
-        findListener<Callbacks>()?.onToolInfo(code)
+    override fun showToolDetails(code: String?) {
+        findListener<ToolsAdapterCallbacks>()?.showToolDetails(code)
     }
 
     override fun onToolsReordered(vararg ids: Long) {
@@ -176,36 +164,17 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
 
     // region ToolsAdapterCallbacks
     override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
-        if (tool == null) return
-        val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
-        if (languages.isEmpty()) return
-
-        findListener<Callbacks>()?.onToolSelect(tool.code, tool.type, *languages.toTypedArray())
-        eventBus.post(ToolOpenTapAnalyticsActionEvent)
+        findListener<Callbacks>()?.openTool(tool, primary, parallel)
     }
 
-    override fun addTool(code: String?) {
-        code?.let { downloadManager.pinToolAsync(it) }
+    override fun pinTool(code: String?) {
+        findListener<Callbacks>()?.pinTool(code)
     }
 
-    override fun removeTool(tool: Tool?, translation: Translation?) {
-        when (mode) {
-            MODE_ADDED -> showRemoveFavoriteConfirmationDialog(tool, translation)
-            else -> removeFavorite(tool?.code)
-        }
+    override fun unpinTool(tool: Tool?, translation: Translation?) {
+        findListener<Callbacks>()?.unpinTool(tool, translation)
     }
     // endregion ToolsAdapterCallbacks
-
-    // region Remove Favorite
-    private fun showRemoveFavoriteConfirmationDialog(tool: Tool?, translation: Translation?) {
-        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, null).toString())
-            .show(childFragmentManager, null)
-    }
-
-    internal fun removeFavorite(code: String?) {
-        code?.let { downloadManager.unpinToolAsync(it) }
-    }
-    // endregion Remove Favorite
 
     // region Tools List
     private val toolsAdapterDataModel by viewModels<ToolsAdapterViewModel>()
@@ -274,24 +243,4 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         toolsDragDropAdapter = null
     }
     // endregion Tools List
-}
-
-class RemoveFavoriteConfirmationDialogFragment() : DialogFragment() {
-    constructor(code: String, name: String) : this() {
-        this.code = code
-        this.name = name
-    }
-
-    private var code: String by arg()
-    private var name: String by arg()
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.tools_list_remove_favorite_dialog_title, name))
-            .setPositiveButton(R.string.tools_list_remove_favorite_dialog_confirm) { _, _ ->
-                findListener<ToolsListFragment>()?.removeFavorite(code)
-            }
-            .setNegativeButton(R.string.tools_list_remove_favorite_dialog_dismiss, null)
-            .create()
-    }
 }

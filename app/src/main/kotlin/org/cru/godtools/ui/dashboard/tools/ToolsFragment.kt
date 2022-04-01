@@ -7,16 +7,14 @@ import androidx.recyclerview.widget.ConcatAdapter.Config
 import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.recyclerview.widget.addLayout
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.databinding.DashboardToolsFragmentBinding
-import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsAdapter
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.ToolsAdapterViewModel
@@ -26,8 +24,7 @@ class ToolsFragment :
     BasePlatformFragment<DashboardToolsFragmentBinding>(R.layout.dashboard_tools_fragment),
     ToolCategoriesAdapter.Callbacks,
     ToolsAdapterCallbacks {
-    @Inject
-    internal lateinit var downloadManager: GodToolsDownloadManager
+    interface Callbacks : ToolsAdapterCallbacks
 
     // region Data Model
     private val dataModel: ToolsFragmentDataModel by viewModels()
@@ -89,19 +86,22 @@ class ToolsFragment :
     }
 
     // region ToolsAdapterCallbacks
-    override fun addTool(code: String?) {
-        code?.let { downloadManager.pinToolAsync(it) }
+    override fun onToolClicked(tool: Tool?, primary: Translation?, parallel: Translation?) = showToolDetails(tool?.code)
+
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+        findListener<Callbacks>()?.openTool(tool, primary, parallel)
     }
 
-    override fun removeTool(tool: Tool?, translation: Translation?) {
-        tool?.code?.let { downloadManager.unpinToolAsync(it) }
+    override fun showToolDetails(code: String?) {
+        findListener<Callbacks>()?.showToolDetails(code)
     }
 
-    override fun onToolInfo(code: String?) {
-        code?.let { requireActivity().startToolDetailsActivity(code) }
+    override fun pinTool(code: String?) {
+        findListener<Callbacks>()?.pinTool(code)
     }
 
-    override fun onToolsReordered(vararg ids: Long) = Unit
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) = Unit
+    override fun unpinTool(tool: Tool?, translation: Translation?) {
+        findListener<Callbacks>()?.unpinTool(tool, translation)
+    }
     // endregion ToolsAdapterCallbacks
 }

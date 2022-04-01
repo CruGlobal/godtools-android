@@ -14,7 +14,6 @@ import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -26,12 +25,16 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ActivityDashboardBinding
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.DashboardDataModel
 import org.cru.godtools.ui.dashboard.DashboardSavedState
+import org.cru.godtools.ui.dashboard.RemoveFavoriteConfirmationDialogFragment
 import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
@@ -40,16 +43,24 @@ import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsListFragment
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_LESSONS
+import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
 class MainActivity :
-    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard), ToolsListFragment.Callbacks {
+    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
+    ToolsListFragment.Callbacks,
+    ToolsFragment.Callbacks,
+    RemoveFavoriteConfirmationDialogFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
+
+    @Inject
+    internal lateinit var lazyDownloadManager: Lazy<GodToolsDownloadManager>
+    private val downloadManager: GodToolsDownloadManager get() = lazyDownloadManager.get()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,23 +151,51 @@ class MainActivity :
         }.also { savedState.selectedPageLiveData.observe(this@MainActivity, it) }
     }
 
-    // region ToolsFragment.Callbacks
+    // region Remove Favorite Dialog
+    private fun showRemoveFavoriteConfirmationDialog(tool: Tool?, translation: Translation?) {
+        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, this).toString())
+            .show(supportFragmentManager, null)
+    }
+
+    override fun removeFavorite(code: String) {
+        downloadManager.unpinToolAsync(code)
+    }
+    // endregion Remove Favorite Dialog
+
+    // region ToolsAdapterCallbacks
     @Inject
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
 
-    override fun onToolSelect(code: String?, type: Tool.Type, vararg languages: Locale) {
-        if (code == null || languages.isEmpty()) return
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+        val code = tool?.code ?: return
+        val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
+        if (languages.isEmpty()) return
+
         languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
-        openToolActivity(code, type, *languages)
+        eventBus.post(ToolOpenTapAnalyticsActionEvent)
+        openToolActivity(code, tool.type, *languages.toTypedArray())
     }
 
-    override fun onToolInfo(code: String?) {
+    override fun showToolDetails(code: String?) {
         code?.let { startToolDetailsActivity(code) }
     }
 
+    override fun pinTool(code: String?) {
+        code?.let { downloadManager.pinToolAsync(it) }
+    }
+
+    override fun unpinTool(tool: Tool?, translation: Translation?) {
+        when (savedState.selectedPage) {
+            Page.FAVORITE_TOOLS -> showRemoveFavoriteConfirmationDialog(tool, translation)
+            else -> tool?.code?.let { removeFavorite(it) }
+        }
+    }
+    // endregion ToolsAdapterCallbacks
+
+    // region ToolsListFragment.Callbacks
     override fun onNoToolsAvailableAction() = showPage(Page.ALL_TOOLS)
-    // endregion ToolsFragment.Callbacks
+    // endregion ToolsListFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
         bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
