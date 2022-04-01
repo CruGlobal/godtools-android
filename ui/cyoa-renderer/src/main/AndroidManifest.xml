@@ -5,8 +5,19 @@
     <application>
         <activity
             android:name=".ui.CyoaActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation"
-            android:theme="@style/Theme.GodTools.Tool" />
+            android:theme="@style/Theme.GodTools.Tool">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="godtools" />
+                <data android:host="${hostGodtoolsCustomUri}" />
+                <data android:pathPattern="/tool/cyoa/.*/.*" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

@@ -78,9 +78,13 @@ android {
             minifyEnabled false
             shrinkResources false
 
-            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools.debug"]
+            manifestPlaceholders += [
+                    "appAuthRedirectScheme": "org.cru.godtools.debug.okta",
+                    "hostGodtoolsCustomUri": "org.cru.godtools.debug"
+            ]
 
-            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug\""
+            buildConfigField "String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.debug\""
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug.okta\""
             resValue "string", "app_name_debug", "GodTools (Dev)"
         }
         qa {
@@ -90,9 +94,13 @@ android {
             applicationIdSuffix ".qa"
             versionNameSuffix "-qa"
 
-            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools.qa"]
+            manifestPlaceholders += [
+                    "appAuthRedirectScheme": "org.cru.godtools.qa.okta",
+                    "hostGodtoolsCustomUri": "org.cru.godtools.qa"
+            ]
 
-            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa\""
+            buildConfigField "String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.qa\""
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\""
             resValue "string", "app_name_debug", "GodTools (QA)"
 
             // Firebase App Distribution build
@@ -115,9 +123,13 @@ android {
                 signingConfig signingConfigs.release
             }
 
-            manifestPlaceholders += ["appAuthRedirectScheme": "org.cru.godtools"]
+            manifestPlaceholders += [
+                    "appAuthRedirectScheme": "org.cru.godtools.okta",
+                    "hostGodtoolsCustomUri": "org.cru.godtools"
+            ]
 
-            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools\""
+            buildConfigField "String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools\""
+            buildConfigField "String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.okta\""
         }
     }
     bundle {

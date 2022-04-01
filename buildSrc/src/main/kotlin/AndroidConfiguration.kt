@@ -1,5 +1,7 @@
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.TestedExtension
+import com.android.build.gradle.internal.core.InternalBaseVariant
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
@@ -34,7 +36,7 @@ fun LibraryExtension.baseConfiguration(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
-private fun <T : BaseExtension> T.configureAndroidCommon(project: Project) {
+private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions()
     configureTestOptions()
@@ -72,7 +74,7 @@ fun BaseExtension.configureFlavorDimensions() {
     }
 }
 
-private fun BaseExtension.configureTestOptions() {
+private fun TestedExtension.configureTestOptions() {
     testOptions.unitTests {
         isIncludeAndroidResources = true
 
@@ -82,6 +84,13 @@ private fun BaseExtension.configureTestOptions() {
             it.maxHeapSize = "2g"
         }
     }
+
+    testVariants.all { configureTestManifestPlaceholders() }
+    unitTestVariants.all { configureTestManifestPlaceholders() }
+}
+
+private fun InternalBaseVariant.configureTestManifestPlaceholders() {
+    mergedFlavor.manifestPlaceholders += "hostGodtoolsCustomUri" to "org.cru.godtools.test"
 }
 
 private fun BaseExtension.filterStageVariants() =
