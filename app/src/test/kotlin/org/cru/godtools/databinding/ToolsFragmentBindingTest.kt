@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.model.Tool
+import org.cru.godtools.ui.dashboard.DashboardActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.activity.MainActivity
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -22,7 +22,7 @@ class ToolsFragmentBindingTest {
 
     @Before
     fun createBinding() {
-        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val activityController = Robolectric.buildActivity(DashboardActivity::class.java)
 
         binding = ToolsFragmentBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()
