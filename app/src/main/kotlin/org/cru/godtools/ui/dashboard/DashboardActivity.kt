@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.activity
+package org.cru.godtools.ui.dashboard
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
@@ -32,10 +32,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
-import org.cru.godtools.ui.dashboard.DashboardDataModel
-import org.cru.godtools.ui.dashboard.DashboardSavedState
-import org.cru.godtools.ui.dashboard.RemoveFavoriteConfirmationDialogFragment
-import org.cru.godtools.ui.dashboard.isDashboardLessonsDeepLink
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
@@ -49,7 +45,7 @@ import org.cru.godtools.util.openToolActivity
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
-class MainActivity :
+class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
     ToolsListFragment.Callbacks,
     ToolsFragment.Callbacks,
@@ -148,7 +144,7 @@ class MainActivity :
         selectedPageMenuObserver?.let { savedState.selectedPageLiveData.removeObserver(it) }
         selectedPageMenuObserver = Observer<Page> {
             findItem(R.id.action_switch_language)?.isVisible = it != Page.LESSONS
-        }.also { savedState.selectedPageLiveData.observe(this@MainActivity, it) }
+        }.also { savedState.selectedPageLiveData.observe(this@DashboardActivity, it) }
     }
 
     // region Remove Favorite Dialog
@@ -199,7 +195,7 @@ class MainActivity :
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
         bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
-            dataModel.lessons.observe(this@MainActivity) { lessons.isVisible = !it.isNullOrEmpty() }
+            dataModel.lessons.observe(this@DashboardActivity) { lessons.isVisible = !it.isNullOrEmpty() }
         }
         bottomNav.setOnItemSelectedListener {
             Page.findPage(it.itemId)?.let { showPage(it) }

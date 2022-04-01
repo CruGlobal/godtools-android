@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.languages.LanguageSettingsActivity
 import org.cru.godtools.ui.languages.LanguageSettingsFragmentBindingCallbacks
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.activity.MainActivity
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -29,7 +29,7 @@ class LanguageSettingsFragmentBindingTest {
 
     @Before
     fun createBinding() {
-        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val activityController = Robolectric.buildActivity(LanguageSettingsActivity::class.java)
         callbacks = mock()
 
         binding = LanguageSettingsFragmentBinding.inflate(LayoutInflater.from(activityController.get()), null, false)

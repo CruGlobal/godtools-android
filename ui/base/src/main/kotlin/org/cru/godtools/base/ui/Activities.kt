@@ -17,7 +17,7 @@ import org.cru.godtools.base.ui.dashboard.Page
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SHOW_TIPS"
 
 // region DashboardActivity (MainActivity)
-private const val ACTIVITY_CLASS_DASHBOARD = "org.keynote.godtools.android.activity.MainActivity"
+private const val ACTIVITY_CLASS_DASHBOARD = "org.cru.godtools.ui.dashboard.DashboardActivity"
 
 fun Activity.startDashboardActivity(page: Page? = null) = startActivity(createDashboardIntent(page))
 
