@@ -50,6 +50,7 @@ class MultiLanguageToolActivityDataModelTest {
     private lateinit var manifestManager: ManifestManager
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
+    private val savedStateHandle = SavedStateHandle()
 
     @Before
     fun setupDataModel() {
@@ -66,7 +67,7 @@ class MultiLanguageToolActivityDataModelTest {
             mockk(),
             manifestManager,
             isConnnected,
-            SavedStateHandle()
+            savedStateHandle
         )
         excludeRecords { dao.findAsFlow<Tool>(any<String>()) }
     }
@@ -359,6 +360,17 @@ class MultiLanguageToolActivityDataModelTest {
         assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
         isConnnected.value = false
         assertEquals(Locale.FRENCH, dataModel.activeLocale.value)
+    }
+
+    @Test
+    fun `Property activeLocale - Persisted via SavedStateHandle`() {
+        dataModel.primaryLocales.value = listOf(Locale.ENGLISH)
+        assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
+
+        // creating a new DataModel using the same SavedState emulates recreation after process death
+        val dataModel2 =
+            MultiLanguageToolActivityDataModel(dao, mockk(), manifestManager, isConnnected, savedStateHandle)
+        assertEquals(Locale.ENGLISH, dataModel2.activeLocale.value)
     }
     // endregion Property: activeLocale
 
