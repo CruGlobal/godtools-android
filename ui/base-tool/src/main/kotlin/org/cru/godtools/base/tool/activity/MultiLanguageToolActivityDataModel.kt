@@ -63,6 +63,21 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
+    // region LiveData Caches
+    private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
+        override fun create(key: TranslationKey): LiveData<Manifest?> {
+            val tool = key.tool ?: return emptyLiveData()
+            val locale = key.locale ?: return emptyLiveData()
+            return manifestManager.getLatestPublishedManifestLiveData(tool, locale).distinctUntilChanged()
+        }
+    }
+
+    private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
+        override fun create(key: TranslationKey) =
+            dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
+    }
+    // endregion LiveData Caches
+
     // region Resolved Data
     private val distinctToolCode = savedState.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged()
     val locales = combine(primaryLocales, parallelLocales) { prim, para -> prim + para }.distinctUntilChanged()
@@ -198,19 +213,6 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
                 }?.let { activeLocale.value = it }
                 else -> Unit
             }
-        }
-    }
-
-    private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
-        override fun create(key: TranslationKey) =
-            dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
-    }
-
-    private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
-        override fun create(key: TranslationKey): LiveData<Manifest?> {
-            val tool = key.tool ?: return emptyLiveData()
-            val locale = key.locale ?: return emptyLiveData()
-            return manifestManager.getLatestPublishedManifestLiveData(tool, locale).distinctUntilChanged()
         }
     }
 }
