@@ -156,7 +156,9 @@ class TractActivity :
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
-        if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
+
+        // deep link parsing
+        if (savedInstanceState == null || dataModel.locales.value.isNullOrEmpty()) {
             if (intent.action != Intent.ACTION_VIEW) return
             val data = intent.data?.normalizeScheme() ?: return
 

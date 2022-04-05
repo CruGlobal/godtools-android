@@ -75,7 +75,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Intent Processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
-        if (dataModel.primaryLocales.value.isNullOrEmpty()) {
+        if (dataModel.locales.value.isNullOrEmpty()) {
             val extras = intent.extras ?: return
             val locales = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
             dataModel.primaryLocales.value = locales.take(1)
@@ -83,9 +83,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         }
     }
 
-    override val isValidStartState
-        get() = dataModel.toolCode.value != null &&
-            (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
+    override val isValidStartState get() = dataModel.toolCode.value != null && !dataModel.locales.value.isNullOrEmpty()
     // endregion Intent Processing
 
     // region UI
