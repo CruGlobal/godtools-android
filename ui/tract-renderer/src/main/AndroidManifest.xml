@@ -28,6 +28,16 @@
 <!--                <data android:pathPattern="/.*/thefour.*" />-->
                 <data android:pathPattern="/.*/.*" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="godtools" />
+                <data android:host="${hostGodtoolsCustomUri}" />
+                <data android:pathPattern="/tool/tract/.*/.*" />
+            </intent-filter>
             <meta-data
                 android:name="default-url"
                 android:value="https://knowgod.com/en/kgp/?useDeviceLanguage=true" />

@@ -17,6 +17,7 @@ import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
@@ -24,7 +25,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.model.NavigationEvent
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -153,6 +156,10 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
+    @Inject
+    @Named(DAGGER_HOST_CUSTOM_URI)
+    internal lateinit var hostCustomUriScheme: String
+
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
@@ -163,6 +170,12 @@ class TractActivity :
             val data = intent.data?.normalizeScheme() ?: return
 
             when {
+                data.isCustomUriDeepLink() -> {
+                    val path = data.pathSegments ?: return
+                    dataModel.toolCode.value = path[2]
+                    dataModel.primaryLocales.value = LocaleUtils.getFallbacks(Locale.forLanguageTag(path[3])).toList()
+                    path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
+                }
                 data.isTractDeepLink() -> {
                     dataModel.toolCode.value = data.deepLinkTool
                     val (primary, parallel) = data.deepLinkLanguages
@@ -176,6 +189,10 @@ class TractActivity :
             }
         }
     }
+
+    private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
+        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "tract"
 
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
@@ -243,7 +260,8 @@ class TractActivity :
             }
         }
     }
-    private var initialPage = 0
+    @VisibleForTesting
+    internal var initialPage = 0
 
     private fun setupPager() {
         pager.adapter = pagerAdapter

@@ -152,6 +152,36 @@ class TractActivityTest {
     }
 
     @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme - Missing Language`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/")) {
+            assertEquals(Lifecycle.State.DESTROYED, it.state)
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme - With Page Num`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr/3")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(3, it.initialPage)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
     fun `processIntent() - Preserve tool and language changes - Direct`() {
         scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)) {
             it.onActivity {
