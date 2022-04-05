@@ -158,15 +158,19 @@ class TractActivity :
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
         if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
             if (intent.action != Intent.ACTION_VIEW) return
-            val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return
+            val data = intent.data?.normalizeScheme() ?: return
 
-            dataModel.toolCode.value = data.deepLinkTool
-            val (primary, parallel) = data.deepLinkLanguages
-            dataModel.primaryLocales.value = primary
-            dataModel.parallelLocales.value = parallel
-            if (savedInstanceState == null) {
-                dataModel.activeLocale.value = data.deepLinkSelectedLanguage
-                data.deepLinkPage?.let { initialPage = it }
+            when {
+                data.isTractDeepLink() -> {
+                    dataModel.toolCode.value = data.deepLinkTool
+                    val (primary, parallel) = data.deepLinkLanguages
+                    dataModel.primaryLocales.value = primary
+                    dataModel.parallelLocales.value = parallel
+                    if (savedInstanceState == null) {
+                        dataModel.activeLocale.value = data.deepLinkSelectedLanguage
+                        data.deepLinkPage?.let { initialPage = it }
+                    }
+                }
             }
         }
     }
