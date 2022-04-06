@@ -6,6 +6,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
@@ -17,6 +18,10 @@ fun Project.configureAndroidApp() = extensions.configure<BaseAppModuleExtension>
 fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExtension> {
     configureAndroidCommon(project)
     configureFlavorDimensions()
+
+    dependencies {
+        add("implementation", project(":app"))
+    }
 }
 
 fun Project.configureAndroidLibrary(block: LibraryExtension.() -> Unit = {}) = extensions.configure<LibraryExtension> {
