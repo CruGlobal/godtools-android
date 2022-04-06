@@ -1,6 +1,9 @@
 plugins {
-    alias(libs.plugins.hilt)
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-parcelize")
+    alias(libs.plugins.hilt)
 }
 
 configureAndroidLibrary()

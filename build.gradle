@@ -86,18 +86,6 @@ allprojects {
     }
 }
 
-// base library plugins
-configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
-    apply plugin: 'com.android.library'
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-
-    dependencies {
-        androidTestImplementation libs.gtoSupport.testing.okta
-        testImplementation libs.gtoSupport.testing.okta
-    }
-}
-
 // common config
 subprojects {
     afterEvaluate { project ->
@@ -115,6 +103,10 @@ subprojects {
                 testImplementation libs.mockito.kotlin
                 testImplementation libs.mockk
                 testImplementation libs.robolectric
+
+                // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
+                androidTestImplementation libs.gtoSupport.testing.okta
+                testImplementation libs.gtoSupport.testing.okta
             }
         }
     }
