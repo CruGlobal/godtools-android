@@ -114,6 +114,10 @@
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
         <activity
+            android:name=".tool.lesson.ui.LessonActivity"
+            android:parentActivityName=".ui.dashboard.DashboardActivity" />
+
+        <activity
             android:name=".tract.activity.TractActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
