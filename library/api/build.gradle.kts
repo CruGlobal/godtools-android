@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 android.defaultConfig {
     buildConfigField("String", "CAMPAIGN_FORMS_API", "\"https://campaign-forms.cru.org/\"")
     buildConfigField("String", "CAMPAIGN_FORMS_ID", "\"3fb6022c-5ef9-458c-928a-0380c4a0e57b\"")

@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 android {
     defaultConfig {
         consumerProguardFiles += file("proguard-rules-snowplow.pro")

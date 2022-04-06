@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 dependencies {
     implementation(project(":library:base"))
 

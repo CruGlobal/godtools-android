@@ -4,10 +4,13 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.gms.google-services'
 
+AndroidConfigurationKt.configureAndroidCommon(project)
+
 android {
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
+        versionCode rootProject.versionCode
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-rules.pro'

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+configureAndroidLibrary()
+
 android {
     buildFeatures.dataBinding = true
 }

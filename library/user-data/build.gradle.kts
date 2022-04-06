@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 android {
     defaultConfig {
         javaCompileOptions {

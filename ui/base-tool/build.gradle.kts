@@ -3,6 +3,8 @@ plugins {
     id("kotlin-parcelize")
 }
 
+configureAndroidLibrary()
+
 android {
     defaultConfig {
         javaCompileOptions {

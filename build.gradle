@@ -25,7 +25,6 @@ buildscript {
         classpath libs.firebase.crashlytics.gradlePlugin
         classpath libs.firebase.perf.gradlePlugin
         classpath libs.google.services.gradlePlugin
-        classpath libs.kotlin.gradlePlugin
     }
 }
 
@@ -34,7 +33,6 @@ plugins {
     alias libs.plugins.hilt apply false
     alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
-    id "de.undercouch.download" version "5.0.2" apply false
 }
 
 version '6.0.0-SNAPSHOT'
@@ -43,9 +41,6 @@ ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029265
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 32
-    minSdk        = 21
-    targetSdk     = 32
 }
 
 // configure dependency resolution
@@ -138,23 +133,6 @@ subprojects {
     beforeEvaluate { project ->
         if (project.hasProperty('android')) {
             android {
-                compileSdkVersion rootProject.compileSdk
-
-                defaultConfig {
-                    versionCode rootProject.versionCode
-
-                    minSdkVersion rootProject.minSdk
-                    targetSdkVersion rootProject.targetSdk
-                }
-
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_11
-                    targetCompatibility JavaVersion.VERSION_11
-                }
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_11.toString()
-                    freeCompilerArgs += '-Xjvm-default=all'
-                }
                 lintOptions {
                     lintConfig rootProject.file("analysis/lint/lint.xml")
                 }

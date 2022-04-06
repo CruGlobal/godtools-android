@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 android {
     defaultConfig.buildConfigField("int", "VERSION_CODE", "${rootProject.ext["versionCode"]}")
 }

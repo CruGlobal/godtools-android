@@ -1,3 +1,5 @@
+configureAndroidCommon()
+
 dependencies {
     implementation(project(":library:initial-content"))
 

@@ -1,3 +1,5 @@
+configureAndroidLibrary()
+
 android {
     buildFeatures.dataBinding = true
 }
