@@ -14,6 +14,8 @@ fun Project.configureAndroidCommon() {
     extensions.configure<BaseExtension> {
         configureSdk()
         configureCompilerOptions()
+
+        testOptions.unitTests.isIncludeAndroidResources = true
     }
 }
 
