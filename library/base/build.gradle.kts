@@ -4,9 +4,9 @@ plugins {
     kotlin("kapt")
 }
 
-configureAndroidLibrary()
-
 android {
+    baseConfiguration(project)
+
     defaultConfig.buildConfigField("int", "VERSION_CODE", "${rootProject.ext["versionCode"]}")
 }
 

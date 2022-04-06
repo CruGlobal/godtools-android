@@ -4,7 +4,7 @@ plugins {
     kotlin("kapt")
 }
 
-configureAndroidLibrary()
+android.baseConfiguration(project)
 
 dependencies {
     implementation(project(":library:api"))

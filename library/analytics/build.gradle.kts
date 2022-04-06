@@ -4,9 +4,9 @@ plugins {
     kotlin("kapt")
 }
 
-configureAndroidLibrary()
-
 android {
+    baseConfiguration(project)
+
     defaultConfig {
         consumerProguardFiles += file("proguard-rules-snowplow.pro")
 

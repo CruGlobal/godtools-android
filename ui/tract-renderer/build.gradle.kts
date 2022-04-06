@@ -6,9 +6,9 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-configureAndroidLibrary()
-
 android {
+    baseConfiguration(project)
+
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
 

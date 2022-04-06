@@ -4,7 +4,8 @@ plugins {
     kotlin("kapt")
 }
 
-configureAndroidLibrary {
+android {
+    baseConfiguration(project)
     configureFlavorDimensions()
 }
 
