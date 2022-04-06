@@ -25,6 +25,7 @@ import org.cru.godtools.model.Tool
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -131,6 +132,12 @@ class GodToolsShortcutManagerTest {
         shortcutManager.updatePendingShortcuts()
         verify(dao).find<Tool>("kgp")
         verifyNoMoreInteractions(dao)
+
+        // prevent garbage collection of the shortcut during the test
+        assertNotNull(
+            "Reference the shortcut here to prevent garbage collection from collecting it during the test.",
+            shortcut
+        )
     }
     // endregion Pending Shortcuts
 
