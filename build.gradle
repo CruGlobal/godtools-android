@@ -86,13 +86,6 @@ allprojects {
     }
 }
 
-// base app plugins
-configure(subprojects.findAll { it.path == ":app" }) {
-    apply plugin: 'com.android.application'
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-}
-
 // base library plugins
 configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
     apply plugin: 'com.android.library'
@@ -130,7 +123,7 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
 
 // common config
 subprojects {
-    beforeEvaluate { project ->
+    afterEvaluate { project ->
         if (project.hasProperty('android')) {
             dependencies {
                 compileOnly libs.androidx.annotation
