@@ -8,15 +8,9 @@ plugins {
 
 android {
     baseConfiguration(project)
+    createEventBusIndex("org.cru.godtools.base.tool.BaseToolEventBusIndex")
 
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.base.tool.BaseToolEventBusIndex"
-        }
-
-        vectorDrawables.useSupportLibrary = true
-    }
+    defaultConfig.vectorDrawables.useSupportLibrary = true
     buildFeatures {
         dataBinding = true
         viewBinding = true

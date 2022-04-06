@@ -7,13 +7,7 @@ plugins {
 
 android {
     baseConfiguration(project)
-
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.shortcuts.ShortcutsEventBusIndex"
-        }
-    }
+    createEventBusIndex("org.cru.godtools.shortcuts.ShortcutsEventBusIndex")
 }
 
 dependencies {

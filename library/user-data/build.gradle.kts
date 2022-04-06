@@ -6,13 +6,7 @@ plugins {
 
 android {
     baseConfiguration(project)
-
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.user.data.UserEventBusIndex"
-        }
-    }
+    createEventBusIndex("org.cru.godtools.user.data.UserEventBusIndex")
 }
 
 dependencies {
