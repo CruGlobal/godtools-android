@@ -17,6 +17,8 @@ fun Project.configureAndroidCommon() {
 
         lintOptions.lintConfig = rootProject.file("analysis/lint/lint.xml")
         testOptions.unitTests.isIncludeAndroidResources = true
+
+        filterStageVariants()
     }
 }
 
@@ -39,3 +41,6 @@ private fun BaseExtension.configureCompilerOptions() {
         freeCompilerArgs += "-Xjvm-default=all"
     }
 }
+
+private fun BaseExtension.filterStageVariants() =
+    variantFilter { if (flavors.any { it.name.contains("stage") } && buildType.name != "debug") ignore = true }

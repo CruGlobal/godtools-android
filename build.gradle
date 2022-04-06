@@ -132,13 +132,6 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
 subprojects {
     beforeEvaluate { project ->
         if (project.hasProperty('android')) {
-            android {
-                // only include stage variants for the debug buildType
-                variantFilter { variant ->
-                    if (variant.flavors*.name.contains("stage") && variant.buildType.name != "debug") setIgnore(true)
-                }
-            }
-
             dependencies {
                 compileOnly libs.androidx.annotation
 
