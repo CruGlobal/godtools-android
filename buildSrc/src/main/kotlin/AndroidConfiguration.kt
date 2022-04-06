@@ -15,6 +15,7 @@ fun Project.configureAndroidCommon() {
         configureSdk()
         configureCompilerOptions()
 
+        lintOptions.lintConfig = rootProject.file("analysis/lint/lint.xml")
         testOptions.unitTests.isIncludeAndroidResources = true
     }
 }
