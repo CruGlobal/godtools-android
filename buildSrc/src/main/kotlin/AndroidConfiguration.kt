@@ -1,4 +1,7 @@
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -6,20 +9,32 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-fun Project.configureAndroidLibrary() {
-    configureAndroidCommon()
+fun Project.configureAndroidApp() = extensions.configure<BaseAppModuleExtension> {
+    configureAndroidCommon(project)
+    configureFlavorDimensions()
 }
 
-fun Project.configureAndroidCommon() {
-    extensions.configure<BaseExtension> {
-        configureSdk()
-        configureCompilerOptions()
+fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExtension> {
+    configureAndroidCommon(project)
+    configureFlavorDimensions()
+}
 
-        lintOptions.lintConfig = rootProject.file("analysis/lint/lint.xml")
-        testOptions.unitTests.isIncludeAndroidResources = true
+fun Project.configureAndroidLibrary(block: LibraryExtension.() -> Unit = {}) = extensions.configure<LibraryExtension> {
+    configureAndroidCommon(project)
+    block()
+}
 
-        filterStageVariants()
-    }
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+private fun <T : BaseExtension> T.configureAndroidCommon(project: Project) {
+    configureSdk()
+    configureCompilerOptions()
+
+    lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
+    testOptions.unitTests.isIncludeAndroidResources = true
+
+    filterStageVariants()
 }
 
 private fun BaseExtension.configureSdk() {
@@ -39,6 +54,14 @@ private fun BaseExtension.configureCompilerOptions() {
     (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
         jvmTarget = JavaVersion.VERSION_11.toString()
         freeCompilerArgs += "-Xjvm-default=all"
+    }
+}
+
+fun BaseExtension.configureFlavorDimensions() {
+    flavorDimensions("env")
+    productFlavors {
+        create("stage").dimension = "env"
+        create("production").dimension = "env"
     }
 }
 

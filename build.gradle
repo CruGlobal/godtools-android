@@ -104,18 +104,6 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
 
-    android {
-        flavorDimensions "env"
-        productFlavors {
-            stage {
-                dimension "env"
-            }
-            production {
-                dimension "env"
-            }
-        }
-    }
-
     dependencies {
         implementation project(":app")
     }

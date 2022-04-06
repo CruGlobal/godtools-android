@@ -1,11 +1,5 @@
-configureAndroidLibrary()
-
-android {
-    flavorDimensions += "env"
-    productFlavors {
-        create("stage") { dimension = "env" }
-        create("production") { dimension = "env" }
-    }
+configureAndroidLibrary {
+    configureFlavorDimensions()
 }
 
 dependencies {

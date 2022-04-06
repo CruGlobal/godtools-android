@@ -7,7 +7,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.gms.google-services'
 
-AndroidConfigurationKt.configureAndroidCommon(project)
+AndroidConfigurationKt.configureAndroidApp(project)
 
 android {
     defaultConfig {
@@ -45,16 +45,11 @@ android {
         }
     }
 
-    flavorDimensions "env"
     productFlavors {
         stage {
-            dimension "env"
-
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.stage}\""
         }
         production {
-            dimension "env"
-
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.production}\""
         }
     }

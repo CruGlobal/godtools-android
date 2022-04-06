@@ -1,4 +1,4 @@
-configureAndroidCommon()
+configureAndroidFeature()
 
 dependencies {
     implementation(project(":library:initial-content"))
