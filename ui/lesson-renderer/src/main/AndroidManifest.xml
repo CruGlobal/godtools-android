@@ -18,6 +18,16 @@
                 <data android:host="godtoolsapp.com" />
                 <data android:pathPattern="/lessons/.*/.*" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="godtools" />
+                <data android:host="${hostGodtoolsCustomUri}" />
+                <data android:pathPattern="/tool/lesson/.*/.*" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>

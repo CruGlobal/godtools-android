@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import javax.inject.Named
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -27,6 +29,10 @@ import org.mockito.kotlin.mock
     ]
 )
 class ExternalSingletonsModule {
+    @get:Provides
+    @get:Named(DAGGER_HOST_CUSTOM_URI)
+    val hostCustomUri = "org.cru.godtools.test"
+
     @get:Provides
     val dao by lazy {
         mock<GodToolsDao> {

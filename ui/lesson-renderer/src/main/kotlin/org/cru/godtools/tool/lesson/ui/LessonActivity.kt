@@ -2,6 +2,7 @@ package org.cru.godtools.tool.lesson.ui
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
@@ -16,11 +17,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
+import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
@@ -79,6 +83,10 @@ class LessonActivity :
     // endregion Lifecycle
 
     // region Intent Processing
+    @Inject
+    @Named(DAGGER_HOST_CUSTOM_URI)
+    internal lateinit var hostCustomUriScheme: String
+
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         val data = intent.data?.normalizeScheme() ?: return
@@ -91,9 +99,18 @@ class LessonActivity :
                     dataModel.toolCode.value = path[1]
                     dataModel.locale.value = Locale.forLanguageTag(path[2])
                 }
+                // Sample deep link: godtools://org.cru.godtools/tool/lesson/{tool}/{locale}
+                data.isCustomUriDeepLink() -> {
+                    dataModel.toolCode.value = path[2]
+                    dataModel.locale.value = Locale.forLanguageTag(path[3])
+                }
             }
         }
     }
+
+    private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
+        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "lesson"
     // endregion Intent Processing
 
     // region UI
