@@ -75,7 +75,7 @@ godtoolsMpp-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = 
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
 google-services-gradlePlugin = "com.google.gms:google-services:4.3.10"
-gradleDownloadTask = "de.undercouch:gradle-download-task:5.0.2"
+gradleDownloadTask = "de.undercouch:gradle-download-task:5.0.4"
 gtoSupport-androidx-constraintlayout = { module = "org.ccci.gto.android:gto-support-androidx-constraintlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
 gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
