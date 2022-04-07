@@ -28,14 +28,6 @@ class TractActivityDeepLinkTest {
     }
 
     @Test
-    fun verifyDeepLinkTool() {
-        with(activity) {
-            assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp").deepLinkTool)
-            assertEquals("kgp", Uri.parse("https://knowgod.com/en/kgp/1").deepLinkTool)
-        }
-    }
-
-    @Test
     fun verifyDeepLinkPage() {
         with(activity) {
             assertNull(Uri.parse("https://knowgod.com/en/kgp").deepLinkPage)

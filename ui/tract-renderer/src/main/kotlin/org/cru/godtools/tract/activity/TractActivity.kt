@@ -168,16 +168,16 @@ class TractActivity :
         if (savedInstanceState == null || dataModel.locales.value.isNullOrEmpty()) {
             if (intent.action != Intent.ACTION_VIEW) return
             val data = intent.data?.normalizeScheme() ?: return
+            val path = data.pathSegments ?: return
 
             when {
                 data.isCustomUriDeepLink() -> {
-                    val path = data.pathSegments ?: return
                     dataModel.toolCode.value = path[2]
                     dataModel.primaryLocales.value = LocaleUtils.getFallbacks(Locale.forLanguageTag(path[3])).toList()
                     path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
                 }
                 data.isTractDeepLink() -> {
-                    dataModel.toolCode.value = data.deepLinkTool
+                    dataModel.toolCode.value = path[1]
                     val (primary, parallel) = data.deepLinkLanguages
                     dataModel.primaryLocales.value = primary
                     dataModel.parallelLocales.value = parallel
@@ -196,8 +196,6 @@ class TractActivity :
 
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
-    @VisibleForTesting
-    internal val Uri.deepLinkTool get() = pathSegments[1]
     @VisibleForTesting
     internal val Uri.deepLinkPage get() = pathSegments.getOrNull(2)?.toIntOrNull()
 

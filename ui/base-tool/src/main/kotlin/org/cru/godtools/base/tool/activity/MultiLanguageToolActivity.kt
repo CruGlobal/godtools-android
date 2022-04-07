@@ -83,7 +83,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         }
     }
 
-    override val isValidStartState get() = dataModel.toolCode.value != null && !dataModel.locales.value.isNullOrEmpty()
+    override val isValidStartState
+        get() = !dataModel.toolCode.value.isNullOrEmpty() && !dataModel.locales.value.isNullOrEmpty()
     // endregion Intent Processing
 
     // region UI
