@@ -37,9 +37,9 @@ fun LibraryExtension.baseConfiguration(project: Project) {
 private fun <T : BaseExtension> T.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions()
+    configureTestOptions()
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
-    testOptions.unitTests.isIncludeAndroidResources = true
 
     filterStageVariants()
 }
@@ -69,6 +69,18 @@ fun BaseExtension.configureFlavorDimensions() {
     productFlavors {
         create("stage").dimension = "env"
         create("production").dimension = "env"
+    }
+}
+
+private fun BaseExtension.configureTestOptions() {
+    testOptions.unitTests {
+        isIncludeAndroidResources = true
+
+        all {
+            // default is 512MB, robolectric consumes a lot of memory
+            // by loading an AOSP image for each version being tested
+            it.maxHeapSize = "2g"
+        }
     }
 }
 
