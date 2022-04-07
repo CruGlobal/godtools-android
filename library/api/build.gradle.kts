@@ -1,8 +1,18 @@
-android.defaultConfig {
-    buildConfigField("String", "CAMPAIGN_FORMS_API", "\"https://campaign-forms.cru.org/\"")
-    buildConfigField("String", "CAMPAIGN_FORMS_ID", "\"3fb6022c-5ef9-458c-928a-0380c4a0e57b\"")
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
+}
 
-    buildConfigField("String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\"")
+android {
+    baseConfiguration(project)
+
+    defaultConfig {
+        buildConfigField("String", "CAMPAIGN_FORMS_API", "\"https://campaign-forms.cru.org/\"")
+        buildConfigField("String", "CAMPAIGN_FORMS_ID", "\"3fb6022c-5ef9-458c-928a-0380c4a0e57b\"")
+
+        buildConfigField("String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\"")
+    }
 }
 
 dependencies {

@@ -1,10 +1,12 @@
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
+}
+
 android {
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.user.data.UserEventBusIndex"
-        }
-    }
+    baseConfiguration(project)
+    createEventBusIndex("org.cru.godtools.user.data.UserEventBusIndex")
 }
 
 dependencies {

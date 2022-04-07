@@ -1,11 +1,15 @@
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
+}
+
 android {
+    baseConfiguration(project)
+    createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
+
     defaultConfig {
         consumerProguardFiles += file("proguard-rules-snowplow.pro")
-
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.analytics.AnalyticsEventBusIndex"
-        }
 
         buildConfigField("String", "APPSFLYER_DEV_KEY", "\"QdbVaVHi9bHRchUTWtoaij\"")
         buildConfigField("String", "SNOWPLOW_ENDPOINT", "\"s.cru.org\"")

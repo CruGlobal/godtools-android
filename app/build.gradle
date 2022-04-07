@@ -1,13 +1,19 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.dagger.hilt.android'
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.gms.google-services'
 
+AndroidConfigurationKt.configureAndroidApp(project)
+
 android {
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
+        versionCode rootProject.versionCode
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-rules.pro'
@@ -39,16 +45,11 @@ android {
         }
     }
 
-    flavorDimensions "env"
     productFlavors {
         stage {
-            dimension "env"
-
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.stage}\""
         }
         production {
-            dimension "env"
-
             buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.production}\""
         }
     }

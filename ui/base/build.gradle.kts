@@ -1,10 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
 android {
+    baseConfiguration(project)
+
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
     buildFeatures {

@@ -1,9 +1,12 @@
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
+}
+
 android {
-    flavorDimensions += "env"
-    productFlavors {
-        create("stage") { dimension = "env" }
-        create("production") { dimension = "env" }
-    }
+    baseConfiguration(project)
+    configureFlavorDimensions()
 }
 
 dependencies {

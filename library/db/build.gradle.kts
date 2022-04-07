@@ -1,3 +1,11 @@
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
+}
+
+android.baseConfiguration(project)
+
 dependencies {
     api(project(":library:base"))
     implementation(project(":library:model"))

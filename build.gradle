@@ -21,12 +21,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath libs.android.gradlePlugin
         classpath libs.firebase.appdistribution.gradlePlugin
         classpath libs.firebase.crashlytics.gradlePlugin
         classpath libs.firebase.perf.gradlePlugin
         classpath libs.google.services.gradlePlugin
-        classpath libs.kotlin.gradlePlugin
     }
 }
 
@@ -35,7 +33,6 @@ plugins {
     alias libs.plugins.hilt apply false
     alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
-    id "de.undercouch.download" version "5.0.2" apply false
 }
 
 version '6.0.0-SNAPSHOT'
@@ -44,9 +41,6 @@ ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029265
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 32
-    minSdk        = 21
-    targetSdk     = 32
 }
 
 // configure dependency resolution
@@ -92,90 +86,10 @@ allprojects {
     }
 }
 
-// base app plugins
-configure(subprojects.findAll { it.path == ":app" }) {
-    apply plugin: 'com.android.application'
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-}
-
-// base library plugins
-configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
-    apply plugin: 'com.android.library'
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-
-    dependencies {
-        androidTestImplementation libs.gtoSupport.testing.okta
-        testImplementation libs.gtoSupport.testing.okta
-    }
-}
-
-// base feature plugins
-configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
-    apply plugin: "com.android.dynamic-feature"
-    apply plugin: 'kotlin-android'
-    apply plugin: 'kotlin-kapt'
-
-    android {
-        flavorDimensions "env"
-        productFlavors {
-            stage {
-                dimension "env"
-            }
-            production {
-                dimension "env"
-            }
-        }
-    }
-
-    dependencies {
-        implementation project(":app")
-    }
-}
-
 // common config
 subprojects {
-    beforeEvaluate { project ->
+    afterEvaluate { project ->
         if (project.hasProperty('android')) {
-            android {
-                compileSdkVersion rootProject.compileSdk
-
-                defaultConfig {
-                    versionCode rootProject.versionCode
-
-                    minSdkVersion rootProject.minSdk
-                    targetSdkVersion rootProject.targetSdk
-                }
-
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_11
-                    targetCompatibility JavaVersion.VERSION_11
-                }
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_11.toString()
-                    freeCompilerArgs += '-Xjvm-default=all'
-                }
-                lintOptions {
-                    lintConfig rootProject.file("analysis/lint/lint.xml")
-                }
-                testOptions {
-                    unitTests {
-                        includeAndroidResources = true
-
-                        all {
-                            // increase unit tests max heap size
-                            jvmArgs "-Xmx2g"
-                        }
-                    }
-                }
-
-                // only include stage variants for the debug buildType
-                variantFilter { variant ->
-                    if (variant.flavors*.name.contains("stage") && variant.buildType.name != "debug") setIgnore(true)
-                }
-            }
-
             dependencies {
                 compileOnly libs.androidx.annotation
 
@@ -189,6 +103,10 @@ subprojects {
                 testImplementation libs.mockito.kotlin
                 testImplementation libs.mockk
                 testImplementation libs.robolectric
+
+                // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
+                androidTestImplementation libs.gtoSupport.testing.okta
+                testImplementation libs.gtoSupport.testing.okta
             }
         }
     }

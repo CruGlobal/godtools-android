@@ -1,16 +1,16 @@
 plugins {
-    alias(libs.plugins.hilt)
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-parcelize")
+    alias(libs.plugins.hilt)
 }
 
 android {
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true
+    baseConfiguration(project)
+    createEventBusIndex("org.cru.godtools.tract.TractEventBusIndex")
 
-        javaCompileOptions {
-            annotationProcessorOptions.arguments += "eventBusIndex" to "org.cru.godtools.tract.TractEventBusIndex"
-        }
-    }
+    defaultConfig.vectorDrawables.useSupportLibrary = true
     buildFeatures {
         dataBinding = true
         viewBinding = true

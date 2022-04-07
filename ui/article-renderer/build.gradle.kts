@@ -1,8 +1,13 @@
 plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
 android {
+    baseConfiguration(project)
+
     buildFeatures {
         dataBinding = true
         viewBinding = true

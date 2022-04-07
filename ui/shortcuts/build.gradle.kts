@@ -1,14 +1,13 @@
 plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
 android {
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments +=
-                "eventBusIndex" to "org.cru.godtools.shortcuts.ShortcutsEventBusIndex"
-        }
-    }
+    baseConfiguration(project)
+    createEventBusIndex("org.cru.godtools.shortcuts.ShortcutsEventBusIndex")
 }
 
 dependencies {
