@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,8 +34,6 @@ import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEve
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
-import org.cru.godtools.tool.lesson.util.lessonDeepLinkCode
-import org.cru.godtools.tool.lesson.util.lessonDeepLinkLocale
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.lesson.LessonPage
 import org.keynote.godtools.android.db.GodToolsDao
@@ -82,12 +81,15 @@ class LessonActivity :
     // region Intent Processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
-        val data = intent.data
+        val data = intent.data?.normalizeScheme() ?: return
+        val path = data.pathSegments ?: return
+
         when (intent.action) {
             ACTION_VIEW -> when {
-                data?.isLessonDeepLink() == true -> {
-                    dataModel.toolCode.value = data.lessonDeepLinkCode
-                    dataModel.locale.value = data.lessonDeepLinkLocale
+                // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
+                data.isLessonDeepLink() -> {
+                    dataModel.toolCode.value = path[1]
+                    dataModel.locale.value = Locale.forLanguageTag(path[2])
                 }
             }
         }

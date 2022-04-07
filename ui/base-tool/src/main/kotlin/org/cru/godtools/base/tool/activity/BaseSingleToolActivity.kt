@@ -42,7 +42,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     }
 
     override val isValidStartState get() = super.isValidStartState && (!requireTool || hasTool())
-    private fun hasTool() = dataModel.toolCode.value != null && dataModel.locale.value != null
+    private fun hasTool() = !dataModel.toolCode.value.isNullOrEmpty() && dataModel.locale.value != null
     // endregion Intent processing
 
     @VisibleForTesting(otherwise = PROTECTED)
