@@ -4,8 +4,11 @@
     <application>
         <activity
             android:name=".ui.ArticlesActivity"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool" />
+
+        <activity
+            android:name=".aem.ui.AemArticleActivity"
+            android:parentActivityName=".ui.ArticlesActivity" />
     </application>
 </manifest>

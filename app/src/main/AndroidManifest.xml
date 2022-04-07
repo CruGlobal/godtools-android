@@ -110,7 +110,15 @@
             android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
+            android:name=".article.ui.ArticlesActivity"
+            android:parentActivityName=".ui.dashboard.DashboardActivity" />
+
+        <activity
             android:name=".tool.cyoa.ui.CyoaActivity"
+            android:parentActivityName=".ui.dashboard.DashboardActivity" />
+
+        <activity
+            android:name=".tool.lesson.ui.LessonActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
         <activity
