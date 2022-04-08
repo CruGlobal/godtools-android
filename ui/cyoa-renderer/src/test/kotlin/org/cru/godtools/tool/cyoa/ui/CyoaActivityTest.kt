@@ -2,7 +2,10 @@ package org.cru.godtools.tool.cyoa.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
@@ -13,6 +16,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
 import javax.inject.Inject
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createCyoaActivityIntent
@@ -132,6 +136,8 @@ class CyoaActivityTest {
 
         scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH)) {
             it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertEquals("page1", it.pageFragment!!.pageId)
             }
         }
@@ -141,6 +147,8 @@ class CyoaActivityTest {
     fun `Intent Processing - Normal Launch - Deferred Manifest`() {
         scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH)) {
             it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertNull(it.pageFragment)
                 manifestEnglish.value = manifest(listOf(page1, page2))
                 assertEquals("page1", it.pageFragment!!.pageId)
@@ -154,6 +162,8 @@ class CyoaActivityTest {
 
         scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, pageId = "page2")) {
             it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertEquals("page2", it.pageFragment!!.pageId)
             }
         }
@@ -163,8 +173,36 @@ class CyoaActivityTest {
     fun `Intent Processing - Open Specific Page - Deferred Manifest`() {
         scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, pageId = "page2")) {
             it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertNull(it.pageFragment)
                 manifestEnglish.value = manifest(listOf(page1, page2))
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Uri Scheme Deep Link`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/cyoa/test/en"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Uri Scheme Deep Link - Specific Page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/cyoa/test/en/page2"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
                 assertEquals("page2", it.pageFragment!!.pageId)
             }
         }
@@ -522,6 +560,8 @@ class CyoaActivityTest {
         }
     }
     // endregion Update Manifest
+
+    private val CyoaActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun CyoaActivity.assertPageStack(vararg pages: String) {
         supportFragmentManager.executePendingTransactions()

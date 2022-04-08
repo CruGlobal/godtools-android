@@ -77,6 +77,18 @@ class LessonActivityTest {
     }
 
     @Test
+    fun `processIntent() - Custom URI Deep Link`() {
+        val intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/lesson/$TOOL/en"))
+        ActivityScenario.launch<LessonActivity>(intent).use {
+            it.onActivity {
+                assertEquals(TOOL, it.tool)
+                assertEquals(Locale.ENGLISH, it.locale)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
     fun `processIntent() - Invalid deeplinks`() {
         listOf(
             "https://example.com/lessons/test/en",

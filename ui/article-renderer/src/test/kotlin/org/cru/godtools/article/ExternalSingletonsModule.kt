@@ -1,4 +1,4 @@
-package org.cru.godtools.tool.lesson
+package org.cru.godtools.article
 
 import androidx.lifecycle.MutableLiveData
 import com.squareup.picasso.Picasso
@@ -6,7 +6,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.every
+import io.mockk.mockk
 import javax.inject.Named
+import kotlinx.coroutines.Job
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.DownloadManagerModule
@@ -15,10 +18,6 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.mock
 
 @Module
 @TestInstallIn(
@@ -35,18 +34,27 @@ class ExternalSingletonsModule {
 
     @get:Provides
     val dao by lazy {
-        mock<GodToolsDao> {
-            on { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } doAnswer { MutableLiveData(null) }
+        mockk<GodToolsDao> {
+            every { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } answers { MutableLiveData(null) }
+            every { updateSharesDeltaAsync(any(), any()) } returns Job().apply { complete() }
         }
     }
     @get:Provides
-    val downloadManager by lazy { mock<GodToolsDownloadManager>() }
+    val downloadManager by lazy {
+        mockk<GodToolsDownloadManager> {
+            every { getDownloadProgressLiveData(any(), any()) } answers { MutableLiveData() }
+        }
+    }
     @get:Provides
-    val eventBus by lazy { mock<EventBus>() }
+    val eventBus by lazy { mockk<EventBus>(relaxUnitFun = true) }
     @get:Provides
-    val picasso by lazy { mock<Picasso>(defaultAnswer = RETURNS_DEEP_STUBS) }
+    val picasso by lazy { mockk<Picasso>() }
     @get:Provides
-    val settings by lazy { mock<Settings>() }
+    val settings by lazy {
+        mockk<Settings>(relaxUnitFun = true) {
+            every { isFeatureDiscovered(any()) } returns false
+        }
+    }
     @get:Provides
-    val toolSyncTasks by lazy { mock<ToolSyncTasks>() }
+    val toolSyncTasks by lazy { mockk<ToolSyncTasks>() }
 }

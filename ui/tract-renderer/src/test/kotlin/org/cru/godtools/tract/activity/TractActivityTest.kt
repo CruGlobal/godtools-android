@@ -9,8 +9,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -57,13 +57,20 @@ class TractActivityTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val context: Context get() = getInstrumentation().context
+    private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
     lateinit var dao: GodToolsDao
     @Inject
     lateinit var manifestManager: ManifestManager
 
     private lateinit var lottieUtils: MockedStatic<*>
+
+    private fun <R> scenario(
+        intent: Intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH),
+        block: (ActivityScenario<TractActivity>) -> R
+    ) = ActivityScenario.launch<TractActivity>(intent).use(block)
+    private fun <R> deepLinkScenario(uri: Uri, block: (ActivityScenario<TractActivity>) -> R) =
+        scenario(Intent(Intent.ACTION_VIEW, uri), block)
 
     @Before
     fun setup() {
@@ -82,7 +89,7 @@ class TractActivityTest {
     // region Intent Processing
     @Test
     fun `processIntent() - Valid direct`() {
-        ActivityScenario.launch<TractActivity>(context.createTractActivityIntent(TOOL, Locale.ENGLISH)).use {
+        scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH)) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -93,8 +100,7 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Valid direct with parallel language`() {
-        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)
-        ActivityScenario.launch<TractActivity>(intent).use {
+        scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -106,29 +112,21 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Invalid missing tool`() {
-        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH)
-        intent.removeExtra(EXTRA_TOOL)
-        ActivityScenario.launch<TractActivity>(intent).use {
+        scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH).apply { removeExtra(EXTRA_TOOL) }) {
             assertEquals(Lifecycle.State.DESTROYED, it.state)
         }
     }
 
     @Test
     fun `processIntent() - Invalid missing locales`() {
-        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH)
-        intent.removeExtra(EXTRA_LANGUAGES)
-        ActivityScenario.launch<TractActivity>(intent).use {
+        scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH).apply { removeExtra(EXTRA_LANGUAGES) }) {
             assertEquals(Lifecycle.State.DESTROYED, it.state)
         }
     }
 
     @Test
-    fun `processIntent() - Valid deeplink`() {
-        val intent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")
-        )
-        ActivityScenario.launch<TractActivity>(intent).use {
+    fun `processIntent() - Deep Link - knowgod_com`() {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -140,9 +138,52 @@ class TractActivityTest {
     }
 
     @Test
+    fun `processIntent() - Deep Link - knowgod_com - With Page Num`() {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test/3?primaryLanguage=en&parallelLanguage=es,fr")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
+                assertEquals(Locale.FRENCH, it.dataModel.activeLocale.value)
+                assertEquals(3, it.initialPage)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme - Missing Language`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/")) {
+            assertEquals(Lifecycle.State.DESTROYED, it.state)
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - Custom Uri Scheme - With Page Num`() {
+        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr/3")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
+                assertEquals(3, it.initialPage)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
     fun `processIntent() - Preserve tool and language changes - Direct`() {
-        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)
-        ActivityScenario.launch<TractActivity>(intent).use {
+        scenario(context.createTractActivityIntent(TOOL, Locale.ENGLISH, Locale.FRENCH)) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -169,12 +210,8 @@ class TractActivityTest {
     }
 
     @Test
-    fun `processIntent() - Preserve tool and language changes - Deeplink`() {
-        val intent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")
-        )
-        ActivityScenario.launch<TractActivity>(intent).use {
+    fun `processIntent() - Preserve tool and language changes - Deep Link`() {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")) {
             // initially parse deep link
             it.onActivity {
                 assertEquals("test", it.dataModel.toolCode.value)
@@ -210,7 +247,7 @@ class TractActivityTest {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
-        ActivityScenario.launch<TractActivity>(context.createTractActivityIntent("test", Locale.ENGLISH)).use {
+        scenario {
             it.moveToState(Lifecycle.State.RESUMED)
             it.onActivity {
                 with(it.findViewById<Toolbar>(R.id.appbar)!!.menu!!.findItem(R.id.action_share)!!) {
@@ -227,11 +264,7 @@ class TractActivityTest {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
-        val intent = Intent(context, TractActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")
-        }
-        ActivityScenario.launch<TractActivity>(intent).use {
+        deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")) {
             it.moveToState(Lifecycle.State.RESUMED)
             it.onActivity {
                 with(it.findViewById<Toolbar>(R.id.appbar)!!.menu!!.findItem(R.id.action_share)!!) {
@@ -248,7 +281,7 @@ class TractActivityTest {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(null))
 
-        ActivityScenario.launch<TractActivity>(context.createTractActivityIntent("test", Locale.ENGLISH)).use {
+        scenario {
             it.moveToState(Lifecycle.State.RESUMED)
             it.onActivity {
                 with(it.findViewById<Toolbar>(R.id.appbar)!!.menu!!.findItem(R.id.action_share)!!) {
@@ -266,8 +299,7 @@ class TractActivityTest {
         whenGetManifest()
             .thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
-        val intent = context.createTractActivityIntent("test", Locale.ENGLISH, showTips = true)
-        ActivityScenario.launch<TractActivity>(intent).use {
+        scenario(context.createTractActivityIntent("test", Locale.ENGLISH, showTips = true)) {
             it.moveToState(Lifecycle.State.RESUMED)
             it.onActivity {
                 with(it.findViewById<Toolbar>(R.id.appbar)!!.menu!!.findItem(R.id.action_share)!!) {
@@ -284,11 +316,7 @@ class TractActivityTest {
         everyGetTranslation() returns MutableLiveData(Translation())
         whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
 
-        val intent = Intent(context, TractActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&$PARAM_LIVE_SHARE_STREAM=asdf")
-        }
-        ActivityScenario.launch<TractActivity>(intent).use {
+        deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&$PARAM_LIVE_SHARE_STREAM=asdf")) {
             it.moveToState(Lifecycle.State.RESUMED)
             it.onActivity {
                 with(it.findViewById<Toolbar>(R.id.appbar)!!.menu!!.findItem(R.id.action_share)!!) {

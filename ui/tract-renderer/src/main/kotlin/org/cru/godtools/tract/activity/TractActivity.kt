@@ -17,6 +17,7 @@ import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
@@ -24,7 +25,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.LocaleUtils
 import org.cru.godtools.api.model.NavigationEvent
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -153,28 +156,46 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
+    @Inject
+    @Named(DAGGER_HOST_CUSTOM_URI)
+    internal lateinit var hostCustomUriScheme: String
+
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
-        if (dataModel.primaryLocales.value.isNullOrEmpty() || savedInstanceState == null) {
-            if (intent.action != Intent.ACTION_VIEW) return
-            val data = intent.data?.takeIf { it.isTractDeepLink() } ?: return
 
-            dataModel.toolCode.value = data.deepLinkTool
-            val (primary, parallel) = data.deepLinkLanguages
-            dataModel.primaryLocales.value = primary
-            dataModel.parallelLocales.value = parallel
-            if (savedInstanceState == null) {
-                dataModel.activeLocale.value = data.deepLinkSelectedLanguage
-                data.deepLinkPage?.let { initialPage = it }
+        // deep link parsing
+        if (savedInstanceState == null || dataModel.locales.value.isNullOrEmpty()) {
+            if (intent.action != Intent.ACTION_VIEW) return
+            val data = intent.data?.normalizeScheme() ?: return
+            val path = data.pathSegments ?: return
+
+            when {
+                data.isCustomUriDeepLink() -> {
+                    dataModel.toolCode.value = path[2]
+                    dataModel.primaryLocales.value = LocaleUtils.getFallbacks(Locale.forLanguageTag(path[3])).toList()
+                    path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
+                }
+                data.isTractDeepLink() -> {
+                    dataModel.toolCode.value = path[1]
+                    val (primary, parallel) = data.deepLinkLanguages
+                    dataModel.primaryLocales.value = primary
+                    dataModel.parallelLocales.value = parallel
+                    if (savedInstanceState == null) {
+                        dataModel.activeLocale.value = data.deepLinkSelectedLanguage
+                        data.deepLinkPage?.let { initialPage = it }
+                    }
+                }
             }
         }
     }
 
+    private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
+        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "tract"
+
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
-    @VisibleForTesting
-    internal val Uri.deepLinkTool get() = pathSegments[1]
     @VisibleForTesting
     internal val Uri.deepLinkPage get() = pathSegments.getOrNull(2)?.toIntOrNull()
 
@@ -237,7 +258,8 @@ class TractActivity :
             }
         }
     }
-    private var initialPage = 0
+    @VisibleForTesting
+    internal var initialPage = 0
 
     private fun setupPager() {
         pager.adapter = pagerAdapter

@@ -2,6 +2,7 @@ package org.cru.godtools.tool.lesson.ui
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
@@ -14,12 +15,16 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
+import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
@@ -33,8 +38,6 @@ import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEve
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
-import org.cru.godtools.tool.lesson.util.lessonDeepLinkCode
-import org.cru.godtools.tool.lesson.util.lessonDeepLinkLocale
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.lesson.LessonPage
 import org.keynote.godtools.android.db.GodToolsDao
@@ -80,18 +83,34 @@ class LessonActivity :
     // endregion Lifecycle
 
     // region Intent Processing
+    @Inject
+    @Named(DAGGER_HOST_CUSTOM_URI)
+    internal lateinit var hostCustomUriScheme: String
+
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
-        val data = intent.data
+        val data = intent.data?.normalizeScheme() ?: return
+        val path = data.pathSegments ?: return
+
         when (intent.action) {
             ACTION_VIEW -> when {
-                data?.isLessonDeepLink() == true -> {
-                    dataModel.toolCode.value = data.lessonDeepLinkCode
-                    dataModel.locale.value = data.lessonDeepLinkLocale
+                // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
+                data.isLessonDeepLink() -> {
+                    dataModel.toolCode.value = path[1]
+                    dataModel.locale.value = Locale.forLanguageTag(path[2])
+                }
+                // Sample deep link: godtools://org.cru.godtools/tool/lesson/{tool}/{locale}
+                data.isCustomUriDeepLink() -> {
+                    dataModel.toolCode.value = path[2]
+                    dataModel.locale.value = Locale.forLanguageTag(path[3])
                 }
             }
         }
     }
+
+    private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
+        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "lesson"
     // endregion Intent Processing
 
     // region UI

@@ -1,5 +1,6 @@
 package org.cru.godtools.tool.cyoa.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -7,14 +8,19 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
-import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
+import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.tool.model.Uri
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
@@ -27,6 +33,8 @@ class CyoaActivity :
     MultiLanguageToolActivity<CyoaActivityBinding>(R.layout.cyoa_activity, Manifest.Type.CYOA),
     CyoaPageFragment.InvalidPageListener,
     ShowTipCallback {
+    private val savedState by viewModels<CyoaActivitySavedState>()
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +69,31 @@ class CyoaActivity :
         checkForPageEvent(event)
     }
     // endregion Lifecycle
+
+    // region Intent Processing
+    @Inject
+    @Named(DAGGER_HOST_CUSTOM_URI)
+    internal lateinit var hostCustomUri: String
+
+    override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
+        super.processIntent(intent, savedInstanceState)
+        if (savedInstanceState == null || !isValidStartState) {
+            val data = intent.data
+            if (data?.isCustomUriSchemeDeepLink == true) {
+                val path = data.pathSegments
+                dataModel.toolCode.value = path.getOrNull(2)
+                dataModel.primaryLocales.value = listOfNotNull(path.getOrNull(3)?.let { Locale.forLanguageTag(it) })
+                dataModel.parallelLocales.value = emptyList()
+                savedState.initialPage = path.getOrNull(4)
+            }
+        }
+    }
+
+    private inline val Uri.isCustomUriSchemeDeepLink
+        get() = SCHEME_GODTOOLS.equals(scheme, true) &&
+            hostCustomUri.equals(host, true) &&
+            pathSegments.size >= 4 && path?.startsWith("/tool/cyoa/") == true
+    // endregion Intent Processing
 
     private fun setupBinding() {
         binding.activeLocale = dataModel.activeLocale
@@ -99,7 +132,7 @@ class CyoaActivity :
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
 
-        (manifest.findPage(intent?.getStringExtra(EXTRA_PAGE)) ?: manifest.pages.firstOrNull { !it.isHidden })
+        (manifest.findPage(savedState.initialPage) ?: manifest.pages.firstOrNull { !it.isHidden })
             ?.let { showPage(it, true) }
     }
 

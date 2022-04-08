@@ -94,7 +94,7 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
 
         override fun onAppOpenAttribution(data: Map<String, String?>) {
             Timber.tag(TAG).d("onAppOpenAttribution($data)")
-            val uri = data[AF_DP]?.let { Uri.parse(it) }
+            val uri = data[AF_DP]?.let { Uri.parse(it).normalizeScheme() }
             deepLinkResolvers.asSequence().mapNotNull { it.resolve(app, uri, data) }.firstOrNull()?.let { intent ->
                 activeActivity?.startActivity(intent)
             }

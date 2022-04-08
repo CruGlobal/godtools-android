@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import org.cru.godtools.analytics.appsflyer.AppsFlyerDeepLinkResolver
 import org.cru.godtools.base.ui.createDashboardIntent
-import org.cru.godtools.base.ui.dashboard.Page
 
 internal object DashboardAppsFlyerDeepLinkResolver : AppsFlyerDeepLinkResolver {
     override fun resolve(context: Context, uri: Uri?, data: Map<String, String?>) = when {
@@ -16,13 +15,6 @@ internal object DashboardAppsFlyerDeepLinkResolver : AppsFlyerDeepLinkResolver {
 
     override fun resolve(context: Context, deepLinkValue: String) = deepLinkValue.split("|")
         .takeIf { it[0] == "dashboard" }
-        ?.let {
-            when (it.getOrNull(1)) {
-                "tools" -> Page.ALL_TOOLS
-                "lessons" -> Page.LESSONS
-                "home" -> Page.FAVORITE_TOOLS
-                else -> Page.FAVORITE_TOOLS
-            }
-        }
+        ?.let { findPageByUriPathSegment(it.getOrNull(1)) }
         ?.let { context.createDashboardIntent(it) }
 }

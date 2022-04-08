@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard
 
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -61,7 +60,7 @@ class DashboardActivity :
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        processIntent(intent, savedInstanceState == null)
+        if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
     }
 
@@ -79,7 +78,7 @@ class DashboardActivity :
 
     override fun onNewIntent(newIntent: Intent) {
         super.onNewIntent(newIntent)
-        processIntent(newIntent, true)
+        processIntent(newIntent)
     }
 
     override fun onResume() {
@@ -95,12 +94,17 @@ class DashboardActivity :
     // endregion Lifecycle
 
     // region Intent processing
-    private fun processIntent(intent: Intent?, newIntent: Boolean) {
-        val page = (intent?.getSerializableExtra(EXTRA_PAGE) as? Page)
+    private fun processIntent(intent: Intent) {
+        val page = (intent.getSerializableExtra(EXTRA_PAGE) as? Page)
         when {
             page != null -> showPage(page)
-            intent?.action == ACTION_VIEW && intent.data?.isDashboardLessonsDeepLink() == true -> {
-                if (newIntent) showPage(Page.LESSONS)
+            intent.action == Intent.ACTION_VIEW -> {
+                val data = intent.data
+                when {
+                    data?.isDashboardCustomUriSchemeDeepLink() == true ->
+                        showPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
+                    data?.isDashboardLessonsDeepLink() == true -> showPage(Page.LESSONS)
+                }
             }
         }
     }
