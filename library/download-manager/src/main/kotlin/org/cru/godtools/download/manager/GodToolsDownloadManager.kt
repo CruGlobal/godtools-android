@@ -80,8 +80,9 @@ internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
     .distinct(true)
     .join(
         AttachmentTable.SQL_JOIN_TOOL.andOn(
-            ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
-                .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))
+            ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID)
+                .or(ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID))
+                .or(ToolTable.FIELD_DETAILS_BANNER_ANIMATION.eq(AttachmentTable.FIELD_ID))
         )
     )
     .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
