@@ -106,7 +106,6 @@ object Contract : BaseContract() {
         val FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER)
         val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
         val FIELD_HIDDEN = TABLE.field(COLUMN_HIDDEN)
-        val FIELD_SPOTLIGHT = TABLE.field(COLUMN_SPOTLIGHT)
         private val FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES)
 
         internal val PROJECTION_ALL = arrayOf(
