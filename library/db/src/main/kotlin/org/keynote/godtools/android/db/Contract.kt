@@ -91,6 +91,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_PENDING_SHARES = "pending_shares"
         const val COLUMN_BANNER = "banner"
         const val COLUMN_DETAILS_BANNER = "banner_details"
+        const val COLUMN_DETAILS_BANNER_ANIMATION = "details_banner_animation"
         const val COLUMN_DETAILS_BANNER_YOUTUBE = "overview_video"
         const val COLUMN_SCREEN_SHARE_DISABLED = "screen_share_disabled"
         const val COLUMN_DEFAULT_ORDER = "default_order"
@@ -119,8 +120,9 @@ object Contract : BaseContract() {
             COLUMN_SHARES,
             COLUMN_PENDING_SHARES,
             COLUMN_BANNER,
-            COLUMN_DETAILS_BANNER_YOUTUBE,
             COLUMN_DETAILS_BANNER,
+            COLUMN_DETAILS_BANNER_ANIMATION,
+            COLUMN_DETAILS_BANNER_YOUTUBE,
             COLUMN_SCREEN_SHARE_DISABLED,
             COLUMN_DEFAULT_ORDER,
             COLUMN_ORDER,
@@ -138,6 +140,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_PENDING_SHARES = "$COLUMN_PENDING_SHARES INTEGER"
         private const val SQL_COLUMN_BANNER = "$COLUMN_BANNER INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER = "$COLUMN_DETAILS_BANNER INTEGER"
+        private const val SQL_COLUMN_DETAILS_BANNER_ANIMATION = "$COLUMN_DETAILS_BANNER_ANIMATION INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER_YOUTUBE = "$COLUMN_DETAILS_BANNER_YOUTUBE TEXT"
         private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
         private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
@@ -163,6 +166,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_PENDING_SHARES,
             SQL_COLUMN_BANNER,
             SQL_COLUMN_DETAILS_BANNER,
+            SQL_COLUMN_DETAILS_BANNER_ANIMATION,
             SQL_COLUMN_DETAILS_BANNER_YOUTUBE,
             SQL_COLUMN_SCREEN_SHARE_DISABLED,
             SQL_COLUMN_DEFAULT_ORDER,
@@ -186,6 +190,8 @@ object Contract : BaseContract() {
             "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SCREEN_SHARE_DISABLED"
         internal const val SQL_V48_CREATE_SPOTLIGHT = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SPOTLIGHT"
         internal const val SQL_V48_POPULATE_SPOTLIGHT = "UPDATE $TABLE_NAME SET $COLUMN_SPOTLIGHT = 0"
+        internal const val SQL_V49_ALTER_DETAILS_BANNER_ANIMATION =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BANNER_ANIMATION"
         // endregion DB migrations
     }
 
