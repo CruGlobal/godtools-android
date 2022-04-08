@@ -44,7 +44,7 @@
                     android:src="@{banner}"
                     app:layout_constraintDimensionRatio="21:10"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:visibleIf="@{TextUtils.isEmpty(tool.overviewVideo)}" />
+                    app:visibleIf="@{TextUtils.isEmpty(tool.detailsBannerYoutubeVideoId)}" />
 
                 <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                     android:id="@+id/video_banner"
@@ -55,8 +55,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:lifecycleOwner="@{fragment.viewLifecycleOwner}"
                     app:recue="@{true}"
-                    app:videoId="@{tool.overviewVideo}"
-                    app:visibleIf="@{!TextUtils.isEmpty(tool.overviewVideo)}" />
+                    app:videoId="@{tool.detailsBannerYoutubeVideoId}"
+                    app:visibleIf="@{!TextUtils.isEmpty(tool.detailsBannerYoutubeVideoId)}" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/banner"
