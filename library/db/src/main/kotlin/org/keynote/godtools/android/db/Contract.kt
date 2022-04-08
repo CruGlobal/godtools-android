@@ -91,7 +91,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_PENDING_SHARES = "pending_shares"
         const val COLUMN_BANNER = "banner"
         const val COLUMN_DETAILS_BANNER = "banner_details"
-        const val COLUMN_OVERVIEW_VIDEO = "overview_video"
+        const val COLUMN_DETAILS_BANNER_YOUTUBE = "overview_video"
         const val COLUMN_SCREEN_SHARE_DISABLED = "screen_share_disabled"
         const val COLUMN_DEFAULT_ORDER = "default_order"
         internal const val COLUMN_ORDER = "ordering"
@@ -119,7 +119,7 @@ object Contract : BaseContract() {
             COLUMN_SHARES,
             COLUMN_PENDING_SHARES,
             COLUMN_BANNER,
-            COLUMN_OVERVIEW_VIDEO,
+            COLUMN_DETAILS_BANNER_YOUTUBE,
             COLUMN_DETAILS_BANNER,
             COLUMN_SCREEN_SHARE_DISABLED,
             COLUMN_DEFAULT_ORDER,
@@ -138,7 +138,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_PENDING_SHARES = "$COLUMN_PENDING_SHARES INTEGER"
         private const val SQL_COLUMN_BANNER = "$COLUMN_BANNER INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER = "$COLUMN_DETAILS_BANNER INTEGER"
-        private const val SQL_COLUMN_OVERVIEW_VIDEO = "$COLUMN_OVERVIEW_VIDEO TEXT"
+        private const val SQL_COLUMN_DETAILS_BANNER_YOUTUBE = "$COLUMN_DETAILS_BANNER_YOUTUBE TEXT"
         private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
         private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
         private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
@@ -163,7 +163,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_PENDING_SHARES,
             SQL_COLUMN_BANNER,
             SQL_COLUMN_DETAILS_BANNER,
-            SQL_COLUMN_OVERVIEW_VIDEO,
+            SQL_COLUMN_DETAILS_BANNER_YOUTUBE,
             SQL_COLUMN_SCREEN_SHARE_DISABLED,
             SQL_COLUMN_DEFAULT_ORDER,
             SQL_COLUMN_ORDER,
@@ -175,8 +175,8 @@ object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
-        internal const val SQL_V40_ALTER_OVERVIEW_VIDEO =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_OVERVIEW_VIDEO"
+        internal const val SQL_V40_ALTER_DETAILS_BANNER_YOUTUBE =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BANNER_YOUTUBE"
         internal const val SQL_V42_ALTER_DEFAULT_ORDER = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DEFAULT_ORDER"
         internal const val SQL_V42_POPULATE_DEFAULT_ORDER = "UPDATE $TABLE_NAME SET $COLUMN_DEFAULT_ORDER = 0"
         internal const val SQL_V43_ALTER_CATEGORY = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_CATEGORY"

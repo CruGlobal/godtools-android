@@ -16,7 +16,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_HIDDEN
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ORDER
-import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_OVERVIEW_VIDEO
+import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_PENDING_SHARES
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SCREEN_SHARE_DISABLED
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES
@@ -35,7 +35,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
             COLUMN_PENDING_SHARES -> values.put(field, obj.pendingShares)
             COLUMN_BANNER -> values.put(field, obj.bannerId)
             COLUMN_DETAILS_BANNER -> values.put(field, obj.detailsBannerId)
-            COLUMN_OVERVIEW_VIDEO -> values.put(field, obj.detailsBannerYoutubeVideoId)
+            COLUMN_DETAILS_BANNER_YOUTUBE -> values.put(field, obj.detailsBannerYoutubeVideoId)
             COLUMN_SCREEN_SHARE_DISABLED -> values.put(field, obj.isScreenShareDisabled)
             COLUMN_DEFAULT_ORDER -> values.put(field, obj.defaultOrder)
             COLUMN_ORDER -> values.put(field, obj.order)
@@ -57,7 +57,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
         pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0)
         bannerId = c.getLong(COLUMN_BANNER)
         detailsBannerId = c.getLong(COLUMN_DETAILS_BANNER)
-        detailsBannerYoutubeVideoId = c.getString(COLUMN_OVERVIEW_VIDEO)
+        detailsBannerYoutubeVideoId = c.getString(COLUMN_DETAILS_BANNER_YOUTUBE)
         defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0)
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE)
         isAdded = getBool(c, COLUMN_ADDED, false)

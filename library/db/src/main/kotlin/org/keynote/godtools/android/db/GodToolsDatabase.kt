@@ -77,7 +77,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             while (upgradeTo <= newVersion) {
                 when (upgradeTo) {
                     39 -> db.execSQL(LanguageTable.SQL_V39_ALTER_NAME)
-                    40 -> db.execSQL(ToolTable.SQL_V40_ALTER_OVERVIEW_VIDEO)
+                    40 -> db.execSQL(ToolTable.SQL_V40_ALTER_DETAILS_BANNER_YOUTUBE)
                     41 -> db.execSQL(GlobalActivityAnalyticsTable.SQL_V41_CREATE_GLOBAL_ANALYTICS)
                     42 -> {
                         db.execSQL(ToolTable.SQL_V42_ALTER_DEFAULT_ORDER)
