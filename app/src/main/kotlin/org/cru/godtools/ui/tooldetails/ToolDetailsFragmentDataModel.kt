@@ -56,6 +56,11 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val bannerAnimation = tool
+        .map { it?.detailsBannerAnimationId }.distinctUntilChanged()
+        .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+        .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
     val primaryTranslation = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
