@@ -13,13 +13,11 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 
-fun Activity.startToolDetailsActivity(toolCode: String) {
-    startActivity(
-        Intent(this, ToolDetailsActivity::class.java)
-            .putExtras(BaseActivity.buildExtras(this))
-            .putExtra(EXTRA_TOOL, toolCode)
-    )
-}
+fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
+    Intent(this, ToolDetailsActivity::class.java)
+        .putExtras(BaseActivity.buildExtras(this))
+        .putExtra(EXTRA_TOOL, toolCode)
+)
 
 @AndroidEntryPoint
 class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
