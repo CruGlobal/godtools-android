@@ -1,20 +1,31 @@
 package org.cru.godtools.ui.tooldetails
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsLiveData
+import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
@@ -25,45 +36,53 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class ToolDetailsFragmentDataModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     settings: Settings,
-    private val shortcutManager: GodToolsShortcutManager
+    private val shortcutManager: GodToolsShortcutManager,
+    private val toolFileSystem: ToolFileSystem,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val toolCode = MutableLiveData<String>()
-    private val distinctToolCode: LiveData<String> = toolCode.distinctUntilChanged()
+    val toolCode = savedStateHandle.getStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
 
-    val tool = distinctToolCode.switchMap { dao.findLiveData<Tool>(it) }
-    val banner = tool.map { it?.detailsBannerId }.distinctUntilChanged()
-        .switchMap { it?.let { dao.findLiveData<Attachment>(it) }.orEmpty() }
-    val primaryTranslation = distinctToolCode.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
+    val tool = toolCode
+        .flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val banner = tool
+        .map { it?.detailsBannerId }.distinctUntilChanged()
+        .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+        .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    private val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
+    val primaryTranslation = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
         dao.getLatestTranslationLiveData(tool, locale)
     }
-    val parallelTranslation = distinctToolCode.switchCombineWith(settings.parallelLanguageLiveData) { tool, locale ->
+    val parallelTranslation = toolCodeLiveData.switchCombineWith(settings.parallelLanguageLiveData) { tool, locale ->
         dao.getLatestTranslationLiveData(tool, locale)
     }
 
-    val primaryManifest = toolCode.switchCombineWith(settings.primaryLanguageLiveData) { code, locale ->
-        when (code) {
-            null -> emptyLiveData()
-            else -> manifestManager.getLatestPublishedManifestLiveData(code, locale)
+    val primaryManifest = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { code, locale ->
+        code?.let { manifestManager.getLatestPublishedManifestLiveData(code, locale) }.orEmpty()
+    }
+
+    val shortcut = tool.asLiveData().map {
+        it?.takeIf { shortcutManager.canPinToolShortcut(it) }
+            ?.let { shortcutManager.getPendingToolShortcut(it.code) }
+    }
+
+    val downloadProgress = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
+        tool?.let { downloadManager.getDownloadProgressLiveData(tool, locale) }.orEmpty()
+    }
+
+    val availableLanguages = toolCodeLiveData
+        .switchMap {
+            it?.let {
+                Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(it)).getAsLiveData(dao)
+            }.orEmpty()
         }
-    }
-
-    val shortcut = tool.map {
-        when {
-            shortcutManager.canPinToolShortcut(it) -> shortcutManager.getPendingToolShortcut(it?.code)
-            else -> null
-        }
-    }
-
-    val downloadProgress = distinctToolCode.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
-        downloadManager.getDownloadProgressLiveData(tool, locale)
-    }
-
-    val availableLanguages = distinctToolCode
-        .switchMap { Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(it)).getAsLiveData(dao) }
-        .map { it.map { translation -> translation.languageCode }.distinct() }
+        .map { it?.map { translation -> translation.languageCode }?.distinct().orEmpty() }
 }
