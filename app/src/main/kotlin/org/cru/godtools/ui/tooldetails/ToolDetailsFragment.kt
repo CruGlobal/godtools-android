@@ -7,13 +7,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
@@ -26,7 +26,6 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
@@ -87,11 +86,6 @@ class ToolDetailsFragment() :
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    override fun onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu()
-        cleanupPinShortcutAction()
-    }
     // endregion Lifecycle
 
     // region Data Model
@@ -132,17 +126,10 @@ class ToolDetailsFragment() :
     // endregion Data Binding
 
     // region Pin Shortcut
-    private var pinShortcutObserver: Observer<PendingShortcut?>? = null
-
     private fun Menu.setupPinShortcutAction() {
-        pinShortcutObserver = findItem(R.id.action_pin_shortcut)
-            ?.let { action -> Observer<PendingShortcut?> { action.isVisible = it != null } }
-            ?.also { dataModel.shortcut.observe(this@ToolDetailsFragment, it) }
-    }
-
-    private fun cleanupPinShortcutAction() {
-        pinShortcutObserver?.let { dataModel.shortcut.removeObserver(it) }
-        pinShortcutObserver = null
+        findItem(R.id.action_pin_shortcut)?.let { item ->
+            dataModel.shortcut.observe(this@ToolDetailsFragment, item) { isVisible = it != null }
+        }
     }
     // endregion Pin Shortcut
 
