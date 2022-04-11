@@ -121,7 +121,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @AnyThread
     fun canPinToolShortcut(tool: Tool?) = when (tool?.type) {
-        Tool.Type.TRACT, Tool.Type.ARTICLE -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+        Tool.Type.ARTICLE,
+        Tool.Type.CYOA,
+        Tool.Type.TRACT -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
         else -> false
     }
 
