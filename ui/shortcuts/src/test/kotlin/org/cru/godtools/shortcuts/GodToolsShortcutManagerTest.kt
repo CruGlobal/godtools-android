@@ -99,7 +99,7 @@ class GodToolsShortcutManagerTest {
     // region canPinShortcut(tool)
     @Test
     fun verifyCanPinToolShortcut() {
-        val supportedTypes = EnumSet.of(Tool.Type.TRACT, Tool.Type.ARTICLE)
+        val supportedTypes = EnumSet.of(Tool.Type.ARTICLE, Tool.Type.CYOA, Tool.Type.TRACT)
         Tool.Type.values().forEach {
             assertEquals(supportedTypes.contains(it), shortcutManager.canPinToolShortcut(Tool().apply { type = it }))
         }
