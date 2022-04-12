@@ -19,8 +19,9 @@ private const val JSON_SPOTLIGHT = "attr-spotlight"
 private const val JSON_DESCRIPTION = "description"
 private const val JSON_TOTAL_VIEWS = "total-views"
 private const val JSON_BANNER = "attr-banner"
-private const val JSON_BANNER_DETAILS = "attr-banner-about"
-private const val JSON_OVERVIEW_VIDEO = "attr-about-overview-video-youtube"
+private const val JSON_DETAILS_BANNER = "attr-banner-about"
+private const val JSON_DETAILS_BANNER_ANIMATION = "attr-about-banner-animation"
+private const val JSON_DETAILS_BANNER_YOUTUBE = "attr-about-overview-video-youtube"
 private const val JSON_DEFAULT_ORDER = "attr-default-order"
 private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
@@ -77,11 +78,13 @@ class Tool : Base() {
 
     @JsonApiAttribute(JSON_BANNER)
     var bannerId: Long? = null
-    @JsonApiAttribute(JSON_BANNER_DETAILS)
-    var detailsBannerId: Long? = null
 
-    @JsonApiAttribute(JSON_OVERVIEW_VIDEO)
-    var overviewVideo: String? = null
+    @JsonApiAttribute(JSON_DETAILS_BANNER)
+    var detailsBannerId: Long? = null
+    @JsonApiAttribute(JSON_DETAILS_BANNER_ANIMATION)
+    var detailsBannerAnimationId: Long? = null
+    @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
+    var detailsBannerYoutubeVideoId: String? = null
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
     var initialFavoritesPriority: Int? = Int.MAX_VALUE

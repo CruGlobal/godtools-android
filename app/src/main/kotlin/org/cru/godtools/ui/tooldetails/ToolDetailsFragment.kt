@@ -61,7 +61,8 @@ class ToolDetailsFragment() :
         binding.fragment = this
         binding.tool = dataModel.tool
         binding.manifest = dataModel.primaryManifest
-        binding.setBanner(dataModel.banner)
+        binding.banner = dataModel.banner
+        binding.bannerAnimation = dataModel.bannerAnimation
         binding.primaryTranslation = dataModel.primaryTranslation
         binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
