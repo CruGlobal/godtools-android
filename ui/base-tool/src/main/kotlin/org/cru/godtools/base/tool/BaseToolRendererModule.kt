@@ -14,6 +14,11 @@ import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ContentEventAnalyticsHandler
+import org.cru.godtools.tool.FEATURE_ANIMATION
+import org.cru.godtools.tool.FEATURE_CONTENT_CARD
+import org.cru.godtools.tool.FEATURE_FLOW
+import org.cru.godtools.tool.FEATURE_MULTISELECT
+import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.xml.AndroidXmlPullParserFactory
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
@@ -36,9 +41,18 @@ abstract class BaseToolRendererModule {
 
         @Provides
         @Reusable
-        fun manifestParser(fs: ToolFileSystem) = ManifestParser(object : AndroidXmlPullParserFactory() {
-            override suspend fun openFile(fileName: String) = fs.openInputStream(fileName).buffered()
-        })
+        fun parserConfig() = ParserConfig(
+            supportedFeatures = setOf(FEATURE_ANIMATION, FEATURE_CONTENT_CARD, FEATURE_FLOW, FEATURE_MULTISELECT)
+        )
+
+        @Provides
+        @Reusable
+        fun manifestParser(fs: ToolFileSystem, config: ParserConfig) = ManifestParser(
+            object : AndroidXmlPullParserFactory() {
+                override suspend fun openFile(fileName: String) = fs.openInputStream(fileName).buffered()
+            },
+            config
+        )
 
         @IntoSet
         @Provides
