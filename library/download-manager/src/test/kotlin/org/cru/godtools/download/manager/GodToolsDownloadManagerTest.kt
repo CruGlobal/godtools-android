@@ -115,14 +115,12 @@ class GodToolsDownloadManagerTest {
     private lateinit var observer: Observer<DownloadProgress?>
 
     private val staleAttachmentsChannel = Channel<List<Attachment>>()
-    private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
 
     @Before
     fun setup() {
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
             on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
-            on { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } doReturn toolBannerAttachmentsChannel.consumeAsFlow()
         }
         fs = mock {
             onBlocking { rootDir() } doReturn resourcesDir
@@ -147,7 +145,6 @@ class GodToolsDownloadManagerTest {
     @After
     fun cleanup() {
         staleAttachmentsChannel.close()
-        toolBannerAttachmentsChannel.close()
         runBlocking { downloadManager.shutdown() }
         testScope.cleanupTestCoroutines()
     }
@@ -319,19 +316,13 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyDownloadToolBannerAttachments() {
+    fun verifyDownloadAttachment() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
 
-        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
-        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
-        verify(dao, never()).find<Attachment>(attachment.id)
-
-        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(listOf(attachment)).isSuccess)
-        // this will block until the previous list has been processed
-        assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
+        downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
