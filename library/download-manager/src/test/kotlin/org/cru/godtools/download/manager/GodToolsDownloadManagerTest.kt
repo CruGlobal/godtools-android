@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import java.io.File
 import java.io.IOException
@@ -97,7 +98,10 @@ class GodToolsDownloadManagerTest {
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fs: ToolFileSystem
-    private lateinit var settings: Settings
+    private val settings = mockk<Settings> {
+        every { isLanguageProtected(any()) } returns false
+        every { parallelLanguage } returns null
+    }
     private lateinit var translationsApi: TranslationsApi
     private lateinit var workManager: WorkManager
     private lateinit var testScope: TestCoroutineScope
@@ -125,7 +129,6 @@ class GodToolsDownloadManagerTest {
             onBlocking { exists() } doReturn true
         }
         observer = mock()
-        settings = mock()
         translationsApi = mock()
         workManager = mock {
             on { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } doReturn mock()
