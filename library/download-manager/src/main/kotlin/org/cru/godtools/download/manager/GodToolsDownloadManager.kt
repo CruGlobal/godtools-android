@@ -27,6 +27,10 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
@@ -297,11 +301,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Attachments
 
     // region Translations
-    private val pinnedTranslationsJob = coroutineScope.launch {
-        dao.getAsFlow(QUERY_PINNED_TRANSLATIONS)
-            .collect { it.map { launch { downloadLatestPublishedTranslation(TranslationKey(it)) } }.joinAll() }
-    }
-
     @AnyThread
     fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
@@ -481,17 +480,40 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         cleanupActor.close()
         staleAttachmentsJob.cancel()
         toolBannerAttachmentsJob.cancel()
-        pinnedTranslationsJob.cancel()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
         staleAttachmentsJob.join()
         toolBannerAttachmentsJob.join()
-        pinnedTranslationsJob.join()
     }
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
         withContext(Dispatchers.IO) { localFile.getFile(fs).outputStream().use { copyTo(it) } }
+    }
+
+    @Singleton
+    class Dispatcher @VisibleForTesting internal constructor(
+        dao: GodToolsDao,
+        private val downloadManager: GodToolsDownloadManager,
+        coroutineScope: CoroutineScope
+    ) {
+        @Inject
+        constructor(dao: GodToolsDao, downloadManager: GodToolsDownloadManager) :
+            this(dao, downloadManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
+        private val pinnedTranslationsJob = dao.getAsFlow(QUERY_PINNED_TRANSLATIONS).conflate()
+            .onEach {
+                coroutineScope {
+                    it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(TranslationKey(it)) } }
+                }
+            }
+            .launchIn(coroutineScope)
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal suspend fun shutdown() {
+            pinnedTranslationsJob.cancel()
+            pinnedTranslationsJob.join()
+        }
     }
 }
