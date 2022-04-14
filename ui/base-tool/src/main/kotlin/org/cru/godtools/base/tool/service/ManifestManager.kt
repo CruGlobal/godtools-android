@@ -21,11 +21,6 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.cru.godtools.tool.FEATURE_ANIMATION
-import org.cru.godtools.tool.FEATURE_CONTENT_CARD
-import org.cru.godtools.tool.FEATURE_FLOW
-import org.cru.godtools.tool.FEATURE_MULTISELECT
-import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
@@ -46,11 +41,6 @@ class ManifestManager @Inject constructor(
     private val coroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
     private val cache = WeakLruCache<String, ParserResult.Data>(6)
     private val loadingMutex = MutexMap()
-
-    init {
-        ParserConfig.supportedFeatures =
-            setOf(FEATURE_ANIMATION, FEATURE_CONTENT_CARD, FEATURE_FLOW, FEATURE_MULTISELECT)
-    }
 
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
