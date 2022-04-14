@@ -11,6 +11,7 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -79,7 +80,6 @@ import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import retrofit2.Response
@@ -98,7 +98,7 @@ class GodToolsDownloadManagerTest {
 
     private val attachmentsApi = mockk<AttachmentsApi>()
     private lateinit var dao: GodToolsDao
-    private lateinit var eventBus: EventBus
+    private val eventBus = mockk<EventBus>(relaxUnitFun = true)
     private lateinit var fs: ToolFileSystem
     private val settings = mockk<Settings> {
         every { isLanguageProtected(any()) } returns false
@@ -126,7 +126,6 @@ class GodToolsDownloadManagerTest {
             on { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } doReturn toolBannerAttachmentsChannel.consumeAsFlow()
             on { getAsFlow(QUERY_PINNED_TRANSLATIONS) } doReturn pinnedTranslationsChannel.consumeAsFlow()
         }
-        eventBus = mock()
         fs = mock {
             onBlocking { rootDir() } doReturn resourcesDir
             onBlocking { exists() } doReturn true
@@ -164,7 +163,8 @@ class GodToolsDownloadManagerTest {
             assertEquals(TOOL, firstValue.code)
             assertTrue(firstValue.isAdded)
         }
-        verify(eventBus).post(ToolUpdateEvent)
+        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
+        confirmVerified(eventBus)
     }
 
     @Test
@@ -175,7 +175,8 @@ class GodToolsDownloadManagerTest {
             assertEquals(TOOL, firstValue.code)
             assertTrue(firstValue.isAdded)
         }
-        verify(eventBus).post(ToolUpdateEvent)
+        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
+        confirmVerified(eventBus)
     }
 
     @Test
@@ -186,7 +187,8 @@ class GodToolsDownloadManagerTest {
             assertEquals(TOOL, firstValue.code)
             assertFalse(firstValue.isAdded)
         }
-        verify(eventBus).post(ToolUpdateEvent)
+        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
+        confirmVerified(eventBus)
     }
 
     @Test
@@ -197,7 +199,8 @@ class GodToolsDownloadManagerTest {
             assertEquals(TOOL, firstValue.code)
             assertFalse(firstValue.isAdded)
         }
-        verify(eventBus).post(ToolUpdateEvent)
+        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
+        confirmVerified(eventBus)
     }
     // endregion pinTool()/unpinTool()
 
@@ -312,7 +315,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
     }
 
@@ -334,7 +338,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
     }
 
@@ -351,7 +356,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
     }
 
@@ -366,10 +372,12 @@ class GodToolsDownloadManagerTest {
         downloadManager.downloadAttachment(attachment.id)
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).find<LocalFile>(attachment.localFilename!!)
-        coVerify { attachmentsApi.download(any()) wasNot Called }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
-        verify(eventBus, never()).post(AttachmentUpdateEvent)
+        verify {
+            attachmentsApi wasNot Called
+            eventBus wasNot Called
+        }
         assertTrue(attachment.isDownloaded)
     }
 
@@ -386,7 +394,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
     }
 
@@ -402,7 +411,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).find<Attachment>(attachment.id)
         verify(dao, never()).updateOrInsert(any())
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertFalse(attachment.isDownloaded)
     }
 
@@ -413,10 +423,13 @@ class GodToolsDownloadManagerTest {
 
         downloadManager.downloadAttachment(attachment.id)
         verify(dao).find<Attachment>(attachment.id)
-        coVerify(exactly = 1) { attachmentsApi.download(any()) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
-        verify(eventBus, never()).post(AttachmentUpdateEvent)
+        coVerify(exactly = 1) {
+            attachmentsApi.download(any())
+            eventBus wasNot Called
+        }
+        confirmVerified(attachmentsApi)
         assertFalse(attachment.isDownloaded)
     }
     // endregion downloadAttachment()
@@ -430,7 +443,8 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
     }
 
@@ -446,7 +460,7 @@ class GodToolsDownloadManagerTest {
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
-        verify(eventBus, never()).post(any())
+        verify { eventBus wasNot Called }
     }
 
     @Test
@@ -461,7 +475,7 @@ class GodToolsDownloadManagerTest {
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
-        verify(eventBus, never()).post(any())
+        verify { eventBus wasNot Called }
         verifyBlocking(fs, never()) { file(any()) }
         assertTrue(attachment.isDownloaded)
     }
@@ -477,7 +491,8 @@ class GodToolsDownloadManagerTest {
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(AttachmentUpdateEvent)
+        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        confirmVerified(eventBus)
         verifyBlocking(fs, never()) { file(any()) }
         verify(dao, never()).updateOrInsert(any())
         assertTrue(attachment.isDownloaded)
@@ -510,7 +525,6 @@ class GodToolsDownloadManagerTest {
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        coVerify(exactly = 1) { translationsApi.download(translation.id) }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -522,8 +536,12 @@ class GodToolsDownloadManagerTest {
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
         assertTrue(translation.isDownloaded)
-        verify(eventBus).post(TranslationUpdateEvent)
-        confirmVerified(translationsApi, workManager)
+        coVerify(exactly = 1) {
+            translationsApi.download(translation.id)
+            workManager wasNot Called
+            eventBus.post(TranslationUpdateEvent)
+        }
+        confirmVerified(translationsApi, eventBus)
         argumentCaptor<DownloadProgress> {
             verify(observer, atLeastOnce()).onChanged(capture())
             assertNull(lastValue)
@@ -542,10 +560,10 @@ class GodToolsDownloadManagerTest {
         coVerify(exactly = 1) {
             translationsApi.download(translation.id)
             workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
+            eventBus wasNot Called
         }
         confirmVerified(translationsApi, workManager)
         verifyNoMoreInteractions(dao)
-        verifyNoInteractions(eventBus)
         argumentCaptor<DownloadProgress> {
             verify(observer, atLeastOnce()).onChanged(capture())
             assertNull(lastValue)
@@ -574,7 +592,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
         verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
-        verify(eventBus).post(TranslationUpdateEvent)
+        verify(exactly = 1) { eventBus.post(TranslationUpdateEvent) }
+        confirmVerified(eventBus)
         argumentCaptor<DownloadProgress> {
             verify(observer, atLeastOnce()).onChanged(capture())
             assertNull(lastValue)
@@ -615,7 +634,8 @@ class GodToolsDownloadManagerTest {
         assertTrue(valid1.isDownloaded)
         assertTrue(valid2.isDownloaded)
         assertTrue(valid3.isDownloaded)
-        verify(eventBus).post(TranslationUpdateEvent)
+        verify(exactly = 1) { eventBus.post(TranslationUpdateEvent) }
+        confirmVerified(eventBus)
     }
     // endregion Translations
 
