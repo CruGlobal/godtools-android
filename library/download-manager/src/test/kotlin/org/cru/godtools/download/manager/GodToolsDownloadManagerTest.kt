@@ -94,7 +94,7 @@ class GodToolsDownloadManagerTest {
         it.mkdirs()
     }
 
-    private lateinit var attachmentsApi: AttachmentsApi
+    private val attachmentsApi = mockk<AttachmentsApi>()
     private lateinit var dao: GodToolsDao
     private lateinit var eventBus: EventBus
     private lateinit var fs: ToolFileSystem
@@ -116,7 +116,6 @@ class GodToolsDownloadManagerTest {
 
     @Before
     fun setup() {
-        attachmentsApi = mockk()
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
             on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
