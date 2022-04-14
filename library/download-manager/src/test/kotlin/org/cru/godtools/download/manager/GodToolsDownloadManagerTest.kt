@@ -151,8 +151,8 @@ class GodToolsDownloadManagerTest {
 
     // region pinTool()/unpinTool()
     @Test
-    fun verifyPinTool() {
-        runBlocking { downloadManager.pinTool(TOOL) }
+    fun verifyPinTool() = runTest {
+        downloadManager.pinTool(TOOL)
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
             assertEquals(TOOL, firstValue.code)
@@ -162,9 +162,8 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPinToolAsync() {
-        runBlocking { downloadManager.pinToolAsync(TOOL).join() }
-
+    fun verifyPinToolAsync() = runTest {
+        downloadManager.pinToolAsync(TOOL).join()
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
             assertEquals(TOOL, firstValue.code)
@@ -174,8 +173,8 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyUnpinTool() {
-        runBlocking { downloadManager.unpinTool(TOOL) }
+    fun verifyUnpinTool() = runTest {
+        downloadManager.unpinTool(TOOL)
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
             assertEquals(TOOL, firstValue.code)
@@ -185,9 +184,8 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyUnpinToolAsync() {
-        runBlocking { downloadManager.unpinToolAsync(TOOL).join() }
-
+    fun verifyUnpinToolAsync() = runTest {
+        downloadManager.unpinToolAsync(TOOL).join()
         argumentCaptor<Tool> {
             verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
             assertEquals(TOOL, firstValue.code)
@@ -199,8 +197,8 @@ class GodToolsDownloadManagerTest {
 
     // region pinLanguage()/unpinLanguage()
     @Test
-    fun verifyPinLanguage() {
-        runBlocking { downloadManager.pinLanguage(Locale.FRENCH) }
+    fun verifyPinLanguage() = runTest {
+        downloadManager.pinLanguage(Locale.FRENCH)
         argumentCaptor<Language> {
             verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
             assertEquals(Locale.FRENCH, firstValue.code)
@@ -209,8 +207,8 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPinLanguageAsync() {
-        runBlocking { downloadManager.pinLanguageAsync(Locale.FRENCH).join() }
+    fun verifyPinLanguageAsync() = runTest {
+        downloadManager.pinLanguageAsync(Locale.FRENCH).join()
 
         argumentCaptor<Language> {
             verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
@@ -220,8 +218,8 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyUnpinLanguage() {
-        runBlocking { downloadManager.unpinLanguage(Locale.FRENCH) }
+    fun verifyUnpinLanguage() = runTest {
+        downloadManager.unpinLanguage(Locale.FRENCH)
         argumentCaptor<Language> {
             verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
             assertEquals(Locale.FRENCH, firstValue.code)
@@ -418,11 +416,11 @@ class GodToolsDownloadManagerTest {
     // endregion downloadAttachment()
 
     @Test
-    fun verifyImportAttachment() {
+    fun verifyImportAttachment() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
+        whenever(attachment.getFile(fs)) doReturn file
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
+        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertArrayEquals(testData, file.readBytes())
         verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -431,14 +429,14 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentUnableToCreateResourcesDir() {
+    fun verifyImportAttachmentUnableToCreateResourcesDir() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         fs.stub {
             onBlocking { exists() } doReturn false
             onBlocking { attachment.getFile(this) } doReturn file
         }
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
+        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertFalse(file.exists())
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
@@ -446,15 +444,15 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentAttachmentAlreadyDownloaded() {
+    fun verifyImportAttachmentAttachmentAlreadyDownloaded() = runTest {
         attachment.isDownloaded = true
         dao.stub {
             on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
+        whenever(attachment.getFile(fs)) doReturn file
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
+        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(any())
@@ -463,15 +461,15 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentLocalFileExists() {
+    fun verifyImportAttachmentLocalFileExists() = runTest {
         attachment.isDownloaded = false
         dao.stub {
             on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
+        whenever(attachment.getFile(fs)) doReturn file
 
-        runBlocking { testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) } }
+        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(eventBus).post(AttachmentUpdateEvent)
         verifyBlocking(fs, never()) { file(any()) }
@@ -547,7 +545,7 @@ class GodToolsDownloadManagerTest {
     // endregion downloadLatestPublishedTranslation()
 
     @Test
-    fun verifyImportTranslation() {
+    fun verifyImportTranslation() = runTest {
         val files = Array(3) { getTmpFile() }
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
         fs.stub {
@@ -556,7 +554,7 @@ class GodToolsDownloadManagerTest {
             onBlocking { file("c.txt") } doReturn files[2]
         }
 
-        runBlocking { downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1) }
+        downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -575,7 +573,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPruneStaleTranslations() {
+    fun verifyPruneStaleTranslations() = runTest {
         val valid1 = Translation().apply {
             toolCode = TOOL
             languageCode = Locale.ENGLISH
@@ -599,7 +597,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.get(argThat<Query<*>> { table.type == Translation::class.java }))
             .thenReturn(listOf(valid1, valid2, invalid, valid3))
 
-        runBlocking { downloadManager.pruneStaleTranslations() }
+        downloadManager.pruneStaleTranslations()
         verify(dao).update(invalid, TranslationTable.COLUMN_DOWNLOADED)
         assertFalse(invalid.isDownloaded)
         verify(dao, never()).update(valid1, TranslationTable.COLUMN_DOWNLOADED)
@@ -614,7 +612,7 @@ class GodToolsDownloadManagerTest {
 
     // region Cleanup
     @Test
-    fun verifyCleanupActorAutomaticRuns() {
+    fun verifyCleanupActorAutomaticRuns() = runTest {
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
         testScope.runCurrent()
         assertCleanupActorRan(0)
@@ -630,9 +628,9 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyCleanupActorBeforeInitialRun() {
+    fun verifyCleanupActorBeforeInitialRun() = runTest {
         assertCleanupActorRan(0)
-        runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
+        downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup)
         assertCleanupActorRan(1)
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
         testScope.runCurrent()
@@ -646,13 +644,13 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyCleanupActorRunsWhenTriggered() {
+    fun verifyCleanupActorRunsWhenTriggered() = runTest {
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
         testScope.runCurrent()
         assertCleanupActorRan(1)
         testScope.testScheduler.advanceTimeBy(2000)
         testScope.runCurrent()
-        runBlocking { downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup) }
+        downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup)
         assertCleanupActorRan(2)
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
         testScope.runCurrent()
@@ -662,22 +660,22 @@ class GodToolsDownloadManagerTest {
         assertCleanupActorRan(3)
     }
 
-    private fun assertCleanupActorRan(times: Int = 1) {
+    private suspend fun assertCleanupActorRan(times: Int = 1) {
         inOrder(dao, fs) {
             repeat(times) {
-                runBlocking { verify(fs).rootDir() }
+                verify(fs).rootDir()
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == TranslationFile::class.java })
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
-                runBlocking { verify(fs).rootDir() }
+                verify(fs).rootDir()
             }
             verify(dao, never()).get(any<Query<*>>())
-            runBlocking { verify(fs, never()).rootDir() }
+            verify(fs, never()).rootDir()
         }
     }
 
     @Test
-    fun verifyDetectMissingFiles() {
+    fun verifyDetectMissingFiles() = runTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
         whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
@@ -686,13 +684,13 @@ class GodToolsDownloadManagerTest {
             onBlocking { file(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
         }
 
-        runBlocking { downloadManager.detectMissingFiles() }
+        downloadManager.detectMissingFiles()
         verify(dao, never()).delete(LocalFile(file.name))
         verify(dao).delete(LocalFile(missingFile.name))
     }
 
     @Test
-    fun verifyCleanupFilesystem() {
+    fun verifyCleanupFilesystem() = runTest {
         val orphan = spy(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
@@ -709,7 +707,7 @@ class GodToolsDownloadManagerTest {
         }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        runBlocking { downloadManager.cleanFilesystem() }
+        downloadManager.cleanFilesystem()
         verify(dao).delete(translation)
         verify(dao).delete(localFile)
         verify(orphan).delete()
