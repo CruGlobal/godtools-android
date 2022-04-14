@@ -2,6 +2,7 @@ package org.cru.godtools.download.manager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import io.mockk.Called
@@ -104,7 +105,9 @@ class GodToolsDownloadManagerTest {
         every { parallelLanguage } returns null
     }
     private val translationsApi = mockk<TranslationsApi>()
-    private lateinit var workManager: WorkManager
+    private val workManager = mockk<WorkManager> {
+        every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
+    }
     private lateinit var testScope: TestCoroutineScope
 
     private lateinit var downloadManager: GodToolsDownloadManager
@@ -129,9 +132,6 @@ class GodToolsDownloadManagerTest {
             onBlocking { exists() } doReturn true
         }
         observer = mock()
-        workManager = mock {
-            on { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } doReturn mock()
-        }
         testScope = TestCoroutineScope()
 
         downloadManager = GodToolsDownloadManager(
@@ -511,7 +511,6 @@ class GodToolsDownloadManagerTest {
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
         coVerify(exactly = 1) { translationsApi.download(translation.id) }
-        confirmVerified(translationsApi)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -524,7 +523,7 @@ class GodToolsDownloadManagerTest {
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
         assertTrue(translation.isDownloaded)
         verify(eventBus).post(TranslationUpdateEvent)
-        verifyNoInteractions(workManager)
+        confirmVerified(translationsApi, workManager)
         argumentCaptor<DownloadProgress> {
             verify(observer, atLeastOnce()).onChanged(capture())
             assertNull(lastValue)
@@ -540,9 +539,11 @@ class GodToolsDownloadManagerTest {
 
         assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        coVerify(exactly = 1) { translationsApi.download(translation.id) }
-        confirmVerified(translationsApi)
-        verify(workManager).enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>())
+        coVerify(exactly = 1) {
+            translationsApi.download(translation.id)
+            workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
+        }
+        confirmVerified(translationsApi, workManager)
         verifyNoMoreInteractions(dao)
         verifyNoInteractions(eventBus)
         argumentCaptor<DownloadProgress> {
