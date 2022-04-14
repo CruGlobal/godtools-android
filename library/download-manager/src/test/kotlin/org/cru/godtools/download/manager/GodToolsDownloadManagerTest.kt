@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import java.io.File
@@ -102,7 +103,7 @@ class GodToolsDownloadManagerTest {
         every { isLanguageProtected(any()) } returns false
         every { parallelLanguage } returns null
     }
-    private lateinit var translationsApi: TranslationsApi
+    private val translationsApi = mockk<TranslationsApi>()
     private lateinit var workManager: WorkManager
     private lateinit var testScope: TestCoroutineScope
 
@@ -128,7 +129,6 @@ class GodToolsDownloadManagerTest {
             onBlocking { exists() } doReturn true
         }
         observer = mock()
-        translationsApi = mock()
         workManager = mock {
             on { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } doReturn mock()
         }
@@ -506,11 +506,12 @@ class GodToolsDownloadManagerTest {
             onBlocking { file("c.txt") } doReturn files[2]
         }
         val response: ResponseBody = mock { on { byteStream() } doReturn getInputStreamForResource("abc.zip") }
-        whenever(translationsApi.download(translation.id)) doReturn Response.success(response)
+        coEvery { translationsApi.download(translation.id) } returns Response.success(response)
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        verify(translationsApi).download(translation.id)
+        coVerify(exactly = 1) { translationsApi.download(translation.id) }
+        confirmVerified(translationsApi)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -534,12 +535,13 @@ class GodToolsDownloadManagerTest {
     fun `downloadLatestPublishedTranslation() - API IOException`() = runTest {
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
         whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
-        whenever(translationsApi.download(translation.id)) doAnswer { throw IOException() }
+        coEvery { translationsApi.download(translation.id) } throws IOException()
         clearInvocations(dao)
 
         assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        verify(translationsApi).download(translation.id)
+        coVerify(exactly = 1) { translationsApi.download(translation.id) }
+        confirmVerified(translationsApi)
         verify(workManager).enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>())
         verifyNoMoreInteractions(dao)
         verifyNoInteractions(eventBus)
