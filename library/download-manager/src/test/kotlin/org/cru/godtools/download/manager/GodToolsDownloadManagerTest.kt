@@ -17,9 +17,6 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.trySendBlocking
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runCurrent
@@ -114,13 +111,10 @@ class GodToolsDownloadManagerTest {
 
     private lateinit var observer: Observer<DownloadProgress?>
 
-    private val staleAttachmentsChannel = Channel<List<Attachment>>()
-
     @Before
     fun setup() {
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
-            on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
         }
         fs = mock {
             onBlocking { rootDir() } doReturn resourcesDir
@@ -144,7 +138,6 @@ class GodToolsDownloadManagerTest {
 
     @After
     fun cleanup() {
-        staleAttachmentsChannel.close()
         runBlocking { downloadManager.shutdown() }
         testScope.cleanupTestCoroutines()
     }
@@ -291,46 +284,6 @@ class GodToolsDownloadManagerTest {
     }
     private val file = getTmpFile()
     private val testData = Random.nextBytes(16 * 1024)
-
-    @Test
-    fun verifyDownloadStaleAttachments() {
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
-
-        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
-        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
-        verify(dao, never()).find<Attachment>(attachment.id)
-
-        assertTrue(staleAttachmentsChannel.trySendBlocking(listOf(attachment)).isSuccess)
-        // this will block until the previous list has been processed
-        assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
-        assertArrayEquals(testData, file.readBytes())
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
-        assertTrue(attachment.isDownloaded)
-    }
-
-    @Test
-    fun verifyDownloadAttachment() = runTest {
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
-        fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
-
-        downloadManager.downloadAttachment(attachment.id)
-        assertArrayEquals(testData, file.readBytes())
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
-        assertTrue(attachment.isDownloaded)
-    }
 
     // region downloadAttachment()
     @Test

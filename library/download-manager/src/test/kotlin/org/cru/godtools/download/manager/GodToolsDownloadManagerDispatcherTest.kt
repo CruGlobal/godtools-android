@@ -25,10 +25,12 @@ import org.keynote.godtools.android.db.GodToolsDao
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
     private val pinnedTranslationsChannel = Channel<List<Translation>>()
+    private val staleAttachmentsChannel = Channel<List<Attachment>>()
     private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
 
     private val dao = mockk<GodToolsDao> {
         every { getAsFlow(QUERY_PINNED_TRANSLATIONS) } returns pinnedTranslationsChannel.consumeAsFlow()
+        every { getAsFlow(QUERY_STALE_ATTACHMENTS) } returns staleAttachmentsChannel.consumeAsFlow()
         every { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } returns toolBannerAttachmentsChannel.consumeAsFlow()
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
@@ -54,6 +56,23 @@ class GodToolsDownloadManagerDispatcherTest {
             coVerify(exactly = 1) {
                 downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
                 downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.FRENCH))
+            }
+            confirmVerified(downloadManager)
+        }
+    }
+
+    @Test
+    fun `staleAttachmentsJob should download any banner attachments`() = runTest {
+        testDispatcher {
+            verify { downloadManager wasNot Called }
+
+            val attachment1 = Attachment().apply { id = Random.nextLong() }
+            val attachment2 = Attachment().apply { id = Random.nextLong() }
+            staleAttachmentsChannel.send(listOf(attachment1, attachment2))
+            runCurrent()
+            coVerify(exactly = 1) {
+                downloadManager.downloadAttachment(attachment1.id)
+                downloadManager.downloadAttachment(attachment2.id)
             }
             confirmVerified(downloadManager)
         }

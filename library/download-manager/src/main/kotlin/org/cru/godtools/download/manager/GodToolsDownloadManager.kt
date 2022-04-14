@@ -215,10 +215,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Download Progress
 
     // region Attachments
-    private val staleAttachmentsJob = coroutineScope.launch {
-        dao.getAsFlow(QUERY_STALE_ATTACHMENTS).collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
-    }
-
     @VisibleForTesting
     internal suspend fun downloadAttachment(attachmentId: Long) {
         if (!fs.exists()) return
@@ -474,11 +470,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @RestrictTo(RestrictTo.Scope.TESTS)
     internal suspend fun shutdown() {
         cleanupActor.close()
-        staleAttachmentsJob.cancel()
         val job = coroutineScope.coroutineContext[Job]
         if (job is CompletableJob) job.complete()
         job?.join()
-        staleAttachmentsJob.join()
     }
 
     @WorkerThread
@@ -504,6 +498,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             }
             .launchIn(coroutineScope)
 
+        private val staleAttachmentsJob = dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
+            .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            .launchIn(coroutineScope)
+
         private val toolBannerAttachmentsJob = dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
             .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
             .launchIn(coroutineScope)
@@ -511,8 +509,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal suspend fun shutdown() {
             pinnedTranslationsJob.cancel()
+            staleAttachmentsJob.cancel()
             toolBannerAttachmentsJob.cancel()
             pinnedTranslationsJob.join()
+            staleAttachmentsJob.join()
             toolBannerAttachmentsJob.join()
         }
     }
