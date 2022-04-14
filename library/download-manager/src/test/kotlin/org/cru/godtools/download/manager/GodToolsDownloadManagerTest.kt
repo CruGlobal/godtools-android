@@ -4,6 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -108,7 +112,7 @@ class GodToolsDownloadManagerTest {
 
     @Before
     fun setup() {
-        attachmentsApi = mock()
+        attachmentsApi = mockk()
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
             on { getAsFlow(QUERY_STALE_ATTACHMENTS) } doReturn staleAttachmentsChannel.consumeAsFlow()
@@ -292,7 +296,7 @@ class GodToolsDownloadManagerTest {
     fun verifyDownloadStaleAttachments() {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
+        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
 
         assertTrue(staleAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
@@ -314,7 +318,7 @@ class GodToolsDownloadManagerTest {
     fun verifyDownloadToolBannerAttachments() {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        stubbing(attachmentsApi) { onBlocking { download(any()) } doReturn Response.success(response) }
+        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         fs.stub { onBlocking { attachment.getFile(this) } doReturn file }
 
         assertTrue(toolBannerAttachmentsChannel.trySendBlocking(emptyList()).isSuccess)
@@ -337,7 +341,7 @@ class GodToolsDownloadManagerTest {
     fun `downloadAttachment()`() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        whenever(attachmentsApi.download(any())) doReturn Response.success(response)
+        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         whenever(attachment.getFile(fs)) doReturn file
 
         downloadManager.downloadAttachment(attachment.id)
@@ -360,7 +364,7 @@ class GodToolsDownloadManagerTest {
         downloadManager.downloadAttachment(attachment.id)
         verify(dao).find<Attachment>(attachment.id)
         verify(dao).find<LocalFile>(attachment.localFilename!!)
-        verify(attachmentsApi, never()).download(any())
+        coVerify { attachmentsApi.download(any()) wasNot Called }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(AttachmentUpdateEvent)
@@ -372,7 +376,7 @@ class GodToolsDownloadManagerTest {
         attachment.isDownloaded = true
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
-        whenever(attachmentsApi.download(any())) doReturn Response.success(response)
+        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         whenever(attachment.getFile(fs)) doReturn file
 
         downloadManager.downloadAttachment(attachment.id)
@@ -388,7 +392,7 @@ class GodToolsDownloadManagerTest {
     fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = runTest {
         attachment.isDownloaded = true
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        whenever(attachmentsApi.download(any())) doAnswer { throw IOException() }
+        coEvery { attachmentsApi.download(any()) } throws IOException()
         whenever(attachment.getFile(fs)) doReturn file
 
         downloadManager.downloadAttachment(attachment.id)
@@ -403,11 +407,11 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadAttachment() - Download fails`() = runTest {
         whenever(dao.find<Attachment>(attachment.id)) doReturn attachment
-        whenever(attachmentsApi.download(any())) doAnswer { throw IOException() }
+        coEvery { attachmentsApi.download(any()) } throws IOException()
 
         downloadManager.downloadAttachment(attachment.id)
         verify(dao).find<Attachment>(attachment.id)
-        verify(attachmentsApi).download(any())
+        coVerify(exactly = 1) { attachmentsApi.download(any()) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify(eventBus, never()).post(AttachmentUpdateEvent)
