@@ -19,6 +19,7 @@ import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
@@ -583,52 +584,22 @@ class GodToolsDownloadManagerTest {
 
     // region Cleanup
     @Test
-    fun verifyCleanupActorAutomaticRuns() = runTest {
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
-        testScope.runCurrent()
+    fun verifyCleanupActorInitialRun() = runTest {
+        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY)
         assertCleanupActorRan(0)
-        testScope.testScheduler.advanceTimeBy(1)
         testScope.runCurrent()
         assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
-        testScope.runCurrent()
+        testScope.advanceUntilIdle()
         assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(1)
-        testScope.runCurrent()
-        assertCleanupActorRan(2)
-    }
-
-    @Test
-    fun verifyCleanupActorBeforeInitialRun() = runTest {
-        assertCleanupActorRan(0)
-        downloadManager.cleanupActor.send(Unit)
-        assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
-        testScope.runCurrent()
-        assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - CLEANUP_DELAY_INITIAL - 1)
-        testScope.runCurrent()
-        assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(1)
-        testScope.runCurrent()
-        assertCleanupActorRan(2)
     }
 
     @Test
     fun verifyCleanupActorRunsWhenTriggered() = runTest {
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
-        testScope.runCurrent()
+        testScope.advanceUntilIdle()
         assertCleanupActorRan(1)
-        testScope.testScheduler.advanceTimeBy(2000)
-        testScope.runCurrent()
         downloadManager.cleanupActor.send(Unit)
+        testScope.advanceUntilIdle()
         assertCleanupActorRan(2)
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
-        testScope.runCurrent()
-        assertCleanupActorRan(2)
-        testScope.testScheduler.advanceTimeBy(1)
-        testScope.runCurrent()
-        assertCleanupActorRan(3)
     }
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {

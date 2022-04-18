@@ -28,15 +28,16 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
-import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
-import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
@@ -69,9 +70,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @VisibleForTesting
-internal const val CLEANUP_DELAY = HOUR_IN_MS
-@VisibleForTesting
-internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+internal const val CLEANUP_DELAY = 30_000L
 
 @VisibleForTesting
 internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
@@ -417,11 +416,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @VisibleForTesting
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
     internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
-        while (!channel.isClosedForReceive) {
+        consumeAsFlow().onStart { emit(Unit) }.transformLatest {
+            delay(CLEANUP_DELAY)
+            emit(Unit)
+        }.conflate().collect {
             detectMissingFiles()
             cleanFilesystem()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
         }
     }
 
