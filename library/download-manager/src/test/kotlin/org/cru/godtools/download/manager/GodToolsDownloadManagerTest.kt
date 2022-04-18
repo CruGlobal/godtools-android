@@ -601,7 +601,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyCleanupActorBeforeInitialRun() = runTest {
         assertCleanupActorRan(0)
-        downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup)
+        downloadManager.cleanupActor.send(Unit)
         assertCleanupActorRan(1)
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY_INITIAL)
         testScope.runCurrent()
@@ -621,7 +621,7 @@ class GodToolsDownloadManagerTest {
         assertCleanupActorRan(1)
         testScope.testScheduler.advanceTimeBy(2000)
         testScope.runCurrent()
-        downloadManager.cleanupActor.send(GodToolsDownloadManager.RunCleanup)
+        downloadManager.cleanupActor.send(Unit)
         assertCleanupActorRan(2)
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY - 1)
         testScope.runCurrent()
@@ -634,14 +634,16 @@ class GodToolsDownloadManagerTest {
     private suspend fun assertCleanupActorRan(times: Int = 1) {
         inOrder(dao, fs) {
             repeat(times) {
+                verify(fs).exists()
                 verify(fs).rootDir()
                 verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
-                verify(dao).get(argThat<Query<*>> { table.type == TranslationFile::class.java })
-                verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
+
+                verify(fs).exists()
+                verify(dao).get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+                verify(dao).get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
                 verify(fs).rootDir()
             }
-            verify(dao, never()).get(any<Query<*>>())
-            verify(fs, never()).rootDir()
+            verifyNoMoreInteractions()
         }
     }
 

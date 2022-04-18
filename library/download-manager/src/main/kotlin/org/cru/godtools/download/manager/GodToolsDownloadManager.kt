@@ -31,7 +31,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -100,6 +99,22 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
             .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
     )
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+
+@VisibleForTesting
+internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFile>()
+    .join(
+        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
+            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
+    )
+    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
+@VisibleForTesting
+internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
+    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
+    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
+    .where(
+        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
+            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
+    )
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -393,18 +408,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         // if any translations were updated, send a broadcast
         if (changes > 0) {
             eventBus.post(TranslationUpdateEvent)
-            cleanupActor.send(RunCleanup)
+            cleanupActor.send(Unit)
         }
     }
     // endregion Translations
 
     // region Cleanup
     @VisibleForTesting
-    internal object RunCleanup
-
-    @VisibleForTesting
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
+    internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
         withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
         while (!channel.isClosedForReceive) {
             detectMissingFiles()
@@ -436,27 +448,13 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded
-                Query.select<TranslationFile>()
-                    .join(
-                        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
-                            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
-                    )
-                    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
-                    .get(dao).forEach { dao.delete(it) }
+                dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
 
                 // delete any LocalFiles that are no longer being used
-                Query.select<LocalFile>()
-                    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
-                    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-                    .where(
-                        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
-                            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
-                    )
-                    .get(dao)
-                    .forEach {
-                        dao.delete(it)
-                        it.getFile(fs).delete()
-                    }
+                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES).forEach {
+                    dao.delete(it)
+                    it.getFile(fs).delete()
+                }
 
                 // delete any orphaned files
                 fs.rootDir().listFiles()
