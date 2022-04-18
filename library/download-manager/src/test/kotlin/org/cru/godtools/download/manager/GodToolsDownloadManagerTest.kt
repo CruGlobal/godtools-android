@@ -24,7 +24,9 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import okhttp3.ResponseBody
+import okhttp3.internal.http.RealResponseBody
+import okio.buffer
+import okio.source
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
@@ -278,7 +280,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadAttachment()`() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         whenever(attachment.getFile(fs)) doReturn file
 
@@ -316,7 +318,7 @@ class GodToolsDownloadManagerTest {
     fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = runTest {
         attachment.isDownloaded = true
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        val response: ResponseBody = mock { on { byteStream() } doReturn testData.inputStream() }
+        val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         whenever(attachment.getFile(fs)) doReturn file
 
@@ -451,7 +453,7 @@ class GodToolsDownloadManagerTest {
             onBlocking { file("b.txt") } doReturn files[1]
             onBlocking { file("c.txt") } doReturn files[2]
         }
-        val response: ResponseBody = mock { on { byteStream() } doReturn getInputStreamForResource("abc.zip") }
+        val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
