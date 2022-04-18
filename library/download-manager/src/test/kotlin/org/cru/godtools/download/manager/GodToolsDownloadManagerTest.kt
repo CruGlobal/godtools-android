@@ -11,6 +11,7 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.io.File
@@ -70,7 +71,6 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.spy
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
@@ -617,13 +617,13 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyCleanupFilesystem() = runTest {
-        val orphan = spy(getTmpFile(true))
+        val orphan = spyk(getTmpFile(true))
+        val keep = spyk(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
-        val keep = spy(getTmpFile(true))
         dao.stub {
-            on { get(argThat<Query<*>> { table.type == TranslationFile::class.java }) } doReturn listOf(translation)
-            on { get(argThat<Query<*>> { table.type == LocalFile::class.java }) } doReturn listOf(localFile)
+            on { get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } doReturn listOf(translation)
+            on { get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } doReturn listOf(localFile)
             val keepLocalFile = LocalFile(keep.name)
             on { find<LocalFile>(keep.name) } doReturn keepLocalFile
         }
@@ -636,8 +636,8 @@ class GodToolsDownloadManagerTest {
         downloadManager.cleanFilesystem()
         verify(dao).delete(translation)
         verify(dao).delete(localFile)
-        verify(orphan).delete()
-        verify(keep, never()).delete()
+        verify { orphan.delete() }
+        verify(exactly = 0) { keep.delete() }
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
     }
     // endregion Cleanup
